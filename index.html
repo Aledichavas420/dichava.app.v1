@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A1C">
+<title>dichava.rd</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --v:#4CAF5A;--ve:#2E7D32;--vc:#A5D6A7;--vf:#E8F5E9;
+  --am:#FFD600;--ams:#FFF9C4;
+  --dk:#1B2A1C;--dk2:#2a3d2b;
+  --cin:#F5F5F0;--cinm:#E4E4DF;
+  --tx:#1B2A1C;--txs:#5D7060;--txm:#9E9E9E;
+  --sa:#00897B;--saf:#E0F2F1;
+  --er:#C62828;--erf:#FFEBEE;
+  --roxo:#7C3AED;--roxof:#F5F3FF;
+  --lrj:#EA580C;--lrjf:#FFF7ED;
+  --r:14px;--rlg:20px;
+  --sh:0 2px 16px rgba(0,0,0,.07);
+  --sh2:0 8px 32px rgba(0,0,0,.14);
+  --sb:env(safe-area-inset-bottom,0px);
+}
+/* CRÍTICO: font-size 16px em TUDO impede zoom automático no iOS */
+html{font-size:16px;height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
+body{font-family:'DM Sans',sans-serif;background:#ECECE8;color:var(--tx);-webkit-font-smoothing:antialiased;height:100%;overflow:hidden;position:fixed;width:100%;top:0;left:0}
+input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:16px}
+input:not([type="checkbox"]),select,textarea{-webkit-appearance:none;appearance:none}
+input[type="checkbox"]{width:18px;height:18px;accent-color:var(--v);cursor:pointer;flex-shrink:0}
+button{cursor:pointer}
+input:focus,select:focus,textarea:focus{outline:none}
+a{color:inherit;text-decoration:none}
+
+/* APP SHELL */
+#shell{width:100%;height:100%;max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
+@media(min-width:431px){body{background:#ECECE8;display:flex;align-items:flex-start;justify-content:center}}
+
+/* VIEW SYSTEM */
+.V{display:none;position:absolute;inset:0;flex-direction:column;background:#fff;overflow:hidden}
+.V.on{display:flex}
+
+/* SCROLL */
+.sc{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none}
+.sc::-webkit-scrollbar{display:none}
+.scpad{padding-bottom:calc(76px + var(--sb))}
+
+/* BOTTOM NAV */
+#bnav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--cinm);display:none;padding:6px 0 calc(6px + var(--sb));z-index:100}
+#bnav.on{display:flex}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;padding:4px 2px;font-size:8px;color:var(--txm);font-weight:500;transition:color .15s}
+.ni.on{color:var(--ve)}
+.ni-ic{font-size:20px;line-height:1}
+.fabw{flex:0 0 56px;display:flex;justify-content:center}
+.fab{width:48px;height:48px;border-radius:50%;background:var(--dk);border:3px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:-18px;box-shadow:0 4px 18px rgba(0,0,0,.3);font-size:24px;color:#fff}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:50px 18px 12px;background:#fff;flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.04)}
+.tlogo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--ve);letter-spacing:-.5px}
+.tlogo em{color:var(--am);font-style:normal}
+.tav{width:34px;height:34px;border-radius:50%;background:var(--vf);border:2px solid var(--vc);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ve);cursor:pointer;flex-shrink:0}
+
+/* PAGE TOPBAR (views secundárias) */
+.ptb{display:flex;align-items:center;gap:11px;padding:50px 18px 14px;flex-shrink:0}
+.ptb-tit{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;color:#fff}
+.ptb-tit.dk{color:var(--dk)}
+.bk{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#fff;flex-shrink:0;transition:background .15s}
+.bk:active{background:rgba(255,255,255,.25)}
+.bk.dk{background:var(--cin);color:var(--dk)}
+
+/* SHARED UI */
+.lbl{display:block;font-size:12px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.ob{color:var(--v)}
+.inp,.fs,.ft{width:100%;padding:13px 14px;border-radius:var(--r);border:1.5px solid var(--cinm);font-size:16px;color:var(--tx);background:var(--cin);transition:border-color .2s,background .2s;line-height:1.4}
+.inp:focus,.fs:focus,.ft:focus{border-color:var(--v);background:#fff}
+.inp.err{border-color:var(--er);background:var(--erf)}
+.ft{resize:none;line-height:1.6}
+.em{font-size:11px;color:var(--er);margin-top:4px;display:none}
+.em.on{display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:var(--r);border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s;letter-spacing:.2px}
+.bfull{width:100%}
+.bdk{background:var(--dk);color:#fff}
+.bv{background:var(--v);color:#fff}
+.bout{background:none;border:1.5px solid var(--cinm);color:var(--txs)}
+.bsa{background:var(--sa);color:#fff}
+.ber{background:var(--er);color:#fff}
+.bsm{padding:9px 16px;font-size:13px}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4}
+
+.shr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 18px}
+.sht{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--dk)}
+.shl{font-size:12px;color:var(--ve);cursor:pointer;font-weight:600}
+
+.emg{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.emb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:var(--r);border:1.5px solid var(--cinm);background:var(--cin);cursor:pointer;transition:all .15s}
+.emb.on{border-color:var(--v);background:var(--vf)}
+.eme{font-size:24px;line-height:1}
+.eml{font-size:9px;font-weight:600;color:var(--txs);text-align:center}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--cinm);font-size:13px;font-weight:500;color:var(--txs);background:#fff;cursor:pointer;transition:all .15s}
+.chip.on{background:var(--dk);color:#fff;border-color:var(--dk)}
+
+.pgb{width:100%;height:8px;background:var(--cinm);border-radius:4px;overflow:hidden}
+.pgf{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.34,1.56,.64,1)}
+
+.tog{position:relative;display:inline-flex;cursor:pointer;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tsl{width:46px;height:26px;background:#D0D0C8;border-radius:13px;position:relative;transition:background .2s}
+.tsl::after{content:'';width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.tog input:checked~.tsl{background:var(--v)}
+.tog input:checked~.tsl::after{left:23px}
+
+/* OVERLAY + SHEET */
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center}
+
+.sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;max-height:92%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sp{padding:0 18px calc(28px + var(--sb))}
+.mh{width:36px;height:4px;background:#E0E0E0;border-radius:2px;margin:12px auto 18px}
+.mt{font-family:'DM Sans',sans-serif;font-size:19px;font-weight:800;color:var(--dk);margin-bottom:4px}
+.mt.c{text-align:center}
+.mb{font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:16px}
+.mb.c{text-align:center}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.fld{margin-bottom:13px}
+
+/* NOTIF */
+.nb{position:absolute;top:-100px;left:14px;right:14px;background:var(--dk);border-radius:18px;padding:13px 16px;display:flex;gap:11px;align-items:center;z-index:600;transition:top .4s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--sh2)}
+.nb.on{top:calc(50px + var(--sb))}
+.nbi{font-size:22px;flex-shrink:0}
+.nbb{flex:1}
+.nbt{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.nbs{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+.nbx{background:none;border:none;font-size:16px;color:rgba(255,255,255,.4);cursor:pointer;padding:0}
+
+/* TOAST */
+#toast{position:absolute;bottom:calc(76px + var(--sb) + 12px);left:14px;right:14px;background:var(--dk);color:#fff;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:500;z-index:700;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none;text-align:center}
+#toast.on{opacity:1;transform:translateY(0)}
+.spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.shake{animation:sk .3s ease}
+@keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* AUTH */
+#va{background:var(--dk);justify-content:flex-end}
+.at{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px 24px;position:relative;overflow:hidden}
+.at::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(76,175,90,.1);top:-80px;right:-80px}
+.at::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,214,0,.07);bottom:-40px;left:-40px}
+.alogo{font-family:'Syne',sans-serif;font-weight:800;font-size:36px;color:var(--v);letter-spacing:-2px;position:relative;z-index:1}
+.alogo em{color:var(--am);font-style:normal}
+.atag{font-size:13px;color:rgba(255,255,255,.4);margin-top:8px;line-height:1.6;text-align:center;position:relative;z-index:1}
+.acard{background:#fff;border-radius:24px 24px 0 0;padding:22px 20px calc(22px + var(--sb))}
+.atabs{display:flex;border-bottom:2px solid var(--cinm);margin-bottom:20px}
+.atab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:700;color:var(--txs);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all .2s}
+.atab.on{color:var(--ve);border-bottom-color:var(--v)}
+
+/* ONBOARD */
+#vo{background:var(--cin)}
+.obw{flex:1;display:flex;flex-direction:column;padding:50px 18px 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.obp{display:flex;gap:6px;margin-bottom:22px;flex-shrink:0}
+.opd{flex:1;height:4px;border-radius:2px;background:var(--cinm);transition:background .3s}
+.opd.on{background:var(--v)}
+.obh{background:linear-gradient(145deg,var(--dk),var(--dk2));border-radius:18px;padding:22px 20px;margin-bottom:18px;position:relative;overflow:hidden;flex-shrink:0}
+.obh::after{content:'';position:absolute;bottom:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:var(--v);opacity:.12}
+.obs{font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.obt{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1.2;position:relative;z-index:1}
+.obu{font-size:13px;color:rgba(255,255,255,.55);margin-top:5px;line-height:1.6;position:relative;z-index:1}
+.obb{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.gc{border:2px solid var(--cinm);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;background:#fff}
+.gc.on{border-color:var(--v);background:var(--vf)}
+.gi{font-size:22px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:12px}
+.gb{flex:1}
+.gn{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk)}
+.gd{font-size:11px;color:var(--txs);margin-top:2px;line-height:1.45}
+.gr{width:22px;height:22px;border-radius:50%;border:2px solid var(--cinm);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.gc.on .gr{border-color:var(--v);background:var(--v)}
+.gc.on .gr::after{content:'';width:9px;height:9px;border-radius:50%;background:#fff}
+.gck{width:22px;height:22px;border-radius:6px;border:2px solid var(--cinm);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:12px;color:transparent}
+.gc.on .gck{border-color:var(--v);background:var(--v);color:#fff}
+.obf{padding:0 0 calc(18px + var(--sb));flex-shrink:0}
+
+/* HOME HERO */
+.hh{background:var(--dk);padding:52px 18px 18px;position:relative;overflow:hidden;flex-shrink:0}
+.hh::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:var(--v);opacity:.1}
+.hh::after{content:'';position:absolute;bottom:-30px;left:20px;width:120px;height:120px;border-radius:50%;background:var(--am);opacity:.07}
+.hsd{font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;position:relative;z-index:1}
+.hn{font-family:'DM Sans',sans-serif;font-size:23px;font-weight:800;color:#fff;line-height:1.15;position:relative;z-index:1}
+.hn span{color:var(--v)}
+.hpill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border-radius:20px;padding:5px 13px;margin-top:9px;font-size:12px;color:rgba(255,255,255,.7);position:relative;z-index:1}
+.hpill strong{color:#fff}
+
+/* STATS */
+.srow{display:flex;gap:8px;padding:12px 18px}
+.sc2{flex:1;background:var(--cin);border-radius:14px;padding:12px 10px;text-align:center}
+.sn{font-family:'DM Sans',sans-serif;font-size:25px;font-weight:800;color:var(--dk);line-height:1}
+.sn.v{color:var(--ve)}
+.sn.r{color:var(--roxo)}
+.sl{font-size:10px;color:var(--txm);margin-top:3px}
+
+/* WEEK */
+.wk{margin:0 18px 13px;background:var(--dk);border-radius:18px;padding:15px 17px;position:relative;overflow:hidden}
+.wk::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:var(--v);opacity:.12}
+.wlb{font-size:10px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;position:relative;z-index:1}
+.wds{display:flex;gap:5px;margin-bottom:12px;position:relative;z-index:1}
+.wd{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wdl{font-size:8px;color:rgba(255,255,255,.3);text-transform:uppercase}
+.wdd{width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:rgba(255,255,255,.5)}
+.wdd.ok{background:var(--v);border-color:var(--v);color:#fff;font-size:13px}
+.wdd.hj{border-color:var(--am);color:var(--am);font-weight:700}
+.wdd.at{background:rgba(234,88,12,.3);border-color:rgba(234,88,12,.5)}
+
+/* ALERTA */
+.alt{border-radius:14px;padding:13px 15px;display:flex;gap:10px;align-items:flex-start;border-left:4px solid;margin:0 18px 10px}
+.alt.at{background:var(--lrjf);border-color:var(--lrj)}
+.alt.pos{background:var(--vf);border-color:var(--v)}
+.alt.inf{background:var(--roxof);border-color:var(--roxo)}
+.alti{font-size:18px;flex-shrink:0;margin-top:1px}
+.altb{flex:1}
+.altt{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:2px}
+.altx{font-size:12px;color:var(--txs);line-height:1.5}
+.altf{background:none;border:none;font-size:15px;color:var(--txm);cursor:pointer;flex-shrink:0;padding:0 0 0 5px}
+
+/* FEED */
+.fc{background:#fff;border-radius:15px;border:1px solid #EBEBEB;overflow:hidden;margin:0 18px 10px}
+.fc:active{opacity:.9}
+.fh{display:flex;align-items:center;gap:9px;padding:13px 13px 8px}
+.fav{width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.fn{font-size:13px;font-weight:600;color:var(--dk)}
+.ftm{font-size:10px;color:#BDBDBD;margin-top:1px}
+.ftag{font-size:10px;padding:2px 9px;border-radius:20px;font-weight:700;white-space:nowrap}
+.ftd{background:var(--ams);color:#795548}
+.ftr{background:var(--roxof);color:var(--roxo)}
+.ftv{background:var(--vf);color:var(--ve)}
+.ftt{font-size:13px;color:var(--txs);line-height:1.6;padding:0 13px 11px}
+.fa{display:flex;padding:7px 9px;border-top:1px solid #F5F5F5}
+.fab2{background:none;border:none;font-size:12px;color:var(--txm);padding:5px 8px;border-radius:8px;cursor:pointer}
+
+/* CALENDÁRIO */
+.calb{background:#fff;border-radius:18px;border:1px solid var(--cinm);overflow:hidden;margin:13px 18px 14px}
+.calnr{display:flex;align-items:center;justify-content:space-between;padding:15px 17px;border-bottom:1px solid var(--cinm)}
+.calm{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:800;color:var(--dk)}
+.calnb{background:var(--cin);border:none;width:33px;height:33px;border-radius:50%;font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.caldls{display:grid;grid-template-columns:repeat(7,1fr);padding:0 9px 5px;margin-top:9px}
+.caldl{text-align:center;font-size:9px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:0 9px 13px}
+.cald{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;font-weight:500;cursor:pointer;position:relative;border:none;background:none;max-width:40px;margin:0 auto;width:100%}
+.cald.hj{background:var(--dk);color:#fff;font-weight:700}
+.cald.sl{background:var(--v);color:#fff}
+.cald.tm::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--v);position:absolute;bottom:3px}
+.cald.hj.tm::after,.cald.sl.tm::after{background:rgba(255,255,255,.8)}
+.cald.at::after{background:var(--lrj)}
+.cald.out{opacity:.25;pointer-events:none}
+.ddet{background:var(--cin);border-radius:18px;padding:15px 17px;margin:0 18px 14px}
+.ddett{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:10px}
+.dri{display:flex;align-items:center;gap:10px;background:#fff;border-radius:11px;padding:10px 12px;margin-bottom:7px;border:1px solid #F0F0F0}
+.drie{font-size:19px;flex-shrink:0}
+.drib{flex:1}
+.drin{font-size:13px;font-weight:600;color:var(--dk)}
+.drim{font-size:11px;color:var(--txs)}
+
+/* PROGRESSO */
+.ph{background:var(--dk);padding:52px 18px 22px;position:relative;overflow:hidden;flex-shrink:0}
+.ph::after{content:'';position:absolute;bottom:-30px;right:-20px;width:130px;height:130px;border-radius:50%;background:var(--v);opacity:.15}
+.pht{font-family:'DM Sans',sans-serif;font-size:23px;font-weight:800;color:#fff;position:relative;z-index:1}
+.phs{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px;position:relative;z-index:1}
+
+/* TIMELINE */
+/* HEATMAP TIMELINE */
+.hmap-wrap{padding:0 18px 16px;overflow-x:auto;scrollbar-width:none}
+.hmap-wrap::-webkit-scrollbar{display:none}
+.hmap-inner{display:inline-flex;flex-direction:column;gap:0;min-width:100%}
+.hmap-months{display:flex;gap:0;margin-bottom:4px;padding-left:22px}
+.hmap-ml{font-size:9px;color:var(--txm);font-weight:700;text-transform:uppercase;flex:1;text-align:center}
+.hmap-rows{display:flex;gap:3px}
+.hmap-dlabs{display:flex;flex-direction:column;gap:2px;margin-right:3px}
+.hmap-dl{font-size:8px;color:var(--txm);font-weight:600;height:12px;line-height:12px;text-transform:uppercase}
+.hmap-cols{display:flex;gap:2px}
+.hmap-col{display:flex;flex-direction:column;gap:2px}
+.hmap-cell{width:12px;height:12px;border-radius:2px;cursor:pointer;transition:transform .1s;flex-shrink:0}
+.hmap-cell:active{transform:scale(1.3)}
+.hmap-cell.vz{background:#EAEAE6}
+.hmap-cell.d1{background:rgba(76,175,90,.25)}
+.hmap-cell.d2{background:rgba(76,175,90,.5)}
+.hmap-cell.d3{background:rgba(76,175,90,.75)}
+.hmap-cell.d4{background:#2E7D32}
+.hmap-cell.at{background:rgba(234,88,12,.6)}
+.hmap-cell.hj{outline:2px solid var(--am);outline-offset:1px}
+.hmap-legend{display:flex;align-items:center;gap:5px;padding:6px 18px 0;justify-content:flex-end}
+.hmap-leg-lbl{font-size:10px;color:var(--txm)}
+.hmap-leg-cell{width:11px;height:11px;border-radius:2px}
+
+/* META CARD */
+.mc{background:#fff;border-radius:17px;border:2px solid var(--cinm);padding:15px 17px;margin:0 18px 10px}
+.mc.ok{border-color:var(--v)}
+.mch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px;gap:7px}
+.mct{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--dk);flex:1;line-height:1.3}
+.mcbg{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0}
+.bok{background:var(--vf);color:var(--ve)}
+.band{background:var(--ams);color:#795548}
+
+/* GRAF */
+.gw{background:#fff;border-radius:17px;border:1px solid var(--cinm);padding:17px;margin:0 18px 13px}
+.gt{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:13px}
+
+/* CONQUISTAS */
+.cqr{display:flex;flex-wrap:wrap;gap:9px;padding:0 18px;margin-bottom:13px}
+.cq{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 9px;background:#fff;border-radius:13px;border:1px solid var(--cinm);min-width:68px;flex:1;opacity:.35}
+.cq.on{opacity:1;border-color:var(--am);background:var(--ams)}
+.cqi{font-size:23px;line-height:1}
+.cqn{font-size:9px;font-weight:700;color:var(--txs);text-align:center}
+
+/* HIST */
+.hi{display:flex;align-items:center;gap:10px;background:#fff;border-radius:13px;padding:11px 13px;border:1px solid #F0F0F0}
+.hie{font-size:21px;flex-shrink:0}
+.hib{flex:1}
+.hin{font-size:13px;font-weight:600;color:var(--dk)}
+.him{font-size:11px;color:var(--txm);margin-top:1px}
+
+/* REFLEXÕES */
+.refh{background:var(--vf);padding:52px 18px 18px;position:relative;overflow:hidden;flex-shrink:0}
+.refh::after{content:'';position:absolute;right:-15px;bottom:-15px;width:90px;height:90px;border-radius:50%;background:var(--vc);opacity:.4}
+.refht{font-family:'DM Sans',sans-serif;font-size:23px;font-weight:800;color:var(--dk)}
+.refhs{font-size:13px;color:var(--txs);margin-top:4px}
+
+/* PROMPT */
+.prc{background:var(--dk);border-radius:17px;padding:17px 19px;margin:13px 18px 11px;position:relative;overflow:hidden}
+.prc::after{content:'';position:absolute;right:-15px;bottom:-15px;width:85px;height:85px;border-radius:50%;background:var(--v);opacity:.12;pointer-events:none}
+.prl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.38);margin-bottom:5px}
+.prt{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.45;margin-bottom:12px;position:relative;z-index:1}
+.prb{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:10px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* COMPOSER */
+.cmp{background:#fff;border-radius:17px;border:1.5px solid var(--cinm);padding:13px;margin:0 18px 11px;cursor:text;transition:border-color .2s}
+.cmp.foc{border-color:var(--v)}
+.cmpt{display:flex;gap:10px;align-items:flex-start}
+.cmpav{width:34px;height:34px;border-radius:50%;background:var(--vf);border:2px solid var(--vc);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ve);flex-shrink:0}
+.cmpta{flex:1;border:none;font-size:16px;color:var(--tx);resize:none;line-height:1.6;background:none;min-height:45px}
+.cmpact{display:flex;justify-content:flex-end;gap:9px;margin-top:11px}
+
+/* REFLEXÃO ITEM */
+.rii{background:#fff;border-radius:13px;border:1px solid #EBEBEB;padding:12px 14px;margin:0 18px 9px}
+.rih{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.riav{width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.rin{font-size:12px;font-weight:600;color:var(--dk)}
+.rid{font-size:10px;color:var(--txm)}
+.ritg{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.rit{font-size:14px;color:var(--tx);line-height:1.7;margin-bottom:8px}
+.rip{font-size:12px;color:var(--txs);font-style:italic;margin-bottom:7px;padding-left:9px;border-left:3px solid var(--vc)}
+.rif{display:flex;align-items:center;justify-content:space-between}
+.rife{font-size:19px}
+
+/* FISSURA ITEM */
+.fssi{display:flex;align-items:flex-start;gap:10px;background:#fff;border-radius:13px;border:1px solid #EBEBEB;padding:12px 14px;margin:0 18px 9px}
+.fssie{font-size:20px;flex-shrink:0}
+.fssib{flex:1}
+.fssin{font-size:13px;font-weight:600;color:var(--dk)}
+.fssim{font-size:11px;color:var(--txm);margin-top:2px}
+.fssit{font-size:13px;color:var(--txs);line-height:1.55;margin-top:4px}
+.fssibg{display:inline-flex;align-items:center;gap:4px;background:var(--vf);color:var(--ve);font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:5px}
+
+/* CARTA */
+.carta{background:linear-gradient(135deg,var(--ams),#fff);border-radius:17px;border:2px dashed var(--am);padding:18px;margin:0 18px 10px}
+.carta.ok{background:#fff;border-style:solid;border-color:var(--vc)}
+.cartai{font-size:26px;margin-bottom:7px}
+.cartat{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--dk);margin-bottom:4px}
+.cartax{font-size:13px;color:var(--txs);line-height:1.6}
+.cartabg{display:inline-flex;align-items:center;gap:4px;background:var(--am);color:var(--dk);font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:7px}
+
+/* RESUMO SEMANAL */
+.rsw{background:var(--dk);border-radius:17px;margin:0 18px 13px;padding:17px 19px;position:relative;overflow:hidden}
+.rsw::after{content:'';position:absolute;right:-20px;bottom:-20px;width:95px;height:95px;border-radius:50%;background:var(--v);opacity:.14}
+.rswt{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;position:relative;z-index:1}
+.rswx{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:13px;position:relative;z-index:1}
+.rsws{display:flex;gap:9px;margin-bottom:13px;position:relative;z-index:1}
+.rss{flex:1;background:rgba(255,255,255,.08);border-radius:11px;padding:9px;text-align:center}
+.rssn{font-family:'DM Sans',sans-serif;font-size:21px;font-weight:800;color:#fff}
+.rssl{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
+
+/* CHECK-IN STRIP */
+.cks{margin:0 18px 13px;background:var(--vf);border-radius:15px;padding:13px 15px;display:none}
+.ckst{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:9px}
+.ckse{display:flex;gap:8px;margin-bottom:9px}
+.cke{width:48px;height:48px;border-radius:50%;border:2px solid var(--cinm);display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all .2s;background:#fff}
+.cke.on{border-color:var(--v);background:var(--vf);transform:scale(1.1)}
+
+/* CRISE VIEW */
+#vcrise{z-index:500;background:var(--er)}
+.crh{flex-shrink:0;padding:52px 20px 22px;text-align:center}
+.crpu{width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:40px;animation:cpul 2s infinite}
+@keyframes cpul{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.3)}50%{box-shadow:0 0 0 14px rgba(255,255,255,0)}}
+.crt{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:7px}
+.crs{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6}
+.crc{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:15px;padding:14px;margin:0 18px 9px;cursor:pointer;display:flex;align-items:center;gap:13px;width:calc(100% - 36px);text-align:left;transition:background .15s}
+.crc:active{background:rgba(255,255,255,.25)}
+.crci{font-size:26px;flex-shrink:0}
+.crcn{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.crcd{font-size:12px;color:rgba(255,255,255,.55);margin-top:2px}
+
+/* INTENSIDADE */
+.introw{display:flex;gap:5px;margin:11px 0}
+.ib{flex:1;height:36px;border-radius:9px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+
+/* RESPIRAÇÃO */
+#vresp{background:var(--dk);z-index:501}
+.resph{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px}
+.respci{width:150px;height:150px;border-radius:50%;background:rgba(76,175,90,.2);display:flex;align-items:center;justify-content:center;margin-bottom:22px;transition:transform 4s ease-in-out}
+.respin{width:94px;height:94px;border-radius:50%;background:var(--v);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;text-align:center;line-height:1.3}
+.respf{font-family:'DM Sans',sans-serif;font-size:21px;font-weight:800;color:#fff;text-align:center;margin-bottom:7px}
+.respc{font-size:46px;font-weight:800;color:var(--am);text-align:center;line-height:1;font-family:'DM Sans',sans-serif}
+
+/* GROUNDING */
+#vgrd{background:var(--dk2);z-index:501}
+.grds{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center}
+.grdn{font-family:'DM Sans',sans-serif;font-size:78px;font-weight:800;color:rgba(255,255,255,.1);line-height:1}
+.grdi{font-size:52px;line-height:1;margin-bottom:14px}
+.grdt{font-family:'DM Sans',sans-serif;font-size:21px;font-weight:800;color:#fff;margin-bottom:9px}
+.grdx{font-size:14px;color:rgba(255,255,255,.6);line-height:1.65}
+
+/* ARTIGO */
+#vart{background:#fff;z-index:201}
+.artbody{font-size:15px;color:var(--txs);line-height:1.75}
+.artbody h3{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:800;color:var(--dk);margin:18px 0 7px}
+.artbody p{margin-bottom:11px}
+
+/* CONFIG */
+.cfgh{background:var(--cin);padding:52px 18px 18px;flex-shrink:0}
+.cfgt{font-family:'DM Sans',sans-serif;font-size:23px;font-weight:800;color:var(--dk)}
+.cfgs{font-size:13px;color:var(--txs);margin-top:4px}
+.cfgsec{background:#fff;border-radius:17px;border:1px solid var(--cinm);margin:0 18px 11px;overflow:hidden}
+.cfgsect{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.7px;padding:11px 15px 7px;border-bottom:1px solid var(--cinm)}
+.cfgi{display:flex;align-items:center;gap:11px;padding:12px 15px;border-bottom:1px solid var(--cinm);cursor:pointer;transition:background .12s}
+.cfgi:last-child{border-bottom:none}
+.cfgi:active{background:var(--cin)}
+.cfgi.dan:active{background:var(--erf)}
+.cfgi.dan .cfgn{color:var(--er)}
+.cfgic{font-size:18px;width:23px;text-align:center;flex-shrink:0}
+.cfgb{flex:1}
+.cfgn{font-size:14px;font-weight:500;color:var(--dk)}
+.cfgd{font-size:12px;color:var(--txm);margin-top:1px;line-height:1.4}
+.cfgar{font-size:15px;color:var(--txm)}
+.pfc{background:var(--cin);border-radius:15px;padding:15px 17px;display:flex;align-items:center;gap:11px;margin:15px 18px 11px}
+.pfav{width:48px;height:48px;border-radius:50%;background:var(--vf);border:3px solid var(--vc);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--ve);flex-shrink:0}
+.pfn{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--dk)}
+.pfe{font-size:12px;color:var(--txm);margin-top:2px}
+.pfm{font-size:12px;color:var(--ve);font-weight:600;margin-top:3px}
+.wppc{display:flex;gap:13px;align-items:flex-start;background:var(--vf);border-radius:17px;border:2px solid var(--vc);padding:17px;margin:0 18px 11px;cursor:pointer}
+.wppc:active{background:#D7EFD9}
+.wppci{font-size:28px;flex-shrink:0}
+.wppcb{flex:1}
+.wppct{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:2px}
+.wppcs{font-size:12px;color:var(--txs);line-height:1.5}
+.wppcl{font-size:13px;font-weight:700;color:var(--ve);margin-top:7px}
+.alimr{display:flex;align-items:center;gap:8px;margin-top:7px}
+.aliminp{width:55px;padding:6px 10px;border:1.5px solid var(--cinm);border-radius:10px;font-size:16px;font-weight:700;color:var(--dk);background:var(--cin);text-align:center}
+.aliminp:focus{border-color:var(--v);background:#fff;outline:none}
+.aliml{font-size:12px;color:var(--txs)}
+.avcli{background:var(--vf);border:1px solid var(--vc);border-radius:13px;padding:13px 15px;display:flex;gap:10px;align-items:flex-start;margin:0 18px 11px}
+.avclic{font-size:19px;flex-shrink:0}
+.avclx{font-size:12px;color:var(--txs);line-height:1.6}
+.termo-ro{background:var(--cin);border-radius:11px;padding:13px;font-size:12px;color:var(--txs);line-height:1.7;max-height:170px;overflow-y:auto;margin-bottom:15px;border:1px solid var(--cinm)}
+
+/* PLANO */
+.plsec{background:#fff;border-radius:17px;border:1px solid var(--cinm);margin:0 18px 11px;overflow:hidden}
+.plsect{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.7px;padding:11px 15px 7px;border-bottom:1px solid var(--cinm)}
+.plrow{padding:11px 15px;border-bottom:1px solid var(--cinm)}
+.plrow:last-child{border-bottom:none}
+.plrowl{font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+
+/* ARTIGO LIST */
+.artc{background:#fff;border-radius:15px;border:1px solid #EBEBEB;overflow:hidden;margin:0 18px 9px;cursor:pointer}
+.artc:active{opacity:.9}
+.artcimg{height:100px;display:flex;align-items:center;justify-content:center;font-size:44px}
+.artcb{padding:12px 13px}
+.artctag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--vf);color:var(--ve);display:inline-block;margin-bottom:5px}
+.artct{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);line-height:1.3;margin-bottom:4px}
+.artcx{font-size:12px;color:var(--txs);line-height:1.5}
+.artctm{font-size:10px;color:var(--txm);margin-top:7px}
+
+/* ── FLUIDEZ v5 ── */
+.ov{opacity:0;transition:opacity .22s ease;pointer-events:none}
+.ov.on{opacity:1;pointer-events:auto;display:flex}
+.sheet{transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,.27,1)}
+.ov.on .sheet{transform:translateY(0)}
+.V.on{animation:vfade .25s ease}
+@keyframes vfade{from{opacity:.6}to{opacity:1}}
+.pg-anim{animation:pgslide .26s cubic-bezier(.25,.8,.35,1)}
+@keyframes pgslide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.cq.on{animation:cqpop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes cqpop{0%{transform:scale(.7)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.hi{transition:transform .12s}
+.hi:active{transform:scale(.985)}
+.fab{transition:transform .15s}
+.fab:active{transform:scale(.88) rotate(90deg)}
+.ni{transition:transform .12s,color .15s}
+.ni:active{transform:scale(.9)}
+.emb:active{transform:scale(.92)}
+.chip:active{transform:scale(.94)}
+.hi-del{background:none;border:none;font-size:13px;color:var(--txm);cursor:pointer;padding:4px 6px;flex-shrink:0;opacity:.5}
+.hi-del:active{color:var(--er);opacity:1}
+@keyframes confetti{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(110vh) rotate(720deg)}}
+.cfp{position:absolute;top:-20px;width:9px;height:9px;z-index:900;pointer-events:none;animation:confetti 1.6s ease-in forwards}
+
+
+/* ── v6.1: DARK MODE COMPLETO ── */
+#shell.dkm{background:#141A14;--cin:#212A21;--cinm:#32402F;--tx:#E9EFE7;--txs:#ADBDA9;--txm:#7C8C78;--vf:#1D3320;--vc:#3E6B44;--ams:#3B3413;--erf:#3B1E1E;--roxof:#2A2142;--lrjf:#3B2A18;--saf:#143029}
+
+/* superfícies */
+#shell.dkm .V,#shell.dkm .topbar,#shell.dkm #vart,#shell.dkm #vo,#shell.dkm .cfgh{background:#141A14}
+#shell.dkm .fc,#shell.dkm .hi,#shell.dkm .calb,#shell.dkm .cmp,#shell.dkm .rii,#shell.dkm .fssi,#shell.dkm .mc,#shell.dkm .gw,#shell.dkm .cfgsec,#shell.dkm .artc,#shell.dkm .gc,#shell.dkm .dri,#shell.dkm .cq,#shell.dkm .acard,#shell.dkm .sheet,#shell.dkm .insc{background:#1D2520;border-color:#32402F}
+#shell.dkm .sc2,#shell.dkm .ddet,#shell.dkm .pfc,#shell.dkm .termo-ro{background:#1D2520;border-color:#32402F}
+#shell.dkm .chip{background:#212A21;border-color:#32402F;color:#ADBDA9}
+#shell.dkm .inp,#shell.dkm .fs,#shell.dkm .ft,#shell.dkm .aliminp{background:#212A21;border-color:#32402F;color:#E9EFE7}
+#shell.dkm .inp::placeholder,#shell.dkm .ft::placeholder,#shell.dkm .cmpta::placeholder{color:#647262}
+#shell.dkm .emb,#shell.dkm .cke{background:#212A21;border-color:#32402F}
+#shell.dkm #bnav{background:rgba(20,26,20,.97);border-top-color:#32402F}
+#shell.dkm .fa{border-top-color:#283228}
+#shell.dkm .calnb,#shell.dkm .bk.dk{background:#212A21;color:#E9EFE7}
+#shell.dkm .hmap-cell.vz{background:#283228}
+#shell.dkm .refh{background:#1D3320}
+#shell.dkm .cks{background:#1D3320}
+
+/* ══ TIPOGRAFIA: todo texto escuro vira claro ══ */
+#shell.dkm .mt,#shell.dkm .sht,#shell.dkm .gn,#shell.dkm .sn,#shell.dkm .calm,#shell.dkm .ddett,#shell.dkm .drin,#shell.dkm .mct,#shell.dkm .gt,#shell.dkm .refht,#shell.dkm .hin,#shell.dkm .fn,#shell.dkm .altt,#shell.dkm .ckst,#shell.dkm .fssin,#shell.dkm .cartat,#shell.dkm .cfgt,#shell.dkm .cfgn,#shell.dkm .pfn,#shell.dkm .wppct,#shell.dkm .artct,#shell.dkm .insct,#shell.dkm .rin,#shell.dkm .ptb-tit.dk,#shell.dkm .artbody h3,#shell.dkm .prt2{color:#E9EFE7}
+#shell.dkm .cald{color:#C9D6C5}
+#shell.dkm .caldl,#shell.dkm .ftm,#shell.dkm .rid,#shell.dkm .him,#shell.dkm .fssim,#shell.dkm .sl,#shell.dkm .artctm{color:#7C8C78}
+#shell.dkm .ftt,#shell.dkm .artbody,#shell.dkm .rit,#shell.dkm .mb,#shell.dkm .gd,#shell.dkm .altx,#shell.dkm .cfgd,#shell.dkm .inscx,#shell.dkm .fssit,#shell.dkm .cartax,#shell.dkm .artcx,#shell.dkm .cmbrx,#shell.dkm .drim,#shell.dkm .wppcs,#shell.dkm .avclx,#shell.dkm .rip,#shell.dkm .lbl{color:#ADBDA9}
+#shell.dkm .sn.v{color:#7BD98A}
+#shell.dkm .sn.r{color:#B79AF2}
+#shell.dkm .tsun{color:#7BD98A}
+#shell.dkm .shl{color:#7BD98A}
+#shell.dkm .atab.on{color:#7BD98A}
+#shell.dkm .tlogo{color:#7BD98A}
+#shell.dkm .pfm,#shell.dkm .wppcl{color:#7BD98A}
+#shell.dkm .artctag,#shell.dkm .fssibg{background:#1D3320;color:#7BD98A}
+#shell.dkm .ftd{background:#3B3413;color:#D9C46A}
+#shell.dkm .ftr{background:#2A2142;color:#B79AF2}
+#shell.dkm .ftv{background:#1D3320;color:#7BD98A}
+
+/* componentes que usavam --dk como FUNDO e sumiriam */
+#shell.dkm .bdk{background:#4CAF5A;color:#0E140E}
+#shell.dkm .chip.on{background:#4CAF5A;border-color:#4CAF5A;color:#0E140E}
+#shell.dkm .cald.hj{background:#4CAF5A;color:#0E140E}
+#shell.dkm .fab{border-color:#141A14}
+#shell.dkm #toast{background:#32402F;color:#E9EFE7}
+#shell.dkm .carta{background:#2E2913;border-color:#8a7a2a}
+#shell.dkm .carta.ok{background:#1D2520;border-color:#3E6B44}
+#shell.dkm .cartabg{background:#8a7a2a;color:#141A14}
+#shell.dkm .mcbg.band{background:#3B3413;color:#D9C46A}
+#shell.dkm .mh{background:#3a463a}
+#shell.dkm .avcli{background:#1D3320;border-color:#3E6B44}
+#shell.dkm .wppc{background:#1D3320;border-color:#3E6B44}
+#shell.dkm .alogo{color:#7BD98A}
+#shell.dkm .tav,#shell.dkm .cmpav,#shell.dkm .pfav,#shell.dkm .riav{background:#1D3320;border-color:#3E6B44;color:#7BD98A}
+
+/* ── v6: SURFAR A ONDA ── */
+#vonda{background:linear-gradient(180deg,#0E2A3F,#1B4965);z-index:502}
+.ondawrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center;position:relative;overflow:hidden}
+.ondasvg{position:absolute;bottom:0;left:0;right:0;height:42%;opacity:.5;pointer-events:none}
+.ondatempo{font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:#fff;line-height:1;position:relative;z-index:1}
+.ondafase{font-size:15px;color:rgba(255,255,255,.85);font-weight:700;margin-top:10px;position:relative;z-index:1;min-height:44px;line-height:1.5;padding:0 10px}
+.ondabar{width:78%;height:10px;background:rgba(255,255,255,.15);border-radius:5px;margin:18px auto 0;overflow:hidden;position:relative;z-index:1}
+.ondafill{height:100%;background:linear-gradient(90deg,#4CAF5A,#FFD600);border-radius:5px;transition:width 1s linear}
+.ondacheck{position:relative;z-index:1;margin-top:20px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:14px;display:none;width:88%}
+.ondacheck.on{display:block;animation:pgslide .3s ease}
+.ondackt{font-size:13px;font-weight:700;color:#fff;margin-bottom:10px}
+.ondackbtns{display:flex;gap:8px;justify-content:center}
+.ondackb{flex:1;padding:10px 6px;border:none;border-radius:11px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* ── v6: PIN LOCK ── */
+#vlock{background:var(--dk);z-index:900}
+.lockwrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px}
+.lockdots{display:flex;gap:14px;margin:22px 0 28px}
+.lockdot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.3);transition:all .15s}
+.lockdot.full{background:var(--v);border-color:var(--v);transform:scale(1.15)}
+.lockpad{display:grid;grid-template-columns:repeat(3,72px);gap:13px}
+.lockkey{height:72px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;font-size:25px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .12s}
+.lockkey:active{background:rgba(255,255,255,.22)}
+.lockkey.ghost{border:none;background:none;font-size:15px;color:rgba(255,255,255,.5)}
+
+/* ── v6: INSIGHTS ── */
+.insc{background:#fff;border-radius:15px;border:1px solid var(--cinm);padding:14px 16px;margin:0 18px 9px;display:flex;gap:12px;align-items:flex-start}
+#shell.dkm .insc{background:#1E2620;border-color:#33402F}
+.insci{font-size:22px;flex-shrink:0;margin-top:1px}
+.insct{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:2px}
+#shell.dkm .insct{color:#E8EDE6}
+.inscx{font-size:12px;color:var(--txs);line-height:1.55}
+
+/* ── v6: TEMPO SEM USO ── */
+.tsu{display:flex;gap:8px;padding:0 18px 12px;overflow-x:auto;scrollbar-width:none}
+.tsu::-webkit-scrollbar{display:none}
+.tsup{flex-shrink:0;background:var(--vf);border:1.5px solid var(--vc);border-radius:14px;padding:9px 14px;text-align:center;min-width:92px}
+.tsun{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--ve);line-height:1}
+#shell.dkm .tsun{color:#7BD98A}
+.tsul{font-size:9.5px;color:var(--txs);margin-top:3px;font-weight:600}
+
+/* ── v6: COMBO ── */
+.cmbres{border-radius:15px;padding:16px;margin-top:13px;border-left:5px solid;display:none}
+.cmbres.on{display:block;animation:pgslide .25s ease}
+.cmbrt{font-size:15px;font-weight:800;margin-bottom:4px}
+.cmbrx{font-size:13px;line-height:1.6;color:var(--txs)}
+.micbtn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--cinm);background:var(--cin);font-size:16px;cursor:pointer;flex-shrink:0;transition:all .15s;align-self:flex-end}
+.micbtn.rec{background:var(--erf);border-color:var(--er);animation:cpul 1.4s infinite}
+
+</style>
+<noscript><div style="padding:40px 24px;font-family:sans-serif;text-align:center;color:#1B2A1C"><h2>⚠️ JavaScript desativado</h2><p>Este app precisa ser aberto em um navegador (Chrome, Safari, Firefox).<br>Se você abriu pelo WhatsApp ou pelo visualizador de arquivos, toque em <strong>"Abrir com → Chrome"</strong>.</p></div></noscript>
+</head>
+<body>
+<div id="shell">
+
+<!-- AUTH -->
+<div class="V on" id="va">
+<div class="at"><div class="alogo">dichava<em>.rd</em></div><div class="atag">Seu espaço de acompanhamento,<br>sem julgamento 💚</div></div>
+<div class="acard">
+  <div class="atabs"><button class="atab on" onclick="authTab('login',this)">Entrar</button><button class="atab" onclick="authTab('signup',this)">Criar conta</button></div>
+  <div id="alogin">
+    <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="li-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="li-ee">E-mail inválido.</div></div>
+    <div class="fld"><div class="lbl">Senha</div><input class="inp" id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"><div class="em" id="li-pwe">E-mail ou senha incorretos.</div></div>
+    <button class="btn bdk bfull" id="btn-login" onclick="doLogin()">Entrar</button>
+    <div style="margin-top:10px;text-align:center;font-size:12px;color:var(--txs)">Demo: <strong>demo@rd.app</strong> / <strong>123456</strong> <button style="background:var(--vf);border:none;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--ve);cursor:pointer;margin-left:4px" onclick="document.getElementById('li-e').value='demo@rd.app';document.getElementById('li-pw').value='123456';doLogin()">Entrar como demo →</button></div>
+  </div>
+  <div id="asignup" style="display:none">
+    <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
+    <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
+    <div class="fld"><div class="lbl">Senha</div><input class="inp" id="su-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><div class="em" id="su-pwe">Mínimo 6 caracteres.</div></div>
+    <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
+  </div>
+</div>
+</div>
+
+<!-- ONBOARD -->
+<div class="V" id="vo">
+<div class="obw">
+  <div class="obp" id="obp"><div class="opd on"></div><div class="opd"></div><div class="opd"></div></div>
+  <div class="obh"><div class="obs" id="ob-st">Passo 1 de 3</div><div class="obt" id="ob-ti">O que te trouxe até aqui?</div><div class="obu" id="ob-su">Escolha o que mais se aproxima. Você pode mudar depois.</div></div>
+  <div class="obb" id="ob-body"></div>
+</div>
+<div class="obf" style="padding:0 18px calc(18px + var(--sb))"><button class="btn bv bfull" id="ob-btn" onclick="obNext()">Continuar →</button></div>
+</div>
+
+<!-- APP -->
+<div class="V" id="vapp">
+
+<!-- HOME -->
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
+<div class="sc scpad">
+  <div class="hh"><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
+  <div class="srow"><div class="sc2"><div class="sn v" id="hs-st">0</div><div class="sl">dias seguidos</div></div><div class="sc2"><div class="sn" id="hs-sw">0</div><div class="sl">esta semana</div></div><div class="sc2"><div class="sn r" id="hs-mt">0%</div><div class="sl">da meta</div></div></div>
+  <div id="h-tempo"></div>
+  <div id="h-alts"></div>
+  <div class="cks" id="ck-strip"><div class="ckst">Como você está agora?</div><div class="ckse"><button class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
+  <div class="wk"><div class="wlb">Sua semana</div><div class="wds" id="h-wds"></div><button class="btn bv bsm" onclick="openMod('mreg')" style="font-family:'DM Sans',sans-serif;position:relative;z-index:1">+ Registrar agora</button></div>
+  <!-- CRISE + FISSURA -->
+  <div style="margin:0 18px 11px;background:var(--erf);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="showV('vcrise')">
+    <div style="width:38px;height:38px;background:var(--er);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">🆘</div>
+    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#E05555">Ajuda de emergência</div><div style="font-size:11px;color:#D07070;margin-top:1px">Mal-estar, crise, overdose — acesse agora</div></div>
+    <div style="color:var(--er);font-size:17px">›</div>
+  </div>
+  <div style="margin:0 18px 11px;background:var(--roxof);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openMod('mfiss')">
+    <div style="width:38px;height:38px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">💪</div>
+    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--roxo)">Resistência ativa</div><div style="font-size:11px;color:var(--roxo);margin-top:1px">Registrar quando quis usar mas não usou</div></div>
+    <div style="color:var(--roxo);font-size:17px">›</div>
+  </div>
+  <div style="margin:0 18px 11px;background:var(--saf);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openCombo()">
+    <div style="width:38px;height:38px;background:var(--sa);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">⚗️</div>
+    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--sa)">Vai misturar? Consulte antes</div><div style="font-size:11px;color:var(--sa);margin-top:1px">Tabela de interações entre substâncias</div></div>
+    <div style="color:var(--sa);font-size:17px">›</div>
+  </div>
+  <div class="shr" style="padding-top:2px"><div class="sht">Para você hoje</div><div class="shl" onclick="goPg('p-ref')">ver mais →</div></div>
+  <div id="h-feed"></div>
+  <div id="h-resumo"></div>
+  <div class="shr"><div class="sht">Últimos registros</div></div>
+  <div id="h-hist"></div>
+</div>
+</div>
+
+<!-- AGENDA -->
+<div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-agenda">
+<div class="topbar"><div class="tlogo">dichava<em>.</em>rd</div><div style="display:flex;align-items:center;gap:9px"><div style="cursor:pointer;font-size:21px" onclick="openMod('mreg')">➕</div><div class="tav" id="tav" onclick="goPg('p-cfg')">?</div></div></div>
+<div class="sc scpad">
+  <div class="calb">
+    <div class="calnr"><button class="calnb" onclick="calNav(-1)">‹</button><div class="calm" id="cal-mes">—</div><button class="calnb" onclick="calNav(1)">›</button></div>
+    <div class="caldls"><div class="caldl">D</div><div class="caldl">S</div><div class="caldl">T</div><div class="caldl">Q</div><div class="caldl">Q</div><div class="caldl">S</div><div class="caldl">S</div></div>
+    <div class="calg" id="calg"></div>
+  </div>
+  <div id="ddet" style="display:none"></div>
+</div>
+</div>
+
+<!-- PROGRESSO -->
+<div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-prog">
+<div class="ph"><div class="pht">Progresso</div><div class="phs">Suas conquistas e evolução</div></div>
+<div class="sc scpad">
+  <div class="shr" style="padding-top:14px"><div class="sht">Mapa de presença — 90 dias</div></div>
+  <div class="hmap-wrap" id="hmap-wrap">
+    <div class="hmap-inner">
+      <div class="hmap-months" id="hmap-months"></div>
+      <div class="hmap-rows">
+        <div class="hmap-dlabs">
+          <div class="hmap-dl">D</div><div class="hmap-dl">S</div><div class="hmap-dl">T</div>
+          <div class="hmap-dl">Q</div><div class="hmap-dl">Q</div><div class="hmap-dl">S</div>
+          <div class="hmap-dl">S</div>
+        </div>
+        <div class="hmap-cols" id="hmap-cols"></div>
+      </div>
+      <div class="hmap-legend">
+        <span class="hmap-leg-lbl">menos</span>
+        <div class="hmap-leg-cell" style="background:#EAEAE6"></div>
+        <div class="hmap-leg-cell" style="background:rgba(76,175,90,.25)"></div>
+        <div class="hmap-leg-cell" style="background:rgba(76,175,90,.5)"></div>
+        <div class="hmap-leg-cell" style="background:#2E7D32"></div>
+        <div class="hmap-leg-cell" style="background:rgba(234,88,12,.6)"></div>
+        <span class="hmap-leg-lbl">acima do limite</span>
+      </div>
+    </div>
+  </div>
+  <div class="shr"><div class="sht">Minhas metas</div><div class="shl" onclick="openMetasMod()">editar</div></div>
+  <div id="metas-l"></div>
+
+  <div class="shr"><div class="sht">Insights do seu padrão 🔍</div></div>
+  <div id="insights-l"></div>
+
+  <div class="shr"><div class="sht">Atividade semanal 📊</div></div>
+  <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
+
+  <div class="shr"><div class="sht">Conquistas 🏆</div></div>
+  <div class="cqr" id="cqr"></div>
+  <div class="shr"><div class="sht">Histórico completo</div><div class="shl" style="color:var(--er)" onclick="if(confirm('Apagar todos os registros?'))limparRegs()">↺ limpar</div></div>
+  <div id="hist-l" style="padding:0 18px;display:flex;flex-direction:column;gap:8px;padding-bottom:4px"></div>
+</div>
+</div>
+
+<!-- REFLEXÕES -->
+<div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-ref">
+<div class="refh"><div class="refht">Reflexões</div><div class="refhs">Um espaço só seu, sem julgamento</div></div>
+<div class="sc scpad">
+  <div class="prc"><div class="prl">💭 Pergunta do dia</div><div class="prt" id="prt">—</div><button class="prb" onclick="respPrm()">Responder agora</button></div>
+  <div class="cmp" id="composer" onclick="focaCmp()">
+    <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
+    <div id="cmpex" style="display:none">
+      <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin:9px 0 7px">Como você está?</div>
+      <div class="emg" id="cmpemg"><button class="emb" onclick="selECmp(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selECmp(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selECmp(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selECmp(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selECmp(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
+      <div class="cmpact"><button class="btn bout bsm" onclick="fechaCmp()">Cancelar</button><button class="btn bsa bsm" onclick="salvRef()">Guardar</button></div>
+    </div>
+  </div>
+  <div id="dica-ref" style="padding:0 18px 13px"></div>
+  <div class="shr"><div class="sht">Meu humor esta semana</div></div>
+  <div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px;margin:0 18px 13px"><canvas id="humor-c" height="130"></canvas></div>
+  <div class="shr"><div class="sht">Cartas para mim ✉️</div><div class="shl" onclick="openMod('mcarta')">+ nova carta</div></div>
+  <div id="cartas-l"></div>
+  <div class="shr"><div class="sht">Resistência ativa 💪</div></div>
+  <div id="fiss-l"></div>
+  <div class="shr"><div class="sht">Minhas reflexões</div></div>
+  <div id="ref-feed"></div>
+  <div class="shr" style="padding-top:4px"><div class="sht">Artigos de RD 📖</div></div>
+  <div id="arts-l"></div>
+</div>
+</div>
+
+<!-- CONFIG -->
+<div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-cfg">
+<div class="cfgh"><div class="cfgt">Configurações</div><div class="cfgs">Sua conta e preferências</div></div>
+<div class="sc scpad">
+  <div class="pfc"><div class="pfav" id="pfav">?</div><div><div class="pfn" id="pfn">—</div><div class="pfe" id="pfe">—</div><div class="pfm" id="pfm">—</div></div></div>
+  <a class="wppc" href="#" onclick="envWPP(event)"><div class="wppci">💬</div><div class="wppcb"><div class="wppct">Compartilhar com terapeuta</div><div class="wppcs">Resumo dos seus registros pelo WhatsApp</div><div class="wppcl">Abrir WhatsApp →</div></div></a>
+  <!-- PLANO -->
+  <div class="shr"><div class="sht">Plano de segurança</div><div class="shl" onclick="openPlanoMod()">editar</div></div>
+  <div class="cfgsec" style="margin:0 18px 11px"><div class="cfgi" onclick="openPlanoMod()"><div class="cfgic">🛡️</div><div class="cfgb"><div class="cfgn">Meu plano pessoal</div><div class="cfgd" id="plano-prev">Não configurado ainda</div></div><div class="cfgar">›</div></div></div>
+  <!-- NOTIF -->
+  <div class="shr"><div class="sht">Notificações</div></div>
+  <div class="cfgsec">
+    <div class="cfgi" style="cursor:default"><div class="cfgic">🔔</div><div class="cfgb"><div class="cfgn">Lembretes diários</div><div class="cfgd">Convite para registrar</div></div><label class="tog"><input type="checkbox" id="tog-n" onchange="salvCfg()"><div class="tsl"></div></label></div>
+    <div style="padding:5px 15px 13px;border-bottom:1px solid var(--cinm)">
+      <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Alertar ao ultrapassar:</div>
+      <div class="alimr"><input class="aliminp" type="number" id="lim-d" min="1" max="20" value="4" onchange="salvCfg()"><span class="aliml">registros por dia</span></div>
+      <div class="alimr" style="margin-top:5px"><input class="aliminp" type="number" id="lim-s" min="1" max="50" value="15" onchange="salvCfg()"><span class="aliml">registros por semana</span></div>
+    </div>
+    <div class="cfgi" style="cursor:default"><div class="cfgic">💭</div><div class="cfgb"><div class="cfgn">Provocações reflexivas</div><div class="cfgd">Perguntas adaptadas ao seu momento</div></div><label class="tog"><input type="checkbox" id="tog-d" onchange="salvCfg()"><div class="tsl"></div></label></div>
+    <div class="cfgi" style="cursor:default"><div class="cfgic">☀️</div><div class="cfgb"><div class="cfgn">Check-in diário de humor</div><div class="cfgd">Lembrete de 30s pela manhã</div></div><label class="tog"><input type="checkbox" id="tog-ck" checked onchange="salvCfg()"><div class="tsl"></div></label></div>
+  </div>
+  <!-- OBJETIVO -->
+  <div class="shr"><div class="sht">Meu objetivo</div></div>
+  <div class="cfgsec">
+    <div class="cfgi" onclick="reabrirOb()"><div class="cfgic">🎯</div><div class="cfgb"><div class="cfgn">Alterar objetivo</div><div class="cfgd" id="cfg-obj">—</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="openMetasMod()"><div class="cfgic">📋</div><div class="cfgb"><div class="cfgn">Gerenciar metas</div><div class="cfgd">Adicione, remova ou conclua</div></div><div class="cfgar">›</div></div>
+  </div>
+  <!-- PRIVACIDADE -->
+  <div class="shr"><div class="sht">Aparência</div></div>
+  <div class="cfgsec">
+    <div class="cfgi" style="cursor:default"><div class="cfgic">🌙</div><div class="cfgb"><div class="cfgn">Modo escuro</div><div class="cfgd">Mais conforto à noite</div></div><label class="tog"><input type="checkbox" id="tog-dark" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
+    <div class="cfgi" style="cursor:default"><div class="cfgic">🕶️</div><div class="cfgb"><div class="cfgn">Modo discreto</div><div class="cfgd">App aparece como "Diário", sem referências a RD</div></div><label class="tog"><input type="checkbox" id="tog-disc" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
+  </div>
+  <div class="shr"><div class="sht">Segurança</div></div>
+  <div class="cfgsec">
+    <div class="cfgi" onclick="cfgPin()"><div class="cfgic">🔒</div><div class="cfgb"><div class="cfgn">PIN de bloqueio</div><div class="cfgd" id="pin-status">Desativado</div></div><div class="cfgar">›</div></div>
+  </div>
+  <div class="shr"><div class="sht">Privacidade</div></div>
+  <div class="cfgsec">
+    <div class="cfgi" onclick="mostrarTermo()"><div class="cfgic">📋</div><div class="cfgb"><div class="cfgn">Termo de consentimento</div><div class="cfgd">Reveja o que você autorizou</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="exportar()"><div class="cfgic">📤</div><div class="cfgb"><div class="cfgn">Exportar meus dados</div><div class="cfgd">Baixar histórico em texto</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="backupJSON()"><div class="cfgic">💾</div><div class="cfgb"><div class="cfgn">Backup completo</div><div class="cfgd">Salvar tudo em arquivo (restaurável)</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="document.getElementById('restore-inp').click()"><div class="cfgic">📥</div><div class="cfgb"><div class="cfgn">Restaurar backup</div><div class="cfgd">Importar arquivo de backup</div></div><div class="cfgar">›</div><input type="file" id="restore-inp" accept=".json" style="display:none" onchange="restoreJSON(this)"></div>
+  </div>
+  <div class="avcli"><div class="avclic">🌿</div><div class="avclx"><strong>Este app é um recurso complementar.</strong> Ele apoia — mas não substitui — o acompanhamento com um profissional de saúde.</div></div>
+  <div class="cfgsec" style="margin-bottom:20px"><div class="cfgi dan" onclick="logout()"><div class="cfgic">🚪</div><div class="cfgb"><div class="cfgn">Sair da conta</div></div></div></div>
+</div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav id="bnav" class="on">
+  <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic">🏠</div><span>Início</span></button>
+  <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic">📅</div><span>Agenda</span></button>
+  <div class="fabw"><div class="fab" onclick="openMod('mreg')">+</div></div>
+  <button class="ni" data-p="p-prog" onclick="goPg('p-prog',this)"><div class="ni-ic">📈</div><span>Progresso</span></button>
+  <button class="ni" data-p="p-ref" onclick="goPg('p-ref',this)"><div class="ni-ic">✍️</div><span>Reflexões</span></button>
+  <button class="ni" data-p="p-cfg" onclick="goPg('p-cfg',this)"><div class="ni-ic">⚙️</div><span>Config.</span></button>
+</nav>
+
+</div><!-- /vapp -->
+
+<!-- CRISE -->
+<div class="V" id="vcrise" style="background:var(--er)">
+<div class="ptb" style="background:var(--er)"><button class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit">Modo Crise</div></div>
+<div class="sc" style="padding-bottom:30px">
+  <div class="crh"><div class="crpu">🆘</div><div class="crt">Você não está sozinho(a)</div><div class="crs">Respira. Escolha o que precisa agora.</div></div>
+  <div style="margin:0 18px 13px;background:rgba(255,255,255,.12);border-radius:15px;padding:14px">
+    <div style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:9px;font-weight:600">Qual a intensidade agora? (1 a 10)</div>
+    <div class="introw" id="crise-int"></div>
+  </div>
+  <button class="crc" onclick="showV('vresp')"><div class="crci">🫁</div><div><div class="crcn">Respiração guiada 4-7-8</div><div class="crcd">2 minutos para acalmar o sistema nervoso</div></div></button>
+  <button class="crc" onclick="iniciarOnda()"><div class="crci">🌊</div><div><div class="crcn">Surfar a onda — 20 min</div><div class="crcd">A fissura tem pico e fim. Atravesse com acompanhamento</div></div></button>
+  <button class="crc" onclick="showV('vgrd')"><div class="crci">🌍</div><div><div class="crcn">Grounding 5-4-3-2-1</div><div class="crcd">Volte ao presente com seus sentidos</div></div></button>
+  <button class="crc" onclick="abrirPlanoCrise()"><div class="crci">🛡️</div><div><div class="crcn">Meu plano de segurança</div><div class="crcd">O que você mesmo(a) preparou para esse momento</div></div></button>
+  <a class="crc" href="tel:192" style="text-decoration:none"><div class="crci">🚑</div><div><div class="crcn">SAMU — 192</div><div class="crcd">Emergência médica, overdose</div></div></a>
+  <a class="crc" href="tel:188" style="text-decoration:none"><div class="crci">💬</div><div><div class="crcn">CVV — 188</div><div class="crcd">Apoio emocional 24h, de graça</div></div></a>
+  <button class="crc" onclick="chamarTerapeuta()"><div class="crci">💚</div><div><div class="crcn">Falar com meu terapeuta</div><div class="crcd">Abrir conversa no WhatsApp agora</div></div></button>
+  <button class="crc" onclick="showV('vapp');setTimeout(()=>openMod('mreg'),50)"><div class="crci">📓</div><div><div class="crcn">Registrar como estou</div><div class="crcd">Documentar esse momento</div></div></button>
+  <div style="margin:13px 18px 0;background:rgba(255,255,255,.1);border-radius:15px;padding:15px">
+    <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">⚡ Se alguém está mal</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.65">1. Mantenha a pessoa consciente e acordada<br>2. Posição lateral de segurança se inconsciente<br>3. Não deixe sozinha — ligue 192 se não melhorar<br>4. Diga o que foi usado: saúde primeiro, sem medo</div>
+  </div>
+</div>
+</div>
+
+<!-- RESPIRAÇÃO -->
+<div class="V" id="vresp" style="background:var(--dk)">
+<div class="ptb" style="background:var(--dk)"><button class="bk" onclick="pararResp(true)">←</button><div class="ptb-tit">Respiração 4-7-8</div></div>
+<div class="resph">
+  <div class="respci" id="respci"><div class="respin" id="respin">Toque para<br>começar</div></div>
+  <div class="respf" id="respf">Pronto para começar</div>
+  <div class="respc" id="respc" style="opacity:0">0</div>
+  <div style="margin-top:22px;display:flex;gap:11px">
+    <button class="btn bv" id="resp-btn" onclick="toggleResp()" style="min-width:130px">Começar</button>
+    <button class="btn bout" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.2)" onclick="pararResp(true)">← Voltar</button>
+  </div>
+  <div style="margin-top:18px;font-size:13px;color:rgba(255,255,255,.4);text-align:center;line-height:1.6">Inspire 4 · Segure 7 · Expire 8<br>Ativa o sistema nervoso parassimpático</div>
+</div>
+</div>
+
+<!-- GROUNDING -->
+<div class="V" id="vgrd" style="background:var(--dk2)">
+<div class="ptb" style="background:var(--dk2)"><button class="bk" onclick="showV('vcrise')">←</button><div class="ptb-tit">Grounding 5-4-3-2-1</div></div>
+<div class="grds">
+  <div class="grdn" id="grd-n">5</div>
+  <div class="grdi" id="grd-i">👁️</div>
+  <div class="grdt" id="grd-t">5 coisas que você VÊ</div>
+  <div class="grdx" id="grd-x">Olhe ao redor. Nomeie 5 coisas que consegue ver agora.</div>
+  <button class="btn bv" style="margin-top:26px;min-width:170px" id="grd-btn" onclick="grdNext()">Próximo →</button>
+</div>
+</div>
+
+<!-- ARTIGO -->
+<div class="V" id="vart" style="background:#fff">
+<div class="ptb" style="background:#fff"><button class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk" id="art-tit-h">Artigo</div></div>
+<div class="sc" style="padding:0 18px calc(32px + var(--sb))"><div id="art-body"></div></div>
+</div>
+
+<!-- ONDA -->
+<div class="V" id="vonda">
+<div class="ptb" style="background:transparent;position:relative;z-index:2"><button class="bk" onclick="pararOnda()">←</button><div class="ptb-tit">Surfar a onda 🌊</div></div>
+<div class="ondawrap">
+  <svg class="ondasvg" viewBox="0 0 400 160" preserveAspectRatio="none"><path id="ondapath" d="M0,80 Q50,40 100,80 T200,80 T300,80 T400,80 V160 H0 Z" fill="rgba(76,175,90,.35)"><animate attributeName="d" dur="4s" repeatCount="indefinite" values="M0,80 Q50,40 100,80 T200,80 T300,80 T400,80 V160 H0 Z;M0,80 Q50,120 100,80 T200,80 T300,80 T400,80 V160 H0 Z;M0,80 Q50,40 100,80 T200,80 T300,80 T400,80 V160 H0 Z"/></path></svg>
+  <div class="ondatempo" id="onda-t">20:00</div>
+  <div class="ondafase" id="onda-f">A vontade é uma onda. Ela sobe, atinge o pico e desce. Você só precisa ficar na prancha.</div>
+  <div class="ondabar"><div class="ondafill" id="onda-fill" style="width:0%"></div></div>
+  <div class="ondacheck" id="onda-ck">
+    <div class="ondackt">Como está a vontade agora?</div>
+    <div class="ondackbtns">
+      <button class="ondackb" style="background:#FFCDD2;color:#B71C1C" onclick="ondaCk(3)">🔥 Forte</button>
+      <button class="ondackb" style="background:#FFF9C4;color:#795548" onclick="ondaCk(2)">〰️ Média</button>
+      <button class="ondackb" style="background:#C8E6C9;color:#1B5E20" onclick="ondaCk(1)">💚 Passando</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- LOCK -->
+<div class="V" id="vlock">
+<div class="lockwrap">
+  <div class="alogo" style="font-size:28px">dichava<em>.rd</em></div>
+  <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:8px" id="lock-msg">Digite seu PIN</div>
+  <div class="lockdots" id="lock-dots"><div class="lockdot"></div><div class="lockdot"></div><div class="lockdot"></div><div class="lockdot"></div></div>
+  <div class="lockpad">
+    <button class="lockkey" onclick="lockKey(1)">1</button><button class="lockkey" onclick="lockKey(2)">2</button><button class="lockkey" onclick="lockKey(3)">3</button>
+    <button class="lockkey" onclick="lockKey(4)">4</button><button class="lockkey" onclick="lockKey(5)">5</button><button class="lockkey" onclick="lockKey(6)">6</button>
+    <button class="lockkey" onclick="lockKey(7)">7</button><button class="lockkey" onclick="lockKey(8)">8</button><button class="lockkey" onclick="lockKey(9)">9</button>
+    <button class="lockkey ghost"></button><button class="lockkey" onclick="lockKey(0)">0</button><button class="lockkey ghost" onclick="lockDel()">⌫</button>
+  </div>
+</div>
+</div>
+
+<!-- COMBO MODAL -->
+<div class="ov" id="mcombo" onclick="if(event.target===this)closeMod('mcombo')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">⚗️ Interações entre substâncias</div>
+  <p style="font-size:12px;color:var(--txs);margin-bottom:14px;line-height:1.6">Referência rápida baseada em dados do <strong>TripSit</strong>. Sempre pesquise mais antes de decidir — combinações têm riscos individuais.</p>
+  <div class="fr2" style="margin-bottom:4px">
+    <div class="fld"><div class="lbl">Substância 1</div><select class="fs" id="cmb-a" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
+    <div class="fld"><div class="lbl">Substância 2</div><select class="fs" id="cmb-b" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
+  </div>
+  <div class="cmbres" id="cmb-res"><div class="cmbrt" id="cmb-rt">—</div><div class="cmbrx" id="cmb-rx">—</div></div>
+  <div style="font-size:11px;color:var(--txm);margin-top:14px;line-height:1.6">Fonte: combo.tripsit.me · uso não-comercial com atribuição. Esta tabela não cobre interações com medicamentos de uso contínuo.</div>
+  <button class="btn bout bfull" style="margin-top:13px" onclick="closeMod('mcombo')">Fechar</button>
+</div></div></div>
+
+<!-- MODALS -->
+<!-- CONSENTIMENTO -->
+<div class="ov" id="mtermo"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="font-size:30px;text-align:center;margin-bottom:9px">🌿</div>
+  <div class="mt c">Consentimento informado</div>
+  <div class="mb c">Este app é uma <strong>ferramenta de apoio</strong> ao acompanhamento terapêutico. Dados privados.<br><br>Não substitui cuidado profissional. Emergências: <strong>SAMU 192</strong> · <strong>CVV 188</strong>.</div>
+  <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-t"><input type="checkbox" id="chk-t"><span style="font-size:13px;color:var(--txs);line-height:1.6">Autorizo o uso dos meus dados para acompanhamento terapêutico e compreendo que este app é um recurso complementar.</span></label>
+  <button class="btn bv bfull" onclick="aceitarTermo()">Aceitar e continuar 💚</button>
+</div></div></div>
+
+<!-- TERMO LEITURA -->
+<div class="ov" id="mtermol" onclick="if(event.target===this)closeMod('mtermol')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt c">Termo de consentimento</div>
+  <div class="termo-ro"><strong>dichava.rd — Termo de Consentimento Informado</strong><br><br>1. Seus dados são armazenados localmente no seu dispositivo e não compartilhados sem sua autorização.<br>2. Este app não substitui o atendimento com profissional de saúde qualificado.<br>3. Emergências: SAMU (192), CVV (188).<br>4. Você pode exportar ou limpar seus dados a qualquer momento.</div>
+  <div style="background:var(--vf);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--ve);font-weight:600;margin-bottom:15px;text-align:center">✓ Aceito em: <span id="termo-dt">—</span></div>
+  <button class="btn bout bfull" onclick="closeMod('mtermol')">Fechar</button>
+</div></div></div>
+
+<!-- NOVO REGISTRO -->
+<div class="ov" id="mreg" onclick="if(event.target===this)closeMod('mreg')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">Novo registro 📓</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Sem julgamento — só registre como foi.</p>
+  <div class="fr2" style="margin-bottom:12px">
+    <div class="fld" style="margin:0"><div class="lbl">Substância <span class="ob">*</span></div>
+      <select class="fs" id="reg-sub" onchange="regSubChg()"><option value="">Selecione…</option><option>🍺 Álcool</option><option>🌿 Cannabis</option><option>🚬 Tabaco</option><option>❄️ Cocaína</option><option>💊 MDMA</option><option>✨ LSD</option><option>🍄 Cogumelo</option><option>🌀 Ketamina</option><option>🔥 Crack</option><option>🌸 Opioide</option><option>💤 Benzodiaz.</option><option>🌿✨ Ayahuasca</option><option>☕ Cafeína</option><option value="outra">➕ Outra</option></select>
+    </div>
+    <div class="fld" style="margin:0"><div class="lbl">Quantidade</div><input class="inp" id="reg-qtd" type="text" placeholder="ex: 2 doses"></div>
+  </div>
+  <div id="reg-outra-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual substância?</div><input class="inp" id="reg-outra" type="text" placeholder="Escreva…"></div>
+  <div class="fr2" style="margin-bottom:12px">
+    <div class="fld" style="margin:0"><div class="lbl">Horário</div><select class="fs" id="reg-hr"><option>Manhã</option><option>Tarde</option><option selected>Noite</option><option>Madrugada</option></select></div>
+    <div class="fld" style="margin:0"><div class="lbl">Contexto</div><select class="fs" id="reg-ctx"><option value="">Onde?</option><option>Em casa, sozinho(a)</option><option>Em casa, com alguém</option><option>Com amigos</option><option>Festa / balada</option><option>Rave / festival</option><option>Trabalho / estudo</option><option>Natureza / cerimônia</option><option>Prefiro não dizer</option></select></div>
+  </div>
+  <div class="fld"><div class="lbl">Valor gasto (opcional)</div><input class="inp" id="reg-custo" type="text" inputmode="decimal" placeholder="R$ 0,00"></div>
+  <div class="fld"><div class="lbl">Estado emocional <span class="ob">*</span></div>
+    <div class="emg" id="reg-emg"><button class="emb" onclick="selEReg(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEReg(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEReg(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEReg(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEReg(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
+  </div>
+  <div class="fld"><div class="lbl">Gatilhos percebidos</div><div class="chips"><span class="chip" onclick="togChip(this)">Estresse</span><span class="chip" onclick="togChip(this)">Ansiedade</span><span class="chip" onclick="togChip(this)">Solidão</span><span class="chip" onclick="togChip(this)">Social</span><span class="chip" onclick="togChip(this)">Tédio</span><span class="chip" onclick="togChip(this)">Celebração</span><span class="chip" onclick="togChip(this)">Hábito</span><span class="chip" onclick="togChip(this)">Não sei</span></div></div>
+  <div class="fld"><div class="lbl">Observação</div><textarea class="ft" id="reg-obs" rows="3" placeholder="O que quero lembrar?"></textarea></div>
+  <button class="btn bv bfull" onclick="salvReg()">Salvar registro</button>
+</div></div></div>
+
+<!-- FISSURA -->
+<div class="ov" id="mfiss" onclick="if(event.target===this)closeMod('mfiss')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">Resistência ativa 💪</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Quis usar mas não usou. Isso é um ato de cuidado com você mesmo(a).</p>
+  <div class="fld"><div class="lbl">Substância que veio à mente</div><select class="fs" id="fiss-sub"><option value="">Selecione…</option><option>🍺 Álcool</option><option>🌿 Cannabis</option><option>🚬 Tabaco</option><option>❄️ Cocaína</option><option>💊 MDMA</option><option>✨ LSD</option><option>Outra</option></select></div>
+  <div class="fld"><div class="lbl">Intensidade (1-10)</div><div class="introw" id="fiss-int"></div></div>
+  <div class="fld"><div class="lbl">O que estava sentindo</div>
+    <div class="emg" id="fiss-emg"><button class="emb" onclick="selEFiss(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEFiss(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEFiss(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEFiss(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEFiss(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
+  </div>
+  <div class="fld"><div class="lbl">O que fiz no lugar</div><input class="inp" id="fiss-fez" type="text" placeholder="ex: fui caminhar, liguei para alguém…"></div>
+  <div class="fld"><div class="lbl">Como me senti depois</div><textarea class="ft" id="fiss-dep" rows="2" placeholder="Como foi atravessar essa vontade?"></textarea></div>
+  <button class="btn bv bfull" onclick="salvFiss()">Registrar conquista 🏆</button>
+</div></div></div>
+
+<!-- METAS -->
+<div class="ov" id="mmetas" onclick="if(event.target===this)closeMod('mmetas')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">Gerenciar metas</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:13px">Marque, remova ou adicione novas metas.</p>
+  <div id="mmetas-l" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
+  <div style="display:flex;gap:8px;margin-bottom:15px">
+    <input class="inp" id="nova-meta" type="text" placeholder="Adicionar minha própria meta…" style="flex:1">
+    <button class="btn bv bsm" onclick="addMeta()">+</button>
+  </div>
+  <button class="btn bout bfull" onclick="closeMod('mmetas')">Fechar</button>
+</div></div></div>
+
+<!-- CARTA -->
+<div class="ov" id="mcarta" onclick="if(event.target===this)closeMod('mcarta')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">✉️ Carta para mim</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Escreva uma carta para você mesmo(a) ler no futuro.</p>
+  <div class="fld"><div class="lbl">Quando abrir?</div><select class="fs" id="carta-prazo"><option value="7">Em 7 dias</option><option value="30" selected>Em 30 dias</option><option value="90">Em 90 dias</option><option value="180">Em 6 meses</option></select></div>
+  <div class="fld"><div class="lbl">Minha carta</div><textarea class="ft" id="carta-tx" rows="6" placeholder="Querido(a) eu do futuro…"></textarea></div>
+  <button class="btn bv bfull" onclick="salvCarta()">Guardar carta ✉️</button>
+</div></div></div>
+
+<!-- PLANO -->
+<div class="ov" id="mplano" onclick="if(event.target===this)closeMod('mplano')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">🛡️ Plano de segurança</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Preencha para ter à mão nos momentos difíceis.</p>
+  <div class="fld"><div class="lbl">Sinais de que estou em risco</div><textarea class="ft" id="pl-sinais" rows="2" placeholder="ex: fico irritado(a), isolo-me…"></textarea></div>
+  <div class="fld"><div class="lbl">Pessoas de confiança (nome + contato)</div><textarea class="ft" id="pl-pess" rows="2" placeholder="ex: Maria — (11)99999-9999"></textarea></div>
+  <div class="fld"><div class="lbl">O que me ajuda nessas horas</div><textarea class="ft" id="pl-ajuda" rows="2" placeholder="ex: caminhar, ouvir música, ligar para alguém…"></textarea></div>
+  <div class="fld"><div class="lbl">Minha frase de ancoragem</div><input class="inp" id="pl-frase" type="text" placeholder="ex: Isso vai passar. Sou mais forte do que isso."></div>
+  <button class="btn bv bfull" onclick="salvPlano()">Salvar plano</button>
+</div></div></div>
+
+<!-- PLANO CRISE (leitura) -->
+<div class="ov" id="mplanocrise" onclick="if(event.target===this)closeMod('mplanocrise')"><div class="sheet" style="background:var(--dk)"><div class="sp">
+  <div class="mh" style="background:rgba(255,255,255,.2)"></div>
+  <div class="mt" style="color:#fff">🛡️ Meu plano de segurança</div>
+  <div id="plano-crise-c" style="margin-top:13px"></div>
+  <button class="btn bfull" style="background:rgba(255,255,255,.15);color:#fff;margin-top:15px" onclick="closeMod('mplanocrise')">Fechar</button>
+</div></div></div>
+
+<!-- RESUMO SEMANAL -->
+<div class="ov" id="mresumo" onclick="if(event.target===this)closeMod('mresumo')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">📊 Resumo da semana</div>
+  <div id="mresumo-c" style="margin:13px 0"></div>
+  <div class="fld"><div class="lbl">O que quero diferente semana que vem?</div><textarea class="ft" id="resumo-prox" rows="3" placeholder="Escreva sua intenção para a próxima semana…"></textarea></div>
+  <div style="display:flex;gap:9px">
+    <button class="btn bv" style="flex:1" onclick="salvResumo()">Guardar</button>
+    <button class="btn bout" onclick="envResumoWPP()">WhatsApp →</button>
+  </div>
+</div></div></div>
+
+<div class="nb" id="nb"><div class="nbi" id="nb-i">💡</div><div class="nbb"><div class="nbt" id="nb-t">—</div><div class="nbs" id="nb-s">—</div></div><button class="nbx" onclick="fechaNB()">✕</button></div>
+<div id="toast"></div>
+<script>
+/* ══ DIAGNÓSTICO ══ */
+window.onerror=function(msg,src,ln){
+  try{
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;top:0;left:0;right:0;background:#B71C1C;color:#fff;font:12px/1.5 monospace;padding:10px 14px;z-index:99999;word-break:break-word';
+    d.innerHTML='⚠️ <b>Erro no app:</b> '+msg+' (linha '+ln+')<br><small>Tire um print desta mensagem.</small>';
+    d.onclick=function(){d.remove()};
+    document.body.appendChild(d);
+  }catch(e){}
+  return false;
+};
+/* ══ CONSTANTES ══ */
+const WPP='+5527998451796';
+const OBJS=[
+  {id:'acompanhar',icon:'📓',bg:'#E8F5E9',nome:'Acompanhar meu uso',desc:'Entender padrões sem pressão de mudar',cor:'#4CAF5A'},
+  {id:'reduzir',icon:'📉',bg:'#FFF3E0',nome:'Reduzir gradualmente',desc:'Diminuir no meu ritmo',cor:'#EA580C'},
+  {id:'parar',icon:'🌱',bg:'#F5F3FF',nome:'Quero parar ou já parei',desc:'Abstinência com acompanhamento',cor:'#7C3AED'},
+  {id:'rd',icon:'🛡️',bg:'#E0F2F1',nome:'Redução de danos',desc:'Usar com mais segurança e consciência',cor:'#00897B'},
+];
+const PASSOS=[
+  {st:'1 de 3',ti:'O que te trouxe até aqui?',su:'Escolha o que mais se aproxima. Pode mudar depois.',tp:'obj'},
+  {st:'2 de 3',ti:'Com quais substâncias quer trabalhar?',su:'Selecione uma ou mais.',tp:'sub'},
+  {st:'3 de 3',ti:'Defina suas primeiras metas',su:'Selecione as que fazem sentido ou crie as suas.',tp:'meta'},
+];
+const SUBS=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','🍄 Cogumelo','🌀 Ketamina','🔥 Crack','🌸 Opioide','💤 Benzodiaz.','🌿✨ Ayahuasca','☕ Cafeína','Outra'];
+const MPAD={
+  acompanhar:['Registrar ao menos 3x por semana','Escrever uma reflexão por semana','Identificar meu principal gatilho','Completar 14 dias de registro','Compartilhar progresso com terapeuta'],
+  reduzir:['Reduzir 30% o uso esta semana','Ter ao menos 2 dias sem usar','Identificar os principais gatilhos','1 copo de água para cada dose de álcool','Criar atividade alternativa no horário de uso'],
+  parar:['Completar 7 dias sem uso','Registrar cada vontade que aparecer','Escrever como me sinto todo dia','Ligar para alguém de confiança ao sentir fissura','Completar 30 dias de acompanhamento'],
+  rd:['Registrar contexto e quantidade a cada uso','Anotar como me sinto antes e depois','Identificar situações de maior risco','Usar kit de reagente antes de substância desconhecida','Planejar set & setting antes de experiências psicodélicas'],
+};
+const PROMPTS={
+  acompanhar:['O que aprendi sobre mim observando meu uso essa semana?','Quando costumo usar mais: manhã, tarde ou noite? Por quê?','Tem algum padrão que não havia percebido antes?','Como me sinto depois de registrar? Isso muda algo?','O que meu uso me diz sobre o que estou sentindo?','Se pudesse conversar com meu eu de 6 meses atrás, o que diria?','Existe situação que consistentemente precede meu uso?','Como minha semana foi em termos de autocuidado?','O que me dá prazer além do uso? Estou cuidando disso?','Qual emoção aparece mais nos meus registros?','Existe relação entre meu sono e meu uso?','Como me sinto fisicamente após usar? E no dia seguinte?','Quais pessoas estão presentes nos momentos de uso?','O que mudou no meu uso nos últimos 30 dias?','Que parte do meu uso me traz satisfação genuína?','Existe algo que evito sentir quando uso?','Como minha rotina influencia meu padrão de uso?','O que mais me surpreendeu ao observar meus dados?','Existe diferença no meu humor nos dias que uso e nos que não uso?','O que minha relação com essa substância diz sobre minhas necessidades?','Como me relaciono com a ideia de controle?','Que cuidados já tomo naturalmente sem perceber?','O que me faz sentir mais conectado(a) com a vida?','Como está minha vida social nos dias de uso?','Existe algo no ambiente que facilita ou dificulta o uso?','Como eu me descreveria a uma pessoa que não me conhece?','O que o meu corpo me diz sobre o meu uso?','Que crença tenho sobre meu uso que merece ser questionada?','O que eu gostaria de registrar daqui a um mês?','Como me sinto ao refletir sobre minha jornada até aqui?'],
+  reduzir:['O que me ajudou a reduzir nos dias em que consegui?','Qual é o maior desafio quando quero diminuir?','Que outra coisa poderia fazer quando sinto vontade de usar?','Como me sinto quando consigo cumprir minha meta?','O que eu diria a um amigo tentando fazer o mesmo?','Qual foi meu momento de maior orgulho essa semana?','O que acontece fisicamente quando decido não usar?','Quem na minha vida me apoia nesse processo?','Como a redução está afetando minha energia e humor?','O que aprendi sobre minha força ao longo dessa jornada?','Qual estratégia funcionou melhor para mim?','Como o delay (esperar 10 min) funcionou?','Que atividade substituta descobri que gosto?','Como está minha relação com as pessoas ao redor?','O que quero que mude nos próximos 30 dias?','Que parte do processo foi mais difícil?','Como me sinto hoje comparado com quando comecei?','O que meu corpo está me dizendo sobre os ajustes?','Qual gatilho ainda me desafia mais?','O que já não me controla mais como antes?','Que pequena vitória aconteceu essa semana?','O que preciso ajustar na minha estratégia?','Como estou dormindo e me alimentando nesse processo?','Que recurso me fortalece mais?','O que faria diferente se começasse de novo?','Como a redução está afetando minha vida social?','Quais são meus maiores motivadores agora?','O que me faz querer continuar nesse caminho?','Como estou cuidando da minha saúde mental?','Que mensagem eu mandaria para mim mesmo(a) no início?'],
+  parar:['O que me motiva a continuar nesse processo hoje?','Como estou cuidando de mim além de não usar?','Qual foi o momento mais difícil essa semana? Como passei?','O que aprendi sobre mim nesse processo?','Que pessoa quero ser daqui a 30 dias?','Como está minha rede de apoio?','Quais atividades estão preenchendo o espaço que o uso ocupava?','Como meu corpo está respondendo a essa mudança?','O que sinto quando a fissura aparece?','Como me relaciono com "um dia de cada vez"?','O que descobri sobre mim que não sabia antes?','Como está meu sono, apetite e energia?','Que conquista desta semana me orgulha mais?','Como estou lidando com situações que antes desencadeavam uso?','Qual é o maior presente que estou me dando?','Como as pessoas ao meu redor estão reagindo à mudança?','O que faço quando sinto que estou no limite?','Que emoção emergiu que antes eu abafava com o uso?','Como me sinto ao olhar para o caminho percorrido?','O que ainda me desafia nesse processo?','Como cuido da minha saúde mental ativamente?','O que significa sobriedade para mim hoje?','Que história estou contando sobre mim mesmo(a)?','Como está minha relação com prazer e diversão sem uso?','Que habilidade estou desenvolvendo?','Como me sinto em eventos sociais agora?','O que mais me ajuda nas horas difíceis?','Que imagem de mim mesmo(a) quero cultivar?','Como estou me relacionando com meu corpo?','Que mensagem de esperança eu deixaria para alguém começando?'],
+  rd:['Houve algo diferente no meu uso esta semana?','Que cuidados tenho tomado que me deixam mais seguro(a)?','O que poderia fazer diferente da próxima vez?','Como eu estava emocionalmente antes de usar? E depois?','Existe algo no meu padrão que está me preocupando?','Que informação sobre segurança aprendi recentemente?','Como estou selecionando com quem uso?','O que faço para estar preparado(a) em emergências?','Como meu set e setting influenciaram minha última experiência?','Que cuidados tomo com a qualidade do que uso?','Como me sinto ao assumir controle sobre meu cuidado?','Que situação de risco desviei essa semana?','Como estou evitando combinações perigosas?','O que aprendi sobre meu corpo e suas reações?','Que recursos de RD estou usando?','Como está minha hidratação nos momentos de uso?','Existe alguém de confiança que sabe onde estou?','Como estou testando ou verificando as substâncias?','Que impacto esse cuidado está tendo na minha saúde?','O que mais me ajuda a me sentir seguro(a)?','Como minha relação com as substâncias mudou?','Que informações ainda sinto falta?','Como estou equilibrando prazer e cuidado?','Que conversa difícil sobre meu uso ainda preciso ter?','O que me diferencia de quando não tinha informação sobre RD?','Como cuido da minha saúde mental?','Que recurso comunitário de RD descobri?','Como a ideia de RD mudou minha perspectiva?','O que ainda quero aprender sobre o cuidado com meu uso?','Que mensagem eu deixaria para outro usuário iniciante?'],
+};
+const DICAS={
+  acompanhar:[{i:'🧩',t:'Padrões revelam muito',x:'Registrar o contexto ajuda a entender o "por quê" antes de qualquer mudança.'},{i:'📊',t:'Seus dados são seus',x:'O histórico que você constrói é uma fonte de autoconhecimento única.'},{i:'🌙',t:'Uso noturno é o mais comum',x:'Muitas pessoas percebem que usam mais à noite — isso é informação valiosa.'},{i:'🎯',t:'Registrar sem julgar',x:'O objetivo do diário é observar, não condenar. Todo registro honesto é cuidado.'},{i:'🔍',t:'O contexto importa',x:'Anotar onde e com quem você estava ajuda a ver padrões que os dados sozinhos não mostram.'},{i:'💤',t:'Sono e uso se influenciam',x:'Privação de sono aumenta a probabilidade de uso compulsivo.'},{i:'📝',t:'Pequenos registros já valem',x:'Não precisa escrever um ensaio. "Usei 2 cervejas, estava ansioso" já é poderoso.'},{i:'🔄',t:'Ciclos se repetem',x:'Com tempo de registro, ciclos emocionais e de uso ficam visíveis.'},{i:'🧠',t:'Autoconhecimento reduz danos',x:'Saber mais sobre si mesmo é a base de qualquer mudança sustentável.'},{i:'🌱',t:'Observar já é mudar',x:'O simples ato de registrar e refletir frequentemente já muda o comportamento.'},{i:'📅',t:'Consistência > perfeição',x:'Registrar 4x por semana por 3 meses é mais útil do que todos os dias por 2 semanas.'},{i:'🫀',t:'Emoções são informação',x:'Raiva, tédio, euforia — toda emoção que precede o uso é um dado sobre o que você precisa.'},{i:'🤔',t:'Curiosidade, não culpa',x:'"Por que usei mais na quinta?" é muito mais útil do que "não devia ter usado".'},{i:'📱',t:'Registre logo após',x:'Quanto mais próximo do uso for o registro, mais preciso e útil ele é.'},{i:'🌿',t:'Não existe uso certo ou errado',x:'O app não julga. Todo registro honesto é válido.'},{i:'💬',t:'Compartilhe com seu terapeuta',x:'Seus registros podem iniciar conversas mais ricas nas sessões.'},{i:'🧘',t:'Reflexão é prática',x:'Reservar 5 minutos por dia para refletir é uma forma de meditação ativa.'},{i:'📈',t:'Cada semana é nova informação',x:'Cada semana completa de registros revela algo que a anterior não mostrou.'},{i:'🔔',t:'Use os lembretes',x:'Configure um horário fixo para registrar. A repetição cria o hábito.'},{i:'🌊',t:'Fluxos e refluxos são normais',x:'Períodos de uso mais intenso alternam com períodos mais tranquilos.'},{i:'🏡',t:'O lugar importa',x:'Ambientes diferentes ativam gatilhos diferentes. Anote onde você está.'},{i:'🎵',t:'Humor influencia o uso',x:'Como você está dormindo e se alimentando também aparece nos dados de uso.'},{i:'🔗',t:'Tudo está conectado',x:'Uso, sono, alimentação, humor — o registro revela essas conexões.'},{i:'📣',t:'Você é o especialista em você',x:'Ninguém conhece seus gatilhos melhor do que você. Esse registro é sua pesquisa.'},{i:'⚡',t:'Uso impulsivo vs planejado',x:'Observe a diferença entre usar porque "surgiu" e usar porque você decidiu.'},{i:'🧩',t:'Cada peça importa',x:'Mesmo que pareça aleatório, cada registro é uma peça de um quebra-cabeça.'},{i:'🌟',t:'Progresso não-linear',x:'Semanas com mais uso após semanas com menos são normais. Não é fracasso.'},{i:'💡',t:'Insight > resolução',x:'Entender por que você usa é mais transformador do que decidir parar.'},{i:'🤝',t:'Acompanhamento faz diferença',x:'Pessoas que registram com apoio profissional têm resultados mais duradouros.'},{i:'🎯',t:'Você já está fazendo a parte mais difícil',x:'Encarar seus padrões com honestidade é corajoso. A maioria evita.'}],
+  reduzir:[{i:'🐢',t:'Devagar é mais duradouro',x:'Reduções graduais têm taxas de sucesso muito maiores que paradas abruptas.'},{i:'⏰',t:'Delay é uma ferramenta',x:'Quando a vontade aparecer, espere 10 minutos. Muitas vezes ela passa sozinha.'},{i:'💧',t:'Cuide do básico',x:'Sono, água e alimentação reduzem a vontade de usar.'},{i:'🎯',t:'Metas pequenas vencem',x:'Reduzir 1 unidade por dia é mais fácil de manter do que cortar metade.'},{i:'🔄',t:'Substitua, não apenas corte',x:'Encontrar algo que preencha a função do uso aumenta muito as chances de sucesso.'},{i:'📊',t:'Acompanhe seus números',x:'Ver a linha do seu uso declinando ao longo das semanas é um dos maiores motivadores.'},{i:'🧘',t:'Respiração funciona',x:'3 respirações profundas ativam o sistema nervoso parassimpático e reduzem a urgência.'},{i:'🌿',t:'Cada esforço conta',x:'Um dia mais leve conta. Um uso a menos conta. Não espere a perfeição.'},{i:'💪',t:'Músculo se fortalece com uso',x:'Cada vez que você resiste ou adia, você fortalece o "músculo" do controle.'},{i:'🤝',t:'Contar para alguém ajuda',x:'Dizer sua meta em voz alta para alguém de confiança aumenta a probabilidade de cumpri-la.'},{i:'🎵',t:'Rituais de substituição',x:'Um ritual agradável no horário de uso habitual facilita a transição.'},{i:'📝',t:'Registre os esforços também',x:'Registre as vezes que quis usar e não usou. Isso é conquista.'},{i:'🌙',t:'Noites são mais difíceis',x:'À noite a resistência está mais baixa. Planeje especialmente esse horário.'},{i:'🏃',t:'Movimento ajuda',x:'Exercício físico reduz craving por vias neurológicas diretas.'},{i:'🔋',t:'Recarregue antes do zero',x:'Cuidar de si antes de chegar ao limite torna mais fácil resistir.'},{i:'🌊',t:'Ondas passam',x:'O craving tem pico e declínio — geralmente em 15-20 minutos.'},{i:'🧩',t:'Identifique o pré-uso',x:'O que acontece 30 minutos antes de você usar? Esse é o momento de intervir.'},{i:'💬',t:'Fale sobre isso',x:'Pessoas que verbalizam sua redução com terapeuta têm resultados melhores.'},{i:'🎉',t:'Celebre sem condição',x:'Comemorar cada semana mais leve é parte do processo.'},{i:'🔮',t:'Visualize o futuro',x:'Como você quer se sentir em 3 meses? Essa imagem é uma âncora.'},{i:'📱',t:'Use o app no momento',x:'Quando sentir vontade, abra o app e registre. Cria distância entre impulso e ação.'},{i:'🌱',t:'Recaídas fazem parte',x:'Um uso após redução não apaga o progresso.'},{i:'🧠',t:'Reconheça os gatilhos automáticos',x:'Cheiro, lugar, horário — estímulos associados disparam vontade automaticamente.'},{i:'🤲',t:'Autocompaixão não é fraqueza',x:'Ser gentil consigo nos momentos difíceis é uma estratégia de resiliência.'},{i:'📏',t:'Meça o que importa',x:'Não apenas a quantidade — meça como você se sente, sua energia, seu sono.'},{i:'🌟',t:'Você está na minoria corajosa',x:'A maioria com padrão problemático nunca busca acompanhamento.'},{i:'⚡',t:'Energia libera quando o uso diminui',x:'Com tempo, muitas pessoas percebem mais energia e clareza mental.'},{i:'🔑',t:'Você tem o que precisa',x:'A capacidade de mudar já está em você.'},{i:'🌅',t:'Manhãs são oportunidades',x:'Como você começa o dia influencia toda a jornada.'},{i:'💚',t:'Cuidado é um ato de amor próprio',x:'Reduzir é um presente que você está se dando.'}],
+  parar:[{i:'🧠',t:'Vontades são temporárias',x:'Uma fissura raramente dura mais que 20 minutos. Só atravessar.'},{i:'🌱',t:'Cada dia importa',x:'Um dia de sobriedade não é pequeno. É enorme.'},{i:'🤝',t:'Você não precisa fazer isso sozinho(a)',x:'A conexão humana é um dos maiores protetores contra recaída.'},{i:'💧',t:'Hidrate-se',x:'O corpo em abstinência precisa de mais água.'},{i:'🏃',t:'Mova-se quando sentir fissura',x:'10 minutos de caminhada liberam endorfinas e interrompem o craving.'},{i:'🕐',t:'Um dia de cada vez',x:'Você não precisa pensar em "nunca mais". Só no hoje.'},{i:'🧘',t:'Respire com intenção',x:'4-7-8: inspire por 4, segure por 7, expire por 8.'},{i:'📞',t:'Tenha um número na agenda',x:'Um amigo, familiar ou terapeuta para ligar nas horas difíceis.'},{i:'🌅',t:'Manhãs definem o tom',x:'Uma rotina matinal, por menor que seja, cria estrutura.'},{i:'🧩',t:'Reconheça seus gatilhos de alto risco',x:'Pessoas, lugares e emoções que precedem o uso — tenha um plano.'},{i:'💪',t:'Cada "não" fortalece',x:'Cada fissura atravessada reconstrói caminhos neurais.'},{i:'🎯',t:'Tenha um plano para recaída',x:'Se acontecer, o que você vai fazer? Ter esse plano antes reduz o dano.'},{i:'🌿',t:'Recaída não é fim',x:'É um evento, não uma identidade.'},{i:'🔋',t:'HALT: fome, raiva, solidão, cansaço',x:'Esses estados aumentam muito a vulnerabilidade. Cheque-se regularmente.'},{i:'🎵',t:'Música como âncora',x:'Uma playlist que você associa a sentimentos positivos pode ser uma ferramenta poderosa.'},{i:'🌙',t:'Durma o suficiente',x:'Privação de sono é um dos maiores fatores de risco para recaída.'},{i:'🤲',t:'Autocompaixão é eficaz',x:'Tratar a si com compaixão após escorregões reduz a chance de recaída.'},{i:'📖',t:'Diário livre também ajuda',x:'Escrever sem estrutura o que está sentindo é uma forma de processar.'},{i:'🌟',t:'Você já provou que consegue',x:'Cada dia de sobriedade é prova real de que você tem a capacidade.'},{i:'👥',t:'Grupos de apoio têm evidências',x:'AA, NA, SMART Recovery — participação regular reduz significativamente recaída.'},{i:'🎯',t:'Saúde física apoia a saúde mental',x:'Alimentação, movimento e sono são pilares da sustentabilidade.'},{i:'💡',t:'Sobriedade não é só abstinência',x:'É também construir uma vida que você queira viver.'},{i:'🔮',t:'Imagine-se em 1 ano',x:'Como você quer estar? Use essa imagem como bússola.'},{i:'🌊',t:'Surf nas ondas, não lute',x:'Observar a vontade sem agir é mais eficaz do que tentar "não pensar".'},{i:'🧘',t:'Mindfulness tem evidências fortes',x:'5 minutos por dia de atenção plena reduz recaída em estudos controlados.'},{i:'💬',t:'Terapia é aliada',x:'O processo vai muito além de não usar. A terapia ajuda a entender o que estava sendo evitado.'},{i:'🏡',t:'Ambiente importa',x:'Reorganizar espaços associados ao uso pode reduzir gatilhos.'},{i:'🌸',t:'Novas fontes de prazer',x:'O que te dava prazer antes? O que você sempre quis experimentar?'},{i:'🔑',t:'A chave está dentro',x:'Toda a capacidade de cuidado que você precisa já está em você.'},{i:'💚',t:'Você merece isso',x:'A vida que você está construindo — você merece. Completamente.'}],
+  rd:[{i:'🧪',t:'Teste é cuidado',x:'Kits de reagente identificam substâncias adulteradas. Em SP e RJ há distribuição gratuita nos CRR.'},{i:'💧',t:'Hidratação salva',x:'1 copo de água para cada dose de álcool. Com MDMA, 500ml por hora — mas não exagere.'},{i:'👥',t:'Set & setting sempre',x:'O ambiente e o estado emocional influenciam muito a experiência.'},{i:'🤝',t:'Nunca use sozinho(a)',x:'Ter alguém de confiança presente ou informado salva vidas.'},{i:'📞',t:'Tenha os números na tela',x:'SAMU 192, CVV 188. Em eventos: procure a equipe médica antes de precisar.'},{i:'⏰',t:'Intervalos importam',x:'Para psicodélicos, pelo menos 2 semanas. Para MDMA, 3 meses.'},{i:'🔬',t:'Conheça o que você usa',x:'TripSit e Erowid têm informações científicas sobre interações e riscos.'},{i:'🌡️',t:'Temperatura é risco real',x:'Hipertermia é uma das principais causas de morte em raves. Faça pausas.'},{i:'🍽️',t:'Coma antes de usar álcool',x:'Estômago cheio reduz pico de alcoolemia.'},{i:'💊',t:'Jamais misture sem pesquisar',x:'Antes de misturar qualquer substância, consulte uma tabela de interações.'},{i:'🎯',t:'Dosagem é segurança',x:'Comece sempre com doses menores. Aumentar depois é possível; reverter não.'},{i:'🧘',t:'Estado emocional afeta tudo',x:'Usar em estado de estresse intensifica esse estado.'},{i:'🚗',t:'Nunca dirija sob efeito',x:'Nenhuma substância psicoativa é compatível com direção segura.'},{i:'🌿',t:'Cannabis e ansiedade',x:'Alto THC e baixo CBD pode intensificar ansiedade. Cultivares equilibradas são mais seguras.'},{i:'🛑',t:'Pare se algo parecer errado',x:'Confie no seu instinto. Se a experiência parecer estranha, interrompa e busque ajuda.'},{i:'📝',t:'Registre sempre',x:'Anotar o que usou e como foi é informação clínica valiosa.'},{i:'🏥',t:'Em emergências, seja honesto(a)',x:'Dizer ao médico o que você usou pode salvar sua vida.'},{i:'🌙',t:'Uso noturno aumenta riscos',x:'Cansaço reduz julgamento. Planeje mais cuidado nos usos noturnos.'},{i:'🔋',t:'Reponha eletrólitos',x:'Após uso prolongado com esforço físico, repor sódio e potássio é importante.'},{i:'🧑‍🤝‍🧑',t:'Conheça seus companheiros',x:'Usar com pessoas que sabem o que fazer em emergências reduz riscos.'},{i:'📱',t:'Salve o número de um redutor de danos',x:'Psiconauta Brasil e grupos locais oferecem apoio sem julgamento.'},{i:'🌿',t:'Princípio ativo ≠ produto final',x:'A substância raramente é pura. Adulterantes são a norma, não exceção.'},{i:'🫀',t:'Condições pré-existentes importam',x:'Histórico de hipertensão ou condição mental afeta o risco.'},{i:'🧴',t:'Cuidados pós-uso',x:'Repouso, hidratação e alimentação adequada no dia seguinte são parte do cuidado.'},{i:'🔍',t:'Saiba os sinais de overdose',x:'Perda de consciência, respiração irregular, lábios azulados: chame ajuda.'},{i:'🌐',t:'Informação de qualidade existe',x:'Drogas.info, TripSit e organizações de RD oferecem informação com rigor científico.'},{i:'🎓',t:'Conhecimento reduz danos',x:'Usuários informados têm significativamente menos incidentes sérios.'},{i:'💚',t:'Cuidado sem julgamento',x:'Redução de danos reconhece que o uso faz parte da vida humana.'},{i:'👤',t:'Você é seu próprio especialista',x:'Com informação e registro, você se torna a pessoa mais capacitada para cuidar de si.'},{i:'🌟',t:'Agência é proteção',x:'Tomar decisões informadas sobre o seu uso — isso é redução de danos.'}],
+};
+const ARTS=[
+  {id:'fissura',ic:'🧠',bg:'#E8F5E9',tag:'Neurociência',ti:'O que é fissura e por que ela passa',tm:'3 min',corpo:`<h3>O que acontece no seu cérebro</h3><p>A fissura (craving) é uma resposta neurológica — não uma fraqueza de caráter. Quando você usa uma substância repetidamente, o cérebro aprende a antecipar o prazer e gera desejo intenso em resposta a gatilhos: um lugar, um horário, uma pessoa, uma emoção.</p><h3>A boa notícia: ela passa</h3><p>Estudos mostram que a maioria das fissuras atinge seu pico em 5 a 10 minutos e diminui em 20 minutos. Você não precisa agir nela — só atravessar.</p><h3>O que funciona</h3><p>Surfar a onda: observar a vontade sem agir. Respiração diafragmática. Mudança de ambiente. Contato com alguém de confiança. Exercício físico breve. Registrar o que você está sentindo — isso cria distância entre o impulso e a ação.</p><h3>Registrar ajuda</h3><p>Cada fissura que você registra sem agir é um dado poderoso. Com o tempo, você começa a ver os padrões — e os padrões são a chave para entender o que realmente está precisando.</p>`},
+  {id:'sono',ic:'🌙',bg:'#E3F2FD',tag:'Saúde',ti:'Como o álcool afeta o seu sono',tm:'4 min',corpo:`<h3>O paradoxo do álcool e o sono</h3><p>O álcool é um depressor do sistema nervoso central e pode facilitar o adormecer — mas piora profundamente a qualidade do sono. Isso cria um ciclo perigoso: você usa para dormir, dorme mal, acorda cansado(a), e a vontade de usar aumenta no dia seguinte.</p><h3>O que acontece na prática</h3><p>O álcool suprime o sono REM (a fase do sonho e da consolidação emocional). Você acorda mais vezes durante a madrugada, mesmo sem perceber. A respiração fica irregular. Você acorda com a sensação de não ter descansado.</p><h3>O ciclo vicioso</h3><p>Privação de sono aumenta impulsividade e reduz a capacidade de resistir ao craving. É um fator de risco real para o aumento do uso. Quebrar esse ciclo — mesmo com pequenas melhorias no sono — pode ter impacto direto na sua relação com o álcool.</p><h3>O que ajuda</h3><p>Evitar álcool nas 3-4 horas antes de dormir. Rotina de sono consistente. Temperatura do quarto ligeiramente fria. Exposição à luz natural pela manhã. Técnicas de relaxamento antes de deitar.</p>`},
+  {id:'settsetting',ic:'🧘',bg:'#F3E5F5',tag:'Psicodélicos',ti:'Set & setting: a base da experiência segura',tm:'5 min',corpo:`<h3>O que são set e setting</h3><p>Set (mindset) é o estado mental, emocional e psicológico com que você entra numa experiência. Setting é o ambiente físico e social ao redor. Décadas de pesquisa confirmaram: esses dois fatores são os principais determinantes de se uma experiência psicodélica será positiva ou difícil.</p><h3>Set: o que preparar internamente</h3><p>Defina uma intenção: por que você está fazendo isso? Evite experiências em momentos de crise emocional intensa, luto recente ou instabilidade mental não trabalhada.</p><h3>Setting: o que preparar externamente</h3><p>Ambiente seguro, limpo e confortável. Pessoas de confiança — de preferência alguém sóbrio (tripper sitter). Música cuidadosamente escolhida. Sem compromissos nas próximas 24h. Kit de segurança: água, frutas, cobertor, recipiente caso precise vomitar.</p><h3>Integração: o que vem depois</h3><p>A integração é o processo de dar sentido ao que aconteceu. Escrever, conversar com alguém de confiança ou com um profissional de saúde mental é parte fundamental de uma experiência saudável com psicodélicos.</p>`},
+  {id:'rdconceito',ic:'🛡️',bg:'#E0F2F1',tag:'Redução de Danos',ti:'O que é redução de danos, de verdade',tm:'3 min',corpo:`<h3>Não é sobre aprovar o uso</h3><p>Redução de danos (RD) é uma política de saúde pública e uma prática clínica baseada em evidências que parte de uma premissa simples: o uso de substâncias existe, existiu e vai continuar existindo. A pergunta relevante não é "como eliminar o uso?" mas "como reduzir o sofrimento causado por ele?"</p><h3>O que RD é na prática</h3><p>Distribuição de kits de reagente para testar substâncias. Troca de seringas. Espaços de consumo supervisionado. Informação sobre interações perigosas. Acompanhamento clínico sem exigência de abstinência. Este app.</p><h3>Por que funciona</h3><p>Porque parte do encontro com a pessoa onde ela está, sem julgamento. Porque reconhece que autonomia e dignidade são parte de qualquer processo de cuidado real. Porque o vínculo terapêutico sem julgamento frequentemente transforma.</p>`},
+  {id:'gatilhos',ic:'⚡',bg:'#FFF9C4',tag:'Psicologia',ti:'Entendendo seus gatilhos de uso',tm:'4 min',corpo:`<h3>O que são gatilhos</h3><p>Gatilhos são estímulos — internos ou externos — que ativam o desejo de usar. Podem ser pessoas, lugares, horários, emoções, cheiros, sons ou situações específicas. Com o uso repetido, o cérebro cria associações automáticas: certo ambiente → ativa circuito de recompensa → vontade de usar.</p><h3>Tipos de gatilhos</h3><p><strong>Emocionais:</strong> estresse, ansiedade, solidão, tédio, raiva, euforia, celebração.<br><strong>Sociais:</strong> determinadas pessoas, grupos, situações sociais.<br><strong>Contextuais:</strong> lugares específicos, horários, rotinas.<br><strong>Sensoriais:</strong> ver, cheirar ou ouvir algo associado ao uso.</p><h3>Como o registro ajuda</h3><p>Identificar padrões de gatilhos ao longo do tempo é uma das ferramentas mais poderosas da redução de danos. Quando você sabe o que dispara o desejo, pode planejar: ter um plano para esse momento, criar alternativas, ou simplesmente estar mais consciente e menos reativo.</p>`},
+];
+const GRPS=[
+  {n:'5',i:'👁️',t:'5 coisas que você VÊ',x:'Olhe ao redor. Nomeie 5 coisas que consegue ver agora. Pode ser qualquer coisa — uma cor, um objeto, uma textura.'},
+  {n:'4',i:'✋',t:'4 coisas que você TOCA',x:'Sinta a textura da sua roupa, do chão sob os pés, do ar na pele. Nomeie 4 sensações físicas agora.'},
+  {n:'3',i:'👂',t:'3 coisas que você OUVE',x:'Feche os olhos e ouça. Sons próximos, sons distantes. Nomeie 3 sons que consegue identificar.'},
+  {n:'2',i:'👃',t:'2 coisas que você CHEIRA',x:'Inspire fundo. Identifique 2 cheiros ao redor — o ar, sua roupa, algo no ambiente.'},
+  {n:'1',i:'👅',t:'1 coisa que você SENTE O GOSTO',x:'Uma respiração longa. Sinta qualquer gosto na boca — água, ar, o que estiver presente.'},
+  {n:'✓',i:'💚',t:'Você atravessou!',x:'Você acabou de trazer seu sistema nervoso de volta ao presente. Respira. Você está aqui.'},
+];
+
+/* ══ STATE ══ */
+let U=null,_eReg=null,_eFiss=null,_eCmp=null;
+let _calDt=new Date(),_calSel=null;
+let _obP=0,_obG=null,_obSubs=[];
+let _gC=null,_hC=null;
+let _grP=0,_rT=null,_rOn=false,_rFase=0,_rSeg=0;
+let _fI=null,_crI=null;
+
+/* ══ STORAGE ══ */
+function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+const uid=()=>U?.id||'x';
+const gR=()=>ls('dr_r_'+uid())||[];
+const sR=r=>ls('dr_r_'+uid(),r);
+const gRef=()=>ls('dr_rf_'+uid())||[];
+const sRef=r=>ls('dr_rf_'+uid(),r);
+const gFs=()=>ls('dr_fs_'+uid())||[];
+const sFs=r=>ls('dr_fs_'+uid(),r);
+const gCt=()=>ls('dr_ct_'+uid())||[];
+const sCt=c=>ls('dr_ct_'+uid(),c);
+const gC=()=>ls('dr_c_'+uid())||{notif:true,dicas:true,ck:true,limD:4,limS:15};
+const sC=c=>ls('dr_c_'+uid(),c);
+const gO=()=>ls('dr_o_'+uid());
+const sO=g=>ls('dr_o_'+uid(),g);
+const gM=()=>ls('dr_m_'+uid())||[];
+const sM=m=>ls('dr_m_'+uid(),m);
+const gP=()=>ls('dr_p_'+uid())||{};
+const sP=p=>ls('dr_p_'+uid(),p);
+const gCK=()=>ls('dr_ck_'+uid())||{};
+const sCK=c=>ls('dr_ck_'+uid(),c);
+
+/* ══ UTILS ══ */
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+const isoLocal=d=>{const p=n=>String(n).padStart(2,'0');return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`};
+const hoje=()=>isoLocal(new Date());
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const vib=ms=>{try{if(navigator.vibrate)navigator.vibrate(ms||10)}catch{}};
+const fdt=iso=>{if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`};
+const nem=s=>{const m={Álcool:'🍺',Cannabis:'🌿',Tabaco:'🚬',Cocaína:'❄️',MDMA:'💊',LSD:'✨',Cogumelo:'🍄',Ketamina:'🌀',Crack:'🔥',Opioide:'🌸','Benzodiaz.':'💤',Ayahuasca:'🌿✨',Cafeína:'☕'};for(const k of Object.keys(m))if(s&&s.includes(k))return m[k];return'🔹'};
+const ini=n=>{if(!n)return'?';return n.trim().split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2)};
+const saud=()=>{const h=new Date().getHours();if(h<12)return'Bom dia,';if(h<18)return'Boa tarde,';return'Boa noite,'};
+function streak(regs){const ds=[...new Set(regs.map(r=>r.data))].sort().reverse();let s=0;let c=new Date();c.setHours(12,0,0,0);for(const d of ds){const dd=new Date(d+'T12:00:00');const df=Math.round((c-dd)/864e5);if(df>1)break;s++;c=dd;}return s}
+function semISO(iso){const d=new Date(iso+'T12:00:00');const dw=d.getDay();const m=new Date(d);m.setDate(d.getDate()-dw+1);return m.toISOString().split('T')[0]}
+const shk=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')};
+const prmp=(g)=>{const a=PROMPTS[g]||PROMPTS.rd;return a[(new Date().getDate()-1)%a.length]};
+const dica=(g)=>{const a=DICAS[g]||DICAS.rd;return a[(new Date().getDate()-1)%a.length]};
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2800)}
+function blurAll(){document.querySelectorAll('input,textarea,select').forEach(e=>e.blur())}
+
+/* ══ VIEWS ══ */
+function showV(id){document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));document.getElementById(id).classList.add('on');if(id==='vresp')initResp();if(id==='vgrd')initGrd();}
+
+/* ══ PAGES ══ */
+const PAGES=['p-home','p-agenda','p-prog','p-ref','p-cfg'];
+function goPg(id,btn){
+  vib(8);
+  PAGES.forEach(p=>{const el=document.getElementById(p);if(el){el.style.display=p===id?'flex':'none';if(p===id){el.classList.remove('pg-anim');void el.offsetWidth;el.classList.add('pg-anim');}}});
+  document.querySelectorAll('.ni[data-p]').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  else document.querySelectorAll(`.ni[data-p="${id}"]`).forEach(b=>b.classList.add('on'));
+  blurAll();
+  if(id==='p-agenda')renderCal();
+  if(id==='p-prog')renderProg();
+  if(id==='p-ref')renderRef();
+  if(id==='p-cfg')renderCfg();
+}
+
+/* ══ MODALS ══ */
+function openMod(id){blurAll();document.getElementById(id).classList.add('on')}
+function closeMod(id){blurAll();document.getElementById(id).classList.remove('on')}
+
+/* ══ NOTIF BANNER ══ */
+function notif(ic,t,s){document.getElementById('nb-i').textContent=ic;document.getElementById('nb-t').textContent=t;document.getElementById('nb-s').textContent=s;document.getElementById('nb').classList.add('on');setTimeout(fechaNB,6000)}
+function fechaNB(){document.getElementById('nb').classList.remove('on')}
+
+/* ══ INTENSIDADE ROWS ══ */
+function buildIntRow(elId,varRef){
+  const el=document.getElementById(elId);if(!el)return;
+  el.innerHTML='';
+  const cls=['#E8F5E9','#C8E6C9','#FFF9C4','#FFE0B2','#FFCCBC','#FFAB91','#FF8A65','#FF7043','#EF5350','#B71C1C'];
+  for(let i=1;i<=10;i++){
+    const b=document.createElement('button');
+    b.className='ib';b.textContent=i;b.style.background=cls[i-1];b.style.color=i>=7?'#fff':'#333';
+    b.onclick=function(){
+      this.closest('.introw').querySelectorAll('.ib').forEach(x=>x.style.outline='none');
+      this.style.outline='2px solid var(--dk)';
+      if(varRef==='cr')_crI=i;else _fI=i;
+    };
+    el.appendChild(b);
+  }
+}
+
+/* ══ AUTH ══ */
+function authTab(t,btn){document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.getElementById('alogin').style.display=t==='login'?'':'none';document.getElementById('asignup').style.display=t==='signup'?'':'none';}
+async function doLogin(){
+  blurAll();
+  const e=document.getElementById('li-e').value.trim(),pw=document.getElementById('li-pw').value;
+  let ok=true;
+  const chk=(id,eid,cond,msg)=>{const el=document.getElementById(id),er=document.getElementById(eid);if(!cond){el.classList.add('err');er.classList.add('on');if(msg)er.textContent=msg;shk(el);ok=false;}else{el.classList.remove('err');er.classList.remove('on');}};
+  chk('li-e','li-ee',e&&/\S+@\S+\.\S+/.test(e),'E-mail inválido.');
+  chk('li-pw','li-pwe',pw&&pw.length>=6,'E-mail ou senha incorretos.');
+  if(!ok)return;
+  const btn=document.getElementById('btn-login');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
+  await delay(600);
+  if(e==='demo@rd.app'&&pw==='123456'){U={id:'demo',nome:'Usuário Demo',email:e};}
+  else{const us=ls('dr_users')||[];const u=us.find(u=>u.email===e&&u.pw===btoa(pw));if(!u){document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent='E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}U={id:u.id,nome:u.nome,email:u.email};}
+  ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();
+}
+async function doSignup(){
+  blurAll();
+  const n=document.getElementById('su-n').value.trim(),e=document.getElementById('su-e').value.trim(),pw=document.getElementById('su-pw').value;
+  let ok=true;
+  const chk=(id,eid,cond,msg)=>{const el=document.getElementById(id),er=document.getElementById(eid);if(!cond){el.classList.add('err');er.classList.add('on');if(msg)er.textContent=msg;shk(el);ok=false;}else{el.classList.remove('err');er.classList.remove('on');}};
+  chk('su-n','su-ne',n,'Informe seu nome.');chk('su-e','su-ee',e&&/\S+@\S+\.\S+/.test(e),'E-mail inválido.');chk('su-pw','su-pwe',pw&&pw.length>=6,'Mínimo 6 caracteres.');
+  if(!ok)return;
+  const btn=document.getElementById('btn-signup');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
+  await delay(600);
+  const us=ls('dr_users')||[];
+  if(us.find(u=>u.email===e)){document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent='E-mail já cadastrado.';shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}
+  const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw)};us.push(nU);ls('dr_users',us);
+  U={id:nU.id,nome:n,email:e};ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();
+}
+function posLogin(){
+  // Esconde auth
+  document.getElementById('va').classList.remove('on');
+  const t=ls('dr_termo_'+U.id);
+  if(!t){
+    // Mostra app por baixo do modal
+    showV('vapp');
+    openMod('mtermo');
+  } else {
+    const o=gO();
+    if(!o) startOb();
+    else entrar();
+  }
+}
+function logout(){if(!confirm('Sair?'))return;U=null;ls('dr_session',null);showV('va');toast('Até logo! 💚')}
+
+/* ══ CONSENTIMENTO ══ */
+function aceitarTermo(){
+  if(!document.getElementById('chk-t').checked){shk(document.querySelector('[for="chk-t"]'));toast('⚠️ Marque a caixa.');return;}
+  ls('dr_termo_'+U.id,new Date().toISOString());closeMod('mtermo');
+  const o=gO();if(!o)startOb();else entrar();
+}
+function mostrarTermo(){
+  const dt=ls('dr_termo_'+U.id);
+  if(dt){const d=new Date(dt);document.getElementById('termo-dt').textContent=d.toLocaleDateString('pt-BR')+' às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+  openMod('mtermol');
+}
+
+/* ══ ONBOARDING ══ */
+function startOb(){
+  _obP=0;_obG=null;_obSubs=[];
+  document.getElementById('ob-btn').textContent='Continuar →';
+  document.getElementById('vapp').classList.remove('on');
+  document.getElementById('vo').classList.add('on');
+  document.getElementById('bnav').classList.remove('on');
+  renderOb();
+}
+function reabrirOb(){startOb();}
+function renderOb(){
+  const p=PASSOS[_obP];
+  document.getElementById('ob-st').textContent=p.st;
+  document.getElementById('ob-ti').textContent=p.ti;
+  document.getElementById('ob-su').textContent=p.su;
+  document.querySelectorAll('.opd').forEach((d,i)=>d.classList.toggle('on',i<=_obP));
+  const body=document.getElementById('ob-body');body.innerHTML='';
+  if(p.tp==='obj'){
+    OBJS.forEach(g=>{
+      const d=document.createElement('div');d.className='gc'+(g.id===_obG?' on':'');
+      d.innerHTML=`<div class="gi" style="background:${g.bg}">${g.icon}</div><div class="gb"><div class="gn">${g.nome}</div><div class="gd">${g.desc}</div></div><div class="gr"></div>`;
+      d.onclick=()=>{_obG=g.id;document.querySelectorAll('#ob-body .gc').forEach(c=>c.classList.remove('on'));d.classList.add('on');};
+      body.appendChild(d);
+    });
+  } else if(p.tp==='sub'){
+    const note=document.createElement('div');note.style.cssText='font-size:12px;color:var(--txm);margin-bottom:10px;padding:8px 12px;background:var(--ams);border-radius:10px';note.textContent='✓ Selecione uma ou mais';body.appendChild(note);
+    const grid=document.createElement('div');grid.style.cssText='display:flex;flex-wrap:wrap;gap:8px';
+    SUBS.forEach(s=>{const b=document.createElement('button');b.className='chip'+(_obSubs.includes(s)?' on':'');b.textContent=s;b.onclick=()=>{const idx=_obSubs.indexOf(s);if(idx>=0)_obSubs.splice(idx,1);else _obSubs.push(s);b.classList.toggle('on',_obSubs.includes(s));};grid.appendChild(b);});
+    body.appendChild(grid);
+  } else if(p.tp==='meta'){
+    const note=document.createElement('div');note.style.cssText='font-size:12px;color:var(--txm);margin-bottom:10px;padding:8px 12px;background:var(--ams);border-radius:10px';note.textContent='✓ Marque as que fazem sentido agora';body.appendChild(note);
+    (MPAD[_obG]||[]).forEach(m=>{
+      const d=document.createElement('div');d.className='gc';
+      d.innerHTML=`<div class="gi" style="background:var(--vf)">✅</div><div class="gb"><div class="gn">${m}</div></div><div class="gck">✓</div>`;
+      d.onclick=()=>d.classList.toggle('on');d._meta=m;body.appendChild(d);
+    });
+  }
+}
+function obNext(){
+  blurAll();
+  const p=PASSOS[_obP];
+  if(p.tp==='obj'&&!_obG){toast('⚠️ Escolha uma opção.');return;}
+  _obP++;
+  if(_obP>=PASSOS.length){
+    const cards=[...document.querySelectorAll('#ob-body .gc.on')];
+    let ms=cards.map(c=>c._meta).filter(Boolean);
+    if(!ms.length)ms=MPAD[_obG]?.slice(0,2)||[];
+    sO({goal:_obG,subs:_obSubs,data:hoje()});
+    sM(ms.map((t,i)=>({id:'m'+i+Date.now(),titulo:t,ok:false,criada:hoje()})));
+    document.getElementById('vo').classList.remove('on');
+    entrar();return;
+  }
+  document.getElementById('ob-btn').textContent=_obP===PASSOS.length-1?'Salvar e entrar →':'Continuar →';
+  renderOb();
+}
+
+/* ══ ENTRAR ══ */
+function entrar(){
+  document.getElementById('vo').classList.remove('on');
+  showV('vapp');
+  document.getElementById('bnav').classList.add('on');
+  goPg('p-home');
+  applyTheme();
+  renderHome();
+  renderCkStrip();
+  buildIntRow('crise-int','cr');
+  buildIntRow('fiss-int','fs');
+  agNotif();
+}
+
+/* ══ CHECK-IN ══ */
+function renderCkStrip(){
+  const cfg=gC();if(!cfg.ck)return;
+  const ck=gCK();if(ck.data===hoje())return;
+  document.getElementById('ck-strip').style.display='block';
+}
+function ckRapido(btn,emoji,label){
+  document.querySelectorAll('#ck-strip .cke').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  sCK({data:hoje(),emoji,label});
+  setTimeout(()=>{document.getElementById('ck-strip').style.display='none';toast('✓ Humor registrado 💚');},600);
+}
+
+/* ══ HOME ══ */
+function renderHome(){
+  const regs=gR(),obj=gO(),goal=OBJS.find(g=>g.id===obj?.goal),nome=U?.nome||'',in2=ini(nome);
+  const tav=document.getElementById('tav');if(tav)tav.textContent=in2;
+  document.getElementById('cmpav').textContent=in2;
+  document.getElementById('h-sd').textContent=saud();
+  document.getElementById('h-n').innerHTML=`${nome} <span>cuida de si.</span>`;
+  document.getElementById('h-mt').textContent=goal?.nome||'—';
+  const st=streak(regs),sw=regs.filter(r=>r.data>=semISO(hoje())).length,mts=gM(),mp=mts.length?Math.round(mts.filter(m=>m.ok).length/mts.length*100):0;
+  document.getElementById('hs-st').textContent=st;
+  document.getElementById('hs-sw').textContent=sw;
+  document.getElementById('hs-mt').textContent=mp+'%';
+  renderTempo();renderAlts(regs);renderWds(regs);renderFeed(obj?.goal);renderResumo(regs,obj?.goal);renderHistMini(regs);
+}
+
+function renderAlts(regs){
+  const c=document.getElementById('h-alts');c.innerHTML=renderD1(regs);const cfg=gC();const hj=hoje();
+  const cH=regs.filter(r=>r.data===hj).length,cS=regs.filter(r=>r.data>=semISO(hj)).length;
+  if(cfg.notif&&cH>=cfg.limD)c.innerHTML+=`<div class="alt at"><div class="alti">⚠️</div><div class="altb"><div class="altt">Limite diário atingido</div><div class="altx">Você registrou ${cH} usos hoje (limite: ${cfg.limD}). Como você está?</div></div><button class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
+  if(cfg.notif&&cS>=cfg.limS)c.innerHTML+=`<div class="alt at"><div class="alti">📊</div><div class="altb"><div class="altt">Limite semanal atingido</div><div class="altx">${cS} usos essa semana (limite: ${cfg.limS}).</div></div><button class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
+  const st=streak(regs);
+  if(st>=3)c.innerHTML+=`<div class="alt pos"><div class="alti">🔥</div><div class="altb"><div class="altt">${st} dias de registro seguidos!</div><div class="altx">Você está construindo uma prática consistente.</div></div><button class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
+}
+
+function renderWds(regs){
+  const c=document.getElementById('h-wds');c.innerHTML='';
+  const hj=new Date();hj.setHours(12,0,0,0);const dias=['D','S','T','Q','Q','S','S'];const cfg=gC();
+  for(let i=6;i>=0;i--){
+    const d=new Date(hj);d.setDate(hj.getDate()-i);const iso=d.toISOString().split('T')[0];
+    const cnt=regs.filter(r=>r.data===iso).length;const isHj=i===0;const at=cnt>=(cfg.limD||4);
+    const cls='wdd'+(cnt>0?(at&&!isHj?' at':' ok'):'')+(isHj&&cnt===0?' hj':'');
+    c.innerHTML+=`<div class="wd"><div class="wdl">${dias[d.getDay()]}</div><div class="${cls}">${cnt>0?'✓':d.getDate()}</div></div>`;
+  }
+}
+
+function renderFeed(goal){
+  const d=dica(goal),p=prmp(goal),c=document.getElementById('h-feed');
+  c.innerHTML=`<div class="fc"><div class="fh"><div class="fav" style="background:var(--vf);color:var(--ve)">${d.i}</div><div style="flex:1"><div class="fn">Dica de RD</div><div class="ftm">Hoje</div></div><span class="ftag ftd">Dica</span></div><div class="ftt"><strong>${d.t}</strong><br>${d.x}</div><div class="fa"><button class="fab2" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div><div class="fc"><div class="fh"><div class="fav" style="background:var(--roxof);color:var(--roxo)">💭</div><div style="flex:1"><div class="fn">Pergunta do dia</div><div class="ftm">Para refletir</div></div><span class="ftag ftr">Reflexão</span></div><div class="ftt">${p}</div><div class="fa"><button class="fab2" onclick="goPg('p-ref');respPrm()">✍️ Responder</button></div></div>`;
+}
+
+function renderResumo(regs,goal){
+  const c=document.getElementById('h-resumo');
+  if(new Date().getDay()!==0){c.innerHTML='';return;}
+  const sw=regs.filter(r=>r.data>=semISO(hoje()));
+  c.innerHTML=`<div class="rsw"><div class="rswt">📊 Resumo da semana</div><div class="rswx">Como foi? Veja seus dados e defina uma intenção para a próxima.</div><div class="rsws"><div class="rss"><div class="rssn">${sw.length}</div><div class="rssl">registros</div></div><div class="rss"><div class="rssn">${[...new Set(sw.map(r=>r.substancia))].length}</div><div class="rssl">substâncias</div></div><div class="rss"><div class="rssn">${streak(regs)}</div><div class="rssl">dias seq.</div></div></div><button class="btn bv bsm" onclick="abrirResumo()" style="font-family:'DM Sans',sans-serif;position:relative;z-index:1">Ver resumo completo →</button></div>`;
+}
+
+function abrirResumo(){
+  const regs=gR();const sw=regs.filter(r=>r.data>=semISO(hoje()));const subs=[...new Set(sw.map(r=>r.substancia))];const mts=gM();
+  document.getElementById('mresumo-c').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px"><div class="sc2"><div class="sn">${sw.length}</div><div class="sl">registros</div></div><div class="sc2"><div class="sn v">${streak(regs)}</div><div class="sl">dias seq.</div></div><div class="sc2"><div class="sn r">${mts.filter(m=>m.ok).length}/${mts.length}</div><div class="sl">metas</div></div></div><div style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Substâncias essa semana</div><div>${subs.length?subs.map(s=>`<span style="display:inline-block;background:var(--vf);color:var(--ve);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;margin:2px">${nem(s)} ${s}</span>`).join(''):'Nenhum registro essa semana.'}</div></div>`;
+  openMod('mresumo');
+}
+function salvResumo(){const tx=document.getElementById('resumo-prox').value.trim();if(!tx){toast('⚠️ Escreva algo.');return;}const refs=gRef();refs.push({id:'f'+Date.now(),texto:tx,emocao:'🎯',tag:'intenção',data:hoje(),criado:new Date().toISOString()});sRef(refs);blurAll();closeMod('mresumo');toast('✓ Intenção guardada!');}
+function envResumoWPP(){const regs=gR(),sw=regs.filter(r=>r.data>=semISO(hoje())),mts=gM();const msg=encodeURIComponent(`dichava.rd — Resumo de ${U?.nome}\n\n📊 Registros: ${sw.length}\n🔥 Dias seguidos: ${streak(regs)}\n🎯 Metas: ${mts.filter(m=>m.ok).length}/${mts.length} concluídas\n\nIntenção para a próxima semana: ${document.getElementById('resumo-prox').value||'—'}`);window.open(`https://wa.me/${WPP}?text=${msg}`,'_blank');}
+
+function renderHistMini(regs){
+  const c=document.getElementById('h-hist');const ul=regs.slice(-5).reverse();
+  if(!ul.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);text-align:center;padding:16px 18px">Nenhum registro ainda.<br>Toque em <strong>+</strong> para começar.</div>';return;}
+  c.innerHTML=ul.map(r=>`<div class="hi" style="margin:0 18px"><div class="hie">${nem(r.substancia)}</div><div class="hib"><div class="hin">${esc(r.substancia)}</div><div class="him">${fdt(r.data)}${r.ctx?' · '+esc(r.ctx):''}${r.hr?' · '+r.hr:''}</div></div><div style="font-size:19px">${r.emocao||''}</div></div>`).join('');
+}
+
+/* ══ REGISTRO ══ */
+function selEReg(btn,e,l){document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_eReg={emoji:e,label:l};}
+function togChip(el){el.classList.toggle('on')}
+function regSubChg(){document.getElementById('reg-outra-w').style.display=document.getElementById('reg-sub').value==='outra'?'block':'none';}
+function salvReg(){
+  blurAll();
+  const sub=document.getElementById('reg-sub').value;
+  if(!sub){toast('⚠️ Selecione uma substância.');shk(document.getElementById('reg-sub'));return;}
+  if(!_eReg){toast('⚠️ Selecione um estado emocional.');shk(document.getElementById('reg-emg'));return;}
+  const chips=[...document.querySelectorAll('#mreg .chip.on')].map(c=>c.textContent);
+  const reg={id:'r'+Date.now(),substancia:sub==='outra'?document.getElementById('reg-outra').value.trim():sub.replace(/^[^\w]+ /,''),qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:document.getElementById('reg-ctx').value,emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim(),data:hoje(),criado:new Date().toISOString()};
+  const regs=gR();regs.push(reg);sR(regs);
+  // reset
+  document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-custo').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-outra-w').style.display='none';
+  document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.remove('on'));
+  _eReg=null;closeMod('mreg');vib(15);toast('✓ Registro guardado 💚');renderHome();
+  const cfg=gC();const cH=regs.filter(r=>r.data===hoje()).length;const cS=regs.filter(r=>r.data>=semISO(hoje())).length;
+  if(cfg.notif&&cH===cfg.limD)notif('⚠️','Limite diário atingido',`Você chegou a ${cH} registros hoje.`);
+  else if(cfg.notif&&cS===cfg.limS)notif('📊','Limite semanal atingido',`${cS} registros essa semana.`);
+}
+function limparRegs(){sR([]);renderHome();toast('Registros apagados.');}
+
+/* ══ FISSURA ══ */
+function selEFiss(btn,e,l){document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_eFiss={emoji:e,label:l};}
+function salvFiss(){
+  blurAll();
+  const sub=document.getElementById('fiss-sub').value;if(!sub){toast('⚠️ Selecione uma substância.');return;}
+  const fiss={id:'fs'+Date.now(),substancia:sub,intens:_fI||'—',emocao:_eFiss?.emoji||'',fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
+  const fs=gFs();fs.push(fiss);sFs(fs);
+  document.getElementById('fiss-sub').value='';document.getElementById('fiss-fez').value='';document.getElementById('fiss-dep').value='';
+  document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#fiss-int .ib').forEach(b=>b.style.outline='none');
+  _eFiss=null;_fI=null;closeMod('mfiss');vib([20,40,20]);confete();toast('🏆 Registrado! Resistir é um ato de cuidado.');renderHome();
+}
+
+/* ══ CALENDÁRIO ══ */
+function renderCal(){
+  const regs=gR();const ano=_calDt.getFullYear();const mes=_calDt.getMonth();
+  const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-mes').textContent=meses[mes]+' '+ano;
+  const limD=(gC().limD||4);const hj=hoje();let html='';
+  for(let i=0;i<new Date(ano,mes,1).getDay();i++)html+='<button class="cald out" disabled></button>';
+  for(let d=1;d<=new Date(ano,mes+1,0).getDate();d++){
+    const iso=`${ano}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cnt=regs.filter(r=>r.data===iso).length;let cls='cald';
+    if(iso===hj)cls+=' hj';if(iso===_calSel)cls+=' sl';
+    if(cnt>0)cls+=(cnt>=limD?' at':' tm');
+    html+=`<button class="${cls}" onclick="calSel('${iso}')">${d}</button>`;
+  }
+  document.getElementById('calg').innerHTML=html;
+  if(_calSel)renderDdet(regs);
+}
+function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
+function calSel(iso){_calSel=iso;renderCal();}
+function renderDdet(regs){
+  const det=document.getElementById('ddet');const ri=regs.filter(r=>r.data===_calSel);det.style.display='block';
+  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nem(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${r.hr||''}${r.ctx?' · '+r.ctx:''}${r.gatilhos?.length?' · '+r.gatilhos.join(', '):''}</div></div><div style="font-size:18px">${r.emocao||''}</div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
+}
+
+/* ══ PROGRESSO ══ */
+function renderProg(){renderTL();renderMetas();renderInsights();renderGraf();renderCqs();renderHist();setTimeout(()=>{const w=document.getElementById('hmap-wrap');if(w)w.scrollLeft=w.scrollWidth;},50);}
+
+function renderTL(){
+  const regs=gR();const limD=gC().limD||4;
+  const hj=new Date();hj.setHours(12,0,0,0);const hjISO=hoje();
+  const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  // Organizar 90 dias em colunas por semana (domingo=0)
+  // Encontrar o domingo mais próximo antes de 90 dias atrás
+  const inicio=new Date(hj);inicio.setDate(hj.getDate()-89);
+  const diaSemana=inicio.getDay();
+  const domingoInicio=new Date(inicio);domingoInicio.setDate(inicio.getDate()-diaSemana);
+  
+  // Construir colunas: cada coluna = 1 semana (7 dias, dom a sab)
+  const colunas=[];let col=[];let d=new Date(domingoInicio);
+  while(d<=hj||col.length>0){
+    if(col.length===7){colunas.push(col);col=[];}
+    const iso=d.toISOString().split('T')[0];
+    const futuro=d>hj;
+    const fora=d<inicio;
+    col.push({iso,futuro,fora,d:new Date(d)});
+    d.setDate(d.getDate()+1);
+    if(d>hj&&col.length>0){while(col.length<7)col.push(null);colunas.push(col);col=[];break;}
+  }
+  
+  // Render colunas
+  const colsEl=document.getElementById('hmap-cols');
+  const monthsEl=document.getElementById('hmap-months');
+  if(!colsEl)return;
+  colsEl.innerHTML='';monthsEl.innerHTML='';
+  
+  let lastMonth=-1;
+  colunas.forEach((col,ci)=>{
+    const colDiv=document.createElement('div');colDiv.className='hmap-col';
+    col.forEach(cell=>{
+      const div=document.createElement('div');
+      if(!cell||cell.fora||cell.futuro){div.className='hmap-cell';div.style.background='transparent';colDiv.appendChild(div);return;}
+      const cnt=regs.filter(r=>r.data===cell.iso).length;
+      let cls='hmap-cell ';
+      if(cnt===0)cls+='vz';else if(cnt>=limD)cls+='at';else if(cnt>=3)cls+='d4';else if(cnt>=2)cls+='d3';else cls+='d1';
+      if(cell.iso===hjISO)cls+=' hj';
+      div.className=cls.trim();
+      div.title=fdt(cell.iso)+': '+cnt+' registro(s)';
+      colDiv.appendChild(div);
+    });
+    colsEl.appendChild(colDiv);
+    
+    // Label de mês: mostrar quando muda o mês (pelo dia da primeira célula válida)
+    const firstValid=col.find(c=>c&&!c.fora&&!c.futuro);
+    if(firstValid){
+      const mes=firstValid.d.getMonth();
+      const mDiv=document.createElement('div');
+      mDiv.className='hmap-ml';
+      mDiv.style.minWidth='14px';
+      if(mes!==lastMonth){mDiv.textContent=MESES[mes];lastMonth=mes;}
+      monthsEl.appendChild(mDiv);
+    }
+  });
+}
+
+function renderMetas(){
+  const mts=gM();const c=document.getElementById('metas-l');
+  if(!mts.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px">Nenhuma meta definida.</div>';return;}
+  c.innerHTML=mts.map((m,i)=>`<div class="mc ${m.ok?'ok':''}"><div class="mch"><div class="mct">${m.titulo}</div><span class="mcbg ${m.ok?'bok':'band'}">${m.ok?'✓ Concluída':'Em andamento'}</span></div><div class="pgb"><div class="pgf" style="width:${m.ok?100:0}%;background:${m.ok?'var(--v)':'var(--cinm)'}"></div></div><button style="margin-top:8px;background:none;border:none;font-size:12px;color:var(--ve);font-weight:700;cursor:pointer;padding:0" onclick="togMeta(${i})">${m.ok?'↩ Desmarcar':'✓ Marcar como concluída'}</button></div>`).join('');
+}
+
+function togMeta(i){const m=gM();m[i].ok=!m[i].ok;sM(m);renderMetas();if(m[i].ok){vib([20,40,20]);confete();}toast(m[i].ok?'🎉 Meta concluída!':'Meta desmarcada.');}
+
+function openMetasMod(){
+  const mts=gM();
+  document.getElementById('mmetas-l').innerHTML=mts.map((m,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cin);border-radius:11px"><div style="font-size:18px;cursor:pointer" onclick="togMetaMod(${i})">${m.ok?'✅':'⬜'}</div><div style="flex:1;font-size:13px;color:var(--tx)">${m.titulo}</div><button style="background:none;border:none;font-size:14px;color:var(--er);cursor:pointer" onclick="remMeta(${i})">✕</button></div>`).join('');
+  openMod('mmetas');
+}
+function togMetaMod(i){const m=gM();m[i].ok=!m[i].ok;sM(m);openMetasMod();renderMetas();}
+function remMeta(i){const m=gM();m.splice(i,1);sM(m);openMetasMod();renderMetas();}
+function addMeta(){const inp=document.getElementById('nova-meta');const tx=inp.value.trim();if(!tx){shk(inp);return;}const m=gM();m.push({id:'m'+Date.now(),titulo:tx,ok:false,criada:hoje()});sM(m);inp.value='';blurAll();openMetasMod();renderMetas();toast('✓ Meta adicionada!');}
+
+function renderGraf(){
+  const regs=gR();const lbs=[],dt=[];const hj=new Date();hj.setHours(12,0,0,0);
+  for(let i=6;i>=0;i--){const d=new Date(hj);d.setDate(hj.getDate()-i*7);const s=semISO(d.toISOString().split('T')[0]);const prx=new Date(d);prx.setDate(d.getDate()+6);dt.push(regs.filter(r=>r.data>=s&&r.data<=prx.toISOString().split('T')[0]).length);lbs.push('S-'+(7-i));}
+  const ctx=document.getElementById('graf');if(!ctx||typeof Chart==='undefined')return;if(_gC)_gC.destroy();
+  _gC=new Chart(ctx,{type:'bar',data:{labels:lbs,datasets:[{label:'Registros',data:dt,backgroundColor:'rgba(76,175,90,.75)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11,family:'DM Sans'}}},y:{display:false,beginAtZero:true}}}});
+}
+
+function renderCqs(){
+  const regs=gR();const refs=gRef();const fiss=gFs();const st=streak(regs);
+  const cqs=[{i:'📝',n:'1º registro',on:regs.length>=1},{i:'🔥',n:'3 dias',on:st>=3},{i:'⚡',n:'7 dias',on:st>=7},{i:'🌟',n:'30 dias',on:st>=30},{i:'✍️',n:'1ª reflexão',on:refs.length>=1},{i:'💪',n:'1ª resistência',on:fiss.length>=1},{i:'🎯',n:'Meta concluída',on:gM().some(m=>m.ok)},{i:'💯',n:'50 registros',on:regs.length>=50}];
+  document.getElementById('cqr').innerHTML=cqs.map(c=>`<div class="cq ${c.on?'on':''}"><div class="cqi">${c.i}</div><div class="cqn">${c.n}</div></div>`).join('');
+}
+
+function renderHist(){
+  const regs=gR().slice().reverse();const c=document.getElementById('hist-l');
+  if(!regs.length){c.innerHTML='<div style="font-size:13px;color:var(--txm)">Nenhum registro ainda.</div>';return;}
+  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${nem(r.substancia)}</div><div class="hib"><div class="hin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><button class="hi-del" onclick="delReg('${r.id}')" title="Excluir">✕</button></div>`).join('');
+}
+function delReg(id){
+  if(!confirm('Excluir este registro?'))return;
+  sR(gR().filter(r=>r.id!==id));renderHist();renderTL();renderGraf();renderCqs();toast('Registro excluído.');
+}
+
+/* ══ REFLEXÕES ══ */
+function renderRef(){
+  const obj=gO();document.getElementById('prt').textContent=prmp(obj?.goal);renderDicaRef(obj?.goal);renderHumorChart();renderCartas();renderFiss();renderRefFeed();renderArts(obj?.goal);
+}
+function renderDicaRef(goal){
+  const d=dica(goal);document.getElementById('dica-ref').innerHTML=`<div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px"><div style="font-size:25px;margin-bottom:7px">${d.i}</div><div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:5px">${d.t}</div><div style="font-size:13px;color:var(--txs);line-height:1.6">${d.x}</div></div>`;
+}
+function renderHumorChart(){
+  const regs=gR();const hj=new Date();hj.setHours(12,0,0,0);const em={'😌':4,'😊':5,'😰':2,'😔':1,'😵':3};const lbs=[],vals=[];
+  for(let i=6;i>=0;i--){const d=new Date(hj);d.setDate(hj.getDate()-i);const iso=d.toISOString().split('T')[0];const dias=['D','S','T','Q','Q','S','S'];lbs.push(dias[d.getDay()]);const rD=regs.filter(r=>r.data===iso);vals.push(rD.length?rD.reduce((a,r)=>a+(em[r.emocao]||3),0)/rD.length:null);}
+  const ctx=document.getElementById('humor-c');if(!ctx||typeof Chart==='undefined')return;if(_hC)_hC.destroy();
+  _hC=new Chart(ctx,{type:'line',data:{labels:lbs,datasets:[{label:'Humor',data:vals,borderColor:'rgba(76,175,90,.8)',backgroundColor:'rgba(76,175,90,.08)',tension:.4,pointBackgroundColor:'#4CAF5A',pointRadius:4,spanGaps:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10,family:'DM Sans'}}},y:{display:false,min:0,max:6}}}});
+}
+
+function renderCartas(){
+  const cartas=gCt();const c=document.getElementById('cartas-l');const hj=new Date();hj.setHours(0,0,0,0);
+  if(!cartas.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 13px">Nenhuma carta ainda. Escreva uma para você do futuro!</div>';return;}
+  c.innerHTML=cartas.map((ct,i)=>{const ab=new Date(ct.abre);ab.setHours(0,0,0,0);const pode=hj>=ab;const dias=Math.max(0,Math.round((ab-hj)/864e5));
+    return pode?`<div class="carta ok"><div class="cartai">✉️</div><div class="cartat">Carta para mim</div><div class="cartax" style="margin-top:6px">${esc(ct.texto)}</div><div class="cartabg">✓ Disponível para leitura</div></div>`:`<div class="carta"><div class="cartai">✉️</div><div class="cartat">Carta para mim</div><div class="cartax">Escrita em ${fdt(ct.data)}. Disponível em ${dias} dias.</div><div class="cartabg">🔒 Abre em ${fdt(ct.abre)}</div></div>`;
+  }).join('');
+}
+
+function salvCarta(){
+  blurAll();const tx=document.getElementById('carta-tx').value.trim();if(!tx){toast('⚠️ Escreva sua carta.');return;}
+  const prazo=parseInt(document.getElementById('carta-prazo').value);const ab=new Date();ab.setHours(12,0,0,0);ab.setDate(ab.getDate()+prazo);
+  const c={id:'c'+Date.now(),texto:tx,data:hoje(),abre:isoLocal(ab),prazo};
+  const cs=gCt();cs.push(c);sCt(cs);document.getElementById('carta-tx').value='';closeMod('mcarta');toast('✉️ Carta guardada! Disponível em '+prazo+' dias.');renderCartas();
+}
+
+function renderFiss(){
+  const fiss=gFs().slice().reverse();const c=document.getElementById('fiss-l');
+  if(!fiss.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 13px">Nenhum registro de resistência ainda. Use o botão roxo na tela inicial!</div>';return;}
+  c.innerHTML=fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">💪</div><div class="fssib"><div class="fssin">${f.substancia} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
+}
+
+function renderRefFeed(){
+  const refs=gRef().slice().reverse();const in2=ini(U?.nome);const c=document.getElementById('ref-feed');
+  if(!refs.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 14px">Nenhuma reflexão ainda.</div>';return;}
+  c.innerHTML=refs.map(r=>`<div class="rii"><div class="rih"><div class="riav" style="background:var(--vf);color:var(--ve)">${in2}</div><div style="flex:1"><div class="rin">${esc(U?.nome)||'Você'}</div><div class="rid">${fdt(r.data)}</div></div><span class="ritg" style="background:var(--vf);color:var(--ve)">${esc(r.tag)||'reflexão'}</span></div>${r.prompt?`<div class="rip">💭 ${esc(r.prompt)}</div>`:''}<div class="rit">${esc(r.texto)}</div><div class="rif"><div class="rife">${r.emocao||'✍️'}</div><button style="background:none;border:none;font-size:13px;color:var(--txm);cursor:pointer" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div>`).join('');
+}
+
+function renderArts(goal){
+  const c=document.getElementById('arts-l');
+  c.innerHTML=ARTS.map(a=>`<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg" style="background:${a.bg}">${a.ic}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm} de leitura</div></div></div>`).join('');
+}
+
+function abrirArt(id){
+  const a=ARTS.find(x=>x.id===id);if(!a)return;
+  document.getElementById('art-tit-h').textContent=a.ti;
+  document.getElementById('art-body').innerHTML=`<div style="background:${a.bg};border-radius:15px;padding:18px;margin-bottom:18px;text-align:center"><div style="font-size:44px">${a.ic}</div><div style="display:inline-block;background:var(--vf);color:var(--ve);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:7px">${a.tag}</div></div><h3 style="font-family:'DM Sans',sans-serif;font-size:21px;font-weight:800;color:var(--dk);margin-bottom:6px">${a.ti}</h3><div style="font-size:12px;color:var(--txm);margin-bottom:18px">⏱ ${a.tm} de leitura</div><div class="artbody">${a.corpo}</div>`;
+  showV('vart');
+}
+
+let _cmpEo=null;
+function selECmp(btn,e,l){document.querySelectorAll('#cmpemg .emb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_cmpEo={emoji:e,label:l};}
+function expCmp(){document.getElementById('cmpex').style.display='';document.getElementById('composer').classList.add('foc');}
+function fechaCmp(){document.getElementById('cmpex').style.display='none';document.getElementById('composer').classList.remove('foc');document.getElementById('cmpta').value='';_cmpEo=null;blurAll();}
+function autoR(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+function focaCmp(){expCmp();document.getElementById('cmpta').focus();}
+function respPrm(){const obj=gO();const p=prmp(obj?.goal);document.getElementById('cmpta').value=p+'\n\n';expCmp();document.getElementById('cmpta').focus();}
+function salvRef(){
+  blurAll();const tx=document.getElementById('cmpta').value.trim();if(!tx){toast('⚠️ Escreva algo antes.');return;}
+  const obj=gO();const p=prmp(obj?.goal);const isP=tx.startsWith(p);
+  const ref={id:'f'+Date.now(),texto:isP?tx.replace(p+'\n\n',''):tx,prompt:isP?p:null,emocao:_cmpEo?.emoji||'✍️',tag:isP?'resposta':'reflexão',data:hoje(),criado:new Date().toISOString()};
+  const refs=gRef();refs.push(ref);sRef(refs);fechaCmp();toast('✓ Reflexão guardada 💚');renderRefFeed();
+}
+
+/* ══ CONFIG ══ */
+function renderCfg(){
+  const nm=U?.nome||'—';const in2=ini(nm);const obj=gO();const goal=OBJS.find(g=>g.id===obj?.goal);
+  document.getElementById('pfav').textContent=in2;document.getElementById('pfn').textContent=nm;document.getElementById('pfe').textContent=U?.email||'—';document.getElementById('pfm').textContent='🎯 '+(goal?.nome||'—');document.getElementById('cfg-obj').textContent=goal?.nome||'—';
+  const cfg=gC();document.getElementById('tog-n').checked=cfg.notif;document.getElementById('tog-d').checked=cfg.dicas;document.getElementById('tog-ck').checked=cfg.ck!==false;document.getElementById('lim-d').value=cfg.limD||4;document.getElementById('lim-s').value=cfg.limS||15;
+  const pl=gP();document.getElementById('plano-prev').textContent=pl.frase||'Não configurado ainda';
+  document.getElementById('tog-dark').checked=!!cfg.dark;
+  document.getElementById('tog-disc').checked=!!cfg.discreto;
+  document.getElementById('pin-status').textContent=gPin()?'Ativado · toque para remover':'Desativado · toque para criar';
+}
+function salvCfg(){blurAll();sC({notif:document.getElementById('tog-n').checked,dicas:document.getElementById('tog-d').checked,ck:document.getElementById('tog-ck').checked,limD:parseInt(document.getElementById('lim-d').value)||4,limS:parseInt(document.getElementById('lim-s').value)||15,dark:document.getElementById('tog-dark').checked,discreto:document.getElementById('tog-disc').checked});}
+
+/* ══ PLANO ══ */
+function openPlanoMod(){const pl=gP();document.getElementById('pl-sinais').value=pl.sinais||'';document.getElementById('pl-pess').value=pl.pess||'';document.getElementById('pl-ajuda').value=pl.ajuda||'';document.getElementById('pl-frase').value=pl.frase||'';openMod('mplano');}
+function salvPlano(){blurAll();sP({sinais:document.getElementById('pl-sinais').value.trim(),pess:document.getElementById('pl-pess').value.trim(),ajuda:document.getElementById('pl-ajuda').value.trim(),frase:document.getElementById('pl-frase').value.trim()});closeMod('mplano');toast('✓ Plano de segurança salvo 🛡️');renderCfg();}
+function abrirPlanoCrise(){
+  const pl=gP();const c=document.getElementById('plano-crise-c');
+  if(!pl.frase&&!pl.sinais&&!pl.pess&&!pl.ajuda){
+    c.innerHTML='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-top:4px;line-height:1.6">Você ainda não configurou seu plano.<br>Vá em <strong style="color:#fff">Configurações → Plano de segurança</strong> para criar agora.</div>';
+    openMod('mplanocrise');return;
+  }
+  let html='';
+  if(pl.frase)html+=`<div style="background:rgba(255,255,255,.1);border-radius:13px;padding:14px;margin-bottom:11px"><div style="font-size:10px;color:rgba(255,255,255,.5);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Minha frase de ancoragem</div><div style="font-size:16px;font-weight:700;color:#fff;line-height:1.4">"${esc(pl.frase)}"</div></div>`;
+  if(pl.sinais)html+=`<div style="margin-bottom:11px"><div style="font-size:10px;color:rgba(255,255,255,.5);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Sinais de alerta</div><div style="font-size:14px;color:rgba(255,255,255,.85);line-height:1.6">${esc(pl.sinais)}</div></div>`;
+  if(pl.pess)html+=`<div style="margin-bottom:11px"><div style="font-size:10px;color:rgba(255,255,255,.5);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Pessoas de confiança</div><div style="font-size:14px;color:rgba(255,255,255,.85);line-height:1.6">${esc(pl.pess)}</div></div>`;
+  if(pl.ajuda)html+=`<div style="margin-bottom:11px"><div style="font-size:10px;color:rgba(255,255,255,.5);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">O que me ajuda</div><div style="font-size:14px;color:rgba(255,255,255,.85);line-height:1.6">${esc(pl.ajuda)}</div></div>`;
+  c.innerHTML=html;
+  openMod('mplanocrise');
+}
+
+/* ══ WPP ══ */
+function chamarTerapeuta(){
+  const n=U?.nome||'Paciente';
+  const msg=encodeURIComponent('Olá! Sou '+n+' e preciso de apoio agora. Estou usando o app dichava.rd.');
+  window.location.href='https://wa.me/'+WPP+'?text='+msg;
+}
+function envWPP(e){
+  e.preventDefault();const regs=gR();const refs=gRef();const n=U?.nome||'Paciente';const obj=gO();const goal=OBJS.find(g=>g.id===obj?.goal);
+  const ur=regs.slice(-5).reverse().map(r=>`• ${fdt(r.data)}: ${r.substancia}${r.qtd?' ('+r.qtd+')':''} — ${r.emocao||''} ${r.emoLabel||''}`).join('\n');
+  const urf=refs.slice(-2).reverse().map(r=>`• ${fdt(r.data)}: "${r.texto.slice(0,120)}…"`).join('\n');
+  const msg=encodeURIComponent(`dichava.rd — Resumo de ${n}\n\n🎯 Objetivo: ${goal?.nome||'—'}\n📊 Total de registros: ${regs.length}\n🔥 Sequência: ${streak(regs)} dias\n💪 Fissuras superadas: ${gFs().length}\n\n📓 Últimos registros:\n${ur||'Nenhum.'}\n\n✍️ Reflexões recentes:\n${urf||'Nenhuma.'}\n\nGostaria de conversar sobre meu acompanhamento.`);
+  window.open(`https://wa.me/${WPP}?text=${msg}`,'_blank');
+}
+function exportar(){
+  const regs=gR();const refs=gRef();const fiss=gFs();let tx=`dichava.rd — Exportação de dados\n${new Date().toLocaleDateString('pt-BR')}\n\n`;
+  tx+=`REGISTROS (${regs.length}):\n`;regs.forEach(r=>{tx+=`${fdt(r.data)} — ${r.substancia}${r.qtd?' ('+r.qtd+')':''} — ${r.emoLabel||''} — ${r.ctx||''}\n`});
+  tx+=`\nFISSURAS (${fiss.length}):\n`;fiss.forEach(f=>{tx+=`${fdt(f.data)} — ${f.substancia} — int.${f.intens} — ${f.fez||'—'}\n`});
+  tx+=`\nREFLEXÕES (${refs.length}):\n`;refs.forEach(r=>{tx+=`${fdt(r.data)}: ${r.texto}\n`});
+  const blob=new Blob([tx],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='dichavard-dados.txt';a.click();URL.revokeObjectURL(url);toast('✓ Dados exportados!');
+}
+
+/* ══ RESPIRAÇÃO ══ */
+function initResp(){_rOn=false;clearTimeout(_rT);_rT=null;document.getElementById('respf').textContent='Pronto para começar';document.getElementById('respc').style.opacity='0';document.getElementById('respin').textContent='Toque para\ncomeçar';document.getElementById('resp-btn').textContent='Começar';document.getElementById('respci').style.transform='scale(1)';}
+function toggleResp(){_rOn?pararResp():iniciarResp();}
+function iniciarResp(){_rOn=true;_rFase=0;_rSeg=0;document.getElementById('resp-btn').textContent='Pausar';document.getElementById('respc').style.opacity='1';rodaResp();}
+function rodaResp(){
+  if(!_rOn)return;
+  const fases=[{n:'Inspire',d:4,s:'scale(1.25)'},{n:'Segure',d:7,s:'scale(1.25)'},{n:'Expire',d:8,s:'scale(1)'}];
+  const f=fases[_rFase%3];
+  if(_rSeg===0){document.getElementById('respf').textContent=f.n;document.getElementById('respci').style.transform=f.s;document.getElementById('respin').textContent=f.n;}
+  document.getElementById('respc').textContent=f.d-_rSeg;
+  _rSeg++;if(_rSeg>=f.d){_rFase++;_rSeg=0;}
+  _rT=setTimeout(rodaResp,1000);
+}
+function pararResp(sair=false){_rOn=false;clearTimeout(_rT);_rT=null;document.getElementById('resp-btn').textContent='Começar';document.getElementById('respf').textContent='Pronto para começar';document.getElementById('respc').style.opacity='0';document.getElementById('respin').textContent='Toque para\ncomeçar';document.getElementById('respci').style.transform='scale(1)';if(sair)showV('vcrise');}
+
+/* ══ GROUNDING ══ */
+function initGrd(){_grP=0;renderGrd();}
+function renderGrd(){
+  const p=GRPS[_grP];document.getElementById('grd-n').textContent=p.n;document.getElementById('grd-i').textContent=p.i;document.getElementById('grd-t').textContent=p.t;document.getElementById('grd-x').textContent=p.x;
+  const btn=document.getElementById('grd-btn');if(_grP>=GRPS.length-1){btn.textContent='Concluir ✓';btn.onclick=()=>showV('vcrise');}else{btn.textContent='Próximo →';btn.onclick=grdNext;}
+}
+function grdNext(){_grP=Math.min(_grP+1,GRPS.length-1);renderGrd();}
+
+/* ══ CONFETE ══ */
+function confete(){
+  const cores=['#4CAF5A','#FFD600','#7C3AED','#EA580C','#00897B'];
+  const shell=document.getElementById('shell');
+  for(let i=0;i<26;i++){
+    const c=document.createElement('div');c.className='cfp';
+    c.style.left=(5+Math.random()*90)+'%';
+    c.style.background=cores[i%cores.length];
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDelay=(Math.random()*.4)+'s';
+    c.style.animationDuration=(1.2+Math.random()*.9)+'s';
+    shell.appendChild(c);
+    setTimeout(()=>c.remove(),2400);
+  }
+}
+
+
+/* ══════════ v6: TEMPO SEM USO ══════════ */
+function renderTempo(){
+  const c=document.getElementById('h-tempo');if(!c)return;
+  const regs=gR();const obj=gO();
+  const subs=(obj?.subs||[]).map(x=>x.replace(/^[^\wÀ-ú]+ /,'')).filter(x=>x!=='Outra');
+  if(!subs.length||!regs.length){c.innerHTML='';return;}
+  const hj=new Date();hj.setHours(12,0,0,0);
+  let html='';
+  subs.slice(0,5).forEach(sb=>{
+    const rs=regs.filter(r=>r.substancia===sb);if(!rs.length)return;
+    const last=rs.map(r=>r.data).sort().pop();
+    const d=Math.round((hj-new Date(last+'T12:00:00'))/864e5);
+    html+=`<div class="tsup"><div class="tsun">${d===0?'hoje':d}</div><div class="tsul">${d===0?'último uso':'dia'+(d>1?'s':'')+' sem'}<br>${nem(sb)} ${esc(sb)}</div></div>`;
+  });
+  c.innerHTML=html?`<div style="padding:12px 18px 6px;font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.6px">Tempo desde o último uso</div><div class="tsu">${html}</div>`:'';
+}
+
+/* ══════════ v6: CHECK-IN D+1 ══════════ */
+const gD1=()=>ls('dr_d1_'+uid())||{};
+const sD1=d=>ls('dr_d1_'+uid(),d);
+function renderD1(regs){
+  const ontem=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-1);return isoLocal(d)})();
+  const usouOntem=regs.some(r=>r.data===ontem);
+  const d1=gD1();
+  if(!usouOntem||d1.ref===ontem)return'';
+  return `<div class="alt inf" id="d1-card"><div class="alti">☀️</div><div class="altb"><div class="altt">Como você acordou hoje?</div><div class="altx" style="margin-bottom:8px">Você fez registros ontem. Como está o dia seguinte?</div><div style="display:flex;gap:7px"><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😣','mal')">😣</button><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😐','ok')">😐</button><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😊','bem')">😊</button><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('💪','ótimo')">💪</button></div></div></div>`;
+}
+function salvD1(emoji,label){
+  const ontem=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-1);return isoLocal(d)})();
+  sD1({ref:ontem,data:hoje(),emoji,label});
+  const el=document.getElementById('d1-card');if(el)el.remove();
+  vib(12);toast('✓ Anotado. Esse dado vale ouro nos seus padrões 💚');
+}
+
+/* ══════════ v6: INSIGHTS ══════════ */
+function topOf(arr){const m={};arr.forEach(x=>{if(x)m[x]=(m[x]||0)+1});const e=Object.entries(m).sort((a,b)=>b[1]-a[1]);return e.length?{k:e[0][0],n:e[0][1],tot:arr.filter(Boolean).length}:null}
+function renderInsights(){
+  const c=document.getElementById('insights-l');if(!c)return;
+  const corte=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-30);return isoLocal(d)})();
+  const regs=gR().filter(r=>r.data>=corte);
+  if(regs.length<5){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Com pelo menos 5 registros em 30 dias, o app começa a revelar seus padrões aqui. 🔍</div>';return;}
+  const ins=[];
+  const tCtx=topOf(regs.map(r=>r.ctx));
+  if(tCtx&&tCtx.n/tCtx.tot>=.4)ins.push({i:'📍',t:'Contexto mais comum',x:`${Math.round(tCtx.n/tCtx.tot*100)}% dos seus registros aconteceram em: <strong>${esc(tCtx.k)}</strong>. O ambiente é parte do padrão.`});
+  const tEmo=topOf(regs.map(r=>r.emoLabel));
+  if(tEmo)ins.push({i:'🫀',t:'Emoção mais presente',x:`"<strong>${esc(tEmo.k)}</strong>" apareceu em ${tEmo.n} de ${regs.length} registros. O que essa emoção está pedindo?`});
+  const gat=regs.flatMap(r=>r.gatilhos||[]);const tGat=topOf(gat);
+  if(tGat)ins.push({i:'⚡',t:'Gatilho número 1',x:`<strong>${esc(tGat.k)}</strong> foi seu gatilho mais frequente (${tGat.n}x). Vale planejar uma alternativa para esse momento.`});
+  const tHr=topOf(regs.map(r=>r.hr));
+  if(tHr&&tHr.n/tHr.tot>=.5)ins.push({i:'🌙',t:'Horário de atenção',x:`${Math.round(tHr.n/tHr.tot*100)}% do seu uso acontece à <strong>${esc(tHr.k.toLowerCase())}</strong>. Que tal preparar esse horário com antecedência?`});
+  const tSub=topOf(regs.map(r=>r.substancia));
+  if(tSub&&tSub.n/regs.length>=.5)ins.push({i:'🎯',t:'Substância principal',x:`<strong>${esc(tSub.k)}</strong> representa ${Math.round(tSub.n/regs.length*100)}% dos registros dos últimos 30 dias.`});
+  const custo=regs.reduce((a,r)=>a+(parseFloat(String(r.custo||'').replace(',','.'))||0),0);
+  if(custo>0)ins.push({i:'💸',t:'Gasto em 30 dias',x:`Você registrou <strong>R$ ${custo.toFixed(2).replace('.',',')}</strong> em uso no último mês. Sem julgamento — só informação.`});
+  const fiss=gFs().filter(f=>f.data>=corte).length;
+  if(fiss>0)ins.push({i:'💪',t:'Resistências no mês',x:`Você atravessou <strong>${fiss} fissura${fiss>1?'s':''}</strong> sem usar nos últimos 30 dias. Isso é capacidade real e crescente.`});
+  c.innerHTML=ins.slice(0,5).map(n=>`<div class="insc"><div class="insci">${n.i}</div><div><div class="insct">${n.t}</div><div class="inscx">${n.x}</div></div></div>`).join('')||'<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Continue registrando para gerar insights.</div>';
+}
+
+/* ══════════ v6: SURFAR A ONDA ══════════ */
+let _ondaT=null,_ondaSeg=0;
+const ONDA_TOTAL=20*60;
+const ONDA_MSGS=[
+  [0,'A vontade é uma onda. Ela sobe, atinge o pico e desce. Você só precisa ficar na prancha.'],
+  [120,'Os primeiros minutos são os mais intensos. Respire fundo. Você está no pico agora.'],
+  [300,'5 minutos. A intensidade já começou a cair, mesmo que não pareça. Continue.'],
+  [600,'Metade do caminho. O que você está sentindo no corpo agora? Só observe.'],
+  [900,'15 minutos. A onda está quebrando. Você está mais perto do fim do que do começo.'],
+  [1080,'Quase lá. Olhe para trás: você atravessou quase 20 minutos. Isso é força real.'],
+];
+function iniciarOnda(){_ondaSeg=0;showV('vonda');clearInterval(_ondaT);_ondaT=setInterval(ondaTick,1000);ondaRender();}
+function ondaTick(){
+  _ondaSeg++;
+  if(_ondaSeg>=ONDA_TOTAL){pararOnda(true);return;}
+  if(_ondaSeg%300===0&&_ondaSeg<ONDA_TOTAL){document.getElementById('onda-ck').classList.add('on');vib(20);}
+  ondaRender();
+}
+function ondaRender(){
+  const rest=ONDA_TOTAL-_ondaSeg;
+  const m=String(Math.floor(rest/60)).padStart(2,'0'),sg=String(rest%60).padStart(2,'0');
+  document.getElementById('onda-t').textContent=m+':'+sg;
+  document.getElementById('onda-fill').style.width=(_ondaSeg/ONDA_TOTAL*100)+'%';
+  const msg=ONDA_MSGS.filter(x=>x[0]<=_ondaSeg).pop();
+  document.getElementById('onda-f').textContent=msg[1];
+}
+function ondaCk(nivel){
+  document.getElementById('onda-ck').classList.remove('on');
+  if(nivel===1){toast('💚 A onda está passando. Continue até o fim se quiser.');}
+  else if(nivel===3){toast('🔥 Forte ainda — normal. Respire. Ela VAI descer.');}
+  else toast('〰️ No caminho. Continue na prancha.');
+}
+function pararOnda(completou=false){
+  clearInterval(_ondaT);_ondaT=null;
+  showV('vapp');
+  if(completou){vib([30,50,30]);confete();toast('🏆 20 minutos! Você surfou a onda inteira.');setTimeout(()=>openMod('mfiss'),900);}
+}
+
+/* ══════════ v6: PIN LOCK ══════════ */
+const gPin=()=>ls('dr_pin_'+uid());
+let _lockBuf='',_lockMode='check',_lockTmp='';
+function maybeLock(){if(gPin()){_lockBuf='';_lockMode='check';document.getElementById('lock-msg').textContent='Digite seu PIN';lockDots();document.getElementById('vlock').classList.add('on');}}
+function lockDots(){document.querySelectorAll('#lock-dots .lockdot').forEach((d,i)=>d.classList.toggle('full',i<_lockBuf.length));}
+function lockKey(n){
+  if(_lockBuf.length>=4)return;
+  _lockBuf+=n;vib(6);lockDots();
+  if(_lockBuf.length===4)setTimeout(lockEval,180);
+}
+function lockDel(){_lockBuf=_lockBuf.slice(0,-1);lockDots();}
+function lockEval(){
+  if(_lockMode==='check'){
+    if(btoa(_lockBuf)===gPin()){document.getElementById('vlock').classList.remove('on');vib(12);}
+    else{vib([40,40,40]);document.getElementById('lock-msg').textContent='PIN incorreto. Tente de novo.';shk(document.getElementById('lock-dots'));_lockBuf='';lockDots();}
+  } else if(_lockMode==='set1'){
+    _lockTmp=_lockBuf;_lockBuf='';lockDots();_lockMode='set2';
+    document.getElementById('lock-msg').textContent='Repita o PIN para confirmar';
+  } else if(_lockMode==='set2'){
+    if(_lockBuf===_lockTmp){ls('dr_pin_'+uid(),btoa(_lockBuf));document.getElementById('vlock').classList.remove('on');toast('🔒 PIN ativado!');renderCfg();}
+    else{vib([40,40,40]);document.getElementById('lock-msg').textContent='Não bateu. Comece de novo.';_lockMode='set1';_lockTmp='';shk(document.getElementById('lock-dots'));}
+    _lockBuf='';lockDots();
+  }
+}
+function cfgPin(){
+  if(gPin()){if(confirm('Remover o PIN de bloqueio?')){ls('dr_pin_'+uid(),null);localStorage.removeItem('dr_pin_'+uid());toast('PIN removido.');renderCfg();}return;}
+  _lockBuf='';_lockTmp='';_lockMode='set1';lockDots();
+  document.getElementById('lock-msg').textContent='Crie um PIN de 4 dígitos';
+  document.getElementById('vlock').classList.add('on');
+}
+
+/* ══════════ v6: BACKUP / RESTORE ══════════ */
+function backupJSON(){
+  const keys=Object.keys(localStorage).filter(k=>k.startsWith('dr_'));
+  const data={app:'dichava.rd',versao:6,exportado:new Date().toISOString(),dados:{}};
+  keys.forEach(k=>data.dados[k]=localStorage.getItem(k));
+  const blob=new Blob([JSON.stringify(data,null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='dichavard-backup-'+hoje()+'.json';a.click();URL.revokeObjectURL(a.href);
+  toast('💾 Backup salvo! Guarde o arquivo em local seguro.');
+}
+function restoreJSON(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(d.app!=='dichava.rd'||!d.dados)throw 0;
+      if(!confirm('Restaurar backup de '+(d.exportado?d.exportado.split('T')[0]:'?')+'? Os dados atuais serão substituídos.'))return;
+      Object.entries(d.dados).forEach(([k,v])=>localStorage.setItem(k,v));
+      toast('📥 Backup restaurado!');setTimeout(()=>location.reload(),900);
+    }catch{toast('⚠️ Arquivo de backup inválido.');}
+  };
+  r.readAsText(f);inp.value='';
+}
+
+/* ══════════ v6: TABELA DE INTERAÇÕES (dados TripSit) ══════════ */
+const CMB_SUBS=['Álcool','Cannabis','Tabaco','Cocaína / Crack','MDMA','LSD','Cogumelo','Ketamina','Opioide','Benzodiaz.','Cafeína'];
+const CMB_NIVEIS={
+  P:{t:'🔴 PERIGOSO',cor:'#C62828',bg:'#FFEBEE',x:'Combinação de altíssimo risco, com potencial de morte. Evite sempre.'},
+  I:{t:'🟠 INSEGURO',cor:'#EA580C',bg:'#FFF7ED',x:'Alto risco de dano físico. Reações imprevisíveis.'},
+  C:{t:'🟡 CAUTELA',cor:'#795548',bg:'#FFF9C4',x:'Risco moderado. Se for combinar, reduza as doses e tenha alguém por perto.'},
+  B:{t:'🟢 BAIXO RISCO',cor:'#2E7D32',bg:'#E8F5E9',x:'Risco físico relativamente baixo, mas efeitos somados ainda pedem atenção.'},
+  S:{t:'🟣 SINERGIA',cor:'#7C3AED',bg:'#F5F3FF',x:'Uma potencializa a outra — a experiência fica mais intensa e imprevisível. Doses menores.'},
+  N:{t:'⚪ SEM DADOS',cor:'#666',bg:'#F5F5F0',x:'Sem informação confiável. Trate como risco desconhecido e pesquise em combo.tripsit.me.'},
+};
+const CMB_NOTAS={
+  'Álcool|Ketamina':'Ambos deprimem o sistema nervoso: risco alto de apagar, vomitar inconsciente e aspirar.',
+  'Álcool|Benzodiaz.':'Depressores somados: perda de consciência, depressão respiratória e amnésia. Combinação presente em muitas mortes.',
+  'Álcool|Opioide':'Depressão respiratória severa. Uma das combinações mais letais que existem.',
+  'Álcool|Cocaína / Crack':'O fígado produz cocaetileno, mais cardiotóxico que a cocaína sozinha.',
+  'Álcool|Cannabis':'Álcool antes da cannabis intensifica muito o efeito: náusea e "branco" (green out).',
+  'Álcool|MDMA':'Desidrata e mascara sinais de superaquecimento. Hidrate e modere o álcool.',
+  'Cocaína / Crack|Opioide':'Estimulante mascara a depressão respiratória do opioide. Overdose silenciosa.',
+  'Cocaína / Crack|MDMA':'Sobrecarga cardiovascular: taquicardia, hipertensão e vasoconstrição somadas.',
+  'Cocaína / Crack|Ketamina':'Pressão e frequência cardíaca sobem; julgamento despenca.',
+  'Ketamina|Opioide':'Sedação somada com risco real de parada respiratória.',
+  'Ketamina|Benzodiaz.':'Sedação profunda, ataxia e risco de inconsciência com aspiração de vômito.',
+  'Opioide|Benzodiaz.':'Depressão respiratória multiplicada. Combinação central nas mortes por overdose.',
+  'Cannabis|LSD':'Cannabis potencializa psicodélicos de forma forte e imprevisível, podendo reativar o pico.',
+  'Cannabis|Cogumelo':'Mesma sinergia imprevisível: pode intensificar muito ou gerar ansiedade.',
+  'MDMA|LSD':'O "candyflip". Sinergia intensa: reduza a dose das duas.',
+  'MDMA|Cogumelo':'Sinergia intensa ("hippieflip"). Doses menores e ambiente seguro.',
+  'MDMA|Benzodiaz.':'Benzo reduz a estimulação — usado até em manejo de crises. Atenção à sedação posterior.',
+  'MDMA|Opioide':'Mistura estimulante+depressor confunde o corpo e mascara sinais de overdose.',
+  'LSD|Cogumelo':'Efeitos somam-se; tolerância cruzada torna doses difíceis de calcular.',
+  'Cafeína|Cocaína / Crack':'Estimulação dupla: ansiedade, taquicardia e pressão alta.',
+  'Cafeína|MDMA':'Aumenta a estimulação e o risco de superaquecimento.',
+  'Cafeína|Álcool':'Cafeína mascara a embriaguez — você bebe mais do que percebe.',
+};
+const CMB_MAP={
+  'Álcool|Cannabis':'C','Álcool|Tabaco':'B','Álcool|Cocaína / Crack':'I','Álcool|MDMA':'C','Álcool|LSD':'C','Álcool|Cogumelo':'C','Álcool|Ketamina':'P','Álcool|Opioide':'P','Álcool|Benzodiaz.':'P','Álcool|Cafeína':'C',
+  'Cannabis|Tabaco':'B','Cannabis|Cocaína / Crack':'C','Cannabis|MDMA':'S','Cannabis|LSD':'S','Cannabis|Cogumelo':'S','Cannabis|Ketamina':'C','Cannabis|Opioide':'C','Cannabis|Benzodiaz.':'C','Cannabis|Cafeína':'B',
+  'Tabaco|Cocaína / Crack':'C','Tabaco|MDMA':'B','Tabaco|LSD':'B','Tabaco|Cogumelo':'B','Tabaco|Ketamina':'B','Tabaco|Opioide':'B','Tabaco|Benzodiaz.':'B','Tabaco|Cafeína':'B',
+  'Cocaína / Crack|MDMA':'I','Cocaína / Crack|LSD':'C','Cocaína / Crack|Cogumelo':'C','Cocaína / Crack|Ketamina':'I','Cocaína / Crack|Opioide':'P','Cocaína / Crack|Benzodiaz.':'C','Cocaína / Crack|Cafeína':'I',
+  'MDMA|LSD':'S','MDMA|Cogumelo':'S','MDMA|Ketamina':'C','MDMA|Opioide':'I','MDMA|Benzodiaz.':'B','MDMA|Cafeína':'C',
+  'LSD|Cogumelo':'S','LSD|Ketamina':'C','LSD|Opioide':'C','LSD|Benzodiaz.':'B','LSD|Cafeína':'C',
+  'Cogumelo|Ketamina':'C','Cogumelo|Opioide':'C','Cogumelo|Benzodiaz.':'B','Cogumelo|Cafeína':'C',
+  'Ketamina|Opioide':'P','Ketamina|Benzodiaz.':'I','Ketamina|Cafeína':'N',
+  'Opioide|Benzodiaz.':'P','Opioide|Cafeína':'N',
+  'Benzodiaz.|Cafeína':'N',
+};
+function openCombo(){
+  const sa=document.getElementById('cmb-a'),sb=document.getElementById('cmb-b');
+  if(sa.options.length<=1){CMB_SUBS.forEach(x=>{sa.add(new Option(x,x));sb.add(new Option(x,x));});}
+  document.getElementById('cmb-res').classList.remove('on');
+  openMod('mcombo');
+}
+function calcCombo(){
+  const a=document.getElementById('cmb-a').value,b=document.getElementById('cmb-b').value;
+  const res=document.getElementById('cmb-res');
+  if(!a||!b)return;
+  if(a===b){res.classList.add('on');res.style.borderColor='#666';res.style.background='var(--cin)';document.getElementById('cmb-rt').textContent='Mesma substância';document.getElementById('cmb-rt').style.color='var(--tx)';document.getElementById('cmb-rx').textContent='Atenção à redosagem: somar doses da mesma substância aumenta o risco de forma não-linear.';return;}
+  const k1=a+'|'+b,k2=b+'|'+a;
+  const nv=CMB_MAP[k1]||CMB_MAP[k2]||'N';
+  const n=CMB_NIVEIS[nv];
+  const nota=CMB_NOTAS[k1]||CMB_NOTAS[k2]||'';
+  res.classList.add('on');res.style.borderColor=n.cor;res.style.background=n.bg;
+  document.getElementById('cmb-rt').textContent=n.t;document.getElementById('cmb-rt').style.color=n.cor;
+  document.getElementById('cmb-rx').innerHTML=esc(n.x)+(nota?'<br><br><strong>Nessa combinação:</strong> '+esc(nota):'');
+  vib(8);
+}
+
+/* ══════════ v6: ÁUDIO-REFLEXÃO ══════════ */
+let _rec=null,_recOn=false;
+function togMic(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const btn=document.getElementById('micbtn');
+  if(!SR){toast('⚠️ Seu navegador não suporta ditado por voz. Tente o Chrome.');return;}
+  if(_recOn){_rec.stop();return;}
+  expCmp();
+  _rec=new SR();_rec.lang='pt-BR';_rec.continuous=true;_rec.interimResults=false;
+  _rec.onresult=e=>{
+    const ta=document.getElementById('cmpta');
+    for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)ta.value=(ta.value?ta.value+' ':'')+e.results[i][0].transcript.trim();
+    autoR(ta);
+  };
+  _rec.onend=()=>{_recOn=false;btn.classList.remove('rec');btn.textContent='🎙️';};
+  _rec.onerror=()=>{_recOn=false;btn.classList.remove('rec');btn.textContent='🎙️';toast('⚠️ Não consegui acessar o microfone.');};
+  _rec.start();_recOn=true;btn.classList.add('rec');btn.textContent='⏸';vib(10);toast('🎙️ Pode falar — toque de novo para parar.');
+}
+
+/* ══════════ v6: TEMA (dark + discreto) ══════════ */
+function applyTheme(){
+  const cfg=gC();
+  document.getElementById('shell').classList.toggle('dkm',!!cfg.dark);
+  document.title=cfg.discreto?'Diário':'dichava.rd';
+  document.querySelectorAll('.tlogo').forEach(l=>l.innerHTML=cfg.discreto?'diário<em>.</em>':'dichava<em>.</em>rd');
+  document.querySelectorAll('.alogo').forEach(l=>l.innerHTML=cfg.discreto?'diário<em>.</em>':'dichava<em>.rd</em>');
+}
+
+/* ══════════ v6: SERVICE WORKER ══════════ */
+if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+
+/* ══ NOTIF ══ */
+function agNotif(){
+  const cfg=gC();if(!cfg.notif)return;
+  const h=new Date().getHours();const regs=gR();
+  if(h>=20&&!regs.some(r=>r.data===hoje()))setTimeout(()=>notif('📝','Lembrete gentil','Você ainda não fez um registro hoje. Sem pressão!'),3000);
+  const obj=gO();if(obj&&cfg.dicas)setTimeout(()=>notif('💭','Pergunta do dia',prmp(obj?.goal).slice(0,80)+'…'),14000);
+}
+
+/* ══ HUMOR CHART na aba de reflexões ══ */
+// Precisamos do canvas no HTML de reflexões
+/* ══ INIT ══ */
+document.addEventListener('touchstart',function(e){if(!e.target.closest('input,textarea,select'))blurAll();},{passive:true});
+(function init(){
+  const sess=ls('dr_session');
+  if(sess&&sess.id){
+    U=sess;const t=ls('dr_termo_'+U.id);
+    if(!t){showV('vapp');document.getElementById('bnav').classList.remove('on');openMod('mtermo');}
+    else{const o=gO();if(!o)startOb();else entrar();}
+    applyTheme();
+    maybeLock();
+  } else {
+    showV('va');
+  }
+  setTimeout(()=>{buildIntRow('crise-int','cr');buildIntRow('fiss-int','fs');},200);
+})();
+</script>
+</div><!-- /shell -->
+</body></html>

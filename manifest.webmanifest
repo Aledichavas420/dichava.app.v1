@@ -1,0 +1,16 @@
+{
+  "name": "dichava.rd — acompanhamento sem julgamento",
+  "short_name": "dichava.rd",
+  "description": "Companion de redução de danos: diário de uso, reflexões, modo crise e ferramentas de cuidado.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1B2A1C",
+  "theme_color": "#1B2A1C",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
