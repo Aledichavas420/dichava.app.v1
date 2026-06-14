@@ -608,6 +608,17 @@ a{color:inherit;text-decoration:none}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--cinm);background:var(--cin);font-size:16px;cursor:pointer;flex-shrink:0;transition:all .15s;align-self:flex-end}
 .micbtn.rec{background:var(--erf);border-color:var(--er);animation:cpul 1.4s infinite}
 
+/* ── FAQ CHAT ── */
+.faq-chatw{max-height:34vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px 2px 6px;display:flex;flex-direction:column}
+.fbq{background:var(--cin);border-radius:13px 13px 13px 4px;padding:10px 13px;font-size:13px;line-height:1.65;color:var(--tx);margin-bottom:9px;max-width:94%}
+.fbu{background:var(--dk);color:#fff;border-radius:13px 13px 4px 13px;padding:9px 13px;font-size:13px;line-height:1.5;margin:0 0 9px auto;max-width:85%;font-weight:600}
+.faqq{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--cinm);border-radius:12px;padding:10px 13px;font-size:12.5px;color:var(--tx);margin-bottom:7px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.faqq:active{background:var(--vf);border-color:var(--v)}
+.faq-qsw{max-height:22vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#shell.dkm .faqq{background:#1D2520;border-color:#32402F;color:#E9EFE7}
+#shell.dkm .faqq:active{background:#1D3320;border-color:#3E6B44}
+#shell.dkm .fbq{background:#212A21;color:#E9EFE7}
+
 </style>
 <noscript><div style="padding:40px 24px;font-family:sans-serif;text-align:center;color:#1B2A1C"><h2>⚠️ JavaScript desativado</h2><p>Este app precisa ser aberto em um navegador (Chrome, Safari, Firefox).<br>Se você abriu pelo WhatsApp ou pelo visualizador de arquivos, toque em <strong>"Abrir com → Chrome"</strong>.</p></div></noscript>
 </head>
@@ -671,6 +682,11 @@ a{color:inherit;text-decoration:none}
     <div style="width:38px;height:38px;background:var(--sa);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">⚗️</div>
     <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--sa)">Vai misturar? Consulte antes</div><div style="font-size:11px;color:var(--sa);margin-top:1px">Tabela de interações entre substâncias</div></div>
     <div style="color:var(--sa);font-size:17px">›</div>
+  </div>
+  <div style="margin:0 18px 11px;background:var(--vf);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openFAQ()">
+    <div style="width:38px;height:38px;background:var(--ve);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">💬</div>
+    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--ve)">Tire suas dúvidas</div><div style="font-size:11px;color:var(--ve);margin-top:1px">Perguntas comuns sobre uso, efeitos e riscos</div></div>
+    <div style="color:var(--ve);font-size:17px">›</div>
   </div>
   <div class="shr" style="padding-top:2px"><div class="sht">Para você hoje</div><div class="shl" onclick="goPg('p-ref')">ver mais →</div></div>
   <div id="h-feed"></div>
@@ -927,6 +943,18 @@ a{color:inherit;text-decoration:none}
   <div class="cmbres" id="cmb-res"><div class="cmbrt" id="cmb-rt">—</div><div class="cmbrx" id="cmb-rx">—</div></div>
   <div style="font-size:11px;color:var(--txm);margin-top:14px;line-height:1.6">Fonte: combo.tripsit.me · uso não-comercial com atribuição. Esta tabela não cobre interações com medicamentos de uso contínuo.</div>
   <button class="btn bout bfull" style="margin-top:13px" onclick="closeMod('mcombo')">Fechar</button>
+</div></div></div>
+
+<!-- FAQ MODAL -->
+<div class="ov" id="mfaq" onclick="if(event.target===this)closeMod('mfaq')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">💬 Tire suas dúvidas</div>
+  <div class="mb">Respostas diretas e sem julgamento sobre uso, misturas, efeitos e segurança. Não substitui avaliação médica — em emergência, use o botão de ajuda na tela inicial.</div>
+  <div class="chips" id="faq-chips" style="margin-bottom:11px"></div>
+  <div class="faq-chatw" id="faq-chat"></div>
+  <div class="fld" style="margin-top:9px"><input class="inp" id="faq-search" placeholder="🔍 Buscar por palavra-chave…" oninput="renderFAQlist()"></div>
+  <div class="faq-qsw" id="faq-qs"></div>
+  <button class="btn bout bfull" style="margin-top:10px" onclick="closeMod('mfaq')">Fechar</button>
 </div></div></div>
 
 <!-- MODALS -->
@@ -1934,6 +1962,55 @@ function calcCombo(){
   document.getElementById('cmb-rt').textContent=n.t;document.getElementById('cmb-rt').style.color=n.cor;
   document.getElementById('cmb-rx').innerHTML=esc(n.x)+(nota?'<br><br><strong>Nessa combinação:</strong> '+esc(nota):'');
   vib(8);
+}
+
+/* ── FAQ CHAT ── */
+const FAQ_CATS={mix:{l:'Combinações',i:'⚗️'},efeitos:{l:'Efeitos & duração',i:'⏳'},alerta:{l:'Sinais de alerta',i:'🚨'}};
+const FAQ_DATA=[
+  {c:'mix',q:'Posso misturar álcool e maconha?',a:'É uma das combinações mais comuns, mas álcool antes da cannabis costuma intensificar muito o efeito — náusea, tontura e o famoso "branco" (green out) são frequentes. Se for combinar, vá com calma: menos álcool, cannabis com THC mais baixo, e espere para sentir o efeito antes de repetir qualquer um dos dois.'},
+  {c:'mix',q:'Cocaína e álcool juntos, que cuidados tomar?',a:'O fígado transforma essa combinação em <strong>cocaetileno</strong>, uma substância mais cardiotóxica que a cocaína isolada — sobrecarrega ainda mais o coração. Hidrate-se, evite repetir doses de cocaína para "compensar" o álcool, e fique atento a dor no peito, palpitação forte ou falta de ar — nesses casos, procure ajuda.'},
+  {c:'mix',q:'MDMA com antidepressivo (ISRS) — pode?',a:'ISRS (ex: sertralina, fluoxetina) costumam reduzir bastante o efeito do MDMA, porque ocupam os receptores que o MDMA usaria. Já com <strong>IMAO</strong> (um tipo mais raro de antidepressivo), a combinação é perigosa e pode causar síndrome serotoninérgica — risco real de vida. Na dúvida sobre seu medicamento, pesquise antes ou converse com seu prescritor.'},
+  {c:'mix',q:'Posso usar benzodiazepínico para "descer" de um estimulante?',a:'É uma prática comum, mas tem riscos: sedação inesperada, esquecimento de quanto você tomou e repetição da dose, além de criar um padrão de dependência cruzada. Se usar, prefira doses baixas, evite combinar com álcool no mesmo momento e não use sozinho(a) — a sedação pode mascarar outros sinais de alerta.'},
+  {c:'mix',q:'Álcool com energético/cafeína, o que muda?',a:'A cafeína te mantém "ligado(a)" e mascara a sensação de embriaguez, então é comum beber mais álcool do que perceberia normalmente — sem reduzir o quanto seu corpo está, de fato, intoxicado. Também soma estimulação cardiovascular. Controle pela quantidade de álcool, não pela sensação de estar "acordado(a)".'},
+  {c:'mix',q:'LSD e cannabis combinam?',a:'Cannabis pode potencializar muito o efeito do LSD, de forma imprevisível — pode intensificar visuais e introspecção, mas também aumentar bastante a ansiedade ou reativar o pico ("re-trip"). Se for combinar, espere o LSD assentar primeiro e use doses bem pequenas de cannabis.'},
+  {c:'efeitos',q:'Quanto tempo dura o efeito do MDMA?',a:'O efeito costuma começar em 30-60 min, atinge o pico em 1-2h e dura no total cerca de 3-5h, com uma "descida" gradual depois. Os dias seguintes (1-3 dias) costumam vir acompanhados de cansaço, baixa de humor e dificuldade de concentração — é o conhecido "blue Tuesday". Hidratação, sono e alimentação ajudam na recuperação.'},
+  {c:'efeitos',q:'Quanto tempo dura uma viagem de LSD?',a:'Geralmente 8-12 horas, com pico entre a 2ª e a 5ª hora. É um tempo longo — planeje seu dia, ambiente (setting) e estado emocional (set) antes de começar, e evite compromissos durante esse período.'},
+  {c:'efeitos',q:'Qual a diferença entre fumar e ingerir cannabis (comestíveis)?',a:'Fumada, a cannabis faz efeito em minutos e dura cerca de 1-3h, sendo mais fácil dosar. Ingerida, o efeito demora 30min-2h para começar, mas pode durar 4-8h e ser muito mais intenso — o erro mais comum é repetir a dose por impaciência, achando que "não fez efeito". Regra de ouro: espere pelo menos 2h antes de considerar tomar mais.'},
+  {c:'efeitos',q:'Quanto tempo a cocaína fica no organismo (e detectável)?',a:'O efeito psicoativo dura cerca de 20-30min (cheirada), o que leva muita gente a repetir doses seguidas. Já a substância pode ser detectada em exames por 2-4 dias (urina) e em alguns casos mais. Repetir doses em curto intervalo aumenta muito a sobrecarga cardiovascular — não é só "a mesma dose de novo".'},
+  {c:'efeitos',q:'O que é tolerância e por que ela muda os riscos?',a:'Tolerância é quando seu corpo passa a precisar de mais substância para sentir o mesmo efeito. O problema é que a tolerância a diferentes efeitos não cresce no mesmo ritmo — por exemplo, com opioides a tolerância ao "barato" aumenta mais rápido do que a tolerância à depressão respiratória, o que é parte do motivo de overdoses acontecerem em pessoas que "sempre usaram aquela dose".'},
+  {c:'efeitos',q:'Como é a "descida" (comedown) e o que ajuda?',a:'Depois do efeito de estimulantes ou MDMA é comum sentir cansaço extremo, irritabilidade, tristeza ou ansiedade por até alguns dias — o cérebro está repondo neurotransmissores. Sono, água, comida de verdade (não só carboidrato), luz solar e companhia de pessoas de confiança ajudam bastante. Se a tristeza for muito intensa ou persistir, vale conversar com alguém de confiança ou buscar apoio profissional.'},
+  {c:'alerta',q:'Quais são os sinais de overdose de opioides?',a:'Respiração muito lenta, superficial ou que para; lábios/unhas arroxeados ou azulados; pele fria e pálida; a pessoa não responde a estímulos (chamar pelo nome, beliscar). Isso é uma <strong>emergência médica</strong>: ligue para o SAMU (192) imediatamente, coloque a pessoa de lado (posição lateral de segurança) e, se houver naloxona disponível, use-a.'},
+  {c:'alerta',q:'Como saber se é uma bad trip e o que fazer?',a:'Sinais incluem pânico intenso, paranoia, sensação de estar "preso" na experiência ou de que algo terrível vai acontecer. O primeiro passo é mudar o ambiente: lugar calmo, com pouca luz e ruído, e alguém de confiança por perto que lembre a pessoa de que é a substância agindo e que vai passar. A respiração guiada do app pode ajudar. Se houver risco físico (autolesão, comportamento muito desorganizado), procure ajuda médica.'},
+  {c:'alerta',q:'Quando devo procurar ajuda médica de emergência?',a:'Procure ajuda imediatamente se houver: perda de consciência, convulsão, dor no peito, dificuldade para respirar, febre muito alta (superaquecimento), vômito enquanto inconsciente, ou pensamento de se machucar. Em qualquer dessas situações, ligue para o <strong>SAMU 192</strong>. Para apoio emocional em crise, o <strong>CVV 188</strong> atende 24h. O app também tem um modo de crise com ferramentas rápidas.'},
+  {c:'alerta',q:'O que fazer se alguém perder a consciência depois de usar algo?',a:'1) Verifique a respiração. 2) Coloque a pessoa em posição lateral de segurança (de lado, com a cabeça apoiada), para evitar que vômito seja aspirado. 3) Ligue para o SAMU (192) e informe o que a pessoa usou, se souber — isso ajuda muito o atendimento. 4) Não deixe a pessoa sozinha até a ajuda chegar.'},
+  {c:'alerta',q:'Como reconhecer hipertermia (superaquecimento)?',a:'Sinais incluem pele muito quente e seca (ou suor excessivo que para de repente), confusão mental, batimentos cardíacos muito acelerados e câimbras. É comum em uso de estimulantes em ambientes quentes/aglomerados, especialmente com pouca hidratação. Leve a pessoa para um local fresco, ofereça água em pequenos goles, ventile e procure ajuda médica se a confusão mental ou febre não melhorarem rápido.'},
+  {c:'alerta',q:'Onde posso testar substâncias (kits de reagente)?',a:'Em algumas cidades brasileiras, organizações de redução de danos e Centros de Referência em Redução de Danos (CRR) distribuem kits de teste gratuitamente em eventos ou pontos fixos. Reagentes não garantem 100% de pureza, mas ajudam a identificar adulterantes perigosos. Buscar por "redução de danos" + sua cidade, ou projetos como Psicotropicus e Centro de Convivência É de Lei, é um bom ponto de partida.'},
+];
+let faqCat='all';
+function openFAQ(){
+  faqCat='all';
+  document.getElementById('faq-search').value='';
+  document.getElementById('faq-chat').innerHTML='<div class="fbq">Oi! Eu reúno respostas para perguntas comuns sobre uso, misturas, efeitos e segurança — direto e sem julgamento. Toque numa pergunta abaixo ou use a busca. Isso não substitui orientação médica.</div>';
+  renderFAQchips();
+  renderFAQlist();
+  openMod('mfaq');
+}
+function faqSetCat(c){faqCat=c;renderFAQchips();renderFAQlist()}
+function renderFAQchips(){
+  const cats=[{k:'all',l:'Todas',i:'💬'},...Object.entries(FAQ_CATS).map(([k,v])=>({k,l:v.l,i:v.i}))];
+  document.getElementById('faq-chips').innerHTML=cats.map(c=>`<div class="chip${faqCat===c.k?' on':''}" onclick="faqSetCat('${c.k}')">${c.i} ${esc(c.l)}</div>`).join('');
+}
+function renderFAQlist(){
+  const term=document.getElementById('faq-search').value.trim().toLowerCase();
+  const list=FAQ_DATA.map((x,i)=>({...x,i})).filter(x=>(faqCat==='all'||x.c===faqCat)&&(!term||x.q.toLowerCase().includes(term)||x.a.toLowerCase().includes(term)));
+  document.getElementById('faq-qs').innerHTML=list.length?list.map(x=>`<button class="faqq" onclick="faqAsk(${x.i})">${esc(x.q)}</button>`).join(''):'<div style="font-size:12px;color:var(--txm);text-align:center;padding:14px">Nenhuma pergunta encontrada. Tente outra palavra-chave.</div>';
+}
+function faqAsk(i){
+  const item=FAQ_DATA[i];
+  const chat=document.getElementById('faq-chat');
+  chat.insertAdjacentHTML('beforeend',`<div class="fbu">${esc(item.q)}</div><div class="fbq">${item.a}</div>`);
+  chat.scrollTop=chat.scrollHeight;
+  vib(6);
 }
 
 /* ══════════ v6: ÁUDIO-REFLEXÃO ══════════ */
