@@ -728,6 +728,32 @@ a{color:inherit;text-decoration:none}
 .gv-btn{background:var(--v);color:#06210F;border:none;border-radius:30px;padding:13px 30px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;cursor:pointer}
 .gv-btn.ghost{background:rgba(255,255,255,.12);color:#fff;margin-top:10px}
 
+/* ══ PRO DASHBOARD ══ */
+#vpro-dash{background:var(--cin);z-index:400}
+#shell.dkm #vpro-dash{background:#161D17}
+.pro-header{background:var(--dk);padding:20px 20px 0;display:flex;flex-direction:column}
+.pro-hname{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:2px}
+.pro-hreg{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:14px}
+.pro-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.1)}
+.pro-tab{flex:1;padding:11px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,.45);text-align:center;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.pro-tab.on{color:#fff;border-bottom-color:var(--v)}
+.pro-panel{display:none;flex:1;overflow-y:auto;padding:20px 18px}
+.pro-panel.on{display:block}
+.pro-card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
+#shell.dkm .pro-card{background:#1e2e1f}
+.pro-card-tit{font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.pro-field{margin-bottom:14px}
+.pro-field .lbl{font-size:12px;color:var(--txs);margin-bottom:4px;font-weight:500}
+.pro-field .val{font-size:14px;color:var(--tx);line-height:1.5}
+.pro-edit-btn{background:var(--vf);color:var(--ve);border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:4px}
+.msg-empty{text-align:center;padding:50px 20px;color:var(--txm)}
+.msg-empty-ic{font-size:44px;margin-bottom:12px}
+.msg-empty-t{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:6px}
+.msg-empty-s{font-size:13px;line-height:1.6}
+.pro-badge-row{display:inline-flex;align-items:center;gap:5px;background:var(--roxof);color:var(--roxo);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:16px}
+.pro-status-pend{background:var(--ams);color:#7a5c00;font-size:12px;font-weight:700;padding:10px 14px;border-radius:10px;margin-bottom:14px;line-height:1.5}
+
+/* ══ PRO DASHBOARD ══ */
 /* ═══ v10: REDE DE PROFISSIONAIS ═══ */
 #vprofs{z-index:530;background:var(--cin)}
 #shell.dkm #vprofs{background:#161D17}
@@ -1242,6 +1268,45 @@ a{color:inherit;text-decoration:none}
     <button class="btn bout bfull" style="margin-top:10px;border-color:var(--roxo);color:var(--roxo)" onclick="logout()">Sair</button>
   </div>
 </div>
+<div class="V" id="vpro-dash">
+  <div class="pro-header">
+    <div class="pro-badge-row">🩺 Profissional verificado</div>
+    <div class="pro-hname" id="pd-nome">—</div>
+    <div class="pro-hreg" id="pd-reg">—</div>
+    <div class="pro-tabs">
+      <button class="pro-tab on" onclick="proTab('perfil',this)">Meu perfil</button>
+      <button class="pro-tab" onclick="proTab('msgs',this)">Mensagens</button>
+      <button class="pro-tab" onclick="proTab('cfg',this)">Conta</button>
+    </div>
+  </div>
+
+  <!-- PERFIL -->
+  <div class="pro-panel on" id="pd-perfil">
+    <div id="pd-perfil-content"></div>
+  </div>
+
+  <!-- MENSAGENS -->
+  <div class="pro-panel" id="pd-msgs">
+    <div class="msg-empty">
+      <div class="msg-empty-ic">💬</div>
+      <div class="msg-empty-t">Nenhuma mensagem ainda</div>
+      <div class="msg-empty-s">Quando um usuário solicitar contato, a conversa aparecerá aqui.</div>
+    </div>
+  </div>
+
+  <!-- CONTA -->
+  <div class="pro-panel" id="pd-cfg">
+    <div class="pro-card">
+      <div class="pro-card-tit">Minha conta</div>
+      <div class="pro-field"><div class="lbl">Nome</div><div class="val" id="pd-cfg-nome">—</div></div>
+      <div class="pro-field"><div class="lbl">E-mail</div><div class="val" id="pd-cfg-email">—</div></div>
+      <div class="pro-field"><div class="lbl">Registro profissional</div><div class="val" id="pd-cfg-reg">—</div></div>
+    </div>
+    <button class="btn bout bfull" style="margin-top:8px" onclick="logout()">🚪 Sair da conta</button>
+    <div style="height:30px"></div>
+  </div>
+</div>
+
 <!-- RESPIRAÇÃO -->
 <div class="V" id="vresp" style="background:var(--dk)">
 <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="pararResp(true)">←</button><div class="ptb-tit">Respiração 4-7-8</div></div>
@@ -2126,7 +2191,8 @@ async function salvarPerfilPro(){
   const{error}=await _SB.from('profissionais').upsert(payload).catch(e=>({error:e}));
   btn.disabled=false;btn.textContent='Enviar perfil para aprovação';
   if(error){toast('Erro ao salvar: '+error.message);return;}
-  showV('vpro-aguarda');
+  // re-check status (edit case: already approved)
+  const st=await checkProStatus();if(st==='aprovado'){toast('✓ Perfil atualizado!');entrarPro();}else{showV('vpro-aguarda');}
 }
 function entrarComoUser(){
   entrar();
@@ -2207,9 +2273,68 @@ async function salvarPerfilPro(){
 async function rotearPro(){
   const st=await checkProStatus();
   if(st===null){showV('vproperfil');}
-  else if(st==='aprovado'){entrar();}
+  else if(st==='aprovado'){entrarPro();}
   else if(st==='rejeitado'){toast('Seu cadastro não foi aprovado. Entre em contato conosco.');showV('vpro-aguarda');}
   else{showV('vpro-aguarda');}
+}
+function proTab(id,btn){
+  document.querySelectorAll('.pro-tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.pro-panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('pd-'+id).classList.add('on');
+}
+async function entrarPro(){
+  // fetch professional profile
+  let prof=null;
+  if(_SB){const{data}=await _SB.from('profissionais').select('*').eq('id',U.id).maybeSingle().catch(()=>({data:null}));prof=data;}
+  // fill header
+  document.getElementById('pd-nome').textContent=U.nome||'—';
+  document.getElementById('pd-reg').textContent=U.reg||'';
+  document.getElementById('pd-cfg-nome').textContent=U.nome||'—';
+  document.getElementById('pd-cfg-email').textContent=U.email||'—';
+  document.getElementById('pd-cfg-reg').textContent=U.reg||'—';
+  // fill profile panel
+  const pc=document.getElementById('pd-perfil-content');
+  if(prof){
+    const tags=prof.especialidades?prof.especialidades.split(',').map(t=>`<span class="pc-tg">${esc(t.trim())}</span>`).join(''):'';
+    const modLabel=prof.modalidade?.includes('online')&&prof.modalidade?.includes('presencial')?'💻📍 Online e presencial':prof.modalidade?.includes('online')?'💻 Online':'📍 Presencial';
+    pc.innerHTML=`
+    <div class="pro-card">
+      <div class="pro-card-tit">Informações públicas</div>
+      <div class="pro-field"><div class="lbl">Tipo</div><div class="val">${esc(prof.tipo_prof||'—')}</div></div>
+      <div class="pro-field"><div class="lbl">Bio</div><div class="val">${esc(prof.bio||'—')}</div></div>
+      <div class="pro-field"><div class="lbl">Especialidades</div><div class="val">${tags||'—'}</div></div>
+      <div class="pro-field"><div class="lbl">Modalidade</div><div class="val">${modLabel}</div></div>
+      ${prof.cidade?`<div class="pro-field"><div class="lbl">Cidade/região</div><div class="val">${esc(prof.cidade)}</div></div>`:''}
+      ${prof.valor?`<div class="pro-field"><div class="lbl">Valor médio</div><div class="val">${esc(prof.valor)}</div></div>`:''}
+      ${prof.duracao?`<div class="pro-field"><div class="lbl">Duração</div><div class="val">${esc(prof.duracao)}</div></div>`:''}
+      ${prof.disponibilidade?`<div class="pro-field"><div class="lbl">Disponibilidade</div><div class="val">${esc(prof.disponibilidade)}</div></div>`:''}
+    </div>
+    <button class="pro-edit-btn" onclick="abrirEdicaoPerfil()">✏️ Editar perfil</button>
+    <div style="height:30px"></div>`;
+  } else {
+    pc.innerHTML='<div class="pro-card"><div style="color:var(--txm);font-size:14px">Perfil não encontrado.</div></div>';
+  }
+  showV('vpro-dash');
+  // reset to first tab
+  document.querySelectorAll('.pro-tab').forEach((b,i)=>{b.classList.toggle('on',i===0);});
+  document.querySelectorAll('.pro-panel').forEach((p,i)=>{p.classList.toggle('on',i===0);});
+}
+function abrirEdicaoPerfil(){
+  // Pre-fill form with existing data and show form
+  if(_SB) _SB.from('profissionais').select('*').eq('id',U.id).maybeSingle().then(({data:prof})=>{
+    if(!prof)return;
+    document.getElementById('pp-tipo').value=prof.tipo_prof||'';
+    document.getElementById('pp-bio').value=prof.bio||'';
+    document.getElementById('pp-esp').value=prof.especialidades||'';
+    document.getElementById('pp-mod').value=prof.modalidade||'';
+    document.getElementById('pp-cidade').value=prof.cidade||'';
+    document.getElementById('pp-valor').value=prof.valor||'';
+    document.getElementById('pp-dur').value=prof.duracao||'';
+    document.getElementById('pp-disp').value=prof.disponibilidade||'';
+    document.getElementById('pp-btn').textContent='Salvar alterações';
+    showV('vproperfil');
+  });
 }
 
 /* ═══════════ SONS DA NATUREZA (Web Audio, offline, em loop) ═══════════ */
