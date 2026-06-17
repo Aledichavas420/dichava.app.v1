@@ -1404,16 +1404,32 @@ a{color:inherit;text-decoration:none}
 <!-- CONSENTIMENTO -->
 <div class="ov" id="mtermo"><div class="sheet"><div class="sp">
   <div class="mh"></div>
-  <div style="font-size:30px;text-align:center;margin-bottom:9px">🌿</div>
-  <div class="mt c">Consentimento informado</div>
-  <div class="mb c">Este app é uma <strong>ferramenta de apoio</strong> baseada na redução de danos. Dados privados, no seu aparelho.<br><br>Não substitui cuidado profissional. Emergências: <strong>SAMU 192</strong> · <strong>CVV 188</strong>.</div>
-  <div style="background:var(--erf);border:1px solid var(--erc);border-radius:12px;padding:12px 14px;margin-bottom:15px">
-    <div style="font-size:13px;font-weight:700;color:var(--er);margin-bottom:4px">🔞 Conteúdo para maiores de 18 anos</div>
-    <div style="font-size:12px;color:var(--txs);line-height:1.55">Este app contém informações sobre substâncias destinadas exclusivamente a pessoas adultas, no contexto de redução de danos.</div>
+  <!-- conteúdo varia: usuário vs profissional -->
+  <div id="termo-user-content">
+    <div style="font-size:30px;text-align:center;margin-bottom:9px">🌿</div>
+    <div class="mt c">Consentimento informado</div>
+    <div class="mb c">Este app é uma <strong>ferramenta de apoio</strong> baseada na redução de danos. Dados privados, no seu aparelho.<br><br>Não substitui cuidado profissional. Emergências: <strong>SAMU 192</strong> · <strong>CVV 188</strong>.</div>
+    <div style="background:var(--erf);border:1px solid var(--erc);border-radius:12px;padding:12px 14px;margin-bottom:15px">
+      <div style="font-size:13px;font-weight:700;color:var(--er);margin-bottom:4px">🔞 Conteúdo para maiores de 18 anos</div>
+      <div style="font-size:12px;color:var(--txs);line-height:1.55">Este app contém informações sobre substâncias destinadas exclusivamente a pessoas adultas, no contexto de redução de danos.</div>
+    </div>
+    <div class="fld" style="margin-bottom:13px"><div class="lbl">Data de nascimento</div><input class="inp" id="termo-dob" type="date" onchange="checaIdade()"><div class="em" id="termo-dobe">Informe sua data de nascimento.</div></div>
+    <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;cursor:pointer" for="chk-18"><input type="checkbox" id="chk-18"><span style="font-size:13px;color:var(--txs);line-height:1.6">Declaro que tenho <strong>18 anos ou mais</strong> e que as informações acima são verdadeiras.</span></label>
+    <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-t"><input type="checkbox" id="chk-t"><span style="font-size:13px;color:var(--txs);line-height:1.6">Compreendo que este app é um recurso complementar de apoio e autorizo o uso dos meus dados, que ficam salvos apenas neste aparelho.</span></label>
   </div>
-  <div class="fld" style="margin-bottom:13px"><div class="lbl">Data de nascimento</div><input class="inp" id="termo-dob" type="date" onchange="checaIdade()"><div class="em" id="termo-dobe">Informe sua data de nascimento.</div></div>
-  <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;cursor:pointer" for="chk-18"><input type="checkbox" id="chk-18"><span style="font-size:13px;color:var(--txs);line-height:1.6">Declaro que tenho <strong>18 anos ou mais</strong> e que as informações acima são verdadeiras.</span></label>
-  <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-t"><input type="checkbox" id="chk-t"><span style="font-size:13px;color:var(--txs);line-height:1.6">Compreendo que este app é um recurso complementar de apoio e autorizo o uso dos meus dados, que ficam salvos apenas neste aparelho.</span></label>
+  <div id="termo-pro-content" style="display:none">
+    <div style="font-size:30px;text-align:center;margin-bottom:9px">🩺</div>
+    <div class="mt c">Termo de responsabilidade profissional</div>
+    <div class="mb c">Ao se cadastrar como profissional na rede dichava.rd, você concorda com os termos abaixo.</div>
+    <div style="background:var(--roxof);border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:var(--roxo);line-height:1.7">
+      <strong>Declaro que:</strong><br>
+      • Sou profissional de saúde legalmente habilitado(a)<br>
+      • As informações de registro que forneci são <strong>verdadeiras e verificáveis</strong><br>
+      • Minha atuação segue os princípios da <strong>redução de danos</strong><br>
+      • Estou ciente de que meu cadastro será <strong>revisado manualmente</strong> antes de ser aprovado
+    </div>
+    <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-pro"><input type="checkbox" id="chk-pro"><span style="font-size:13px;color:var(--txs);line-height:1.6">Confirmo que todas as informações fornecidas são <strong>verdadeiras e de minha responsabilidade</strong>.</span></label>
+  </div>
   <button class="btn bv bfull" onclick="aceitarTermo()">Aceitar e continuar 💚</button>
 </div></div></div>
 
@@ -1731,6 +1747,10 @@ async function posLogin(){
   const t=ls('dr_termo_'+U.id);
   if(!t){
     showV('vapp');
+    // show correct consent content
+    const isPro=U?.tipo==='pro';
+    document.getElementById('termo-user-content').style.display=isPro?'none':'block';
+    document.getElementById('termo-pro-content').style.display=isPro?'block':'none';
     openMod('mtermo');
   } else {
     if(U.tipo==='pro'){await rotearPro();return;}
@@ -1758,18 +1778,24 @@ function checaIdade(){
   e.classList.remove('on');document.getElementById('termo-dob').classList.remove('err');return true;
 }
 async function aceitarTermo(){
-  const dob=document.getElementById('termo-dob').value;
-  const a=idadeAnos(dob);
-  const dobE=document.getElementById('termo-dobe');
-  if(!dob){dobE.textContent='Informe sua data de nascimento.';dobE.classList.add('on');shk(document.getElementById('termo-dob'));return;}
-  if(a===null||a<18){dobE.textContent='É necessário ter 18 anos ou mais para usar o app.';dobE.classList.add('on');document.getElementById('termo-dob').classList.add('err');shk(document.getElementById('termo-dob'));toast('🔞 App restrito a maiores de 18 anos.');return;}
-  dobE.classList.remove('on');
-  if(!document.getElementById('chk-18').checked){shk(document.querySelector('[for="chk-18"]'));toast('⚠️ Confirme que tem 18 anos ou mais.');return;}
-  if(!document.getElementById('chk-t').checked){shk(document.querySelector('[for="chk-t"]'));toast('⚠️ Marque a caixa de consentimento.');return;}
+  const isPro=U?.tipo==='pro';
+  if(isPro){
+    if(!document.getElementById('chk-pro').checked){shk(document.querySelector('[for="chk-pro"]'));toast('⚠️ Confirme os dados para continuar.');return;}
+  } else {
+    const dob=document.getElementById('termo-dob').value;
+    const a=idadeAnos(dob);
+    const dobE=document.getElementById('termo-dobe');
+    if(!dob){dobE.textContent='Informe sua data de nascimento.';dobE.classList.add('on');shk(document.getElementById('termo-dob'));return;}
+    if(a===null||a<18){dobE.textContent='É necessário ter 18 anos ou mais para usar o app.';dobE.classList.add('on');document.getElementById('termo-dob').classList.add('err');shk(document.getElementById('termo-dob'));toast('🔞 App restrito a maiores de 18 anos.');return;}
+    dobE.classList.remove('on');
+    if(!document.getElementById('chk-18').checked){shk(document.querySelector('[for="chk-18"]'));toast('⚠️ Confirme que tem 18 anos ou mais.');return;}
+    if(!document.getElementById('chk-t').checked){shk(document.querySelector('[for="chk-t"]'));toast('⚠️ Marque a caixa de consentimento.');return;}
+    ls('dr_dob_'+U.id,dob);
+  }
   ls('dr_termo_'+U.id,new Date().toISOString());
-  ls('dr_dob_'+U.id,dob);
   closeMod('mtermo');
-  if(U.tipo==='pro'){rotearPro();return;}const o=gO();if(!o)startOb();else entrar();
+  if(isPro){await rotearPro();return;}
+  const o=gO();if(!o)startOb();else entrar();
 }
 function mostrarTermo(){
   const dt=ls('dr_termo_'+U.id);
@@ -2194,22 +2220,7 @@ async function salvarPerfilPro(){
   // re-check status (edit case: already approved)
   const st=await checkProStatus();if(st==='aprovado'){toast('✓ Perfil atualizado!');entrarPro();}else{showV('vpro-aguarda');}
 }
-function entrarComoUser(){
-  entrar();
-}
-async function rotearPro(){
-  const st=await checkProStatus();
-  if(st===null){
-    showV('vproperfil');
-  } else if(st==='aprovado'){
-    entrar();
-  } else if(st==='rejeitado'){
-    toast('Seu cadastro não foi aprovado. Entre em contato conosco.');
-    showV('vpro-aguarda');
-  } else {
-    showV('vpro-aguarda');
-  }
-}
+// rotearPro definida abaixo
 function setFiltro(f,v,btn){_pfFilt[f]=v;btn.parentElement.querySelectorAll('.pf-chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');renderProfs();}
 async function renderProfs(){
   const c=document.getElementById('pf-list');
