@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dichava.rd — acompanhamento de uso, sem julgamento</title>
+<meta name="description" content="App de redução de danos: diário de uso, modo crise, tabela de interações entre substâncias e tira-dúvidas. Grátis para você, planos para profissionais de saúde.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --v:#4CAF5A;--ve:#2E7D32;--vc:#A5D6A7;--vf:#E8F5E9;
+  --am:#FFD600;--ams:#FFF9C4;
+  --dk:#1B2A1C;--dk2:#2a3d2b;
+  --cin:#F5F5F0;--cinm:#E4E4DF;
+  --tx:#1B2A1C;--txs:#5D7060;--txm:#9E9E9E;
+  --roxo:#7C3AED;--roxof:#F5F3FF;
+  --r:14px;--rlg:22px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--tx);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.brand{font-family:'Syne',sans-serif;font-weight:800}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+img,svg{display:block;max-width:100%}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--cinm)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{font-size:21px;letter-spacing:-.5px;color:var(--ve)}
+.brand em{color:#E0A800;font-style:normal}
+.navlinks{display:flex;align-items:center;gap:28px;font-size:14px;font-weight:700;color:var(--txs)}
+.navlinks a:hover{color:var(--ve)}
+.navlinks .cta{background:var(--dk);color:#fff;padding:10px 20px;border-radius:30px;transition:transform .15s,background .2s}
+.navlinks .cta:hover{background:var(--ve);transform:translateY(-1px)}
+@media(max-width:760px){.navlinks a:not(.cta){display:none}}
+
+/* HERO */
+.hero{position:relative;background:linear-gradient(160deg,var(--dk),var(--dk2));color:#fff;overflow:hidden;padding:90px 0 120px}
+.hero::before{content:'';position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;background:var(--v);opacity:.14}
+.hero::after{content:'';position:absolute;bottom:-100px;left:-80px;width:300px;height:300px;border-radius:50%;background:var(--am);opacity:.08}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:30px;padding:7px 16px;font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--vc);margin-bottom:20px}
+.hero h1{font-size:42px;line-height:1.15;margin-bottom:18px}
+.hero h1 span{color:var(--v)}
+.hero p{font-size:16px;color:rgba(255,255,255,.65);max-width:480px;margin-bottom:30px}
+.herobtns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;padding:15px 26px;border-radius:14px;border:none;cursor:pointer;transition:transform .15s,box-shadow .2s;letter-spacing:.2px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--v);color:#0E1A0F;box-shadow:0 8px 24px -8px rgba(76,175,90,.7)}
+.btn-primary:hover{box-shadow:0 10px 28px -6px rgba(76,175,90,.85)}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.22)}
+.btn-ghost:hover{background:rgba(255,255,255,.14)}
+.btn-dark{background:var(--dk);color:#fff}
+.btn-dark:hover{background:var(--ve)}
+.trust{display:flex;gap:22px;margin-top:34px;font-size:12px;color:rgba(255,255,255,.45)}
+.trust b{color:#fff;font-size:18px;display:block;font-family:'Syne',sans-serif}
+
+/* PHONE MOCK */
+.phone{position:relative;background:#0E140E;border-radius:34px;padding:14px;width:100%;max-width:320px;margin:0 auto;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.06)}
+.phscreen{background:#fff;border-radius:24px;overflow:hidden;color:var(--tx)}
+.phhh{background:var(--dk);padding:30px 16px 14px;position:relative;overflow:hidden}
+.phhh::after{content:'';position:absolute;top:-30px;right:-30px;width:110px;height:110px;border-radius:50%;background:var(--v);opacity:.12}
+.phhsd{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;position:relative;z-index:1}
+.phhn{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:800;color:#fff;margin-top:2px;position:relative;z-index:1}
+.phhn span{color:var(--v)}
+.phpill{display:inline-flex;gap:5px;background:rgba(255,255,255,.1);border-radius:20px;padding:4px 11px;margin-top:8px;font-size:10px;color:rgba(255,255,255,.7);position:relative;z-index:1}
+.phbody{padding:12px}
+.phqag{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.phqac{position:relative;overflow:hidden;border-radius:13px;padding:10px;font-size:9px}
+.phqac::after{content:'';position:absolute;right:-14px;bottom:-14px;width:46px;height:46px;border-radius:50%;background:var(--acc);opacity:.12}
+.phqaic{width:24px;height:24px;border-radius:8px;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:12px;margin-bottom:6px;position:relative;z-index:1}
+.phqat{font-weight:800;font-size:9.5px;margin-bottom:1px;position:relative;z-index:1}
+.phqad{font-size:8px;opacity:.75;position:relative;z-index:1;line-height:1.3}
+.phchat{background:var(--vf);border:1px solid var(--vc);border-radius:13px;padding:10px;display:flex;gap:8px;align-items:flex-start}
+.phchat .ic{font-size:16px}
+.phchat .tx1{font-size:9px;font-weight:800;color:var(--ve)}
+.phchat .tx2{font-size:8px;color:var(--txs);margin-top:2px;line-height:1.5}
+.phdots{display:flex;justify-content:center;gap:5px;margin-top:12px}
+.phdots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.15)}
+.phdots span:first-child{background:var(--v);width:16px;border-radius:3px}
+.float-badge{position:absolute;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 12px 30px -10px rgba(0,0,0,.35);font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;color:var(--tx)}
+.float-badge.b1{top:8%;left:-8%;animation:floaty 5s ease-in-out infinite}
+.float-badge.b2{bottom:10%;right:-10%;animation:floaty 5s ease-in-out infinite reverse}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr;text-align:center}.hero p{margin-left:auto;margin-right:auto}.herobtns{justify-content:center}.trust{justify-content:center}.float-badge{display:none}.phone{margin-top:40px}}
+@media(max-width:520px){.hero h1{font-size:32px}}
+
+/* SECTIONS */
+section{padding:90px 0}
+.sectag{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ve);margin-bottom:10px;text-align:center;display:block}
+.sectitle{font-size:32px;text-align:center;margin-bottom:14px}
+.secsub{font-size:15px;color:var(--txs);text-align:center;max-width:560px;margin:0 auto 50px}
+
+/* FEATURES */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat{background:var(--cin);border:1px solid var(--cinm);border-radius:var(--rlg);padding:26px;transition:transform .2s,box-shadow .2s}
+.feat:hover{transform:translateY(-4px);box-shadow:0 14px 30px -16px rgba(0,0,0,.18);background:#fff}
+.feati{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.feat h3{font-size:16px;margin-bottom:8px;font-family:'DM Sans',sans-serif;font-weight:800}
+.feat p{font-size:13px;color:var(--txs)}
+@media(max-width:860px){.feats{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.feats{grid-template-columns:1fr}}
+
+/* PHILOSOPHY BAND */
+.band{background:var(--vf);border-radius:var(--rlg);padding:50px;text-align:center;position:relative;overflow:hidden}
+.band::after{content:'';position:absolute;right:-60px;bottom:-60px;width:200px;height:200px;border-radius:50%;background:var(--vc);opacity:.5}
+.band h2{font-size:26px;margin-bottom:14px;position:relative;z-index:1}
+.band p{font-size:15px;color:var(--txs);max-width:620px;margin:0 auto;position:relative;z-index:1}
+.band .quoteic{font-size:34px;margin-bottom:10px;position:relative;z-index:1}
+
+/* PRICING */
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+.price{background:#fff;border:1.5px solid var(--cinm);border-radius:var(--rlg);padding:30px;display:flex;flex-direction:column}
+.price.hl{border-color:var(--v);box-shadow:0 16px 40px -20px rgba(76,175,90,.5);position:relative}
+.price.hl::before{content:'Mais popular';position:absolute;top:-13px;right:24px;background:var(--v);color:#0E1A0F;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px}
+.ptag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--ve);margin-bottom:10px}
+.price h3{font-size:20px;margin-bottom:6px}
+.pdesc{font-size:13px;color:var(--txs);margin-bottom:18px;min-height:38px}
+.pprice{font-family:'Syne',sans-serif;font-weight:800;font-size:34px;margin-bottom:2px}
+.pprice span{font-size:14px;font-weight:500;color:var(--txm);font-family:'DM Sans',sans-serif}
+.pnote{font-size:11px;color:var(--txm);margin-bottom:20px}
+.pfeats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px;flex:1}
+.pfeats li{font-size:13px;color:var(--txs);display:flex;gap:9px;align-items:flex-start}
+.pfeats li::before{content:'✓';color:var(--ve);font-weight:800;flex-shrink:0}
+.price .btn{width:100%;justify-content:center}
+@media(max-width:900px){.pricing{grid-template-columns:1fr}.price.hl{order:-1}}
+
+/* CTA BAND */
+.ctaband{background:linear-gradient(145deg,var(--dk),var(--dk2));border-radius:var(--rlg);padding:60px 30px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.ctaband::after{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;border-radius:50%;background:var(--v);opacity:.12}
+.ctaband h2{font-size:28px;margin-bottom:12px;position:relative;z-index:1}
+.ctaband p{color:rgba(255,255,255,.6);font-size:14px;margin-bottom:26px;position:relative;z-index:1}
+.ctaband .herobtns{justify-content:center;position:relative;z-index:1}
+
+/* FOOTER */
+footer{background:var(--dk);color:rgba(255,255,255,.55);padding:60px 0 30px;font-size:13px}
+.footgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;margin-bottom:40px}
+.footgrid .brand{color:#fff;margin-bottom:10px;display:block}
+.footgrid .brand em{color:var(--am)}
+.footgrid p{max-width:280px;line-height:1.7}
+.footcol h4{color:#fff;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'DM Sans',sans-serif;font-weight:800}
+.footcol a{display:block;margin-bottom:9px;color:rgba(255,255,255,.55);transition:color .15s}
+.footcol a:hover{color:var(--v)}
+.footbottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;font-size:12px;color:rgba(255,255,255,.4)}
+.footbottom .em{color:var(--vc);font-weight:700}
+@media(max-width:760px){.footgrid{grid-template-columns:1fr 1fr}.footgrid>div:first-child{grid-column:1/-1}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="brand">dichava<em>.</em>rd</div>
+    <div class="navlinks">
+      <a href="#recursos">Recursos</a>
+      <a href="#filosofia">Sobre</a>
+      <a href="#profissionais">Para profissionais</a>
+      <a class="cta" href="index.html">Abrir o app</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">🌿 Redução de danos, na prática</span>
+      <h1>Acompanhe seu uso <span>sem julgamento</span> — e com mais segurança</h1>
+      <p>Diário de uso, modo crise, tabela de interações entre substâncias e respostas para as dúvidas que você não sabe a quem perguntar. Tudo num app gratuito, pensado com base em redução de danos.</p>
+      <div class="herobtns">
+        <a class="btn btn-primary" href="index.html">📲 Baixar grátis</a>
+        <a class="btn btn-ghost" href="#profissionais">Para profissionais de saúde →</a>
+      </div>
+      <div class="trust">
+        <div><b>100%</b>gratuito p/ usuários</div>
+        <div><b>Sem</b>julgamento, sempre</div>
+        <div><b>Privado</b>dados no seu dispositivo</div>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="float-badge b1">🆘 Modo crise sempre à mão</div>
+      <div class="float-badge b2">💬 Tire suas dúvidas</div>
+      <div class="phone">
+        <div class="phscreen">
+          <div class="phhh">
+            <div class="phhsd">Bom dia,</div>
+            <div class="phhn">Você <span>🌱</span></div>
+            <div class="phpill">🎯 <b>4 dias seguidos</b></div>
+          </div>
+          <div class="phbody">
+            <div class="phqag">
+              <div class="phqac" style="background:#FFEBEE;--acc:#C62828"><div class="phqaic">🆘</div><div class="phqat" style="color:#E05555">Emergência</div><div class="phqad">Mal-estar, crise</div></div>
+              <div class="phqac" style="background:#F5F3FF;--acc:#7C3AED"><div class="phqaic">💪</div><div class="phqat" style="color:#7C3AED">Resistência</div><div class="phqad">Quis e não usou</div></div>
+              <div class="phqac" style="background:#E0F2F1;--acc:#00897B"><div class="phqaic">⚗️</div><div class="phqat" style="color:#00897B">Vai misturar?</div><div class="phqad">Interações</div></div>
+              <div class="phqac" style="background:#E8F5E9;--acc:#2E7D32"><div class="phqaic">💬</div><div class="phqat" style="color:#2E7D32">Dúvidas</div><div class="phqad">Uso e riscos</div></div>
+            </div>
+            <div class="phchat"><div class="ic">💬</div><div><div class="tx1">Tire suas dúvidas</div><div class="tx2">"Posso misturar álcool e maconha?" — respostas diretas, sem julgamento.</div></div></div>
+            <div class="phdots"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- RECURSOS -->
+<section id="recursos">
+  <div class="wrap">
+    <span class="sectag">O que o app faz</span>
+    <h2 class="sectitle">Cuidado real, no seu ritmo</h2>
+    <p class="secsub">Ferramentas pensadas para quem usa — sem exigir abstinência, sem discursos prontos, com informação de qualidade.</p>
+    <div class="feats">
+      <div class="feat">
+        <div class="feati" style="background:var(--vf)">📔</div>
+        <h3>Diário de uso</h3>
+        <p>Registre uso, contexto e emoções para entender seus próprios padrões — sem culpa, só dados.</p>
+      </div>
+      <div class="feat">
+        <div class="feati" style="background:#FFEBEE">🆘</div>
+        <h3>Modo crise</h3>
+        <p>Respiração guiada, grounding e contatos de emergência a um toque, quando o momento for difícil.</p>
+      </div>
+      <div class="feat">
+        <div class="feati" style="background:#E0F2F1">⚗️</div>
+        <h3>Vai misturar? Consulte antes</h3>
+        <p>Tabela de interações entre substâncias baseada em dados do TripSit, direto e sem rodeios.</p>
+      </div>
+      <div class="feat">
+        <div class="feati" style="background:#E8F5E9">💬</div>
+        <h3>Tire suas dúvidas</h3>
+        <p>Respostas pré-prontas sobre efeitos, duração, combinações e sinais de alerta — busque por palavra-chave.</p>
+      </div>
+      <div class="feat">
+        <div class="feati" style="background:var(--ams)">🏆</div>
+        <h3>Progresso e conquistas</h3>
+        <p>Acompanhe metas, sequências e marcos da sua jornada — sejam eles redução, controle ou abstinência.</p>
+      </div>
+      <div class="feat">
+        <div class="feati" style="background:#F5F3FF">🔒</div>
+        <h3>Privacidade em primeiro lugar</h3>
+        <p>Seus registros ficam no seu dispositivo. Sem rastreamento, sem venda de dados, sem julgamento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILOSOFIA -->
+<section id="filosofia" style="padding-top:0">
+  <div class="wrap">
+    <div class="band">
+      <div class="quoteic">🌿</div>
+      <h2>Redução de danos não é sobre aprovar o uso</h2>
+      <p>É reconhecer que o uso de substâncias existe, existiu e vai continuar existindo — e que a pergunta certa não é "como eliminar?", mas "como reduzir o sofrimento causado por ele?". O dichava.rd parte do encontro com a pessoa onde ela está, sem julgamento.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROFISSIONAIS / PRICING -->
+<section id="profissionais">
+  <div class="wrap">
+    <span class="sectag">Para profissionais de saúde</span>
+    <h2 class="sectitle">Leve a redução de danos para o seu acompanhamento</h2>
+    <p class="secsub">Planos pensados para psicólogos, psiquiatras, terapeutas e equipes de CAPS/CRR acompanharem pacientes com mais dados e menos fricção.</p>
+    <div class="pricing">
+      <div class="price">
+        <div class="ptag">Pessoal</div>
+        <h3>Usuário</h3>
+        <div class="pdesc">Para quem quer acompanhar o próprio uso com mais cuidado.</div>
+        <div class="pprice">Grátis</div>
+        <div class="pnote">para sempre, sem anúncios</div>
+        <ul class="pfeats">
+          <li>Diário de uso ilimitado</li>
+          <li>Modo crise e ferramentas de regulação</li>
+          <li>Tabela de interações e tira-dúvidas</li>
+          <li>Metas, progresso e conquistas</li>
+          <li>Dados privados, no seu dispositivo</li>
+        </ul>
+        <a class="btn btn-dark" href="index.html">Baixar grátis</a>
+      </div>
+      <div class="price hl">
+        <div class="ptag">Profissional</div>
+        <h3>Acompanhamento</h3>
+        <div class="pdesc">Para psicólogos, terapeutas e profissionais com até 30 pacientes ativos.</div>
+        <div class="pprice">R$ 49<span>/mês por profissional</span></div>
+        <div class="pnote">cobrança mensal · cancele quando quiser</div>
+        <ul class="pfeats">
+          <li>Painel com visão consolidada dos pacientes</li>
+          <li>Compartilhamento de registros com consentimento</li>
+          <li>Relatórios de evolução em PDF</li>
+          <li>Modelos de plano de cuidado em RD</li>
+          <li>Suporte prioritário por e-mail</li>
+        </ul>
+        <a class="btn btn-primary" href="#contato">Assinar plano</a>
+      </div>
+      <div class="price">
+        <div class="ptag">Equipes</div>
+        <h3>Clínica / CAPS</h3>
+        <div class="pdesc">Para clínicas, ONGs e serviços com múltiplos profissionais.</div>
+        <div class="pprice">R$ 39<span>/mês por profissional</span></div>
+        <div class="pnote">a partir de 5 profissionais · faturamento único</div>
+        <ul class="pfeats">
+          <li>Tudo do plano Acompanhamento</li>
+          <li>Gestão de equipe e permissões</li>
+          <li>Indicadores agregados do serviço</li>
+          <li>Onboarding para a equipe</li>
+          <li>Gerente de conta dedicado</li>
+        </ul>
+        <a class="btn btn-dark" href="#contato">Falar com a gente</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="contato">
+  <div class="wrap">
+    <div class="ctaband">
+      <h2>Pronto para começar?</h2>
+      <p>Baixe o app gratuitamente — leva menos de um minuto e não pede cadastro com cartão.</p>
+      <div class="herobtns">
+        <a class="btn btn-primary" href="index.html">📲 Baixar o app grátis</a>
+        <a class="btn btn-ghost" href="mailto:contato@dichava.rd">Falar sobre planos profissionais</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footgrid">
+      <div>
+        <span class="brand">dichava<em>.</em>rd</span>
+        <p>Companion de redução de danos: diário de uso, reflexões, modo crise e ferramentas de cuidado — sem julgamento.</p>
+      </div>
+      <div class="footcol">
+        <h4>Produto</h4>
+        <a href="#recursos">Recursos</a>
+        <a href="#profissionais">Para profissionais</a>
+        <a href="index.html">Abrir o app</a>
+      </div>
+      <div class="footcol">
+        <h4>Sobre</h4>
+        <a href="#filosofia">Nossa filosofia</a>
+        <a href="mailto:contato@dichava.rd">Contato</a>
+      </div>
+      <div class="footcol">
+        <h4>Emergência</h4>
+        <a href="tel:192">SAMU — 192</a>
+        <a href="tel:188">CVV — 188</a>
+      </div>
+    </div>
+    <div class="footbottom">
+      <div>© 2026 dichava.rd · Este app é uma ferramenta de apoio e <span class="em">não substitui cuidado profissional</span>.</div>
+      <div>Feito com 🌿 para reduzir danos</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
