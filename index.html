@@ -55,9 +55,9 @@ a{color:inherit;text-decoration:none}
 /* BOTTOM NAV */
 #bnav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--cinm);display:none;padding:6px 0 calc(6px + var(--sb));z-index:100}
 #bnav.on{display:flex}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;padding:4px 2px;font-size:8px;color:var(--txm);font-weight:500;transition:color .15s}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;padding:4px 1px;font-size:7.5px;color:var(--txm);font-weight:500;transition:color .15s}
 .ni.on{color:var(--ve)}
-.ni-ic{font-size:20px;line-height:1}
+.ni-ic{font-size:18px;line-height:1}
 .fabw{flex:0 0 56px;display:flex;justify-content:center}
 .fab{width:48px;height:48px;border-radius:50%;background:var(--dk);border:3px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:-18px;box-shadow:0 4px 18px rgba(0,0,0,.3);font-size:24px;color:#fff}
 
@@ -577,11 +577,44 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .tsun{color:#7BD98A}
 .tsul{font-size:9.5px;color:var(--txs);margin-top:3px;font-weight:600}
 
-/* ── v6: COMBO ── */
-.cmbres{border-radius:15px;padding:16px;margin-top:13px;border-left:5px solid;display:none}
-.cmbres.on{display:block;animation:pgslide .25s ease}
-.cmbrt{font-size:15px;font-weight:800;margin-bottom:4px}
-.cmbrx{font-size:13px;line-height:1.6;color:var(--txs)}
+/* ── v6→v13: COMBO RICO ── */
+.cmbwrap{margin-top:13px}
+.cmb-head{border-radius:16px;padding:16px;border:1.5px solid;animation:pgslide .25s ease}
+.cmb-subs{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap}
+.cmb-cls{display:flex;flex-direction:column;font-size:14px;font-weight:700;color:var(--dk);line-height:1.25}
+.cmb-cls small{font-size:11px;font-weight:500;color:var(--txm)}
+.cmb-plus{font-size:18px;color:var(--txm);font-weight:700}
+.cmb-badge{display:inline-block;color:#fff;font-size:11px;font-weight:800;letter-spacing:.04em;padding:4px 11px;border-radius:20px;margin-bottom:9px}
+.cmb-tx{font-size:13px;line-height:1.55;font-weight:600}
+.cmb-obs{font-size:12.5px;line-height:1.55;color:var(--txs);margin-top:10px;background:rgba(255,255,255,.55);border-radius:10px;padding:9px 11px}
+.cmb-alert{font-size:12.5px;line-height:1.55;color:#B71C1C;margin-top:8px;background:rgba(255,255,255,.6);border-radius:10px;padding:9px 11px}
+#shell.dkm .cmb-cls{color:#E9EFE7}
+#shell.dkm .cmb-obs,#shell.dkm .cmb-alert{background:rgba(0,0,0,.18)}
+#shell.dkm .cmb-obs{color:#ADBDA9}
+
+.dz-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+@media(min-width:560px){.dz-grid{grid-template-columns:1fr 1fr}}
+.dz-card{border:1px solid var(--cinm);border-radius:14px;padding:14px;background:#fff}
+#shell.dkm .dz-card{background:#1D2520;border-color:#32402F}
+.dz-h{font-size:13.5px;font-weight:800;color:var(--dk);margin-bottom:9px}
+#shell.dkm .dz-h{color:#E9EFE7}
+.dz-warn{font-size:10.5px;line-height:1.5;color:#8a6d00;background:#FFF9C4;border-radius:9px;padding:8px 10px;margin-bottom:11px}
+#shell.dkm .dz-warn{background:#3a3410;color:#e8d98a}
+.dz-via{font-size:12px;font-weight:700;color:var(--ve);text-transform:uppercase;letter-spacing:.04em;margin:8px 0 6px}
+.dz-un{color:var(--txm);font-weight:500;text-transform:none}
+.dz-scale{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px}
+.dz-step{border-radius:9px;padding:7px 4px;text-align:center;line-height:1.2}
+.dz-step span{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;opacity:.75}
+.dz-step b{display:block;font-size:12px;font-weight:800;margin-top:2px}
+.s-leve{background:#E8F5E9;color:#2E7D32}
+.s-comum{background:#FFF9C4;color:#7A6A00}
+.s-forte{background:#FFE0B2;color:#C2700A}
+.s-pesada{background:#FFCDD2;color:#C62828}
+.dz-meta{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:11px;color:var(--txs);margin-top:7px}
+.dz-meta b{color:var(--dk);font-weight:700}
+#shell.dkm .dz-meta{color:#ADBDA9}#shell.dkm .dz-meta b{color:#E9EFE7}
+.dz-tip{font-size:11.5px;line-height:1.5;color:var(--txs);margin-top:10px;border-top:1px dashed var(--cinm);padding-top:9px}
+#shell.dkm .dz-tip{color:#ADBDA9;border-color:#32402F}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--cinm);background:var(--cin);font-size:16px;cursor:pointer;flex-shrink:0;transition:all .15s;align-self:flex-end}
 .micbtn.rec{background:var(--erf);border-color:var(--er);animation:cpul 1.4s infinite}
 
@@ -606,6 +639,156 @@ a{color:inherit;text-decoration:none}
 .qad{position:relative;z-index:1;font-size:11px;line-height:1.5;opacity:.8}
 #shell.dkm .qac{box-shadow:0 1px 10px rgba(0,0,0,.25)}
 
+
+/* ═══ v12: PAUSA PRA MENTE — estilo Silent Moon ═══ */
+#p-jogos{background:linear-gradient(180deg,#1B1B3A 0%,#2A2A5C 42%,#3D3D7A 100%)}
+#shell.dkm #p-jogos{background:linear-gradient(180deg,#13132B 0%,#1E1E42 42%,#2A2A57 100%)}
+.zen-top{padding:calc(20px + var(--st,0px)) 22px 6px;display:flex;align-items:center;justify-content:space-between}
+.zen-logo{font-family:'DM Sans',sans-serif;font-weight:800;font-size:19px;color:#fff;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.zen-av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
+.zen-hero{padding:14px 22px 20px}
+.zen-hero h2{font-family:'DM Sans',sans-serif;font-size:27px;font-weight:800;color:#fff;line-height:1.12;letter-spacing:-.5px}
+.zen-hero p{font-size:14px;color:rgba(255,255,255,.66);margin-top:8px;line-height:1.55;max-width:300px}
+.zen-moon{position:absolute;top:60px;right:-10px;font-size:70px;opacity:.9;pointer-events:none;filter:drop-shadow(0 0 24px rgba(255,221,120,.4))}
+.zen-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.zen-star{position:absolute;background:#fff;border-radius:50%;opacity:.7;animation:twk 3s ease-in-out infinite}
+@keyframes twk{0%,100%{opacity:.25}50%{opacity:.9}}
+.zen-sc{flex:1;overflow-y:auto;position:relative;z-index:2;padding-bottom:30px}
+.zen-sc::-webkit-scrollbar{display:none}
+.zen-sec{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin:8px 22px 12px}
+
+/* cards grandes de jogos (estilo Silent Moon) */
+.zen-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 22px}
+.zcard{border-radius:22px;padding:18px;min-height:152px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s}
+.zcard:active{transform:scale(.97)}
+.zcard .zi{font-size:34px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.zcard h4{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;line-height:1.15;letter-spacing:-.2px}
+.zcard p{font-size:11.5px;margin-top:3px;line-height:1.35;opacity:.78}
+.zcard.tall{grid-row:span 1;min-height:172px}
+.zc-blue{background:linear-gradient(155deg,#8E97FD,#6B74E8);color:#fff}
+.zc-orange{background:linear-gradient(155deg,#FFA45B,#F98C42);color:#fff}
+.zc-yellow{background:linear-gradient(155deg,#FFCF86,#FAB75A);color:#3A2E1A}
+.zc-pink{background:linear-gradient(155deg,#F6A6C1,#EE7BA4);color:#fff}
+.zc-teal{background:linear-gradient(155deg,#7BD0C1,#4FB3A4);color:#fff}
+.zc-dark{background:linear-gradient(155deg,#3F4A8A,#2E3568);color:#fff}
+
+/* sons de natureza */
+.snd-row{display:flex;gap:12px;overflow-x:auto;padding:0 22px 4px;scrollbar-width:none}
+.snd-row::-webkit-scrollbar{display:none}
+.snd{flex-shrink:0;width:120px;border-radius:20px;padding:16px 14px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s;border:2px solid transparent}
+.snd:active{transform:scale(.96)}
+.snd.on{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.snd .si{font-size:30px}
+.snd h5{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;margin-top:10px;color:#fff}
+.snd p{font-size:10.5px;color:rgba(255,255,255,.7);margin-top:1px}
+.snd .playing{position:absolute;top:11px;right:11px;display:none;gap:2px;align-items:flex-end;height:14px}
+.snd.on .playing{display:flex}
+.snd .playing i{width:3px;background:#fff;border-radius:2px;animation:eq .9s ease-in-out infinite}
+.snd .playing i:nth-child(2){animation-delay:.3s}
+.snd .playing i:nth-child(3){animation-delay:.6s}
+@keyframes eq{0%,100%{height:4px}50%{height:13px}}
+
+/* player de som flutuante */
+.sndbar{margin:16px 22px 0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:14px 16px;display:none;align-items:center;gap:13px;backdrop-filter:blur(8px)}
+.sndbar.on{display:flex}
+.sndbar .sb-ic{width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.sndbar .sb-info{flex:1;min-width:0}
+.sndbar .sb-t{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.sndbar .sb-s{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:1px}
+.sndbar .sb-timer{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+.sndbar .sb-stop{width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.18);color:#fff;font-size:16px;cursor:pointer;flex-shrink:0}
+.snd-times{display:flex;gap:7px;padding:12px 22px 0}
+.snd-time{flex:1;text-align:center;padding:9px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.85);font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.snd-time.on{background:rgba(255,255,255,.9);color:#2A2A5C;border-color:#fff}
+
+.zen-foot{text-align:center;font-size:11.5px;color:rgba(255,255,255,.45);margin:22px 22px 0;line-height:1.5}
+.zen-foot strong{color:rgba(255,255,255,.75);cursor:pointer}
+
+/* game viewer fullscreen */
+#vgame{z-index:540;background:var(--dk)}
+.gv-top{display:flex;align-items:center;gap:10px;padding:calc(14px + var(--st,0px)) 16px 14px;position:relative;z-index:3}
+.gv-top .bk{background:rgba(255,255,255,.14);color:#fff}
+.gv-title{font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;color:#fff}
+.gv-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:0 16px 30px}
+#flap-cv,#pop-cv{width:100%;max-width:380px;border-radius:18px;background:#bfe3f0;touch-action:none;display:block}
+.gv-hud{display:flex;gap:18px;margin-bottom:14px;font-family:'DM Sans',sans-serif}
+.gv-score{font-size:34px;font-weight:800;color:#fff;line-height:1}
+.gv-score small{display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.gv-hint{margin-top:16px;font-size:13px;color:rgba(255,255,255,.6);text-align:center;max-width:320px;line-height:1.5}
+.gv-pad{display:none;gap:9px;margin-top:18px;width:100%;max-width:300px;grid-template-columns:repeat(4,1fr)}
+.gv-pad.on{display:grid}
+.padbtn{height:60px;border-radius:14px;border:none;background:rgba(255,255,255,.16);color:#fff;font-size:24px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .08s,transform .08s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;display:flex;align-items:center;justify-content:center}
+.padbtn:active,.padbtn.held{background:rgba(255,255,255,.34);transform:scale(.94)}
+.padbtn.soft{background:rgba(255,255,255,.1)}
+.padbtn.wide{grid-column:span 4;height:50px;font-size:16px;background:rgba(123,217,138,.28)}
+.gv-over{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,23,16,.82);backdrop-filter:blur(4px);border-radius:18px;z-index:5}
+.gv-over.on{display:flex}
+.gv-over h3{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:6px}
+.gv-over p{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:20px;text-align:center;padding:0 24px;line-height:1.5}
+.gv-btn{background:var(--v);color:#06210F;border:none;border-radius:30px;padding:13px 30px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;cursor:pointer}
+.gv-btn.ghost{background:rgba(255,255,255,.12);color:#fff;margin-top:10px}
+
+/* ═══ v10: REDE DE PROFISSIONAIS ═══ */
+#vprofs{z-index:530;background:var(--cin)}
+#shell.dkm #vprofs{background:#161D17}
+.pf-search{padding:14px 18px 6px;display:flex;flex-direction:column;gap:9px}
+.pf-inp{width:100%;background:#fff;border:1px solid var(--cinm);border-radius:12px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--tx);outline:none}
+#shell.dkm .pf-inp{background:#212A21;border-color:#32402F;color:#E9EFE7}
+.pf-filters{display:flex;gap:7px;overflow-x:auto;padding:2px 0;scrollbar-width:none}
+.pf-filters::-webkit-scrollbar{display:none}
+.pf-chip{flex-shrink:0;background:#fff;border:1px solid var(--cinm);border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--txs);cursor:pointer;white-space:nowrap;transition:all .15s}
+.pf-chip.on{background:var(--dk);border-color:var(--dk);color:#fff}
+#shell.dkm .pf-chip{background:#212A21;border-color:#32402F;color:#ADBDA9}
+#shell.dkm .pf-chip.on{background:var(--v);border-color:var(--v);color:#06210F}
+.pf-list{padding:8px 18px 30px;display:flex;flex-direction:column;gap:12px}
+.pf-count{font-size:12px;color:var(--txm);padding:4px 0 2px;font-family:'DM Sans',sans-serif;font-weight:600}
+.pcard{background:#fff;border:1px solid var(--cinm);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+#shell.dkm .pcard{background:#1D2520;border-color:#32402F}
+.pc-head{display:flex;gap:13px;align-items:flex-start}
+.pc-av{width:54px;height:54px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--vf)}
+#shell.dkm .pc-av{background:#1D3320}
+.pc-id{flex:1;min-width:0}
+.pc-nome{font-family:'DM Sans',sans-serif;font-size:15.5px;font-weight:700;color:var(--dk)}
+#shell.dkm .pc-nome{color:#E9EFE7}
+.pc-esp{font-size:13px;color:var(--ve);font-weight:600;margin-top:1px}
+#shell.dkm .pc-esp{color:#7BD98A}
+.pc-reg{font-size:11px;color:var(--txm);font-family:'DM Sans',sans-serif;margin-top:2px}
+.pc-modtag{flex-shrink:0;font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.mt-on{background:var(--saf);color:var(--sa)}
+.mt-pr{background:var(--lrjf);color:var(--lrj)}
+.mt-am{background:var(--roxof);color:var(--roxo)}
+.pc-bio{font-size:13px;color:var(--txs);line-height:1.5}
+.pc-meta{display:grid;grid-template-columns:1fr 1fr;gap:9px;border-top:1px solid var(--cinm);padding-top:12px}
+#shell.dkm .pc-meta{border-color:#32402F}
+.pc-mi{display:flex;flex-direction:column;gap:1px}
+.pc-mi .k{font-size:10px;color:var(--txm);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.pc-mi .v{font-size:13px;color:var(--dk);font-weight:600}
+#shell.dkm .pc-mi .v{color:#E9EFE7}
+.pc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.pc-tg{font-size:11px;background:var(--cin);border:1px solid var(--cinm);color:var(--txs);padding:3px 9px;border-radius:20px}
+#shell.dkm .pc-tg{background:#212A21;border-color:#32402F;color:#ADBDA9}
+.pc-cta{display:flex;gap:8px;margin-top:2px}
+.pc-btn{flex:1;text-align:center;padding:11px;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;border:none}
+.pc-btn.solid{background:var(--v);color:#06210F}
+.pc-btn.line{background:transparent;border:1px solid var(--cinm);color:var(--dk)}
+#shell.dkm .pc-btn.line{border-color:#32402F;color:#E9EFE7}
+.pf-disc{margin:4px 18px 0;font-size:11.5px;color:var(--txm);line-height:1.5;text-align:center}
+
+/* badge profissional na conta */
+.acct-type{display:flex;gap:10px;margin-top:4px}
+.acct-opt{flex:1;border:1.5px solid var(--cinm);border-radius:14px;padding:14px;cursor:pointer;text-align:center;transition:all .15s;background:#fff}
+.acct-opt.on{border-color:var(--v);background:var(--vf)}
+.acct-opt .ai{font-size:24px}
+.acct-opt .at{font-size:13px;font-weight:700;color:var(--dk);margin-top:5px}
+.acct-opt .ad{font-size:11px;color:var(--txs);margin-top:2px;line-height:1.4}
+#shell.dkm .acct-opt{background:#212A21;border-color:#32402F}
+#shell.dkm .acct-opt.on{border-color:var(--v);background:#1D3320}
+#shell.dkm .acct-opt .at{color:#E9EFE7}
+.probadge{display:inline-flex;align-items:center;gap:5px;background:var(--roxof);color:var(--roxo);font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:5px}
+
+/* botão emergência -> profissionais (no crise) */
+.crc.prof{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35)}
+
 </style>
 <noscript><div style="padding:40px 24px;font-family:sans-serif;text-align:center;color:#1B2A1C"><h2>⚠️ JavaScript desativado</h2><p>Este app precisa ser aberto em um navegador (Chrome, Safari, Firefox).<br>Se você abriu pelo WhatsApp ou pelo visualizador de arquivos, toque em <strong>"Abrir com → Chrome"</strong>.</p></div></noscript>
 </head>
@@ -627,6 +810,13 @@ a{color:inherit;text-decoration:none}
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
     <div class="fld"><div class="lbl">Senha</div><input class="inp" id="su-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><div class="em" id="su-pwe">Mínimo 6 caracteres.</div></div>
+    <div class="fld"><div class="lbl">Tipo de conta</div>
+      <div class="acct-type">
+        <div class="acct-opt on" id="acct-user" onclick="setAcct('user')"><div class="ai">🌱</div><div class="at">Sou usuário</div><div class="ad">Quero cuidar de mim</div></div>
+        <div class="acct-opt" id="acct-pro" onclick="setAcct('pro')"><div class="ai">🩺</div><div class="at">Sou profissional</div><div class="ad">Saúde · quero compor a rede</div></div>
+      </div>
+    </div>
+    <div class="fld" id="pro-reg-fld" style="display:none"><div class="lbl">Registro profissional (CRP, CRM…)</div><input class="inp" id="su-reg" type="text" placeholder="Ex.: CRP 16/7696"><div class="em" id="su-rege">Informe seu registro.</div></div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
   </div>
 </div>
@@ -676,6 +866,16 @@ a{color:inherit;text-decoration:none}
       <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
       <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
     </div>
+    <div class="qac" style="background:#EAF2FF;--acc:#2B6CB0" onclick="abrirProfs()">
+      <div class="qaic">🩺</div>
+      <div class="qat" style="color:#2B6CB0">Fale com um profissional</div>
+      <div class="qad" style="color:#4A82C0">Rede de psi e psiquiatras</div>
+    </div>
+    <div class="qac" style="background:#FFF4E6;--acc:#C2700A" onclick="goPg('p-jogos')">
+      <div class="qaic">🎮</div>
+      <div class="qat" style="color:#C2700A">Pausa pra mente</div>
+      <div class="qad" style="color:#D08A2E">Jogos pra atravessar a fissura</div>
+    </div>
   </div>
   <div class="shr" style="padding-top:2px"><div class="sht">Para você hoje</div><div class="shl" onclick="goPg('p-ref')">ver mais →</div></div>
   <div id="h-feed"></div>
@@ -685,6 +885,68 @@ a{color:inherit;text-decoration:none}
 </div>
 </div>
 
+<!-- JOGOS -->
+<div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-jogos">
+<div class="zen-stars" id="zen-stars"></div>
+<div class="zen-moon">🌙</div>
+<div class="zen-top">
+  <div class="zen-logo">🌿 Pausa pra mente</div>
+  <div class="zen-av" id="tav-j" onclick="goPg('p-cfg')">?</div>
+</div>
+<div class="zen-hero">
+  <h2>Respira.<br>A vontade é uma onda.</h2>
+  <p>Ocupe as mãos e a cabeça enquanto ela sobe, atinge o pico e desce. Não precisa vencer, só atravessar.</p>
+</div>
+<div class="zen-sc">
+  <div class="zen-sec">Sons da natureza · em loop</div>
+  <div class="snd-row">
+    <div class="snd zc-blue" data-snd="rain" onclick="toggleSom('rain',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🌧️</div><h5>Chuva</h5><p>Calma e constante</p></div>
+    <div class="snd zc-teal" data-snd="ocean" onclick="toggleSom('ocean',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🌊</div><h5>Oceano</h5><p>Ondas lentas</p></div>
+    <div class="snd zc-dark" data-snd="night" onclick="toggleSom('night',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🦗</div><h5>Noite</h5><p>Grilos e calma</p></div>
+    <div class="snd zc-teal" data-snd="stream" onclick="toggleSom('stream',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🏞️</div><h5>Riacho</h5><p>Água corrente</p></div>
+    <div class="snd zc-dark" data-snd="wind" onclick="toggleSom('wind',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🍃</div><h5>Vento</h5><p>Brisa entre folhas</p></div>
+    <div class="snd zc-blue" data-snd="forest" onclick="toggleSom('forest',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🌲</div><h5>Floresta</h5><p>Pássaros e mata</p></div>
+  </div>
+  <div class="snd-times" id="snd-times">
+    <div class="snd-time" data-min="5" onclick="setSomTempo(5,this)">5 min</div>
+    <div class="snd-time on" data-min="10" onclick="setSomTempo(10,this)">10 min</div>
+    <div class="snd-time" data-min="20" onclick="setSomTempo(20,this)">20 min</div>
+    <div class="snd-time" data-min="0" onclick="setSomTempo(0,this)">∞</div>
+  </div>
+  <div class="sndbar" id="sndbar">
+    <div class="sb-ic" id="sb-ic">🌧️</div>
+    <div class="sb-info"><div class="sb-t" id="sb-t">Chuva</div><div class="sb-s">tocando em loop</div></div>
+    <div class="sb-timer" id="sb-timer"></div>
+    <button class="sb-stop" onclick="pararSom()">⏹</button>
+  </div>
+
+  <div class="zen-sec" style="margin-top:24px">Jogos pra distrair</div>
+  <div class="zen-grid">
+    <div class="zcard zc-blue tall" onclick="abrirJogo('flap')">
+      <div class="zi">🐝</div>
+      <div><h4>Voo da abelha</h4><p>Toque pra voar e desviar</p></div>
+    </div>
+    <div class="zcard zc-orange tall" onclick="abrirJogo('tetris')">
+      <div class="zi">🧱</div>
+      <div><h4>Blocos</h4><p>Encaixe e complete linhas</p></div>
+    </div>
+    <div class="zcard zc-dark tall" onclick="abrirJogo('pong')">
+      <div class="zi">🏓</div>
+      <div><h4>Ping-pong retrô</h4><p>Estilo minigame anos 90</p></div>
+    </div>
+    <div class="zcard zc-pink tall" onclick="abrirJogo('pop')">
+      <div class="zi">🫧</div>
+      <div><h4>Estoura bolhas</h4><p>Foco no aqui e agora</p></div>
+    </div>
+    <div class="zcard zc-yellow tall" onclick="showV('vresp')" style="grid-column:span 2;min-height:120px;flex-direction:row;align-items:center;gap:16px">
+      <div class="zi">🫁</div>
+      <div><h4>Respiração guiada</h4><p>Siga o círculo: inspira, segura, solta</p></div>
+    </div>
+  </div>
+
+  <div class="zen-foot">Se a vontade continuar muito forte, o <strong onclick="showV('vcrise')">Modo Crise</strong> tem mais ferramentas de apoio.</div>
+</div>
+</div>
 <!-- AGENDA -->
 <div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-agenda">
 <div class="topbar"><div class="tlogo">dichava<em>.</em>rd</div><div style="display:flex;align-items:center;gap:9px"><div style="cursor:pointer;font-size:21px" onclick="openMod('mreg')">➕</div><div class="tav" id="tav" onclick="goPg('p-cfg')">?</div></div></div>
@@ -749,8 +1011,17 @@ a{color:inherit;text-decoration:none}
 <div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-cfg">
 <div class="cfgh"><div class="cfgt">Configurações</div><div class="cfgs">Sua conta e preferências</div></div>
 <div class="sc scpad">
-  <div class="pfc"><div class="pfav" id="pfav">?</div><div><div class="pfn" id="pfn">—</div><div class="pfe" id="pfe">—</div><div class="pfm" id="pfm">—</div></div></div>
-  <a class="wppc" href="#" onclick="envWPP(event)"><div class="wppci">💬</div><div class="wppcb"><div class="wppct">Compartilhar com terapeuta</div><div class="wppcs">Resumo dos seus registros pelo WhatsApp</div><div class="wppcl">Abrir WhatsApp →</div></div></a>
+  <div class="pfc"><div class="pfav" id="pfav">?</div><div><div class="pfn" id="pfn">—</div><div class="pfe" id="pfe">—</div><div class="pfm" id="pfm">—</div><div class="probadge" id="pf-badge" style="display:none">🩺 Profissional verificado</div></div></div>
+  <!-- ÁREA EXCLUSIVA PROFISSIONAL -->
+  <div id="pro-area" style="display:none">
+    <div class="cfgsec" style="border:2px solid var(--roxo);margin:0 18px 11px">
+      <div class="cfgsect" style="color:var(--roxo);border-color:var(--roxof)">🩺 Área do profissional</div>
+      <div class="cfgi" onclick="toast('Painel de pacientes — em breve 💚')"><div class="cfgic">👥</div><div class="cfgb"><div class="cfgn">Pacientes encaminhados</div><div class="cfgd" id="pro-pac">Nenhum encaminhamento ainda</div></div><div class="cfgar">›</div></div>
+      <div class="cfgi" onclick="toast('Edição de perfil público — em breve 💚')"><div class="cfgic">🪪</div><div class="cfgb"><div class="cfgn">Meu perfil na rede</div><div class="cfgd" id="pro-reg-show">—</div></div><div class="cfgar">›</div></div>
+      <div class="cfgi" onclick="toast('Agenda de disponibilidade — em breve 💚')"><div class="cfgic">🗓️</div><div class="cfgb"><div class="cfgn">Disponibilidade</div><div class="cfgd">Defina seus horários de atendimento</div></div><div class="cfgar">›</div></div>
+    </div>
+  </div>
+  <a class="wppc" href="#" onclick="event.preventDefault();abrirProfs()"><div class="wppci">🩺</div><div class="wppcb"><div class="wppct">Fale com um profissional</div><div class="wppcs">Rede de psicólogos e psiquiatras alinhados à redução de danos</div><div class="wppcl">Ver profissionais →</div></div></a>
   <!-- PLANO -->
   <div class="shr"><div class="sht">Plano de segurança</div><div class="shl" onclick="openPlanoMod()">editar</div></div>
   <div class="cfgsec" style="margin:0 18px 11px"><div class="cfgi" onclick="openPlanoMod()"><div class="cfgic">🛡️</div><div class="cfgb"><div class="cfgn">Meu plano pessoal</div><div class="cfgd" id="plano-prev">Não configurado ainda</div></div><div class="cfgar">›</div></div></div>
@@ -797,6 +1068,7 @@ a{color:inherit;text-decoration:none}
 <!-- BOTTOM NAV -->
 <nav id="bnav" class="on">
   <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic">🏠</div><span>Início</span></button>
+  <button class="ni" data-p="p-jogos" onclick="goPg('p-jogos',this)"><div class="ni-ic">🎮</div><span>Jogos</span></button>
   <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic">📅</div><span>Agenda</span></button>
   <div class="fabw"><div class="fab" onclick="openMod('mreg')">+</div></div>
   <button class="ni" data-p="p-prog" onclick="goPg('p-prog',this)"><div class="ni-ic">📈</div><span>Progresso</span></button>
@@ -821,13 +1093,62 @@ a{color:inherit;text-decoration:none}
   <button class="crc" onclick="abrirPlanoCrise()"><div class="crci">🛡️</div><div><div class="crcn">Meu plano de segurança</div><div class="crcd">O que você mesmo(a) preparou para esse momento</div></div></button>
   <a class="crc" href="tel:192" style="text-decoration:none"><div class="crci">🚑</div><div><div class="crcn">SAMU — 192</div><div class="crcd">Emergência médica, overdose</div></div></a>
   <a class="crc" href="tel:188" style="text-decoration:none"><div class="crci">💬</div><div><div class="crcn">CVV — 188</div><div class="crcd">Apoio emocional 24h, de graça</div></div></a>
-  <button class="crc" onclick="chamarTerapeuta()"><div class="crci">💚</div><div><div class="crcn">Falar com meu terapeuta</div><div class="crcd">Abrir conversa no WhatsApp agora</div></div></button>
+  <button class="crc prof" onclick="abrirProfs()"><div class="crci">🩺</div><div><div class="crcn">Fale com um profissional</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
   <button class="crc" onclick="showV('vapp');setTimeout(()=>openMod('mreg'),50)"><div class="crci">📓</div><div><div class="crcn">Registrar como estou</div><div class="crcd">Documentar esse momento</div></div></button>
   <div style="margin:13px 18px 0;background:rgba(255,255,255,.1);border-radius:15px;padding:15px">
     <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">⚡ Se alguém está mal</div>
     <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.65">1. Mantenha a pessoa consciente e acordada<br>2. Posição lateral de segurança se inconsciente<br>3. Não deixe sozinha — ligue 192 se não melhorar<br>4. Diga o que foi usado: saúde primeiro, sem medo</div>
   </div>
 </div>
+</div>
+
+<!-- GAME PLAYER -->
+<div class="V" id="vgame">
+  <div class="gv-top"><button class="bk" onclick="fecharJogo()">←</button><div class="gv-title" id="gv-title">Jogo</div></div>
+  <div class="gv-stage">
+    <div class="gv-hud"><div class="gv-score"><span id="gv-score">0</span><small id="gv-score-l">pontos</small></div><div class="gv-score"><span id="gv-best">0</span><small>recorde</small></div></div>
+    <div style="position:relative;width:100%;max-width:380px">
+      <canvas id="game-cv" width="380" height="500"></canvas>
+      <div class="gv-over" id="gv-over">
+        <h3 id="gv-over-t">Fim de jogo</h3>
+        <p id="gv-over-p">A vontade já não está igual a quando você começou. Respira.</p>
+        <button class="gv-btn" onclick="restartJogo()">Jogar de novo</button>
+        <button class="gv-btn ghost" onclick="fecharJogo()">Voltar</button>
+      </div>
+    </div>
+    <div class="gv-hint" id="gv-hint">Toque para começar</div>
+    <div class="gv-pad" id="gv-pad">
+      <button class="padbtn" id="pad-l">◀</button>
+      <button class="padbtn" id="pad-rot">↻</button>
+      <button class="padbtn" id="pad-r">▶</button>
+      <button class="padbtn soft" id="pad-down">▼</button>
+      <button class="padbtn wide" id="pad-drop">⤓ Soltar</button>
+    </div>
+  </div>
+</div>
+
+<!-- REDE DE PROFISSIONAIS -->
+<div class="V" id="vprofs">
+  <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="fecharProfs()">←</button><div class="ptb-tit">Fale com um profissional</div></div>
+  <div class="pf-search">
+    <input class="pf-inp" id="pf-q" placeholder="🔍 Buscar por nome, especialidade ou cidade" oninput="renderProfs()">
+    <div class="pf-filters" id="pf-fmod">
+      <button class="pf-chip on" data-f="mod" data-v="" onclick="setFiltro('mod','',this)">Todos</button>
+      <button class="pf-chip" data-f="mod" data-v="online" onclick="setFiltro('mod','online',this)">💻 Online</button>
+      <button class="pf-chip" data-f="mod" data-v="presencial" onclick="setFiltro('mod','presencial',this)">📍 Presencial</button>
+    </div>
+    <div class="pf-filters" id="pf-fesp">
+      <button class="pf-chip on" data-f="cat" data-v="" onclick="setFiltro('cat','',this)">Toda área</button>
+      <button class="pf-chip" data-f="cat" data-v="psi" onclick="setFiltro('cat','psi',this)">Psicologia</button>
+      <button class="pf-chip" data-f="cat" data-v="med" onclick="setFiltro('cat','med',this)">Psiquiatria</button>
+      <button class="pf-chip" data-f="cat" data-v="rd" onclick="setFiltro('cat','rd',this)">Redução de danos</button>
+    </div>
+  </div>
+  <div class="sc" style="flex:1;overflow-y:auto">
+    <div class="pf-list" id="pf-list"></div>
+    <div class="pf-disc">Profissionais fictícios, para demonstração. Esta lista não constitui indicação ou recomendação médica. Em emergências, ligue para o SAMU (192). Apoio emocional 24h: CVV (188).</div>
+    <div style="height:24px"></div>
+  </div>
 </div>
 
 <!-- RESPIRAÇÃO -->
@@ -903,11 +1224,11 @@ a{color:inherit;text-decoration:none}
   <div class="mt">⚗️ Interações entre substâncias</div>
   <p style="font-size:12px;color:var(--txs);margin-bottom:14px;line-height:1.6">Referência rápida baseada em dados do <strong>TripSit</strong>. Sempre pesquise mais antes de decidir — combinações têm riscos individuais.</p>
   <div class="fr2" style="margin-bottom:4px">
-    <div class="fld"><div class="lbl">Substância 1</div><select class="fs" id="cmb-a" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
-    <div class="fld"><div class="lbl">Substância 2</div><select class="fs" id="cmb-b" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
+    <div class="fld"><div class="lbl">Primeira substância</div><select class="fs" id="cmb-a" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
+    <div class="fld"><div class="lbl">Segunda substância</div><select class="fs" id="cmb-b" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
   </div>
-  <div class="cmbres" id="cmb-res"><div class="cmbrt" id="cmb-rt">—</div><div class="cmbrx" id="cmb-rx">—</div></div>
-  <div style="font-size:11px;color:var(--txm);margin-top:14px;line-height:1.6">Fonte: combo.tripsit.me · uso não-comercial com atribuição. Esta tabela não cobre interações com medicamentos de uso contínuo.</div>
+  <div id="cmb-res" class="cmbwrap"></div>
+  <div style="font-size:11px;color:var(--txm);margin-top:14px;line-height:1.6">Fontes: combo.tripsit.me e PsychonautWiki · uso não-comercial. Faixas de dose são <strong>aproximadas</strong> e variam com peso, tolerância e pureza. Não cobre medicamentos de uso contínuo.</div>
   <button class="btn bout bfull" style="margin-top:13px" onclick="closeMod('mcombo')">Fechar</button>
 </div></div></div>
 
@@ -929,8 +1250,14 @@ a{color:inherit;text-decoration:none}
   <div class="mh"></div>
   <div style="font-size:30px;text-align:center;margin-bottom:9px">🌿</div>
   <div class="mt c">Consentimento informado</div>
-  <div class="mb c">Este app é uma <strong>ferramenta de apoio</strong> ao acompanhamento terapêutico. Dados privados.<br><br>Não substitui cuidado profissional. Emergências: <strong>SAMU 192</strong> · <strong>CVV 188</strong>.</div>
-  <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-t"><input type="checkbox" id="chk-t"><span style="font-size:13px;color:var(--txs);line-height:1.6">Autorizo o uso dos meus dados para acompanhamento terapêutico e compreendo que este app é um recurso complementar.</span></label>
+  <div class="mb c">Este app é uma <strong>ferramenta de apoio</strong> baseada na redução de danos. Dados privados, no seu aparelho.<br><br>Não substitui cuidado profissional. Emergências: <strong>SAMU 192</strong> · <strong>CVV 188</strong>.</div>
+  <div style="background:var(--erf);border:1px solid var(--erc);border-radius:12px;padding:12px 14px;margin-bottom:15px">
+    <div style="font-size:13px;font-weight:700;color:var(--er);margin-bottom:4px">🔞 Conteúdo para maiores de 18 anos</div>
+    <div style="font-size:12px;color:var(--txs);line-height:1.55">Este app contém informações sobre substâncias destinadas exclusivamente a pessoas adultas, no contexto de redução de danos.</div>
+  </div>
+  <div class="fld" style="margin-bottom:13px"><div class="lbl">Data de nascimento</div><input class="inp" id="termo-dob" type="date" onchange="checaIdade()"><div class="em" id="termo-dobe">Informe sua data de nascimento.</div></div>
+  <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;cursor:pointer" for="chk-18"><input type="checkbox" id="chk-18"><span style="font-size:13px;color:var(--txs);line-height:1.6">Declaro que tenho <strong>18 anos ou mais</strong> e que as informações acima são verdadeiras.</span></label>
+  <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-t"><input type="checkbox" id="chk-t"><span style="font-size:13px;color:var(--txs);line-height:1.6">Compreendo que este app é um recurso complementar de apoio e autorizo o uso dos meus dados, que ficam salvos apenas neste aparelho.</span></label>
   <button class="btn bv bfull" onclick="aceitarTermo()">Aceitar e continuar 💚</button>
 </div></div></div>
 
@@ -1110,6 +1437,8 @@ const _SB = (typeof supabase !== 'undefined')
   : null;
 
 let U=null,_eReg=null,_eFiss=null,_eCmp=null;
+let _acct='user';
+function setAcct(t){_acct=t;document.getElementById('acct-user').classList.toggle('on',t==='user');document.getElementById('acct-pro').classList.toggle('on',t==='pro');document.getElementById('pro-reg-fld').style.display=t==='pro'?'block':'none';}
 let _calDt=new Date(),_calSel=null;
 let _obP=0,_obG=null,_obSubs=[];
 let _gC=null,_hC=null;
@@ -1160,7 +1489,7 @@ function blurAll(){document.querySelectorAll('input,textarea,select').forEach(e=
 function showV(id){document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));document.getElementById(id).classList.add('on');if(id==='vresp')initResp();if(id==='vgrd')initGrd();}
 
 /* ══ PAGES ══ */
-const PAGES=['p-home','p-agenda','p-prog','p-ref','p-cfg'];
+const PAGES=['p-home','p-jogos','p-agenda','p-prog','p-ref','p-cfg'];
 function goPg(id,btn){
   vib(8);
   PAGES.forEach(p=>{const el=document.getElementById(p);if(el){el.style.display=p===id?'flex':'none';if(p===id){el.classList.remove('pg-anim');void el.offsetWidth;el.classList.add('pg-anim');}}});
@@ -1172,6 +1501,8 @@ function goPg(id,btn){
   if(id==='p-prog')renderProg();
   if(id==='p-ref')renderRef();
   if(id==='p-cfg')renderCfg();
+  if(id==='p-jogos')popularEstrelas();
+  else if(_somAtual)pararSom();
 }
 
 /* ══ MODALS ══ */
@@ -1210,14 +1541,12 @@ async function doLogin(){
   chk('li-pw','li-pwe',pw&&pw.length>=6,'E-mail ou senha incorretos.');
   if(!ok)return;
   const btn=document.getElementById('btn-login');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
-  // modo demo offline
-  if(e==='demo@rd.app'&&pw==='123456'){U={id:'demo',nome:'Usuário Demo',email:e};ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();return;}
-  if(!_SB){const us=ls('dr_users')||[];const u=us.find(u=>u.email===e&&u.pw===btoa(pw));if(!u){document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent='E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}U={id:u.id,nome:u.nome,email:u.email};ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();return;}
+  if(e==='demo@rd.app'&&pw==='123456'){U={id:'demo',nome:'Usuário Demo',email:e,tipo:'user',reg:null};ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();return;}
+  if(!_SB){const us=ls('dr_users')||[];const u=us.find(u=>u.email===e&&u.pw===btoa(pw));if(!u){document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent='E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}U={id:u.id,nome:u.nome,email:u.email,tipo:u.tipo||'user',reg:u.reg||null};ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();return;}
   const {data,error}=await _SB.auth.signInWithPassword({email:e,password:pw});
   if(error){document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent='E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}
-  const sbU=data.user;
-  const nome=sbU.user_metadata?.nome||sbU.email.split('@')[0];
-  U={id:sbU.id,nome,email:sbU.email};
+  const sbU=data.user;const m=sbU.user_metadata||{};
+  U={id:sbU.id,nome:m.nome||sbU.email.split('@')[0],email:sbU.email,tipo:m.tipo||'user',reg:m.reg||null};
   ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();
 }
 async function doSignup(){
@@ -1226,13 +1555,15 @@ async function doSignup(){
   let ok=true;
   const chk=(id,eid,cond,msg)=>{const el=document.getElementById(id),er=document.getElementById(eid);if(!cond){el.classList.add('err');er.classList.add('on');if(msg)er.textContent=msg;shk(el);ok=false;}else{el.classList.remove('err');er.classList.remove('on');}};
   chk('su-n','su-ne',n,'Informe seu nome.');chk('su-e','su-ee',e&&/\S+@\S+\.\S+/.test(e),'E-mail inválido.');chk('su-pw','su-pwe',pw&&pw.length>=6,'Mínimo 6 caracteres.');
+  const tipo=_acct;const reg=document.getElementById('su-reg').value.trim();
+  if(tipo==='pro')chk('su-reg','su-rege',reg,'Informe seu registro.');
   if(!ok)return;
   const btn=document.getElementById('btn-signup');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
-  if(!_SB){const us=ls('dr_users')||[];if(us.find(u=>u.email===e)){document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent='E-mail já cadastrado.';shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw)};us.push(nU);ls('dr_users',us);U={id:nU.id,nome:n,email:e};ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();return;}
-  const {data,error}=await _SB.auth.signUp({email:e,password:pw,options:{data:{nome:n}}});
-  if(error){const msg=error.message.includes('already')? 'E-mail já cadastrado.':error.message;document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent=msg;shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}
+  if(!_SB){const us=ls('dr_users')||[];if(us.find(u=>u.email===e)){document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent='E-mail já cadastrado.';shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw),tipo,reg:tipo==='pro'?reg:null};us.push(nU);ls('dr_users',us);U={id:nU.id,nome:n,email:e,tipo:nU.tipo,reg:nU.reg};ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();return;}
+  const {data,error}=await _SB.auth.signUp({email:e,password:pw,options:{data:{nome:n,tipo,reg:tipo==='pro'?reg:null}}});
+  if(error){const msg=error.message.includes('already')?'E-mail já cadastrado.':error.message;document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent=msg;shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}
   const sbU=data.user;
-  U={id:sbU.id,nome:n,email:sbU.email};
+  U={id:sbU.id,nome:n,email:sbU.email,tipo,reg:tipo==='pro'?reg:null};
   ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();
 }
 function posLogin(){
@@ -1252,9 +1583,33 @@ function posLogin(){
 async function logout(){if(!confirm('Sair?'))return;if(_SB)await _SB.auth.signOut().catch(()=>{});U=null;ls('dr_session',null);showV('va');toast('Até logo! 💚')}
 
 /* ══ CONSENTIMENTO ══ */
+function idadeAnos(dob){
+  if(!dob)return null;
+  const d=new Date(dob+'T00:00:00'),h=new Date();
+  let a=h.getFullYear()-d.getFullYear();
+  const m=h.getMonth()-d.getMonth();
+  if(m<0||(m===0&&h.getDate()<d.getDate()))a--;
+  return a;
+}
+function checaIdade(){
+  const dob=document.getElementById('termo-dob').value;
+  const e=document.getElementById('termo-dobe');
+  const a=idadeAnos(dob);
+  if(dob&&a!==null&&a<18){e.textContent='É necessário ter 18 anos ou mais para usar o app.';e.classList.add('on');document.getElementById('termo-dob').classList.add('err');return false;}
+  e.classList.remove('on');document.getElementById('termo-dob').classList.remove('err');return true;
+}
 function aceitarTermo(){
-  if(!document.getElementById('chk-t').checked){shk(document.querySelector('[for="chk-t"]'));toast('⚠️ Marque a caixa.');return;}
-  ls('dr_termo_'+U.id,new Date().toISOString());closeMod('mtermo');
+  const dob=document.getElementById('termo-dob').value;
+  const a=idadeAnos(dob);
+  const dobE=document.getElementById('termo-dobe');
+  if(!dob){dobE.textContent='Informe sua data de nascimento.';dobE.classList.add('on');shk(document.getElementById('termo-dob'));return;}
+  if(a===null||a<18){dobE.textContent='É necessário ter 18 anos ou mais para usar o app.';dobE.classList.add('on');document.getElementById('termo-dob').classList.add('err');shk(document.getElementById('termo-dob'));toast('🔞 App restrito a maiores de 18 anos.');return;}
+  dobE.classList.remove('on');
+  if(!document.getElementById('chk-18').checked){shk(document.querySelector('[for="chk-18"]'));toast('⚠️ Confirme que tem 18 anos ou mais.');return;}
+  if(!document.getElementById('chk-t').checked){shk(document.querySelector('[for="chk-t"]'));toast('⚠️ Marque a caixa de consentimento.');return;}
+  ls('dr_termo_'+U.id,new Date().toISOString());
+  ls('dr_dob_'+U.id,dob);
+  closeMod('mtermo');
   const o=gO();if(!o)startOb();else entrar();
 }
 function mostrarTermo(){
@@ -1585,6 +1940,10 @@ function renderCfg(){
   document.getElementById('tog-dark').checked=!!cfg.dark;
   document.getElementById('tog-disc').checked=!!cfg.discreto;
   document.getElementById('pin-status').textContent=gPin()?'Ativado · toque para remover':'Desativado · toque para criar';
+  const isPro=U?.tipo==='pro';
+  document.getElementById('pf-badge').style.display=isPro?'inline-flex':'none';
+  document.getElementById('pro-area').style.display=isPro?'block':'none';
+  if(isPro)document.getElementById('pro-reg-show').textContent=U?.reg||'Registro não informado';
 }
 function salvCfg(){blurAll();sC({notif:document.getElementById('tog-n').checked,dicas:document.getElementById('tog-d').checked,ck:document.getElementById('tog-ck').checked,limD:parseInt(document.getElementById('lim-d').value)||4,limS:parseInt(document.getElementById('lim-s').value)||15,dark:document.getElementById('tog-dark').checked,discreto:document.getElementById('tog-disc').checked});}
 
@@ -1607,6 +1966,609 @@ function abrirPlanoCrise(){
 }
 
 /* ══ WPP ══ */
+/* ═══════════ REDE DE PROFISSIONAIS ═══════════ */
+const PROFS=[
+  {id:'p1',nome:'Dra. Helena Vasconcelos',cat:'psi',esp:'Psicóloga · Gestalt-terapia',reg:'CRP 06/12345',av:'👩🏻‍⚕️',avbg:'var(--vf)',
+   bio:'Atendimento focado em uso de substâncias sob a ótica da redução de danos, sem metas de abstinência impostas.',
+   valor:'R$ 150',dur:'50 min',mod:['online'],cidade:'Atende de todo o Brasil',
+   tags:['Redução de danos','Ansiedade','Uso de álcool'],disp:'Seg, Qua e Sex · tarde e noite'},
+  {id:'p2',nome:'Dr. Rafael Antunes',cat:'med',esp:'Psiquiatra',reg:'CRM 52.98765',av:'👨🏽‍⚕️',avbg:'var(--saf)',
+   bio:'Manejo medicamentoso e acompanhamento de dependência química com abordagem humanizada e antiproibicionista.',
+   valor:'R$ 320',dur:'45 min',mod:['online','presencial'],cidade:'Vitória · ES',
+   tags:['Redução de danos','Dependência','Medicação'],disp:'Ter e Qui · manhã'},
+  {id:'p3',nome:'Mariana Lopes',cat:'rd',esp:'Redutora de danos · Educadora social',reg:'Coletivo Maloca RD',av:'🧑🏾‍⚕️',avbg:'var(--lrjf)',
+   bio:'Acompanhamento de campo e escuta para pessoas que usam drogas, com foco em segurança, testagem e informação.',
+   valor:'Gratuito',dur:'Livre',mod:['online','presencial'],cidade:'São Paulo · SP',
+   tags:['Redução de danos','Acolhimento','Testagem'],disp:'Plantão Qua e Sáb'},
+  {id:'p4',nome:'Dra. Camila Ribeiro',cat:'psi',esp:'Psicóloga · TCC',reg:'CRP 07/45678',av:'👩🏼‍⚕️',avbg:'var(--roxof)',
+   bio:'Terapia cognitivo-comportamental aplicada ao manejo de fissura, gatilhos e prevenção de recaída.',
+   valor:'R$ 180',dur:'50 min',mod:['online'],cidade:'Atende de todo o Brasil',
+   tags:['Fissura','Recaída','Compulsão'],disp:'Seg a Sex · horário comercial'},
+  {id:'p5',nome:'Dr. Eduardo Khalil',cat:'med',esp:'Psiquiatra · Medicina canábica',reg:'CRM 49.11223',av:'🧔🏻‍⚕️',avbg:'var(--vf)',
+   bio:'Atendimento em saúde mental e prescrição canábica, com escuta sobre uso de substâncias sem julgamento.',
+   valor:'R$ 400',dur:'60 min',mod:['online','presencial'],cidade:'Belo Horizonte · MG',
+   tags:['Cannabis medicinal','Ansiedade','Sono'],disp:'Qui e Sex · tarde'},
+  {id:'p6',nome:'Juliana Prado',cat:'psi',esp:'Psicóloga · Psicanálise',reg:'CRP 05/33445',av:'👩🏽‍⚕️',avbg:'var(--saf)',
+   bio:'Escuta clínica de longo prazo para questões ligadas a vínculos, sofrimento psíquico e relação com o uso.',
+   valor:'R$ 200',dur:'50 min',mod:['presencial'],cidade:'Rio de Janeiro · RJ',
+   tags:['Psicanálise','Vínculos','Sofrimento psíquico'],disp:'Seg e Qua · manhã e tarde'},
+  {id:'p7',nome:'Dra. Sofia Nakamura',cat:'rd',esp:'Médica de família · Redução de danos',reg:'CRM 31.55778',av:'👩🏻‍⚕️',avbg:'var(--lrjf)',
+   bio:'Cuidado primário com perspectiva de redução de danos: prevenção, vacinação, testagem e orientação de uso seguro.',
+   valor:'R$ 120',dur:'40 min',mod:['online','presencial'],cidade:'Curitiba · PR',
+   tags:['Redução de danos','Saúde geral','Testagem'],disp:'Ter e Qui · manhã'},
+];
+let _pfFilt={mod:'',cat:''};
+function abrirProfs(){_pfFilt={mod:'',cat:''};document.getElementById('pf-q').value='';document.querySelectorAll('.pf-chip').forEach(c=>c.classList.toggle('on',c.dataset.v===''));showV('vprofs');renderProfs();}
+function fecharProfs(){showV('vapp');}
+function setFiltro(f,v,btn){_pfFilt[f]=v;btn.parentElement.querySelectorAll('.pf-chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');renderProfs();}
+function renderProfs(){
+  const q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
+  const list=PROFS.filter(p=>{
+    if(_pfFilt.mod&&!p.mod.includes(_pfFilt.mod))return false;
+    if(_pfFilt.cat&&p.cat!==_pfFilt.cat)return false;
+    if(q){const hay=(p.nome+' '+p.esp+' '+p.cidade+' '+p.tags.join(' ')).toLowerCase();if(!hay.includes(q))return false;}
+    return true;
+  });
+  const c=document.getElementById('pf-list');
+  const modtag=m=>m.includes('online')&&m.includes('presencial')?'<span class="pc-modtag mt-am">💻📍 Online e presencial</span>':m.includes('online')?'<span class="pc-modtag mt-on">💻 Online</span>':'<span class="pc-modtag mt-pr">📍 Presencial</span>';
+  c.innerHTML=`<div class="pf-count">${list.length} profissio${list.length===1?'nal':'nais'} ${list.length===1?'encontrado':'encontrados'}</div>`+
+    (list.length?list.map(p=>`
+    <div class="pcard">
+      <div class="pc-head">
+        <div class="pc-av" style="background:${p.avbg}">${p.av}</div>
+        <div class="pc-id"><div class="pc-nome">${esc(p.nome)}</div><div class="pc-esp">${esc(p.esp)}</div><div class="pc-reg">${esc(p.reg)}</div></div>
+        ${modtag(p.mod)}
+      </div>
+      <div class="pc-bio">${esc(p.bio)}</div>
+      <div class="pc-meta">
+        <div class="pc-mi"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></div>
+        <div class="pc-mi"><span class="k">Duração</span><span class="v">${esc(p.dur)}</span></div>
+        <div class="pc-mi"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></div>
+        <div class="pc-mi"><span class="k">Disponibilidade</span><span class="v">${esc(p.disp)}</span></div>
+      </div>
+      <div class="pc-tags">${p.tags.map(t=>`<span class="pc-tg">${esc(t)}</span>`).join('')}</div>
+      <div class="pc-cta">
+        <button class="pc-btn solid" onclick="contatarProf('${p.id}')">Solicitar contato</button>
+        <button class="pc-btn line" onclick="toast('Perfil de demonstração 💚')">Ver perfil</button>
+      </div>
+    </div>`).join(''):'<div style="text-align:center;color:var(--txm);font-size:14px;padding:40px 20px">Nenhum profissional encontrado com esses filtros.<br>Tente ampliar a busca.</div>');
+}
+function contatarProf(id){
+  const p=PROFS.find(x=>x.id===id);if(!p)return;
+  vib(12);
+  toast('✓ Pedido enviado a '+p.nome.split(' ').slice(0,2).join(' ')+' (demonstração)');
+}
+
+/* ═══════════ SONS DA NATUREZA (Web Audio, offline, em loop) ═══════════ */
+let _ac=null,_somNodes=null,_somAtual=null,_somTempo=10,_somTimerId=null,_somFim=0,_somTickId=null;
+const SOM_INFO={rain:{e:'🌧️',n:'Chuva'},ocean:{e:'🌊',n:'Oceano'},night:{e:'🦗',n:'Noite'},stream:{e:'🏞️',n:'Riacho'},wind:{e:'🍃',n:'Vento'},forest:{e:'🌲',n:'Floresta'}};
+
+function _noiseBuffer(tipo){
+  const len=_ac.sampleRate*4,buf=_ac.createBuffer(1,len,_ac.sampleRate),d=buf.getChannelData(0);
+  if(tipo==='white'){
+    for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  } else if(tipo==='pink'){
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for(let i=0;i<len;i++){
+      const w=Math.random()*2-1;
+      b0=0.99886*b0+w*0.0555179;b1=0.99332*b1+w*0.0750759;b2=0.96900*b2+w*0.1538520;
+      b3=0.86650*b3+w*0.3104856;b4=0.55000*b4+w*0.5329522;b5=-0.7616*b5-w*0.0168980;
+      d[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;b6=w*0.115926;
+    }
+  } else {
+    let last=0;
+    for(let i=0;i<len;i++){const w=Math.random()*2-1;d[i]=(last+0.02*w)/1.02;last=d[i];d[i]*=3.5;}
+  }
+  return buf;
+}
+function _src(tipo){const s=_ac.createBufferSource();s.buffer=_noiseBuffer(tipo||'brown');s.loop=true;return s;}
+function _lfoTo(target,freq,depth,base){
+  const lfo=_ac.createOscillator();lfo.type='sine';lfo.frequency.value=freq;
+  const g=_ac.createGain();g.gain.value=depth;
+  lfo.connect(g).connect(target);
+  if(base!==undefined)target.value=base;
+  return[lfo,g];
+}
+
+function _buildSom(tipo){
+  // retorna {nodes:[...], stop()} — cada som montado com filtros/LFOs
+  const out=_ac.createGain();out.gain.value=0;out.connect(_ac.destination);
+  const nodes=[out];const started=[];
+  const reg=n=>{nodes.push(n);return n};
+  function startAll(){started.forEach(s=>{try{s.start()}catch(e){}});}
+  if(tipo==='rain'){
+    // chuva: camada de fundo (chuvisco contínuo) + médios + gotas aleatórias + leve movimento
+    const s1=reg(_src('pink'));const lp1=reg(_ac.createBiquadFilter());lp1.type='lowpass';lp1.frequency.value=3200;
+    const hp1=reg(_ac.createBiquadFilter());hp1.type='highpass';hp1.frequency.value=500;
+    const g1=reg(_ac.createGain());g1.gain.value=.42;
+    s1.connect(hp1).connect(lp1).connect(g1).connect(out);started.push(s1);
+    // chiado mais agudo (textura de chuva fina)
+    const s2=reg(_src('white'));const hp2=reg(_ac.createBiquadFilter());hp2.type='highpass';hp2.frequency.value=3500;
+    const g2=reg(_ac.createGain());g2.gain.value=.05;
+    s2.connect(hp2).connect(g2).connect(out);started.push(s2);
+    // movimento lento de intensidade (vai e vem da chuva)
+    const[l,lg]=_lfoTo(g1.gain,0.05,.12,.42);reg(l);reg(lg);started.push(l);
+    // pingos ocasionais
+    let dropT=null;
+    (function drop(){if(!_ac)return;
+      const o=_ac.createOscillator();o.type='sine';const og=_ac.createGain();og.gain.value=0;
+      const f=900+Math.random()*1500;o.frequency.setValueAtTime(f,_ac.currentTime);
+      o.frequency.exponentialRampToValueAtTime(f*0.5,_ac.currentTime+.06);
+      og.gain.linearRampToValueAtTime(.03+Math.random()*.04,_ac.currentTime+.005);
+      og.gain.exponentialRampToValueAtTime(.0001,_ac.currentTime+.09);
+      o.connect(og).connect(out);o.start();o.stop(_ac.currentTime+.1);
+      dropT=setTimeout(drop,120+Math.random()*420);
+    })();
+    nodes._extra=()=>{if(dropT)clearTimeout(dropT)};
+  } else if(tipo==='ocean'){
+    // ondas: ruído grave com swell lento (sobe e quebra) + espuma aguda na crista
+    const s=reg(_src('brown'));const lp=reg(_ac.createBiquadFilter());lp.type='lowpass';lp.frequency.value=550;
+    const g=reg(_ac.createGain());g.gain.value=.04;
+    s.connect(lp).connect(g).connect(out);started.push(s);
+    // swell — modula volume e abertura do filtro juntos (sensação de onda quebrando)
+    const swell=reg(_ac.createOscillator());swell.type='sine';swell.frequency.value=.09;
+    const sg=reg(_ac.createGain());sg.gain.value=.5;swell.connect(sg).connect(g.gain);started.push(swell);
+    const fg=reg(_ac.createGain());fg.gain.value=420;swell.connect(fg).connect(lp.frequency);
+    // espuma (chiado agudo que aparece na crista)
+    const s2=reg(_src('white'));const hp=reg(_ac.createBiquadFilter());hp.type='highpass';hp.frequency.value=2200;
+    const g2=reg(_ac.createGain());g2.gain.value=.0;
+    s2.connect(hp).connect(g2).connect(out);started.push(s2);
+    const fo=reg(_ac.createGain());fo.gain.value=.018;
+    const sh=reg(_ac.createWaveShaper());// retifica o swell pra espuma só na crista
+    swell.connect(fo).connect(g2.gain);
+  } else if(tipo==='wind'){
+    // vento: ruído filtrado com banda que varia (rajadas) + assobio leve
+    const s=reg(_src('brown'));const bp=reg(_ac.createBiquadFilter());bp.type='bandpass';bp.frequency.value=500;bp.Q.value=.6;
+    const g=reg(_ac.createGain());g.gain.value=.16;
+    s.connect(bp).connect(g).connect(out);started.push(s);
+    const[l1,lg1]=_lfoTo(bp.frequency,0.07,340,500);reg(l1);reg(lg1);started.push(l1);
+    const[l2,lg2]=_lfoTo(g.gain,0.11,.09,.16);reg(l2);reg(lg2);started.push(l2);
+    // segunda camada mais aguda (vento entre folhas)
+    const s2=reg(_src('pink'));const bp2=reg(_ac.createBiquadFilter());bp2.type='bandpass';bp2.frequency.value=2400;bp2.Q.value=.8;
+    const g2=reg(_ac.createGain());g2.gain.value=.04;
+    s2.connect(bp2).connect(g2).connect(out);started.push(s2);
+    const[l3,lg3]=_lfoTo(g2.gain,0.13,.03,.04);reg(l3);reg(lg3);started.push(l3);
+  } else if(tipo==='stream'){
+    // riacho: borbulhar (banda média modulada rápido) + água corrente aguda + glugs
+    const s=reg(_src('white'));const hp=reg(_ac.createBiquadFilter());hp.type='highpass';hp.frequency.value=700;
+    const lp=reg(_ac.createBiquadFilter());lp.type='lowpass';lp.frequency.value=4800;
+    const g=reg(_ac.createGain());g.gain.value=.22;
+    s.connect(hp).connect(lp).connect(g).connect(out);started.push(s);
+    const[l,lg]=_lfoTo(lp.frequency,3.2,900,3600);reg(l);reg(lg);started.push(l);
+    // borbulhas ocasionais (glug)
+    let bT=null;
+    (function bub(){if(!_ac)return;
+      const o=_ac.createOscillator();o.type='sine';const og=_ac.createGain();og.gain.value=0;
+      const f=400+Math.random()*700;o.frequency.setValueAtTime(f,_ac.currentTime);
+      o.frequency.exponentialRampToValueAtTime(f*1.8,_ac.currentTime+.05);
+      og.gain.linearRampToValueAtTime(.04,_ac.currentTime+.01);
+      og.gain.exponentialRampToValueAtTime(.0001,_ac.currentTime+.08);
+      o.connect(og).connect(out);o.start();o.stop(_ac.currentTime+.09);
+      bT=setTimeout(bub,90+Math.random()*260);
+    })();
+    nodes._extra=()=>{if(bT)clearTimeout(bT)};
+  } else if(tipo==='night'){
+    // noite: fundo grave + grilos pulsantes em camadas + sapo ocasional
+    const s=reg(_src('brown'));const lp=reg(_ac.createBiquadFilter());lp.type='lowpass';lp.frequency.value=400;
+    const g=reg(_ac.createGain());g.gain.value=.1;s.connect(lp).connect(g).connect(out);started.push(s);
+    // grilos: dois osciladores agudos com pulsação rítmica
+    [4400,5200].forEach((freq,idx)=>{
+      const cri=reg(_ac.createOscillator());cri.type='triangle';cri.frequency.value=freq;
+      const cg=reg(_ac.createGain());cg.gain.value=0;
+      const pulse=reg(_ac.createOscillator());pulse.type='square';pulse.frequency.value=14+idx*4;
+      const pg=reg(_ac.createGain());pg.gain.value=.004;
+      // banda estreita pra dar timbre de grilo
+      const bp=reg(_ac.createBiquadFilter());bp.type='bandpass';bp.frequency.value=freq;bp.Q.value=8;
+      pulse.connect(pg).connect(cg.gain);cri.connect(cg).connect(bp).connect(out);
+      started.push(cri);started.push(pulse);
+    });
+    // modulação lenta de presença dos grilos (vão e voltam)
+  } else if(tipo==='forest'){
+    // floresta: brisa suave + pássaros variados aleatórios
+    const s=reg(_src('pink'));const bp=reg(_ac.createBiquadFilter());bp.type='bandpass';bp.frequency.value=900;bp.Q.value=.5;
+    const g=reg(_ac.createGain());g.gain.value=.06;s.connect(bp).connect(g).connect(out);started.push(s);
+    const[l,lg]=_lfoTo(g.gain,0.09,.03,.06);reg(l);reg(lg);started.push(l);
+    let chirpT=null;
+    function chirp(){
+      if(!_ac)return;
+      const n=1+(Math.random()*3|0); // sequência de 1-3 notas
+      for(let i=0;i<n;i++){
+        const t0=_ac.currentTime+i*.13;
+        const o=_ac.createOscillator();o.type='sine';const og=_ac.createGain();og.gain.value=0;
+        const f=1700+Math.random()*1800;o.frequency.setValueAtTime(f,t0);
+        o.frequency.linearRampToValueAtTime(f+(Math.random()*500-150),t0+.1);
+        og.gain.linearRampToValueAtTime(.09,t0+.03);
+        og.gain.exponentialRampToValueAtTime(.0001,t0+.14);
+        o.connect(og).connect(out);o.start(t0);o.stop(t0+.16);
+      }
+      chirpT=setTimeout(chirp,900+Math.random()*3200);
+    }
+    chirpT=setTimeout(chirp,600);
+    nodes._extra=()=>{if(chirpT)clearTimeout(chirpT)};
+  }
+  startAll();
+  // fade-in suave
+  out.gain.linearRampToValueAtTime(.9,_ac.currentTime+1.2);
+  return {nodes,stop(){try{out.gain.linearRampToValueAtTime(0,_ac.currentTime+.4)}catch(e){}
+    setTimeout(()=>{nodes.forEach(n=>{try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}});if(nodes._extra)nodes._extra();},450);}};
+}
+
+function _destravaAudio(){
+  // iOS/Android exigem que um buffer toque dentro do gesto de toque para liberar o áudio
+  try{
+    const b=_ac.createBuffer(1,1,22050);
+    const s=_ac.createBufferSource();s.buffer=b;s.connect(_ac.destination);
+    s.start(0);
+  }catch(e){}
+}
+function toggleSom(tipo,el){
+  if(!_ac){try{_ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){toast('Áudio não suportado neste navegador');return;}}
+  if(_ac.state==='suspended'||_ac.state!=='running'){_ac.resume().catch(()=>{});}
+  _destravaAudio();
+  if(_somAtual===tipo){pararSom();return;}
+  if(_somNodes)_somNodes.stop();
+  document.querySelectorAll('.snd').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  _somNodes=_buildSom(tipo);_somAtual=tipo;
+  const info=SOM_INFO[tipo];
+  document.getElementById('sb-ic').textContent=info.e;
+  document.getElementById('sb-t').textContent=info.n;
+  document.getElementById('sndbar').classList.add('on');
+  vib(8);
+  _iniciarTimerSom();
+}
+function pararSom(){
+  if(_somNodes){_somNodes.stop();_somNodes=null;}
+  _somAtual=null;
+  document.querySelectorAll('.snd').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sndbar').classList.remove('on');
+  if(_somTimerId){clearTimeout(_somTimerId);_somTimerId=null;}
+  if(_somTickId){clearInterval(_somTickId);_somTickId=null;}
+}
+function setSomTempo(min,el){
+  _somTempo=min;
+  document.querySelectorAll('#snd-times .snd-time').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  if(_somAtual)_iniciarTimerSom();
+}
+function _iniciarTimerSom(){
+  if(_somTimerId){clearTimeout(_somTimerId);_somTimerId=null;}
+  if(_somTickId){clearInterval(_somTickId);_somTickId=null;}
+  const tEl=document.getElementById('sb-timer');
+  if(!_somTempo){tEl.textContent='∞';return;}
+  _somFim=Date.now()+_somTempo*60000;
+  const tick=()=>{
+    const ms=_somFim-Date.now();
+    if(ms<=0){tEl.textContent='0:00';pararSom();toast('Sessão de som concluída 🌙');return;}
+    const s=Math.ceil(ms/1000),m=Math.floor(s/60),ss=s%60;
+    tEl.textContent=m+':'+String(ss).padStart(2,'0');
+  };
+  tick();
+  _somTickId=setInterval(tick,1000);
+  _somTimerId=setTimeout(()=>{},_somTempo*60000);
+}
+
+/* estrelas decorativas do fundo */
+function popularEstrelas(){
+  const c=document.getElementById('zen-stars');if(!c||c.dataset.done)return;
+  let h='';
+  for(let i=0;i<40;i++){
+    const sz=1+Math.random()*2,top=Math.random()*55,left=Math.random()*100,dl=Math.random()*3;
+    h+=`<div class="zen-star" style="width:${sz}px;height:${sz}px;top:${top}%;left:${left}%;animation-delay:${dl}s"></div>`;
+  }
+  c.innerHTML=h;c.dataset.done='1';
+}
+
+/* ═══════════ JOGOS ═══════════ */
+let _game=null,_gameType=null,_gRAF=null;
+const gBest=t=>ls('dr_gbest_'+t+'_'+uid())||0;
+const gSetBest=(t,v)=>ls('dr_gbest_'+t+'_'+uid(),v);
+
+function abrirJogo(tipo){
+  _gameType=tipo;
+  const titulos={flap:'Voo da abelha',pop:'Estoura bolhas',tetris:'Blocos',pong:'Ping-pong retrô'};
+  const labels={flap:'pontos',pop:'estouradas',tetris:'linhas',pong:'rebatidas'};
+  document.getElementById('gv-title').textContent=titulos[tipo]||'Jogo';
+  document.getElementById('gv-score-l').textContent=labels[tipo]||'pontos';
+  document.getElementById('gv-best').textContent=gBest(tipo);
+  document.getElementById('gv-pad').classList.toggle('on',tipo==='tetris');
+  if(tipo==='tetris')bindTetPad();
+  showV('vgame');
+  setTimeout(()=>{
+    if(tipo==='flap')initFlap();
+    else if(tipo==='pop')initPop();
+    else if(tipo==='tetris')initTetris();
+    else if(tipo==='pong')initPong();
+  },80);
+}
+function fecharJogo(){
+  if(_gRAF)cancelAnimationFrame(_gRAF);_gRAF=null;
+  if(_game&&_game.cleanup)_game.cleanup();
+  _game=null;_tet=null;
+  document.getElementById('gv-pad').classList.remove('on');
+  showV('vapp');
+}
+function restartJogo(){
+  document.getElementById('gv-over').classList.remove('on');
+  if(_gRAF)cancelAnimationFrame(_gRAF);_gRAF=null;
+  if(_game&&_game.cleanup)_game.cleanup();
+  if(_gameType==='flap')initFlap();
+  else if(_gameType==='pop')initPop();
+  else if(_gameType==='tetris')initTetris();
+  else if(_gameType==='pong')initPong();
+}
+function fimJogo(score){
+  const b=gBest(_gameType);
+  if(score>b){gSetBest(_gameType,score);document.getElementById('gv-best').textContent=score;}
+  const o=document.getElementById('gv-over');
+  document.getElementById('gv-over-t').textContent=score>b?'Novo recorde! 🎉':'Fim de jogo';
+  document.getElementById('gv-over-p').textContent=score>b?`${score} ponto${score!==1?'s':''}. E a vontade — como está agora?`:'A vontade já não está igual a quando você começou. Respira fundo.';
+  o.classList.add('on');
+  vib(20);
+}
+
+/* ── Voo da abelha (flappy) ── */
+function initFlap(){
+  if(_gRAF)cancelAnimationFrame(_gRAF);
+  const cv=document.getElementById('game-cv'),ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  let by=H/2,vy=0,score=0,started=false,dead=false;
+  const G=0.45,JUMP=-7.4,R=15;
+  let pipes=[];const GAP=150,PW=58,SPD=2.3;
+  function spawn(x){const top=50+Math.random()*(H-GAP-160);pipes.push({x,top,passed:false});}
+  spawn(W+60);spawn(W+60+(W+60)/2);
+  document.getElementById('gv-hint').textContent='Toque para voar';
+  document.getElementById('gv-score').textContent='0';
+  function jump(){if(dead)return;if(!started){started=true;document.getElementById('gv-hint').style.visibility='hidden';}vy=JUMP;vib(5);}
+  function draw(){
+    ctx.fillStyle='#bfe3f0';ctx.fillRect(0,0,W,H);
+    // nuvens decorativas
+    ctx.fillStyle='rgba(255,255,255,.55)';
+    ctx.beginPath();ctx.arc(70,90,22,0,7);ctx.arc(95,90,28,0,7);ctx.arc(120,90,20,0,7);ctx.fill();
+    ctx.beginPath();ctx.arc(280,150,18,0,7);ctx.arc(300,150,24,0,7);ctx.fill();
+    // pipes (troncos verdes)
+    pipes.forEach(p=>{
+      ctx.fillStyle='#4CAF5A';
+      ctx.fillRect(p.x,0,PW,p.top);
+      ctx.fillRect(p.x,p.top+GAP,PW,H-p.top-GAP);
+      ctx.fillStyle='#3d9249';
+      ctx.fillRect(p.x-3,p.top-14,PW+6,14);
+      ctx.fillRect(p.x-3,p.top+GAP,PW+6,14);
+    });
+    // abelha
+    ctx.font='28px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.save();ctx.translate(80,by);ctx.rotate(Math.max(-0.4,Math.min(0.8,vy*0.06)));ctx.fillText('🐝',0,0);ctx.restore();
+    // score
+    ctx.fillStyle='rgba(27,42,28,.85)';ctx.font='bold 30px sans-serif';ctx.textAlign='center';
+    ctx.fillText(score,W/2,54);
+  }
+  function loop(){
+    if(started&&!dead){
+      vy+=G;by+=vy;
+      pipes.forEach(p=>p.x-=SPD);
+      if(pipes.length&&pipes[0].x<-PW){pipes.shift();spawn(pipes[pipes.length-1].x+(W+60)/1.6);}
+      pipes.forEach(p=>{
+        if(!p.passed&&p.x+PW<80){p.passed=true;score++;document.getElementById('gv-score').textContent=score;vib(4);}
+        if(80+R>p.x&&80-R<p.x+PW&&(by-R<p.top||by+R>p.top+GAP))dead=true;
+      });
+      if(by+R>H||by-R<0)dead=true;
+    }
+    draw();
+    if(dead){fimJogo(score);return;}
+    _gRAF=requestAnimationFrame(loop);
+  }
+  const onTap=e=>{e.preventDefault();jump();};
+  cv.ontouchstart=onTap;cv.onmousedown=onTap;
+  _game={cleanup(){cv.ontouchstart=null;cv.onmousedown=null;}};
+  loop();
+}
+
+/* ── Estoura bolhas ── */
+function initPop(){
+  if(_gRAF)cancelAnimationFrame(_gRAF);
+  const cv=document.getElementById('game-cv'),ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  let score=0,bubbles=[],t=0,lost=0,dead=false;
+  const COL=['#4CAF5A','#00897B','#7C3AED','#EA580C','#FFB300'];
+  document.getElementById('gv-hint').textContent='Toque nas bolhas antes que escapem';
+  document.getElementById('gv-score').textContent='0';
+  function spawn(){const r=22+Math.random()*16;bubbles.push({x:r+Math.random()*(W-2*r),y:H+r,r,vy:0.8+Math.random()*1.1,c:COL[(Math.random()*COL.length)|0],pop:0});}
+  function draw(){
+    ctx.fillStyle='#0E1712';ctx.fillRect(0,0,W,H);
+    bubbles.forEach(b=>{
+      ctx.globalAlpha=b.pop?Math.max(0,1-b.pop/8):1;
+      const rr=b.pop?b.r*(1+b.pop/6):b.r;
+      ctx.beginPath();ctx.arc(b.x,b.y,rr,0,7);ctx.fillStyle=b.c;ctx.fill();
+      ctx.beginPath();ctx.arc(b.x-rr/3,b.y-rr/3,rr/4,0,7);ctx.fillStyle='rgba(255,255,255,.45)';ctx.fill();
+      ctx.globalAlpha=1;
+    });
+    ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold 26px sans-serif';ctx.textAlign='center';ctx.fillText(score,W/2,42);
+    // vidas (bolhas escapadas)
+    ctx.font='15px sans-serif';ctx.fillStyle='rgba(255,255,255,.5)';ctx.textAlign='right';
+    ctx.fillText('escaparam: '+lost+'/5',W-12,26);
+  }
+  function loop(){
+    t++;
+    if(t%52===0)spawn();
+    bubbles.forEach(b=>{if(!b.pop)b.y-=b.vy;else b.pop++;});
+    bubbles=bubbles.filter(b=>{
+      if(b.pop>8)return false;
+      if(b.y+b.r<0&&!b.pop){lost++;vib(8);if(lost>=5)dead=true;return false;}
+      return true;
+    });
+    draw();
+    if(dead){fimJogo(score);return;}
+    _gRAF=requestAnimationFrame(loop);
+  }
+  const hit=(cx,cy)=>{
+    const rect=cv.getBoundingClientRect(),sx=cv.width/rect.width,sy=cv.height/rect.height;
+    const x=(cx-rect.left)*sx,y=(cy-rect.top)*sy;
+    for(let i=bubbles.length-1;i>=0;i--){const b=bubbles[i];if(!b.pop&&Math.hypot(b.x-x,b.y-y)<b.r+6){b.pop=1;score++;document.getElementById('gv-score').textContent=score;vib(6);break;}}
+  };
+  cv.ontouchstart=e=>{e.preventDefault();const tt=e.changedTouches[0];hit(tt.clientX,tt.clientY);};
+  cv.onmousedown=e=>{e.preventDefault();hit(e.clientX,e.clientY);};
+  _game={cleanup(){cv.ontouchstart=null;cv.onmousedown=null;}};
+  loop();
+}
+
+/* ── Blocos (Tetris) ── */
+let _tet=null;
+const TET_COLS=10,TET_ROWS=18;
+const TET_SHAPES=[
+  {c:'#00BCD4',b:[[1,1,1,1]]},               // I
+  {c:'#FFC107',b:[[1,1],[1,1]]},             // O
+  {c:'#9C27B0',b:[[0,1,0],[1,1,1]]},         // T
+  {c:'#4CAF50',b:[[0,1,1],[1,1,0]]},         // S
+  {c:'#F44336',b:[[1,1,0],[0,1,1]]},         // Z
+  {c:'#3F51B5',b:[[1,0,0],[1,1,1]]},         // J
+  {c:'#FF9800',b:[[0,0,1],[1,1,1]]},         // L
+];
+function initTetris(){
+  if(_gRAF)cancelAnimationFrame(_gRAF);
+  const cv=document.getElementById('game-cv'),ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  const CS=Math.floor(Math.min(W/TET_COLS,H/TET_ROWS));
+  const OX=Math.floor((W-CS*TET_COLS)/2),OY=Math.floor((H-CS*TET_ROWS)/2);
+  let grid=Array.from({length:TET_ROWS},()=>Array(TET_COLS).fill(null));
+  let cur=null,lines=0,dead=false,dropT=0,dropI=42;
+  document.getElementById('gv-hint').textContent='◀ ▶ mover (segure pra repetir) · ↻ girar · ▼ descer · ⤓ soltar';
+  document.getElementById('gv-score').textContent='0';
+  function newPiece(){
+    const s=TET_SHAPES[(Math.random()*TET_SHAPES.length)|0];
+    cur={b:s.b.map(r=>r.slice()),c:s.c,x:((TET_COLS-s.b[0].length)/2)|0,y:0};
+    if(collide(cur.x,cur.y,cur.b)){dead=true;fimJogo(lines);}
+  }
+  function collide(x,y,b){
+    for(let r=0;r<b.length;r++)for(let c=0;c<b[r].length;c++){
+      if(!b[r][c])continue;
+      const nx=x+c,ny=y+r;
+      if(nx<0||nx>=TET_COLS||ny>=TET_ROWS)return true;
+      if(ny>=0&&grid[ny][nx])return true;
+    }
+    return false;
+  }
+  function merge(){
+    cur.b.forEach((row,r)=>row.forEach((v,c)=>{if(v){const ny=cur.y+r;if(ny>=0)grid[ny][cur.x+c]=cur.c;}}));
+    let cleared=0;
+    for(let r=TET_ROWS-1;r>=0;r--){
+      if(grid[r].every(c=>c)){grid.splice(r,1);grid.unshift(Array(TET_COLS).fill(null));cleared++;r++;}
+    }
+    if(cleared){lines+=cleared;document.getElementById('gv-score').textContent=lines;vib(cleared>1?[20,40,20]:10);dropI=Math.max(14,42-Math.floor(lines/4)*3);}
+    newPiece();
+  }
+  function rotate(){
+    const b=cur.b,nb=b[0].map((_,i)=>b.map(r=>r[i]).reverse());
+    if(!collide(cur.x,cur.y,nb))cur.b=nb;
+    else if(!collide(cur.x-1,cur.y,nb)){cur.x--;cur.b=nb;}
+    else if(!collide(cur.x+1,cur.y,nb)){cur.x++;cur.b=nb;}
+  }
+  function step(){if(!collide(cur.x,cur.y+1,cur.b))cur.y++;else merge();}
+  function cell(x,y,col){ctx.fillStyle=col;ctx.fillRect(OX+x*CS+1,OY+y*CS+1,CS-2,CS-2);ctx.fillStyle='rgba(255,255,255,.18)';ctx.fillRect(OX+x*CS+1,OY+y*CS+1,CS-2,4);}
+  function draw(){
+    ctx.fillStyle='#11161f';ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;
+    for(let r=0;r<TET_ROWS;r++)for(let c=0;c<TET_COLS;c++)ctx.strokeRect(OX+c*CS,OY+r*CS,CS,CS);
+    for(let r=0;r<TET_ROWS;r++)for(let c=0;c<TET_COLS;c++)if(grid[r][c])cell(c,r,grid[r][c]);
+    if(cur)cur.b.forEach((row,r)=>row.forEach((v,c)=>{if(v&&cur.y+r>=0)cell(cur.x+c,cur.y+r,cur.c);}));
+  }
+  function loop(){
+    if(!dead){dropT++;if(dropT>=dropI){dropT=0;step();}draw();}
+    if(dead)return;
+    _gRAF=requestAnimationFrame(loop);
+  }
+  function onKey(e){if(dead)return;if(e.key==='ArrowLeft'){if(!collide(cur.x-1,cur.y,cur.b))cur.x--;}else if(e.key==='ArrowRight'){if(!collide(cur.x+1,cur.y,cur.b))cur.x++;}else if(e.key==='ArrowUp'){rotate();}else if(e.key==='ArrowDown'){step();}draw();}
+  document.addEventListener('keydown',onKey);
+  _tet={move(d){if(dead)return;if(!collide(cur.x+d,cur.y,cur.b)){cur.x+=d;draw();vib(4);}},rot(){if(dead)return;rotate();draw();vib(5);},soft(){if(dead)return;step();draw();vib(3);},drop(){if(dead)return;while(!collide(cur.x,cur.y+1,cur.b))cur.y++;merge();draw();vib(8);}};
+  _game={cleanup(){document.removeEventListener('keydown',onKey);_tet=null;}};
+  newPiece();loop();
+}
+function tetMove(d){if(_tet)_tet.move(d);}
+function tetRot(){if(_tet)_tet.rot();}
+function tetDrop(){if(_tet)_tet.drop();}
+function tetDown(){if(_tet)_tet.soft();}
+
+// liga os botões do D-pad com auto-repeat (segurar = repetir)
+let _padBound=false;
+function bindTetPad(){
+  if(_padBound)return;_padBound=true;
+  const map=[
+    ['pad-l',()=>tetMove(-1),true],
+    ['pad-r',()=>tetMove(1),true],
+    ['pad-rot',()=>tetRot(),false],
+    ['pad-down',()=>tetDown(),true],
+    ['pad-drop',()=>tetDrop(),false],
+  ];
+  map.forEach(([id,fn,repeat])=>{
+    const b=document.getElementById(id);if(!b)return;
+    let rep=null,delay=null;
+    const start=e=>{
+      e.preventDefault();b.classList.add('held');fn();
+      if(repeat){delay=setTimeout(()=>{rep=setInterval(fn,90);},260);}
+    };
+    const stop=()=>{b.classList.remove('held');if(rep){clearInterval(rep);rep=null;}if(delay){clearTimeout(delay);delay=null;}};
+    b.addEventListener('pointerdown',start);
+    b.addEventListener('pointerup',stop);
+    b.addEventListener('pointerleave',stop);
+    b.addEventListener('pointercancel',stop);
+  });
+}
+
+/* ── Ping-pong retrô (estilo minigame analógico) ── */
+function initPong(){
+  if(_gRAF)cancelAnimationFrame(_gRAF);
+  const cv=document.getElementById('game-cv'),ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  let started=false,dead=false,score=0;
+  const PW=12,PH=78;
+  let py=(H-PH)/2;                 // jogador (esquerda)
+  let ay=(H-PH)/2;                 // CPU (direita)
+  let bx=W/2,by=H/2,bvx=-2.6,bvy=1.7,sp=1;
+  const aiSpd=2.6;
+  document.getElementById('gv-hint').textContent='Arraste pra cima e pra baixo pra mover a raquete';
+  document.getElementById('gv-score').textContent='0';
+  function reset(dir){bx=W/2;by=H/2;const ang=(Math.random()*0.8-0.4);bvx=dir*3.4;bvy=4*ang;sp=1;}
+  function draw(){
+    // estética monocromática verde tipo LCD/minigame
+    ctx.fillStyle='#9bb83f';ctx.fillRect(0,0,W,H);       // tela verde-oliva tipo Game Boy
+    ctx.fillStyle='rgba(20,40,10,.10)';for(let y=0;y<H;y+=4)ctx.fillRect(0,y,W,1); // scanlines
+    ctx.strokeStyle='#2c3a14';ctx.lineWidth=4;ctx.setLineDash([10,10]);
+    ctx.beginPath();ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#2c3a14';
+    ctx.fillRect(14,py,PW,PH);                 // jogador
+    ctx.fillRect(W-14-PW,ay,PW,PH);            // cpu
+    ctx.fillRect(bx-7,by-7,14,14);             // bola quadrada (retrô)
+    ctx.font='bold 40px monospace';ctx.textAlign='center';ctx.fillStyle='rgba(44,58,20,.45)';
+    ctx.fillText(score,W/2,52);
+  }
+  function loop(){
+    if(started&&!dead){
+      bx+=bvx*sp;by+=bvy*sp;
+      if(by<7){by=7;bvy=Math.abs(bvy);}if(by>H-7){by=H-7;bvy=-Math.abs(bvy);}
+      // raquete jogador
+      if(bx-7<14+PW&&bx-7>14&&by>py&&by<py+PH&&bvx<0){bvx=Math.abs(bvx);const hit=(by-(py+PH/2))/(PH/2);bvy=hit*4.5;score++;document.getElementById('gv-score').textContent=score;sp+=0.04;vib(6);}
+      // cpu segue a bola com folga
+      const tgt=by-PH/2;ay+=Math.max(-aiSpd,Math.min(aiSpd,(tgt-ay)*0.12));
+      if(bx+7>W-14-PW&&bx+7<W-14&&by>ay&&by<ay+PH&&bvx>0){bvx=-Math.abs(bvx);const hit=(by-(ay+PH/2))/(PH/2);bvy=hit*4.5;}
+      if(bx<0){dead=true;fimJogo(score);}      // jogador perdeu
+      if(bx>W){reset(-1);}                       // cpu perdeu ponto, recomeça (modo treino infinito)
+    }
+    draw();
+    if(dead)return;
+    _gRAF=requestAnimationFrame(loop);
+  }
+  function moveTo(cy){
+    const rect=cv.getBoundingClientRect(),sy=cv.height/rect.height;
+    py=Math.max(0,Math.min(H-PH,(cy-rect.top)*sy-PH/2));
+    if(!started){started=true;document.getElementById('gv-hint').style.visibility='hidden';}
+  }
+  cv.ontouchstart=e=>{e.preventDefault();moveTo(e.changedTouches[0].clientY);};
+  cv.ontouchmove=e=>{e.preventDefault();moveTo(e.changedTouches[0].clientY);};
+  cv.onmousemove=e=>moveTo(e.clientY);
+  cv.onmousedown=e=>moveTo(e.clientY);
+  _game={cleanup(){cv.ontouchstart=null;cv.ontouchmove=null;cv.onmousemove=null;cv.onmousedown=null;}};
+  draw();loop();
+}
+
 function chamarTerapeuta(){
   const n=U?.nome||'Paciente';
   const msg=encodeURIComponent('Olá! Sou '+n+' e preciso de apoio agora. Estou usando o app dichava.rd.');
@@ -1822,6 +2784,39 @@ function restoreJSON(inp){
 
 /* ══════════ v6: TABELA DE INTERAÇÕES (dados TripSit) ══════════ */
 const CMB_SUBS=['Álcool','Cannabis','Tabaco','Cocaína / Crack','MDMA','LSD','Cogumelo','Ketamina','Opioide','Benzodiaz.','Cafeína'];
+// classificação farmacológica e dados de dosagem (baseado em TripSit / PsychonautWiki — apenas redução de danos)
+const SUB_INFO={
+  'Álcool':{cls:'Depressor',vias:[{via:'Oral',un:'doses',leve:'1-2',comum:'3-4',forte:'5-7',pesada:'8+',inicio:'10-30 min',dur:'1-3 h',res:'6-24 h (ressaca)'}],aviso:'Uma "dose" ≈ uma lata de cerveja, uma taça de vinho ou um drinque destilado. Beba água entre as doses.'},
+  'Cannabis':{cls:'Depressor / Psicodélico leve',vias:[{via:'Fumada',un:'',leve:'1-2 tragadas',comum:'3-5 tragadas',forte:'várias',pesada:'—',inicio:'segundos a min',dur:'1-3 h',res:'2-6 h'},{via:'Comestível',un:'mg THC',leve:'2,5-5',comum:'5-15',forte:'15-30',pesada:'30+',inicio:'30 min-2 h',dur:'4-8 h',res:'até 12 h'}],aviso:'Comestível demora a fazer efeito: não repita a dose por impaciência. Espere pelo menos 2 horas.'},
+  'Tabaco':{cls:'Estimulante',vias:[{via:'Fumado',un:'',leve:'1 tragada',comum:'1 cigarro',forte:'—',pesada:'—',inicio:'segundos',dur:'5-30 min',res:'—'}],aviso:'Nicotina cria dependência rápida. Combinar com outras substâncias aumenta o consumo.'},
+  'Cocaína / Crack':{cls:'Estimulante',vias:[{via:'Nasal',un:'mg',leve:'15-30',comum:'30-60',forte:'60-90',pesada:'90+',inicio:'1-5 min',dur:'15-30 min',res:'1-2 h'}],aviso:'O efeito curto leva à redosagem. Espaçar doses reduz a sobrecarga no coração. Pureza muito variável.'},
+  'MDMA':{cls:'Estimulante / Empatógeno',vias:[{via:'Oral',un:'mg',leve:'40-75',comum:'75-125',forte:'125-180',pesada:'180+',inicio:'30-60 min',dur:'3-5 h',res:'1-3 dias'}],aviso:'Dose comum ≈ 1,5 mg por kg de peso. Hidrate com moderação (≈ 500 ml/h) e evite superaquecer. Não redose mais que metade da dose inicial.'},
+  'LSD':{cls:'Psicodélico',vias:[{via:'Oral',un:'µg',leve:'25-75',comum:'75-150',forte:'150-300',pesada:'300+',inicio:'30-90 min',dur:'8-12 h',res:'2-5 h'}],aviso:'Dose muito difícil de medir em "selos". Set e setting (estado emocional e ambiente) importam tanto quanto a dose.'},
+  'Cogumelo':{cls:'Psicodélico',vias:[{via:'Oral',un:'g secos',leve:'0,25-1',comum:'1-2,5',forte:'2,5-5',pesada:'5+',inicio:'20-60 min',dur:'4-6 h',res:'2-4 h'}],aviso:'A potência varia muito entre espécies e exemplares. Comece baixo, especialmente em material desconhecido.'},
+  'Ketamina':{cls:'Dissociativo',vias:[{via:'Nasal',un:'mg',leve:'20-50',comum:'50-100',forte:'100-150',pesada:'150+ (k-hole)',inicio:'5-15 min',dur:'45-90 min',res:'1-3 h'}],aviso:'Doses altas levam ao "k-hole" (imobilidade dissociativa). Use sentado/deitado em local seguro. Risco de vômito.'},
+  'Opioide':{cls:'Depressor',vias:[{via:'Varia',un:'',leve:'—',comum:'—',forte:'—',pesada:'—',inicio:'min a 1 h',dur:'3-6 h',res:'horas'}],aviso:'Potência altíssima e variável (especialmente fentanil). Risco de depressão respiratória. Tenha naloxona por perto e nunca use sozinho(a).'},
+  'Benzodiaz.':{cls:'Depressor',vias:[{via:'Oral',un:'',leve:'—',comum:'—',forte:'—',pesada:'—',inicio:'15-60 min',dur:'4-12 h',res:'até 24 h'}],aviso:'Dose varia muito conforme o tipo. Causa amnésia: anote o que tomou. Não combine com álcool ou opioides.'},
+  'Cafeína':{cls:'Estimulante',vias:[{via:'Oral',un:'mg',leve:'20-100',comum:'100-200',forte:'200-400',pesada:'400+',inicio:'10-45 min',dur:'3-6 h',res:'até 12 h'}],aviso:'Um café ≈ 80-120 mg. Acima de 400 mg/dia: ansiedade, tremor e taquicardia. Energéticos somam bastante.'},
+};
+const CMB_ALERTA={
+  'Álcool|Ketamina':'Vômito com inconsciência, parada respiratória.',
+  'Álcool|Benzodiaz.':'Apagão, depressão respiratória, amnésia.',
+  'Álcool|Opioide':'Respiração lenta ou que para, lábios azulados.',
+  'Álcool|Cocaína / Crack':'Dor no peito, palpitação, dano hepático (cocaetileno).',
+  'Álcool|Cannabis':'Náusea intensa, tontura, "green out" (branco).',
+  'Álcool|MDMA':'Desidratação, superaquecimento mascarado.',
+  'Cocaína / Crack|Opioide':'Overdose silenciosa — o estimulante esconde a depressão respiratória.',
+  'Cocaína / Crack|MDMA':'Taquicardia, hipertensão, dor no peito.',
+  'Cocaína / Crack|Ketamina':'Pressão alta, batimentos acelerados.',
+  'Ketamina|Opioide':'Sedação profunda, parada respiratória.',
+  'Ketamina|Benzodiaz.':'Inconsciência com risco de aspirar vômito.',
+  'Opioide|Benzodiaz.':'Depressão respiratória — combinação central em overdoses.',
+  'Cannabis|LSD':'Ansiedade intensa, pânico, reativação do pico.',
+  'MDMA|LSD':'Sobrecarga sensorial; reduza as duas doses.',
+  'MDMA|Cocaína / Crack':'Coração sobrecarregado, superaquecimento.',
+  'Cafeína|Cocaína / Crack':'Ansiedade, taquicardia, pressão alta.',
+  'Cafeína|Álcool':'Você bebe mais do que percebe — embriaguez mascarada.',
+};
 const CMB_NIVEIS={
   P:{t:'🔴 PERIGOSO',cor:'#C62828',bg:'#FFEBEE',x:'Combinação de altíssimo risco, com potencial de morte. Evite sempre.'},
   I:{t:'🟠 INSEGURO',cor:'#EA580C',bg:'#FFF7ED',x:'Alto risco de dano físico. Reações imprevisíveis.'},
@@ -1869,26 +2864,63 @@ const CMB_MAP={
 function openCombo(){
   const sa=document.getElementById('cmb-a'),sb=document.getElementById('cmb-b');
   if(sa.options.length<=1){CMB_SUBS.forEach(x=>{sa.add(new Option(x,x));sb.add(new Option(x,x));});}
-  document.getElementById('cmb-res').classList.remove('on');
+  document.getElementById('cmb-res').innerHTML='';
   openMod('mcombo');
+}
+function _doseTable(sub){
+  const info=SUB_INFO[sub];if(!info)return'';
+  let h=`<div class="dz-card"><div class="dz-h">💊 Doses — ${esc(sub)}</div>`;
+  h+=`<div class="dz-warn">⚠️ Faixas aproximadas, baseadas em TripSit/PsychonautWiki. <strong>Não são validadas clinicamente</strong> e mudam com peso, tolerância e pureza. Referência de redução de danos, não prescrição.</div>`;
+  info.vias.forEach(v=>{
+    h+=`<div class="dz-via">${esc(v.via)}${v.un?` <span class="dz-un">(${esc(v.un)})</span>`:''}</div>`;
+    if(v.leve!=='—'){
+      h+=`<div class="dz-scale">
+        <div class="dz-step s-leve"><span>Leve</span><b>${esc(v.leve)}</b></div>
+        <div class="dz-step s-comum"><span>Comum</span><b>${esc(v.comum)}</b></div>
+        <div class="dz-step s-forte"><span>Forte</span><b>${esc(v.forte)}</b></div>
+        <div class="dz-step s-pesada"><span>Pesada</span><b>${esc(v.pesada)}</b></div>
+      </div>`;
+    }
+    h+=`<div class="dz-meta"><span>⏱️ Início: <b>${esc(v.inicio)}</b></span><span>⏳ Duração: <b>${esc(v.dur)}</b></span>${v.res&&v.res!=='—'?`<span>🌙 Resíduo: <b>${esc(v.res)}</b></span>`:''}</div>`;
+  });
+  if(info.aviso)h+=`<div class="dz-tip">💡 ${esc(info.aviso)}</div>`;
+  h+=`</div>`;
+  return h;
 }
 function calcCombo(){
   const a=document.getElementById('cmb-a').value,b=document.getElementById('cmb-b').value;
   const res=document.getElementById('cmb-res');
-  if(!a||!b)return;
-  if(a===b){res.classList.add('on');res.style.borderColor='#666';res.style.background='var(--cin)';document.getElementById('cmb-rt').textContent='Mesma substância';document.getElementById('cmb-rt').style.color='var(--tx)';document.getElementById('cmb-rx').textContent='Atenção à redosagem: somar doses da mesma substância aumenta o risco de forma não-linear.';return;}
+  if(!a||!b){res.innerHTML='';return;}
+  vib(8);
+  const ca=SUB_INFO[a]?SUB_INFO[a].cls:'',cb=SUB_INFO[b]?SUB_INFO[b].cls:'';
+  if(a===b){
+    res.innerHTML=`<div class="cmb-head" style="border-color:#999;background:var(--cin)">
+      <div class="cmb-badge" style="background:#999">MESMA</div>
+      <div class="cmb-tt">${esc(a)} + ${esc(a)}</div>
+      <div class="cmb-tx">Atenção à <strong>redosagem</strong>: somar doses da mesma substância aumenta o risco de forma não-linear. O efeito não dobra — o risco, sim.</div>
+    </div>`+_doseTable(a);
+    return;
+  }
   const k1=a+'|'+b,k2=b+'|'+a;
   const nv=CMB_MAP[k1]||CMB_MAP[k2]||'N';
   const n=CMB_NIVEIS[nv];
   const nota=CMB_NOTAS[k1]||CMB_NOTAS[k2]||'';
-  res.classList.add('on');res.style.borderColor=n.cor;res.style.background=n.bg;
-  document.getElementById('cmb-rt').textContent=n.t;document.getElementById('cmb-rt').style.color=n.cor;
-  document.getElementById('cmb-rx').innerHTML=esc(n.x)+(nota?'<br><br><strong>Nessa combinação:</strong> '+esc(nota):'');
-  vib(8);
+  const alerta=CMB_ALERTA[k1]||CMB_ALERTA[k2]||'';
+  const badge=n.t.replace(/^[^\s]+\s/,'');
+  let h=`<div class="cmb-head" style="border-color:${n.cor};background:${n.bg}">
+    <div class="cmb-subs"><span class="cmb-cls">${esc(a)}<small>${esc(ca)}</small></span><span class="cmb-plus">+</span><span class="cmb-cls">${esc(b)}<small>${esc(cb)}</small></span></div>
+    <div class="cmb-badge" style="background:${n.cor}">${esc(badge)}</div>
+    <div class="cmb-tx" style="color:${n.cor}">${esc(n.x)}</div>`;
+  if(nota)h+=`<div class="cmb-obs"><strong>Nessa combinação:</strong> ${esc(nota)}</div>`;
+  if(alerta)h+=`<div class="cmb-alert"><strong>🚩 Sinais de alerta:</strong> ${esc(alerta)}</div>`;
+  h+=`</div>`;
+  // tabelas de dosagem das duas
+  h+=`<div class="dz-grid">${_doseTable(a)}${_doseTable(b)}</div>`;
+  res.innerHTML=h;
 }
 
 /* ── FAQ CHAT ── */
-const FAQ_CATS={mix:{l:'Combinações',i:'⚗️'},efeitos:{l:'Efeitos & duração',i:'⏳'},alerta:{l:'Sinais de alerta',i:'🚨'}};
+const FAQ_CATS={mix:{l:'Combinações',i:'⚗️'},efeitos:{l:'Efeitos & duração',i:'⏳'},alerta:{l:'Sinais de alerta',i:'🚨'},seguranca:{l:'Uso mais seguro',i:'🛡️'},corpo:{l:'Corpo & saúde',i:'🩺'},dependencia:{l:'Dependência & recaída',i:'🔁'},legal:{l:'Direitos & exames',i:'⚖️'}};
 const FAQ_DATA=[
   {c:'mix',q:'Posso misturar álcool e maconha?',a:'É uma das combinações mais comuns, mas álcool antes da cannabis costuma intensificar muito o efeito — náusea, tontura e o famoso "branco" (green out) são frequentes. Se for combinar, vá com calma: menos álcool, cannabis com THC mais baixo, e espere para sentir o efeito antes de repetir qualquer um dos dois.'},
   {c:'mix',q:'Cocaína e álcool juntos, que cuidados tomar?',a:'O fígado transforma essa combinação em <strong>cocaetileno</strong>, uma substância mais cardiotóxica que a cocaína isolada — sobrecarrega ainda mais o coração. Hidrate-se, evite repetir doses de cocaína para "compensar" o álcool, e fique atento a dor no peito, palpitação forte ou falta de ar — nesses casos, procure ajuda.'},
@@ -1908,6 +2940,40 @@ const FAQ_DATA=[
   {c:'alerta',q:'O que fazer se alguém perder a consciência depois de usar algo?',a:'1) Verifique a respiração. 2) Coloque a pessoa em posição lateral de segurança (de lado, com a cabeça apoiada), para evitar que vômito seja aspirado. 3) Ligue para o SAMU (192) e informe o que a pessoa usou, se souber — isso ajuda muito o atendimento. 4) Não deixe a pessoa sozinha até a ajuda chegar.'},
   {c:'alerta',q:'Como reconhecer hipertermia (superaquecimento)?',a:'Sinais incluem pele muito quente e seca (ou suor excessivo que para de repente), confusão mental, batimentos cardíacos muito acelerados e câimbras. É comum em uso de estimulantes em ambientes quentes/aglomerados, especialmente com pouca hidratação. Leve a pessoa para um local fresco, ofereça água em pequenos goles, ventile e procure ajuda médica se a confusão mental ou febre não melhorarem rápido.'},
   {c:'alerta',q:'Onde posso testar substâncias (kits de reagente)?',a:'Em algumas cidades brasileiras, organizações de redução de danos e Centros de Referência em Redução de Danos (CRR) distribuem kits de teste gratuitamente em eventos ou pontos fixos. Reagentes não garantem 100% de pureza, mas ajudam a identificar adulterantes perigosos. Buscar por "redução de danos" + sua cidade, ou projetos como Psicotropicus e Centro de Convivência É de Lei, é um bom ponto de partida.'},
+  {c:'seguranca',q:'O que é redução de danos, afinal?',a:'É uma abordagem de saúde que parte de uma ideia simples: se a pessoa vai usar, que use da forma menos arriscada possível. Em vez de exigir abstinência como única opção, foca em <strong>reduzir os danos</strong> — testar substâncias, ajustar doses, hidratar, não usar sozinho(a), espaçar o uso. Cuidar de você não depende de você parar primeiro.'},
+  {c:'seguranca',q:'Quais cuidados básicos antes de usar qualquer coisa?',a:'Alguns princípios que valem pra quase tudo: comece com <strong>dose baixa</strong> (especialmente material novo), não use sozinho(a), avise alguém de confiança, cuide do ambiente (set e setting), tenha água por perto, não dirija, e evite misturar. Pesquisar a substância antes — efeitos, duração, interações — já reduz muito risco.'},
+  {c:'seguranca',q:'Por que dizem para "começar baixo e ir devagar"?',a:'Porque a pureza e a potência variam muito, e a resposta de cada corpo é diferente. Uma dose que foi tranquila para alguém pode ser demais para você. Começar com pouco e esperar o efeito completo antes de considerar mais reduz o risco de exagerar — é mais fácil tomar mais depois do que reverter uma dose alta.'},
+  {c:'seguranca',q:'Como usar de forma mais segura se eu estiver sozinho(a)?',a:'O ideal é não usar sozinho(a). Se for inevitável, avise alguém de confiança por mensagem dizendo o que vai usar e combine um horário para se falarem. Deixe a porta destrancada para socorro, evite doses altas e tenha água e o telefone por perto.'},
+  {c:'seguranca',q:'Vale a pena pesar as doses? Como?',a:'Para substâncias ativas em miligramas (como MDMA), uma balança de precisão (0,001 g) faz muita diferença — estimar "no olho" é uma das principais causas de overdose acidental. Para doses muito pequenas, diluir em líquido medido (volumetric dosing) é mais seguro que tentar pesar quantidades minúsculas.'},
+  {c:'seguranca',q:'O que é set e setting?',a:'São dois fatores que moldam muito a experiência, principalmente com psicodélicos. <strong>Set</strong> é o seu estado interno: humor, expectativas, saúde mental. <strong>Setting</strong> é o ambiente: lugar, pessoas, som, segurança. Um bom set e setting reduz muito o risco de experiências difíceis. Evite usar em momentos de crise emocional ou em lugares inseguros.'},
+  {c:'seguranca',q:'Posso dirigir depois de usar?',a:'Não. Praticamente todas as substâncias afetam reflexos, percepção e julgamento, mesmo quando você "se sente bem". Programe transporte (carona, app, transporte público) antes de usar. Além do risco de vida, dirigir alterado é crime.'},
+  {c:'seguranca',q:'Como cuidar de um amigo que usou demais?',a:'Fique perto e mantenha a calma. Leve para um lugar tranquilo e arejado, ofereça água em pequenos goles, e converse para manter a pessoa consciente. Se houver vômito, vire de lado. Observe a respiração. Se surgir qualquer sinal grave (desmaio, respiração lenta, convulsão, dor no peito), chame o SAMU (192) sem hesitar.'},
+  {c:'seguranca',q:'Hidratação: quanto de água é seguro?',a:'Tanto desidratar quanto beber água demais são perigosos — especialmente com MDMA. A referência geral é beber por volta de <strong>500 ml por hora</strong> se estiver dançando/suando, e menos se estiver parado(a). Beber litros de uma vez pode causar hiponatremia (sódio baixo), que é grave. Equilíbrio é a chave.'},
+  {c:'seguranca',q:'Posso usar se estou tomando medicação psiquiátrica?',a:'Depende muito do medicamento e da substância — algumas combinações são inofensivas, outras perigosas (ISRS + MDMA reduz efeito; IMAO + vários é risco de vida). Não interrompa sua medicação por conta própria para usar — isso costuma ser mais arriscado. Pesquise a interação específica ou converse com seu prescritor.'},
+  {c:'efeitos',q:'O que é a "curva" da fissura e por que ela passa?',a:'A fissura costuma funcionar como uma onda: sobe rápido, atinge um pico em poucos minutos e depois desce sozinha, mesmo que você não use. Saber que ela tem fim ajuda a atravessar — distração, respiração, mudar de ambiente ou conversar com alguém costumam bastar para "surfar" até a onda baixar. O app tem ferramentas pra isso na aba de jogos e no modo crise.'},
+  {c:'efeitos',q:'Quanto tempo dura o efeito da cannabis?',a:'Fumada, o pico vem em poucos minutos e dura cerca de 1-3h. Comestível demora 30min-2h para começar e dura 4-8h, podendo ser bem mais intenso. Os efeitos residuais podem durar mais algumas horas. No uso frequente, traços ficam detectáveis em exame por semanas.'},
+  {c:'efeitos',q:'Por que o álcool dá ressaca e o que ajuda?',a:'A ressaca vem de desidratação, acúmulo de acetaldeído (subproduto tóxico), inflamação e sono ruim. O que realmente ajuda é prevenção: alternar com água, comer antes, e moderar. No dia seguinte: hidratação, comida leve, sais minerais e descanso. Não existe cura milagrosa — e beber de novo só adia o problema.'},
+  {c:'efeitos',q:'O que é tolerância cruzada?',a:'É quando usar uma substância reduz o efeito de outra parecida — por exemplo, LSD e cogumelos compartilham tolerância, então usar um logo após o outro rende muito menos efeito (e tenta a redosar perigosamente). Por isso psicodélicos pedem dias de intervalo para "resetar" a tolerância.'},
+  {c:'efeitos',q:'Por que estimulantes "cortam" o sono e a fome?',a:'Estimulantes (cocaína, MDMA, anfetaminas, cafeína em excesso) aceleram o sistema nervoso e suprimem fome e sono. O corpo gasta energia sem repor — por isso a "descida" vem com exaustão, fome e queda de humor. Comer algo leve e hidratar antes e durante ajuda a amenizar.'},
+  {c:'efeitos',q:'O que é "redose" e por que é arriscado?',a:'Redose é tomar mais durante um efeito que já está rolando. O risco é que você ainda não sente a dose anterior por completo (comum em comestíveis e MDMA), então soma doses sem perceber. Com estimulantes, redoses sucessivas sobrecarregam o coração. Regra geral: espere o efeito completo, e se redosar, use bem menos que a dose inicial.'},
+  {c:'efeitos',q:'Café e energéticos contam como droga?',a:'A cafeína é a substância psicoativa mais usada do mundo e, sim, é um estimulante — com tolerância, abstinência (dor de cabeça, irritação) e limites de segurança. Até 400 mg/dia costuma ser seguro para adultos saudáveis. Acima disso, ou combinada com álcool e outros estimulantes, traz ansiedade, taquicardia e insônia.'},
+  {c:'corpo',q:'Usar afeta a saúde mental?',a:'Pode afetar nos dois sentidos. Algumas substâncias aliviam sintomas no curto prazo, mas o uso frequente pode piorar ansiedade, sono, humor e, em pessoas predispostas, desencadear ou agravar quadros como psicose. Se você percebe que usa para lidar com sofrimento emocional, isso não é fraqueza — é sinal de que vale buscar apoio. O app tem uma rede de profissionais.'},
+  {c:'corpo',q:'Cannabis pode desencadear crises psicóticas?',a:'Em pessoas com predisposição (histórico pessoal ou familiar de psicose/esquizofrenia), o uso — especialmente potente, frequente e começando cedo — está associado a maior risco de desencadear quadros psicóticos. Para a maioria não acontece, mas se você tem esse histórico ou já sentiu paranoia/desorganização ao usar, vale muita cautela ou evitar.'},
+  {c:'corpo',q:'Que substâncias mais sobrecarregam o coração?',a:'Estimulantes em geral — cocaína, anfetaminas, MDMA — aumentam frequência cardíaca e pressão, e o risco cresce com a dose, o calor e a combinação entre eles. Quem tem problema cardíaco, pressão alta ou usa certos medicamentos corre mais risco. Dor no peito, palpitação forte ou falta de ar pedem socorro imediato.'},
+  {c:'corpo',q:'O que o uso faz com o sono?',a:'Quase tudo atrapalha o sono. Estimulantes impedem de dormir; álcool dá sono mas piora a qualidade; cannabis pode ajudar a pegar no sono mas reduz o sono REM. Sono ruim piora humor e fissura — vira um ciclo. Recuperar o sono é uma das coisas que mais ajuda na descida.'},
+  {c:'corpo',q:'Uso ocasional vicia?',a:'Vício não é só frequência — envolve o quanto a substância passa a ocupar espaço na sua vida e fatores pessoais e de contexto. Uso ocasional tem risco menor de dependência, mas algumas substâncias "fisgam" mais rápido (nicotina, opioides, crack). O sinal de alerta não é "quantas vezes", e sim se você sente que perdeu o controle ou continua apesar dos prejuízos.'},
+  {c:'dependencia',q:'Como saber se meu uso virou um problema?',a:'Alguns sinais: usar mais ou por mais tempo do que pretendia, tentar reduzir e não conseguir, gastar muito tempo em função do uso, largar coisas que importavam, continuar mesmo com prejuízos claros. Não precisa "bater todos" — se você se preocupa com isso, já é motivo válido pra conversar com alguém.'},
+  {c:'dependencia',q:'Diferença entre uso, abuso e dependência?',a:'<strong>Uso</strong> é o consumo sem prejuízo significativo; <strong>uso problemático</strong> é quando começa a trazer danos (saúde, relações, responsabilidades); <strong>dependência</strong> envolve tolerância, abstinência e perda de controle. As fronteiras não são rígidas — é um espectro, e dá para buscar ajuda em qualquer ponto dele.'},
+  {c:'dependencia',q:'O que é síndrome de abstinência?',a:'É o conjunto de sintomas que aparece quando alguém com dependência reduz ou para de usar. De álcool e benzodiazepínicos pode ser <strong>grave e até perigosa</strong> (convulsões), exigindo acompanhamento médico; de opioides é muito desconfortável mas raramente fatal; de estimulantes vem como exaustão e depressão. Parar certas substâncias sozinho(a) e de uma vez pode ser arriscado — busque orientação.'},
+  {c:'dependencia',q:'Recaída significa que eu falhei?',a:'Não. A recaída faz parte do processo de mudança para muita gente, e é uma oportunidade de aprender o que disparou — não uma prova de fracasso. O que importa é o que você faz depois: acolher sem se afundar em culpa, entender o gatilho e retomar. Tratar recaída como informação, não como veredito, é parte central da redução de danos.'},
+  {c:'dependencia',q:'Como lidar com os gatilhos de uso?',a:'Primeiro, identifique os seus — pessoas, lugares, emoções, horários. Depois planeje respostas: evitar o gatilho quando possível, ter uma atividade alternativa pronta, avisar alguém de confiança, usar técnicas de "surfar a fissura". O app ajuda a mapear seus padrões na aba de progresso, mostrando quais contextos e emoções mais aparecem.'},
+  {c:'dependencia',q:'Quero reduzir, não parar. Isso é válido?',a:'Totalmente. Reduzir frequência, quantidade, ou trocar por formas menos arriscadas são metas legítimas e muitas vezes mais sustentáveis que a abstinência imediata. O importante é ter clareza do objetivo e acompanhar o progresso. O app foi desenhado pra isso — você define a meta no seu ritmo, sem cobrança de abstinência.'},
+  {c:'dependencia',q:'Como ajudar alguém que usa sem afastar?',a:'Acolhimento funciona melhor que sermão. Evite julgamento, ameaças e ultimatos — costumam afastar. Demonstre que se importa, ouça sem tentar "consertar" na marra, ofereça informação de redução de danos e apoio para buscar ajuda quando a pessoa quiser. Cuide de você também. A mudança é da pessoa; você pode ser uma presença segura.'},
+  {c:'legal',q:'Posso ser preso por usar ou portar?',a:'No Brasil, a Lei 11.343/2006 diferencia usuário de traficante, mas não define quantidade exata — quem usa ou porta para consumo próprio não pega prisão (penas como advertência e serviços comunitários), mas a distinção é decidida caso a caso, o que gera insegurança. Isto não é orientação jurídica: para casos concretos, procure um(a) advogado(a) ou a Defensoria Pública.'},
+  {c:'legal',q:'Por quanto tempo cada substância aparece em exame?',a:'Varia conforme o exame (urina, sangue, cabelo), a frequência de uso e o metabolismo. Em urina, em linhas gerais: cocaína 2-4 dias; MDMA 2-4 dias; cannabis de poucos dias (uso único) a semanas (uso frequente); álcool até cerca de 12-24h. Cabelo detecta por meses. São estimativas — não há garantia.'},
+  {c:'legal',q:'Tenho direitos se for parado pela polícia?',a:'Sim. Você tem direito de ficar em silêncio, de não produzir prova contra si, e de ser tratado(a) sem violência. Mantenha a calma, não resista fisicamente e evite confronto. Anote identificação se puder e relate abusos depois. Isto é informação geral, não aconselhamento jurídico — a Defensoria Pública é gratuita e pode orientar.'},
+  {c:'legal',q:'Onde encontro ajuda gratuita no SUS?',a:'O SUS oferece atendimento gratuito em redução de danos e saúde mental, principalmente nos <strong>CAPS-AD</strong> (Centros de Atenção Psicossocial Álcool e Drogas) e nas UBS. O atendimento não exige abstinência e é sigiloso. Busque "CAPS AD" + sua cidade. Para apoio emocional imediato, o CVV (188) atende 24h, de graça.'},
+  {c:'legal',q:'Meus dados no app ficam seguros?',a:'Sim. Tudo o que você registra fica salvo apenas <strong>no seu aparelho</strong> (armazenamento local do navegador), não vai para nenhum servidor e ninguém além de você tem acesso. Você pode fazer backup, exportar e apagar tudo quando quiser nas configurações. Se compartilhar o celular, ative o PIN de bloqueio.'},
 ];
 let faqCat='all';
 function openFAQ(){
@@ -1982,16 +3048,14 @@ function agNotif(){
 /* ══ INIT ══ */
 document.addEventListener('touchstart',function(e){if(!e.target.closest('input,textarea,select'))blurAll();},{passive:true});
 (async function init(){
-  // tenta recuperar sessão do Supabase
   const {data:{session}} = _SB ? await _SB.auth.getSession().catch(()=>({data:{session:null}})) : {data:{session:null}};
   if(session?.user){
-    const sbU=session.user;
-    const nome=sbU.user_metadata?.nome||sbU.email.split('@')[0];
-    U={id:sbU.id,nome,email:sbU.email};
+    const sbU=session.user;const m=sbU.user_metadata||{};
+    U={id:sbU.id,nome:m.nome||sbU.email.split('@')[0],email:sbU.email,tipo:m.tipo||'user',reg:m.reg||null};
     ls('dr_session',U);
   } else {
     const sess=ls('dr_session');
-    if(sess&&sess.id) U=sess; // fallback offline / demo
+    if(sess&&sess.id) U=sess;
   }
   if(U){
     const t=ls('dr_termo_'+U.id);
