@@ -272,29 +272,6 @@ a{color:inherit;text-decoration:none}
 .phs{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px;position:relative;z-index:1}
 
 /* TIMELINE */
-/* HEATMAP TIMELINE */
-.hmap-wrap{padding:0 18px 16px;overflow-x:auto;scrollbar-width:none}
-.hmap-wrap::-webkit-scrollbar{display:none}
-.hmap-inner{display:inline-flex;flex-direction:column;gap:0;min-width:100%}
-.hmap-months{display:flex;gap:0;margin-bottom:4px;padding-left:22px}
-.hmap-ml{font-size:9px;color:var(--txm);font-weight:700;text-transform:uppercase;flex:1;text-align:center}
-.hmap-rows{display:flex;gap:3px}
-.hmap-dlabs{display:flex;flex-direction:column;gap:2px;margin-right:3px}
-.hmap-dl{font-size:8px;color:var(--txm);font-weight:600;height:12px;line-height:12px;text-transform:uppercase}
-.hmap-cols{display:flex;gap:2px}
-.hmap-col{display:flex;flex-direction:column;gap:2px}
-.hmap-cell{width:12px;height:12px;border-radius:2px;cursor:pointer;transition:transform .1s;flex-shrink:0}
-.hmap-cell:active{transform:scale(1.3)}
-.hmap-cell.vz{background:#EAEAE6}
-.hmap-cell.d1{background:rgba(76,175,90,.25)}
-.hmap-cell.d2{background:rgba(76,175,90,.5)}
-.hmap-cell.d3{background:rgba(76,175,90,.75)}
-.hmap-cell.d4{background:#2E7D32}
-.hmap-cell.at{background:rgba(234,88,12,.6)}
-.hmap-cell.hj{outline:2px solid var(--am);outline-offset:1px}
-.hmap-legend{display:flex;align-items:center;gap:5px;padding:6px 18px 0;justify-content:flex-end}
-.hmap-leg-lbl{font-size:10px;color:var(--txm)}
-.hmap-leg-cell{width:11px;height:11px;border-radius:2px}
 
 /* META CARD */
 .mc{background:#fff;border-radius:17px;border:2px solid var(--cinm);padding:15px 17px;margin:0 18px 10px}
@@ -522,7 +499,6 @@ a{color:inherit;text-decoration:none}
 #shell.dkm #bnav{background:rgba(20,26,20,.97);border-top-color:#32402F}
 #shell.dkm .fa{border-top-color:#283228}
 #shell.dkm .calnb,#shell.dkm .bk.dk{background:#212A21;color:#E9EFE7}
-#shell.dkm .hmap-cell.vz{background:#283228}
 #shell.dkm .refh{background:#1D3320}
 #shell.dkm .cks{background:#1D3320}
 
@@ -619,6 +595,16 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .faqq:active{background:#1D3320;border-color:#3E6B44}
 #shell.dkm .fbq{background:#212A21;color:#E9EFE7}
 
+/* ── QUICK ACTIONS GRID ── */
+.qag{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 18px 13px}
+.qac{position:relative;overflow:hidden;border-radius:18px;padding:15px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 1px 10px rgba(0,0,0,.05)}
+.qac:active{transform:scale(.96)}
+.qac::after{content:'';position:absolute;right:-22px;bottom:-22px;width:78px;height:78px;border-radius:50%;background:var(--acc);opacity:.12;pointer-events:none}
+.qaic{position:relative;z-index:1;width:38px;height:38px;border-radius:12px;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:11px;box-shadow:0 4px 10px -2px var(--acc)}
+.qat{position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:800;line-height:1.3;margin-bottom:3px}
+.qad{position:relative;z-index:1;font-size:11px;line-height:1.5;opacity:.8}
+#shell.dkm .qac{box-shadow:0 1px 10px rgba(0,0,0,.25)}
+
 </style>
 <noscript><div style="padding:40px 24px;font-family:sans-serif;text-align:center;color:#1B2A1C"><h2>⚠️ JavaScript desativado</h2><p>Este app precisa ser aberto em um navegador (Chrome, Safari, Firefox).<br>Se você abriu pelo WhatsApp ou pelo visualizador de arquivos, toque em <strong>"Abrir com → Chrome"</strong>.</p></div></noscript>
 </head>
@@ -668,25 +654,27 @@ a{color:inherit;text-decoration:none}
   <div class="cks" id="ck-strip"><div class="ckst">Como você está agora?</div><div class="ckse"><button class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
   <div class="wk"><div class="wlb">Sua semana</div><div class="wds" id="h-wds"></div><button class="btn bv bsm" onclick="openMod('mreg')" style="font-family:'DM Sans',sans-serif;position:relative;z-index:1">+ Registrar agora</button></div>
   <!-- CRISE + FISSURA -->
-  <div style="margin:0 18px 11px;background:var(--erf);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="showV('vcrise')">
-    <div style="width:38px;height:38px;background:var(--er);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">🆘</div>
-    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#E05555">Ajuda de emergência</div><div style="font-size:11px;color:#D07070;margin-top:1px">Mal-estar, crise, overdose — acesse agora</div></div>
-    <div style="color:var(--er);font-size:17px">›</div>
-  </div>
-  <div style="margin:0 18px 11px;background:var(--roxof);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openMod('mfiss')">
-    <div style="width:38px;height:38px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">💪</div>
-    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--roxo)">Resistência ativa</div><div style="font-size:11px;color:var(--roxo);margin-top:1px">Registrar quando quis usar mas não usou</div></div>
-    <div style="color:var(--roxo);font-size:17px">›</div>
-  </div>
-  <div style="margin:0 18px 11px;background:var(--saf);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openCombo()">
-    <div style="width:38px;height:38px;background:var(--sa);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">⚗️</div>
-    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--sa)">Vai misturar? Consulte antes</div><div style="font-size:11px;color:var(--sa);margin-top:1px">Tabela de interações entre substâncias</div></div>
-    <div style="color:var(--sa);font-size:17px">›</div>
-  </div>
-  <div style="margin:0 18px 11px;background:var(--vf);border-radius:15px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openFAQ()">
-    <div style="width:38px;height:38px;background:var(--ve);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">💬</div>
-    <div style="flex:1"><div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--ve)">Tire suas dúvidas</div><div style="font-size:11px;color:var(--ve);margin-top:1px">Perguntas comuns sobre uso, efeitos e riscos</div></div>
-    <div style="color:var(--ve);font-size:17px">›</div>
+  <div class="qag">
+    <div class="qac" style="background:var(--erf);--acc:var(--er)" onclick="showV('vcrise')">
+      <div class="qaic">🆘</div>
+      <div class="qat" style="color:#E05555">Ajuda de emergência</div>
+      <div class="qad" style="color:#D07070">Mal-estar, crise, overdose</div>
+    </div>
+    <div class="qac" style="background:var(--roxof);--acc:var(--roxo)" onclick="openMod('mfiss')">
+      <div class="qaic">💪</div>
+      <div class="qat" style="color:var(--roxo)">Resistência ativa</div>
+      <div class="qad" style="color:var(--roxo)">Quis usar e não usou? Registre</div>
+    </div>
+    <div class="qac" style="background:var(--saf);--acc:var(--sa)" onclick="openCombo()">
+      <div class="qaic">⚗️</div>
+      <div class="qat" style="color:var(--sa)">Vai misturar?</div>
+      <div class="qad" style="color:var(--sa)">Tabela de interações</div>
+    </div>
+    <div class="qac" style="background:var(--vf);--acc:var(--ve)" onclick="openFAQ()">
+      <div class="qaic">💬</div>
+      <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
+      <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
+    </div>
   </div>
   <div class="shr" style="padding-top:2px"><div class="sht">Para você hoje</div><div class="shl" onclick="goPg('p-ref')">ver mais →</div></div>
   <div id="h-feed"></div>
@@ -713,30 +701,7 @@ a{color:inherit;text-decoration:none}
 <div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-prog">
 <div class="ph"><div class="pht">Progresso</div><div class="phs">Suas conquistas e evolução</div></div>
 <div class="sc scpad">
-  <div class="shr" style="padding-top:14px"><div class="sht">Mapa de presença — 90 dias</div></div>
-  <div class="hmap-wrap" id="hmap-wrap">
-    <div class="hmap-inner">
-      <div class="hmap-months" id="hmap-months"></div>
-      <div class="hmap-rows">
-        <div class="hmap-dlabs">
-          <div class="hmap-dl">D</div><div class="hmap-dl">S</div><div class="hmap-dl">T</div>
-          <div class="hmap-dl">Q</div><div class="hmap-dl">Q</div><div class="hmap-dl">S</div>
-          <div class="hmap-dl">S</div>
-        </div>
-        <div class="hmap-cols" id="hmap-cols"></div>
-      </div>
-      <div class="hmap-legend">
-        <span class="hmap-leg-lbl">menos</span>
-        <div class="hmap-leg-cell" style="background:#EAEAE6"></div>
-        <div class="hmap-leg-cell" style="background:rgba(76,175,90,.25)"></div>
-        <div class="hmap-leg-cell" style="background:rgba(76,175,90,.5)"></div>
-        <div class="hmap-leg-cell" style="background:#2E7D32"></div>
-        <div class="hmap-leg-cell" style="background:rgba(234,88,12,.6)"></div>
-        <span class="hmap-leg-lbl">acima do limite</span>
-      </div>
-    </div>
-  </div>
-  <div class="shr"><div class="sht">Minhas metas</div><div class="shl" onclick="openMetasMod()">editar</div></div>
+  <div class="shr" style="padding-top:14px"><div class="sht">Minhas metas</div><div class="shl" onclick="openMetasMod()">editar</div></div>
   <div id="metas-l"></div>
 
   <div class="shr"><div class="sht">Insights do seu padrão 🔍</div></div>
@@ -1487,64 +1452,7 @@ function renderDdet(regs){
 }
 
 /* ══ PROGRESSO ══ */
-function renderProg(){renderTL();renderMetas();renderInsights();renderGraf();renderCqs();renderHist();setTimeout(()=>{const w=document.getElementById('hmap-wrap');if(w)w.scrollLeft=w.scrollWidth;},50);}
-
-function renderTL(){
-  const regs=gR();const limD=gC().limD||4;
-  const hj=new Date();hj.setHours(12,0,0,0);const hjISO=hoje();
-  const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  // Organizar 90 dias em colunas por semana (domingo=0)
-  // Encontrar o domingo mais próximo antes de 90 dias atrás
-  const inicio=new Date(hj);inicio.setDate(hj.getDate()-89);
-  const diaSemana=inicio.getDay();
-  const domingoInicio=new Date(inicio);domingoInicio.setDate(inicio.getDate()-diaSemana);
-  
-  // Construir colunas: cada coluna = 1 semana (7 dias, dom a sab)
-  const colunas=[];let col=[];let d=new Date(domingoInicio);
-  while(d<=hj||col.length>0){
-    if(col.length===7){colunas.push(col);col=[];}
-    const iso=d.toISOString().split('T')[0];
-    const futuro=d>hj;
-    const fora=d<inicio;
-    col.push({iso,futuro,fora,d:new Date(d)});
-    d.setDate(d.getDate()+1);
-    if(d>hj&&col.length>0){while(col.length<7)col.push(null);colunas.push(col);col=[];break;}
-  }
-  
-  // Render colunas
-  const colsEl=document.getElementById('hmap-cols');
-  const monthsEl=document.getElementById('hmap-months');
-  if(!colsEl)return;
-  colsEl.innerHTML='';monthsEl.innerHTML='';
-  
-  let lastMonth=-1;
-  colunas.forEach((col,ci)=>{
-    const colDiv=document.createElement('div');colDiv.className='hmap-col';
-    col.forEach(cell=>{
-      const div=document.createElement('div');
-      if(!cell||cell.fora||cell.futuro){div.className='hmap-cell';div.style.background='transparent';colDiv.appendChild(div);return;}
-      const cnt=regs.filter(r=>r.data===cell.iso).length;
-      let cls='hmap-cell ';
-      if(cnt===0)cls+='vz';else if(cnt>=limD)cls+='at';else if(cnt>=3)cls+='d4';else if(cnt>=2)cls+='d3';else cls+='d1';
-      if(cell.iso===hjISO)cls+=' hj';
-      div.className=cls.trim();
-      div.title=fdt(cell.iso)+': '+cnt+' registro(s)';
-      colDiv.appendChild(div);
-    });
-    colsEl.appendChild(colDiv);
-    
-    // Label de mês: mostrar quando muda o mês (pelo dia da primeira célula válida)
-    const firstValid=col.find(c=>c&&!c.fora&&!c.futuro);
-    if(firstValid){
-      const mes=firstValid.d.getMonth();
-      const mDiv=document.createElement('div');
-      mDiv.className='hmap-ml';
-      mDiv.style.minWidth='14px';
-      if(mes!==lastMonth){mDiv.textContent=MESES[mes];lastMonth=mes;}
-      monthsEl.appendChild(mDiv);
-    }
-  });
-}
+function renderProg(){renderMetas();renderInsights();renderGraf();renderCqs();renderHist();}
 
 function renderMetas(){
   const mts=gM();const c=document.getElementById('metas-l');
@@ -1583,7 +1491,7 @@ function renderHist(){
 }
 function delReg(id){
   if(!confirm('Excluir este registro?'))return;
-  sR(gR().filter(r=>r.id!==id));renderHist();renderTL();renderGraf();renderCqs();toast('Registro excluído.');
+  sR(gR().filter(r=>r.id!==id));renderHist();renderGraf();renderCqs();toast('Registro excluído.');
 }
 
 /* ══ REFLEXÕES ══ */
