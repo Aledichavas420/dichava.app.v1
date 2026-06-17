@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -1100,6 +1101,14 @@ const GRPS=[
 ];
 
 /* ══ STATE ══ */
+/* ══ SUPABASE ══ */
+const _SB = (typeof supabase !== 'undefined')
+  ? supabase.createClient(
+      'https://gnpwaywyexcevtzbwiyq.supabase.co',
+      'sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'
+    )
+  : null;
+
 let U=null,_eReg=null,_eFiss=null,_eCmp=null;
 let _calDt=new Date(),_calSel=null;
 let _obP=0,_obG=null,_obSubs=[];
@@ -1201,9 +1210,14 @@ async function doLogin(){
   chk('li-pw','li-pwe',pw&&pw.length>=6,'E-mail ou senha incorretos.');
   if(!ok)return;
   const btn=document.getElementById('btn-login');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
-  await delay(600);
-  if(e==='demo@rd.app'&&pw==='123456'){U={id:'demo',nome:'Usuário Demo',email:e};}
-  else{const us=ls('dr_users')||[];const u=us.find(u=>u.email===e&&u.pw===btoa(pw));if(!u){document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent='E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}U={id:u.id,nome:u.nome,email:u.email};}
+  // modo demo offline
+  if(e==='demo@rd.app'&&pw==='123456'){U={id:'demo',nome:'Usuário Demo',email:e};ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();return;}
+  if(!_SB){const us=ls('dr_users')||[];const u=us.find(u=>u.email===e&&u.pw===btoa(pw));if(!u){document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent='E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}U={id:u.id,nome:u.nome,email:u.email};ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();return;}
+  const {data,error}=await _SB.auth.signInWithPassword({email:e,password:pw});
+  if(error){document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent='E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}
+  const sbU=data.user;
+  const nome=sbU.user_metadata?.nome||sbU.email.split('@')[0];
+  U={id:sbU.id,nome,email:sbU.email};
   ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();
 }
 async function doSignup(){
@@ -1214,11 +1228,12 @@ async function doSignup(){
   chk('su-n','su-ne',n,'Informe seu nome.');chk('su-e','su-ee',e&&/\S+@\S+\.\S+/.test(e),'E-mail inválido.');chk('su-pw','su-pwe',pw&&pw.length>=6,'Mínimo 6 caracteres.');
   if(!ok)return;
   const btn=document.getElementById('btn-signup');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
-  await delay(600);
-  const us=ls('dr_users')||[];
-  if(us.find(u=>u.email===e)){document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent='E-mail já cadastrado.';shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}
-  const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw)};us.push(nU);ls('dr_users',us);
-  U={id:nU.id,nome:n,email:e};ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();
+  if(!_SB){const us=ls('dr_users')||[];if(us.find(u=>u.email===e)){document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent='E-mail já cadastrado.';shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw)};us.push(nU);ls('dr_users',us);U={id:nU.id,nome:n,email:e};ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();return;}
+  const {data,error}=await _SB.auth.signUp({email:e,password:pw,options:{data:{nome:n}}});
+  if(error){const msg=error.message.includes('already')? 'E-mail já cadastrado.':error.message;document.getElementById('su-e').classList.add('err');document.getElementById('su-ee').classList.add('on');document.getElementById('su-ee').textContent=msg;shk(document.getElementById('su-e'));btn.disabled=false;btn.textContent='Criar conta';return;}
+  const sbU=data.user;
+  U={id:sbU.id,nome:n,email:sbU.email};
+  ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();
 }
 function posLogin(){
   // Esconde auth
@@ -1234,7 +1249,7 @@ function posLogin(){
     else entrar();
   }
 }
-function logout(){if(!confirm('Sair?'))return;U=null;ls('dr_session',null);showV('va');toast('Até logo! 💚')}
+async function logout(){if(!confirm('Sair?'))return;if(_SB)await _SB.auth.signOut().catch(()=>{});U=null;ls('dr_session',null);showV('va');toast('Até logo! 💚')}
 
 /* ══ CONSENTIMENTO ══ */
 function aceitarTermo(){
@@ -1966,10 +1981,20 @@ function agNotif(){
 // Precisamos do canvas no HTML de reflexões
 /* ══ INIT ══ */
 document.addEventListener('touchstart',function(e){if(!e.target.closest('input,textarea,select'))blurAll();},{passive:true});
-(function init(){
-  const sess=ls('dr_session');
-  if(sess&&sess.id){
-    U=sess;const t=ls('dr_termo_'+U.id);
+(async function init(){
+  // tenta recuperar sessão do Supabase
+  const {data:{session}} = _SB ? await _SB.auth.getSession().catch(()=>({data:{session:null}})) : {data:{session:null}};
+  if(session?.user){
+    const sbU=session.user;
+    const nome=sbU.user_metadata?.nome||sbU.email.split('@')[0];
+    U={id:sbU.id,nome,email:sbU.email};
+    ls('dr_session',U);
+  } else {
+    const sess=ls('dr_session');
+    if(sess&&sess.id) U=sess; // fallback offline / demo
+  }
+  if(U){
+    const t=ls('dr_termo_'+U.id);
     if(!t){showV('vapp');document.getElementById('bnav').classList.remove('on');openMod('mtermo');}
     else{const o=gO();if(!o)startOb();else entrar();}
     applyTheme();
