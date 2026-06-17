@@ -1446,7 +1446,10 @@ let _grP=0,_rT=null,_rOn=false,_rFase=0,_rSeg=0;
 let _fI=null,_crI=null;
 
 /* ══ STORAGE ══ */
-function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+let _syncT=null;
+function syncToCloud(){if(!_SB||!U||U.id==='demo')return;clearTimeout(_syncT);_syncT=setTimeout(async()=>{try{const dados={};Object.keys(localStorage).forEach(k=>{if(k.startsWith('dr_')&&k.includes(U.id))dados[k]=localStorage.getItem(k);});const{data:ex}=await _SB.from('registros').select('id').eq('user_id',U.id).maybeSingle();if(ex)await _SB.from('registros').update({dados}).eq('user_id',U.id);else await _SB.from('registros').insert({user_id:U.id,dados});}catch(e){}},2000);}
+async function syncFromCloud(){if(!_SB||!U||U.id==='demo')return;try{const{data}=await _SB.from('registros').select('dados').eq('user_id',U.id).maybeSingle();if(data?.dados)Object.entries(data.dados).forEach(([k,v])=>{if(!localStorage.getItem(k))localStorage.setItem(k,v);});}catch(e){}}
+function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('dr_r_')||k.startsWith('dr_rf_')||k.startsWith('dr_fs_')||k.startsWith('dr_m_')||k.startsWith('dr_ct_')||k.startsWith('dr_o_'))syncToCloud();}catch{}}
 const uid=()=>U?.id||'x';
 const gR=()=>ls('dr_r_'+uid())||[];
 const sR=r=>ls('dr_r_'+uid(),r);
@@ -1566,12 +1569,11 @@ async function doSignup(){
   U={id:sbU.id,nome:n,email:sbU.email,tipo,reg:tipo==='pro'?reg:null};
   ls('dr_session',U);btn.disabled=false;btn.textContent='Criar conta';posLogin();
 }
-function posLogin(){
-  // Esconde auth
+async function posLogin(){
   document.getElementById('va').classList.remove('on');
+  await syncFromCloud();
   const t=ls('dr_termo_'+U.id);
   if(!t){
-    // Mostra app por baixo do modal
     showV('vapp');
     openMod('mtermo');
   } else {
