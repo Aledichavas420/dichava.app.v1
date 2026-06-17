@@ -1194,17 +1194,6 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<div class="V" id="vpro-aguarda" style="background:var(--roxof)">
-  <div class="sc" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center">
-    <div style="font-size:56px;margin-bottom:20px">🩺</div>
-    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--roxo);margin-bottom:12px">Perfil em análise</div>
-    <div style="font-size:14px;color:var(--roxo);opacity:.8;line-height:1.7;margin-bottom:28px">Recebemos seu cadastro. Nossa equipe revisa cada perfil manualmente para garantir a qualidade da rede.<br><br><strong>Prazo: até 48h úteis.</strong></div>
-    <div style="background:#fff;border-radius:16px;padding:16px 20px;width:100%;text-align:left;margin-bottom:20px"><div style="font-size:11px;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Enquanto isso, você pode</div><div style="font-size:13px;color:var(--tx);line-height:2">✅ Usar o app normalmente<br>✅ Registrar seu próprio uso<br>✅ Acessar todas as ferramentas</div></div>
-    <button class="btn bv bfull" onclick="entrar()">Usar o app enquanto aguardo</button>
-    <button class="btn bout bfull" style="margin-top:10px;border-color:var(--roxo);color:var(--roxo)" onclick="logout()">Sair</button>
-  </div>
-</div>
-
 <div class="V" id="vproperfil">
   <div class="ptb" style="background:var(--dk)"><div class="ptb-tit">Complete seu perfil profissional</div></div>
   <div class="sc" style="flex:1;overflow-y:auto;padding:20px 18px">
@@ -1260,12 +1249,11 @@ a{color:inherit;text-decoration:none}
     <div style="font-size:56px;margin-bottom:20px">🩺</div>
     <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--roxo);margin-bottom:12px">Perfil em análise</div>
     <div style="font-size:14px;color:var(--roxo);opacity:.8;line-height:1.7;margin-bottom:28px">Recebemos seu cadastro. Nossa equipe revisa cada perfil manualmente para garantir a qualidade da rede.<br><br><strong>Prazo: até 48h úteis.</strong></div>
-    <div style="background:#fff;border-radius:16px;padding:16px 20px;width:100%;text-align:left;margin-bottom:20px">
-      <div style="font-size:11px;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Enquanto isso, você pode</div>
-      <div style="font-size:13px;color:var(--tx);line-height:2">✅ Usar o app normalmente<br>✅ Registrar seu próprio uso<br>✅ Acessar todas as ferramentas</div>
+    <div style="background:#fff;border-radius:16px;padding:16px 20px;width:100%;text-align:left;margin-bottom:24px">
+      <div style="font-size:11px;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">O que acontece agora</div>
+      <div style="font-size:13px;color:var(--tx);line-height:2">📋 Sua solicitação foi recebida<br>🔍 Nossa equipe irá verificar seus dados<br>✅ Você receberá acesso após aprovação</div>
     </div>
-    <button class="btn bv bfull" onclick="entrarComoUser()">Usar o app enquanto aguardo</button>
-    <button class="btn bout bfull" style="margin-top:10px;border-color:var(--roxo);color:var(--roxo)" onclick="logout()">Sair</button>
+    <button class="btn bout bfull" style="border-color:var(--roxo);color:var(--roxo)" onclick="logout()">Sair da conta</button>
   </div>
 </div>
 <div class="V" id="vpro-dash">
@@ -2184,7 +2172,7 @@ const PROFS=[
 ];
 let _pfFilt={mod:'',cat:''};
 function abrirProfs(){_pfFilt={mod:'',cat:''};document.getElementById('pf-q').value='';document.querySelectorAll('.pf-chip').forEach(c=>c.classList.toggle('on',c.dataset.v===''));showV('vprofs');renderProfs();}
-function fecharProfs(){showV('vapp');}
+function fecharProfs(){if(U?.tipo==='pro')entrarPro();else showV('vapp');}
 
 /* ══ PERFIL PROFISSIONAL ══ */
 async function checkProStatus(){
