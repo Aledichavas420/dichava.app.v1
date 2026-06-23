@@ -906,10 +906,10 @@ a{color:inherit;text-decoration:none}
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
     <div class="fld"><div class="lbl">Senha</div><input class="inp" id="su-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><div class="em" id="su-pwe">Mínimo 6 caracteres.</div></div>
-    <div class="fld"><div class="lbl">Tipo de conta</div>
+    <div class="fld" style="display:none"><div class="lbl">Tipo de conta</div>
       <div class="acct-type">
         <div class="acct-opt on" id="acct-user" onclick="setAcct('user')"><div class="ai" data-icon="usuario"></div><div class="at">Sou usuário</div><div class="ad">Quero cuidar de mim</div></div>
-        <div class="acct-opt" id="acct-pro" onclick="setAcct('pro')"><div class="ai">🩺</div><div class="at">Sou profissional</div><div class="ad">Saúde · quero compor a rede</div></div>
+        <div class="acct-opt" id="acct-pro" onclick="setAcct('pro')" style="display:none"><div class="ai">🩺</div><div class="at">Sou profissional</div><div class="ad">Saúde · quero compor a rede</div></div>
       </div>
     </div>
     <div class="fld" id="pro-reg-fld" style="display:none"><div class="lbl">Registro profissional (CRP, CRM…)</div><input class="inp" id="su-reg" type="text" placeholder="Ex.: CRP 16/7696"><div class="em" id="su-rege">Informe seu registro.</div></div>
@@ -962,7 +962,7 @@ a{color:inherit;text-decoration:none}
       <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
       <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
     </div>
-    <div class="qac" style="background:#EAF2FF;--acc:#2B6CB0" onclick="toast('Rede de profissionais — em breve 💚')">
+    <div class="qac" style="background:#EAF2FF;--acc:#2B6CB0;display:none" onclick="toast('Rede de profissionais — em breve 💚')">
       <div class="qaic" data-icon="profissional"></div>
       <div class="qat" style="color:#2B6CB0">Fale com um profissional</div>
       <div class="qad" style="color:#4A82C0">Rede de psi e psiquiatras</div>
@@ -1219,7 +1219,7 @@ a{color:inherit;text-decoration:none}
   <button class="crc" onclick="abrirPlanoCrise()"><div class="crci" data-icon="cfg-plano"></div><div><div class="crcn">Meu plano de segurança</div><div class="crcd">O que você mesmo(a) preparou para esse momento</div></div></button>
   <a class="crc" href="tel:192" style="text-decoration:none"><div class="crci" data-icon="crise-ambulancia"></div><div><div class="crcn">SAMU — 192</div><div class="crcd">Emergência médica, overdose</div></div></a>
   <a class="crc" href="tel:188" style="text-decoration:none"><div class="crci" data-icon="crise-cvv"></div><div><div class="crcn">CVV — 188</div><div class="crcd">Apoio emocional 24h, de graça</div></div></a>
-  <button class="crc prof" onclick="toast('Rede de profissionais — em breve 💚')"><div class="crci" data-icon="profissional"></div><div><div class="crcn">Fale com um profissional</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
+  <button class="crc prof" onclick="toast('Rede de profissionais — em breve 💚')" style="display:none"><div class="crci" data-icon="profissional"></div><div><div class="crcn">Fale com um profissional</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
   <button class="crc" onclick="showV('vapp');setTimeout(()=>openMod('mreg'),50)"><div class="crci">📓</div><div><div class="crcn">Registrar como estou</div><div class="crcd">Documentar esse momento</div></div></button>
   <div style="margin:13px 18px 0;background:rgba(255,255,255,.1);border-radius:15px;padding:15px">
     <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">⚡ Se alguém está mal</div>
