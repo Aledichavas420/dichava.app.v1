@@ -926,6 +926,7 @@ function salvCfg(){
     incog:!!document.getElementById('tog-incog')?.checked,
     lockTimeout:toEl?parseInt(toEl.value):5,
   });
+  resetInactTimer();
 }
 
 /* ══ PLANO ══ */
@@ -1956,7 +1957,15 @@ function pararOnda(completou=false){
 /* ══════════ v6: PIN LOCK ══════════ */
 const gPin=()=>ls('dr_pin_'+uid());
 let _lockBuf='',_lockMode='check',_lockTmp='';
-function maybeLock(){if(gPin()){_lockBuf='';_lockMode='check';document.getElementById('lock-msg').textContent='Digite seu PIN';lockDots();document.getElementById('vlock').classList.add('on');}}
+let _inactTimer=null;
+function resetInactTimer(){
+  if(!gPin())return;
+  const mins=gC().lockTimeout;
+  if(!mins||mins===0)return;
+  clearTimeout(_inactTimer);
+  _inactTimer=setTimeout(()=>{if(gPin())maybeLock();},mins*60*1000);
+}
+function maybeLock(){if(gPin()){clearTimeout(_inactTimer);_lockBuf='';_lockMode='check';document.getElementById('lock-msg').textContent='Digite seu PIN';lockDots();document.getElementById('vlock').classList.add('on');}}
 function lockDots(){document.querySelectorAll('#lock-dots .lockdot').forEach((d,i)=>d.classList.toggle('full',i<_lockBuf.length));}
 function lockKey(n){
   if(_lockBuf.length>=4)return;
@@ -2301,6 +2310,9 @@ document.addEventListener('touchstart',function(e){if(!e.target.closest('input,t
     showV('va');
   }
   setTimeout(()=>{buildIntRow('crise-int','cr');buildIntRow('fiss-int','fs');},200);
+  // timer de inatividade — reseta a cada toque/clique
+  ['touchstart','mousedown','keydown'].forEach(ev=>document.addEventListener(ev,resetInactTimer,{passive:true}));
+  resetInactTimer();
 })();
 
 // Splash screen: remove após init completo
