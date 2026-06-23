@@ -490,11 +490,10 @@
 </div>
 </div>
 
-<!-- ARTIGO -->
 <!-- LISTA DE ARTIGOS -->
-<div class="V" id="varts" style="background:var(--cin)">
+<div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;background:var(--cin)" id="p-arts">
   <div class="ptb" style="background:var(--dk)">
-    <button class="bk" onclick="showV('vapp')">←</button>
+    <button class="bk" onclick="fecharArts()">←</button>
     <div class="ptb-tit" style="color:#fff">📚 Leituras de RD</div>
   </div>
   <div class="sc" style="padding:0 0 calc(32px + var(--sb))">
@@ -506,8 +505,8 @@
 </div>
 
 <!-- ARTIGO INDIVIDUAL -->
-<div class="V" id="vart" style="background:#fff">
-<div class="ptb" style="background:#fff"><button class="bk dk" onclick="showV('varts')">←</button><div class="ptb-tit dk" id="art-tit-h">Artigo</div></div>
+<div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;background:#fff" id="p-art">
+<div class="ptb" style="background:#fff"><button class="bk dk" onclick="goPg('p-arts')">←</button><div class="ptb-tit dk" id="art-tit-h">Artigo</div></div>
 <div class="sc" style="padding:0 18px calc(32px + var(--sb))"><div id="art-body"></div></div>
 </div>
 

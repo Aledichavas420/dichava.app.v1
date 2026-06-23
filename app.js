@@ -405,7 +405,8 @@ function blurAll(){document.querySelectorAll('input,textarea,select').forEach(e=
 function showV(id){document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));document.getElementById(id).classList.add('on');aplicarIcones(document.getElementById(id));if(id==='vresp')initResp();if(id==='vgrd')initGrd();}
 
 /* ══ PAGES ══ */
-const PAGES=['p-home','p-jogos','p-agenda','p-prog','p-ref','p-cfg'];
+const PAGES=['p-home','p-jogos','p-agenda','p-prog','p-ref','p-cfg','p-arts','p-art'];
+let _artsFrom='p-home';
 function goPg(id,btn){
   vib(8);
   PAGES.forEach(p=>{const el=document.getElementById(p);if(el){el.style.display=p===id?'flex':'none';if(p===id){el.classList.remove('pg-anim');void el.offsetWidth;el.classList.add('pg-anim');}}});
@@ -856,8 +857,9 @@ function renderRefFeed(){
   c.innerHTML=refs.map(r=>`<div class="rii"><div class="rih"><div class="riav" style="background:var(--vf);color:var(--ve)">${in2}</div><div style="flex:1"><div class="rin">${esc(U?.nome)||'Você'}</div><div class="rid">${fdt(r.data)}</div></div><span class="ritg" style="background:var(--vf);color:var(--ve)">${esc(r.tag)||'reflexão'}</span></div>${r.prompt?`<div class="rip">💭 ${esc(r.prompt)}</div>`:''}<div class="rit">${esc(r.texto)}</div><div class="rif"><div class="rife">${r.emocao||'✍️'}</div><button style="background:none;border:none;font-size:13px;color:var(--txm);cursor:pointer" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div>`).join('');
 }
 
-function abrirArts(){
-  showV('varts');
+function abrirArts(from){
+  _artsFrom=from||'p-home';
+  goPg('p-arts');
   const grid=document.getElementById('varts-grid');
   if(!grid||grid.dataset.loaded)return;
   grid.dataset.loaded='1';
@@ -865,6 +867,7 @@ function abrirArts(){
   grid.innerHTML='<div class="arts-grid">'+ARTS.map(a=>`<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg">${a.svg}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm}</div></div></div>`).join('')+'</div>';
   aplicarIcones(grid);
 }
+function fecharArts(){goPg(_artsFrom||'p-home');}
 function renderArts(goal){
   const c=document.getElementById('arts-l');
   c.innerHTML='<div class="arts-grid">'+ARTS.map(a=>`<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg">${a.svg}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm}</div></div></div>`).join('')+'</div>';
@@ -872,12 +875,9 @@ function renderArts(goal){
 
 function abrirArt(id){
   const a=ARTS.find(x=>x.id===id);if(!a)return;
-  // Botão voltar do artigo individual aponta para lista
-  const bk=document.querySelector('#vart .bk');
-  if(bk)bk.onclick=()=>showV('varts');
   document.getElementById('art-tit-h').textContent=a.ti;
   document.getElementById('art-body').innerHTML=`<div style="border-radius:15px;overflow:hidden;margin-bottom:16px;height:120px;position:relative">${a.svg}</div><div style="margin-bottom:14px"><span style="display:inline-block;background:var(--vf);color:var(--ve);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">${a.tag}</span></div><h3 style="font-family:'DM Sans',sans-serif;font-size:21px;font-weight:800;color:var(--dk);margin-bottom:6px;line-height:1.2">${a.ti}</h3><div style="font-size:12px;color:var(--txm);margin-bottom:18px">⏱ ${a.tm} de leitura</div><div class="artbody">${a.corpo}</div>`;
-  showV('vart');
+  goPg('p-art');
 }
 
 let _cmpEo=null;
