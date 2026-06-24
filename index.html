@@ -1673,7 +1673,7 @@ const ICONS={
 };
 function icon(nome){return ICONS[nome]||"";}
 function aplicarIcones(root){(root||document).querySelectorAll('[data-icon]').forEach(el=>{const n=el.getAttribute('data-icon');if(n&&ICONS[n]&&!el.dataset.iconDone){el.innerHTML=ICONS[n];el.dataset.iconDone='1';}});}
-document.addEventListener('DOMContentLoaded',()=>aplicarIcones());
+document.addEventListener('DOMContentLoaded',()=>{aplicarIcones();montarSubGrid('reg-subgrid',SUBS_REG);});
 /* ═══ ícones de substâncias (v16) ═══ */
 const SUBICONS={
   "alcool":`<svg class="subicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <path fill="#FFD98A" d="M6 8h10v9.5a3.5 3.5 0 0 1-3.5 3.5h-3A3.5 3.5 0 0 1 6 17.5Z"></path><path fill="#E0922A" d="M16 9.5h1.3A3.2 3.2 0 0 1 17.3 16H16v-2.4h1.1a.8.8 0 0 0 0-1.6H16Z"></path><path fill="#E0922A" d="M5.6 8.2a2.4 2.4 0 0 1 .5-4.55A2.9 2.9 0 0 1 11 2.3a2.9 2.9 0 0 1 4.9 1.35 2.4 2.4 0 0 1 .5 4.55Z"></path> </svg>`,
@@ -2112,12 +2112,19 @@ function renderHumorChart(){
   _hC=new Chart(ctx,{type:'line',data:{labels:lbs,datasets:[{label:'Humor',data:vals,borderColor:'rgba(76,175,90,.8)',backgroundColor:'rgba(76,175,90,.08)',tension:.4,pointBackgroundColor:'#4CAF5A',pointRadius:4,spanGaps:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10,family:'DM Sans'}}},y:{display:false,min:0,max:6}}}});
 }
 
+
 function renderCartas(){
   const cartas=gCt();const c=document.getElementById('cartas-l');const hj=new Date();hj.setHours(0,0,0,0);
   if(!cartas.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 13px">Nenhuma carta ainda. Escreva uma para você do futuro!</div>';return;}
   c.innerHTML=cartas.map((ct,i)=>{const ab=new Date(ct.abre);ab.setHours(0,0,0,0);const pode=hj>=ab;const dias=Math.max(0,Math.round((ab-hj)/864e5));
     return pode?`<div class="carta ok"><div class="cartai">✉️</div><div class="cartat">Carta para mim</div><div class="cartax" style="margin-top:6px">${esc(ct.texto)}</div><div class="cartabg">✓ Disponível para leitura</div></div>`:`<div class="carta"><div class="cartai">✉️</div><div class="cartat">Carta para mim</div><div class="cartax">Escrita em ${fdt(ct.data)}. Disponível em ${dias} dias.</div><div class="cartabg">🔒 Abre em ${fdt(ct.abre)}</div></div>`;
   }).join('');
+}
+function salvCarta(){
+  blurAll();const tx=document.getElementById('carta-tx').value.trim();if(!tx){toast('⚠️ Escreva sua carta.');return;}
+  const prazo=parseInt(document.getElementById('carta-prazo').value);const ab=new Date();ab.setHours(12,0,0,0);ab.setDate(ab.getDate()+prazo);
+  const c={id:'c'+Date.now(),texto:tx,data:hoje(),abre:isoLocal(ab),prazo};
+  const cs=gCt();cs.push(c);sCt(cs);document.getElementById('carta-tx').value='';closeMod('mcarta');toast('✉️ Carta guardada! Disponível em '+prazo+' dias.');renderCartas();
 }
 
 function salvCarta(){
