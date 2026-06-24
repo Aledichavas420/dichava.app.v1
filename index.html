@@ -1694,6 +1694,38 @@ const SUBICONS={
 
 const SUBS_REG=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','🍄 Cogumelo','🌀 Ketamina','🔥 Crack','🌸 Opioide','💤 Benzodiaz.','🌿✨ Ayahuasca','☕ Cafeína','➕ Outra'];
 const SUBS_FISS=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','➕ Outra'];
+function subKey(s){
+  if(!s)return 'outra';
+  s=s.toLowerCase();
+  if(s.includes('álcool')||s.includes('alcool')||s.includes('cerveja'))return 'alcool';
+  if(s.includes('cannabis')||s.includes('maconha'))return 'cannabis';
+  if(s.includes('tabaco')||s.includes('cigarro'))return 'tabaco';
+  if(s.includes('crack'))return 'crack';
+  if(s.includes('cocaína')||s.includes('cocaina'))return 'cocaina';
+  if(s.includes('mdma')||s.includes('ecstasy'))return 'mdma';
+  if(s.includes('lsd'))return 'lsd';
+  if(s.includes('cogumelo'))return 'cogumelo';
+  if(s.includes('ketamina')||s.includes('keta'))return 'ketamina';
+  if(s.includes('opioide')||s.includes('opi'))return 'opioide';
+  if(s.includes('benzo'))return 'benzo';
+  if(s.includes('ayahuasca'))return 'ayahuasca';
+  if(s.includes('cafeína')||s.includes('cafeina')||s.includes('café'))return 'cafeina';
+  return 'outra';
+}
+function subIcon(s){return SUBICONS[subKey(s)]||SUBICONS['outra'];}
+
+
+/* ══ DIAGNÓSTICO ══ */
+window.onerror=function(msg,src,ln){
+  try{
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;top:0;left:0;right:0;background:#B71C1C;color:#fff;font:12px/1.5 monospace;padding:10px 14px;z-index:99999;word-break:break-word';
+    d.innerHTML='⚠️ <b>Erro no app:</b> '+msg+' (linha '+ln+')<br><small>Tire um print desta mensagem.</small>';
+    d.onclick=function(){d.remove()};
+    document.body.appendChild(d);
+  }catch(e){}
+  return false;
+}
 function montarSubGrid(gridId,lista){
   const grid=document.getElementById(gridId);if(!grid||grid.dataset.done)return;
   const target=grid.dataset.target;
