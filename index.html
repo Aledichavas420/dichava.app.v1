@@ -343,9 +343,17 @@ a{color:inherit;text-decoration:none}
 .fssit{font-size:13px;color:var(--txs);line-height:1.55;margin-top:4px}
 .fssibg{display:inline-flex;align-items:center;gap:4px;background:var(--vf);color:var(--ve);font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:5px}
 
-/* CARTA */
-.carta{background:linear-gradient(135deg,var(--ams),#fff);border-radius:17px;border:2px dashed var(--am);padding:18px;margin:0 18px 10px}
-.carta.ok{background:#fff;border-style:solid;border-color:var(--vc)}
+/* CARTA — seção destacada */
+.ref-sec-carta{background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:20px;padding:16px 0 6px;margin:0 18px 14px;overflow:hidden;position:relative}
+.ref-sec-carta::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--am);opacity:.12;pointer-events:none}
+.ref-carta-hd{display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:12px}
+.ref-carta-hd-left{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--dk);display:flex;align-items:center}
+.ref-carta-nova{background:var(--am);border:none;color:var(--dk);border-radius:10px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif}
+#shell.dkm .ref-sec-carta{background:linear-gradient(135deg,#2A2410,#1E1C0E);border-color:#8a7a2a}
+#shell.dkm .ref-carta-hd-left{color:#E9EFE7}
+#shell.dkm .ref-carta-nova{background:#8a7a2a;color:#E9EFE7}
+.carta{background:rgba(255,255,255,.7);border-radius:14px;border:1.5px dashed rgba(160,130,0,.35);padding:15px 18px;margin:0 14px 9px;backdrop-filter:blur(4px)}
+.carta.ok{background:rgba(255,255,255,.95);border-style:solid;border-color:var(--vc)}
 .cartai{font-size:26px;margin-bottom:7px}
 .cartat{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--dk);margin-bottom:4px}
 .cartax{font-size:13px;color:var(--txs);line-height:1.6}
@@ -526,7 +534,7 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .cald.hj{background:#4CAF5A;color:#0E140E}
 #shell.dkm .fab{border-color:#141A14}
 #shell.dkm #toast{background:#32402F;color:#E9EFE7}
-#shell.dkm .carta{background:#2E2913;border-color:#8a7a2a}
+#shell.dkm .carta{background:rgba(255,255,255,.06);border-color:rgba(138,122,42,.5)}
 #shell.dkm .carta.ok{background:#1D2520;border-color:#3E6B44}
 #shell.dkm .cartabg{background:#8a7a2a;color:#141A14}
 #shell.dkm .mcbg.band{background:#3B3413;color:#D9C46A}
@@ -1538,7 +1546,106 @@ const ARTS=[
   {id:'sono',ic:'🌙',bg:'#E3F2FD',tag:'Saúde',ti:'Como o álcool afeta o seu sono',tm:'4 min',corpo:`<h3>O paradoxo do álcool e o sono</h3><p>O álcool é um depressor do sistema nervoso central e pode facilitar o adormecer — mas piora profundamente a qualidade do sono. Isso cria um ciclo perigoso: você usa para dormir, dorme mal, acorda cansado(a), e a vontade de usar aumenta no dia seguinte.</p><h3>O que acontece na prática</h3><p>O álcool suprime o sono REM (a fase do sonho e da consolidação emocional). Você acorda mais vezes durante a madrugada, mesmo sem perceber. A respiração fica irregular. Você acorda com a sensação de não ter descansado.</p><h3>O ciclo vicioso</h3><p>Privação de sono aumenta impulsividade e reduz a capacidade de resistir ao craving. É um fator de risco real para o aumento do uso. Quebrar esse ciclo — mesmo com pequenas melhorias no sono — pode ter impacto direto na sua relação com o álcool.</p><h3>O que ajuda</h3><p>Evitar álcool nas 3-4 horas antes de dormir. Rotina de sono consistente. Temperatura do quarto ligeiramente fria. Exposição à luz natural pela manhã. Técnicas de relaxamento antes de deitar.</p>`},
   {id:'settsetting',ic:'🧘',bg:'#F3E5F5',tag:'Psicodélicos',ti:'Set & setting: a base da experiência segura',tm:'5 min',corpo:`<h3>O que são set e setting</h3><p>Set (mindset) é o estado mental, emocional e psicológico com que você entra numa experiência. Setting é o ambiente físico e social ao redor. Décadas de pesquisa confirmaram: esses dois fatores são os principais determinantes de se uma experiência psicodélica será positiva ou difícil.</p><h3>Set: o que preparar internamente</h3><p>Defina uma intenção: por que você está fazendo isso? Evite experiências em momentos de crise emocional intensa, luto recente ou instabilidade mental não trabalhada.</p><h3>Setting: o que preparar externamente</h3><p>Ambiente seguro, limpo e confortável. Pessoas de confiança — de preferência alguém sóbrio (tripper sitter). Música cuidadosamente escolhida. Sem compromissos nas próximas 24h. Kit de segurança: água, frutas, cobertor, recipiente caso precise vomitar.</p><h3>Integração: o que vem depois</h3><p>A integração é o processo de dar sentido ao que aconteceu. Escrever, conversar com alguém de confiança ou com um profissional de saúde mental é parte fundamental de uma experiência saudável com psicodélicos.</p>`},
   {id:'rdconceito',ic:'🛡️',bg:'#E0F2F1',tag:'Redução de Danos',ti:'O que é redução de danos, de verdade',tm:'3 min',corpo:`<h3>Não é sobre aprovar o uso</h3><p>Redução de danos (RD) é uma política de saúde pública e uma prática clínica baseada em evidências que parte de uma premissa simples: o uso de substâncias existe, existiu e vai continuar existindo. A pergunta relevante não é "como eliminar o uso?" mas "como reduzir o sofrimento causado por ele?"</p><h3>O que RD é na prática</h3><p>Distribuição de kits de reagente para testar substâncias. Troca de seringas. Espaços de consumo supervisionado. Informação sobre interações perigosas. Acompanhamento clínico sem exigência de abstinência. Este app.</p><h3>Por que funciona</h3><p>Porque parte do encontro com a pessoa onde ela está, sem julgamento. Porque reconhece que autonomia e dignidade são parte de qualquer processo de cuidado real. Porque o vínculo terapêutico sem julgamento frequentemente transforma.</p>`},
-  {id:'gatilhos',ic:'⚡',bg:'#FFF9C4',tag:'Psicologia',ti:'Entendendo seus gatilhos de uso',tm:'4 min',corpo:`<h3>O que são gatilhos</h3><p>Gatilhos são estímulos — internos ou externos — que ativam o desejo de usar. Podem ser pessoas, lugares, horários, emoções, cheiros, sons ou situações específicas. Com o uso repetido, o cérebro cria associações automáticas: certo ambiente → ativa circuito de recompensa → vontade de usar.</p><h3>Tipos de gatilhos</h3><p><strong>Emocionais:</strong> estresse, ansiedade, solidão, tédio, raiva, euforia, celebração.<br><strong>Sociais:</strong> determinadas pessoas, grupos, situações sociais.<br><strong>Contextuais:</strong> lugares específicos, horários, rotinas.<br><strong>Sensoriais:</strong> ver, cheirar ou ouvir algo associado ao uso.</p><h3>Como o registro ajuda</h3><p>Identificar padrões de gatilhos ao longo do tempo é uma das ferramentas mais poderosas da redução de danos. Quando você sabe o que dispara o desejo, pode planejar: ter um plano para esse momento, criar alternativas, ou simplesmente estar mais consciente e menos reativo.</p>`},
+  {id:'gatilhos',ic:'⚡',bg:'#FFF9C4',tag:'Psicologia',ti:'Entendendo seus gatilhos de uso',tm:'4 min',corpo:`<h3>O que são gatilhos</h3><p>Gatilhos são estímulos — internos ou externos — que ativam o desejo de usar. Podem ser pessoas, lugares, horários, emoções, cheiros, sons ou situações específicas. Com o uso repetido, o cérebro cria associações automáticas: certo ambiente → ativa circuito de recompensa → vontade de usar.</p><h3>Tipos de gatilhos</h3><p><strong>Emocionais:</strong> estresse, ansiedade, solidão, tédio, raiva, euforia, celebração.<br><strong>Sociais:</strong> determinadas pessoas, grupos, situações sociais.<br><strong>Contextuais:</strong> lugares específicos, horários, rotinas.<br><strong>Sensoriais:</strong> ver, cheirar ou ouvir algo associado ao uso.</p><h3>Como o registro ajuda</h3><p>Identificar padrões de gatilhos ao longo do tempo é uma das ferramentas mais poderosas da redução de danos. Quando você sabe o que dispara o desejo, pode planejar: ter um plano para esse momento, criar alternativas, ou simplesmente estar mais consciente e menos reativo.</p>`},,
+  {id:'recaida',bg:'#FCE4EC',tag:'Autocompaixão',ti:'Recaída não é fracasso: o que a ciência diz',tm:'4 min',svg:`<svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="80" fill="#FCE4EC"/>
+  <!-- espiral ascendente (recomeço) -->
+  <path d="M100 65 Q130 60 135 45 Q140 30 120 22 Q100 14 80 22 Q60 30 65 45 Q70 58 90 63" fill="none" stroke="#EC407A" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+  <!-- seta para cima -->
+  <path d="M90 63 L95 52 L100 65 Z" fill="#EC407A" opacity=".6"/>
+  <!-- coração renovado -->
+  <path d="M97 32 Q97 26 100 26 Q106 26 106 32 Q106 39 100 43 Q94 39 94 32Z" fill="#E91E63" opacity=".35"/>
+  <!-- folha de esperança -->
+  <path d="M55 55 Q60 42 72 45 Q60 48 55 55Z" fill="#66BB6A" opacity=".6"/>
+  <line x1="55" y1="55" x2="63" y2="47" stroke="#4CAF5A" stroke-width="1.2" opacity=".5"/>
+  <path d="M135 58 Q148 45 155 50 Q148 53 135 58Z" fill="#66BB6A" opacity=".5"/>
+  <!-- estrelas de esperança -->
+  <circle cx="30" cy="20" r="2" fill="#F48FB1" opacity=".6"/>
+  <circle cx="170" cy="15" r="2.5" fill="#F48FB1" opacity=".5"/>
+  <circle cx="25" cy="45" r="1.5" fill="#F48FB1" opacity=".4"/>
+  <circle cx="178" cy="48" r="1.5" fill="#F48FB1" opacity=".4"/>
+</svg>`,corpo:`<h3>O mito do fracasso</h3><p>A ideia de que uma recaída apaga todo o progresso é um dos maiores obstáculos ao cuidado. Ela não é verdadeira. Do ponto de vista neurológico, cada período sem usar ou reduzindo o uso constrói novas conexões cerebrais — e elas não desaparecem com um episódio de uso. O progresso é cumulativo, mesmo quando não parece.</p><h3>O que os dados mostram</h3><p>A dependência química é classificada pela OMS como uma condição crônica, assim como diabetes e hipertensão. Para essas condições, recaída não é falha — é parte esperada do curso da doença. Taxas de recaída em dependência química variam entre 40% e 60%, similares às de outras condições crônicas como hipertensão (40-60%) e asma (50-70%). O padrão é: tentativa, recaída, ajuste, nova tentativa. Não: tentativa perfeita ou fracasso total.</p><h3>O que fazer quando acontece</h3><p>Não catastrofizar: um episódio não é uma queda livre. Observar sem punir: o que levou a esse momento? Que gatilho, que estado emocional, que contexto? Retomar o acompanhamento o quanto antes — a janela de engajamento após uma recaída é importante. Conversar com alguém de confiança ou profissional. Ajustar o plano com base no que você aprendeu.</p><h3>Autocompaixão como estratégia clínica</h3><p>Pesquisas de Kristin Neff e outros mostram que autocompaixão — tratar a si mesmo com a mesma gentileza que você trataria um amigo — está associada a menor duração das recaídas e maior capacidade de retomar o cuidado. Culpa excessiva, paradoxalmente, aumenta o risco de continuar usando.</p>`},
+  {id:'dependencia',bg:'#FFF3E0',tag:'Saúde Mental',ti:'Dependência química: o que é, o que não é',tm:'5 min',svg:`<svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="80" fill="#FFF3E0"/>
+  <!-- corrente e chave (libertação) -->
+  <!-- elos da corrente -->
+  <ellipse cx="65" cy="42" rx="10" ry="6" fill="none" stroke="#FF8F00" stroke-width="2.5" opacity=".5" transform="rotate(-30 65 42)"/>
+  <ellipse cx="80" cy="38" rx="10" ry="6" fill="none" stroke="#FF8F00" stroke-width="2.5" opacity=".5" transform="rotate(-30 80 38)"/>
+  <ellipse cx="95" cy="42" rx="10" ry="6" fill="none" stroke="#FF8F00" stroke-width="2.5" opacity=".5" transform="rotate(-30 95 42)"/>
+  <!-- elo partido -->
+  <path d="M104 40 Q112 34 116 42" fill="none" stroke="#FF8F00" stroke-width="2.5" opacity=".5" stroke-dasharray="3 2"/>
+  <!-- chave dourada -->
+  <circle cx="140" cy="36" r="9" fill="none" stroke="#FFD600" stroke-width="2.8" opacity=".8"/>
+  <circle cx="140" cy="36" r="4" fill="#FFD600" opacity=".4"/>
+  <rect x="148" y="33" width="18" height="4" rx="2" fill="#FFD600" opacity=".8"/>
+  <rect x="158" y="37" width="5" height="4" rx="1.5" fill="#FFD600" opacity=".7"/>
+  <rect x="164" y="37" width="4" height="4" rx="1.5" fill="#FFD600" opacity=".7"/>
+  <!-- caminho de liberação -->
+  <path d="M115 42 Q128 52 140 45" fill="none" stroke="#FFB300" stroke-width="1.5" opacity=".4" stroke-dasharray="3 2"/>
+  <!-- base -->
+  <path d="M20 68 Q100 58 180 68" fill="#FF8F00" opacity=".1"/>
+</svg>`,corpo:`<h3>Além do estereótipo</h3><p>Dependência química raramente se parece com o estereótipo popular. A maioria das pessoas com uso problemático de substâncias trabalha, cuida da família, mantém relações sociais. A dependência existe num espectro — de uso ocasional com baixo risco a uso compulsivo com prejuízo significativo — e a maioria das pessoas está em algum ponto intermediário.</p><h3>O que caracteriza dependência</h3><p>Perda de controle sobre quantidade ou frequência. Uso contínuo apesar de consequências claras (saúde, trabalho, relações). Tolerância crescente: precisa de mais para o mesmo efeito. Síndrome de abstinência ao tentar parar. Tempo excessivo obtendo, usando ou se recuperando. Abandono de atividades importantes por causa do uso. Craving intenso e frequente.</p><h3>Fatores de risco</h3><p>Genética (responsável por cerca de 50% da vulnerabilidade). Trauma, especialmente na infância. Transtornos de saúde mental não tratados. Ambiente social com uso normalizado. Início precoce do uso. Falta de vínculos sociais de qualidade. Nenhum desses fatores é determinístico — são probabilidades, não destinos.</p><h3>Tratamentos com evidência</h3><p><strong>Entrevista Motivacional:</strong> abordagem empática que explora motivações internas para mudança. <strong>Terapia Cognitivo-Comportamental:</strong> identifica e muda padrões de pensamento que mantêm o uso. <strong>Farmacoterapia:</strong> para álcool (naltrexona, dissulfiram), opioides (metadona, buprenorfina), nicotina (vareniclina). <strong>Grupos de apoio:</strong> AA, NA, SMART Recovery — evidências sólidas para manutenção. <strong>Redução de danos:</strong> eficaz quando abstinência não é o objetivo imediato ou possível.</p>`},
+  {id:'cannabis',bg:'#F1F8E9',tag:'Cannabis',ti:'Cannabis: efeitos, riscos e uso mais seguro',tm:'5 min',svg:`<svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="80" fill="#F1F8E9"/>
+  <!-- folha de cannabis estilizada -->
+  <path d="M100 60 L100 30" stroke="#558B2F" stroke-width="2" opacity=".4"/>
+  <!-- folhas em leque -->
+  <path d="M100 45 Q80 25 65 20 Q80 35 100 45Z" fill="#8BC34A" opacity=".55"/>
+  <path d="M100 45 Q120 25 135 20 Q120 35 100 45Z" fill="#8BC34A" opacity=".55"/>
+  <path d="M100 40 Q72 30 58 35 Q75 38 100 40Z" fill="#7CB342" opacity=".5"/>
+  <path d="M100 40 Q128 30 142 35 Q125 38 100 40Z" fill="#7CB342" opacity=".5"/>
+  <path d="M100 36 Q78 20 75 8 Q88 22 100 36Z" fill="#9CCC65" opacity=".5"/>
+  <path d="M100 36 Q122 20 125 8 Q112 22 100 36Z" fill="#9CCC65" opacity=".5"/>
+  <path d="M100 32 Q100 12 100 8" stroke="#558B2F" stroke-width="1.5" opacity=".5"/>
+  <!-- caule -->
+  <rect x="97" y="55" width="6" height="18" rx="3" fill="#6D4C41" opacity=".4"/>
+  <!-- névoa de fumaça leve -->
+  <ellipse cx="155" cy="25" rx="22" ry="14" fill="#fff" opacity=".3"/>
+  <ellipse cx="168" cy="18" rx="14" ry="9" fill="#fff" opacity=".25"/>
+  <!-- pontinhos de glândulas -->
+  <circle cx="88" cy="30" r="1.5" fill="#F9A825" opacity=".5"/>
+  <circle cx="100" cy="25" r="1.5" fill="#F9A825" opacity=".5"/>
+  <circle cx="112" cy="30" r="1.5" fill="#F9A825" opacity=".5"/>
+</svg>`,corpo:`<h3>O que é cannabis, de verdade</h3><p>Cannabis é uma planta com mais de 100 canabinoides identificados. Os principais são THC (tetrahidrocanabinol), responsável pelos efeitos psicoativos, e CBD (canabidiol), que tem efeitos ansiolíticos e pode moderar os efeitos do THC. A proporção entre eles varia muito entre variedades — e isso muda bastante o perfil de risco.</p><h3>Efeitos comuns</h3><p>Euforia, relaxamento, aumento da percepção sensorial, alteração da percepção do tempo, aumento do apetite. Com doses mais altas ou THC muito elevado: ansiedade, paranoia, taquicardia, desorientação temporal. Efeitos variam muito entre pessoas e contextos — o mesmo produto pode ser relaxante uma vez e ansiolítico outra.</p><h3>Riscos reais (sem exagero)</h3><p><strong>Saúde mental:</strong> uso frequente, especialmente com THC alto, aumenta risco de episódios de ansiedade e psicose em pessoas predispostas. Se você tem histórico familiar de psicose ou esquizofrenia, cautela adicional é warranted. <strong>Memória:</strong> uso intenso e precoce (adolescência) está associado a prejuízos de memória de curto prazo. <strong>Pulmões:</strong> fumar qualquer coisa irrita as vias aéreas — vaporização é menos agressiva. <strong>Dependência:</strong> cerca de 9% dos usuários desenvolvem algum grau de dependência; o risco sobe para 17% quando o início é na adolescência.</p><h3>Uso mais seguro</h3><p>Prefira variedades com menor relação THC/CBD. Vaporizadores são menos agressivos ao pulmão do que fumar. Comestíveis têm início tardio (30-90min) — espere o efeito completo antes de repetir. Evite usar em momentos de estresse intenso ou instabilidade emocional. Não misture com álcool sem conhecer bem sua resposta à combinação. Intervalos entre usos permitem resetar a tolerância.</p>`},
+  {id:'alcool',bg:'#FFF8E1',tag:'Álcool',ti:'Álcool: o mais normalizado dos riscos',tm:'5 min',svg:`<svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="80" fill="#FFF8E1"/>
+  <!-- copo -->
+  <path d="M80 18 L88 58 Q88 64 100 64 Q112 64 112 58 L120 18 Z" fill="#FFA726" opacity=".3"/>
+  <path d="M80 18 L87 52 Q88 58 100 58 Q112 58 113 52 L120 18 Z" fill="#FFB74D" opacity=".2"/>
+  <!-- líquido no copo -->
+  <path d="M84 30 L115 30 L112 58 Q112 64 100 64 Q88 64 88 58 Z" fill="#FFD54F" opacity=".45"/>
+  <!-- bolhas no copo -->
+  <circle cx="93" cy="48" r="2" fill="#fff" opacity=".5"/>
+  <circle cx="100" cy="42" r="1.5" fill="#fff" opacity=".4"/>
+  <circle cx="107" cy="50" r="2" fill="#fff" opacity=".5"/>
+  <!-- grãos de cevada -->
+  <ellipse cx="38" cy="38" rx="8" ry="16" fill="#A5D6A7" opacity=".5" transform="rotate(-20 38 38)"/>
+  <ellipse cx="52" cy="32" rx="7" ry="14" fill="#81C784" opacity=".4" transform="rotate(-10 52 32)"/>
+  <!-- ondas de efeito -->
+  <path d="M130 35 Q145 28 155 35 Q165 42 175 35" fill="none" stroke="#FFA000" stroke-width="1.8" opacity=".35" stroke-linecap="round"/>
+  <path d="M133 44 Q148 37 158 44 Q168 51 178 44" fill="none" stroke="#FFA000" stroke-width="1.4" opacity=".25" stroke-linecap="round"/>
+  <!-- sinal de atenção -->
+  <path d="M23 55 L30 42 L37 55 Z" fill="#F44336" opacity=".35"/>
+  <text x="29" y="53" font-size="9" fill="#fff" opacity=".9" font-weight="700" font-family="sans-serif">!</text>
+</svg>`,corpo:`<h3>A droga mais aceita e subestimada</h3><p>O álcool causa mais mortes e incapacidade no Brasil do que todas as outras drogas combinadas — incluindo crack e cocaína. Essa estatística existe em paralelo com sua aceitação social quase universal. A normalização cultural não reduz o dano; apenas torna mais difícil reconhecê-lo e pedir ajuda.</p><h3>O que acontece no corpo</h3><p>Álcool é um depressor do sistema nervoso central. Em doses baixas, inibe os sistemas inibitórios primeiro — daí a sensação inicial de desinibição e euforia. Com doses maiores, deprime coordenação motora, julgamento, reflexos e, em doses altas, centros de controle respiratório. A margem entre dose euforizante e dose perigosa é menor do que muita gente imagina.</p><h3>Síndrome de abstinência: o risco silencioso</h3><p>Ao contrário de muitas outras substâncias, a abstinência de álcool em pessoas com dependência severa pode ser fatal. Sintomas incluem tremores, sudorese, confusão, convulsões e, no caso mais grave, delirium tremens. Se você usa álcool diariamente em grandes quantidades e quer parar, converse com um profissional antes — a retirada deve ser acompanhada.</p><h3>Referências de uso de baixo risco</h3><p>A OMS e o Ministério da Saúde brasileiro utilizam como referência: no máximo 1 dose/dia para mulheres, 2 doses/dia para homens, com ao menos 2 dias sem uso por semana, e nunca mais de 4 doses num único episódio. Uma dose = 1 lata de cerveja 350ml / 1 taça de vinho 150ml / 1 dose de destilado 40ml. São referências, não metas — qualquer redução tem valor.</p><h3>Redução prática</h3><p>Hidratação: 1 copo d'água entre cada bebida alcoólica. Comer antes e durante. Estabelecer um limite antes de começar. Identificar os contextos de maior risco (festas, estresse, solidão). Criar rituais alternativos para os horários de maior uso. Registrar — a consciência do padrão já muda o padrão.</p>`},
+  {id:'ansiedade',bg:'#EDE7F6',tag:'Saúde Mental',ti:'Ansiedade e uso de substâncias: o nó',tm:'4 min',svg:`<svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="80" fill="#EDE7F6"/>
+  <!-- ondas de ansiedade (espiral) -->
+  <path d="M100 40 Q110 30 120 40 Q130 50 120 60 Q110 70 100 60 Q90 50 100 40Z" fill="none" stroke="#9575CD" stroke-width="2" opacity=".4"/>
+  <path d="M100 40 Q115 22 130 40 Q145 58 130 70 Q115 82 100 70 Q85 58 100 40Z" fill="none" stroke="#7E57C2" stroke-width="1.5" opacity=".3"/>
+  <path d="M100 40 Q120 14 140 40 Q160 66 140 80 Q120 94 100 80 Q80 66 100 40Z" fill="none" stroke="#673AB7" stroke-width="1" opacity=".18"/>
+  <!-- figura respirando (centro) -->
+  <circle cx="100" cy="40" r="10" fill="#B39DDB" opacity=".6"/>
+  <path d="M96 40 Q100 36 104 40 Q100 44 96 40Z" fill="#fff" opacity=".7"/>
+  <!-- pulmões -->
+  <ellipse cx="82" cy="52" rx="9" ry="14" fill="#CE93D8" opacity=".3" transform="rotate(10 82 52)"/>
+  <ellipse cx="118" cy="52" rx="9" ry="14" fill="#CE93D8" opacity=".3" transform="rotate(-10 118 52)"/>
+  <!-- pontos de tensão -->
+  <circle cx="35" cy="22" r="3" fill="#7C4DFF" opacity=".3"/>
+  <circle cx="165" cy="18" r="2.5" fill="#7C4DFF" opacity=".25"/>
+  <circle cx="25" cy="55" r="2" fill="#7C4DFF" opacity=".2"/>
+  <circle cx="175" cy="60" r="2" fill="#7C4DFF" opacity=".2"/>
+</svg>`,corpo:`<h3>Causa ou consequência?</h3><p>Ansiedade e uso de substâncias estão profundamente entrelaçados. Muitas pessoas começam a usar — ou aumentam o uso — para aliviar ansiedade. Com o tempo, substâncias que inicialmente reduzem a ansiedade (álcool, benzodiazepínicos, cannabis em baixas doses) podem, paradoxalmente, aumentá-la: pela ressaca, pelo ciclo de dependência, pela ansiedade de abstinência. É um nó difícil de desatar — mas possível.</p><h3>O ciclo</h3><p>Ansiedade → uso como alívio → alívio temporário → ressaca/abstinência aumenta ansiedade → mais uso para aliviar → tolerância cresce → ansiedade de base aumenta. Esse ciclo pode se estabelecer de forma gradual, sem que a pessoa perceba que o que está "aliviando" está também alimentando o problema.</p><h3>Substâncias e ansiedade: o que saber</h3><p><strong>Álcool:</strong> alivia no curto prazo, piora estruturalmente com uso frequente. A ressaca inclui componente ansioso real. <strong>Cannabis:</strong> THC alto pode intensificar ansiedade, especialmente em predispostos. CBD tem efeito ansiolítico. <strong>Cafeína:</strong> estimulante que pode exacerbar ansiedade — muita gente ansiosa usa café em excesso sem perceber a conexão. <strong>Cocaína/anfetaminas:</strong> podem desencadear episódios de pânico mesmo em pessoas sem histórico.</p><h3>O que ajuda de verdade</h3><p>Tratamento da ansiedade com psicoterapia (TCC, especialmente) tem evidências sólidas. Técnicas de regulação nervosa autônoma: respiração, exercício físico regular, exposição gradual. Reduzir ou pausar substâncias ansiogênicas — pode ser necessário fazer isso gradualmente. Entender que ansiedade sem causa aparente muitas vezes tem causas biológicas tratáveis — não é fraqueza. E que pedir ajuda é parte do cuidado.</p>`}
 ];
 const GRPS=[
   {n:'5',i:'👁️',t:'5 coisas que você VÊ',x:'Olhe ao redor. Nomeie 5 coisas que consegue ver agora. Pode ser qualquer coisa — uma cor, um objeto, uma textura.'},
