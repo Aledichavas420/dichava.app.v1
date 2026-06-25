@@ -873,22 +873,22 @@ a{color:inherit;text-decoration:none}
   <!-- CRISE + FISSURA -->
   <div class="qag">
     <div class="qac" style="background:var(--erf);--acc:var(--er)" onclick="showV('vcrise')">
-      <div class="qaic">🆘</div>
+      <div class="qaic" data-icon="emergencia"></div>
       <div class="qat" style="color:#E05555">Ajuda de emergência</div>
       <div class="qad" style="color:#D07070">Mal-estar, crise, overdose</div>
     </div>
     <div class="qac" style="background:var(--roxof);--acc:var(--roxo)" onclick="openMod('mfiss')">
-      <div class="qaic">💪</div>
+      <div class="qaic" data-icon="resistencia"></div>
       <div class="qat" style="color:var(--roxo)">Resistência ativa</div>
       <div class="qad" style="color:var(--roxo)">Quis usar e não usou? Registre</div>
     </div>
     <div class="qac" style="background:var(--saf);--acc:var(--sa)" onclick="openCombo()">
-      <div class="qaic">⚗️</div>
+      <div class="qaic" data-icon="misturar"></div>
       <div class="qat" style="color:var(--sa)">Vai misturar?</div>
       <div class="qad" style="color:var(--sa)">Tabela de interações</div>
     </div>
     <div class="qac" style="background:var(--vf);--acc:var(--ve)" onclick="openFAQ()">
-      <div class="qaic">💬</div>
+      <div class="qaic" data-icon="duvidas"></div>
       <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
       <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
     </div>
@@ -898,7 +898,7 @@ a{color:inherit;text-decoration:none}
       <div class="qad" style="color:#4A82C0">Rede de psi e psiquiatras</div>
     </div>
     <div class="qac" style="background:#FFF4E6;--acc:#C2700A" onclick="goPg('p-jogos')">
-      <div class="qaic">🎮</div>
+      <div class="qaic" data-icon="pausa-mente"></div>
       <div class="qat" style="color:#C2700A">Pausa pra mente</div>
       <div class="qad" style="color:#D08A2E">Jogos pra atravessar a fissura</div>
     </div>
@@ -926,12 +926,12 @@ a{color:inherit;text-decoration:none}
 <div class="zen-sc">
   <div class="zen-sec">Sons da natureza · em loop</div>
   <div class="snd-row">
-    <div class="snd zc-blue" data-snd="rain" onclick="toggleSom('rain',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🌧️</div><h5>Chuva</h5><p>Calma e constante</p></div>
-    <div class="snd zc-teal" data-snd="ocean" onclick="toggleSom('ocean',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🌊</div><h5>Oceano</h5><p>Ondas lentas</p></div>
-    <div class="snd zc-dark" data-snd="night" onclick="toggleSom('night',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🦗</div><h5>Noite</h5><p>Grilos e calma</p></div>
-    <div class="snd zc-teal" data-snd="stream" onclick="toggleSom('stream',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🏞️</div><h5>Riacho</h5><p>Água corrente</p></div>
-    <div class="snd zc-dark" data-snd="wind" onclick="toggleSom('wind',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🍃</div><h5>Vento</h5><p>Brisa entre folhas</p></div>
-    <div class="snd zc-blue" data-snd="forest" onclick="toggleSom('forest',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si">🌲</div><h5>Floresta</h5><p>Pássaros e mata</p></div>
+    <div class="snd zc-blue" data-snd="rain" onclick="toggleSom('rain',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-chuva"></div><h5>Chuva</h5><p>Calma e constante</p></div>
+    <div class="snd zc-teal" data-snd="ocean" onclick="toggleSom('ocean',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-oceano"></div><h5>Oceano</h5><p>Ondas lentas</p></div>
+    <div class="snd zc-dark" data-snd="night" onclick="toggleSom('night',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-noite"></div><h5>Noite</h5><p>Grilos e calma</p></div>
+    <div class="snd zc-teal" data-snd="stream" onclick="toggleSom('stream',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-riacho"></div><h5>Riacho</h5><p>Água corrente</p></div>
+    <div class="snd zc-dark" data-snd="wind" onclick="toggleSom('wind',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-vento"></div><h5>Vento</h5><p>Brisa entre folhas</p></div>
+    <div class="snd zc-blue" data-snd="forest" onclick="toggleSom('forest',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-floresta"></div><h5>Floresta</h5><p>Pássaros e mata</p></div>
   </div>
   <div class="snd-times" id="snd-times">
     <div class="snd-time" data-min="5" onclick="setSomTempo(5,this)">5 min</div>
@@ -949,23 +949,23 @@ a{color:inherit;text-decoration:none}
   <div class="zen-sec" style="margin-top:24px">Jogos pra distrair</div>
   <div class="zen-grid">
     <div class="zcard zc-blue tall" onclick="abrirJogo('flap')">
-      <div class="zi">🐝</div>
+      <div class="zi" data-icon="jogo-abelha"></div>
       <div><h4>Voo da abelha</h4><p>Toque pra voar e desviar</p></div>
     </div>
     <div class="zcard zc-orange tall" onclick="abrirJogo('tetris')">
-      <div class="zi">🧱</div>
+      <div class="zi" data-icon="jogo-blocos"></div>
       <div><h4>Blocos</h4><p>Encaixe e complete linhas</p></div>
     </div>
     <div class="zcard zc-dark tall" onclick="abrirJogo('pong')">
-      <div class="zi">🏓</div>
+      <div class="zi" data-icon="jogo-pingpong"></div>
       <div><h4>Ping-pong retrô</h4><p>Estilo minigame anos 90</p></div>
     </div>
     <div class="zcard zc-pink tall" onclick="abrirJogo('pop')">
-      <div class="zi">🫧</div>
+      <div class="zi" data-icon="jogo-bolhas"></div>
       <div><h4>Estoura bolhas</h4><p>Foco no aqui e agora</p></div>
     </div>
     <div class="zcard zc-yellow tall" onclick="showV('vresp')" style="grid-column:span 2;min-height:120px;flex-direction:row;align-items:center;gap:16px">
-      <div class="zi">🫁</div>
+      <div class="zi" data-icon="jogo-respiracao"></div>
       <div><h4>Respiração guiada</h4><p>Siga o círculo: inspira, segura, solta</p></div>
     </div>
   </div>
@@ -1111,7 +1111,7 @@ a{color:inherit;text-decoration:none}
   <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic" data-icon="agenda"></div><span>Agenda</span></button>
   <div class="fabw"><div class="fab" onclick="openMod('mreg')" data-icon="registrar">+</div></div>
   <button class="ni" data-p="p-prog" onclick="goPg('p-prog',this)"><div class="ni-ic" data-icon="progresso"></div><span>Progresso</span></button>
-  <button class="ni" data-p="p-ref" onclick="goPg('p-ref',this)"><div class="ni-ic">✍️</div><span>Reflexões</span></button>
+  <button class="ni" data-p="p-ref" onclick="goPg('p-ref',this)"><div class="ni-ic" data-icon="reflexoes"></div><span>Reflexões</span></button>
   <button class="ni" data-p="p-cfg" onclick="goPg('p-cfg',this)"><div class="ni-ic">⚙️</div><span>Config.</span></button>
 </nav>
 
@@ -1694,6 +1694,8 @@ const SUBICONS={
 
 const SUBS_REG=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','🍄 Cogumelo','🌀 Ketamina','🔥 Crack','🌸 Opioide','💤 Benzodiaz.','🌿✨ Ayahuasca','☕ Cafeína','➕ Outra'];
 const SUBS_FISS=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','➕ Outra'];
+function subKey(nome){const m={'Álcool':'alcool','Cannabis':'cannabis','Tabaco':'tabaco','Cocaína':'cocaina','MDMA':'mdma','LSD':'lsd','Cogumelo':'cogumelo','Ketamina':'ketamina','Crack':'crack','Opioide':'opioide','Benzodiaz.':'benzo','Ayahuasca':'ayahuasca','Cafeína':'cafeina','Outra':'outra'};return m[nome]||'';}
+function subIcon(nome){const k=subKey(nome);return k&&SUBICONS[k]?SUBICONS[k]:'';}
 function montarSubGrid(gridId,lista){
   const grid=document.getElementById(gridId);if(!grid||grid.dataset.done)return;
   const target=grid.dataset.target;
