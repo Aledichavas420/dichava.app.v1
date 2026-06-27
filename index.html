@@ -343,6 +343,20 @@ a{color:inherit;text-decoration:none}
 .fssit{font-size:13px;color:var(--txs);line-height:1.55;margin-top:4px}
 .fssibg{display:inline-flex;align-items:center;gap:4px;background:var(--vf);color:var(--ve);font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:5px}
 
+/* SUBGRID — seletor de substâncias */
+.subgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.subbtn{display:flex;flex-direction:column;align-items:center;gap:7px;background:linear-gradient(160deg,#fff,#fafbfa);border:1.5px solid var(--cinm);border-radius:17px;padding:13px 5px 10px;cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.subbtn:active{transform:scale(.95)}
+.subbtn.on{border-color:var(--v);background:linear-gradient(160deg,var(--vf),#fff);box-shadow:0 3px 12px rgba(76,175,90,.22)}
+.subbtn .subicon,.subbtn svg{width:34px;height:34px;transition:transform .15s}
+.subbtn.on .subicon,.subbtn.on svg{transform:scale(1.08)}
+.subbtn span{font-size:11px;font-weight:700;color:var(--txs);text-align:center;line-height:1.2;letter-spacing:-.1px}
+.subbtn.on span{color:var(--ve)}
+#shell.dkm .subbtn{background:#212A21;border-color:#32402F;box-shadow:none}
+#shell.dkm .subbtn.on{border-color:var(--v);background:#1D3320}
+#shell.dkm .subbtn span{color:#ADBDA9}
+#shell.dkm .subbtn.on span{color:#7BD98A}
+
 /* CARTA — seção destacada */
 .ref-sec-carta{background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:20px;padding:16px 0 6px;margin:0 18px 14px;overflow:hidden;position:relative}
 .ref-sec-carta::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--am);opacity:.12;pointer-events:none}
@@ -626,18 +640,21 @@ a{color:inherit;text-decoration:none}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--cinm);background:var(--cin);font-size:16px;cursor:pointer;flex-shrink:0;transition:all .15s;align-self:flex-end}
 .micbtn.rec{background:var(--erf);border-color:var(--er);animation:cpul 1.4s infinite}
 
-/* ── FAQ CHAT ── */
+/* ── FAQ ACCORDION ── */
 .faq-sheet .sp{display:flex;flex-direction:column}
-.faq-chatw{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px 2px 6px;display:flex;flex-direction:column}
-.fbq{background:var(--cin);border-radius:13px 13px 13px 4px;padding:12px 15px;font-size:13px;line-height:1.7;color:var(--tx);margin-bottom:9px;max-width:94%}
-.fbu{background:var(--dk);color:#fff;border-radius:13px 13px 4px 13px;padding:9px 13px;font-size:13px;line-height:1.5;margin:0 0 9px auto;max-width:85%;font-weight:600}
-.faqq{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--cinm);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--tx);margin-bottom:8px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;font-weight:500}
-.faqq::before{content:'›';font-size:18px;color:var(--ve);font-weight:700;flex-shrink:0}
-.faqq:active{background:var(--vf);border-color:var(--v)}
 .faq-qsw{overflow-y:auto;-webkit-overflow-scrolling:touch}
-#shell.dkm .faqq{background:#1D2520;border-color:#32402F;color:#E9EFE7}
-#shell.dkm .faqq:active{background:#1D3320;border-color:#3E6B44}
-#shell.dkm .fbq{background:#212A21;color:#E9EFE7}
+.faqac{background:#fff;border:1.5px solid var(--cinm);border-radius:15px;margin-bottom:9px;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.faqac.open{border-color:var(--v);box-shadow:0 4px 16px rgba(76,175,90,.13)}
+.faqac-h{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:none;padding:13px 15px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.faqac-ic{font-size:18px;flex-shrink:0}
+.faqac-q{flex:1;font-size:13.5px;font-weight:600;color:var(--dk);line-height:1.35}
+.faqac-ar{font-size:21px;font-weight:400;color:var(--ve);flex-shrink:0;width:20px;text-align:center;line-height:1}
+.faqac-a{max-height:0;overflow:hidden;padding:0 15px;font-size:13px;line-height:1.7;color:var(--txs);transition:max-height .28s ease,padding .28s ease}
+.faqac.open .faqac-a{max-height:600px;padding:0 15px 15px}
+#shell.dkm .faqac{background:#1D2520;border-color:#32402F}
+#shell.dkm .faqac.open{border-color:#3E6B44}
+#shell.dkm .faqac-q{color:#E9EFE7}
+#shell.dkm .faqac-a{color:#ADBDA9}
 
 /* ── QUICK ACTIONS GRID ── */
 .qag{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 18px 13px}
@@ -902,7 +919,7 @@ a{color:inherit;text-decoration:none}
       <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
       <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
     </div>
-    <div class="qac" style="background:#EAF2FF;--acc:#2B6CB0" onclick="abrirProfs()">
+    <div class="qac" style="background:#EAF2FF;--acc:#2B6CB0;display:none" onclick="abrirProfs()">
       <div class="qaic">🩺</div>
       <div class="qat" style="color:#2B6CB0">Fale com um profissional</div>
       <div class="qad" style="color:#4A82C0">Rede de psi e psiquiatras</div>
@@ -1000,6 +1017,18 @@ a{color:inherit;text-decoration:none}
     <div class="calg" id="calg"></div>
   </div>
   <div id="ddet" style="display:none"></div>
+  <!-- DIÁRIO -->
+  <div class="shr" style="padding-top:4px"><div class="sht">Diário ✍️</div></div>
+  <div class="prc"><div class="prl">💭 Pergunta do dia</div><div class="prt" id="prt">—</div><button class="prb" onclick="respPrm()">Responder agora</button></div>
+  <div class="cmp" id="composer" onclick="focaCmp()">
+    <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
+    <div id="cmpex" style="display:none">
+      <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin:9px 0 7px">Como você está?</div>
+      <div class="emg" id="cmpemg"><button class="emb" onclick="selECmp(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selECmp(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selECmp(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selECmp(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selECmp(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
+      <div class="cmpact"><button class="btn bout bsm" onclick="fechaCmp()">Cancelar</button><button class="btn bsa bsm" onclick="salvRef()">Guardar</button></div>
+    </div>
+  </div>
+  <div id="ref-feed"></div>
 </div>
 </div>
 
@@ -1027,16 +1056,7 @@ a{color:inherit;text-decoration:none}
 <div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-ref">
 <div class="refh"><div class="refht">Reflexões</div><div class="refhs">Um espaço só seu, sem julgamento</div></div>
 <div class="sc scpad">
-  <div class="prc"><div class="prl">💭 Pergunta do dia</div><div class="prt" id="prt">—</div><button class="prb" onclick="respPrm()">Responder agora</button></div>
-  <div class="cmp" id="composer" onclick="focaCmp()">
-    <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
-    <div id="cmpex" style="display:none">
-      <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin:9px 0 7px">Como você está?</div>
-      <div class="emg" id="cmpemg"><button class="emb" onclick="selECmp(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selECmp(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selECmp(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selECmp(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selECmp(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
-      <div class="cmpact"><button class="btn bout bsm" onclick="fechaCmp()">Cancelar</button><button class="btn bsa bsm" onclick="salvRef()">Guardar</button></div>
-    </div>
-  </div>
-  <div id="dica-ref" style="padding:0 18px 13px"></div>
+  <div id="dica-ref" style="padding:14px 18px 13px"></div>
   <div class="ref-sec-carta">
     <div class="ref-carta-hd">
       <div class="ref-carta-hd-left">
@@ -1051,12 +1071,8 @@ a{color:inherit;text-decoration:none}
   <!-- HUMOR -->
 <div class="shr"><div class="sht">Meu humor esta semana</div></div>
   <div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px;margin:0 18px 13px"><canvas id="humor-c" height="130"></canvas></div>
-  <div class="shr"><div class="sht">Cartas para mim ✉️</div><div class="shl" onclick="openMod('mcarta')">+ nova carta</div></div>
-  <div id="cartas-l"></div>
   <div class="shr"><div class="sht">Resistência ativa 💪</div></div>
   <div id="fiss-l"></div>
-  <div class="shr"><div class="sht">Minhas reflexões</div></div>
-  <div id="ref-feed"></div>
   <div class="shr" style="padding-top:4px"><div class="sht">Artigos de RD 📖</div></div>
   <div id="arts-l"></div>
 </div>
@@ -1076,7 +1092,7 @@ a{color:inherit;text-decoration:none}
       <div class="cfgi" onclick="toast('Agenda de disponibilidade — em breve 💚')"><div class="cfgic">🗓️</div><div class="cfgb"><div class="cfgn">Disponibilidade</div><div class="cfgd">Defina seus horários de atendimento</div></div><div class="cfgar">›</div></div>
     </div>
   </div>
-  <a class="wppc" href="#" onclick="event.preventDefault();abrirProfs()"><div class="wppci">🩺</div><div class="wppcb"><div class="wppct">Fale com um profissional</div><div class="wppcs">Rede de psicólogos e psiquiatras alinhados à redução de danos</div><div class="wppcl">Ver profissionais →</div></div></a>
+  <a class="wppc" href="#" style="display:none" onclick="event.preventDefault();abrirProfs()"><div class="wppci">🩺</div><div class="wppcb"><div class="wppct">Fale com um profissional</div><div class="wppcs">Rede de psicólogos e psiquiatras alinhados à redução de danos</div><div class="wppcl">Ver profissionais →</div></div></a>
   <!-- PLANO -->
   <div class="shr"><div class="sht">Plano de segurança</div><div class="shl" onclick="openPlanoMod()">editar</div></div>
   <div class="cfgsec" style="margin:0 18px 11px"><div class="cfgi" onclick="openPlanoMod()"><div class="cfgic">🛡️</div><div class="cfgb"><div class="cfgn">Meu plano pessoal</div><div class="cfgd" id="plano-prev">Não configurado ainda</div></div><div class="cfgar">›</div></div></div>
@@ -1148,7 +1164,7 @@ a{color:inherit;text-decoration:none}
   <button class="crc" onclick="abrirPlanoCrise()"><div class="crci">🛡️</div><div><div class="crcn">Meu plano de segurança</div><div class="crcd">O que você mesmo(a) preparou para esse momento</div></div></button>
   <a class="crc" href="tel:192" style="text-decoration:none"><div class="crci">🚑</div><div><div class="crcn">SAMU — 192</div><div class="crcd">Emergência médica, overdose</div></div></a>
   <a class="crc" href="tel:188" style="text-decoration:none"><div class="crci">💬</div><div><div class="crcn">CVV — 188</div><div class="crcd">Apoio emocional 24h, de graça</div></div></a>
-  <button class="crc prof" onclick="abrirProfs()"><div class="crci">🩺</div><div><div class="crcn">Fale com um profissional</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
+  <button class="crc prof" style="display:none" onclick="abrirProfs()"><div class="crci">🩺</div><div><div class="crcn">Fale com um profissional</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
   <button class="crc" onclick="showV('vapp');setTimeout(()=>openMod('mreg'),50)"><div class="crci">📓</div><div><div class="crcn">Registrar como estou</div><div class="crcd">Documentar esse momento</div></div></button>
   <div style="margin:13px 18px 0;background:rgba(255,255,255,.1);border-radius:15px;padding:15px">
     <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">⚡ Se alguém está mal</div>
@@ -1371,8 +1387,7 @@ a{color:inherit;text-decoration:none}
   <div class="mb" style="margin-bottom:13px">Respostas diretas e sem julgamento. Não substitui avaliação médica.</div>
   <div class="fld" style="margin-bottom:11px"><input class="inp" id="faq-search" placeholder="🔍 Buscar pergunta…" oninput="renderFAQlist()"></div>
   <div class="chips" id="faq-chips" style="margin-bottom:12px"></div>
-  <div class="faq-qsw" id="faq-qs" style="max-height:32vh"></div>
-  <div class="faq-chatw" id="faq-chat" style="max-height:none;margin-top:11px"></div>
+  <div class="faq-qsw" id="faq-qs" style="max-height:52vh"></div>
   <button class="btn bout bfull" style="margin-top:12px" onclick="closeMod('mfaq')">Fechar</button>
 </div></div></div>
 
@@ -2097,7 +2112,7 @@ function renderWds(regs){
 
 function renderFeed(goal){
   const d=dica(goal),p=prmp(goal),c=document.getElementById('h-feed');
-  c.innerHTML=`<div class="fc"><div class="fh"><div class="fav" style="background:var(--vf);color:var(--ve)">${d.i}</div><div style="flex:1"><div class="fn">Dica de RD</div><div class="ftm">Hoje</div></div><span class="ftag ftd">Dica</span></div><div class="ftt"><strong>${d.t}</strong><br>${d.x}</div><div class="fa"><button class="fab2" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div><div class="fc"><div class="fh"><div class="fav" style="background:var(--roxof);color:var(--roxo)">💭</div><div style="flex:1"><div class="fn">Pergunta do dia</div><div class="ftm">Para refletir</div></div><span class="ftag ftr">Reflexão</span></div><div class="ftt">${p}</div><div class="fa"><button class="fab2" onclick="goPg('p-ref');respPrm()">✍️ Responder</button></div></div>`;
+  c.innerHTML=`<div class="fc"><div class="fh"><div class="fav" style="background:var(--vf);color:var(--ve)">${d.i}</div><div style="flex:1"><div class="fn">Dica de RD</div><div class="ftm">Hoje</div></div><span class="ftag ftd">Dica</span></div><div class="ftt"><strong>${d.t}</strong><br>${d.x}</div><div class="fa"><button class="fab2" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div><div class="fc"><div class="fh"><div class="fav" style="background:var(--roxof);color:var(--roxo)">💭</div><div style="flex:1"><div class="fn">Pergunta do dia</div><div class="ftm">Para refletir</div></div><span class="ftag ftr">Reflexão</span></div><div class="ftt">${p}</div><div class="fa"><button class="fab2" onclick="goPg('p-agenda');respPrm()">✍️ Responder</button></div></div>`;
 }
 
 function renderResumo(regs,goal){
@@ -2173,6 +2188,8 @@ function renderCal(){
   }
   document.getElementById('calg').innerHTML=html;
   if(_calSel)renderDdet(regs);
+  // diário
+  const obj=gO();const prtEl=document.getElementById('prt');if(prtEl)prtEl.textContent=prmp(obj?.goal);renderRefFeed();
 }
 function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
 function calSel(iso){_calSel=iso;renderCal();}
@@ -2226,7 +2243,7 @@ function delReg(id){
 
 /* ══ REFLEXÕES ══ */
 function renderRef(){
-  const obj=gO();document.getElementById('prt').textContent=prmp(obj?.goal);renderDicaRef(obj?.goal);renderHumorChart();renderCartas();renderFiss();renderRefFeed();renderArts(obj?.goal);
+  const obj=gO();renderDicaRef(obj?.goal);renderHumorChart();renderCartas();renderFiss();renderArts(obj?.goal);
 }
 function renderDicaRef(goal){
   const d=dica(goal);document.getElementById('dica-ref').innerHTML=`<div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px"><div style="font-size:25px;margin-bottom:7px">${d.i}</div><div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:5px">${d.t}</div><div style="font-size:13px;color:var(--txs);line-height:1.6">${d.x}</div></div>`;
@@ -2291,7 +2308,7 @@ function expCmp(){document.getElementById('cmpex').style.display='';document.get
 function fechaCmp(){document.getElementById('cmpex').style.display='none';document.getElementById('composer').classList.remove('foc');document.getElementById('cmpta').value='';_cmpEo=null;blurAll();}
 function autoR(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
 function focaCmp(){expCmp();document.getElementById('cmpta').focus();}
-function respPrm(){const obj=gO();const p=prmp(obj?.goal);document.getElementById('cmpta').value=p+'\n\n';expCmp();document.getElementById('cmpta').focus();}
+function respPrm(){if(getComputedStyle(document.getElementById('p-agenda')).display==='none')goPg('p-agenda');const obj=gO();const p=prmp(obj?.goal);document.getElementById('cmpta').value=p+'\n\n';expCmp();document.getElementById('cmpta').focus();}
 function salvRef(){
   blurAll();const tx=document.getElementById('cmpta').value.trim();if(!tx){toast('⚠️ Escreva algo antes.');return;}
   const obj=gO();const p=prmp(obj?.goal);const isP=tx.startsWith(p);
@@ -3487,15 +3504,15 @@ const FAQ_DATA=[
   {c:'legal',q:'Meus dados no app ficam seguros?',a:'Sim. Tudo o que você registra fica salvo apenas <strong>no seu aparelho</strong> (armazenamento local do navegador), não vai para nenhum servidor e ninguém além de você tem acesso. Você pode fazer backup, exportar e apagar tudo quando quiser nas configurações. Se compartilhar o celular, ative o PIN de bloqueio.'},
 ];
 let faqCat='all';
+let _faqOpen=null;
 function openFAQ(){
-  faqCat='all';
+  faqCat='all';_faqOpen=null;
   document.getElementById('faq-search').value='';
-  document.getElementById('faq-chat').innerHTML='<div class="fbq">Oi! Eu reúno respostas para perguntas comuns sobre uso, misturas, efeitos e segurança — direto e sem julgamento. Toque numa pergunta abaixo ou use a busca. Isso não substitui orientação médica.</div>';
   renderFAQchips();
   renderFAQlist();
   openMod('mfaq');
 }
-function faqSetCat(c){faqCat=c;renderFAQchips();renderFAQlist()}
+function faqSetCat(c){faqCat=c;_faqOpen=null;renderFAQchips();renderFAQlist()}
 function renderFAQchips(){
   const cats=[{k:'all',l:'Todas',i:'💬'},...Object.entries(FAQ_CATS).map(([k,v])=>({k,l:v.l,i:v.i}))];
   document.getElementById('faq-chips').innerHTML=cats.map(c=>`<div class="chip${faqCat===c.k?' on':''}" onclick="faqSetCat('${c.k}')">${c.i} ${esc(c.l)}</div>`).join('');
@@ -3503,15 +3520,12 @@ function renderFAQchips(){
 function renderFAQlist(){
   const term=document.getElementById('faq-search').value.trim().toLowerCase();
   const list=FAQ_DATA.map((x,i)=>({...x,i})).filter(x=>(faqCat==='all'||x.c===faqCat)&&(!term||x.q.toLowerCase().includes(term)||x.a.toLowerCase().includes(term)));
-  document.getElementById('faq-qs').innerHTML=list.length?list.map(x=>`<button class="faqq" onclick="faqAsk(${x.i})">${esc(x.q)}</button>`).join(''):'<div style="font-size:12px;color:var(--txm);text-align:center;padding:14px">Nenhuma pergunta encontrada. Tente outra palavra-chave.</div>';
+  document.getElementById('faq-qs').innerHTML=list.length?list.map(x=>{
+    const cat=FAQ_CATS[x.c];const open=_faqOpen===x.i;
+    return `<div class="faqac${open?' open':''}"><button class="faqac-h" onclick="faqToggle(${x.i})"><span class="faqac-ic">${cat?cat.i:'💬'}</span><span class="faqac-q">${esc(x.q)}</span><span class="faqac-ar">${open?'−':'+'}</span></button><div class="faqac-a">${x.a}</div></div>`;
+  }).join(''):'<div style="font-size:12px;color:var(--txm);text-align:center;padding:14px">Nenhuma pergunta encontrada. Tente outra palavra-chave.</div>';
 }
-function faqAsk(i){
-  const item=FAQ_DATA[i];
-  const chat=document.getElementById('faq-chat');
-  chat.insertAdjacentHTML('beforeend',`<div class="fbu">${esc(item.q)}</div><div class="fbq">${item.a}</div>`);
-  chat.scrollTop=chat.scrollHeight;
-  vib(6);
-}
+function faqToggle(i){_faqOpen=_faqOpen===i?null:i;vib(6);renderFAQlist();}
 
 /* ══════════ v6: ÁUDIO-REFLEXÃO ══════════ */
 let _rec=null,_recOn=false;
