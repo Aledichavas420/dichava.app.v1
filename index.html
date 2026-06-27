@@ -703,6 +703,15 @@ a{color:inherit;text-decoration:none}
 
 /* ── QUICK ACTIONS GRID ── */
 .qag{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 18px 13px}
+.qac-wide{grid-column:1/-1;display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#262657,#3D3D7A);border-radius:18px;padding:15px 17px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 5px 16px rgba(30,30,70,.28);-webkit-tap-highlight-color:transparent;transition:transform .15s}
+.qac-wide:active{transform:scale(.98)}
+.qacw-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9}
+.qacw-ic{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;box-shadow:inset 0 1px 1px rgba(255,255,255,.3)}
+.qacw-ic svg,.qacw-ic img{width:30px;height:30px}
+.qacw-tx{flex:1;position:relative;z-index:1}
+.qacw-t{font-family:'DM Sans',sans-serif;font-size:16.5px;font-weight:800;color:#fff;letter-spacing:-.2px}
+.qacw-s{font-size:12px;color:rgba(255,255,255,.72);margin-top:3px;line-height:1.4;max-width:230px}
+.qacw-go{font-size:24px;color:rgba(255,255,255,.55);position:relative;z-index:1;flex-shrink:0}
 .qac{position:relative;overflow:hidden;border-radius:18px;padding:15px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 1px 10px rgba(0,0,0,.05)}
 .qac:active{transform:scale(.96)}
 .qac::after{content:'';position:absolute;right:-22px;bottom:-22px;width:78px;height:78px;border-radius:50%;background:var(--acc);opacity:.12;pointer-events:none}
@@ -999,10 +1008,18 @@ a{color:inherit;text-decoration:none}
       <div class="qat" style="color:#2B6CB0">Fale com um profissional</div>
       <div class="qad" style="color:#4A82C0">Rede de psi e psiquiatras</div>
     </div>
-    <div class="qac" style="background:#FFF4E6;--acc:#C2700A" onclick="goPg('p-jogos')">
-      <div class="qaic" data-icon="pausa-mente"></div>
-      <div class="qat" style="color:#C2700A">Pausa pra mente</div>
-      <div class="qad" style="color:#D08A2E">Jogos pra atravessar a fissura</div>
+    <div class="qac-wide" onclick="goPg('p-jogos')">
+      <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="340" cy="40" r="26" fill="rgba(255,221,120,.9)"/>
+        <circle cx="330" cy="34" r="22" fill="#2A2A5C"/>
+        <g fill="#fff"><circle cx="250" cy="28" r="1.6" opacity=".8"/><circle cx="290" cy="60" r="1.3" opacity=".6"/><circle cx="370" cy="78" r="1.5" opacity=".7"/><circle cx="225" cy="70" r="1.2" opacity=".55"/><circle cx="310" cy="92" r="1.3" opacity=".5"/></g>
+      </svg>
+      <div class="qacw-ic" data-icon="pausa-mente"></div>
+      <div class="qacw-tx">
+        <div class="qacw-t">Pausa pra mente</div>
+        <div class="qacw-s">Sons que acalmam, respiração e jogos pra atravessar a fissura</div>
+      </div>
+      <div class="qacw-go">›</div>
     </div>
   </div>
   <div onclick="abrirArts()" style="background:linear-gradient(135deg,#1B2A1C 0%,#2d4a30 100%);border-radius:20px;padding:20px 22px;margin:0 0 13px;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent" role="button" aria-label="Ver artigos de redução de danos">
@@ -1041,6 +1058,14 @@ a{color:inherit;text-decoration:none}
     <div class="snd zc-teal" data-snd="stream" onclick="toggleSom('stream',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-riacho"></div><h5>Riacho</h5><p>Água corrente</p></div>
     <div class="snd zc-dark" data-snd="wind" onclick="toggleSom('wind',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-vento"></div><h5>Vento</h5><p>Brisa entre folhas</p></div>
     <div class="snd zc-blue" data-snd="forest" onclick="toggleSom('forest',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-floresta"></div><h5>Floresta</h5><p>Pássaros e mata</p></div>
+  </div>
+  <div class="zen-sec" style="margin-top:22px">Ruído & frequências · foco e calma</div>
+  <div class="snd-row">
+    <div class="snd zc-dark" data-snd="branco" onclick="toggleSom('branco',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">⚪</div><h5>Ruído branco</h5><p>Bloqueia distrações</p></div>
+    <div class="snd zc-dark" data-snd="marrom" onclick="toggleSom('marrom',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🟤</div><h5>Ruído marrom</h5><p>Grave e aconchegante</p></div>
+    <div class="snd zc-teal" data-snd="f432" onclick="toggleSom('f432',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎵</div><h5>432 Hz</h5><p>Relaxamento</p></div>
+    <div class="snd zc-teal" data-snd="f528" onclick="toggleSom('f528',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎶</div><h5>528 Hz</h5><p>Sensação de bem-estar</p></div>
+    <div class="snd zc-blue" data-snd="binaural" onclick="toggleSom('binaural',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🧘</div><h5>Binaural θ</h5><p>Ondas theta · meditação</p></div>
   </div>
   <div class="snd-times" id="snd-times">
     <div class="snd-time" data-min="5" onclick="setSomTempo(5,this)">5 min</div>
@@ -2688,8 +2713,11 @@ function abrirEdicaoPerfil(){
 }
 
 /* ═══════════ SONS DA NATUREZA (Web Audio, offline, em loop) ═══════════ */
-let _ac=null,_somNodes=null,_somAtual=null,_somTempo=10,_somTimerId=null,_somFim=0,_somTickId=null;
-const SOM_INFO={rain:{e:'🌧️',n:'Chuva'},ocean:{e:'🌊',n:'Oceano'},night:{e:'🦗',n:'Noite'},stream:{e:'🏞️',n:'Riacho'},wind:{e:'🍃',n:'Vento'},forest:{e:'🌲',n:'Floresta'}};
+let _ac=null,_somNodes=null,_somAtual=null,_somTempo=10,_somTimerId=null,_somFim=0,_somTickId=null,_somAudio=null;
+const SOM_INFO={rain:{e:'🌧️',n:'Chuva'},ocean:{e:'🌊',n:'Oceano'},night:{e:'🦗',n:'Noite'},stream:{e:'🏞️',n:'Riacho'},wind:{e:'🍃',n:'Vento'},forest:{e:'🌲',n:'Floresta'},branco:{e:'⚪',n:'Ruído branco'},marrom:{e:'🟤',n:'Ruído marrom'},f432:{e:'🎵',n:'432 Hz'},f528:{e:'🎶',n:'528 Hz'},binaural:{e:'🧘',n:'Binaural θ'}};
+// Sons reais hospedados no Supabase Storage (bucket público "sons"). Se o arquivo não existir, cai no som sintetizado.
+const _SOM_BUCKET='https://gnpwaywyexcevtzbwiyq.supabase.co/storage/v1/object/public/sons/';
+const SOM_SRC={rain:'chuva.mp3',ocean:'oceano.mp3',night:'noite.mp3',stream:'riacho.mp3',wind:'vento.mp3',forest:'floresta.mp3'};
 
 function _noiseBuffer(tipo){
   const len=_ac.sampleRate*4,buf=_ac.createBuffer(1,len,_ac.sampleRate),d=buf.getChannelData(0);
@@ -2833,6 +2861,27 @@ function _buildSom(tipo){
     }
     chirpT=setTimeout(chirp,600);
     nodes._extra=()=>{if(chirpT)clearTimeout(chirpT)};
+  } else if(tipo==='branco'){
+    const s=reg(_ac.createBufferSource());const len=_ac.sampleRate*2;const buf=_ac.createBuffer(1,len,_ac.sampleRate);const d=buf.getChannelData(0);
+    for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*.5;
+    s.buffer=buf;s.loop=true;const g=reg(_ac.createGain());g.gain.value=.13;s.connect(g).connect(out);started.push(s);
+  } else if(tipo==='marrom'){
+    const s=reg(_src('brown'));const lp=reg(_ac.createBiquadFilter());lp.type='lowpass';lp.frequency.value=1100;
+    const g=reg(_ac.createGain());g.gain.value=.15;s.connect(lp).connect(g).connect(out);started.push(s);
+  } else if(tipo==='f432'||tipo==='f528'){
+    const hz=tipo==='f432'?432:528;
+    const o=reg(_ac.createOscillator());o.type='sine';o.frequency.value=hz;
+    const o2=reg(_ac.createOscillator());o2.type='sine';o2.frequency.value=hz*2;
+    const g=reg(_ac.createGain());g.gain.value=.17;const g2=reg(_ac.createGain());g2.gain.value=.04;
+    o.connect(g).connect(out);o2.connect(g2).connect(out);started.push(o);started.push(o2);
+    const[l,lg]=_lfoTo(g.gain,0.06,.04,.17);reg(l);reg(lg);started.push(l);
+  } else if(tipo==='binaural'){
+    const base=200,beat=6;const merger=reg(_ac.createChannelMerger(2));
+    const oL=reg(_ac.createOscillator());oL.type='sine';oL.frequency.value=base;
+    const oR=reg(_ac.createOscillator());oR.type='sine';oR.frequency.value=base+beat;
+    const gL=reg(_ac.createGain());gL.gain.value=.18;const gR=reg(_ac.createGain());gR.gain.value=.18;
+    oL.connect(gL).connect(merger,0,0);oR.connect(gR).connect(merger,0,1);
+    merger.connect(out);started.push(oL);started.push(oR);
   }
   startAll();
   // fade-in suave
@@ -2854,10 +2903,12 @@ function toggleSom(tipo,el){
   if(_ac.state==='suspended'||_ac.state!=='running'){_ac.resume().catch(()=>{});}
   _destravaAudio();
   if(_somAtual===tipo){pararSom();return;}
-  if(_somNodes)_somNodes.stop();
+  if(_somNodes){_somNodes.stop();_somNodes=null;}
+  if(_somAudio){try{_somAudio.pause()}catch(e){}_somAudio=null;}
   document.querySelectorAll('.snd').forEach(s=>s.classList.remove('on'));
   el.classList.add('on');
-  _somNodes=_buildSom(tipo);_somAtual=tipo;
+  _somAtual=tipo;
+  _playSom(tipo);
   const info=SOM_INFO[tipo];
   document.getElementById('sb-ic').textContent=info.e;
   document.getElementById('sb-t').textContent=info.n;
@@ -2865,8 +2916,33 @@ function toggleSom(tipo,el){
   vib(8);
   _iniciarTimerSom();
 }
+// tenta tocar o som real (Supabase Storage); se faltar o arquivo, usa o sintetizado
+function _playSom(tipo){
+  const file=SOM_SRC[tipo];
+  if(file){
+    const a=new Audio(_SOM_BUCKET+file);
+    a.loop=true;a.preload='auto';a.volume=0;
+    let ok=false;
+    a.addEventListener('canplaythrough',()=>{
+      ok=true;a.play().then(()=>{let v=0;const iv=setInterval(()=>{if(_somAudio!==a){clearInterval(iv);return;}v=Math.min(.9,v+.05);a.volume=v;if(v>=.9)clearInterval(iv);},60);}).catch(()=>_fallbackSynth(tipo));
+    },{once:true});
+    a.addEventListener('error',()=>{if(!ok&&_somAtual===tipo)_fallbackSynth(tipo);},{once:true});
+    setTimeout(()=>{if(!ok&&_somAtual===tipo&&!_somNodes)_fallbackSynth(tipo);},3500);
+    _somAudio=a;
+  } else {
+    _fallbackSynth(tipo);
+  }
+}
+function _fallbackSynth(tipo){
+  if(_somAudio){try{_somAudio.pause()}catch(e){}_somAudio=null;}
+  if(_somAtual!==tipo)return;
+  if(!_ac){try{_ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return;}}
+  if(_somNodes)_somNodes.stop();
+  _somNodes=_buildSom(tipo);
+}
 function pararSom(){
   if(_somNodes){_somNodes.stop();_somNodes=null;}
+  if(_somAudio){try{_somAudio.pause();_somAudio.src='';}catch(e){}_somAudio=null;}
   _somAtual=null;
   document.querySelectorAll('.snd').forEach(s=>s.classList.remove('on'));
   document.getElementById('sndbar').classList.remove('on');
