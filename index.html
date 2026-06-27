@@ -19,6 +19,20 @@
   window.addEventListener('orientationchange',function(){setTimeout(setH,150);});
   if(window.visualViewport)window.visualViewport.addEventListener('resize',setH);
 })();
+// Splash de abertura com o mascote + frase de impacto
+(function(){
+  var phrases=['Cuidar de si é um ato de coragem.','Um dia de cada vez.','Você não está sozinho(a).','Cada pequeno passo conta.','Sem julgamento. Só cuidado.','Respira. A vontade é uma onda.','Seu ritmo é o ritmo certo.'];
+  document.addEventListener('DOMContentLoaded',function(){
+    var sp=document.getElementById('splash');if(!sp)return;
+    var bee=document.getElementById('splash-bee');
+    try{var s=(typeof ICONS!=='undefined'&&ICONS['jogo-abelha'])||'';var m=s.match(/href="(data:image\/png;base64,[^"]+)"/);if(bee&&m)bee.src=m[1];}catch(e){}
+    var ph=document.getElementById('splash-phrase');if(ph)ph.textContent=phrases[Math.floor(Math.random()*phrases.length)];
+    // estrelas decorativas
+    var st=document.getElementById('splash-stars');
+    if(st){var h='';for(var i=0;i<26;i++){var sz=(Math.random()*2+1).toFixed(1);h+='<span class="splash-star" style="width:'+sz+'px;height:'+sz+'px;left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(Math.random()*2.4).toFixed(2)+'s"></span>';}st.innerHTML=h;}
+    setTimeout(function(){sp.classList.add('hide');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},600);},2200);
+  });
+})();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +41,19 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+/* ── SPLASH (abertura do app) ── */
+#splash{position:fixed;inset:0;z-index:3000;background:linear-gradient(165deg,#1B2A1C 0%,#24412a 55%,#2d4a30 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s ease}
+#splash.hide{opacity:0;pointer-events:none}
+.splash-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.splash-star{position:absolute;background:#fff;border-radius:50%;opacity:.6;animation:spk 2.4s ease-in-out infinite}
+@keyframes spk{0%,100%{opacity:.2}50%{opacity:.85}}
+#splash-bee{width:128px;height:128px;object-fit:contain;filter:drop-shadow(0 10px 26px rgba(0,0,0,.4));animation:splPop .75s cubic-bezier(.34,1.56,.64,1) both,splFloat 2.4s ease-in-out .75s infinite;position:relative;z-index:1}
+@keyframes splPop{0%{transform:scale(0) rotate(-25deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes splFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.splash-logo{font-family:'DM Sans',sans-serif;font-weight:800;font-size:30px;color:#fff;letter-spacing:-.5px;opacity:0;animation:splUp .55s ease .35s both;position:relative;z-index:1}
+.splash-logo span{color:#7BD98A}
+.splash-phrase{font-family:'DM Sans',sans-serif;font-size:14.5px;color:rgba(255,255,255,.72);max-width:250px;text-align:center;line-height:1.5;opacity:0;animation:splUp .55s ease .65s both;position:relative;z-index:1}
+@keyframes splUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 :root{
   --v:#4CAF5A;--ve:#2E7D32;--vc:#A5D6A7;--vf:#E8F5E9;
   --am:#FFD600;--ams:#FFF9C4;
@@ -228,12 +255,20 @@ a{color:inherit;text-decoration:none}
 .hpill strong{color:#fff}
 
 /* STATS */
-.srow{display:flex;gap:8px;padding:12px 18px}
-.sc2{flex:1;background:var(--cin);border-radius:14px;padding:12px 10px;text-align:center}
-.sn{font-family:'DM Sans',sans-serif;font-size:25px;font-weight:800;color:var(--dk);line-height:1}
+.srow{display:flex;gap:9px;padding:14px 18px}
+.sc2{flex:1;border-radius:18px;padding:13px 8px 12px;text-align:center;position:relative;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.sc-streak{background:linear-gradient(160deg,#E9F9ED,#CFEFD8)}
+.sc-week{background:linear-gradient(160deg,#E8F1FF,#D2E2FF)}
+.sc-goal{background:linear-gradient(160deg,#F2EBFF,#E2D4FF)}
+.sc2-ic{font-size:17px;margin-bottom:3px;line-height:1}
+.sn{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--dk);line-height:1}
 .sn.v{color:var(--ve)}
 .sn.r{color:var(--roxo)}
-.sl{font-size:10px;color:var(--txm);margin-top:3px}
+.sl{font-size:10px;color:var(--txs);margin-top:4px;font-weight:600}
+#shell.dkm .sc-streak{background:linear-gradient(160deg,#16301C,#10250F)}
+#shell.dkm .sc-week{background:linear-gradient(160deg,#16243A,#101B2E)}
+#shell.dkm .sc-goal{background:linear-gradient(160deg,#241936,#1A1230)}
+#shell.dkm .sn{color:#E9EFE7}
 
 /* WEEK */
 .wk{margin:0 18px 13px;background:var(--dk);border-radius:18px;padding:15px 17px;position:relative;overflow:hidden}
@@ -640,12 +675,16 @@ a{color:inherit;text-decoration:none}
 .inscx{font-size:12px;color:var(--txs);line-height:1.55}
 
 /* ── v6: TEMPO SEM USO ── */
-.tsu{display:flex;gap:8px;padding:0 18px 12px;overflow-x:auto;scrollbar-width:none}
+.tsu{display:flex;gap:10px;padding:2px 18px 14px;overflow-x:auto;scrollbar-width:none}
 .tsu::-webkit-scrollbar{display:none}
-.tsup{flex-shrink:0;background:var(--vf);border:1.5px solid var(--vc);border-radius:14px;padding:9px 14px;text-align:center;min-width:92px}
-.tsun{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--ve);line-height:1}
+.tsup{flex-shrink:0;background:linear-gradient(160deg,var(--vf),#fff);border:1.5px solid var(--vc);border-radius:18px;padding:13px 16px 12px;text-align:center;min-width:106px;box-shadow:0 3px 12px rgba(76,175,90,.12);position:relative;overflow:hidden}
+.tsup::before{content:'';position:absolute;top:-16px;right:-16px;width:46px;height:46px;border-radius:50%;background:var(--v);opacity:.1}
+.tsu-ic{width:32px;height:32px;margin:0 auto 6px;position:relative;z-index:1}
+.tsu-ic svg{width:32px;height:32px}
+.tsun{font-family:'Syne',sans-serif;font-size:25px;font-weight:800;color:var(--ve);line-height:1;position:relative;z-index:1}
 #shell.dkm .tsun{color:#7BD98A}
-.tsul{font-size:9.5px;color:var(--txs);margin-top:3px;font-weight:600}
+.tsul{font-size:10px;color:var(--txs);margin-top:4px;font-weight:600;line-height:1.3;position:relative;z-index:1}
+#shell.dkm .tsup{background:linear-gradient(160deg,#16301C,#0F2310);border-color:#2E5A35}
 
 /* ── v6→v13: COMBO RICO ── */
 .cmbwrap{margin-top:13px}
@@ -958,6 +997,12 @@ a{color:inherit;text-decoration:none}
 <noscript><div style="padding:40px 24px;font-family:sans-serif;text-align:center;color:#1B2A1C"><h2>⚠️ JavaScript desativado</h2><p>Este app precisa ser aberto em um navegador (Chrome, Safari, Firefox).<br>Se você abriu pelo WhatsApp ou pelo visualizador de arquivos, toque em <strong>"Abrir com → Chrome"</strong>.</p></div></noscript>
 </head>
 <body>
+<div id="splash">
+  <div class="splash-stars" id="splash-stars"></div>
+  <img id="splash-bee" alt="">
+  <div class="splash-logo">dichava<span>.rd</span></div>
+  <div class="splash-phrase" id="splash-phrase">Cuidar de si é um ato de coragem.</div>
+</div>
 <div id="shell">
 
 <!-- AUTH -->
@@ -1005,7 +1050,7 @@ a{color:inherit;text-decoration:none}
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
 <div class="sc scpad">
   <div class="hh"><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
-  <div class="srow"><div class="sc2"><div class="sn v" id="hs-st">0</div><div class="sl">dias seguidos</div></div><div class="sc2"><div class="sn" id="hs-sw">0</div><div class="sl">esta semana</div></div><div class="sc2"><div class="sn r" id="hs-mt">0%</div><div class="sl">da meta</div></div></div>
+  <div class="srow"><div class="sc2 sc-streak"><div class="sc2-ic">🔥</div><div class="sn v" id="hs-st">0</div><div class="sl">dias seguidos</div></div><div class="sc2 sc-week"><div class="sc2-ic">📅</div><div class="sn" id="hs-sw">0</div><div class="sl">esta semana</div></div><div class="sc2 sc-goal"><div class="sc2-ic">🎯</div><div class="sn r" id="hs-mt">0%</div><div class="sl">da meta</div></div></div>
   <div id="h-tempo"></div>
   <div id="h-alts"></div>
   <div class="cks" id="ck-strip"><div class="ckst">Como você está agora?</div><div class="ckse"><button class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
@@ -3473,9 +3518,10 @@ function renderTempo(){
     const rs=regs.filter(r=>r.substancia===sb);if(!rs.length)return;
     const last=rs.map(r=>r.data).sort().pop();
     const d=Math.round((hj-new Date(last+'T12:00:00'))/864e5);
-    html+=`<div class="tsup"><div class="tsun">${d===0?'hoje':d}</div><div class="tsul">${d===0?'último uso':'dia'+(d>1?'s':'')+' sem'}<br>${nem(sb)} ${esc(sb)}</div></div>`;
+    const ic=(typeof subIcon==='function'&&subIcon(sb))||`<span style="font-size:26px">${nem(sb)}</span>`;
+    html+=`<div class="tsup"><div class="tsu-ic">${ic}</div><div class="tsun">${d===0?'hoje':d}</div><div class="tsul">${d===0?'último uso':'dia'+(d>1?'s':'')+' sem'}<br>${esc(sb)}</div></div>`;
   });
-  c.innerHTML=html?`<div style="padding:12px 18px 6px;font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.6px">Tempo desde o último uso</div><div class="tsu">${html}</div>`:'';
+  c.innerHTML=html?`<div style="padding:14px 18px 8px;font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.6px">⏳ Tempo desde o último uso</div><div class="tsu">${html}</div>`:'';
 }
 
 /* ══════════ v6: CHECK-IN D+1 ══════════ */
