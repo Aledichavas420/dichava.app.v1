@@ -614,29 +614,41 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .cmb-obs,#shell.dkm .cmb-alert{background:rgba(0,0,0,.18)}
 #shell.dkm .cmb-obs{color:#ADBDA9}
 
-.dz-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+.dz-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:12px}
 @media(min-width:560px){.dz-grid{grid-template-columns:1fr 1fr}}
-.dz-card{border:1px solid var(--cinm);border-radius:14px;padding:14px;background:#fff}
-#shell.dkm .dz-card{background:#1D2520;border-color:#32402F}
-.dz-h{font-size:13.5px;font-weight:800;color:var(--dk);margin-bottom:9px}
-#shell.dkm .dz-h{color:#E9EFE7}
-.dz-warn{font-size:10.5px;line-height:1.5;color:#8a6d00;background:#FFF9C4;border-radius:9px;padding:8px 10px;margin-bottom:11px}
-#shell.dkm .dz-warn{background:#3a3410;color:#e8d98a}
-.dz-via{font-size:12px;font-weight:700;color:var(--ve);text-transform:uppercase;letter-spacing:.04em;margin:8px 0 6px}
-.dz-un{color:var(--txm);font-weight:500;text-transform:none}
-.dz-scale{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px}
-.dz-step{border-radius:9px;padding:7px 4px;text-align:center;line-height:1.2}
-.dz-step span{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;opacity:.75}
-.dz-step b{display:block;font-size:12px;font-weight:800;margin-top:2px}
+/* ── CARTA POKÉMON (doses) ── */
+.pkc{border-radius:16px;padding:8px;background:linear-gradient(150deg,#f7dd7f,#e9bd4d 55%,#d9a93b);box-shadow:0 4px 16px rgba(0,0,0,.16);border:1px solid rgba(0,0,0,.12);position:relative;font-family:'DM Sans',sans-serif}
+.pkc-top{display:flex;align-items:center;gap:7px;padding:3px 5px 7px}
+.pkc-stage{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#5b4a1a;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.15);border-radius:8px;padding:2px 6px}
+.pkc-name{flex:1;font-size:17px;font-weight:900;color:#2a2208;line-height:1;letter-spacing:-.3px}
+.pkc-type{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.7);border:1.5px solid rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.pkc-art{border:3px solid #d9b441;border-radius:7px;height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.pkc-art-in{display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 3px 6px rgba(0,0,0,.28))}
+.pkc-art-in svg,.pkc-art-in .subicon{width:78px;height:78px}
+.pkc-cls{margin:6px 6px 0;background:linear-gradient(#f3ead0,#e6d7b0);border:1px solid #cbb472;border-radius:20px;font-size:9.5px;font-weight:700;color:#5b4a1a;text-align:center;padding:3px 8px;letter-spacing:.02em}
+.pkc-body{background:linear-gradient(180deg,#fffdf4,#fbf3da);border-radius:10px;margin:7px 4px 4px;padding:11px 12px;border:1px solid rgba(0,0,0,.06)}
+.pkc-via{font-size:11px;font-weight:800;color:var(--pkc);text-transform:uppercase;letter-spacing:.04em;margin:0 0 7px;display:flex;align-items:center;gap:5px}
+.pkc-via::before{content:'';width:13px;height:13px;border-radius:50%;background:var(--pkc);opacity:.85}
+.pkc-un{color:#999;font-weight:600;text-transform:none}
+.pkc-atks{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
+.pkc-atk{display:flex;align-items:center;justify-content:space-between;border-radius:9px;padding:7px 11px;border:1px solid rgba(0,0,0,.05)}
+.pkc-atk-n{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.pkc-atk-v{font-size:13px;font-weight:900}
 .s-leve{background:#E8F5E9;color:#2E7D32}
 .s-comum{background:#FFF9C4;color:#7A6A00}
 .s-forte{background:#FFE0B2;color:#C2700A}
 .s-pesada{background:#FFCDD2;color:#C62828}
-.dz-meta{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:11px;color:var(--txs);margin-top:7px}
-.dz-meta b{color:var(--dk);font-weight:700}
-#shell.dkm .dz-meta{color:#ADBDA9}#shell.dkm .dz-meta b{color:#E9EFE7}
-.dz-tip{font-size:11.5px;line-height:1.5;color:var(--txs);margin-top:10px;border-top:1px dashed var(--cinm);padding-top:9px}
-#shell.dkm .dz-tip{color:#ADBDA9;border-color:#32402F}
+.pkc-novar{font-size:11.5px;color:#a35;background:#fdeef0;border-radius:9px;padding:8px 10px;margin-bottom:9px;font-weight:600}
+.pkc-stats{display:flex;justify-content:space-between;gap:6px;border-top:1.5px solid #ece2c4;padding-top:9px}
+.pkc-stats div{flex:1;text-align:center;line-height:1.25}
+.pkc-stats small{display:block;font-size:8.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.02em;margin-bottom:2px}
+.pkc-stats b{font-size:11px;font-weight:800;color:#3a2f10}
+.pkc-flavor{font-size:11px;line-height:1.5;color:#4a3d12;font-style:italic;margin:6px 8px 0;padding:0 2px}
+.pkc-warn{font-size:9px;line-height:1.45;color:#6b5512;text-align:center;margin:7px 6px 2px;opacity:.85}
+#shell.dkm .pkc-body{background:linear-gradient(180deg,#23291f,#1c2119);border-color:#32402F}
+#shell.dkm .pkc-stats{border-color:#3a4632}
+#shell.dkm .pkc-stats b{color:#E9EFE7}
+#shell.dkm .pkc-flavor{color:#cdbf8e}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--cinm);background:var(--cin);font-size:16px;cursor:pointer;flex-shrink:0;transition:all .15s;align-self:flex-end}
 .micbtn.rec{background:var(--erf);border-color:var(--er);animation:cpul 1.4s infinite}
 
@@ -3395,23 +3407,49 @@ function openCombo(){
   document.getElementById('cmb-res').innerHTML='';
   openMod('mcombo');
 }
+const DZ_THEME={
+  'Álcool':{k:'depre',cor:'#5B8DEF',emo:'🌙',bg:['#dbe9ff','#b9d3ff']},
+  'Cannabis':{k:'erva',cor:'#4CAF5A',emo:'🌿',bg:['#dcf3df','#b9e6c0']},
+  'Tabaco':{k:'estim',cor:'#C2700A',emo:'🚬',bg:['#f6e4c8','#ecd0a3']},
+  'Cocaína / Crack':{k:'estim',cor:'#F0584A',emo:'⚡',bg:['#ffe0db','#ffc4bb']},
+  'MDMA':{k:'empat',cor:'#EC5B95',emo:'💗',bg:['#ffdcec','#ffbcd9']},
+  'LSD':{k:'psico',cor:'#9B5DE5',emo:'🔮',bg:['#ece0ff','#d6bdff']},
+  'Cogumelo':{k:'psico',cor:'#8D6E63',emo:'🍄',bg:['#ece2db','#dbc8bd']},
+  'Ketamina':{k:'dissoc',cor:'#2BB3A3',emo:'🌀',bg:['#d3f4ef','#b0e8e0']},
+  'Opioide':{k:'depre',cor:'#7E57C2',emo:'⚠️',bg:['#e6ddf5','#cdbceb']},
+  'Benzodiaz.':{k:'depre',cor:'#5C6BC0',emo:'💤',bg:['#dde1f7','#c3cbef']},
+  'Cafeína':{k:'estim',cor:'#A1887F',emo:'☕',bg:['#ece4df','#d8c9c1']}
+};
+function _doseIcon(sub){
+  const m={'Álcool':'alcool','Cannabis':'cannabis','Tabaco':'tabaco','Cocaína / Crack':'cocaina','MDMA':'mdma','LSD':'lsd','Cogumelo':'cogumelo','Ketamina':'ketamina','Opioide':'opioide','Benzodiaz.':'benzo','Cafeína':'cafeina'};
+  const k=m[sub];return (k&&SUBICONS[k])?SUBICONS[k]:'';
+}
 function _doseTable(sub){
   const info=SUB_INFO[sub];if(!info)return'';
-  let h=`<div class="dz-card"><div class="dz-h">💊 Doses — ${esc(sub)}</div>`;
-  h+=`<div class="dz-warn">⚠️ Faixas aproximadas, baseadas em TripSit/PsychonautWiki. <strong>Não são validadas clinicamente</strong> e mudam com peso, tolerância e pureza. Referência de redução de danos, não prescrição.</div>`;
+  const th=DZ_THEME[sub]||{k:'neutro',cor:'#888',emo:'✨',bg:['#eee','#ddd']};
+  const ic=_doseIcon(sub);
+  let h=`<div class="pkc pkc-${th.k}" style="--pkc:${th.cor}">`;
+  h+=`<div class="pkc-top"><span class="pkc-stage">Substância</span><span class="pkc-name">${esc(sub)}</span><span class="pkc-type">${th.emo}</span></div>`;
+  h+=`<div class="pkc-art" style="background:linear-gradient(135deg,${th.bg[0]},${th.bg[1]})"><div class="pkc-art-in">${ic||'<span style=\"font-size:54px\">'+th.emo+'</span>'}</div></div>`;
+  h+=`<div class="pkc-cls">${esc(info.cls)}</div>`;
+  h+=`<div class="pkc-body">`;
   info.vias.forEach(v=>{
-    h+=`<div class="dz-via">${esc(v.via)}${v.un?` <span class="dz-un">(${esc(v.un)})</span>`:''}</div>`;
+    h+=`<div class="pkc-via">${esc(v.via)}${v.un?` <span class="pkc-un">(${esc(v.un)})</span>`:''}</div>`;
     if(v.leve!=='—'){
-      h+=`<div class="dz-scale">
-        <div class="dz-step s-leve"><span>Leve</span><b>${esc(v.leve)}</b></div>
-        <div class="dz-step s-comum"><span>Comum</span><b>${esc(v.comum)}</b></div>
-        <div class="dz-step s-forte"><span>Forte</span><b>${esc(v.forte)}</b></div>
-        <div class="dz-step s-pesada"><span>Pesada</span><b>${esc(v.pesada)}</b></div>
+      h+=`<div class="pkc-atks">
+        <div class="pkc-atk s-leve"><span class="pkc-atk-n">Leve</span><span class="pkc-atk-v">${esc(v.leve)}</span></div>
+        <div class="pkc-atk s-comum"><span class="pkc-atk-n">Comum</span><span class="pkc-atk-v">${esc(v.comum)}</span></div>
+        <div class="pkc-atk s-forte"><span class="pkc-atk-n">Forte</span><span class="pkc-atk-v">${esc(v.forte)}</span></div>
+        <div class="pkc-atk s-pesada"><span class="pkc-atk-n">Pesada</span><span class="pkc-atk-v">${esc(v.pesada)}</span></div>
       </div>`;
+    } else {
+      h+=`<div class="pkc-novar">Dose muito variável — sem faixa segura definida.</div>`;
     }
-    h+=`<div class="dz-meta"><span>⏱️ Início: <b>${esc(v.inicio)}</b></span><span>⏳ Duração: <b>${esc(v.dur)}</b></span>${v.res&&v.res!=='—'?`<span>🌙 Resíduo: <b>${esc(v.res)}</b></span>`:''}</div>`;
+    h+=`<div class="pkc-stats"><div><small>⏱️ Início</small><b>${esc(v.inicio)}</b></div><div><small>⏳ Duração</small><b>${esc(v.dur)}</b></div>${v.res&&v.res!=='—'?`<div><small>🌙 Resíduo</small><b>${esc(v.res)}</b></div>`:''}</div>`;
   });
-  if(info.aviso)h+=`<div class="dz-tip">💡 ${esc(info.aviso)}</div>`;
+  h+=`</div>`;
+  if(info.aviso)h+=`<div class="pkc-flavor">💡 ${esc(info.aviso)}</div>`;
+  h+=`<div class="pkc-warn">⚠️ Faixas aproximadas (TripSit/PsychonautWiki) — não validadas clinicamente. RD, não prescrição.</div>`;
   h+=`</div>`;
   return h;
 }
