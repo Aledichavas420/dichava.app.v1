@@ -615,7 +615,21 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .cmb-obs{color:#ADBDA9}
 
 .dz-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:12px}
-@media(min-width:560px){.dz-grid{grid-template-columns:1fr 1fr}}
+.dz-stack{display:flex;flex-direction:column;gap:10px;margin-top:13px}
+/* ── BOTÃO COMPACTO (abre a carta) ── */
+.dzc-btn{display:flex;align-items:center;gap:11px;width:100%;text-align:left;cursor:pointer;font-family:'DM Sans',sans-serif;background:linear-gradient(150deg,#f7dd7f,#e6b94a);border:1.5px solid #d9a93b;border-radius:14px;padding:9px 12px;box-shadow:0 2px 7px rgba(0,0,0,.1);transition:transform .12s,box-shadow .15s}
+.dzc-btn:active{transform:scale(.98)}
+.dzc-ic{width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.7);border:1.5px solid rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.dzc-ic svg,.dzc-ic .subicon{width:26px;height:26px}
+.dzc-txt{flex:1;display:flex;flex-direction:column;line-height:1.2}
+.dzc-txt b{font-size:14.5px;font-weight:900;color:#2a2208}
+.dzc-txt small{font-size:10.5px;font-weight:600;color:#6b5512}
+.dzc-act{font-size:10.5px;font-weight:800;color:#5b4a1a;text-transform:uppercase;letter-spacing:.03em;display:flex;align-items:center;gap:3px;flex-shrink:0}
+.dzc-act i{font-style:normal;display:inline-block;transition:transform .25s}
+.dzc.open .dzc-act i{transform:rotate(180deg)}
+.dzc.open .dzc-btn{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.dzc-full{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.dzc.open .dzc-full{max-height:1400px;margin-top:8px}
 /* ── CARTA POKÉMON (doses) ── */
 .pkc{border-radius:16px;padding:8px;background:linear-gradient(150deg,#f7dd7f,#e9bd4d 55%,#d9a93b);box-shadow:0 4px 16px rgba(0,0,0,.16);border:1px solid rgba(0,0,0,.12);position:relative;font-family:'DM Sans',sans-serif}
 .pkc-top{display:flex;align-items:center;gap:7px;padding:3px 5px 7px}
@@ -3453,6 +3467,17 @@ function _doseTable(sub){
   h+=`</div>`;
   return h;
 }
+function _doseCard(sub){
+  const info=SUB_INFO[sub];if(!info)return'';
+  const th=DZ_THEME[sub]||{cor:'#888',emo:'✨'};
+  const ic=_doseIcon(sub);
+  return `<div class="dzc"><button type="button" class="dzc-btn" style="--pkc:${th.cor}" onclick="dzToggle(this)">
+    <span class="dzc-ic">${ic||th.emo}</span>
+    <span class="dzc-txt"><b>${esc(sub)}</b><small>${esc(info.cls)}</small></span>
+    <span class="dzc-act">ver doses <i>▼</i></span>
+  </button><div class="dzc-full">${_doseTable(sub)}</div></div>`;
+}
+function dzToggle(btn){const c=btn.closest('.dzc');if(!c)return;c.classList.toggle('open');vib(6);}
 function calcCombo(){
   const a=document.getElementById('cmb-a').value,b=document.getElementById('cmb-b').value;
   const res=document.getElementById('cmb-res');
@@ -3464,7 +3489,7 @@ function calcCombo(){
       <div class="cmb-badge" style="background:#999">MESMA</div>
       <div class="cmb-tt">${esc(a)} + ${esc(a)}</div>
       <div class="cmb-tx">Atenção à <strong>redosagem</strong>: somar doses da mesma substância aumenta o risco de forma não-linear. O efeito não dobra — o risco, sim.</div>
-    </div>`+_doseTable(a);
+    </div>`+`<div class="dz-stack">${_doseCard(a)}</div>`;
     return;
   }
   const k1=a+'|'+b,k2=b+'|'+a;
@@ -3480,8 +3505,8 @@ function calcCombo(){
   if(nota)h+=`<div class="cmb-obs"><strong>Nessa combinação:</strong> ${esc(nota)}</div>`;
   if(alerta)h+=`<div class="cmb-alert"><strong>🚩 Sinais de alerta:</strong> ${esc(alerta)}</div>`;
   h+=`</div>`;
-  // tabelas de dosagem das duas
-  h+=`<div class="dz-grid">${_doseTable(a)}${_doseTable(b)}</div>`;
+  // cartas de dosagem das duas (expansíveis)
+  h+=`<div class="dz-stack">${_doseCard(a)}${_doseCard(b)}</div>`;
   res.innerHTML=h;
 }
 
