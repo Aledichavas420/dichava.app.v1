@@ -779,6 +779,8 @@ a{color:inherit;text-decoration:none}
 #vgame{z-index:540;background:var(--dk)}
 .gv-top{display:flex;align-items:center;gap:10px;padding:calc(14px + var(--st,0px)) 16px 14px;position:relative;z-index:3}
 .gv-top .bk{background:rgba(255,255,255,.14);color:#fff}
+.gv-exit{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:13px;padding:10px 18px;font-size:14.5px;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:.02em;transition:background .12s,transform .1s}
+.gv-exit:active{background:rgba(255,255,255,.34);transform:scale(.96)}
 .gv-title{font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;color:#fff}
 .gv-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:0 16px 30px}
 #flap-cv,#pop-cv{width:100%;max-width:380px;border-radius:18px;background:#bfe3f0;touch-action:none;display:block}
@@ -786,12 +788,29 @@ a{color:inherit;text-decoration:none}
 .gv-score{font-size:34px;font-weight:800;color:#fff;line-height:1}
 .gv-score small{display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
 .gv-hint{margin-top:16px;font-size:13px;color:rgba(255,255,255,.6);text-align:center;max-width:320px;line-height:1.5}
-.gv-pad{display:none;gap:9px;margin-top:18px;width:100%;max-width:300px;grid-template-columns:repeat(4,1fr)}
-.gv-pad.on{display:grid}
-.padbtn{height:60px;border-radius:14px;border:none;background:rgba(255,255,255,.16);color:#fff;font-size:24px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .08s,transform .08s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;display:flex;align-items:center;justify-content:center}
-.padbtn:active,.padbtn.held{background:rgba(255,255,255,.34);transform:scale(.94)}
-.padbtn.soft{background:rgba(255,255,255,.1)}
-.padbtn.wide{grid-column:span 4;height:50px;font-size:16px;background:rgba(123,217,138,.28)}
+/* ── CONTROLE ESTILO SUPER NINTENDO (tetris) ── */
+.gv-pad{display:none}
+.gv-pad.on{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:330px;margin:20px auto calc(70px + var(--sb))}
+.snes-dpad{display:grid;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px);flex-shrink:0;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+.dpad-cell{border:none;padding:0;display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
+.dpad-up{grid-column:2;grid-row:1;background:linear-gradient(#54545e,#34343b);border-radius:8px 8px 0 0}
+.dpad-left{grid-column:1;grid-row:2;background:linear-gradient(#54545e,#34343b);border-radius:8px 0 0 8px;cursor:pointer}
+.dpad-nub{grid-column:2;grid-row:2;background:#3d3d44;position:relative}
+.dpad-nub::after{content:'';position:absolute;inset:8px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#5a5a64,#2c2c32);box-shadow:inset 0 1px 2px rgba(255,255,255,.18)}
+.dpad-right{grid-column:3;grid-row:2;background:linear-gradient(#54545e,#34343b);border-radius:0 8px 8px 0;cursor:pointer}
+.dpad-downbtn{grid-column:2;grid-row:3;background:linear-gradient(#54545e,#34343b);border-radius:0 0 8px 8px;cursor:pointer}
+.dpad-hit:active,.dpad-hit.held{background:linear-gradient(#6a6a76,#44444c)}
+.tri{display:block;width:0;height:0}
+.tri-l{border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:11px solid #d3d4da}
+.tri-r{border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:11px solid #d3d4da}
+.tri-d{border-left:8px solid transparent;border-right:8px solid transparent;border-top:11px solid #d3d4da}
+.snes-actions{display:flex;gap:15px;flex-shrink:0}
+.snes-ab{width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;color:#fff;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;box-shadow:0 5px 0 rgba(0,0,0,.32),inset 0 2px 4px rgba(255,255,255,.35);transition:transform .07s,box-shadow .07s}
+.snes-ab span{font-size:19px;font-weight:900;line-height:1}
+.snes-ab small{font-size:8px;font-weight:800;opacity:.92;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.snes-ab:active,.snes-ab.held{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.32),inset 0 2px 4px rgba(255,255,255,.35)}
+.snes-a{background:radial-gradient(circle at 35% 30%,#ff7184,#d4283f);align-self:flex-start}
+.snes-b{background:radial-gradient(circle at 35% 30%,#ffdb5c,#e0a81c);color:#5b4500;align-self:flex-end}
 .gv-over{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,23,16,.82);backdrop-filter:blur(4px);border-radius:18px;z-index:5}
 .gv-over.on{display:flex}
 .gv-over h3{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:6px}
@@ -1239,7 +1258,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- GAME PLAYER -->
 <div class="V" id="vgame">
-  <div class="gv-top"><button class="bk" onclick="fecharJogo()">←</button><div class="gv-title" id="gv-title">Jogo</div></div>
+  <div class="gv-top"><button class="gv-exit" onclick="fecharJogo()">✕ Sair</button><div class="gv-title" id="gv-title">Jogo</div></div>
   <div class="gv-stage">
     <div class="gv-hud"><div class="gv-score"><span id="gv-score">0</span><small id="gv-score-l">pontos</small></div><div class="gv-score"><span id="gv-best">0</span><small>recorde</small></div></div>
     <div style="position:relative;width:100%;max-width:380px">
@@ -1253,11 +1272,17 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="gv-hint" id="gv-hint">Toque para começar</div>
     <div class="gv-pad" id="gv-pad">
-      <button class="padbtn" id="pad-l">◀</button>
-      <button class="padbtn" id="pad-rot">↻</button>
-      <button class="padbtn" id="pad-r">▶</button>
-      <button class="padbtn soft" id="pad-down">▼</button>
-      <button class="padbtn wide" id="pad-drop">⤓ Soltar</button>
+      <div class="snes-dpad">
+        <span class="dpad-cell dpad-up"></span>
+        <button class="dpad-cell dpad-hit dpad-left" id="pad-l" aria-label="Mover para esquerda"><i class="tri tri-l"></i></button>
+        <span class="dpad-cell dpad-nub"></span>
+        <button class="dpad-cell dpad-hit dpad-right" id="pad-r" aria-label="Mover para direita"><i class="tri tri-r"></i></button>
+        <button class="dpad-cell dpad-hit dpad-downbtn" id="pad-down" aria-label="Descer"><i class="tri tri-d"></i></button>
+      </div>
+      <div class="snes-actions">
+        <button class="snes-ab snes-a" id="pad-rot"><span>A</span><small>Girar</small></button>
+        <button class="snes-ab snes-b" id="pad-drop"><span>B</span><small>Soltar</small></button>
+      </div>
     </div>
   </div>
 </div>
@@ -2311,7 +2336,7 @@ function renderRef(){
   // reseta carta de reflexão pro verso
   const rc=document.getElementById('rcard');if(rc){rc.classList.remove('flip');const ac=document.getElementById('rcard-acts');if(ac)ac.style.display='none';}
 }
-const RCARDS=['O que seu corpo está pedindo agora?','Qual foi um pequeno cuidado que você teve consigo hoje?','O que costuma vir antes da vontade de usar?','Como você gostaria de se sentir amanhã de manhã?','Que emoção você anda evitando sentir?','O que te trouxe algum alívio recentemente?','Quem é alguém com quem você pode contar?','O que você diria a um amigo na sua situação?','Qual parte do seu dia foi mais leve?','O que você aprendeu sobre si essa semana?','Que necessidade o uso costuma tentar suprir?','Qual seria um próximo passo gentil pra você?','Do que você sente orgulho, mesmo que pequeno?','O que você precisa ouvir hoje?','Qual limite você gostaria de respeitar mais?','O que estava acontecendo da última vez que você se sentiu bem?','Que parte de você merece mais paciência?','O que mudaria se você fosse mais gentil consigo?'];
+const RCARDS=['O que seu corpo está pedindo agora?','Qual foi um pequeno cuidado que você teve consigo hoje?','O que costuma vir antes da vontade de usar?','Como você gostaria de se sentir amanhã de manhã?','Que emoção você anda evitando sentir?','O que te trouxe algum alívio recentemente?','Quem é alguém com quem você pode contar?','O que você diria a um amigo na sua situação?','Qual parte do seu dia foi mais leve?','O que você aprendeu sobre si essa semana?','Que necessidade o uso costuma tentar suprir?','Qual seria um próximo passo gentil pra você?','Do que você sente orgulho, mesmo que pequeno?','O que você precisa ouvir hoje?','Qual limite você gostaria de respeitar mais?','O que estava acontecendo da última vez que você se sentiu bem?','Que parte de você merece mais paciência?','O que mudaria se você fosse mais gentil consigo?','Que pensamento tem ocupado mais espaço na sua cabeça?','O que você faria hoje se não tivesse medo de errar?','Quando foi a última vez que você riu de verdade?','O que te ajuda a desacelerar quando tudo aperta?','Qual é uma coisa que você sente falta?','O que seu eu de 5 anos atrás acharia de você hoje?','Que conversa você está adiando ter?','O que costuma te acalmar de verdade?','Onde no corpo você sente a ansiedade?','Que situação costuma te puxar de volta pro uso?','O que seria descansar de verdade pra você?','Qual vitória sua passou despercebida essa semana?','O que você gostaria de soltar hoje?','Que parte do seu dia você gostaria de repetir?','O que você está aprendendo a aceitar?','Quem te faz sentir seguro(a)?','O que mudaria se você confiasse mais em você?','Que cuidado você daria a alguém que ama — e poderia dar a si?','O que te dá esperança ultimamente?','Qual sentimento você gostaria de sentir mais vezes?','O que seu silêncio anda tentando dizer?','Que peso você está carregando que não é seu?'];
 let _rcLast=-1;
 function virarCarta(force){
   const c=document.getElementById('rcard');if(!c)return;
