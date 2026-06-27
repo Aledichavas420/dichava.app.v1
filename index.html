@@ -357,6 +357,24 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .subbtn span{color:#ADBDA9}
 #shell.dkm .subbtn.on span{color:#7BD98A}
 
+/* CARTA DE REFLEXÃO (flip) */
+.rcard-wrap{margin:0 18px 16px}
+.rcard{perspective:1100px;cursor:pointer}
+.rcard-in{position:relative;width:100%;min-height:158px;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.rcard.flip .rcard-in{transform:rotateY(180deg)}
+.rcard-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;box-shadow:0 4px 16px rgba(124,77,214,.22)}
+.rcard-back{background:linear-gradient(140deg,#7C4DD6,#9B5DE5 55%,#B57BEE);color:#fff;overflow:hidden}
+.rcard-back::before{content:'';position:absolute;inset:6px;border:1.5px solid rgba(255,255,255,.35);border-radius:13px;pointer-events:none}
+.rcard-back-deco{font-size:34px;opacity:.92;margin-bottom:6px}
+.rcard-back-t{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;letter-spacing:.2px}
+.rcard-back-s{font-size:12px;opacity:.8;margin-top:3px}
+.rcard-front{background:linear-gradient(140deg,#fff,#f6f2ff);border:2px solid #9B5DE5;transform:rotateY(180deg)}
+.rcard-q{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--dk);line-height:1.4}
+.rcard-acts{display:flex;gap:9px;margin-top:10px}
+.rcard-acts .btn{flex:1}
+#shell.dkm .rcard-front{background:linear-gradient(140deg,#1D2520,#241d33);border-color:#7C4DD6}
+#shell.dkm .rcard-q{color:#E9EFE7}
+
 /* CARTA — seção destacada */
 .ref-sec-carta{background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:20px;padding:16px 0 6px;margin:0 18px 14px;overflow:hidden;position:relative}
 .ref-sec-carta::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--am);opacity:.12;pointer-events:none}
@@ -1083,6 +1101,26 @@ a{color:inherit;text-decoration:none}
 <div class="refh"><div class="refht">Reflexões</div><div class="refhs">Um espaço só seu, sem julgamento</div></div>
 <div class="sc scpad">
   <div id="dica-ref" style="padding:14px 18px 13px"></div>
+  <!-- CARTA DE REFLEXÃO (sorteio) -->
+  <div class="shr"><div class="sht">Carta de reflexão 🔮</div></div>
+  <div class="rcard-wrap">
+    <div class="rcard" id="rcard" onclick="if(!this.classList.contains('flip'))virarCarta()">
+      <div class="rcard-in">
+        <div class="rcard-face rcard-back">
+          <div class="rcard-back-deco">✦</div>
+          <div class="rcard-back-t">Carta de reflexão</div>
+          <div class="rcard-back-s">Toque para virar</div>
+        </div>
+        <div class="rcard-face rcard-front">
+          <div class="rcard-q" id="rcard-q">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="rcard-acts" id="rcard-acts" style="display:none">
+      <button class="btn bout bsm" onclick="virarCarta(true)">🔀 Outra carta</button>
+      <button class="btn bsa bsm" onclick="responderCarta()">✍️ Responder</button>
+    </div>
+  </div>
   <div class="ref-sec-carta">
     <div class="ref-carta-hd">
       <div class="ref-carta-hd-left">
@@ -2270,6 +2308,24 @@ function delReg(id){
 /* ══ REFLEXÕES ══ */
 function renderRef(){
   const obj=gO();renderDicaRef(obj?.goal);renderHumorChart();renderCartas();renderFiss();renderArts(obj?.goal);
+  // reseta carta de reflexão pro verso
+  const rc=document.getElementById('rcard');if(rc){rc.classList.remove('flip');const ac=document.getElementById('rcard-acts');if(ac)ac.style.display='none';}
+}
+const RCARDS=['O que seu corpo está pedindo agora?','Qual foi um pequeno cuidado que você teve consigo hoje?','O que costuma vir antes da vontade de usar?','Como você gostaria de se sentir amanhã de manhã?','Que emoção você anda evitando sentir?','O que te trouxe algum alívio recentemente?','Quem é alguém com quem você pode contar?','O que você diria a um amigo na sua situação?','Qual parte do seu dia foi mais leve?','O que você aprendeu sobre si essa semana?','Que necessidade o uso costuma tentar suprir?','Qual seria um próximo passo gentil pra você?','Do que você sente orgulho, mesmo que pequeno?','O que você precisa ouvir hoje?','Qual limite você gostaria de respeitar mais?','O que estava acontecendo da última vez que você se sentiu bem?','Que parte de você merece mais paciência?','O que mudaria se você fosse mais gentil consigo?'];
+let _rcLast=-1;
+function virarCarta(force){
+  const c=document.getElementById('rcard');if(!c)return;
+  let i;do{i=Math.floor(Math.random()*RCARDS.length);}while(i===_rcLast&&RCARDS.length>1);_rcLast=i;
+  document.getElementById('rcard-q').textContent=RCARDS[i];
+  if(force){c.classList.remove('flip');void c.offsetWidth;}
+  c.classList.add('flip');
+  document.getElementById('rcard-acts').style.display='flex';
+  vib(8);
+}
+function responderCarta(){
+  const q=document.getElementById('rcard-q').textContent;
+  goPg('p-agenda');
+  setTimeout(()=>{const ta=document.getElementById('cmpta');if(!ta)return;ta.value=q+'\n\n';expCmp();autoR(ta);ta.focus();},80);
 }
 function renderDicaRef(goal){
   const d=dica(goal);document.getElementById('dica-ref').innerHTML=`<div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px"><div style="font-size:25px;margin-bottom:7px">${d.i}</div><div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:5px">${d.t}</div><div style="font-size:13px;color:var(--txs);line-height:1.6">${d.x}</div></div>`;
