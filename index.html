@@ -32,7 +32,7 @@
 }
 /* CRÍTICO: font-size 16px em TUDO impede zoom automático no iOS */
 html{font-size:16px;height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
-body{font-family:'DM Sans',sans-serif;background:#ECECE8;color:var(--tx);-webkit-font-smoothing:antialiased;height:100vh;height:100dvh;overflow:hidden;position:fixed;width:100%;top:0;left:0}
+body{font-family:'DM Sans',sans-serif;background:#ECECE8;color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:0}
 input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:16px}
 input:not([type="checkbox"]),select,textarea{-webkit-appearance:none;appearance:none}
 input[type="checkbox"]{width:18px;height:18px;accent-color:var(--v);cursor:pointer;flex-shrink:0}
@@ -41,7 +41,7 @@ input:focus,select:focus,textarea:focus{outline:none}
 a{color:inherit;text-decoration:none}
 
 /* APP SHELL */
-#shell{width:100%;height:100%;height:100dvh;max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
+#shell{width:100%;height:100%;max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
 @media(min-width:431px){body{background:#ECECE8;display:flex;align-items:flex-start;justify-content:center}}
 
 /* VIEW SYSTEM */
@@ -827,20 +827,19 @@ a{color:inherit;text-decoration:none}
 .gv-hint{margin-top:16px;font-size:13px;color:rgba(255,255,255,.6);text-align:center;max-width:320px;line-height:1.5}
 /* ── CONTROLE ESTILO SUPER NINTENDO (tetris) ── */
 .gv-pad{display:none}
-.gv-pad.on{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:330px;margin:16px auto calc(18px + var(--sb))}
-.snes-dpad{display:grid;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px);flex-shrink:0;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+.gv-pad.on{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:340px;margin:8px auto calc(38px + var(--sb))}
+.snes-dpad{display:grid;grid-template-columns:repeat(3,50px);grid-template-rows:repeat(2,50px);flex-shrink:0;filter:drop-shadow(0 4px 7px rgba(0,0,0,.42))}
 .dpad-cell{border:none;padding:0;display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
-.dpad-up{grid-column:2;grid-row:1;background:linear-gradient(#54545e,#34343b);border-radius:8px 8px 0 0}
-.dpad-left{grid-column:1;grid-row:2;background:linear-gradient(#54545e,#34343b);border-radius:8px 0 0 8px;cursor:pointer}
-.dpad-nub{grid-column:2;grid-row:2;background:#3d3d44;position:relative}
-.dpad-nub::after{content:'';position:absolute;inset:8px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#5a5a64,#2c2c32);box-shadow:inset 0 1px 2px rgba(255,255,255,.18)}
-.dpad-right{grid-column:3;grid-row:2;background:linear-gradient(#54545e,#34343b);border-radius:0 8px 8px 0;cursor:pointer}
-.dpad-downbtn{grid-column:2;grid-row:3;background:linear-gradient(#54545e,#34343b);border-radius:0 0 8px 8px;cursor:pointer}
+.dpad-left{grid-column:1;grid-row:1;background:linear-gradient(#54545e,#34343b);border-radius:9px 0 0 9px;cursor:pointer}
+.dpad-nub{grid-column:2;grid-row:1;background:linear-gradient(#54545e,#3a3a41);position:relative;border-radius:9px 9px 0 0}
+.dpad-nub::after{content:'';position:absolute;inset:10px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#5a5a64,#2c2c32);box-shadow:inset 0 1px 2px rgba(255,255,255,.18)}
+.dpad-right{grid-column:3;grid-row:1;background:linear-gradient(#54545e,#34343b);border-radius:0 9px 9px 0;cursor:pointer}
+.dpad-downbtn{grid-column:2;grid-row:2;background:linear-gradient(#4a4a52,#34343b);border-radius:0 0 9px 9px;cursor:pointer}
 .dpad-hit:active,.dpad-hit.held{background:linear-gradient(#6a6a76,#44444c)}
 .tri{display:block;width:0;height:0}
-.tri-l{border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:11px solid #d3d4da}
-.tri-r{border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:11px solid #d3d4da}
-.tri-d{border-left:8px solid transparent;border-right:8px solid transparent;border-top:11px solid #d3d4da}
+.tri-l{border-top:9px solid transparent;border-bottom:9px solid transparent;border-right:13px solid #d3d4da}
+.tri-r{border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:13px solid #d3d4da}
+.tri-d{border-left:9px solid transparent;border-right:9px solid transparent;border-top:13px solid #d3d4da}
 .snes-actions{display:flex;gap:15px;flex-shrink:0}
 .snes-ab{width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;color:#fff;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;box-shadow:0 5px 0 rgba(0,0,0,.32),inset 0 2px 4px rgba(255,255,255,.35);transition:transform .07s,box-shadow .07s}
 .snes-ab span{font-size:19px;font-weight:900;line-height:1}
@@ -1348,7 +1347,6 @@ a{color:inherit;text-decoration:none}
     <div class="gv-hint" id="gv-hint">Toque para começar</div>
     <div class="gv-pad" id="gv-pad">
       <div class="snes-dpad">
-        <span class="dpad-cell dpad-up"></span>
         <button class="dpad-cell dpad-hit dpad-left" id="pad-l" aria-label="Mover para esquerda"><i class="tri tri-l"></i></button>
         <span class="dpad-cell dpad-nub"></span>
         <button class="dpad-cell dpad-hit dpad-right" id="pad-r" aria-label="Mover para direita"><i class="tri tri-r"></i></button>
