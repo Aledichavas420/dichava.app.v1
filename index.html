@@ -47,7 +47,8 @@
 .splash-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .splash-star{position:absolute;background:#fff;border-radius:50%;opacity:.6;animation:spk 2.4s ease-in-out infinite}
 @keyframes spk{0%,100%{opacity:.2}50%{opacity:.85}}
-#splash-bee{width:128px;height:128px;object-fit:contain;filter:drop-shadow(0 10px 26px rgba(0,0,0,.4));animation:splPop .75s cubic-bezier(.34,1.56,.64,1) both,splFloat 2.4s ease-in-out .75s infinite;position:relative;z-index:1}
+.splash-halo{position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(123,217,138,.22),transparent 70%);z-index:0;animation:splUp .6s ease both}
+#splash-bee{width:92px;height:92px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 8px 20px rgba(0,0,0,.35));animation:splPop .75s cubic-bezier(.34,1.56,.64,1) both,splFloat 2.4s ease-in-out .75s infinite;position:relative;z-index:1}
 @keyframes splPop{0%{transform:scale(0) rotate(-25deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes splFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 .splash-logo{font-family:'DM Sans',sans-serif;font-weight:800;font-size:30px;color:#fff;letter-spacing:-.5px;opacity:0;animation:splUp .55s ease .35s both;position:relative;z-index:1}
@@ -182,6 +183,10 @@ a{color:inherit;text-decoration:none}
 .sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;max-height:92%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .sp{padding:0 18px calc(28px + var(--sb))}
 .mh{width:36px;height:4px;background:#E0E0E0;border-radius:2px;margin:12px auto 18px}
+.mclose{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:none;background:var(--cin);color:var(--txs);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
+.mclose:active{background:var(--cinm)}
+#shell.dkm .mclose{background:#2a352a;color:#cdd6cb}
+.sp{position:relative}
 .mt{font-family:'DM Sans',sans-serif;font-size:19px;font-weight:800;color:var(--dk);margin-bottom:4px}
 .mt.c{text-align:center}
 .mb{font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:16px}
@@ -999,6 +1004,7 @@ a{color:inherit;text-decoration:none}
 <body>
 <div id="splash">
   <div class="splash-stars" id="splash-stars"></div>
+  <div class="splash-halo"></div>
   <img id="splash-bee" alt="">
   <div class="splash-logo">dichava<span>.rd</span></div>
   <div class="splash-phrase" id="splash-phrase">Cuidar de si é um ato de coragem.</div>
@@ -1656,6 +1662,7 @@ a{color:inherit;text-decoration:none}
 <!-- NOVO REGISTRO -->
 <div class="ov" id="mreg" onclick="if(event.target===this)closeMod('mreg')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
+  <button class="mclose" onclick="fecharReg()" aria-label="Fechar">✕</button>
   <div class="mt">Novo registro 📓</div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Sem julgamento — só registre como foi.</p>
   <div class="fr2" style="margin-bottom:12px">
@@ -1675,7 +1682,7 @@ a{color:inherit;text-decoration:none}
   </div>
   <div class="fld"><div class="lbl">Gatilhos percebidos</div><div class="chips"><span class="chip" onclick="togChip(this)">Estresse</span><span class="chip" onclick="togChip(this)">Ansiedade</span><span class="chip" onclick="togChip(this)">Solidão</span><span class="chip" onclick="togChip(this)">Social</span><span class="chip" onclick="togChip(this)">Tédio</span><span class="chip" onclick="togChip(this)">Celebração</span><span class="chip" onclick="togChip(this)">Hábito</span><span class="chip" onclick="togChip(this)">Não sei</span></div></div>
   <div class="fld"><div class="lbl">Observação</div><textarea class="ft" id="reg-obs" rows="3" placeholder="O que quero lembrar?"></textarea></div>
-  <button class="btn bv bfull" onclick="salvReg()">Salvar registro</button>
+  <div style="display:flex;gap:9px"><button class="btn bout" style="flex:0 0 38%" onclick="fecharReg()">Cancelar</button><button class="btn bv" style="flex:1" onclick="salvReg()">Salvar registro</button></div>
 </div></div></div>
 
 <!-- FISSURA -->
@@ -2396,6 +2403,11 @@ function salvReg(){
   else if(cfg.notif&&cS===cfg.limS)notif('📊','Limite semanal atingido',`${cS} registros essa semana.`);
 }
 function limparRegs(){sR([]);renderHome();toast('Registros apagados.');}
+function fecharReg(){
+  _editRegId=null;_eReg=null;
+  const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Novo registro 📓';
+  closeMod('mreg');
+}
 
 /* ══ FISSURA ══ */
 function selEFiss(btn,e,l){document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_eFiss={emoji:e,label:l};}
