@@ -48,13 +48,29 @@ a{color:inherit;text-decoration:none}
 .V{display:none;position:absolute;inset:0;flex-direction:column;background:#fff;overflow:hidden}
 .V.on{display:flex}
 
+/* MENU 3 PONTINHOS */
+.kw{position:relative;flex-shrink:0}
+.kebab{background:none;border:none;font-size:20px;color:var(--txm);cursor:pointer;padding:2px 8px;line-height:1;border-radius:8px;letter-spacing:1px}
+.kebab:active{background:var(--cin)}
+.kmenu{position:absolute;right:0;top:100%;margin-top:4px;background:#fff;border:1px solid var(--cinm);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18);overflow:hidden;z-index:60;display:none;min-width:138px}
+.kw.open .kmenu{display:block}
+.kmenu button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:none;border:none;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--tx);cursor:pointer;font-family:'DM Sans',sans-serif}
+.kmenu button:active{background:var(--cin)}
+.kmenu button.dan{color:var(--er);border-top:1px solid var(--cinm)}
+#shell.dkm .kmenu{background:#222C22;border-color:#32402F}
+#shell.dkm .kmenu button{color:#E9EFE7}
+#shell.dkm .kmenu button.dan{border-color:#32402F}
+
 /* SCROLL */
 .sc{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none}
 .sc::-webkit-scrollbar{display:none}
-.scpad{padding-bottom:calc(76px + var(--sb))}
+.scpad{padding-bottom:22px}
 
-/* BOTTOM NAV */
-#bnav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--cinm);display:none;padding:6px 0 calc(6px + var(--sb));z-index:100}
+/* PÁGINAS (área acima da nav) */
+#vpages{flex:1;position:relative;overflow:hidden;min-height:0}
+
+/* BOTTOM NAV — item flex no rodapé (responsivo a qualquer tela) */
+#bnav{flex-shrink:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--cinm);display:none;padding:6px 0 calc(6px + var(--sb));z-index:100}
 #bnav.on{display:flex}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;padding:4px 1px;font-size:7.5px;color:var(--txm);font-weight:500;transition:color .15s}
 .ni.on{color:var(--ve)}
@@ -971,6 +987,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- APP -->
 <div class="V" id="vapp">
+<div id="vpages">
 
 <!-- HOME -->
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
@@ -1276,6 +1293,7 @@ a{color:inherit;text-decoration:none}
 </div>
 </div>
 
+</div><!-- /vpages -->
 <!-- BOTTOM NAV -->
 <nav id="bnav" class="on">
   <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic" data-icon="inicio"></div><span>Início</span></button>
@@ -1640,6 +1658,14 @@ a{color:inherit;text-decoration:none}
   <div class="fld"><div class="lbl">Quando abrir?</div><select class="fs" id="carta-prazo"><option value="7">Em 7 dias</option><option value="30" selected>Em 30 dias</option><option value="90">Em 90 dias</option><option value="180">Em 6 meses</option></select></div>
   <div class="fld"><div class="lbl">Minha carta</div><textarea class="ft" id="carta-tx" rows="6" placeholder="Querido(a) eu do futuro…"></textarea></div>
   <button class="btn bv bfull" onclick="salvCarta()">Guardar carta ✉️</button>
+</div></div></div>
+
+<!-- EDITAR REFLEXÃO -->
+<div class="ov" id="medref" onclick="if(event.target===this)closeMod('medref')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">✏️ Editar anotação</div>
+  <div class="fld"><textarea class="ft" id="edref-tx" rows="6" placeholder="Sua reflexão…" oninput="autoR(this)"></textarea></div>
+  <div style="display:flex;gap:9px"><button class="btn bout" style="flex:1" onclick="closeMod('medref')">Cancelar</button><button class="btn bv" style="flex:1" onclick="salvEditRef()">Salvar</button></div>
 </div></div></div>
 
 <!-- PLANO -->
@@ -2292,13 +2318,23 @@ function salvReg(){
   if(!sub){toast('⚠️ Selecione uma substância.');shk(document.getElementById('reg-sub'));return;}
   if(!_eReg){toast('⚠️ Selecione um estado emocional.');shk(document.getElementById('reg-emg'));return;}
   const chips=[...document.querySelectorAll('#mreg .chip.on')].map(c=>c.textContent);
-  const reg={id:'r'+Date.now(),substancia:sub==='outra'?document.getElementById('reg-outra').value.trim():sub.replace(/^[^\w]+ /,''),qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:document.getElementById('reg-ctx').value,emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim(),data:hoje(),criado:new Date().toISOString()};
-  const regs=gR();regs.push(reg);sR(regs);
+  const dados={substancia:sub==='outra'?document.getElementById('reg-outra').value.trim():sub.replace(/^[^\w]+ /,''),qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:document.getElementById('reg-ctx').value,emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim()};
+  const regs=gR();
+  const editando=_editRegId;
+  if(editando){const i=regs.findIndex(r=>r.id===editando);if(i>=0)regs[i]={...regs[i],...dados};}
+  else{regs.push({id:'r'+Date.now(),...dados,data:hoje(),criado:new Date().toISOString()});}
+  sR(regs);
   // reset
   document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-custo').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-outra-w').style.display='none';
   document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.remove('on'));
-  _eReg=null;closeMod('mreg');vib(15);toast('✓ Registro guardado 💚');renderHome();
+  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
+  const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Novo registro 📓';
+  _eReg=null;_editRegId=null;closeMod('mreg');vib(15);
+  toast(editando?'✓ Registro atualizado':'✓ Registro guardado 💚');
+  try{renderHome();renderHist();renderGraf();renderCqs();}catch(e){}
+  try{if(getComputedStyle(document.getElementById('p-agenda')).display!=='none')renderCal();}catch(e){}
+  if(editando)return;
   const cfg=gC();const cH=regs.filter(r=>r.data===hoje()).length;const cS=regs.filter(r=>r.data>=semISO(hoje())).length;
   if(cfg.notif&&cH===cfg.limD)notif('⚠️','Limite diário atingido',`Você chegou a ${cH} registros hoje.`);
   else if(cfg.notif&&cS===cfg.limS)notif('📊','Limite semanal atingido',`${cS} registros essa semana.`);
@@ -2341,7 +2377,7 @@ function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
 function calSel(iso){_calSel=iso;renderCal();}
 function renderDdet(regs){
   const det=document.getElementById('ddet');const ri=regs.filter(r=>r.data===_calSel);det.style.display='block';
-  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nem(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${r.hr||''}${r.ctx?' · '+r.ctx:''}${r.gatilhos?.length?' · '+r.gatilhos.join(', '):''}</div></div><div style="font-size:18px">${r.emocao||''}</div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
+  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nem(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${r.hr||''}${r.ctx?' · '+r.ctx:''}${r.gatilhos?.length?' · '+r.gatilhos.join(', '):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
 }
 
 /* ══ PROGRESSO ══ */
@@ -2380,11 +2416,42 @@ function renderCqs(){
 function renderHist(){
   const regs=gR().slice().reverse();const c=document.getElementById('hist-l');
   if(!regs.length){c.innerHTML='<div style="font-size:13px;color:var(--txm)">Nenhum registro ainda.</div>';return;}
-  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${nem(r.substancia)}</div><div class="hib"><div class="hin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><button class="hi-del" onclick="delReg('${r.id}')" title="Excluir">✕</button></div>`).join('');
+  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${nem(r.substancia)}</div><div class="hib"><div class="hin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
 }
 function delReg(id){
   if(!confirm('Excluir este registro?'))return;
-  sR(gR().filter(r=>r.id!==id));renderHist();renderGraf();renderCqs();toast('Registro excluído.');
+  sR(gR().filter(r=>r.id!==id));
+  try{renderHist();renderGraf();renderCqs();}catch(e){}
+  try{if(getComputedStyle(document.getElementById('p-agenda')).display!=='none')renderCal();}catch(e){}
+  try{renderHome();}catch(e){}
+  toast('Registro excluído.');
+}
+function toggleKebab(btn,ev){if(ev)ev.stopPropagation();const w=btn.closest('.kw');if(!w)return;const open=w.classList.contains('open');document.querySelectorAll('.kw.open').forEach(x=>x.classList.remove('open'));if(!open)w.classList.add('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.kw'))document.querySelectorAll('.kw.open').forEach(x=>x.classList.remove('open'));});
+let _editRegId=null;
+function editReg(id){
+  const r=gR().find(x=>x.id===id);if(!r)return;
+  document.querySelectorAll('.kw.open').forEach(x=>x.classList.remove('open'));
+  _editRegId=id;
+  openMod('mreg');
+  // preenche os campos
+  const subVal=SUBS_REG.find(s=>s.replace(/^[^\w]+ /,'')===r.substancia);
+  const hidden=document.getElementById('reg-sub');
+  if(subVal){hidden.value=subVal;}else{hidden.value='outra';document.getElementById('reg-outra').value=r.substancia;}
+  regSubChg();
+  // marca botão da substância
+  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.toggle('on',b.dataset.val===hidden.value));
+  document.getElementById('reg-qtd').value=r.qtd||'';
+  document.getElementById('reg-hr').value=r.hr||'';
+  document.getElementById('reg-ctx').value=r.ctx||'';
+  document.getElementById('reg-obs').value=r.obs||'';
+  document.getElementById('reg-custo').value=r.custo||'';
+  // emoção
+  _eReg=r.emocao?{emoji:r.emocao,label:r.emoLabel||''}:null;
+  document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.toggle('on',b.textContent.includes(r.emocao||' ')));
+  // gatilhos
+  document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.toggle('on',(r.gatilhos||[]).includes(c.textContent)));
+  const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Editar registro ✏️';
 }
 
 /* ══ REFLEXÕES ══ */
@@ -2443,9 +2510,27 @@ function renderFiss(){
 function renderRefFeed(){
   const refs=gRef().slice().reverse();const in2=ini(U?.nome);const c=document.getElementById('ref-feed');
   if(!refs.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 14px">Nenhuma reflexão ainda.</div>';return;}
-  c.innerHTML=refs.map(r=>`<div class="rii"><div class="rih"><div class="riav" style="background:var(--vf);color:var(--ve)">${in2}</div><div style="flex:1"><div class="rin">${esc(U?.nome)||'Você'}</div><div class="rid">${fdt(r.data)}</div></div><span class="ritg" style="background:var(--vf);color:var(--ve)">${esc(r.tag)||'reflexão'}</span></div>${r.prompt?`<div class="rip">💭 ${esc(r.prompt)}</div>`:''}<div class="rit">${esc(r.texto)}</div><div class="rif"><div class="rife">${r.emocao||'✍️'}</div><button style="background:none;border:none;font-size:13px;color:var(--txm);cursor:pointer" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div>`).join('');
+  c.innerHTML=refs.map(r=>`<div class="rii"><div class="rih"><div class="riav" style="background:var(--vf);color:var(--ve)">${in2}</div><div style="flex:1"><div class="rin">${esc(U?.nome)||'Você'}</div><div class="rid">${fdt(r.data)}</div></div><span class="ritg" style="background:var(--vf);color:var(--ve)">${esc(r.tag)||'reflexão'}</span><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editRef('${r.id}')">✏️ Editar</button><button class="dan" onclick="delRef('${r.id}')">🗑️ Apagar</button></div></div></div>${r.prompt?`<div class="rip">💭 ${esc(r.prompt)}</div>`:''}<div class="rit">${esc(r.texto)}</div><div class="rif"><div class="rife">${r.emocao||'✍️'}</div><button style="background:none;border:none;font-size:13px;color:var(--txm);cursor:pointer" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div>`).join('');
 }
 
+let _editRefId=null;
+function editRef(id){
+  const r=gRef().find(x=>x.id===id);if(!r)return;
+  document.querySelectorAll('.kw.open').forEach(x=>x.classList.remove('open'));
+  _editRefId=id;
+  document.getElementById('edref-tx').value=r.texto||'';
+  openMod('medref');
+  setTimeout(()=>{const t=document.getElementById('edref-tx');t.focus();autoR(t);},80);
+}
+function salvEditRef(){
+  blurAll();const tx=document.getElementById('edref-tx').value.trim();if(!tx){toast('⚠️ Escreva algo.');return;}
+  const refs=gRef();const i=refs.findIndex(r=>r.id===_editRefId);if(i>=0){refs[i].texto=tx;sRef(refs);}
+  _editRefId=null;closeMod('medref');toast('✓ Reflexão atualizada');renderRefFeed();
+}
+function delRef(id){
+  if(!confirm('Apagar esta anotação?'))return;
+  sRef(gRef().filter(r=>r.id!==id));renderRefFeed();toast('Anotação apagada.');
+}
 function renderArts(goal){
   const c=document.getElementById('arts-l');
   if(c)c.innerHTML=ARTS.slice(0,4).map(a=>`<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg" style="background:${a.bg}">${a.svg||(a.ic?`<span style="font-size:44px">${a.ic}</span>`:'')}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm} de leitura</div></div></div>`).join('')+'<div style="text-align:center;padding:8px 0 4px"><button class="btn bout bsm" onclick="abrirArts()">Ver todos os artigos →</button></div>';
