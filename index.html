@@ -7,6 +7,19 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1B2A1C">
 <title>dichava.rd</title>
+<script>
+// Altura real da viewport (corrige barra de tarefas fora do lugar em iOS/Android)
+(function(){
+  function setH(){
+    var h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
+    document.documentElement.style.setProperty('--app-h',h+'px');
+  }
+  setH();
+  window.addEventListener('resize',setH);
+  window.addEventListener('orientationchange',function(){setTimeout(setH,150);});
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',setH);
+})();
+</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -32,7 +45,7 @@
 }
 /* CRÍTICO: font-size 16px em TUDO impede zoom automático no iOS */
 html{font-size:16px;height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
-body{font-family:'DM Sans',sans-serif;background:#ECECE8;color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:0}
+body{font-family:'DM Sans',sans-serif;background:#ECECE8;color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;position:fixed;top:0;left:0;width:100%;height:var(--app-h,100vh)}
 input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:16px}
 input:not([type="checkbox"]),select,textarea{-webkit-appearance:none;appearance:none}
 input[type="checkbox"]{width:18px;height:18px;accent-color:var(--v);cursor:pointer;flex-shrink:0}
@@ -41,7 +54,7 @@ input:focus,select:focus,textarea:focus{outline:none}
 a{color:inherit;text-decoration:none}
 
 /* APP SHELL */
-#shell{width:100%;height:100%;max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
+#shell{width:100%;height:var(--app-h,100%);max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
 @media(min-width:431px){body{background:#ECECE8;display:flex;align-items:flex-start;justify-content:center}}
 
 /* VIEW SYSTEM */
