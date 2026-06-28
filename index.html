@@ -1766,7 +1766,10 @@ a{color:inherit;text-decoration:none}
   <div class="mh"></div>
   <div class="mt">Resistência ativa 💪</div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Quis usar mas não usou. Isso é um ato de cuidado com você mesmo(a).</p>
-  <div class="fld"><div class="lbl">Substância que veio à mente</div><select class="fs" id="fiss-sub"><option value="">Selecione…</option><option>🍺 Álcool</option><option>🌿 Cannabis</option><option>🚬 Tabaco</option><option>❄️ Cocaína</option><option>💊 MDMA</option><option>✨ LSD</option><option>Outra</option></select></div>
+  <div class="fld"><div class="lbl">Substância que veio à mente <span class="ob">*</span></div>
+    <div class="subgrid" id="fiss-subgrid" data-target="fiss-sub"></div><input type="hidden" id="fiss-sub" value="" onchange="fissSubChg()">
+  </div>
+  <div id="fiss-outra-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual substância?</div><input class="inp" id="fiss-outra" type="text" placeholder="Escreva…"></div>
   <div class="fld"><div class="lbl">Intensidade (1-10)</div><div class="introw" id="fiss-int"></div></div>
   <div class="fld"><div class="lbl">O que estava sentindo</div>
     <div class="emg" id="fiss-emg"><button class="emb" onclick="selEFiss(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEFiss(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEFiss(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEFiss(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEFiss(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
@@ -2163,6 +2166,7 @@ function selSub(gridId,target,btn){
   document.getElementById(target).value=btn.dataset.val;
   vib(5);
   if(target==='reg-sub')regSubChg();
+  if(target==='fiss-sub')fissSubChg();
 }
 
 const PAGES=['p-home','p-jogos','p-agenda','p-prog','p-ref','p-cfg'];
@@ -2511,6 +2515,7 @@ function renderHistMini(regs){
 function selEReg(btn,e,l){document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_eReg={emoji:e,label:l};}
 function togChip(el){el.classList.toggle('on')}
 function regSubChg(){document.getElementById('reg-outra-w').style.display=document.getElementById('reg-sub').value==='outra'?'block':'none';}
+function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(w)w.style.display=document.getElementById('fiss-sub').value==='outra'?'block':'none';}
 function salvReg(){
   blurAll();
   const sub=document.getElementById('reg-sub').value;
@@ -2550,9 +2555,13 @@ function selEFiss(btn,e,l){document.querySelectorAll('#fiss-emg .emb').forEach(b
 function salvFiss(){
   blurAll();
   const sub=document.getElementById('fiss-sub').value;if(!sub){toast('⚠️ Selecione uma substância.');return;}
-  const fiss={id:'fs'+Date.now(),substancia:sub,intens:_fI||'—',emocao:_eFiss?.emoji||'',fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
+  const substancia=sub==='outra'?document.getElementById('fiss-outra').value.trim():sub.replace(/^[^\w]+ /,'');
+  if(sub==='outra'&&!substancia){toast('⚠️ Escreva a substância.');return;}
+  const fiss={id:'fs'+Date.now(),substancia:substancia,intens:_fI||'—',emocao:_eFiss?.emoji||'',fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
   const fs=gFs();fs.push(fiss);sFs(fs);
   document.getElementById('fiss-sub').value='';document.getElementById('fiss-fez').value='';document.getElementById('fiss-dep').value='';
+  document.getElementById('fiss-outra').value='';const fow=document.getElementById('fiss-outra-w');if(fow)fow.style.display='none';
+  document.querySelectorAll('#fiss-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#fiss-int .ib').forEach(b=>b.style.outline='none');
   _eFiss=null;_fI=null;closeMod('mfiss');vib([20,40,20]);confete();toast('🏆 Registrado! Resistir é um ato de cuidado.');renderHome();
