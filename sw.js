@@ -1,4 +1,4 @@
-// dichava.rd — service worker v71
+// dichava.rd — service worker v72
 const CACHE = 'dichavard-v72';
 const ASSETS = ['./', './index.html'];
 
