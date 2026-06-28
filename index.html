@@ -284,6 +284,13 @@ a{color:inherit;text-decoration:none}
 .hero-leaves{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .hleaf{position:absolute;border-radius:0 100% 0 100%;background:rgba(255,255,255,.13);animation:hdrift linear infinite}
 @keyframes hdrift{0%{transform:translateY(-20px) rotate(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(260px) rotate(220deg);opacity:0}}
+.hero-info-btn{position:absolute;top:14px;right:14px;width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);font-size:13px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;line-height:1}
+.hero-info-btn:active{background:rgba(255,255,255,.28)}
+.infi{display:flex;gap:13px;align-items:flex-start;margin-bottom:15px}
+.infi-ic{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.infi-t{font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:800;color:var(--dk);margin-bottom:2px}
+.infi-d{font-size:12.5px;color:var(--txs);line-height:1.5}
+#shell.dkm .infi-t{color:#E9EFE7}
 .hero-top{display:flex;align-items:center;gap:18px;position:relative;z-index:1}
 .hero-ring-wrap{position:relative;width:104px;height:104px;flex-shrink:0}
 .hero-ring{position:absolute;inset:0;transform:rotate(-90deg)}
@@ -1090,6 +1097,7 @@ a{color:inherit;text-decoration:none}
   <div class="hh"><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
+    <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
     <div class="hero-top">
       <div class="hero-ring-wrap">
         <svg class="hero-ring" viewBox="0 0 104 104"><defs><linearGradient id="hgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9CF06B"></stop><stop offset="1" stop-color="#5CE3CF"></stop></linearGradient></defs><circle class="hr-bg" cx="52" cy="52" r="46"></circle><circle class="hr-fg" id="hero-ring-fg" cx="52" cy="52" r="46"></circle></svg>
@@ -1711,6 +1719,20 @@ a{color:inherit;text-decoration:none}
   <div class="termo-ro"><strong>dichava.rd — Termo de Consentimento Informado</strong><br><br>1. Seus dados são armazenados localmente no seu dispositivo e não compartilhados sem sua autorização.<br>2. Este app não substitui o atendimento com profissional de saúde qualificado.<br>3. Emergências: SAMU (192), CVV (188).<br>4. Você pode exportar ou limpar seus dados a qualquer momento.</div>
   <div style="background:var(--vf);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--ve);font-weight:600;margin-bottom:15px;text-align:center">✓ Aceito em: <span id="termo-dt">—</span></div>
   <button class="btn bout bfull" onclick="closeMod('mtermol')">Fechar</button>
+</div></div></div>
+
+<!-- O QUE SIGNIFICAM (hero) -->
+<div class="ov" id="minfo" onclick="if(event.target===this)closeMod('minfo')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('minfo')" aria-label="Fechar">✕</button>
+  <div class="mt">O que significam? 💡</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:16px">Um resumo rápido do seu acompanhamento — sem cobrança, só pra te situar.</p>
+  <div class="infi"><div class="infi-ic" style="background:#E9F9ED">🔥</div><div><div class="infi-t">Dias seguidos</div><div class="infi-d">Quantos dias seguidos você registrou algo. Mede sua <strong>constância</strong> no acompanhamento — não é sobre acertar, é sobre estar presente.</div></div></div>
+  <div class="infi"><div class="infi-ic" style="background:#E8F1FF">📅</div><div><div class="infi-t">Esta semana</div><div class="infi-d">Número de registros que você fez nos últimos 7 dias.</div></div></div>
+  <div class="infi"><div class="infi-ic" style="background:#F2EBFF">🎯</div><div><div class="infi-t">Da meta</div><div class="infi-d">Porcentagem das suas metas concluídas. Defina e gerencie suas metas na aba <strong>Progresso</strong>.</div></div></div>
+  <div class="infi"><div class="infi-ic" style="background:#FFF3E0">📆</div><div><div class="infi-t">Este mês</div><div class="infi-d">Total de registros feitos no mês atual.</div></div></div>
+  <div class="infi"><div class="infi-ic" style="background:var(--vf)">⏳</div><div><div class="infi-t">Tempo desde o último uso</div><div class="infi-d">Há quantos dias você não registra cada substância. Um marco de orgulho, no seu ritmo.</div></div></div>
+  <button class="btn bv bfull" style="margin-top:6px" onclick="closeMod('minfo')">Entendi</button>
 </div></div></div>
 
 <!-- NOVO REGISTRO -->
