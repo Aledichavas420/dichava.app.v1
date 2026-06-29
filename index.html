@@ -412,6 +412,16 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .dia{background:linear-gradient(135deg,#2A2410,#1E1C0E)}
 #shell.dkm .dia.ok{background:linear-gradient(135deg,#16301C,#10250F);border-color:#3E6B44}
 #shell.dkm .dia-l{color:#E9EFE7}#shell.dkm .dia-step{background:rgba(255,255,255,.06)}#shell.dkm .dia-bar{background:rgba(255,255,255,.1)}
+/* CONFIRMAR REGISTRO RÁPIDO */
+.quick-card{display:flex;align-items:center;gap:14px;background:var(--cin);border-radius:15px;padding:14px 16px;margin-bottom:12px}
+.quick-card-ic{font-size:34px;flex-shrink:0}
+.quick-card-n{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--dk)}
+.quick-card-m{font-size:12px;color:var(--txm);margin-top:2px}
+#shell.dkm .quick-card{background:#212A21}#shell.dkm .quick-card-n{color:#E9EFE7}
+.quick-alert{display:flex;flex-direction:column;gap:2px;background:#FFF4E6;border:1px solid #FFD9A8;border-radius:12px;padding:10px 13px;margin-bottom:9px}
+.quick-alert b{font-size:12.5px;font-weight:800;color:#C2700A}
+.quick-alert span{font-size:12px;color:#8a6520;line-height:1.45}
+#shell.dkm .quick-alert{background:#2E2410;border-color:#5a4520}#shell.dkm .quick-alert span{color:#d8b483}
 /* REGISTRO RÁPIDO */
 .quickreg{display:flex;align-items:center;gap:12px;width:100%;margin:0 0 14px;background:var(--dk);border:none;border-radius:16px;padding:13px 16px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:transform .12s}
 .quickreg{width:calc(100% - 36px);margin:0 18px 14px}
@@ -1946,6 +1956,18 @@ a{color:inherit;text-decoration:none}
   <button class="btn bv bfull" style="margin-top:14px" onclick="closeMod('mrank')">Fechar</button>
 </div></div></div>
 
+<!-- CONFIRMAR REGISTRO RÁPIDO -->
+<div class="ov" id="mquick" onclick="if(event.target===this)closeMod('mquick')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mquick')" aria-label="Fechar">✕</button>
+  <div class="mt">⚡ Confirmar registro</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:14px">Revise antes de salvar — igual ao seu último registro.</p>
+  <div id="quick-card"></div>
+  <div id="quick-alert"></div>
+  <div style="display:flex;gap:9px;margin-top:14px"><button class="btn bout" style="flex:1" onclick="closeMod('mquick')">Cancelar</button><button class="btn bv" style="flex:1.5" id="quick-confirm" onclick="confirmarQuick()">Confirmar registro</button></div>
+  <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mquick');openMod('mreg')">✏️ Editar detalhes</button>
+</div></div></div>
+
 <!-- NOVO REGISTRO -->
 <div class="ov" id="mreg" onclick="if(event.target===this)closeMod('mreg')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
@@ -2091,7 +2113,7 @@ const OBJS=[
   {id:'rd',icon:'🛡️',bg:'#E0F2F1',nome:'Redução de danos',desc:'Usar com mais segurança e consciência',cor:'#00897B'},
 ];
 const PASSOS=[
-  {tp:'intro',ti:'Oi! Eu sou o Broto 🌱',su:'Vou te ajudar a montar seu espaço — no seu ritmo, sem cobrança. Leva só um minutinho.',btn:'Bora começar'},
+  {tp:'intro',ti:'Oi! Eu sou o Dichavaldo 🌱',su:'Vou te ajudar a montar seu espaço — no seu ritmo, sem cobrança. Leva só um minutinho.',btn:'Bora começar'},
   {tp:'nome',ti:'Como posso te chamar?',su:'Pode ser seu nome ou um apelido. Fica só com você.'},
   {tp:'obj',ti:'O que te trouxe até aqui?',su:'Escolha o que mais combina. Dá pra mudar quando quiser.'},
   {tp:'sub',ti:'Com quais substâncias quer trabalhar?',su:'Pode marcar uma ou várias.'},
@@ -2908,14 +2930,31 @@ function renderQuick(){
   const last=regs[regs.length-1];
   c.innerHTML=`<button class="quickreg" onclick="registroRapido()"><span class="quickreg-ic">⚡</span><span class="quickreg-tx">Registrar igual ao último<b>${nem(last.substancia)} ${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</b></span><span class="quickreg-go">+</span></button>`;
 }
+let _quickData=null;
+function limiteDia(){return gC().limD||3;}
 function registroRapido(){
   const regs=gR();if(!regs.length){openMod('mreg');return;}
   const last=regs[regs.length-1];
-  const reg={id:'r'+Date.now(),substancia:last.substancia,qtd:last.qtd||'',hr:periodoAgora(),ctx:last.ctx||'',emocao:last.emocao||'😐',emoLabel:last.emoLabel||'',gatilhos:[],obs:'',custo:last.custo||'',data:hoje(),criado:new Date().toISOString()};
+  _quickData={substancia:last.substancia,qtd:last.qtd||'',hr:periodoAgora(),ctx:last.ctx||'',emocao:last.emocao||'😐',emoLabel:last.emoLabel||'',custo:last.custo||''};
+  document.getElementById('quick-card').innerHTML=`<div class="quick-card"><div class="quick-card-ic">${nem(last.substancia)}</div><div><div class="quick-card-n">${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</div><div class="quick-card-m">${periodoAgora()} · agora</div></div></div>`;
+  // alertas de cuidado
+  const hj=hoje();const hojeRegs=regs.filter(r=>r.data===hj);const lim=limiteDia();const al=[];
+  if(hojeRegs.length>=lim)al.push({t:'⚠️ Limite do dia atingido',d:`Você já registrou ${hojeRegs.length}x hoje (seu limite é ${lim}). Registrar a realidade é ótimo — mas que tal uma pausa antes? 💚`});
+  if(last.criado){const mins=Math.round((Date.now()-new Date(last.criado).getTime())/60000);if(mins>=0&&mins<90)al.push({t:'⏱️ Faz pouco tempo',d:`Só ${mins} min desde o último. Espaçar reduz os riscos — respira fundo? 🌿`});}
+  document.getElementById('quick-alert').innerHTML=al.map(a=>`<div class="quick-alert"><b>${a.t}</b><span>${a.d}</span></div>`).join('');
+  document.getElementById('quick-confirm').textContent=al.length?'Registrar mesmo assim':'Confirmar registro';
+  openMod('mquick');
+}
+function confirmarQuick(){
+  if(!_quickData){closeMod('mquick');return;}
+  const q=_quickData;
+  const reg={id:'r'+Date.now(),substancia:q.substancia,qtd:q.qtd,hr:q.hr,ctx:q.ctx,emocao:q.emocao,emoLabel:q.emoLabel,custo:q.custo,gatilhos:[],obs:'',data:hoje(),criado:new Date().toISOString()};
   const r2=gR();r2.push(reg);sR(r2);
   try{addXP(5,'registro');}catch(e){}
-  vib(12);toast('⚡ Registrado igual ao último. Edite no histórico se quiser.');
-  renderHome();
+  closeMod('mquick');vib(12);_quickData=null;
+  const cfg=gC();const cH=gR().filter(r=>r.data===hoje()).length;
+  if(cfg.notif&&cH>=limiteDia())notif('⚠️','Atenção ao ritmo',`Você registrou ${cH}x hoje. Cuidar é também desacelerar 💚`);
+  toast('✓ Registro confirmado');renderHome();
 }
 /* ── INSTALAR NA TELA INICIAL ── */
 function renderInstall(){
