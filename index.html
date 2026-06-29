@@ -329,7 +329,9 @@ a{color:inherit;text-decoration:none}
 .obf{padding:0 0 calc(18px + var(--sb));flex-shrink:0}
 
 /* HOME HERO */
-.hh{background:var(--dk);padding:52px 18px 18px;position:relative;overflow:hidden;flex-shrink:0}
+.hh{background:var(--dk);padding:calc(var(--st) + 18px) 18px 18px;position:relative;overflow:hidden;flex-shrink:0}
+.hh-av{position:absolute;top:calc(var(--st) + 16px);right:18px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);border:2px solid rgba(124,217,138,.5);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:17px;color:#fff;cursor:pointer;z-index:2;transition:transform .12s}
+.hh-av:active{transform:scale(.92)}
 .hh::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:var(--v);opacity:.1}
 .hh::after{content:'';position:absolute;bottom:-30px;left:20px;width:120px;height:120px;border-radius:50%;background:var(--am);opacity:.07}
 .hsd{font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;position:relative;z-index:1}
@@ -548,6 +550,22 @@ a{color:inherit;text-decoration:none}
 .mch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px;gap:7px}
 .mct{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--dk);flex:1;line-height:1.3}
 .mcbg{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0}
+/* MEU PERFIL */
+.perfil-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.perfil-av{width:60px;height:60px;border-radius:50%;background:var(--dk);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:23px;flex-shrink:0;border:3px solid var(--vc)}
+.perfil-nome{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:var(--dk)}
+.perfil-tit{font-size:12.5px;color:var(--ve);font-weight:700;margin-top:2px}
+.perfil-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.perfil-st{background:var(--cin);border-radius:14px;padding:11px 4px;text-align:center}
+.perfil-st-n{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;color:var(--dk);line-height:1}
+.perfil-st-l{font-size:9px;color:var(--txs);margin-top:4px;font-weight:600;line-height:1.2}
+.perfil-row{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--cinm)}
+.perfil-k{font-size:12.5px;font-weight:700;color:var(--txs);width:130px;flex-shrink:0}
+.perfil-v{flex:1;font-size:13.5px;color:var(--dk);font-weight:600;display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.perfil-chip{background:var(--vf);color:var(--ve);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600}
+#shell.dkm .perfil-nome{color:#E9EFE7}#shell.dkm .perfil-st{background:#212A21}#shell.dkm .perfil-st-n{color:#E9EFE7}#shell.dkm .perfil-v{color:#E9EFE7}
+.mc-auto{font-size:11px;color:var(--txm);margin-top:7px;font-weight:600}
+.mc-btn{margin-top:8px;background:none;border:none;font-size:12px;color:var(--ve);font-weight:700;cursor:pointer;padding:0;font-family:'DM Sans',sans-serif}
 .bok{background:var(--vf);color:var(--ve)}
 .band{background:var(--ams);color:#795548}
 
@@ -976,6 +994,7 @@ a{color:inherit;text-decoration:none}
 .qag{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 18px 13px}
 .qac-wide{grid-column:1/-1;display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#262657,#3D3D7A);border-radius:18px;padding:15px 17px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 5px 16px rgba(30,30,70,.28);-webkit-tap-highlight-color:transparent;transition:transform .15s}
 .qac-wide:active{transform:scale(.98)}
+.qac-cartas{background:linear-gradient(135deg,#E07B2E,#F0A24A);box-shadow:0 5px 16px rgba(180,90,20,.28);margin-top:10px}
 .qacw-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9}
 .qacw-ic{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;box-shadow:inset 0 1px 1px rgba(255,255,255,.3)}
 .qacw-ic svg,.qacw-ic img{width:30px;height:30px}
@@ -1298,7 +1317,7 @@ a{color:inherit;text-decoration:none}
 <!-- HOME -->
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
 <div class="sc scpad">
-  <div class="hh"><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
+  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
     <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
@@ -1367,6 +1386,18 @@ a{color:inherit;text-decoration:none}
       <div class="qacw-tx">
         <div class="qacw-t">Pausa pra mente</div>
         <div class="qacw-s">Sons que acalmam, respiração e jogos pra atravessar a fissura</div>
+      </div>
+      <div class="qacw-go">›</div>
+    </div>
+    <div class="qac-wide qac-cartas" onclick="abrirCartas()">
+      <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="rgba(255,255,255,.4)" stroke-width="2.5" fill="none"><rect x="296" y="22" width="74" height="52" rx="6"/><path d="M298 26 L333 52 L368 26"/></g>
+        <g fill="#fff" opacity=".5"><circle cx="250" cy="30" r="1.6"/><circle cx="288" cy="92" r="1.3"/><circle cx="360" cy="96" r="1.4"/><circle cx="232" cy="74" r="1.2"/></g>
+      </svg>
+      <div class="qacw-ic" data-icon="sec-cartas"></div>
+      <div class="qacw-tx">
+        <div class="qacw-t">Cartas para mim</div>
+        <div class="qacw-s">Escreva pro seu eu do futuro e leia quando chegar a hora</div>
       </div>
       <div class="qacw-go">›</div>
     </div>
@@ -1951,6 +1982,19 @@ a{color:inherit;text-decoration:none}
   <div class="infi"><div class="infi-ic" style="background:#FFF3E0">📆</div><div><div class="infi-t">Este mês</div><div class="infi-d">Total de registros feitos no mês atual.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:var(--vf)">⏳</div><div><div class="infi-t">Tempo desde o último uso</div><div class="infi-d">Há quantos dias você não registra cada substância. Um marco de orgulho, no seu ritmo.</div></div></div>
   <button class="btn bv bfull" style="margin-top:6px" onclick="closeMod('minfo')">Entendi</button>
+</div></div></div>
+
+<!-- MEU PERFIL -->
+<div class="ov" id="mperfil" onclick="if(event.target===this)closeMod('mperfil')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mperfil')" aria-label="Fechar">✕</button>
+  <div class="perfil-top">
+    <div class="perfil-av" id="perfil-av">?</div>
+    <div><div class="perfil-nome" id="perfil-nome">—</div><div class="perfil-tit" id="perfil-tit">—</div></div>
+  </div>
+  <div class="perfil-stats" id="perfil-stats"></div>
+  <div id="perfil-info"></div>
+  <div style="display:flex;gap:9px;margin-top:14px"><button class="btn bout" style="flex:1" onclick="closeMod('mperfil');reabrirOb()">Editar objetivo</button><button class="btn bv" style="flex:1" onclick="closeMod('mperfil');goPg('p-cfg')">Configurações</button></div>
 </div></div></div>
 
 <!-- RANK / MESTRE DE SI -->
@@ -2802,6 +2846,7 @@ function ckRapido(btn,emoji,label){
 function renderHome(){
   const regs=gR(),obj=gO(),goal=OBJS.find(g=>g.id===obj?.goal),nome=U?.nome||'',in2=ini(nome);
   const tav=document.getElementById('tav');if(tav)tav.textContent=in2;
+  const hav=document.getElementById('hh-av');if(hav)hav.textContent=in2;
   document.getElementById('cmpav').textContent=in2;
   document.getElementById('h-sd').textContent=saud();
   document.getElementById('h-n').innerHTML=`${nome} <span>cuida de si.</span>`;
@@ -3136,10 +3181,55 @@ function renderDdet(regs){
 /* ══ PROGRESSO ══ */
 function renderProg(){renderMetas();renderInsights();renderGraf();renderCqs();renderHist();}
 
+// ── progresso automático das metas (lê os registros) ──
+function _diasAtivosN(){const s=new Set();gR().forEach(r=>s.add(r.data));gRef().forEach(r=>s.add(r.data));(gProt()||[]).forEach(d=>s.add(d));return s.size;}
+function _consecSemUso(){const dias=new Set(gR().map(r=>r.data));const base=new Date();base.setHours(12,0,0,0);let n=0;for(let i=0;i<366;i++){const x=new Date(base);x.setDate(base.getDate()-i);if(dias.has(x.toISOString().slice(0,10)))break;n++;}return n;}
+function metaProg(m){
+  const t=(m.titulo||'').toLowerCase();const regs=gR(),refs=gRef(),fiss=(typeof gFs==='function'?gFs():[]);
+  const semStart=semISO(hoje());const regSem=regs.filter(r=>r.data>=semStart).length;const refSem=refs.filter(r=>r.data>=semStart).length;
+  const nm=t.match(/(\d+)/);const num=nm?+nm[1]:null;
+  if(/dias?\s*sem\s*(uso|usar)/.test(t))return{cur:_consecSemUso(),tot:num||7};
+  if(/dias?\s*(de\s*)?(registro|acompanhamento)/.test(t))return{cur:_diasAtivosN(),tot:num||14};
+  if(/reflex/.test(t))return{cur:refSem,tot:num||1};
+  if(/(fissura|resist|vontade)/.test(t))return{cur:fiss.length,tot:num||5};
+  if(/registr/.test(t)&&/(semana)/.test(t))return{cur:regSem,tot:num||3};
+  if(/\dx\s*por\s*semana/.test(t))return{cur:regSem,tot:num||3};
+  return null;
+}
 function renderMetas(){
   const mts=gM();const c=document.getElementById('metas-l');
   if(!mts.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px">Nenhuma meta definida.</div>';return;}
-  c.innerHTML=mts.map((m,i)=>`<div class="mc ${m.ok?'ok':''}"><div class="mch"><div class="mct">${m.titulo}</div><span class="mcbg ${m.ok?'bok':'band'}">${m.ok?'✓ Concluída':'Em andamento'}</span></div><div class="pgb"><div class="pgf" style="width:${m.ok?100:0}%;background:${m.ok?'var(--v)':'var(--cinm)'}"></div></div><button style="margin-top:8px;background:none;border:none;font-size:12px;color:var(--ve);font-weight:700;cursor:pointer;padding:0" onclick="togMeta(${i})">${m.ok?'↩ Desmarcar':'✓ Marcar como concluída'}</button></div>`).join('');
+  let mudou=false;
+  c.innerHTML=mts.map((m,i)=>{
+    const p=metaProg(m);
+    if(p){
+      const cur=Math.max(0,Math.min(p.cur,p.tot)),tot=p.tot,pct=Math.round(cur/tot*100);
+      if(pct>=100&&!m.ok){m.ok=true;mudou=true;}
+      const done=m.ok;
+      return `<div class="mc ${done?'ok':''}"><div class="mch"><div class="mct">${esc(m.titulo)}</div><span class="mcbg ${done?'bok':'band'}">${done?'✓ Concluída':cur+'/'+tot}</span></div><div class="pgb"><div class="pgf" style="width:${done?100:pct}%;background:${done?'var(--v)':'linear-gradient(90deg,#9CF06B,#5CE3CF)'}"></div></div><div class="mc-auto">📊 Atualiza sozinho conforme seus registros</div></div>`;
+    }
+    return `<div class="mc ${m.ok?'ok':''}"><div class="mch"><div class="mct">${esc(m.titulo)}</div><span class="mcbg ${m.ok?'bok':'band'}">${m.ok?'✓ Concluída':'Manual'}</span></div><div class="pgb"><div class="pgf" style="width:${m.ok?100:0}%;background:${m.ok?'var(--v)':'var(--cinm)'}"></div></div><button class="mc-btn" onclick="togMeta(${i})">${m.ok?'↩ Desmarcar':'✓ Marcar como concluída'}</button></div>`;
+  }).join('');
+  if(mudou){sM(mts);setTimeout(()=>{try{confete();vib([20,40,20]);addXP(25,'meta');toast('🎉 Meta concluída automaticamente!');}catch(e){}},300);}
+}
+function abrirCartas(){goPg('p-ref');setTimeout(()=>{const s=document.querySelector('#p-ref .ref-sec-carta');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});},140);}
+function abrirPerfil(){
+  const nome=U?.nome||'—';const in2=ini(nome);const obj=gO();const goal=OBJS.find(g=>g.id===obj?.goal);
+  const p=gPlayer();const{cur}=nivelDe(p.xp||0);const regs=gR();const refs=gRef();const fiss=(typeof gFs==='function'?gFs():[]);
+  document.getElementById('perfil-av').textContent=in2;
+  document.getElementById('perfil-nome').textContent=nome;
+  document.getElementById('perfil-tit').textContent=cur.ic+' '+cur.t+' · '+(p.xp||0)+' XP';
+  const stats=[['🔥',streak(regs),'dias seguidos'],['📓',regs.length,'registros'],['✍️',refs.length,'reflexões'],['💪',fiss.length,'resistências']];
+  document.getElementById('perfil-stats').innerHTML=stats.map(s=>`<div class="perfil-st"><div class="perfil-st-n">${s[1]}</div><div class="perfil-st-l">${s[0]} ${s[2]}</div></div>`).join('');
+  const perf=gPerfil();const subs=(obj?.subs||[]).map(x=>x.replace(/^[^\wÀ-ú]+ /,''));
+  let info='';
+  info+=`<div class="perfil-row"><div class="perfil-k">🎯 Objetivo</div><div class="perfil-v">${esc(goal?.nome||'—')}</div></div>`;
+  if(subs.length)info+=`<div class="perfil-row"><div class="perfil-k">🌿 Substâncias</div><div class="perfil-v">${subs.map(s=>`<span class="perfil-chip">${nem(s)} ${esc(s)}</span>`).join('')}</div></div>`;
+  const fmt=(k,ic,key)=>{const v=perf[key];if(v&&v.length)info+=`<div class="perfil-row"><div class="perfil-k">${ic} ${k}</div><div class="perfil-v">${v.map(x=>`<span class="perfil-chip">${esc(x)}</span>`).join('')}</div></div>`;};
+  fmt('Motivação','💛','motivacao');fmt('Tempo de uso','⏳','tempo');fmt('Tentativas','🔁','tentativas');fmt('Desafios','🌊','desafio');
+  if(obj?.data)info+=`<div class="perfil-row"><div class="perfil-k">📅 Membro desde</div><div class="perfil-v">${fdt(obj.data)}</div></div>`;
+  document.getElementById('perfil-info').innerHTML=info;
+  openMod('mperfil');
 }
 
 function togMeta(i){const m=gM();m[i].ok=!m[i].ok;sM(m);renderMetas();if(m[i].ok){vib([20,40,20]);confete();}toast(m[i].ok?'🎉 Meta concluída!':'Meta desmarcada.');}
