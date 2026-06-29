@@ -41,6 +41,25 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+/* ── TELA DE PARABÉNS (level-up) ── */
+#celebra{position:fixed;inset:0;z-index:3500;background:radial-gradient(circle at 50% 38%,#244a2c,#13230f 75%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;overflow:hidden}
+#celebra.on{display:flex;animation:celFade .35s ease}
+@keyframes celFade{from{opacity:0}to{opacity:1}}
+.cel-rays{position:absolute;width:160vmax;height:160vmax;top:50%;left:50%;transform:translate(-50%,-58%);background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.05) 0deg 8deg,transparent 8deg 16deg);animation:celSpin 22s linear infinite;pointer-events:none}
+@keyframes celSpin{to{transform:translate(-50%,-58%) rotate(360deg)}}
+.cel-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.cel-confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:celConf linear forwards}
+@keyframes celConf{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(112vh) rotate(720deg);opacity:.9}}
+.cel-card{position:relative;z-index:2;text-align:center;max-width:340px;width:100%}
+.cel-badge{font-size:30px;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;margin:0 auto -30px;position:relative;z-index:3;animation:celPop .6s cubic-bezier(.34,1.56,.64,1) .2s both}
+.cel-broto{width:150px;height:150px;margin:0 auto 10px;animation:celPop .7s cubic-bezier(.34,1.56,.64,1) both,hfloat 3s ease-in-out 1s infinite}
+.cel-broto svg{width:150px;height:150px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.4))}
+@keyframes celPop{0%{transform:scale(0) rotate(-12deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.cel-kicker{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#7BD98A;margin-top:4px;animation:splUp .5s ease .4s both}
+.cel-nome{font-family:'Bagel Fat One',system-ui;font-size:38px;color:#fff;letter-spacing:.5px;margin-top:6px;line-height:1.05;animation:splUp .5s ease .5s both;text-shadow:2px 3px 0 rgba(0,0,0,.25)}
+.cel-sub{font-size:14px;color:rgba(255,255,255,.78);margin-top:10px;line-height:1.5;animation:splUp .5s ease .6s both}
+.cel-xp{font-size:12.5px;color:#FFE36B;font-weight:700;margin-top:12px;animation:splUp .5s ease .7s both}
+#celebra .btn{animation:splUp .5s ease .8s both}
 /* ── SPLASH (abertura do app) ── */
 #splash{position:fixed;inset:0;z-index:3000;background:linear-gradient(165deg,#1B2A1C 0%,#24412a 55%,#2d4a30 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s ease}
 #splash.hide{opacity:0;pointer-events:none}
@@ -1329,14 +1348,6 @@ a{color:inherit;text-decoration:none}
     <div class="snd zc-dark" data-snd="wind" onclick="toggleSom('wind',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-vento"></div><h5>Vento</h5><p>Brisa entre folhas</p></div>
     <div class="snd zc-blue" data-snd="forest" onclick="toggleSom('forest',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-floresta"></div><h5>Floresta</h5><p>Pássaros e mata</p></div>
   </div>
-  <div class="zen-sec" style="margin-top:22px">Ruído & frequências · foco e calma</div>
-  <div class="snd-row">
-    <div class="snd zc-dark" data-snd="branco" onclick="toggleSom('branco',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">⚪</div><h5>Ruído branco</h5><p>Bloqueia distrações</p></div>
-    <div class="snd zc-dark" data-snd="marrom" onclick="toggleSom('marrom',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🟤</div><h5>Ruído marrom</h5><p>Grave e aconchegante</p></div>
-    <div class="snd zc-teal" data-snd="f432" onclick="toggleSom('f432',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎵</div><h5>432 Hz</h5><p>Relaxamento</p></div>
-    <div class="snd zc-teal" data-snd="f528" onclick="toggleSom('f528',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎶</div><h5>528 Hz</h5><p>Sensação de bem-estar</p></div>
-    <div class="snd zc-blue" data-snd="binaural" onclick="toggleSom('binaural',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🧘</div><h5>Binaural θ</h5><p>Ondas theta · meditação</p></div>
-  </div>
   <div class="snd-times" id="snd-times">
     <div class="snd-time" data-min="5" onclick="setSomTempo(5,this)">5 min</div>
     <div class="snd-time on" data-min="10" onclick="setSomTempo(10,this)">10 min</div>
@@ -1350,6 +1361,17 @@ a{color:inherit;text-decoration:none}
     <button class="sb-stop" onclick="pararSom()">⏹</button>
   </div>
   </div><!-- /zen-sons -->
+
+  <div id="zen-freq">
+  <div class="zen-sec" style="margin-top:22px">Ruído & frequências · foco e calma</div>
+  <div class="snd-row">
+    <div class="snd zc-dark" data-snd="branco" onclick="toggleSom('branco',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">⚪</div><h5>Ruído branco</h5><p>Bloqueia distrações</p></div>
+    <div class="snd zc-dark" data-snd="marrom" onclick="toggleSom('marrom',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🟤</div><h5>Ruído marrom</h5><p>Grave e aconchegante</p></div>
+    <div class="snd zc-teal" data-snd="f432" onclick="toggleSom('f432',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎵</div><h5>432 Hz</h5><p>Relaxamento</p></div>
+    <div class="snd zc-teal" data-snd="f528" onclick="toggleSom('f528',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎶</div><h5>528 Hz</h5><p>Sensação de bem-estar</p></div>
+    <div class="snd zc-blue" data-snd="binaural" onclick="toggleSom('binaural',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🧘</div><h5>Binaural θ</h5><p>Ondas theta · meditação</p></div>
+  </div>
+  </div><!-- /zen-freq -->
 
   <div class="zen-sec" style="margin-top:24px">Jogos pra distrair</div>
   <div class="zen-grid">
@@ -1991,6 +2013,21 @@ a{color:inherit;text-decoration:none}
 
 <div class="nb" id="nb"><div class="nbi" id="nb-i">💡</div><div class="nbb"><div class="nbt" id="nb-t">—</div><div class="nbs" id="nb-s">—</div></div><button class="nbx" onclick="fechaNB()">✕</button></div>
 <div id="toast"></div>
+
+<!-- TELA DE PARABÉNS (novo título) -->
+<div id="celebra">
+  <div class="cel-rays"></div>
+  <div class="cel-confetti" id="cel-confetti"></div>
+  <div class="cel-card">
+    <div class="cel-badge" id="cel-badge">🌱</div>
+    <div class="cel-broto" id="cel-broto"></div>
+    <div class="cel-kicker">Novo título desbloqueado!</div>
+    <div class="cel-nome" id="cel-nome">Aprendiz</div>
+    <div class="cel-sub" id="cel-sub">Você está cuidando de si — e isso conta. 💚</div>
+    <div class="cel-xp" id="cel-xp"></div>
+    <button class="btn bv bfull" style="margin-top:18px" onclick="fecharCelebra()">Continuar 🎉</button>
+  </div>
+</div>
 <script>
 /* ══ DIAGNÓSTICO ══ */
 window.onerror=function(msg,src,ln){
@@ -2734,13 +2771,33 @@ const NIVEIS=[
 const gPlayer=()=>ls('dr_player_'+uid())||{xp:0};
 const sPlayer=p=>ls('dr_player_'+uid(),p);
 function nivelDe(xp){let cur=NIVEIS[0],nxt=null;for(let i=0;i<NIVEIS.length;i++){if(xp>=NIVEIS[i].xp){cur=NIVEIS[i];nxt=NIVEIS[i+1]||null;}}return{cur,nxt};}
+const CEL_SUB={
+  'Aprendiz':'Você deu os primeiros passos. Continua, no seu ritmo. 🌱',
+  'Praticante':'Tá virando hábito — e hábito de cuidado muda tudo. 🧭',
+  'Analista':'Você já enxerga seus padrões. Isso é autoconhecimento. 🔍',
+  'Guardião(ã)':'Você protege seu bem-estar todo dia. Que força. 🛡️',
+  'Mestre de Si':'O topo da jornada: presença, consciência e cuidado. 🏆',
+};
 function addXP(n,motivo){
   if(!n)return;const p=gPlayer();const antes=nivelDe(p.xp||0).cur;
   p.xp=(p.xp||0)+n;sPlayer(p);
   const depois=nivelDe(p.xp).cur;renderXP();
-  if(depois.t!==antes.t){setTimeout(()=>{try{confete();vib([20,40,20]);toast('🎉 Novo título: '+depois.ic+' '+depois.t+'!');}catch(e){}},450);}
+  if(depois.t!==antes.t){setTimeout(()=>abrirCelebra(depois,p.xp),500);}
   else{const fl=document.getElementById('xp-flash');if(fl){fl.textContent='+'+n+' XP';fl.classList.remove('on');void fl.offsetWidth;fl.classList.add('on');}}
 }
+function abrirCelebra(nivel,xp){
+  const el=document.getElementById('celebra');if(!el){toast('🎉 Novo título: '+nivel.ic+' '+nivel.t);return;}
+  document.getElementById('cel-badge').textContent=nivel.ic;
+  document.getElementById('cel-nome').textContent=nivel.t;
+  document.getElementById('cel-sub').textContent=CEL_SUB[nivel.t]||'Você está cuidando de si — e isso conta. 💚';
+  document.getElementById('cel-xp').textContent='⭐ '+(xp||gPlayer().xp||0)+' XP acumulados';
+  const b=document.getElementById('cel-broto');if(b)b.innerHTML=brotoSVG();
+  // confete
+  const cc=document.getElementById('cel-confetti');if(cc){const cores=['#7BD98A','#FFD24B','#5CE3CF','#FF8A7A','#B79AF7','#FFA470'];let h='';for(let i=0;i<70;i++){h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;background:'+cores[i%cores.length]+';animation-duration:'+(2.2+Math.random()*2).toFixed(2)+'s;animation-delay:'+(Math.random()*1.2).toFixed(2)+'s;transform:rotate('+(Math.random()*360|0)+'deg)"></i>';}cc.innerHTML=h;}
+  el.classList.add('on');
+  try{vib([30,50,30,50,60]);}catch(e){}
+}
+function fecharCelebra(){const el=document.getElementById('celebra');if(el){el.classList.remove('on');const cc=document.getElementById('cel-confetti');if(cc)cc.innerHTML='';}}
 // concede XP de "pausa pra mente" no máx 1x/dia
 function xpPausa(){const k='dr_xp_pausa_'+uid()+'_'+hoje();if(!localStorage.getItem(k)){localStorage.setItem(k,'1');addXP(4,'pausa');}}
 function renderXP(){
@@ -2773,12 +2830,12 @@ function renderMissao(){
 }
 
 /* ── ÁRVORE DE HABILIDADES (Pausa pra Mente) ── */
+// Obs: ferramentas de crise (respiração, grounding, surfar a onda) NÃO entram aqui —
+// são sempre livres no Modo Crise. A trilha só desbloqueia recursos de relaxamento extra.
 const HABS=[
-  {id:'respira',ic:'🫁',nome:'Respiração guiada',desc:'Acalme o sistema nervoso',cond:()=>true,go:()=>showV('vresp')},
   {id:'jogos',ic:'🎮',nome:'Jogos de foco',desc:'Ocupe as mãos e a cabeça',cond:()=>true,go:()=>{const g=document.querySelector('#p-jogos .zen-grid');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});}},
-  {id:'grounding',ic:'🌍',nome:'Grounding 5-4-3-2-1',desc:'Volte ao presente pelos sentidos',need:'3 reflexões no diário',prog:()=>[gRef().length,3],go:()=>showV('vgrd')},
   {id:'sons',ic:'🎧',nome:'Sons da natureza',desc:'Paisagens sonoras em loop',need:'3 dias seguidos',prog:()=>[streak(gR()),3],go:()=>{const s=document.getElementById('zen-sons');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
-  {id:'onda',ic:'🌊',nome:'Surfar a onda',desc:'Atravesse a fissura — 20 min',need:'5 dias seguidos',prog:()=>[streak(gR()),5],go:()=>iniciarOnda()},
+  {id:'freq',ic:'🎚️',nome:'Ruído & frequências',desc:'Ruído branco, 432Hz, binaural',need:'7 dias seguidos',prog:()=>[streak(gR()),7],go:()=>{const s=document.getElementById('zen-freq');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
 ];
 function habUnlocked(s){return s.cond?s.cond():s.prog()[0]>=s.prog()[1];}
 function renderHabilidades(){
@@ -2789,6 +2846,7 @@ function renderHabilidades(){
     return `<div class="sknode${un?' on':''}" ${un?`onclick="habGo('${s.id}')"`:''}><div class="sk-ic">${un?s.ic:'🔒'}</div><div class="sk-b"><div class="sk-n">${esc(s.nome)}</div><div class="sk-d">${sub}</div>${prog}</div><div class="sk-st">${un?'›':''}</div></div>`;
   }).join('')+'</div>';
   const sons=document.getElementById('zen-sons');if(sons)sons.style.display=habUnlocked(HABS.find(h=>h.id==='sons'))?'':'none';
+  const freq=document.getElementById('zen-freq');if(freq)freq.style.display=habUnlocked(HABS.find(h=>h.id==='freq'))?'':'none';
   // celebra desbloqueios novos (só habilidades condicionais)
   HABS.forEach(s=>{if(s.prog&&habUnlocked(s)){const k='dr_hab_'+uid()+'_'+s.id;if(!localStorage.getItem(k)){localStorage.setItem(k,'1');setTimeout(()=>{try{confete();vib([20,40,20]);addXP(20,'habilidade');toast('🔓 Habilidade desbloqueada: '+s.nome+'!');}catch(e){}},500);}}});
 }
