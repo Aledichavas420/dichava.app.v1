@@ -323,6 +323,37 @@ a{color:inherit;text-decoration:none}
 .hchip{flex:1;background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);border-radius:15px;padding:11px 6px;text-align:center}
 .hchip b{display:block;font-family:'Poppins',sans-serif;font-size:21px;font-weight:800;color:#fff;line-height:1}
 .hchip span{font-size:9.5px;color:rgba(255,255,255,.66);font-weight:600;margin-top:4px;display:block;letter-spacing:.2px}
+/* rank / XP no hero */
+.hero-rank{position:relative;z-index:1;margin-top:13px;cursor:pointer}
+.hr-tit{font-family:'Poppins',sans-serif;font-size:12.5px;font-weight:700;color:#fff;display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.hr-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden}
+.hr-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#FFD24B,#5CE3CF);transition:width .6s cubic-bezier(.4,.1,.2,1)}
+.hr-xp{font-size:9.5px;color:rgba(255,255,255,.6);font-weight:600;margin-top:4px;text-align:right}
+.xp-flash{position:absolute;top:14px;left:50%;transform:translateX(-50%) translateY(0);font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;color:#FFE36B;opacity:0;pointer-events:none;z-index:3;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+.xp-flash.on{animation:xpFl 1.1s ease forwards}
+@keyframes xpFl{0%{opacity:0;transform:translateX(-50%) translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-22px)}}
+/* missão diária */
+.missao{margin:0 18px 14px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:13px;position:relative;overflow:hidden}
+.missao.ok{background:linear-gradient(135deg,#E9F9ED,#CFEFD8);border-color:var(--vc)}
+.missao-ic{width:44px;height:44px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;box-shadow:0 2px 7px rgba(0,0,0,.08)}
+.missao-b{flex:1;min-width:0}
+.missao-l{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--am);margin-bottom:2px}
+.missao.ok .missao-l{color:var(--ve)}
+.missao-t{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);line-height:1.3}
+.missao-go{flex-shrink:0;background:var(--am);color:#3a2f10;border:none;border-radius:11px;padding:8px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif}
+.missao-done{flex-shrink:0;font-size:24px}
+#shell.dkm .missao{background:linear-gradient(135deg,#2A2410,#1E1C0E)}
+#shell.dkm .missao.ok{background:linear-gradient(135deg,#16301C,#10250F);border-color:#3E6B44}
+#shell.dkm .missao-t{color:#E9EFE7}#shell.dkm .missao-ic{background:#222C22}
+/* lista de rank no modal */
+.rankr{display:flex;align-items:center;gap:13px;padding:11px 13px;border-radius:14px;border:1.5px solid var(--cinm);margin-bottom:8px}
+.rankr.cur{border-color:var(--v);background:var(--vf)}
+.rankr-ic{font-size:24px;width:40px;text-align:center;flex-shrink:0}
+.rankr-b{flex:1}
+.rankr-t{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--dk)}
+.rankr-x{font-size:11px;color:var(--txm);margin-top:1px}
+.rankr-st{font-size:16px;flex-shrink:0}
+#shell.dkm .rankr{border-color:#32402F}#shell.dkm .rankr.cur{background:#1D3320}#shell.dkm .rankr-t{color:#E9EFE7}
 #shell.dkm .sc-streak{background:linear-gradient(160deg,#16301C,#10250F)}
 #shell.dkm .sc-week{background:linear-gradient(160deg,#16243A,#101B2E)}
 #shell.dkm .sc-goal{background:linear-gradient(160deg,#241936,#1A1230)}
@@ -1134,7 +1165,10 @@ a{color:inherit;text-decoration:none}
       <div class="hchip"><b id="hs-mt">0%</b><span>da meta</span></div>
       <div class="hchip"><b id="hs-mes">0</b><span>este mês</span></div>
     </div>
+    <div class="hero-rank" id="hero-rank" onclick="abrirRank()"></div>
+    <div class="xp-flash" id="xp-flash"></div>
   </div>
+  <div id="h-missao"></div>
   <div id="h-tempo"></div>
   <div id="h-alts"></div>
   <div class="cks" id="ck-strip"><div class="ckst">Como você está agora?</div><div class="ckse"><button class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
@@ -1754,6 +1788,17 @@ a{color:inherit;text-decoration:none}
   <button class="btn bv bfull" style="margin-top:6px" onclick="closeMod('minfo')">Entendi</button>
 </div></div></div>
 
+<!-- RANK / MESTRE DE SI -->
+<div class="ov" id="mrank" onclick="if(event.target===this)closeMod('mrank')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mrank')" aria-label="Fechar">✕</button>
+  <div class="mt">Seu percurso 🧭</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:8px">Você ganha XP cuidando de si: registrar, refletir, resistir a uma fissura, fazer uma pausa. Sem abstinência forçada — só presença.</p>
+  <div id="rank-list" style="margin-top:10px"></div>
+  <div style="font-size:11.5px;color:var(--txm);margin-top:12px;line-height:1.6">📓 Registro +5 · ✍️ Diário +8 · 🏆 Resistência +15 · 🧘 Pausa +4 · ⭐ Missão do dia +10</div>
+  <button class="btn bv bfull" style="margin-top:14px" onclick="closeMod('mrank')">Fechar</button>
+</div></div></div>
+
 <!-- NOVO REGISTRO -->
 <div class="ov" id="mreg" onclick="if(event.target===this)closeMod('mreg')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
@@ -1887,6 +1932,10 @@ const PASSOS=[
   {tp:'intro',ti:'Oi! Eu sou o Broto 🌱',su:'Vou te ajudar a montar seu espaço — no seu ritmo, sem cobrança. Leva só um minutinho.',btn:'Bora começar'},
   {tp:'obj',ti:'O que te trouxe até aqui?',su:'Escolha o que mais combina. Dá pra mudar quando quiser.'},
   {tp:'sub',ti:'Com quais substâncias quer trabalhar?',su:'Pode marcar uma ou várias.'},
+  {tp:'choice',key:'motivacao',multi:true,ti:'O que mais te move a estar aqui?',su:'Pode marcar mais de um.',opts:[['🫀','Minha saúde'],['🧘','Meu bem-estar'],['👥','Minhas relações'],['💰','Economizar'],['🕊️','Minha liberdade'],['🔍','Autoconhecimento']]},
+  {tp:'choice',key:'tempo',multi:false,ti:'Há quanto tempo isso faz parte da sua vida?',su:'Sem julgamento — só pra entender seu contexto.',opts:[['🌱','Menos de 1 ano'],['📅','1 a 5 anos'],['🗓️','5 a 10 anos'],['⏳','Mais de 10 anos'],['🤐','Prefiro não dizer']]},
+  {tp:'choice',key:'tentativas',multi:false,ti:'Já tentou mudar antes?',su:'Toda tentativa conta como aprendizado.',opts:[['✨','É a primeira vez'],['🔁','1 a 3 vezes'],['💪','Várias vezes']]},
+  {tp:'choice',key:'desafio',multi:true,ti:'O que costuma ser mais difícil?',su:'Isso me ajuda a te apoiar melhor.',opts:[['🌊','Fissura forte'],['😤','Estresse'],['😔','Ansiedade ou tristeza'],['🎉','Situações sociais'],['↩️','Recair'],['🎯','Perder o foco'],['🌙','Sono'],['🥱','Tédio']]},
   {tp:'meta',ti:'Que metas fazem sentido agora?',su:'Marque as que te animam — ou nenhuma, sem problema.'},
   {tp:'done',ti:'Tudo pronto! 💚',su:'Seu espaço tá montado. Vamos juntos, um dia de cada vez.',btn:'Entrar no meu espaço'},
 ];
@@ -2038,7 +2087,9 @@ let U=null,_eReg=null,_eFiss=null,_eCmp=null;
 let _acct='user';
 function setAcct(t){_acct=t;document.getElementById('acct-user').classList.toggle('on',t==='user');document.getElementById('acct-pro').classList.toggle('on',t==='pro');document.getElementById('pro-reg-fld').style.display=t==='pro'?'block':'none';}
 let _calDt=new Date(),_calSel=null;
-let _obP=0,_obG=null,_obSubs=[];
+let _obP=0,_obG=null,_obSubs=[],_obPerfil={};
+const gPerfil=()=>ls('dr_perfil_'+uid())||{};
+const sPerfil=p=>ls('dr_perfil_'+uid(),p);
 let _gC=null,_hC=null;
 let _grP=0,_rT=null,_rOn=false,_rFase=0,_rSeg=0;
 let _fI=null,_crI=null;
@@ -2363,7 +2414,7 @@ function mostrarTermo(){
 
 /* ══ ONBOARDING ══ */
 function startOb(){
-  _obP=0;_obG=null;_obSubs=[];
+  _obP=0;_obG=null;_obSubs=[];_obPerfil=gPerfil()||{};
   document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));
   document.getElementById('vo').classList.add('on');
   document.getElementById('bnav').classList.remove('on');
@@ -2402,6 +2453,20 @@ function renderOb(){
     const grid=document.createElement('div');grid.style.cssText='display:flex;flex-wrap:wrap;gap:8px';
     SUBS.forEach(s=>{const b=document.createElement('button');b.className='chip'+(_obSubs.includes(s)?' on':'');b.textContent=s;b.onclick=()=>{const idx=_obSubs.indexOf(s);if(idx>=0)_obSubs.splice(idx,1);else _obSubs.push(s);b.classList.toggle('on',_obSubs.includes(s));};grid.appendChild(b);});
     body.appendChild(grid);
+  } else if(p.tp==='choice'){
+    if(p.multi){const note=document.createElement('div');note.style.cssText='font-size:12px;color:var(--txm);margin-bottom:10px;padding:8px 12px;background:var(--ams);border-radius:10px';note.textContent='✓ Pode marcar mais de um';body.appendChild(note);}
+    p.opts.forEach(([ic,label])=>{
+      const sel=(_obPerfil[p.key]||[]).includes(label);
+      const d=document.createElement('div');d.className='gc'+(sel?' on':'');
+      d.innerHTML=`<div class="gi" style="background:var(--vf)">${ic}</div><div class="gb"><div class="gn">${label}</div></div><div class="${p.multi?'gck':'gr'}">${p.multi?'✓':''}</div>`;
+      d.onclick=()=>{
+        let arr=_obPerfil[p.key]||[];
+        if(p.multi){const i=arr.indexOf(label);if(i>=0)arr.splice(i,1);else arr.push(label);d.classList.toggle('on');}
+        else{arr=[label];document.querySelectorAll('#ob-body .gc').forEach(c=>c.classList.remove('on'));d.classList.add('on');}
+        _obPerfil[p.key]=arr;vib(4);
+      };
+      body.appendChild(d);
+    });
   } else if(p.tp==='meta'){
     const note=document.createElement('div');note.style.cssText='font-size:12px;color:var(--txm);margin-bottom:10px;padding:8px 12px;background:var(--ams);border-radius:10px';note.textContent='✓ Marque as que fazem sentido agora';body.appendChild(note);
     (MPAD[_obG]||[]).forEach(m=>{
@@ -2422,9 +2487,10 @@ function obNext(){
     if(!ms.length)ms=MPAD[_obG]?.slice(0,2)||[];
     sO({goal:_obG,subs:_obSubs,data:hoje()});
     sM(ms.map((t,i)=>({id:'m'+i+Date.now(),titulo:t,ok:false,criada:hoje()})));
+    sPerfil(_obPerfil);
   }
   if(p.tp==='done'){document.getElementById('vo').classList.remove('on');entrar();return;}
-  const ehPergunta=['obj','sub','meta'].includes(p.tp);
+  const ehPergunta=['obj','sub','meta','choice'].includes(p.tp);
   _obP++;
   if(ehPergunta){
     // bolha de validação rápida do Broto antes da próxima pergunta
@@ -2482,7 +2548,7 @@ function renderHome(){
   document.getElementById('hs-mt').textContent=mp+'%';
   const mes=hoje().slice(0,7);document.getElementById('hs-mes').textContent=regs.filter(r=>r.data.slice(0,7)===mes).length;
   renderHero(st,mp);
-  renderTempo();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
+  renderTempo();renderMissao();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
 }
 function renderHero(st,mp){
   // mascote
@@ -2513,6 +2579,57 @@ function renderHero(st,mp){
   // folhas flutuantes (uma vez)
   const lv=document.getElementById('hero-leaves');
   if(lv&&!lv.dataset.done){let h='';for(let i=0;i<7;i++){const sz=(7+Math.random()*9).toFixed(0);h+='<span class="hleaf" style="width:'+sz+'px;height:'+sz+'px;left:'+(Math.random()*100).toFixed(0)+'%;animation-duration:'+(7+Math.random()*6).toFixed(1)+'s;animation-delay:'+(Math.random()*7).toFixed(1)+'s"></span>';}lv.innerHTML=h;lv.dataset.done='1';}
+  renderXP();
+}
+
+/* ══════════ GAMIFICAÇÃO — "Mestre de Si" ══════════ */
+const NIVEIS=[
+  {xp:0,t:'Observador(a)',ic:'👁️'},
+  {xp:60,t:'Aprendiz',ic:'🌱'},
+  {xp:180,t:'Praticante',ic:'🧭'},
+  {xp:400,t:'Analista',ic:'🔍'},
+  {xp:800,t:'Guardião(ã)',ic:'🛡️'},
+  {xp:1500,t:'Mestre de Si',ic:'🏆'},
+];
+const gPlayer=()=>ls('dr_player_'+uid())||{xp:0};
+const sPlayer=p=>ls('dr_player_'+uid(),p);
+function nivelDe(xp){let cur=NIVEIS[0],nxt=null;for(let i=0;i<NIVEIS.length;i++){if(xp>=NIVEIS[i].xp){cur=NIVEIS[i];nxt=NIVEIS[i+1]||null;}}return{cur,nxt};}
+function addXP(n,motivo){
+  if(!n)return;const p=gPlayer();const antes=nivelDe(p.xp||0).cur;
+  p.xp=(p.xp||0)+n;sPlayer(p);
+  const depois=nivelDe(p.xp).cur;renderXP();
+  if(depois.t!==antes.t){setTimeout(()=>{try{confete();vib([20,40,20]);toast('🎉 Novo título: '+depois.ic+' '+depois.t+'!');}catch(e){}},450);}
+  else{const fl=document.getElementById('xp-flash');if(fl){fl.textContent='+'+n+' XP';fl.classList.remove('on');void fl.offsetWidth;fl.classList.add('on');}}
+}
+// concede XP de "pausa pra mente" no máx 1x/dia
+function xpPausa(){const k='dr_xp_pausa_'+uid()+'_'+hoje();if(!localStorage.getItem(k)){localStorage.setItem(k,'1');addXP(4,'pausa');}}
+function renderXP(){
+  const el=document.getElementById('hero-rank');if(!el)return;
+  const p=gPlayer();const{cur,nxt}=nivelDe(p.xp||0);
+  const base=cur.xp,teto=nxt?nxt.xp:cur.xp;const prog=nxt?Math.round(((p.xp-base)/(teto-base))*100):100;
+  el.innerHTML=`<div class="hr-tit">${cur.ic} ${esc(cur.t)}</div><div class="hr-bar"><div class="hr-bar-fill" style="width:${prog}%"></div></div><div class="hr-xp">${nxt?((p.xp||0)+' / '+teto+' XP'):'XP máx 🏆'}</div>`;
+}
+// ── Missão diária ──
+const MISSOES=[
+  {id:'reg',ic:'📓',t:'Registre como você está hoje',cta:'Registrar',go:()=>openMod('mreg'),done:()=>gR().some(r=>r.data===hoje())},
+  {id:'pausa',ic:'🧘',t:'Faça uma pausa de 2 minutos',cta:'Ir',go:()=>goPg('p-jogos'),done:()=>!!localStorage.getItem('dr_xp_pausa_'+uid()+'_'+hoje())},
+  {id:'diario',ic:'✍️',t:'Escreva uma linha no diário',cta:'Escrever',go:()=>{goPg('p-agenda');setTimeout(()=>{const t=document.getElementById('cmpta');if(t){try{expCmp();}catch(e){}t.focus();}},90);},done:()=>gRef().some(r=>r.data===hoje())},
+  {id:'carta',ic:'🔮',t:'Sorteie uma carta de reflexão',cta:'Ir',go:()=>goPg('p-ref'),done:()=>!!localStorage.getItem('dr_carta_'+uid()+'_'+hoje())},
+];
+function missaoDoDia(){const s=hoje();let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return MISSOES[h%MISSOES.length];}
+function abrirRank(){
+  const c=document.getElementById('rank-list');if(!c)return;
+  const xp=gPlayer().xp||0;const curT=nivelDe(xp).cur.t;
+  c.innerHTML=NIVEIS.map(n=>{const at=xp>=n.xp;const cur=curT===n.t;return `<div class="rankr${cur?' cur':''}"><div class="rankr-ic">${n.ic}</div><div class="rankr-b"><div class="rankr-t">${esc(n.t)}</div><div class="rankr-x">a partir de ${n.xp} XP</div></div><div class="rankr-st">${cur?'★':(at?'✓':'🔒')}</div></div>`;}).join('');
+  openMod('mrank');
+}
+function missaoGo(){missaoDoDia().go();}
+function renderMissao(){
+  const c=document.getElementById('h-missao');if(!c)return;
+  const m=missaoDoDia();const feito=m.done();
+  const k='dr_missao_'+uid()+'_'+hoje();
+  if(feito&&!localStorage.getItem(k)){localStorage.setItem(k,'1');addXP(10,'missao');setTimeout(()=>{try{confete();}catch(e){}},300);}
+  c.innerHTML=`<div class="missao${feito?' ok':''}"><div class="missao-ic">${feito?'✅':m.ic}</div><div class="missao-b"><div class="missao-l">${feito?'Missão concluída':'Missão de hoje'}</div><div class="missao-t">${feito?'Mandou bem! +10 XP 🎉':esc(m.t)}</div></div>${feito?'<div class="missao-done">🌟</div>':`<button class="missao-go" onclick="missaoGo()">${esc(m.cta)}</button>`}</div>`;
 }
 
 function renderAlts(regs){
@@ -2585,6 +2702,7 @@ function salvReg(){
   document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
   const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Novo registro 📓';
   _eReg=null;_editRegId=null;closeMod('mreg');vib(15);
+  if(!editando)try{addXP(5,'registro');}catch(e){}
   toast(editando?'✓ Registro atualizado':'✓ Registro guardado 💚');
   try{renderHome();renderHist();renderGraf();renderCqs();}catch(e){}
   try{if(getComputedStyle(document.getElementById('p-agenda')).display!=='none')renderCal();}catch(e){}
@@ -2614,7 +2732,7 @@ function salvFiss(){
   document.querySelectorAll('#fiss-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#fiss-int .ib').forEach(b=>b.style.outline='none');
-  _eFiss=null;_fI=null;closeMod('mfiss');vib([20,40,20]);confete();toast('🏆 Registrado! Resistir é um ato de cuidado.');renderHome();
+  _eFiss=null;_fI=null;closeMod('mfiss');vib([20,40,20]);confete();try{addXP(15,'resistencia');}catch(e){}toast('🏆 Registrado! Resistir é um ato de cuidado.');renderHome();
 }
 
 /* ══ CALENDÁRIO ══ */
@@ -2733,6 +2851,7 @@ function virarCarta(force){
   if(force){c.classList.remove('flip');void c.offsetWidth;}
   c.classList.add('flip');
   document.getElementById('rcard-acts').style.display='flex';
+  try{localStorage.setItem('dr_carta_'+uid()+'_'+hoje(),'1');}catch(e){}
   vib(8);
 }
 function responderCarta(){
@@ -2826,7 +2945,7 @@ function salvRef(){
   blurAll();const tx=document.getElementById('cmpta').value.trim();if(!tx){toast('⚠️ Escreva algo antes.');return;}
   const obj=gO();const p=prmp(obj?.goal);const isP=tx.startsWith(p);
   const ref={id:'f'+Date.now(),texto:isP?tx.replace(p+'\n\n',''):tx,prompt:isP?p:null,emocao:_cmpEo?.emoji||'✍️',tag:isP?'resposta':'reflexão',data:hoje(),criado:new Date().toISOString()};
-  const refs=gRef();refs.push(ref);sRef(refs);fechaCmp();toast('✓ Reflexão guardada 💚');renderRefFeed();
+  const refs=gRef();refs.push(ref);sRef(refs);fechaCmp();try{addXP(8,'reflexao');}catch(e){}toast('✓ Reflexão guardada 💚');renderRefFeed();
 }
 
 /* ══ CONFIG ══ */
@@ -3257,6 +3376,7 @@ function toggleSom(tipo,el){
   if(_somAudio){try{_somAudio.pause()}catch(e){}_somAudio=null;}
   document.querySelectorAll('.snd').forEach(s=>s.classList.remove('on'));
   el.classList.add('on');
+  try{xpPausa();}catch(e){}
   _somAtual=tipo;
   _playSom(tipo);
   const info=SOM_INFO[tipo];
@@ -3340,6 +3460,7 @@ const gSetBest=(t,v)=>ls('dr_gbest_'+t+'_'+uid(),v);
 
 function abrirJogo(tipo){
   _gameType=tipo;
+  try{xpPausa();}catch(e){}
   const titulos={flap:'Flappy Marola',pop:'Estoura bolhas',tetris:'Blocos',pong:'Ping-pong retrô'};
   const labels={flap:'pontos',pop:'estouradas',tetris:'linhas',pong:'rebatidas'};
   document.getElementById('gv-title').textContent=titulos[tipo]||'Jogo';
