@@ -234,11 +234,25 @@ a{color:inherit;text-decoration:none}
 
 /* ONBOARD */
 #vo{background:var(--cin)}
-.obw{flex:1;display:flex;flex-direction:column;padding:50px 18px 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.obp{display:flex;gap:6px;margin-bottom:22px;flex-shrink:0}
-.opd{flex:1;height:4px;border-radius:2px;background:var(--cinm);transition:background .3s}
-.opd.on{background:var(--v)}
-.obh{background:linear-gradient(145deg,var(--dk),var(--dk2));border-radius:18px;padding:22px 20px;margin-bottom:18px;position:relative;overflow:hidden;flex-shrink:0}
+.obw{flex:1;display:flex;flex-direction:column;padding:calc(var(--st) + 18px) 18px 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ob-prog{height:6px;border-radius:3px;background:var(--cinm);margin-bottom:22px;flex-shrink:0;overflow:hidden}
+.ob-prog-fill{height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,var(--v),#5CE3CF);transition:width .5s cubic-bezier(.4,.1,.2,1)}
+.opd{display:none}
+/* mentor Broto + balão de fala */
+.ob-mentor{display:flex;align-items:flex-end;gap:10px;margin-bottom:16px;flex-shrink:0}
+.ob-broto{width:64px;height:64px;flex-shrink:0}
+.ob-broto svg{width:64px;height:64px;filter:drop-shadow(0 4px 7px rgba(0,0,0,.18))}
+.ob-broto.pop{animation:obPop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes obPop{0%{transform:scale(.6) rotate(-8deg)}100%{transform:scale(1) rotate(0)}}
+.ob-bubble{flex:1;position:relative;margin-bottom:0!important;animation:obBub .35s ease}
+@keyframes obBub{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ob-bubble::before{content:'';position:absolute;left:-9px;bottom:16px;width:0;height:0;border:9px solid transparent;border-right-color:var(--dk);border-left:0}
+/* cena (telas de intro / fim) */
+.ob-scene{display:none;flex-direction:column;align-items:center;text-align:center;padding:18px 6px 6px;flex-shrink:0}
+.ob-scene.on{display:flex}
+.ob-scene .obroto{width:128px;height:128px;animation:hfloat 3s ease-in-out infinite}
+.ob-scene .obroto svg{width:128px;height:128px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.2))}
+.obh{background:linear-gradient(145deg,var(--dk),var(--dk2));border-radius:18px;padding:18px 18px;margin-bottom:18px;position:relative;overflow:hidden;flex-shrink:0}
 .obh::after{content:'';position:absolute;bottom:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:var(--v);opacity:.12}
 .obs{font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
 .obt{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1.2;position:relative;z-index:1}
@@ -1080,8 +1094,12 @@ a{color:inherit;text-decoration:none}
 <!-- ONBOARD -->
 <div class="V" id="vo">
 <div class="obw">
-  <div class="obp" id="obp"><div class="opd on"></div><div class="opd"></div><div class="opd"></div></div>
-  <div class="obh"><div class="obs" id="ob-st">Passo 1 de 3</div><div class="obt" id="ob-ti">O que te trouxe até aqui?</div><div class="obu" id="ob-su">Escolha o que mais se aproxima. Você pode mudar depois.</div></div>
+  <div class="ob-prog"><div class="ob-prog-fill" id="ob-prog-fill"></div></div>
+  <div class="ob-mentor">
+    <div class="ob-broto" id="ob-broto"></div>
+    <div class="obh ob-bubble"><div class="obt" id="ob-ti">—</div><div class="obu" id="ob-su"></div></div>
+  </div>
+  <div class="ob-scene" id="ob-scene"></div>
   <div class="obb" id="ob-body"></div>
 </div>
 <div class="obf" style="padding:0 18px calc(18px + var(--sb))"><button class="btn bv bfull" id="ob-btn" onclick="obNext()">Continuar →</button></div>
@@ -1866,10 +1884,13 @@ const OBJS=[
   {id:'rd',icon:'🛡️',bg:'#E0F2F1',nome:'Redução de danos',desc:'Usar com mais segurança e consciência',cor:'#00897B'},
 ];
 const PASSOS=[
-  {st:'1 de 3',ti:'O que te trouxe até aqui?',su:'Escolha o que mais se aproxima. Pode mudar depois.',tp:'obj'},
-  {st:'2 de 3',ti:'Com quais substâncias quer trabalhar?',su:'Selecione uma ou mais.',tp:'sub'},
-  {st:'3 de 3',ti:'Defina suas primeiras metas',su:'Selecione as que fazem sentido ou crie as suas.',tp:'meta'},
+  {tp:'intro',ti:'Oi! Eu sou o Broto 🌱',su:'Vou te ajudar a montar seu espaço — no seu ritmo, sem cobrança. Leva só um minutinho.',btn:'Bora começar'},
+  {tp:'obj',ti:'O que te trouxe até aqui?',su:'Escolha o que mais combina. Dá pra mudar quando quiser.'},
+  {tp:'sub',ti:'Com quais substâncias quer trabalhar?',su:'Pode marcar uma ou várias.'},
+  {tp:'meta',ti:'Que metas fazem sentido agora?',su:'Marque as que te animam — ou nenhuma, sem problema.'},
+  {tp:'done',ti:'Tudo pronto! 💚',su:'Seu espaço tá montado. Vamos juntos, um dia de cada vez.',btn:'Entrar no meu espaço'},
 ];
+const OB_VALID=['Anotado! 📝','Entendi 💚','Boa escolha 👍','Tá no jeito ✨','Show, segue comigo 🌿'];
 const SUBS=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','🍄 Cogumelo','🌀 Ketamina','🔥 Crack','🌸 Opioide','💤 Benzodiaz.','🌿✨ Ayahuasca','☕ Cafeína','Outra'];
 const MPAD={
   acompanhar:['Registrar ao menos 3x por semana','Escrever uma reflexão por semana','Identificar meu principal gatilho','Completar 14 dias de registro','Compartilhar progresso com terapeuta'],
@@ -2343,20 +2364,32 @@ function mostrarTermo(){
 /* ══ ONBOARDING ══ */
 function startOb(){
   _obP=0;_obG=null;_obSubs=[];
-  document.getElementById('ob-btn').textContent='Continuar →';
-  document.getElementById('vapp').classList.remove('on');
+  document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));
   document.getElementById('vo').classList.add('on');
   document.getElementById('bnav').classList.remove('on');
+  const br=document.getElementById('ob-broto');if(br)br.innerHTML=brotoSVG();
   renderOb();
 }
 function reabrirOb(){startOb();}
 function renderOb(){
   const p=PASSOS[_obP];
-  document.getElementById('ob-st').textContent=p.st;
-  document.getElementById('ob-ti').textContent=p.ti;
+  const total=PASSOS.length-1;
+  document.getElementById('ob-prog-fill').style.width=Math.round(_obP/total*100)+'%';
+  document.getElementById('ob-ti').textContent=p.ti.replace('[nome]',U?.nome||'');
   document.getElementById('ob-su').textContent=p.su;
-  document.querySelectorAll('.opd').forEach((d,i)=>d.classList.toggle('on',i<=_obP));
+  document.getElementById('ob-btn').textContent=p.btn||'Continuar →';
+  const br=document.getElementById('ob-broto');if(br){br.classList.remove('pop');void br.offsetWidth;br.classList.add('pop');}
   const body=document.getElementById('ob-body');body.innerHTML='';
+  const scene=document.getElementById('ob-scene');scene.className='ob-scene';scene.innerHTML='';
+  const mentor=document.querySelector('.ob-mentor');
+  // telas de fala (intro / fim): Broto grande centralizado, sem cards
+  if(p.tp==='intro'||p.tp==='done'){
+    mentor.style.display='none';
+    scene.classList.add('on');
+    scene.innerHTML=`<div class="obroto">${brotoSVG()}</div><div class="obh" style="margin-top:16px;text-align:center"><div class="obt">${esc(p.ti.replace('[nome]',U?.nome||''))}</div><div class="obu" style="max-width:none">${esc(p.su)}</div></div>`;
+    return;
+  }
+  mentor.style.display='flex';
   if(p.tp==='obj'){
     OBJS.forEach(g=>{
       const d=document.createElement('div');d.className='gc'+(g.id===_obG?' on':'');
@@ -2382,18 +2415,31 @@ function obNext(){
   blurAll();
   const p=PASSOS[_obP];
   if(p.tp==='obj'&&!_obG){toast('⚠️ Escolha uma opção.');return;}
-  _obP++;
-  if(_obP>=PASSOS.length){
+  // salva ao sair da etapa de metas
+  if(p.tp==='meta'){
     const cards=[...document.querySelectorAll('#ob-body .gc.on')];
     let ms=cards.map(c=>c._meta).filter(Boolean);
     if(!ms.length)ms=MPAD[_obG]?.slice(0,2)||[];
     sO({goal:_obG,subs:_obSubs,data:hoje()});
     sM(ms.map((t,i)=>({id:'m'+i+Date.now(),titulo:t,ok:false,criada:hoje()})));
-    document.getElementById('vo').classList.remove('on');
-    entrar();return;
   }
-  document.getElementById('ob-btn').textContent=_obP===PASSOS.length-1?'Salvar e entrar →':'Continuar →';
-  renderOb();
+  if(p.tp==='done'){document.getElementById('vo').classList.remove('on');entrar();return;}
+  const ehPergunta=['obj','sub','meta'].includes(p.tp);
+  _obP++;
+  if(ehPergunta){
+    // bolha de validação rápida do Broto antes da próxima pergunta
+    document.querySelector('.ob-scene').className='ob-scene';
+    document.querySelector('.ob-mentor').style.display='flex';
+    document.getElementById('ob-body').innerHTML='';
+    document.getElementById('ob-ti').textContent=OB_VALID[Math.floor(Math.random()*OB_VALID.length)];
+    document.getElementById('ob-su').textContent='';
+    document.getElementById('ob-btn').textContent=' ';
+    const br=document.getElementById('ob-broto');if(br){br.classList.remove('pop');void br.offsetWidth;br.classList.add('pop');}
+    vib(8);
+    setTimeout(renderOb,750);
+  } else {
+    renderOb();
+  }
 }
 
 /* ══ ENTRAR ══ */
