@@ -656,35 +656,42 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .subbtn span{color:#ADBDA9}
 #shell.dkm .subbtn.on span{color:#7BD98A}
 
-/* CARTA DE REFLEXÃO (flip) */
-/* ── CARTA DE TAROT ── */
+/* ── CARTA DE TAROT (dourado místico) ── */
 .rcard-wrap{margin:0 18px 16px}
-.tarot{perspective:1400px;cursor:pointer}
-.tarot-in{position:relative;width:100%;min-height:330px;transition:transform .7s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.tarot{perspective:1500px;cursor:pointer}
+.tarot-in{position:relative;width:100%;min-height:400px;transition:transform .8s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
 .tarot.flip .tarot-in{transform:rotateY(180deg)}
-.tarot-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px 22px;text-align:center;overflow:hidden;box-shadow:0 10px 30px rgba(91,46,168,.32)}
-.tarot-frame{position:absolute;inset:9px;border:1.5px solid rgba(255,255,255,.4);border-radius:13px;pointer-events:none}
-.tarot-back{background:radial-gradient(circle at 50% 40%,#8B5BE0,#5B2EA8 80%);color:#fff}
-.tarot-back .tarot-frame{border-color:rgba(255,255,255,.45)}
-.tarot-back::before{content:'';position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 42%,rgba(255,255,255,.05) 0deg 10deg,transparent 10deg 20deg);opacity:.6}
-.tarot-stars{position:absolute;inset:0;color:rgba(255,255,255,.55)}
-.tarot-stars span{position:absolute;font-size:13px}
-.tarot-stars span:nth-child(1){top:14%;left:18%}.tarot-stars span:nth-child(2){top:24%;right:16%;font-size:10px}.tarot-stars span:nth-child(3){top:60%;left:14%}.tarot-stars span:nth-child(4){bottom:16%;right:20%}.tarot-stars span:nth-child(5){bottom:26%;left:26%;font-size:10px}
-.tarot-back-c{position:relative;z-index:1}
-.tarot-moon{font-size:50px;margin-bottom:10px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.3));animation:hfloat 4s ease-in-out infinite}
-.tarot-back-t{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;letter-spacing:.3px}
-.tarot-back-s{font-size:12.5px;opacity:.85;margin-top:5px}
-.tarot-front{background:linear-gradient(150deg,#9B6BE8,#7C4DD6 55%,#6B43C4);color:#fff;transform:rotateY(180deg);justify-content:space-between}
-.tarot-front .tarot-frame{border-color:rgba(255,255,255,.5);box-shadow:inset 0 0 0 4px rgba(255,255,255,.08)}
-.tarot-corner{position:absolute;font-size:13px;color:rgba(255,255,255,.6)}
-.tc-tl{top:14px;left:16px}.tc-tr{top:14px;right:16px}.tc-bl{bottom:14px;left:16px}.tc-br{bottom:14px;right:16px}
-.tarot-top{position:relative;z-index:1;font-size:10.5px;font-weight:800;letter-spacing:.18em;color:rgba(255,255,255,.8)}
-.tarot-sym{position:relative;z-index:1;font-size:42px;margin:2px 0;filter:drop-shadow(0 3px 8px rgba(0,0,0,.25))}
-.tarot-q{position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-size:21px;font-weight:800;line-height:1.32;letter-spacing:-.2px;padding:0 6px;text-shadow:0 2px 8px rgba(0,0,0,.18)}
-.tarot-foot{position:relative;z-index:1;font-family:'Bagel Fat One',system-ui;font-size:17px;color:#fff;opacity:.92}
-.tarot-foot span{color:#FFD24A}
-.rcard-acts{display:flex;gap:8px;margin-top:12px}
-.rcard-acts .btn{flex:1;padding-left:6px;padding-right:6px}
+.tarot-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 22px;text-align:center;overflow:hidden;box-shadow:0 14px 36px rgba(20,10,40,.5)}
+.tarot-face::after{content:'';position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 0%,rgba(255,216,107,.1),transparent 55%);pointer-events:none}
+.tarot-frame{position:absolute;inset:8px;border:1.5px solid rgba(214,178,90,.8);border-radius:12px;pointer-events:none;box-shadow:inset 0 0 0 4px rgba(214,178,90,.16),0 0 14px rgba(214,178,90,.1)}
+.tarot-back{background:radial-gradient(circle at 50% 38%,#2c2060,#1a1338 70%,#120c26);color:#F3E9C8}
+.tarot-back-t{position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;letter-spacing:.3px;color:#EBD9A0;margin-top:14px}
+.tarot-back-s{position:relative;z-index:1;font-size:12.5px;opacity:.7;margin-top:6px}
+.tarot-front{background:radial-gradient(circle at 50% 34%,#3a2b6e,#1c1340 72%,#130d28);color:#F3E9C8;transform:rotateY(180deg);justify-content:space-between;padding:24px 20px 20px}
+.tarot-front::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(214,178,90,.16) 1px,transparent 1.4px);background-size:16px 16px;opacity:.5;pointer-events:none}
+.tarot-corner{position:absolute;font-size:16px;color:rgba(224,190,110,.85);z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.tc-tl{top:16px;left:18px}.tc-tr{top:16px;right:18px}.tc-bl{bottom:16px;left:18px}.tc-br{bottom:16px;right:18px}
+.tarot-top{position:relative;z-index:1;font-size:10px;font-weight:800;letter-spacing:.22em;color:#D8B25A}
+/* emblema sunburst */
+.tarot-emblem{position:relative;width:118px;height:118px;display:flex;align-items:center;justify-content:center;z-index:1;margin:2px 0}
+.tarot-emblem-sm{width:96px;height:96px}
+.tarot-rays{position:absolute;inset:0;border-radius:50%;background:
+  conic-gradient(from 0deg,#FFE9A8 0deg 2deg,transparent 2deg 15deg,#E0BE6E 15deg 17deg,transparent 17deg 30deg);
+  -webkit-mask:radial-gradient(circle,#000 34%,rgba(0,0,0,.5) 46%,transparent 64%);mask:radial-gradient(circle,#000 34%,rgba(0,0,0,.5) 46%,transparent 64%);
+  filter:drop-shadow(0 0 8px rgba(255,216,107,.4));animation:ccSpin 60s linear infinite}
+.tarot-emblem-sym{position:relative;z-index:1;font-size:42px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+.tarot-emblem-sm .tarot-emblem-sym{font-size:34px}
+.tarot-q{position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;line-height:1.34;letter-spacing:-.2px;padding:0 4px;color:#F6EFD6;text-shadow:0 2px 10px rgba(0,0,0,.4)}
+.tarot-banner{position:relative;z-index:1;font-family:'Bagel Fat One',system-ui;font-size:18px;letter-spacing:.04em;color:#1c1340;background:linear-gradient(#FFE6A0,#E6BE66);border:1.5px solid #B8923E;border-radius:6px;padding:5px 22px;box-shadow:0 3px 10px rgba(0,0,0,.3);transform:rotate(-.5deg);text-transform:uppercase}
+.tarot-brand{position:relative;z-index:1;font-size:11px;font-weight:700;color:rgba(224,190,110,.7);letter-spacing:.05em;margin-top:-2px}
+/* botões premium */
+.tarot-acts{display:flex;gap:9px;margin-top:14px}
+.ta-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:rgba(124,77,214,.08);border:1.5px solid rgba(124,77,214,.25);border-radius:15px;padding:11px 4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:var(--roxo);transition:transform .12s,box-shadow .15s}
+.ta-btn:active{transform:scale(.95)}
+.ta-ic{font-size:18px;line-height:1}
+.ta-primary{background:linear-gradient(135deg,#8B5BE0,#6B43C4);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(107,67,196,.4)}
+#shell.dkm .ta-btn{background:rgba(155,107,232,.12);border-color:rgba(155,107,232,.3);color:#C9B0F0}
+#shell.dkm .ta-primary{color:#fff}
 
 /* CARTA — seção destacada */
 /* ABA CARTAS PARA MIM (fundo relógios/tempo) */
@@ -1621,27 +1628,26 @@ a{color:inherit;text-decoration:none}
       <div class="tarot-in">
         <div class="tarot-face tarot-back">
           <div class="tarot-frame"></div>
-          <div class="tarot-stars"><span>✦</span><span>✧</span><span>·</span><span>✦</span><span>✧</span></div>
-          <div class="tarot-back-c">
-            <div class="tarot-moon">🌙</div>
-            <div class="tarot-back-t">Carta de reflexão</div>
-            <div class="tarot-back-s">Toque ou agite o celular ✦</div>
-          </div>
+          <div class="tarot-emblem tarot-emblem-sm"><div class="tarot-rays"></div><div class="tarot-emblem-sym">🌙</div></div>
+          <div class="tarot-back-t">Carta de reflexão</div>
+          <div class="tarot-back-s">Toque ou agite o celular ✦</div>
+          <div class="tarot-corner tc-tl">✦</div><div class="tarot-corner tc-tr">✦</div><div class="tarot-corner tc-bl">✦</div><div class="tarot-corner tc-br">✦</div>
         </div>
         <div class="tarot-face tarot-front" id="tarot-front">
           <div class="tarot-frame"></div>
-          <div class="tarot-corner tc-tl">✦</div><div class="tarot-corner tc-tr">✦</div><div class="tarot-corner tc-bl">✦</div><div class="tarot-corner tc-br">✦</div>
-          <div class="tarot-top">✦&nbsp;&nbsp;CARTA DE REFLEXÃO&nbsp;&nbsp;✦</div>
-          <div class="tarot-sym" id="tarot-sym">🌙</div>
+          <div class="tarot-corner tc-tl" id="tc1">☾</div><div class="tarot-corner tc-tr" id="tc2">✶</div><div class="tarot-corner tc-bl" id="tc3">✷</div><div class="tarot-corner tc-br" id="tc4">☉</div>
+          <div class="tarot-top">✦&ensp;CARTA DE REFLEXÃO&ensp;✦</div>
+          <div class="tarot-emblem"><div class="tarot-rays"></div><div class="tarot-emblem-sym" id="tarot-sym">🌙</div></div>
           <div class="tarot-q" id="rcard-q">—</div>
-          <div class="tarot-foot">dichava<span>.rd</span></div>
+          <div class="tarot-banner" id="tarot-banner">A LUA</div>
+          <div class="tarot-brand">@dichava.app</div>
         </div>
       </div>
     </div>
-    <div class="rcard-acts" id="rcard-acts" style="display:none">
-      <button class="btn bout bsm" onclick="virarCarta(true)">🔀 Outra</button>
-      <button class="btn bsa bsm" onclick="responderCarta()">✍️ Responder</button>
-      <button class="btn bout bsm" onclick="compartilharCarta()">📤 Compartilhar</button>
+    <div class="tarot-acts" id="rcard-acts" style="display:none">
+      <button class="ta-btn" onclick="virarCarta(true)"><span class="ta-ic">🔀</span><span>Outra</span></button>
+      <button class="ta-btn ta-primary" onclick="responderCarta()"><span class="ta-ic">✍️</span><span>Responder</span></button>
+      <button class="ta-btn" onclick="compartilharCarta()"><span class="ta-ic">📤</span><span>Compartilhar</span></button>
     </div>
   </div>
   <div class="ref-carta-link" onclick="abrirCartas()">
@@ -3398,12 +3404,20 @@ function renderRef(){
   try{if(!/iphone|ipad|ipod/i.test(navigator.userAgent))ativarShake();}catch(e){}
 }
 const RCARDS=['O que seu corpo está pedindo agora?','Qual foi um pequeno cuidado que você teve consigo hoje?','O que costuma vir antes da vontade de usar?','Como você gostaria de se sentir amanhã de manhã?','Que emoção você anda evitando sentir?','O que te trouxe algum alívio recentemente?','Quem é alguém com quem você pode contar?','O que você diria a um amigo na sua situação?','Qual parte do seu dia foi mais leve?','O que você aprendeu sobre si essa semana?','Que necessidade o uso costuma tentar suprir?','Qual seria um próximo passo gentil pra você?','Do que você sente orgulho, mesmo que pequeno?','O que você precisa ouvir hoje?','Qual limite você gostaria de respeitar mais?','O que estava acontecendo da última vez que você se sentiu bem?','Que parte de você merece mais paciência?','O que mudaria se você fosse mais gentil consigo?','Que pensamento tem ocupado mais espaço na sua cabeça?','O que você faria hoje se não tivesse medo de errar?','Quando foi a última vez que você riu de verdade?','O que te ajuda a desacelerar quando tudo aperta?','Qual é uma coisa que você sente falta?','O que seu eu de 5 anos atrás acharia de você hoje?','Que conversa você está adiando ter?','O que costuma te acalmar de verdade?','Onde no corpo você sente a ansiedade?','Que situação costuma te puxar de volta pro uso?','O que seria descansar de verdade pra você?','Qual vitória sua passou despercebida essa semana?','O que você gostaria de soltar hoje?','Que parte do seu dia você gostaria de repetir?','O que você está aprendendo a aceitar?','Quem te faz sentir seguro(a)?','O que mudaria se você confiasse mais em você?','Que cuidado você daria a alguém que ama — e poderia dar a si?','O que te dá esperança ultimamente?','Qual sentimento você gostaria de sentir mais vezes?','O que seu silêncio anda tentando dizer?','Que peso você está carregando que não é seu?'];
-let _rcLast=-1;const TAROT_SYM=['🌙','✦','🌿','🔮','🕯️','🌊','☀️','🪞'];
+let _rcLast=-1,_rcArc=null;
+const ARCANAS=[
+  {n:'A Lua',s:'🌙'},{n:'O Espelho',s:'🪞'},{n:'A Semente',s:'🌱'},{n:'A Onda',s:'🌊'},
+  {n:'A Chama',s:'🕯️'},{n:'O Caminho',s:'🧭'},{n:'A Raiz',s:'🌿'},{n:'O Tempo',s:'⏳'},
+  {n:'A Estrela',s:'✦'},{n:'O Silêncio',s:'🤍'},{n:'A Ponte',s:'🌉'},{n:'A Coragem',s:'🦁'},
+  {n:'O Recomeço',s:'🌅'},{n:'A Pausa',s:'☕'},{n:'O Abraço',s:'🫂'},{n:'O Sol',s:'☀️'},
+];
 function virarCarta(force){
   const c=document.getElementById('rcard');if(!c)return;
   let i;do{i=Math.floor(Math.random()*RCARDS.length);}while(i===_rcLast&&RCARDS.length>1);_rcLast=i;
+  _rcArc=ARCANAS[Math.floor(Math.random()*ARCANAS.length)];
   document.getElementById('rcard-q').textContent=RCARDS[i];
-  const sym=document.getElementById('tarot-sym');if(sym)sym.textContent=TAROT_SYM[Math.floor(Math.random()*TAROT_SYM.length)];
+  const sym=document.getElementById('tarot-sym');if(sym)sym.textContent=_rcArc.s;
+  const ban=document.getElementById('tarot-banner');if(ban)ban.textContent=_rcArc.n;
   if(force){c.classList.remove('flip');void c.offsetWidth;}
   c.classList.add('flip');
   document.getElementById('rcard-acts').style.display='flex';
@@ -3431,27 +3445,39 @@ function onShakeMotion(e){
 }
 /* ── compartilhar a carta (imagem, tipo print) ── */
 function cartaCanvas(q){
-  const W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
-  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#9B6BE8');g.addColorStop(.55,'#7C4DD6');g.addColorStop(1,'#5B2EA8');
+  const W=1080,H=1500,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  const arc=_rcArc||{n:'A Lua',s:'🌙'};const GOLD='#E6BE66',GOLD2='#FFE9A8',CREAM='#F6EFD6';
+  // fundo místico
+  const g=x.createRadialGradient(W/2,H*0.36,80,W/2,H*0.5,H*0.8);g.addColorStop(0,'#3a2b6e');g.addColorStop(.6,'#1c1340');g.addColorStop(1,'#0f0a22');
   x.fillStyle=g;x.fillRect(0,0,W,H);
-  // moldura
-  x.strokeStyle='rgba(255,255,255,.45)';x.lineWidth=4;rrect(x,46,46,W-92,H-92,34);x.stroke();
-  x.strokeStyle='rgba(255,255,255,.18)';x.lineWidth=10;rrect(x,70,70,W-140,H-140,26);x.stroke();
-  // estrelas
-  x.fillStyle='rgba(255,255,255,.5)';['✦','✧','✦','·','✧'].forEach((s,i)=>{x.font=(28+i*8)+'px serif';x.fillText(s,120+i*180,150+(i%2)*40);});
+  // textura pontilhada
+  x.fillStyle='rgba(230,190,102,.10)';for(let i=0;i<460;i++){x.beginPath();x.arc(Math.random()*W,Math.random()*H,Math.random()*2.2,0,7);x.fill();}
+  // estrelinhas brilhantes
+  x.fillStyle='rgba(255,255,255,.8)';['✦','✧','✦','✧','✦','✧'].forEach((s,i)=>{x.font=(20+Math.random()*26|0)+'px serif';x.fillText(s,90+Math.random()*(W-180),150+Math.random()*(H-300));});
+  // molduras douradas
+  x.strokeStyle=GOLD;x.lineWidth=5;rrect(x,42,42,W-84,H-84,30);x.stroke();
+  x.strokeStyle='rgba(230,190,102,.35)';x.lineWidth=16;rrect(x,66,66,W-132,H-132,22);x.stroke();
   x.textAlign='center';
-  x.fillStyle='rgba(255,255,255,.82)';x.font='600 30px DM Sans, sans-serif';x.fillText('✦   CARTA DE REFLEXÃO   ✦',W/2,240);
-  x.font='120px serif';x.fillText('🌙',W/2,400);
-  // pergunta (quebra de linha)
-  x.fillStyle='#fff';x.font='800 56px DM Sans, sans-serif';
-  wrapText(x,q,W/2,560,W-220,72);
-  // rodapé marca
-  x.font='64px "Bagel Fat One", system-ui';
-  x.textAlign='right';x.fillStyle='#fff';x.fillText('dichava',W/2+16,H-150);
-  x.textAlign='left';x.fillStyle='#FFD24A';x.fillText('.rd',W/2+16,H-150);
-  x.textAlign='center';x.fillStyle='rgba(255,255,255,.6)';x.font='500 26px DM Sans, sans-serif';x.fillText('acompanhamento sem julgamento',W/2,H-100);
+  // cantos
+  x.fillStyle=GOLD;x.font='44px serif';x.fillText('☾',110,150);x.fillText('✶',W-110,150);x.fillText('✷',110,H-120);x.fillText('☉',W-110,H-120);
+  // topo
+  x.fillStyle=GOLD;x.font='700 34px DM Sans, sans-serif';x.fillText('✦   C A R T A   D E   R E F L E X Ã O   ✦',W/2,250);
+  // emblema sunburst dourado
+  drawSunburst(x,W/2,470,150,GOLD2,GOLD);
+  x.font='120px serif';x.fillText(arc.s,W/2,512);
+  // pergunta
+  x.fillStyle=CREAM;x.font='800 58px DM Sans, sans-serif';
+  wrapText(x,q,W/2,760,W-230,74);
+  // selo/banner com nome da carta
+  const bw=Math.min(W-220,x.measureText(arc.n.toUpperCase()).width+180),bh=92,bx=(W-bw)/2,by=H-330;
+  const bg=x.createLinearGradient(0,by,0,by+bh);bg.addColorStop(0,GOLD2);bg.addColorStop(1,GOLD);x.fillStyle=bg;rrect(x,bx,by,bw,bh,12);x.fill();
+  x.strokeStyle='#B8923E';x.lineWidth=3;rrect(x,bx,by,bw,bh,12);x.stroke();
+  x.fillStyle='#1c1340';x.font='62px "Bagel Fat One", system-ui';x.fillText(arc.n.toUpperCase(),W/2,by+64);
+  // marca discreta
+  x.fillStyle=GOLD;x.font='700 40px DM Sans, sans-serif';x.fillText('@dichava.app',W/2,H-130);
   return cv;
 }
+function drawSunburst(x,cx,cy,r,c1,c2){const n=48;for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2;const rr=i%2?r:r*0.62;x.save();x.translate(cx,cy);x.rotate(a);x.beginPath();x.moveTo(0,-6);x.lineTo(rr,0);x.lineTo(0,6);x.closePath();x.fillStyle=i%2?c2:c1;x.globalAlpha=.9;x.fill();x.restore();}x.globalAlpha=1;x.beginPath();x.arc(cx,cy,r*0.42,0,7);x.fillStyle='rgba(28,19,64,.85)';x.fill();x.lineWidth=3;x.strokeStyle=c2;x.stroke();}
 function rrect(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();}
 function wrapText(ctx,text,cx,cy,maxW,lh){const words=text.split(' ');let line='',y=cy;const lines=[];words.forEach(w=>{const t=line?line+' '+w:w;if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w;}else line=t;});if(line)lines.push(line);y=cy-(lines.length-1)*lh/2;lines.forEach(l=>{ctx.fillText(l,cx,y);y+=lh;});}
 async function compartilharCarta(){
