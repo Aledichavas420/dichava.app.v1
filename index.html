@@ -390,6 +390,46 @@ a{color:inherit;text-decoration:none}
 .xp-flash.on{animation:xpFl 1.1s ease forwards}
 @keyframes xpFl{0%{opacity:0;transform:translateX(-50%) translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-22px)}}
 /* missão diária */
+/* SEU DIA HOJE */
+.dia{margin:0 18px 14px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:20px;padding:15px 16px}
+.dia.ok{background:linear-gradient(135deg,#E9F9ED,#CFEFD8);border-color:var(--vc)}
+.dia-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dia-l{font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:800;color:var(--dk)}
+.dia-c{font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;color:var(--am)}
+.dia.ok .dia-c{color:var(--ve)}
+.dia-bar{height:7px;border-radius:4px;background:rgba(0,0,0,.07);overflow:hidden;margin-bottom:12px}
+.dia-bar-f{height:100%;border-radius:4px;background:linear-gradient(90deg,#FFC24B,#4CAF5A);transition:width .6s cubic-bezier(.4,.1,.2,1)}
+.dia-steps{display:flex;gap:8px}
+.dia-step{flex:1;background:rgba(255,255,255,.7);border:1.5px solid rgba(0,0,0,.06);border-radius:14px;padding:11px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:transform .12s}
+.dia-step:active{transform:scale(.95)}
+.dia-step.done{background:var(--vf);border-color:var(--vc)}
+.dia-step-ic{font-size:21px;line-height:1}
+.dia-step.done .dia-step-ic{color:var(--ve);font-weight:800}
+.dia-step-l{font-size:11px;font-weight:700;color:var(--txs)}
+.dia-step.done .dia-step-l{color:var(--ve)}
+.dia-msg{font-size:12px;font-weight:600;color:var(--ve);margin-top:11px;line-height:1.45}
+.dia-msg.risco{color:#C2700A}
+#shell.dkm .dia{background:linear-gradient(135deg,#2A2410,#1E1C0E)}
+#shell.dkm .dia.ok{background:linear-gradient(135deg,#16301C,#10250F);border-color:#3E6B44}
+#shell.dkm .dia-l{color:#E9EFE7}#shell.dkm .dia-step{background:rgba(255,255,255,.06)}#shell.dkm .dia-bar{background:rgba(255,255,255,.1)}
+/* REGISTRO RÁPIDO */
+.quickreg{display:flex;align-items:center;gap:12px;width:100%;margin:0 0 14px;background:var(--dk);border:none;border-radius:16px;padding:13px 16px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:transform .12s}
+.quickreg{width:calc(100% - 36px);margin:0 18px 14px}
+.quickreg:active{transform:scale(.98)}
+.quickreg-ic{font-size:20px;flex-shrink:0}
+.quickreg-tx{flex:1;text-align:left;font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.3}
+.quickreg-tx b{display:block;font-size:14px;font-weight:700;color:#fff;margin-top:1px}
+.quickreg-go{width:30px;height:30px;border-radius:50%;background:var(--v);color:#fff;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* INSTALAR */
+.installc{display:flex;align-items:center;gap:12px;margin:0 18px 14px;background:linear-gradient(135deg,#EAF2FF,#DCE9FF);border:1.5px solid #B9D3FF;border-radius:16px;padding:12px 14px;position:relative}
+.installc-ic{font-size:22px;flex-shrink:0}
+.installc-b{flex:1;min-width:0}
+.installc-t{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:800;color:#1B3A6B}
+.installc-d{font-size:11.5px;color:#3A5A8C;margin-top:1px;line-height:1.35}
+.installc-go{background:#2B6CB0;color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif}
+.installc-x{position:absolute;top:6px;right:8px;background:none;border:none;color:#7a90b5;font-size:13px;cursor:pointer}
+#shell.dkm .installc{background:linear-gradient(135deg,#16243A,#101B2E);border-color:#2a3f5f}
+#shell.dkm .installc-t{color:#cfe0ff}#shell.dkm .installc-d{color:#90a8cc}
 .missao{margin:0 18px 14px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:13px;position:relative;overflow:hidden}
 .missao.ok{background:linear-gradient(135deg,#E9F9ED,#CFEFD8);border-color:var(--vc)}
 .missao-ic{width:44px;height:44px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;box-shadow:0 2px 7px rgba(0,0,0,.08)}
@@ -1266,7 +1306,9 @@ a{color:inherit;text-decoration:none}
     <div class="hero-rank" id="hero-rank" onclick="abrirRank()"></div>
     <div class="xp-flash" id="xp-flash"></div>
   </div>
+  <div id="h-install"></div>
   <div id="h-missao"></div>
+  <div id="h-quick"></div>
   <div id="h-tempo"></div>
   <div id="h-alts"></div>
   <div class="cks" id="ck-strip"><div class="ckst">Como você está agora?</div><div class="ckse"><button class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
@@ -2251,7 +2293,21 @@ const fdt=iso=>{if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}/${
 const nem=s=>{const m={Álcool:'🍺',Cannabis:'🌿',Tabaco:'🚬',Cocaína:'❄️',MDMA:'💊',LSD:'✨',Cogumelo:'🍄',Ketamina:'🌀',Crack:'🔥',Opioide:'🌸','Benzodiaz.':'💤',Ayahuasca:'🌿✨',Cafeína:'☕'};for(const k of Object.keys(m))if(s&&s.includes(k))return m[k];return'🔹'};
 const ini=n=>{if(!n)return'?';return n.trim().split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2)};
 const saud=()=>{const h=new Date().getHours();if(h<12)return'Bom dia,';if(h<18)return'Boa tarde,';return'Boa noite,'};
-function streak(regs){const ds=[...new Set(regs.map(r=>r.data))].sort().reverse();let s=0;let c=new Date();c.setHours(12,0,0,0);for(const d of ds){const dd=new Date(d+'T12:00:00');const df=Math.round((c-dd)/864e5);if(df>1)break;s++;c=dd;}return s}
+const gProt=()=>ls('dr_prot_'+uid())||[];
+function streak(regs){const prot=gProt();const ds=[...new Set([...(regs||[]).map(r=>r.data),...prot])].sort().reverse();let s=0;let c=new Date();c.setHours(12,0,0,0);for(const d of ds){const dd=new Date(d+'T12:00:00');const df=Math.round((c-dd)/864e5);if(df>1)break;s++;c=dd;}return s}
+function semanaISO(){const d=new Date();const onejan=new Date(d.getFullYear(),0,1);const w=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);return d.getFullYear()+'-'+w;}
+function getEscudo(){let e=ls('dr_escudo_'+uid());const w=semanaISO();if(!e||e.week!==w){e={n:1,week:w};ls('dr_escudo_'+uid(),e);}return e;}
+function checarEscudo(){
+  const regs=gR(),prot=gProt();const active=new Set([...regs.map(r=>r.data),...prot]);
+  const base=new Date();base.setHours(12,0,0,0);
+  const iso=d=>{const x=new Date(base);x.setDate(base.getDate()-d);return x.toISOString().slice(0,10);};
+  const hoje0=iso(0),ontem=iso(1),anteontem=iso(2);
+  if(!active.has(hoje0)&&!active.has(ontem)&&active.has(anteontem)){
+    const e=getEscudo();
+    if(e.n>0){e.n--;ls('dr_escudo_'+uid(),e);prot.push(ontem);ls('dr_prot_'+uid(),prot);
+      setTimeout(()=>{try{toast('🛡️ Escudo usado! Sua sequência foi protegida.');vib([20,40,20]);}catch(x){}},1300);}
+  }
+}
 function semISO(iso){const d=new Date(iso+'T12:00:00');const dw=d.getDay();const m=new Date(d);m.setDate(d.getDate()-dw+1);return m.toISOString().split('T')[0]}
 const shk=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')};
 const prmp=(g)=>{const a=PROMPTS[g]||PROMPTS.rd;return a[(new Date().getDate()-1)%a.length]};
@@ -2690,6 +2746,7 @@ function entrar(){
   document.getElementById('vo').classList.remove('on');
   showV('vapp');
   document.getElementById('bnav').classList.add('on');
+  try{checarEscudo();}catch(e){}
   goPg('p-home');
   applyTheme();
   renderHome();
@@ -2725,7 +2782,7 @@ function renderHome(){
   document.getElementById('hs-mt').textContent=mp+'%';
   const mes=hoje().slice(0,7);document.getElementById('hs-mes').textContent=regs.filter(r=>r.data.slice(0,7)===mes).length;
   renderHero(st,mp);
-  renderTempo();renderMissao();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
+  renderTempo();renderDiaHoje();renderQuick();renderInstall();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
 }
 function renderHero(st,mp){
   // mascote
@@ -2821,13 +2878,59 @@ function abrirRank(){
   openMod('mrank');
 }
 function missaoGo(){missaoDoDia().go();}
-function renderMissao(){
-  const c=document.getElementById('h-missao');if(!c)return;
-  const m=missaoDoDia();const feito=m.done();
-  const k='dr_missao_'+uid()+'_'+hoje();
-  if(feito&&!localStorage.getItem(k)){localStorage.setItem(k,'1');addXP(10,'missao');setTimeout(()=>{try{confete();}catch(e){}},300);}
-  c.innerHTML=`<div class="missao${feito?' ok':''}"><div class="missao-ic">${feito?'✅':m.ic}</div><div class="missao-b"><div class="missao-l">${feito?'Missão concluída':'Missão de hoje'}</div><div class="missao-t">${feito?'Mandou bem! +10 XP 🎉':esc(m.t)}</div></div>${feito?'<div class="missao-done">🌟</div>':`<button class="missao-go" onclick="missaoGo()">${esc(m.cta)}</button>`}</div>`;
+/* ── SEU DIA HOJE (ritual diário) ── */
+function diaSteps(){
+  const hj=hoje();
+  return [
+    {ic:'☀️',l:'Check-in',done:gCK().data===hj,go:()=>{const c=document.getElementById('ck-strip');if(c){c.style.display='block';c.scrollIntoView({behavior:'smooth',block:'center'});}}},
+    {ic:'📓',l:'Registrar',done:gR().some(r=>r.data===hj)||gRef().some(r=>r.data===hj),go:()=>openMod('mreg')},
+    {ic:'🧘',l:'Pausa',done:!!localStorage.getItem('dr_xp_pausa_'+uid()+'_'+hj),go:()=>goPg('p-jogos')},
+  ];
 }
+function diaGo(i){const s=diaSteps()[i];if(s&&!s.done)s.go();else if(s)s.go();}
+function renderDiaHoje(){
+  const c=document.getElementById('h-missao');if(!c)return;
+  const steps=diaSteps();const feitos=steps.filter(s=>s.done).length;const total=steps.length;const completo=feitos===total;
+  const st=streak(gR());const risco=!completo&&st>=2&&!steps[1].done;
+  if(completo){const k='dr_dia_'+uid()+'_'+hoje();if(!localStorage.getItem(k)){localStorage.setItem(k,'1');try{addXP(15,'dia');}catch(e){}setTimeout(()=>{try{confete();}catch(e){}},250);}}
+  c.innerHTML=`<div class="dia${completo?' ok':''}">
+    <div class="dia-hd"><span class="dia-l">${completo?'🎉 Dia completo!':'☀️ Seu dia hoje'}</span><span class="dia-c">${feitos}/${total}</span></div>
+    <div class="dia-bar"><div class="dia-bar-f" style="width:${Math.round(feitos/total*100)}%"></div></div>
+    <div class="dia-steps">${steps.map((s,i)=>`<button class="dia-step${s.done?' done':''}" onclick="diaGo(${i})"><span class="dia-step-ic">${s.done?'✓':s.ic}</span><span class="dia-step-l">${s.l}</span></button>`).join('')}</div>
+    ${completo?'<div class="dia-msg">Mandou bem! Ritual de hoje cumprido · +15 XP 💚</div>':(risco?`<div class="dia-msg risco">🔥 Sua sequência de ${st} dias acaba hoje — faça um registro pra manter!</div>`:'')}
+  </div>`;
+}
+/* ── REGISTRO RÁPIDO (1 toque) ── */
+function periodoAgora(){const h=new Date().getHours();return h<6?'Madrugada':h<12?'Manhã':h<18?'Tarde':'Noite';}
+function renderQuick(){
+  const c=document.getElementById('h-quick');if(!c)return;
+  const regs=gR();if(!regs.length){c.innerHTML='';return;}
+  const last=regs[regs.length-1];
+  c.innerHTML=`<button class="quickreg" onclick="registroRapido()"><span class="quickreg-ic">⚡</span><span class="quickreg-tx">Registrar igual ao último<b>${nem(last.substancia)} ${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</b></span><span class="quickreg-go">+</span></button>`;
+}
+function registroRapido(){
+  const regs=gR();if(!regs.length){openMod('mreg');return;}
+  const last=regs[regs.length-1];
+  const reg={id:'r'+Date.now(),substancia:last.substancia,qtd:last.qtd||'',hr:periodoAgora(),ctx:last.ctx||'',emocao:last.emocao||'😐',emoLabel:last.emoLabel||'',gatilhos:[],obs:'',custo:last.custo||'',data:hoje(),criado:new Date().toISOString()};
+  const r2=gR();r2.push(reg);sR(r2);
+  try{addXP(5,'registro');}catch(e){}
+  vib(12);toast('⚡ Registrado igual ao último. Edite no histórico se quiser.');
+  renderHome();
+}
+/* ── INSTALAR NA TELA INICIAL ── */
+function renderInstall(){
+  const c=document.getElementById('h-install');if(!c)return;
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+  if(standalone){c.innerHTML='';return;}
+  if(localStorage.getItem('dr_install_dismiss_'+uid())){c.innerHTML='';return;}
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(!window._deferredPrompt&&!isIOS){c.innerHTML='';return;}
+  c.innerHTML=`<div class="installc"><div class="installc-ic">📲</div><div class="installc-b"><div class="installc-t">Tenha o dichava na tela inicial</div><div class="installc-d">${isIOS?'Toque em Compartilhar → "Adicionar à Tela de Início"':'Acesso rápido e notificações, como um app'}</div></div>${isIOS?'':'<button class="installc-go" onclick="instalarApp()">Instalar</button>'}<button class="installc-x" onclick="fecharInstall()">✕</button></div>`;
+}
+async function instalarApp(){
+  const p=window._deferredPrompt;if(!p)return;p.prompt();try{await p.userChoice;}catch(e){}window._deferredPrompt=null;renderInstall();
+}
+function fecharInstall(){localStorage.setItem('dr_install_dismiss_'+uid(),'1');renderInstall();}
 
 /* ── ÁRVORE DE HABILIDADES (Pausa pra Mente) ── */
 // Obs: ferramentas de crise (respiração, grounding, surfar a onda) NÃO entram aqui —
@@ -4494,6 +4597,9 @@ function applyTheme(){
 if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
+// captura o prompt de instalação (Android/Chrome)
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._deferredPrompt=e;try{renderInstall();}catch(x){}});
+window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{renderInstall();}catch(x){}});
 
 /* ══════════ NOTIFICAÇÕES PUSH (Web Push + Supabase) ══════════ */
 const VAPID_PUB='BNWG_B7SsJFIhvTO-aJAX8WzdvDyixqKhAF6qc17vYzpUWu0OzZjJ2IIJgK6sASfHrfvZ4WbzDrndFOqXa1FsPU';
