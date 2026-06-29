@@ -511,14 +511,21 @@ a{color:inherit;text-decoration:none}
 .calnb{background:var(--cin);border:none;width:33px;height:33px;border-radius:50%;font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .caldls{display:grid;grid-template-columns:repeat(7,1fr);padding:0 9px 5px;margin-top:9px}
 .caldl{text-align:center;font-size:9px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px}
-.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:0 9px 13px}
-.cald{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;font-weight:500;cursor:pointer;position:relative;border:none;background:none;max-width:40px;margin:0 auto;width:100%}
-.cald.hj{background:var(--dk);color:#fff;font-weight:700}
-.cald.sl{background:var(--v);color:#fff}
-.cald.tm::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--v);position:absolute;bottom:3px}
-.cald.hj.tm::after,.cald.sl.tm::after{background:rgba(255,255,255,.8)}
-.cald.at::after{background:var(--lrj)}
-.cald.out{opacity:.25;pointer-events:none}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:2px 10px 12px}
+.cald{height:42px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:13.5px;font-weight:600;color:var(--dk);cursor:pointer;position:relative;border:none;background:none;width:100%;transition:transform .1s}
+.cald:active{transform:scale(.92)}
+.cald.tm{background:var(--vf);color:var(--ve);font-weight:700}
+.cald.at{background:#FFE0CC;color:#D2570A;font-weight:800}
+.cald.hj{box-shadow:inset 0 0 0 2px var(--dk)}
+.cald.sl{background:var(--v);color:#fff;box-shadow:0 3px 9px rgba(76,175,90,.32)}
+.cald.out{visibility:hidden;pointer-events:none}
+#shell.dkm .cald{color:#E9EFE7}
+#shell.dkm .cald.tm{background:#1D3320;color:#7BD98A}
+#shell.dkm .cald.at{background:#3A2614;color:#F0A861}
+#shell.dkm .cald.hj{box-shadow:inset 0 0 0 2px #71826f}
+.cal-leg{display:flex;gap:16px;justify-content:center;padding:0 9px 12px;font-size:10.5px;color:var(--txm);font-weight:600}
+.cal-leg span{display:flex;align-items:center;gap:5px}
+.cal-leg i{width:11px;height:11px;border-radius:4px;display:inline-block}
 .ddet{background:var(--cin);border-radius:18px;padding:15px 17px;margin:0 18px 14px}
 .ddett{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:10px}
 .dri{display:flex;align-items:center;gap:10px;background:#fff;border-radius:11px;padding:10px 12px;margin-bottom:7px;border:1px solid #F0F0F0}
@@ -1460,6 +1467,7 @@ a{color:inherit;text-decoration:none}
     <div class="calnr"><button class="calnb" onclick="calNav(-1)">‹</button><div class="calm" id="cal-mes">—</div><button class="calnb" onclick="calNav(1)">›</button></div>
     <div class="caldls"><div class="caldl">D</div><div class="caldl">S</div><div class="caldl">T</div><div class="caldl">Q</div><div class="caldl">Q</div><div class="caldl">S</div><div class="caldl">S</div></div>
     <div class="calg" id="calg"></div>
+    <div class="cal-leg"><span><i style="background:var(--vf)"></i>algum uso</span><span><i style="background:#FFE0CC"></i>uso intenso</span><span><i style="box-shadow:inset 0 0 0 2px var(--dk)"></i>hoje</span></div>
   </div>
   <div id="ddet" style="display:none"></div>
   <!-- DIÁRIO -->
@@ -1594,8 +1602,8 @@ a{color:inherit;text-decoration:none}
     <div class="cfgi" onclick="togglePush()"><div class="cfgic">📲</div><div class="cfgb"><div class="cfgn">Notificações de cuidado</div><div class="cfgd" id="push-status">Avisos no seu ritmo, mesmo com o app fechado</div></div><label class="tog" onclick="event.preventDefault()"><input type="checkbox" id="tog-push"><div class="tsl"></div></label></div>
     <div style="padding:5px 15px 13px;border-bottom:1px solid var(--cinm)">
       <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Alertar ao ultrapassar:</div>
-      <div class="alimr"><input class="aliminp" type="number" id="lim-d" min="1" max="20" value="4" onchange="salvCfg()"><span class="aliml">registros por dia</span></div>
-      <div class="alimr" style="margin-top:5px"><input class="aliminp" type="number" id="lim-s" min="1" max="50" value="15" onchange="salvCfg()"><span class="aliml">registros por semana</span></div>
+      <div class="alimr"><input class="aliminp" type="number" id="lim-d" min="1" max="20" value="3" onchange="salvCfg()"><span class="aliml">registros por dia</span></div>
+      <div class="alimr" style="margin-top:5px"><input class="aliminp" type="number" id="lim-s" min="1" max="50" value="12" onchange="salvCfg()"><span class="aliml">registros por semana</span></div>
     </div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">💭</div><div class="cfgb"><div class="cfgn">Provocações reflexivas</div><div class="cfgd">Perguntas adaptadas ao seu momento</div></div><label class="tog"><input type="checkbox" id="tog-d" onchange="salvCfg()"><div class="tsl"></div></label></div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">☀️</div><div class="cfgb"><div class="cfgn">Check-in diário de humor</div><div class="cfgd">Lembrete de 30s pela manhã</div></div><label class="tog"><input type="checkbox" id="tog-ck" checked onchange="salvCfg()"><div class="tsl"></div></label></div>
@@ -2294,7 +2302,7 @@ const gFs=()=>ls('dr_fs_'+uid())||[];
 const sFs=r=>ls('dr_fs_'+uid(),r);
 const gCt=()=>ls('dr_ct_'+uid())||[];
 const sCt=c=>ls('dr_ct_'+uid(),c);
-const gC=()=>ls('dr_c_'+uid())||{notif:true,dicas:true,ck:true,limD:4,limS:15};
+const gC=()=>ls('dr_c_'+uid())||{notif:true,dicas:true,ck:true,limD:3,limS:12};
 const sC=c=>ls('dr_c_'+uid(),c);
 const gO=()=>ls('dr_o_'+uid());
 const sO=g=>ls('dr_o_'+uid(),g);
@@ -2932,15 +2940,17 @@ function renderQuick(){
 }
 let _quickData=null;
 function limiteDia(){return gC().limD||3;}
+function limiteSemana(){return gC().limS||12;}
 function registroRapido(){
   const regs=gR();if(!regs.length){openMod('mreg');return;}
   const last=regs[regs.length-1];
   _quickData={substancia:last.substancia,qtd:last.qtd||'',hr:periodoAgora(),ctx:last.ctx||'',emocao:last.emocao||'😐',emoLabel:last.emoLabel||'',custo:last.custo||''};
   document.getElementById('quick-card').innerHTML=`<div class="quick-card"><div class="quick-card-ic">${nem(last.substancia)}</div><div><div class="quick-card-n">${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</div><div class="quick-card-m">${periodoAgora()} · agora</div></div></div>`;
   // alertas de cuidado
-  const hj=hoje();const hojeRegs=regs.filter(r=>r.data===hj);const lim=limiteDia();const al=[];
+  const hj=hoje();const hojeRegs=regs.filter(r=>r.data===hj);const semRegs=regs.filter(r=>r.data>=semISO(hj));const lim=limiteDia(),limS=limiteSemana();const al=[];
   if(hojeRegs.length>=lim)al.push({t:'⚠️ Limite do dia atingido',d:`Você já registrou ${hojeRegs.length}x hoje (seu limite é ${lim}). Registrar a realidade é ótimo — mas que tal uma pausa antes? 💚`});
   if(last.criado){const mins=Math.round((Date.now()-new Date(last.criado).getTime())/60000);if(mins>=0&&mins<90)al.push({t:'⏱️ Faz pouco tempo',d:`Só ${mins} min desde o último. Espaçar reduz os riscos — respira fundo? 🌿`});}
+  if(semRegs.length>=limS)al.push({t:'📅 Uso alto na semana',d:`São ${semRegs.length} registros nos últimos 7 dias (seu limite é ${limS}). Sem culpa — talvez seja um bom momento pra um cuidado extra. 🌿`});
   document.getElementById('quick-alert').innerHTML=al.map(a=>`<div class="quick-alert"><b>${a.t}</b><span>${a.d}</span></div>`).join('');
   document.getElementById('quick-confirm').textContent=al.length?'Registrar mesmo assim':'Confirmar registro';
   openMod('mquick');
@@ -3008,7 +3018,7 @@ function renderWds(regs){
   const hj=new Date();hj.setHours(12,0,0,0);const dias=['D','S','T','Q','Q','S','S'];const cfg=gC();
   for(let i=6;i>=0;i--){
     const d=new Date(hj);d.setDate(hj.getDate()-i);const iso=d.toISOString().split('T')[0];
-    const cnt=regs.filter(r=>r.data===iso).length;const isHj=i===0;const at=cnt>=(cfg.limD||4);
+    const cnt=regs.filter(r=>r.data===iso).length;const isHj=i===0;const at=cnt>=(cfg.limD||3);
     const cls='wdd'+(cnt>0?(at&&!isHj?' at':' ok'):'')+(isHj&&cnt===0?' hj':'');
     c.innerHTML+=`<div class="wd"><div class="wdl">${dias[d.getDay()]}</div><div class="${cls}">${cnt>0?'✓':d.getDate()}</div></div>`;
   }
@@ -3102,7 +3112,7 @@ function renderCal(){
   const regs=gR();const ano=_calDt.getFullYear();const mes=_calDt.getMonth();
   const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   document.getElementById('cal-mes').textContent=meses[mes]+' '+ano;
-  const limD=(gC().limD||4);const hj=hoje();let html='';
+  const limD=(gC().limD||3);const hj=hoje();let html='';
   for(let i=0;i<new Date(ano,mes,1).getDay();i++)html+='<button class="cald out" disabled></button>';
   for(let d=1;d<=new Date(ano,mes+1,0).getDate();d++){
     const iso=`${ano}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
@@ -3314,7 +3324,7 @@ function salvRef(){
 function renderCfg(){
   const nm=U?.nome||'—';const in2=ini(nm);const obj=gO();const goal=OBJS.find(g=>g.id===obj?.goal);
   document.getElementById('pfav').textContent=in2;document.getElementById('pfn').textContent=nm;document.getElementById('pfe').textContent=U?.email||'—';document.getElementById('pfm').textContent='🎯 '+(goal?.nome||'—');document.getElementById('cfg-obj').textContent=goal?.nome||'—';
-  const cfg=gC();document.getElementById('tog-n').checked=cfg.notif;document.getElementById('tog-d').checked=cfg.dicas;document.getElementById('tog-ck').checked=cfg.ck!==false;document.getElementById('lim-d').value=cfg.limD||4;document.getElementById('lim-s').value=cfg.limS||15;
+  const cfg=gC();document.getElementById('tog-n').checked=cfg.notif;document.getElementById('tog-d').checked=cfg.dicas;document.getElementById('tog-ck').checked=cfg.ck!==false;document.getElementById('lim-d').value=cfg.limD||3;document.getElementById('lim-s').value=cfg.limS||12;
   try{setPushStatus();}catch(e){}
   const pl=gP();document.getElementById('plano-prev').textContent=pl.frase||'Não configurado ainda';
   document.getElementById('tog-dark').checked=!!cfg.dark;
