@@ -1382,6 +1382,7 @@ a{color:inherit;text-decoration:none}
   <div class="shr"><div class="sht">Notificações</div></div>
   <div class="cfgsec">
     <div class="cfgi" style="cursor:default"><div class="cfgic">🔔</div><div class="cfgb"><div class="cfgn">Lembretes diários</div><div class="cfgd">Convite para registrar</div></div><label class="tog"><input type="checkbox" id="tog-n" onchange="salvCfg()"><div class="tsl"></div></label></div>
+    <div class="cfgi" onclick="togglePush()"><div class="cfgic">📲</div><div class="cfgb"><div class="cfgn">Notificações de cuidado</div><div class="cfgd" id="push-status">Avisos no seu ritmo, mesmo com o app fechado</div></div><label class="tog" onclick="event.preventDefault()"><input type="checkbox" id="tog-push"><div class="tsl"></div></label></div>
     <div style="padding:5px 15px 13px;border-bottom:1px solid var(--cinm)">
       <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Alertar ao ultrapassar:</div>
       <div class="alimr"><input class="aliminp" type="number" id="lim-d" min="1" max="20" value="4" onchange="salvCfg()"><span class="aliml">registros por dia</span></div>
@@ -2787,6 +2788,7 @@ function renderCfg(){
   const nm=U?.nome||'—';const in2=ini(nm);const obj=gO();const goal=OBJS.find(g=>g.id===obj?.goal);
   document.getElementById('pfav').textContent=in2;document.getElementById('pfn').textContent=nm;document.getElementById('pfe').textContent=U?.email||'—';document.getElementById('pfm').textContent='🎯 '+(goal?.nome||'—');document.getElementById('cfg-obj').textContent=goal?.nome||'—';
   const cfg=gC();document.getElementById('tog-n').checked=cfg.notif;document.getElementById('tog-d').checked=cfg.dicas;document.getElementById('tog-ck').checked=cfg.ck!==false;document.getElementById('lim-d').value=cfg.limD||4;document.getElementById('lim-s').value=cfg.limS||15;
+  try{setPushStatus();}catch(e){}
   const pl=gP();document.getElementById('plano-prev').textContent=pl.frase||'Não configurado ainda';
   document.getElementById('tog-dark').checked=!!cfg.dark;
   document.getElementById('tog-disc').checked=!!cfg.discreto;
@@ -4104,6 +4106,43 @@ function applyTheme(){
 /* ══════════ v6: SERVICE WORKER ══════════ */
 if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+
+/* ══════════ NOTIFICAÇÕES PUSH (Web Push + Supabase) ══════════ */
+const VAPID_PUB='BNWG_B7SsJFIhvTO-aJAX8WzdvDyixqKhAF6qc17vYzpUWu0OzZjJ2IIJgK6sASfHrfvZ4WbzDrndFOqXa1FsPU';
+function _b64ToU8(s){const pad='='.repeat((4-s.length%4)%4);const b=(s+pad).replace(/-/g,'+').replace(/_/g,'/');const r=atob(b);const a=new Uint8Array(r.length);for(let i=0;i<r.length;i++)a[i]=r.charCodeAt(i);return a;}
+function pushSuportado(){return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;}
+function pushInstaladoIOS(){const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);return !(isIOS&&!standalone);}
+async function togglePush(){
+  const inp=document.getElementById('tog-push');
+  const reg=await navigator.serviceWorker?.ready?.catch(()=>null);
+  const jaInscrito=reg&&await reg.pushManager.getSubscription();
+  if(jaInscrito){await desativarPush();setPushStatus();return;}
+  if(!pushSuportado()){toast('Seu navegador não suporta notificações push.');return;}
+  if(!pushInstaladoIOS()){toast('📲 No iPhone: toque em Compartilhar → "Adicionar à Tela de Início", abra pelo ícone e ative aqui.');return;}
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=='granted'){toast('Permissão negada. Ative nas configurações do aparelho se mudar de ideia.');setPushStatus();return;}
+    const r=await navigator.serviceWorker.ready;
+    const sub=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:_b64ToU8(VAPID_PUB)});
+    await salvarPush(sub);
+    setPushStatus();vib(15);toast('🔔 Notificações ativadas! Você vai receber avisos de cuidado 💚');
+  }catch(e){toast('Não consegui ativar agora. Tente novamente.');}
+}
+async function salvarPush(sub){
+  if(!_SB||!U||U.id==='demo')return;
+  const j=sub.toJSON();
+  const obj=gO();
+  try{await _SB.from('push_subs').upsert({user_id:U.id,endpoint:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth,goal:obj?.goal||null,tz:Intl.DateTimeFormat().resolvedOptions().timeZone||'America/Sao_Paulo',updated_at:new Date().toISOString()},{onConflict:'endpoint'});}catch(e){}
+}
+async function desativarPush(){
+  try{const r=await navigator.serviceWorker.ready;const sub=await r.pushManager.getSubscription();if(sub){const ep=sub.endpoint;await sub.unsubscribe();if(_SB)await _SB.from('push_subs').delete().eq('endpoint',ep);}}catch(e){}
+  toast('Notificações de cuidado desativadas.');
+}
+function setPushStatus(){
+  const el=document.getElementById('push-status'),inp=document.getElementById('tog-push');if(!inp)return;
+  if(!pushSuportado()){inp.checked=false;if(el)el.textContent='Indisponível neste navegador';return;}
+  navigator.serviceWorker.ready.then(r=>r.pushManager.getSubscription()).then(s=>{inp.checked=!!s;if(el)el.textContent=s?'Ativadas — avisos de cuidado mesmo com o app fechado':(pushInstaladoIOS()?'Avisos no seu ritmo, mesmo com o app fechado':'No iPhone, instale o app na Tela de Início primeiro');}).catch(()=>{});
 }
 
 /* ══ NOTIF ══ */

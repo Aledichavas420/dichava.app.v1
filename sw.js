@@ -1,5 +1,5 @@
-// dichava.rd — service worker v73
-const CACHE = 'dichavard-v73';
+// dichava.rd — service worker v74
+const CACHE = 'dichavard-v74';
 const ASSETS = ['./', './index.html'];
 
 self.addEventListener('install', e => {
@@ -23,5 +23,34 @@ self.addEventListener('fetch', e => {
       caches.open(CACHE).then(c => c.put(e.request, copy)).catch(()=>{});
       return res;
     }).catch(() => caches.match(e.request).then(r => r || caches.match('./')))
+  );
+});
+
+// ── NOTIFICAÇÕES PUSH ──
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data.json(); } catch (_) { d = { title: 'dichava.rd', body: e.data ? e.data.text() : '' }; }
+  const title = d.title || 'dichava.rd';
+  const opts = {
+    body: d.body || '',
+    icon: './icon-192.png',
+    badge: './icon-192.png',
+    image: d.image || undefined,
+    data: { url: d.url || './' },
+    vibrate: [60, 40, 60],
+    tag: d.tag || undefined,
+    renotify: !!d.tag
+  };
+  e.waitUntil(self.registration.showNotification(title, opts));
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || './';
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(cl => {
+      for (const c of cl) { if ('focus' in c) { c.navigate && c.navigate(url); return c.focus(); } }
+      return clients.openWindow(url);
+    })
   );
 });
