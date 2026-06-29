@@ -674,6 +674,29 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .rcard-q{color:#E9EFE7}
 
 /* CARTA — seção destacada */
+/* ABA CARTAS PARA MIM (fundo relógios/tempo) */
+#vcartas{background:linear-gradient(170deg,#FFF8E8,#FBEFD6 55%,#F6E3C8)}
+#shell.dkm #vcartas{background:linear-gradient(170deg,#231d12,#1c1810 55%,#191510)}
+.cartas-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;color:rgba(200,140,40,.16)}
+#shell.dkm .cartas-bg{color:rgba(220,180,90,.12)}
+.cartas-clock{position:absolute;animation:ccSpin linear infinite}
+.cc1{width:150px;height:150px;top:7%;right:-34px;animation-duration:90s}
+.cc2{width:100px;height:100px;top:44%;left:-26px;animation-duration:70s;animation-direction:reverse}
+.cc3{width:120px;height:120px;bottom:9%;right:16%;animation-duration:110s}
+@keyframes ccSpin{to{transform:rotate(360deg)}}
+.cartas-spark{position:absolute;color:rgba(232,134,47,.4);font-size:18px;animation:spk 4s ease-in-out infinite}
+.cartas-spark.s1{top:19%;left:17%}.cartas-spark.s2{top:60%;right:13%;font-size:14px;animation-delay:1.5s}.cartas-spark.s3{bottom:23%;left:22%;font-size:22px;animation-delay:.8s}
+.cartas-hero{text-align:center;padding:12px 24px 6px;position:relative;z-index:2}
+.cartas-hero-ic{font-size:46px;margin-bottom:6px;filter:drop-shadow(0 6px 12px rgba(200,140,40,.3))}
+.cartas-hero h2{font-family:'DM Sans',sans-serif;font-size:25px;font-weight:800;color:#6b4e10;line-height:1.18;letter-spacing:-.3px}
+.cartas-hero p{font-size:13.5px;color:#8a6d2a;margin:9px auto 18px;line-height:1.55;max-width:300px}
+#shell.dkm .cartas-hero h2{color:#F0D89A}#shell.dkm .cartas-hero p{color:#c9b079}
+.cartas-nova{background:linear-gradient(135deg,#E8862F,#F0A24A)!important;box-shadow:0 6px 18px rgba(200,120,30,.3)}
+.ref-carta-link{display:flex;align-items:center;gap:12px;margin:0 18px 14px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:18px;padding:14px 16px;cursor:pointer}
+.rcl-t{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:#7a5e10}
+.rcl-s{font-size:12px;color:#9a7d2a;margin-top:1px}
+.rcl-go{font-size:22px;color:var(--am);font-weight:700}
+#shell.dkm .ref-carta-link{background:linear-gradient(135deg,#2A2410,#1E1C0E);border-color:#8a7a2a}#shell.dkm .rcl-t{color:#F0D89A}
 .ref-sec-carta{background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:20px;padding:16px 0 6px;margin:0 18px 14px;overflow:hidden;position:relative}
 .ref-sec-carta::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--am);opacity:.12;pointer-events:none}
 .ref-carta-hd{display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:12px}
@@ -1599,15 +1622,10 @@ a{color:inherit;text-decoration:none}
       <button class="btn bsa bsm" onclick="responderCarta()">✍️ Responder</button>
     </div>
   </div>
-  <div class="ref-sec-carta">
-    <div class="ref-carta-hd">
-      <div class="ref-carta-hd-left">
-        <span data-icon="sec-cartas" style="width:22px;height:22px;display:inline-block;vertical-align:middle;margin-right:7px"></span>
-        <span>Cartas para mim</span>
-      </div>
-      <button class="ref-carta-nova" onclick="openMod('mcarta')">+ nova carta</button>
-    </div>
-    <div id="cartas-l"></div>
+  <div class="ref-carta-link" onclick="abrirCartas()">
+    <span data-icon="sec-cartas" style="width:26px;height:26px;display:inline-block;flex-shrink:0"></span>
+    <div style="flex:1"><div class="rcl-t">Cartas para mim</div><div class="rcl-s">Escreva pro seu eu do futuro</div></div>
+    <span class="rcl-go">›</span>
   </div>
 
   <!-- HUMOR -->
@@ -1864,6 +1882,27 @@ a{color:inherit;text-decoration:none}
   <div class="grdx" id="grd-x">Olhe ao redor. Nomeie 5 coisas que consegue ver agora.</div>
   <button class="btn bv" style="margin-top:26px;min-width:170px" id="grd-btn" onclick="grdNext()">Próximo →</button>
 </div>
+</div>
+
+<!-- CARTAS PARA MIM (aba dedicada) -->
+<div class="V" id="vcartas">
+  <div class="cartas-bg" aria-hidden="true">
+    <svg class="cartas-clock cc1" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3"/><line x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="50" y1="50" x2="70" y2="58" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <svg class="cartas-clock cc2" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3"/><line x1="50" y1="50" x2="64" y2="32" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="50" y1="50" x2="38" y2="64" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <svg class="cartas-clock cc3" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3"/><line x1="50" y1="50" x2="50" y2="24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="50" y1="50" x2="32" y2="44" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <span class="cartas-spark s1">✦</span><span class="cartas-spark s2">✦</span><span class="cartas-spark s3">✦</span>
+  </div>
+  <div class="ptb" style="background:transparent;position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk">Cartas para mim</div></div>
+  <div class="sc" style="position:relative;z-index:2;padding-bottom:30px">
+    <div class="cartas-hero">
+      <div class="cartas-hero-ic">✉️</div>
+      <h2>Uma carta pro seu<br>eu do futuro</h2>
+      <p>Escreva o que está sentindo hoje. Guardamos com carinho e você lê quando chegar a hora.</p>
+      <button class="btn bv bfull cartas-nova" onclick="openMod('mcarta')">✍️ Escrever carta pro meu eu do futuro</button>
+    </div>
+    <div class="shr" style="margin-top:8px"><div class="sht">Minhas cartas</div></div>
+    <div id="cartas-l" style="padding:0 4px"></div>
+  </div>
 </div>
 
 <!-- ARTIGO -->
@@ -3240,7 +3279,7 @@ function renderMetas(){
   }).join('');
   if(mudou){sM(mts);setTimeout(()=>{try{confete();vib([20,40,20]);addXP(25,'meta');toast('🎉 Meta concluída automaticamente!');}catch(e){}},300);}
 }
-function abrirCartas(){goPg('p-ref');setTimeout(()=>{const s=document.querySelector('#p-ref .ref-sec-carta');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});},140);}
+function abrirCartas(){showV('vcartas');try{renderCartas();}catch(e){}}
 function abrirPerfil(){
   const nome=U?.nome||'—';const in2=ini(nome);const obj=gO();const goal=OBJS.find(g=>g.id===obj?.goal);
   const p=gPlayer();const{cur}=nivelDe(p.xp||0);const regs=gR();const refs=gRef();const fiss=(typeof gFs==='function'?gFs():[]);
