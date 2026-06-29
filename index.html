@@ -221,6 +221,12 @@ a{color:inherit;text-decoration:none}
 
 /* AUTH */
 #va{background:var(--dk);justify-content:flex-end}
+.aw{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--st) + 24px) 30px calc(30px + var(--sb));position:relative;overflow:hidden;text-align:center}
+.aw-broto{width:140px;height:140px;margin-bottom:18px;animation:hfloat 3s ease-in-out infinite}
+.aw-broto svg{width:140px;height:140px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35))}
+.aw-acts{width:100%;max-width:340px;margin-top:34px}
+.aw-pro{background:none;border:none;color:rgba(255,255,255,.5);font-size:13px;font-weight:600;cursor:pointer;margin-top:20px;font-family:'DM Sans',sans-serif}
+.aw-back{display:block;margin:14px auto 0;background:none;border:none;color:var(--txs);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
 .at{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px 24px;position:relative;overflow:hidden}
 .at::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(76,175,90,.1);top:-80px;right:-80px}
 .at::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,214,0,.07);bottom:-40px;left:-40px}
@@ -244,6 +250,8 @@ a{color:inherit;text-decoration:none}
 .ob-broto svg{width:64px;height:64px;filter:drop-shadow(0 4px 7px rgba(0,0,0,.18))}
 .ob-broto.pop{animation:obPop .5s cubic-bezier(.34,1.56,.64,1)}
 @keyframes obPop{0%{transform:scale(.6) rotate(-8deg)}100%{transform:scale(1) rotate(0)}}
+.ob-check{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--tx);line-height:1.45;margin:4px 0 12px;cursor:pointer}
+.ob-check input{width:20px;height:20px;flex-shrink:0;margin-top:1px;accent-color:var(--v)}
 .ob-bubble{flex:1;position:relative;margin-bottom:0!important;animation:obBub .35s ease}
 @keyframes obBub{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .ob-bubble::before{content:'';position:absolute;left:-9px;bottom:16px;width:0;height:0;border:9px solid transparent;border-right-color:var(--dk);border-left:0}
@@ -1097,6 +1105,19 @@ a{color:inherit;text-decoration:none}
 
 <!-- AUTH -->
 <div class="V on" id="va">
+<!-- BOAS-VINDAS -->
+<div id="aw-welcome" class="aw">
+  <div class="aw-broto" id="aw-broto"></div>
+  <div class="alogo">dichava<em>.rd</em></div>
+  <div class="atag">Seu espaço de acompanhamento,<br>sem julgamento 💚</div>
+  <div class="aw-acts">
+    <button class="btn bv bfull" onclick="iniciarJornada()">🌱 Iniciar jornada</button>
+    <button class="btn bout bfull" style="margin-top:11px" onclick="mostrarLogin()">Já tenho conta · Entrar</button>
+  </div>
+  <button class="aw-pro" onclick="mostrarSignupPro()">Sou profissional de saúde →</button>
+</div>
+<!-- AUTH (login / cadastro pro) -->
+<div id="aw-auth" style="display:none">
 <div class="at"><div class="alogo">dichava<em>.rd</em></div><div class="atag">Seu espaço de acompanhamento,<br>sem julgamento 💚</div></div>
 <div class="acard">
   <div class="atabs"><button class="atab on" onclick="authTab('login',this)">Entrar</button><button class="atab" onclick="authTab('signup',this)">Criar conta</button></div>
@@ -1119,6 +1140,8 @@ a{color:inherit;text-decoration:none}
     <div class="fld" id="pro-reg-fld" style="display:none"><div class="lbl">Registro profissional (CRP, CRM…)</div><input class="inp" id="su-reg" type="text" placeholder="Ex.: CRP 16/7696"><div class="em" id="su-rege">Informe seu registro.</div></div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
   </div>
+  <button class="aw-back" onclick="mostrarWelcome()">← voltar</button>
+</div>
 </div>
 </div>
 
@@ -1930,6 +1953,7 @@ const OBJS=[
 ];
 const PASSOS=[
   {tp:'intro',ti:'Oi! Eu sou o Broto 🌱',su:'Vou te ajudar a montar seu espaço — no seu ritmo, sem cobrança. Leva só um minutinho.',btn:'Bora começar'},
+  {tp:'nome',ti:'Como posso te chamar?',su:'Pode ser seu nome ou um apelido. Fica só com você.'},
   {tp:'obj',ti:'O que te trouxe até aqui?',su:'Escolha o que mais combina. Dá pra mudar quando quiser.'},
   {tp:'sub',ti:'Com quais substâncias quer trabalhar?',su:'Pode marcar uma ou várias.'},
   {tp:'choice',key:'motivacao',multi:true,ti:'O que mais te move a estar aqui?',su:'Pode marcar mais de um.',opts:[['🫀','Minha saúde'],['🧘','Meu bem-estar'],['👥','Minhas relações'],['💰','Economizar'],['🕊️','Minha liberdade'],['🔍','Autoconhecimento']]},
@@ -1937,7 +1961,7 @@ const PASSOS=[
   {tp:'choice',key:'tentativas',multi:false,ti:'Já tentou mudar antes?',su:'Toda tentativa conta como aprendizado.',opts:[['✨','É a primeira vez'],['🔁','1 a 3 vezes'],['💪','Várias vezes']]},
   {tp:'choice',key:'desafio',multi:true,ti:'O que costuma ser mais difícil?',su:'Isso me ajuda a te apoiar melhor.',opts:[['🌊','Fissura forte'],['😤','Estresse'],['😔','Ansiedade ou tristeza'],['🎉','Situações sociais'],['↩️','Recair'],['🎯','Perder o foco'],['🌙','Sono'],['🥱','Tédio']]},
   {tp:'meta',ti:'Que metas fazem sentido agora?',su:'Marque as que te animam — ou nenhuma, sem problema.'},
-  {tp:'done',ti:'Tudo pronto! 💚',su:'Seu espaço tá montado. Vamos juntos, um dia de cada vez.',btn:'Entrar no meu espaço'},
+  {tp:'conta',ti:'Pra guardar seu progresso 💚',su:'Crie sua conta — assim seus registros ficam salvos e sincronizados.',btn:'Criar conta e entrar'},
 ];
 const OB_VALID=['Anotado! 📝','Entendi 💚','Boa escolha 👍','Tá no jeito ✨','Show, segue comigo 🌿'];
 const SUBS=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','🍄 Cogumelo','🌀 Ketamina','🔥 Crack','🌸 Opioide','💤 Benzodiaz.','🌿✨ Ayahuasca','☕ Cafeína','Outra'];
@@ -2087,7 +2111,8 @@ let U=null,_eReg=null,_eFiss=null,_eCmp=null;
 let _acct='user';
 function setAcct(t){_acct=t;document.getElementById('acct-user').classList.toggle('on',t==='user');document.getElementById('acct-pro').classList.toggle('on',t==='pro');document.getElementById('pro-reg-fld').style.display=t==='pro'?'block':'none';}
 let _calDt=new Date(),_calSel=null;
-let _obP=0,_obG=null,_obSubs=[],_obPerfil={};
+let _obP=0,_obG=null,_obSubs=[],_obPerfil={},_obNome='',_obMetas=[],_obEdit=false,_passos=null;
+function passosAtivos(){return _obEdit?PASSOS.filter(p=>!['intro','nome','conta'].includes(p.tp)):PASSOS;}
 const gPerfil=()=>ls('dr_perfil_'+uid())||{};
 const sPerfil=p=>ls('dr_perfil_'+uid(),p);
 let _gC=null,_hC=null;
@@ -2315,7 +2340,11 @@ function buildIntRow(elId,varRef){
 }
 
 /* ══ AUTH ══ */
-function authTab(t,btn){document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.getElementById('alogin').style.display=t==='login'?'':'none';document.getElementById('asignup').style.display=t==='signup'?'':'none';}
+function authTab(t,btn){document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');else{const i=t==='login'?0:1;document.querySelectorAll('.atab')[i]?.classList.add('on');}document.getElementById('alogin').style.display=t==='login'?'':'none';document.getElementById('asignup').style.display=t==='signup'?'':'none';}
+function mostrarWelcome(){document.getElementById('aw-welcome').style.display='flex';document.getElementById('aw-auth').style.display='none';const b=document.getElementById('aw-broto');if(b&&!b.dataset.done){b.innerHTML=brotoSVG();b.dataset.done='1';}}
+function mostrarLogin(){document.getElementById('aw-welcome').style.display='none';document.getElementById('aw-auth').style.display='block';authTab('login');}
+function mostrarSignupPro(){document.getElementById('aw-welcome').style.display='none';document.getElementById('aw-auth').style.display='block';authTab('signup');setAcct('pro');}
+function iniciarJornada(){startOb();}
 async function doLogin(){
   blurAll();
   const e=document.getElementById('li-e').value.trim(),pw=document.getElementById('li-pw').value;
@@ -2414,7 +2443,9 @@ function mostrarTermo(){
 
 /* ══ ONBOARDING ══ */
 function startOb(){
-  _obP=0;_obG=null;_obSubs=[];_obPerfil=gPerfil()||{};
+  _obEdit=!!(U&&ls('dr_termo_'+U.id));
+  _passos=passosAtivos();
+  _obP=0;_obG=(gO()?.goal)||null;_obSubs=[];_obPerfil=gPerfil()||{};_obNome=U?.nome||'';_obMetas=[];
   document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));
   document.getElementById('vo').classList.add('on');
   document.getElementById('bnav').classList.remove('on');
@@ -2423,21 +2454,38 @@ function startOb(){
 }
 function reabrirOb(){startOb();}
 function renderOb(){
-  const p=PASSOS[_obP];
-  const total=PASSOS.length-1;
+  const p=_passos[_obP];
+  const total=Math.max(1,_passos.length-1);
   document.getElementById('ob-prog-fill').style.width=Math.round(_obP/total*100)+'%';
-  document.getElementById('ob-ti').textContent=p.ti.replace('[nome]',U?.nome||'');
+  const nm=_obNome||U?.nome||'';
+  document.getElementById('ob-ti').textContent=p.ti.replace('[nome]',nm);
   document.getElementById('ob-su').textContent=p.su;
   document.getElementById('ob-btn').textContent=p.btn||'Continuar →';
+  document.getElementById('ob-btn').style.display='';
   const br=document.getElementById('ob-broto');if(br){br.classList.remove('pop');void br.offsetWidth;br.classList.add('pop');}
   const body=document.getElementById('ob-body');body.innerHTML='';
   const scene=document.getElementById('ob-scene');scene.className='ob-scene';scene.innerHTML='';
   const mentor=document.querySelector('.ob-mentor');
-  // telas de fala (intro / fim): Broto grande centralizado, sem cards
-  if(p.tp==='intro'||p.tp==='done'){
+  // telas de fala (intro): Broto grande centralizado, sem cards
+  if(p.tp==='intro'){
     mentor.style.display='none';
     scene.classList.add('on');
-    scene.innerHTML=`<div class="obroto">${brotoSVG()}</div><div class="obh" style="margin-top:16px;text-align:center"><div class="obt">${esc(p.ti.replace('[nome]',U?.nome||''))}</div><div class="obu" style="max-width:none">${esc(p.su)}</div></div>`;
+    scene.innerHTML=`<div class="obroto">${brotoSVG()}</div><div class="obh" style="margin-top:16px;text-align:center"><div class="obt">${esc(p.ti.replace('[nome]',nm))}</div><div class="obu" style="max-width:none">${esc(p.su)}</div></div>`;
+    return;
+  }
+  mentor.style.display='flex';
+  if(p.tp==='nome'){
+    body.innerHTML=`<input class="inp" id="ob-nome" type="text" placeholder="Seu nome ou apelido" autocomplete="given-name" value="${esc(_obNome)}" style="font-size:16px"><div class="em" id="ob-nome-e">Como posso te chamar?</div>`;
+    setTimeout(()=>{const i=document.getElementById('ob-nome');if(i)i.oninput=()=>{_obNome=i.value.trim();};},10);
+    return;
+  }
+  if(p.tp==='conta'){
+    body.innerHTML=`
+      <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="ob-email" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="ob-email-e">E-mail inválido.</div></div>
+      <div class="fld"><div class="lbl">Senha</div><input class="inp" id="ob-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><div class="em" id="ob-pw-e">Mínimo 6 caracteres.</div></div>
+      <label class="ob-check"><input type="checkbox" id="ob-18"><span>Confirmo que tenho <strong>18 anos ou mais</strong>.</span></label>
+      <label class="ob-check"><input type="checkbox" id="ob-termo"><span>Li e aceito os <a onclick="event.preventDefault();abrirRegras()" style="color:var(--ve);font-weight:700">termos e as regras da comunidade</a>.</span></label>
+      <div class="em" id="ob-conta-e" style="margin-top:4px"></div>`;
     return;
   }
   mentor.style.display='flex';
@@ -2476,21 +2524,23 @@ function renderOb(){
     });
   }
 }
-function obNext(){
+async function obNext(){
   blurAll();
-  const p=PASSOS[_obP];
+  const p=_passos[_obP];
   if(p.tp==='obj'&&!_obG){toast('⚠️ Escolha uma opção.');return;}
-  // salva ao sair da etapa de metas
+  if(p.tp==='nome'){const i=document.getElementById('ob-nome');_obNome=(i?.value||'').trim();if(!_obNome){document.getElementById('ob-nome-e').classList.add('on');shk(i);return;}}
+  // guarda metas em memória ao sair da etapa de metas
   if(p.tp==='meta'){
     const cards=[...document.querySelectorAll('#ob-body .gc.on')];
     let ms=cards.map(c=>c._meta).filter(Boolean);
     if(!ms.length)ms=MPAD[_obG]?.slice(0,2)||[];
-    sO({goal:_obG,subs:_obSubs,data:hoje()});
-    sM(ms.map((t,i)=>({id:'m'+i+Date.now(),titulo:t,ok:false,criada:hoje()})));
-    sPerfil(_obPerfil);
+    _obMetas=ms;
+    // modo edição (usuário já logado): salva e entra direto
+    if(_obEdit){salvarOnboard();document.getElementById('vo').classList.remove('on');entrar();return;}
   }
-  if(p.tp==='done'){document.getElementById('vo').classList.remove('on');entrar();return;}
-  const ehPergunta=['obj','sub','meta','choice'].includes(p.tp);
+  // passo final: criar conta + termos + maioridade
+  if(p.tp==='conta'){await finalizarOnboarding();return;}
+  const ehPergunta=['nome','obj','sub','meta','choice'].includes(p.tp);
   _obP++;
   if(ehPergunta){
     // bolha de validação rápida do Broto antes da próxima pergunta
@@ -2507,6 +2557,36 @@ function obNext(){
     renderOb();
   }
 }
+function salvarOnboard(){
+  if(_obNome&&U){U.nome=_obNome;ls('dr_session',U);}
+  sO({goal:_obG,subs:_obSubs,data:hoje()});
+  sM(_obMetas.map((t,i)=>({id:'m'+i+Date.now(),titulo:t,ok:false,criada:hoje()})));
+  sPerfil(_obPerfil);
+}
+async function criarConta(n,e,pw,tipo,reg){
+  if(!_SB){const us=ls('dr_users')||[];if(us.find(u=>u.email===e))return{ok:false,err:'E-mail já cadastrado.'};const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw),tipo,reg:tipo==='pro'?reg:null};us.push(nU);ls('dr_users',us);U={id:nU.id,nome:n,email:e,tipo:nU.tipo,reg:nU.reg};ls('dr_session',U);return{ok:true};}
+  try{const{data,error}=await _SB.auth.signUp({email:e,password:pw,options:{data:{nome:n,tipo,reg:tipo==='pro'?reg:null}}});if(error)return{ok:false,err:error.message.includes('already')?'E-mail já cadastrado.':error.message};U={id:data.user.id,nome:n,email:data.user.email,tipo,reg:tipo==='pro'?reg:null};ls('dr_session',U);return{ok:true};}catch(err){return{ok:false,err:'Não consegui criar a conta agora.'};}
+}
+async function finalizarOnboarding(){
+  const eEl=document.getElementById('ob-email'),pwEl=document.getElementById('ob-pw'),err=document.getElementById('ob-conta-e');
+  const e=(eEl?.value||'').trim(),pw=pwEl?.value||'';
+  err.classList.remove('on');
+  if(!/\S+@\S+\.\S+/.test(e)){document.getElementById('ob-email-e').classList.add('on');shk(eEl);return;}
+  document.getElementById('ob-email-e').classList.remove('on');
+  if(pw.length<6){document.getElementById('ob-pw-e').classList.add('on');shk(pwEl);return;}
+  document.getElementById('ob-pw-e').classList.remove('on');
+  if(!document.getElementById('ob-18').checked){err.textContent='⚠️ Confirme que você tem 18 anos ou mais.';err.classList.add('on');return;}
+  if(!document.getElementById('ob-termo').checked){err.textContent='⚠️ Aceite os termos e as regras da comunidade.';err.classList.add('on');return;}
+  const btn=document.getElementById('ob-btn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
+  const r=await criarConta(_obNome,e,pw,'user',null);
+  btn.disabled=false;btn.textContent='Criar conta e entrar';
+  if(!r.ok){err.textContent=r.err;err.classList.add('on');return;}
+  ls('dr_termo_'+U.id,new Date().toISOString());
+  salvarOnboard();
+  document.getElementById('vo').classList.remove('on');
+  entrar();
+}
+function abrirRegras(){const dt=document.getElementById('termo-dt');if(dt)dt.textContent='—';openMod('mtermol');}
 
 /* ══ ENTRAR ══ */
 function entrar(){
@@ -4342,6 +4422,7 @@ document.addEventListener('touchstart',function(e){if(!e.target.closest('input,t
     maybeLock();
   } else {
     showV('va');
+    try{mostrarWelcome();}catch(e){}
   }
   setTimeout(()=>{buildIntRow('crise-int','cr');buildIntRow('fiss-int','fs');},200);
 })();
