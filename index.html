@@ -2669,6 +2669,7 @@ function goPg(id,btn){
   if(btn)btn.classList.add('on');
   else document.querySelectorAll(`.ni[data-p="${id}"]`).forEach(b=>b.classList.add('on'));
   blurAll();
+  if(id!=='p-ref')desativarShake();
   if(id==='p-agenda')renderCal();
   if(id==='p-prog')renderProg();
   if(id==='p-ref')renderRef();
@@ -3501,6 +3502,7 @@ function ativarShake(){
     DeviceMotionEvent.requestPermission().then(p=>{if(p==='granted')start();}).catch(()=>{});
   } else start();
 }
+function desativarShake(){if(!_shakeOn)return;window.removeEventListener('devicemotion',onShakeMotion);_shakeOn=false;_shakeLastMag=null;}
 function onShakeMotion(e){
   const a=e.accelerationIncludingGravity;if(!a)return;
   const mag=Math.abs(a.x||0)+Math.abs(a.y||0)+Math.abs(a.z||0);
