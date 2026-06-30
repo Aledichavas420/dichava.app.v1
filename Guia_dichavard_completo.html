@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia completo · dichava.rd</title>
+<style>
+  :root{--ve:#2DA257;--vf:#E8F5E9;--roxo:#6B43C4;--am:#E6BE66;--dk:#1c2b22;--tx:#3a4a40;--txs:#6b7c72;--cinm:#e6ece8}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--tx);line-height:1.6;background:#f4f7f5}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px 60px}
+  .cover{background:linear-gradient(160deg,#2da257,#0c9c8c);color:#fff;padding:54px 30px 44px;text-align:center;border-radius:0 0 26px 26px;margin-bottom:34px}
+  .cover h1{font-size:40px;margin:0 0 6px;letter-spacing:-1px}
+  .cover .rd{color:var(--am)}
+  .cover p{font-size:16px;opacity:.92;margin:6px 0 0}
+  .cover .v{display:inline-block;margin-top:16px;font-size:12px;background:rgba(255,255,255,.18);padding:5px 14px;border-radius:20px;letter-spacing:.5px}
+  h2{color:var(--dk);font-size:23px;margin:38px 0 6px;padding-bottom:8px;border-bottom:2px solid var(--cinm)}
+  h2 .n{display:inline-block;width:30px;height:30px;line-height:30px;text-align:center;background:var(--ve);color:#fff;border-radius:9px;font-size:15px;margin-right:9px;vertical-align:2px}
+  h3{color:var(--ve);font-size:16px;margin:20px 0 4px}
+  p{margin:7px 0}
+  ul{margin:7px 0;padding-left:22px}
+  li{margin:4px 0}
+  .lead{font-size:15.5px;color:var(--txs)}
+  .card{background:#fff;border:1px solid var(--cinm);border-radius:14px;padding:16px 20px;margin:14px 0;box-shadow:0 2px 10px rgba(20,60,40,.04)}
+  .tip{background:var(--vf);border-left:4px solid var(--ve);border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14.5px}
+  .warn{background:#FFF4E5;border-left:4px solid #E8920C;border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14.5px}
+  .crisis{background:#FFEBEE;border-left:4px solid #D32F2F;border-radius:8px;padding:12px 16px;margin:14px 0}
+  .toc{columns:2;font-size:14.5px}
+  .toc a{color:var(--ve);text-decoration:none}
+  .muted{color:var(--txs);font-size:13.5px}
+  .feat{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+  .feat .b{font-weight:700;color:var(--dk)}
+  footer{text-align:center;color:var(--txs);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--cinm)}
+  @media print{body{background:#fff}.cover{border-radius:0}.card{box-shadow:none}h2{break-after:avoid}}
+</style>
+</head>
+<body>
+<div class="cover">
+  <h1>dichava<span class="rd">.rd</span></h1>
+  <p>Guia completo do aplicativo</p>
+  <p style="font-size:14px;opacity:.85">Acompanhamento pessoal na lógica da redução de danos — sem julgamento, sem cobrança.</p>
+  <span class="v">Atualizado · 2026 · versão de testes</span>
+</div>
+<div class="wrap">
+
+<div class="card">
+  <strong>O que é este guia.</strong> Um passeio por <em>todas</em> as telas e recursos do dichava.rd, na ordem em que você costuma encontrá-los. Não precisa decorar nada: o app foi feito pra ser explorado no seu ritmo. Use este guia como mapa quando bater dúvida.
+</div>
+
+<h2>Índice</h2>
+<div class="toc">
+  <a href="#filosofia">1. A ideia por trás do app</a><br>
+  <a href="#acesso">2. Como acessar e instalar</a><br>
+  <a href="#conta">3. Conta e primeiros passos</a><br>
+  <a href="#inicio">4. Tela Início</a><br>
+  <a href="#registrar">5. Registrar um uso</a><br>
+  <a href="#resistencia">6. Resistência ativa</a><br>
+  <a href="#agenda">7. Agenda &amp; Diário</a><br>
+  <a href="#progresso">8. Progresso &amp; Insights</a><br>
+  <a href="#mestre">9. Mestre de Si (XP, trilha, missões)</a><br>
+  <a href="#reflexoes">10. Reflexões &amp; Carta</a><br>
+  <a href="#crise">11. Modo Crise</a><br>
+  <a href="#misturar">12. Misturar substâncias</a><br>
+  <a href="#duvidas">13. Tire suas dúvidas</a><br>
+  <a href="#pausa">14. Pausa pra mente (sons &amp; jogos)</a><br>
+  <a href="#perfil">15. Meu Perfil &amp; Dichavaldo</a><br>
+  <a href="#config">16. Configurações</a><br>
+  <a href="#notif">17. Notificações de cuidado</a><br>
+  <a href="#privacidade">18. Privacidade &amp; segurança</a><br>
+</div>
+
+<h2 id="filosofia"><span class="n">1</span>A ideia por trás do app</h2>
+<p class="lead">O dichava.rd parte da <strong>redução de danos</strong>: a ideia de que cuidar não é necessariamente parar, mas usar com mais informação, consciência e segurança — no seu tempo e do seu jeito.</p>
+<ul>
+  <li><strong>Sem julgamento:</strong> o app nunca te chama de errado(a). Ele registra, informa e acolhe.</li>
+  <li><strong>Você no controle:</strong> você escolhe seu objetivo (acompanhar, reduzir, parar ou só se informar) e o app se adapta a ele.</li>
+  <li><strong>Apoio, não substituto:</strong> é uma ferramenta de autoconhecimento — não substitui acompanhamento profissional.</li>
+</ul>
+
+<h2 id="acesso"><span class="n">2</span>Como acessar e instalar</h2>
+<div class="card">
+  <h3>Abra no navegador certo</h3>
+  <ul>
+    <li><strong>Android:</strong> Chrome.</li>
+    <li><strong>iPhone:</strong> Safari.</li>
+  </ul>
+  <div class="warn"><strong>Erro mais comum:</strong> abrir o link <em>dentro</em> do WhatsApp ou Instagram. Toque nos três pontinhos e escolha <strong>"Abrir no navegador"</strong>.</div>
+  <h3>Instale na tela inicial (recomendado)</h3>
+  <ul>
+    <li><strong>Android (Chrome):</strong> menu ⋮ → <strong>"Instalar app"</strong>.</li>
+    <li><strong>iPhone (Safari):</strong> botão Compartilhar → <strong>"Adicionar à Tela de Início"</strong> → abra pelo ícone.</li>
+  </ul>
+  <div class="tip">No iPhone, instalar na tela inicial é <strong>obrigatório</strong> para receber as notificações de cuidado (limitação da Apple). Vale a pena.</div>
+</div>
+
+<h2 id="conta"><span class="n">3</span>Conta e primeiros passos</h2>
+<p>Na primeira vez, o app apresenta um <strong>onboarding com o Dichavaldo</strong> (nosso mascote-mentor), que faz algumas perguntas pra entender seu momento e montar seu perfil.</p>
+<ul>
+  <li><strong>Crie uma conta</strong> (e-mail e senha) para <strong>salvar seu histórico, sincronizar entre aparelhos e receber notificações</strong>.</li>
+  <li><strong>Modo demo</strong> existe só para dar uma espiada — ele <strong>não salva nada</strong> nem recebe lembretes. Para testar de verdade, use uma conta real.</li>
+  <li>Logo de cara você escolhe seu <strong>objetivo</strong> e responde um onboarding curto que alimenta seu perfil e suas dicas.</li>
+</ul>
+<div class="tip">Você confirma um <strong>termo de consentimento</strong> no início — vale a leitura, ele explica como seus dados são tratados.</div>
+
+<h2 id="inicio"><span class="n">4</span>Tela Início</h2>
+<p class="lead">Seu painel principal. De cima pra baixo:</p>
+<div class="feat"><div><span class="b">Cabeçalho com seu avatar e dias seguidos.</span> Mostra seu streak de registro e uma frase de acolhimento. Toque no avatar para abrir <em>Meu Perfil</em>.</div></div>
+<div class="feat"><div><span class="b">Check-in de humor.</span> "Como você está agora?" — toque numa carinha para registrar seu humor do momento em segundos.</div></div>
+<div class="feat"><div><span class="b">Resumo rápido.</span> Esta semana · % da meta · este mês.</div></div>
+<div class="feat"><div><span class="b">Botão central (+).</span> Atalho para registrar um uso a qualquer momento.</div></div>
+<div class="feat"><div><span class="b">Cards de acesso rápido:</span> Ajuda de emergência (Modo Crise), Resistência ativa, Vai misturar?, Tire suas dúvidas, Pausa pra mente, Cartas para mim e Artigos de redução de danos.</div></div>
+
+<h2 id="registrar"><span class="n">5</span>Registrar um uso</h2>
+<p>Toque no <strong>+</strong> (ou em "Registrar agora"). Abre uma janela onde você informa:</p>
+<ul>
+  <li><strong>Substância</strong> (ícones ilustrados — 14 opções, incluindo "Outra").</li>
+  <li><strong>Quantidade / via</strong> e <strong>período do dia</strong>.</li>
+  <li><strong>Contexto e emoção</strong> — onde estava, com quem, como se sentia. É isso que gera os insights depois.</li>
+</ul>
+<div class="tip"><strong>Tela de confirmação:</strong> antes de salvar, o app mostra um resumo — nada é registrado por engano com um toque só.</div>
+<div class="warn"><strong>Alertas de cuidado (não bloqueiam nada):</strong> se você passar do seu limite definido (ex: 3 registros no dia ou 12 na semana), o app dá um aviso gentil. É informação, não punição — você decide o que fazer com ela.</div>
+
+<h2 id="resistencia"><span class="n">6</span>Resistência ativa</h2>
+<p>Sentiu vontade e <strong>não usou</strong>? Isso também merece registro. O botão roxo "Resistência ativa" guarda esse momento: a substância, a intensidade da fissura e o que você fez no lugar.</p>
+<p>Na aba Reflexões, suas resistências aparecem num <strong>painel de vitórias</strong> com um contador — pra você ver o tamanho da sua força ao longo do tempo.</p>
+
+<h2 id="agenda"><span class="n">7</span>Agenda &amp; Diário</h2>
+<ul>
+  <li><strong>Calendário:</strong> cada dia ganha uma cor conforme o uso registrado, com legenda. Toque num dia para ver e editar os registros.</li>
+  <li><strong>Diário:</strong> abaixo do calendário, "O que está na sua cabeça hoje?" — um espaço livre pra escrever, com <strong>ditado por voz</strong> (ícone de microfone).</li>
+  <li><strong>Pergunta do dia:</strong> uma provocação reflexiva adaptada ao seu objetivo.</li>
+  <li><strong>Meus registros:</strong> seu histórico, com opção de <strong>editar e apagar</strong> cada item.</li>
+</ul>
+
+<h2 id="progresso"><span class="n">8</span>Progresso &amp; Insights</h2>
+<ul>
+  <li><strong>Insights do seu padrão:</strong> o app cruza seus registros e mostra observações (horários, gatilhos, gasto estimado em 30 dias…) — sempre sem julgamento.</li>
+  <li><strong>Atividade semanal:</strong> visão da sua semana.</li>
+  <li><strong>Conquistas:</strong> medalhas que você desbloqueia (1º registro, 3 dias, 7 dias, primeira reflexão, primeira resistência, meta concluída…).</li>
+  <li><strong>Resumo:</strong> dias seguidos, esta semana, % da meta, este mês.</li>
+</ul>
+
+<h2 id="mestre"><span class="n">9</span>Mestre de Si — XP, trilha e missões</h2>
+<p class="lead">Uma camada de jornada pessoal (gamificação leve) para tornar o autocuidado mais concreto.</p>
+<ul>
+  <li><strong>XP e níveis:</strong> cada cuidado rende pontos (registro, diário, resistência, pausa, missão do dia). Ao subir de nível, aparece uma <strong>tela de parabéns com confetes</strong>.</li>
+  <li><strong>Missão do dia:</strong> um pequeno objetivo diário.</li>
+  <li><strong>Trilha de habilidades:</strong> conforme você mantém constância, desbloqueia recursos extras de relaxamento (sons da natureza, frequências…).</li>
+</ul>
+<div class="tip">As <strong>ferramentas do Modo Crise são sempre livres</strong> — nunca ficam "trancadas" atrás de XP. A trilha só libera extras de relaxamento.</div>
+
+<h2 id="reflexoes"><span class="n">10</span>Reflexões &amp; Carta de reflexão</h2>
+<ul>
+  <li><strong>Carta de reflexão:</strong> uma carta no estilo tarô, dourada. <strong>Toque ou agite o celular</strong> para virar e receber uma pergunta — com um pequeno texto que aprofunda a reflexão. Dá pra pedir "Outra", "Responder" (leva pro diário) ou <strong>Compartilhar</strong> como imagem.</li>
+  <li><strong>Meu humor esta semana:</strong> uma fileira visual com o humor de cada dia.</li>
+  <li><strong>Resistência ativa:</strong> seu painel de vitórias.</li>
+  <li><strong>Artigos de redução de danos:</strong> conteúdo de RD para se informar.</li>
+</ul>
+
+<h2 id="crise"><span class="n">11</span>Modo Crise</h2>
+<p>Acessível pelo card "Ajuda de emergência". Pensado pra momentos difíceis — tudo à mão, sem precisar procurar:</p>
+<ul>
+  <li><strong>Respiração guiada 4-7-8</strong> — para acalmar o sistema nervoso.</li>
+  <li><strong>Surfar a onda</strong> — a fissura tem pico e fim; um cronômetro pra atravessar.</li>
+  <li><strong>Grounding 5-4-3-2-1</strong> — volta ao presente pelos cinco sentidos.</li>
+  <li><strong>Meu plano de segurança</strong> — o que você mesmo(a) preparou pra esse momento.</li>
+  <li><strong>Registrar como estou.</strong></li>
+</ul>
+<div class="crisis"><strong>Emergências:</strong> SAMU <strong>192</strong> (emergência médica, overdose) · CVV <strong>188</strong> (apoio emocional 24h, gratuito). Os botões discam direto.</div>
+
+<h2 id="misturar"><span class="n">12</span>Misturar substâncias</h2>
+<p>Card "Vai misturar?". Escolha duas substâncias e veja o <strong>nível de risco</strong> da combinação (de Baixo risco a Perigoso, além de Sinergia e Sem dados), com explicação, observações e <strong>sinais de alerta</strong>.</p>
+<div class="warn">Conteúdo para maiores de 18 anos. É informação para <strong>reduzir risco</strong> — nunca um incentivo. Na dúvida, não misture.</div>
+
+<h2 id="duvidas"><span class="n">13</span>Tire suas dúvidas</h2>
+<p>Uma central de perguntas e respostas (FAQ) por categorias — combinações, efeitos &amp; duração, dosagem, primeiros socorros — em linguagem direta e sem estigma.</p>
+
+<h2 id="pausa"><span class="n">14</span>Pausa pra mente</h2>
+<p class="lead">Um espaço para desacelerar, ocupar as mãos e a cabeça.</p>
+<ul>
+  <li><strong>Sons que acalmam:</strong> paisagens da natureza (chuva, oceano, noite, riacho, vento, floresta).</li>
+  <li><strong>Ruído &amp; frequências:</strong> ruído branco, ruído marrom, 432 Hz, 528 Hz e batidas binaurais (use fones).</li>
+  <li><strong>Jogos de foco:</strong> mini-games leves (como o <em>Flappy Marola</em>) para distrair a fissura — com botão de sair sempre acessível.</li>
+  <li><strong>Trilha de habilidades:</strong> recursos extras que se desbloqueiam com constância.</li>
+</ul>
+
+<h2 id="perfil"><span class="n">15</span>Meu Perfil &amp; Dichavaldo</h2>
+<ul>
+  <li><strong>Meu Perfil:</strong> reúne seus dados, nível e progresso.</li>
+  <li><strong>Avatar Dichavaldo:</strong> o mascote em várias cores — toque em "Editar avatar" para escolher a sua.</li>
+</ul>
+
+<h2 id="config"><span class="n">16</span>Configurações</h2>
+<ul>
+  <li><strong>Grupo de testes → Enviar feedback:</strong> abre o grupo pra relatar bugs e ideias. <em>Use bastante! 💚</em></li>
+  <li><strong>Notificações:</strong> lembretes diários e <strong>Notificações de cuidado</strong> (push), com limites de alerta por dia/semana.</li>
+  <li><strong>Aparência:</strong> <strong>Modo escuro</strong> e <strong>Modo discreto</strong> (o app aparece como "Diário", sem referências a RD).</li>
+  <li><strong>Segurança:</strong> <strong>PIN de bloqueio</strong>.</li>
+  <li><strong>Objetivo &amp; metas:</strong> altere seu objetivo e gerencie metas (que se preenchem sozinhas conforme você registra).</li>
+  <li><strong>Privacidade:</strong> termo de consentimento, exportar dados, <strong>backup completo</strong> e restaurar.</li>
+</ul>
+
+<h2 id="notif"><span class="n">17</span>Notificações de cuidado</h2>
+<p>Em Configurações → <strong>Notificações de cuidado</strong>, você ativa avisos personalizados que chegam <strong>mesmo com o app fechado</strong>: mensagens de acolhimento conforme a substância, os dias desde o último uso e o seu objetivo. No máximo <strong>uma por dia</strong>, sem spam.</p>
+<div class="tip">No iPhone, lembre: instale o app na tela inicial e aceite a permissão quando o app pedir.</div>
+
+<h2 id="privacidade"><span class="n">18</span>Privacidade &amp; segurança</h2>
+<ul>
+  <li>Seu histórico fica salvo no seu aparelho e é <strong>sincronizado com o servidor próprio do projeto (Supabase)</strong> para permitir backup entre aparelhos e as notificações. <strong>Nada é compartilhado com terceiros.</strong></li>
+  <li>Você pode <strong>exportar</strong> ou fazer <strong>backup completo</strong> dos seus dados quando quiser, e ativar um <strong>PIN</strong> e o <strong>Modo discreto</strong> para mais privacidade no dia a dia.</li>
+</ul>
+
+<div class="crisis" style="margin-top:30px">
+  <strong>Lembrete sempre válido:</strong> o dichava.rd é um recurso de apoio e <strong>não substitui</strong> acompanhamento profissional. Em emergências, ligue <strong>SAMU 192</strong>. Apoio emocional 24h: <strong>CVV 188</strong>.
+</div>
+
+<footer>
+  dichava.rd — feito com cuidado, na lógica da redução de danos 🌿<br>
+  Guia de testes · uso interno do grupo de voluntários.
+</footer>
+</div>
+</body>
+</html>
