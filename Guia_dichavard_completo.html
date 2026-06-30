@@ -18,7 +18,6 @@
   body{margin:0;font-family:'Space Grotesk',-apple-system,sans-serif;color:var(--tx);background:var(--creme);line-height:1.62;-webkit-font-smoothing:antialiased}
   .disp{font-family:'Bagel Fat One','Space Grotesk',sans-serif;font-weight:400;letter-spacing:.2px}
   .wrap{max-width:880px;margin:0 auto;padding:0 22px 70px}
-  /* ---- capa ---- */
   .cover{position:relative;text-align:center;padding:64px 24px 54px;overflow:hidden;background:
      radial-gradient(120% 90% at 50% -10%, #FFE9A8 0%, #FFD24A 22%, transparent 55%), var(--creme)}
   .rays{position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:140%;height:120%;
@@ -32,42 +31,48 @@
      border-radius:30px;padding:8px 20px;font-weight:600;font-size:15px;box-shadow:3px 3px 0 var(--roxo);margin-top:6px}
   .cover .sub{position:relative;margin-top:18px;font-size:15px;color:#7a6a52}
   .leaf{position:absolute;font-size:26px;opacity:.85}
-  /* ---- intro ---- */
   .intro{background:#fff;border:2.5px solid var(--roxo);border-radius:22px;padding:20px 24px;margin:30px 0;
      box-shadow:5px 5px 0 rgba(58,32,99,.12);font-size:15.5px}
   .intro .disp{color:var(--roxo);font-size:19px}
-  /* ---- seções ---- */
-  .sec{display:flex;gap:26px;align-items:center;margin:30px 0;padding:22px;border-radius:24px;border:2.5px solid var(--ink);
+  .sec{display:flex;gap:26px;align-items:center;margin:28px 0;padding:22px;border-radius:24px;border:2.5px solid var(--ink);
      box-shadow:6px 6px 0 rgba(42,32,24,.10);background:#fff}
-  .sec:nth-child(even){flex-direction:row-reverse}
+  .sec.rev{flex-direction:row-reverse}
   .sec .txt{flex:1;min-width:0}
   .chip{display:inline-flex;align-items:center;gap:8px;font-family:'Bagel Fat One',sans-serif;font-size:13px;color:#fff;
      padding:5px 14px;border-radius:30px;margin-bottom:8px;box-shadow:2px 2px 0 rgba(0,0,0,.18)}
   .sec h2{font-family:'Bagel Fat One',sans-serif;font-weight:400;color:var(--ink);font-size:25px;margin:2px 0 8px;line-height:1.15}
   .sec p{margin:7px 0;font-size:15px}
   .sec ul{margin:8px 0;padding-left:20px}.sec li{margin:5px 0;font-size:14.5px}
-  /* moldura de celular */
   .phone{flex-shrink:0;width:236px;border:8px solid var(--ink);border-radius:34px;overflow:hidden;background:#000;
      box-shadow:7px 9px 0 rgba(42,32,24,.16);position:relative}
   .phone img{width:100%;display:block}
-  /* callouts */
-  .tip{background:#EAF7EE;border:2px solid var(--verde);border-radius:16px;padding:13px 18px;margin:14px 0;font-size:14.5px}
-  .warn{background:#FFF3DC;border:2px solid var(--laranja);border-radius:16px;padding:13px 18px;margin:14px 0;font-size:14.5px}
+  .duo{display:flex;gap:12px;flex-shrink:0}
+  .duo .phone{width:150px;border-width:6px;border-radius:26px}
+  .tip{background:#EAF7EE;border:2px solid var(--verde);border-radius:16px;padding:12px 16px;margin:12px 0;font-size:14px}
+  .tip b,.tip strong{color:var(--verde2)}
+  .warn{background:#FFF3DC;border:2px solid var(--laranja);border-radius:16px;padding:12px 16px;margin:12px 0;font-size:14px}
   .crisis{background:#FFE6E6;border:2px solid #D14b3b;border-radius:16px;padding:14px 18px;margin:18px 0;font-size:14.5px}
   b,strong{color:var(--ink)}
   .crisis b{color:#B23A2c}
-  h2 .n{display:none}
-  /* divisor de capítulo */
-  .band{font-family:'Bagel Fat One',sans-serif;color:var(--roxo);font-size:15px;text-align:center;margin:40px 0 6px;letter-spacing:.5px}
+  .band{font-family:'Bagel Fat One',sans-serif;color:var(--roxo);font-size:16px;text-align:center;margin:40px 0 8px;letter-spacing:.5px}
   .band::before,.band::after{content:'✦';color:var(--amarelo);margin:0 10px}
+  /* bloco de dicas em grade */
+  .tips{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  .tipcard{background:#fff;border:2px solid var(--ink);border-radius:18px;padding:15px 18px;box-shadow:4px 4px 0 rgba(42,32,24,.08)}
+  .tipcard .t{font-family:'Bagel Fat One',sans-serif;color:var(--ink);font-size:15px;margin-bottom:3px}
+  .tipcard p{margin:4px 0 0;font-size:13.5px}
+  .tipcard.g{border-color:var(--verde)}.tipcard.g .t{color:var(--verde2)}
+  .tipcard.o{border-color:var(--laranja)}.tipcard.o .t{color:var(--laranja)}
+  .tipcard.p{border-color:var(--roxo)}.tipcard.p .t{color:var(--roxo)}
+  .tipcard.t2{border-color:var(--teal)}.tipcard.t2 .t{color:var(--teal)}
   footer{text-align:center;color:#8a7a60;font-size:13.5px;margin-top:48px;padding-top:22px;border-top:2px dashed #e3d6b8}
   @media print{
     body{background:var(--creme)}
-    .sec,.intro{box-shadow:none}
-    .sec{break-inside:avoid}
+    .sec,.intro,.tipcard{box-shadow:none}
+    .sec,.tipcard,.intro{break-inside:avoid}
     .cover{break-after:avoid}
   }
-  @media(max-width:680px){.sec,.sec:nth-child(even){flex-direction:column}.phone{width:200px}}
+  @media(max-width:680px){.sec,.sec.rev{flex-direction:column}.phone{width:210px}.tips{grid-template-columns:1fr}.duo{justify-content:center}}
 </style>
 </head>
 <body>
@@ -81,24 +86,39 @@
   <img class="ico" src="guia-assets/icon-192.png" alt="ícone dichava">
   <div class="logo disp"><span class="g">dichava</span><span class="a">.app</span></div>
   <div class="badge">Guia do aplicativo — no seu ritmo, sem cobrança</div>
-  <div class="sub">Acompanhamento pessoal na lógica da redução de danos. Um passeio por todas as telas. 🌿</div>
+  <div class="sub">Acompanhamento pessoal na lógica da redução de danos. Um passeio por todas as telas, com dicas. 🌿</div>
 </div>
 
 <div class="wrap">
 
 <div class="intro">
   <div class="disp">Bem-vindo(a) 💚</div>
-  Este guia mostra <strong>todas as funcionalidades</strong> do app, com prints de cada tela. Não precisa decorar nada — o dichava.app foi feito pra ser explorado no seu tempo. Use isto como mapa quando bater dúvida.
+  Este guia mostra <strong>todas as funcionalidades</strong> do app, com prints de cada tela e <strong>dicas práticas</strong>. Não precisa decorar nada — o dichava.app foi feito pra ser explorado no seu tempo. Use isto como mapa quando bater dúvida.
 </div>
 
 <div class="band">Primeiros passos</div>
 
 <div class="sec">
+  <div class="phone"><img src="guia-assets/onboarding.png" alt="Onboarding com o Dichavaldo"></div>
+  <div class="txt">
+    <span class="chip" style="background:var(--verde)">🌱 Boas-vindas</span>
+    <h2>O Dichavaldo te recebe</h2>
+    <p>Na primeira vez, o mascote <strong>Dichavaldo</strong> faz algumas perguntas pra entender seu momento e montar seu perfil. A primeira é o seu <strong>objetivo</strong>:</p>
+    <ul>
+      <li><strong>Acompanhar</strong> — entender padrões, sem pressão de mudar.</li>
+      <li><strong>Reduzir</strong> — diminuir no seu ritmo.</li>
+      <li><strong>Parar / já parei</strong> — abstinência com apoio.</li>
+      <li><strong>Redução de danos</strong> — usar com mais segurança.</li>
+    </ul>
+    <div class="tip"><b>💡 Dica:</b> não existe resposta certa. Você pode <strong>mudar o objetivo</strong> quando quiser, em Configurações — e o app se adapta.</div>
+  </div>
+</div>
+
+<div class="sec rev">
   <div class="phone"><img src="guia-assets/inicio.png" alt="Tela inicial"></div>
   <div class="txt">
     <span class="chip" style="background:var(--verde)">🏠 Tela Início</span>
     <h2>Seu painel de cuidado</h2>
-    <p>Tudo começa aqui. De cima pra baixo você encontra:</p>
     <ul>
       <li><strong>Dias seguidos</strong> e uma frase de incentivo, com seu avatar.</li>
       <li><strong>Check-in de humor</strong> — registre como está em 1 toque.</li>
@@ -106,6 +126,7 @@
       <li><strong>Tempo desde o último uso</strong> por substância.</li>
       <li><strong>Cards de acesso rápido</strong> para todos os recursos.</li>
     </ul>
+    <div class="tip"><b>💡 Dica:</b> use o card <strong>"Registrar igual ao último"</strong> pra anotar em 1 toque quando o uso for parecido com o anterior.</div>
   </div>
 </div>
 
@@ -114,24 +135,26 @@
   <div class="txt">
     <span class="chip" style="background:var(--teal)">➕ Registrar</span>
     <h2>Registrar um uso</h2>
-    <p>Toque no <strong>+</strong> para registrar. Você informa a substância (ícones ilustrados), quantidade, período, contexto e emoção.</p>
-    <div class="tip">Antes de salvar, aparece uma <strong>tela de confirmação</strong> — nada é registrado por engano. E se você passar do seu limite, o app dá um <strong>aviso gentil</strong>, nunca um bloqueio.</div>
+    <p>Toque no <strong>+</strong>. Você informa a substância (ícones ilustrados), quantidade, período, contexto e emoção.</p>
+    <div class="tip"><b>💡 Dica:</b> capriche no <strong>contexto e na emoção</strong> — é o que faz o app gerar bons insights depois (onde, com quem, como você se sentia).</div>
+    <div class="warn"><b>⚠️ Cuidado, não cobrança:</b> se passar do seu limite (ex: 3/dia), aparece um aviso gentil. Nunca há bloqueio — a escolha é sempre sua.</div>
   </div>
 </div>
 
 <div class="band">Acompanhar &amp; refletir</div>
 
-<div class="sec">
+<div class="sec rev">
   <div class="phone"><img src="guia-assets/agenda.png" alt="Agenda e diário"></div>
   <div class="txt">
     <span class="chip" style="background:var(--laranja)">📅 Agenda &amp; Diário</span>
     <h2>Seu calendário e diário</h2>
     <ul>
-      <li><strong>Calendário</strong> colorido por dia, com legenda — toque para editar.</li>
-      <li><strong>Diário</strong> livre com <strong>ditado por voz</strong>.</li>
+      <li><strong>Calendário</strong> colorido por dia, com legenda — toque pra editar.</li>
+      <li><strong>Diário</strong> livre com <strong>ditado por voz</strong> (microfone).</li>
       <li><strong>Pergunta do dia</strong> adaptada ao seu objetivo.</li>
       <li><strong>Meus registros</strong>, com editar e apagar.</li>
     </ul>
+    <div class="tip"><b>💡 Dica:</b> sem tempo de digitar? Toque no <strong>microfone</strong> e fale — o app transcreve pra você.</div>
   </div>
 </div>
 
@@ -140,13 +163,28 @@
   <div class="txt">
     <span class="chip" style="background:#E0509E">📊 Progresso</span>
     <h2>Progresso &amp; conquistas</h2>
-    <p>Acompanhe sua evolução sem cobrança:</p>
     <ul>
       <li><strong>Minhas metas</strong> — se preenchem sozinhas conforme você registra.</li>
       <li><strong>Insights</strong> do seu padrão (horários, gatilhos, gasto estimado…).</li>
       <li><strong>Conquistas</strong> — medalhas que você desbloqueia.</li>
       <li>Histórico completo de registros.</li>
     </ul>
+    <div class="tip"><b>💡 Dica:</b> os insights melhoram quanto mais você registra. Dê alguns dias — os padrões começam a aparecer.</div>
+  </div>
+</div>
+
+<div class="sec rev">
+  <div class="phone"><img src="guia-assets/perfil.png" alt="Meu Perfil"></div>
+  <div class="txt">
+    <span class="chip" style="background:var(--roxo)">🧑 Meu Perfil &amp; Mestre de Si</span>
+    <h2>Sua jornada em XP</h2>
+    <p>Toque no <strong>avatar</strong> (canto da tela inicial) pra abrir seu perfil. Cada cuidado vira <strong>XP</strong> e você sobe de nível (Observador, e por aí vai) — com <strong>tela de parabéns e confetes</strong>.</p>
+    <ul>
+      <li>Resumo: dias seguidos, registros, reflexões, resistências.</li>
+      <li><strong>Editar avatar</strong> — escolha a cor do Dichavaldo.</li>
+      <li>Missão do dia e trilha de habilidades completam a jornada.</li>
+    </ul>
+    <div class="tip"><b>💡 Dica:</b> as <strong>ferramentas de crise são sempre livres</strong> — nunca ficam trancadas atrás de XP.</div>
   </div>
 </div>
 
@@ -155,29 +193,43 @@
   <div class="txt">
     <span class="chip" style="background:var(--roxo)">🔮 Reflexões</span>
     <h2>Carta de reflexão</h2>
-    <p>Uma carta no estilo tarô, dourada. <strong>Toque ou agite o celular</strong> para virar e receber uma pergunta com um texto que aprofunda a reflexão.</p>
+    <p>Uma carta no estilo tarô, dourada. <strong>Toque ou agite o celular</strong> pra virar e receber uma pergunta com um texto que aprofunda a reflexão.</p>
     <ul>
       <li><strong>Outra · Responder · Compartilhar</strong> (vira imagem pra postar).</li>
       <li><strong>Meu humor esta semana</strong> em bolhas coloridas.</li>
       <li><strong>Resistência ativa</strong> e artigos de redução de danos.</li>
     </ul>
+    <div class="tip"><b>💡 Dica:</b> gostou de uma pergunta? Toque em <strong>Responder</strong> — ela vai direto pro seu diário.</div>
   </div>
 </div>
 
 <div class="band">Cuidado na hora difícil</div>
 
 <div class="sec">
-  <div class="phone"><img src="guia-assets/crise.png" alt="Modo Crise"></div>
+  <div class="duo">
+    <div class="phone"><img src="guia-assets/respiracao.png" alt="Respiração 4-7-8"></div>
+    <div class="phone"><img src="guia-assets/grounding.png" alt="Grounding 5-4-3-2-1"></div>
+  </div>
   <div class="txt">
     <span class="chip" style="background:#D14b3b">🆘 Modo Crise</span>
     <h2>Tudo à mão na crise</h2>
     <ul>
       <li><strong>Respiração 4-7-8</strong> — acalma o sistema nervoso.</li>
       <li><strong>Surfar a onda</strong> — a fissura tem pico e fim.</li>
-      <li><strong>Grounding 5-4-3-2-1</strong> — volta ao presente.</li>
+      <li><strong>Grounding 5-4-3-2-1</strong> — volta ao presente pelos sentidos.</li>
       <li><strong>Meu plano de segurança</strong>.</li>
     </ul>
     <div class="crisis"><b>Emergências:</b> SAMU <b>192</b> · CVV <b>188</b> (apoio emocional 24h). Os botões discam direto.</div>
+  </div>
+</div>
+
+<div class="sec rev">
+  <div class="phone"><img src="guia-assets/resistencia.png" alt="Resistência ativa"></div>
+  <div class="txt">
+    <span class="chip" style="background:var(--roxo)">💪 Resistência ativa</span>
+    <h2>Toda vontade que você segura é uma vitória</h2>
+    <p>Sentiu vontade e <strong>não usou</strong>? Registre pelo botão roxo. Você guarda a substância, a intensidade da fissura e o que fez no lugar.</p>
+    <div class="tip"><b>💡 Dica:</b> na aba Reflexões, suas resistências viram um <strong>painel de vitórias</strong> com contador — ótimo pra olhar num dia difícil e lembrar da sua força.</div>
   </div>
 </div>
 
@@ -187,27 +239,39 @@
     <span class="chip" style="background:var(--verde2)">⚗️ Misturar</span>
     <h2>Interações entre substâncias</h2>
     <p>Escolha duas substâncias e veja o <strong>nível de risco</strong> da combinação (de Baixo risco a Perigoso), com explicação e <strong>sinais de alerta</strong>.</p>
-    <div class="warn">Conteúdo 18+. É informação para <strong>reduzir risco</strong> — nunca incentivo. Na dúvida, não misture.</div>
+    <div class="warn"><b>⚠️ 18+:</b> é informação para <strong>reduzir risco</strong> — nunca incentivo. Na dúvida, não misture, e nunca use sozinho(a).</div>
   </div>
 </div>
 
-<div class="band">Pausa &amp; ajustes</div>
+<div class="band">Pausa &amp; diversão</div>
 
-<div class="sec">
+<div class="sec rev">
   <div class="phone"><img src="guia-assets/pausa.png" alt="Pausa pra mente"></div>
   <div class="txt">
     <span class="chip" style="background:var(--teal)">🧘 Pausa pra mente</span>
-    <h2>Sons, frequências e jogos</h2>
+    <h2>Sons, frequências e trilha</h2>
     <ul>
       <li><strong>Sons da natureza</strong> (chuva, oceano, floresta…).</li>
       <li><strong>Ruído &amp; frequências</strong> (branco, marrom, 432/528 Hz, binaural).</li>
-      <li><strong>Jogos de foco</strong> (como o Flappy Marola) pra distrair a fissura.</li>
       <li><strong>Trilha de habilidades</strong> que desbloqueia extras com constância.</li>
     </ul>
+    <div class="tip"><b>💡 Dica:</b> as <strong>batidas binaurais</strong> só funcionam bem de <strong>fones de ouvido</strong>.</div>
   </div>
 </div>
 
 <div class="sec">
+  <div class="phone"><img src="guia-assets/jogo.png" alt="Flappy Marola"></div>
+  <div class="txt">
+    <span class="chip" style="background:#8B5BE0">🎮 Jogos de foco</span>
+    <h2>Ocupe as mãos e a cabeça</h2>
+    <p>Mini-games leves — como o <strong>Flappy Marola</strong>, Blocos, Ping-pong e Bolhas — pra atravessar a fissura distraindo. O botão <strong>Sair</strong> fica sempre acessível.</p>
+    <div class="tip"><b>💡 Dica:</b> a fissura costuma durar poucos minutos. Um joguinho rápido ajuda a "surfar" esse tempo.</div>
+  </div>
+</div>
+
+<div class="band">Ajustes &amp; privacidade</div>
+
+<div class="sec rev">
   <div class="phone"><img src="guia-assets/config.png" alt="Configurações"></div>
   <div class="txt">
     <span class="chip" style="background:#5E6B80">⚙️ Configurações</span>
@@ -219,18 +283,31 @@
       <li><strong>PIN</strong> de bloqueio, objetivo &amp; metas.</li>
       <li><strong>Backup</strong>, restaurar e exportar dados.</li>
     </ul>
+    <div class="tip"><b>💡 Dica:</b> o <strong>Modo discreto</strong> faz o app parecer um diário comum — bom pra privacidade no dia a dia.</div>
   </div>
 </div>
 
 <div class="intro" style="border-color:var(--teal)">
   <div class="disp" style="color:var(--teal)">🔔 Notificações de cuidado</div>
   Em <strong>Configurações → Notificações de cuidado</strong>, você ativa avisos que chegam <strong>mesmo com o app fechado</strong> — mensagens de acolhimento conforme a substância, os dias desde o último uso e seu objetivo. No máximo <strong>1 por dia</strong>, sem spam.
-  <br><br><strong>iPhone:</strong> instale o app na Tela de Início e aceite a permissão — só assim o push funciona (limitação da Apple).
+  <br><br><strong>📱 iPhone:</strong> instale o app na Tela de Início e aceite a permissão — só assim o push funciona (limitação da Apple).
 </div>
 
 <div class="intro" style="border-color:var(--verde)">
   <div class="disp" style="color:var(--verde2)">🛡️ Privacidade</div>
-  Seu histórico fica no seu aparelho e é <strong>sincronizado com o servidor próprio do projeto</strong> (para backup entre aparelhos e as notificações). <strong>Nada é compartilhado com terceiros</strong>, e você pode exportar ou apagar quando quiser. Há ainda <strong>PIN</strong> e <strong>Modo discreto</strong> para mais privacidade no dia a dia.
+  Seu histórico fica no seu aparelho e é <strong>sincronizado com o servidor próprio do projeto</strong> (para backup entre aparelhos e as notificações). <strong>Nada é compartilhado com terceiros</strong>, e você pode exportar ou apagar quando quiser. Há ainda <strong>PIN</strong> e <strong>Modo discreto</strong> para mais privacidade.
+</div>
+
+<div class="band">Dicas pra aproveitar melhor</div>
+<div class="tips">
+  <div class="tipcard g"><div class="t">🍃 Registre sem culpa</div><p>Registrar um uso não é "fracassar". É informação que te ajuda a se conhecer. Honestidade vale mais que números bonitos.</p></div>
+  <div class="tipcard o"><div class="t">⏱️ Pouco e constante</div><p>Melhor 30 segundos por dia do que tentar lembrar tudo no fim da semana. O check-in de humor é o jeito mais rápido.</p></div>
+  <div class="tipcard p"><div class="t">🌙 Use o Modo Crise antes da crise</div><p>Conheça a respiração e o grounding num momento calmo. Assim, na hora difícil, já são familiares.</p></div>
+  <div class="tipcard t2"><div class="t">📲 Instale na tela inicial</div><p>Além de abrir mais rápido, é o que libera as notificações de cuidado — principalmente no iPhone.</p></div>
+  <div class="tipcard g"><div class="t">💾 Faça um backup</div><p>Em Configurações → Backup completo. Guarde o arquivo: assim seu histórico nunca se perde se trocar de aparelho.</p></div>
+  <div class="tipcard o"><div class="t">🎯 Revise seu objetivo</div><p>Mudou de fase? Troque o objetivo. O app, as perguntas e as dicas se adaptam ao novo momento.</p></div>
+  <div class="tipcard p"><div class="t">🔮 Carta no fim do dia</div><p>Vire uma carta de reflexão à noite e responda no diário. Vira um ritual gentil de fechamento.</p></div>
+  <div class="tipcard t2"><div class="t">💬 Mande feedback</div><p>Achou um bug ou teve uma ideia? Configurações → Enviar feedback. Sua experiência deixa o app melhor pra todo mundo.</p></div>
 </div>
 
 <div class="crisis">
