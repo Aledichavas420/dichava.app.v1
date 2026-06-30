@@ -151,6 +151,28 @@ Deno.serve(async (req) => {
     if (k !== CRON_SECRET) return new Response("forbidden", { status: 403 });
   }
 
+  // ── MODO TESTE: ?teste=1 envia um push na hora pra todos os inscritos
+  //    (ignora marcos/cron — serve só pra confirmar que o push chega) ──
+  if (new URL(req.url).searchParams.get("teste") === "1") {
+    const { data: ts } = await sb.from("push_subs").select("*");
+    let ok = 0, falhou = 0;
+    for (const s of ts || []) {
+      try {
+        await webpush.sendNotification(
+          { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
+          JSON.stringify({ title: "Teste 💚", body: "Push funcionando! As notificações de cuidado estão ativas.", url: "./" }),
+        );
+        ok++;
+      } catch (err: any) {
+        falhou++;
+        if (err?.statusCode === 404 || err?.statusCode === 410) {
+          await sb.from("push_subs").delete().eq("endpoint", s.endpoint);
+        }
+      }
+    }
+    return new Response(JSON.stringify({ ok: true, teste: true, inscritos: (ts || []).length, enviados: ok, falhas: falhou }), { headers: { "content-type": "application/json" } });
+  }
+
   const { data: subs } = await sb.from("push_subs").select("*");
   if (!subs?.length) return new Response(JSON.stringify({ ok: true, enviados: 0 }), { headers: { "content-type": "application/json" } });
 
