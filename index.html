@@ -1713,6 +1713,11 @@ a{color:inherit;text-decoration:none}
 <div class="cfgh"><div class="cfgt">Configurações</div><div class="cfgs">Sua conta e preferências</div></div>
 <div class="sc scpad">
   <div class="pfc"><div class="pfav" id="pfav">?</div><div><div class="pfn" id="pfn">—</div><div class="pfe" id="pfe">—</div><div class="pfm" id="pfm">—</div><div class="probadge" id="pf-badge" style="display:none">🩺 Profissional verificado</div></div></div>
+  <!-- GRUPO DE TESTES -->
+  <div class="shr"><div class="sht">Grupo de testes</div></div>
+  <div class="cfgsec">
+    <div class="cfgi" onclick="abrirFeedback()"><div class="cfgic" data-icon="duvidas"></div><div class="cfgb"><div class="cfgn">Enviar feedback</div><div class="cfgd">Relate bugs e ideias no grupo do WhatsApp 💚</div></div><div class="cfgar">›</div></div>
+  </div>
   <!-- ÁREA EXCLUSIVA PROFISSIONAL -->
   <div id="pro-area" style="display:none">
     <div class="cfgsec" style="border:2px solid var(--roxo);margin:0 18px 11px">
@@ -5005,6 +5010,12 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._def
 window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{renderInstall();}catch(x){}});
 
 /* ══════════ NOTIFICAÇÕES PUSH (Web Push + Supabase) ══════════ */
+/* ── Link do grupo de feedback (beta). Cole aqui o convite do WhatsApp quando criar. ── */
+const LINK_FEEDBACK='';
+function abrirFeedback(){
+  if(!LINK_FEEDBACK){toast('💬 O grupo de feedback abre em breve!');return;}
+  try{window.open(LINK_FEEDBACK,'_blank','noopener');}catch(e){location.href=LINK_FEEDBACK;}
+}
 const VAPID_PUB='BNWG_B7SsJFIhvTO-aJAX8WzdvDyixqKhAF6qc17vYzpUWu0OzZjJ2IIJgK6sASfHrfvZ4WbzDrndFOqXa1FsPU';
 function _b64ToU8(s){const pad='='.repeat((4-s.length%4)%4);const b=(s+pad).replace(/-/g,'+').replace(/_/g,'/');const r=atob(b);const a=new Uint8Array(r.length);for(let i=0;i<r.length;i++)a[i]=r.charCodeAt(i);return a;}
 function pushSuportado(){return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;}
