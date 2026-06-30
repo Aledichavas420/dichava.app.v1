@@ -803,6 +803,7 @@ a{color:inherit;text-decoration:none}
 .cfgi.dan:active{background:var(--erf)}
 .cfgi.dan .cfgn{color:var(--er)}
 .cfgic{font-size:18px;width:23px;text-align:center;flex-shrink:0}
+.cfgic .appicon{width:23px;height:23px;display:block}
 .cfgb{flex:1}
 .cfgn{font-size:14px;font-weight:500;color:var(--dk)}
 .cfgd{font-size:12px;color:var(--txm);margin-top:1px;line-height:1.4}
@@ -1686,11 +1687,11 @@ a{color:inherit;text-decoration:none}
   <a class="wppc" href="#" style="display:none" onclick="event.preventDefault();abrirProfs()"><div class="wppci">🩺</div><div class="wppcb"><div class="wppct">Fale com um profissional</div><div class="wppcs">Rede de psicólogos e psiquiatras alinhados à redução de danos</div><div class="wppcl">Ver profissionais →</div></div></a>
   <!-- PLANO -->
   <div class="shr"><div class="sht">Plano de segurança</div><div class="shl" onclick="openPlanoMod()">editar</div></div>
-  <div class="cfgsec" style="margin:0 18px 11px"><div class="cfgi" onclick="openPlanoMod()"><div class="cfgic">🛡️</div><div class="cfgb"><div class="cfgn">Meu plano pessoal</div><div class="cfgd" id="plano-prev">Não configurado ainda</div></div><div class="cfgar">›</div></div></div>
+  <div class="cfgsec" style="margin:0 18px 11px"><div class="cfgi" onclick="openPlanoMod()"><div class="cfgic" data-icon="cfg-plano"></div><div class="cfgb"><div class="cfgn">Meu plano pessoal</div><div class="cfgd" id="plano-prev">Não configurado ainda</div></div><div class="cfgar">›</div></div></div>
   <!-- NOTIF -->
   <div class="shr"><div class="sht">Notificações</div></div>
   <div class="cfgsec">
-    <div class="cfgi" style="cursor:default"><div class="cfgic">🔔</div><div class="cfgb"><div class="cfgn">Lembretes diários</div><div class="cfgd">Convite para registrar</div></div><label class="tog"><input type="checkbox" id="tog-n" onchange="salvCfg()"><div class="tsl"></div></label></div>
+    <div class="cfgi" style="cursor:default"><div class="cfgic" data-icon="cfg-notif"></div><div class="cfgb"><div class="cfgn">Lembretes diários</div><div class="cfgd">Convite para registrar</div></div><label class="tog"><input type="checkbox" id="tog-n" onchange="salvCfg()"><div class="tsl"></div></label></div>
     <div class="cfgi" onclick="togglePush()"><div class="cfgic">📲</div><div class="cfgb"><div class="cfgn">Notificações de cuidado</div><div class="cfgd" id="push-status">Avisos no seu ritmo, mesmo com o app fechado</div></div><label class="tog" onclick="event.preventDefault()"><input type="checkbox" id="tog-push"><div class="tsl"></div></label></div>
     <div style="padding:5px 15px 13px;border-bottom:1px solid var(--cinm)">
       <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Alertar ao ultrapassar:</div>
@@ -1704,27 +1705,27 @@ a{color:inherit;text-decoration:none}
   <div class="shr"><div class="sht">Meu objetivo</div></div>
   <div class="cfgsec">
     <div class="cfgi" onclick="reabrirOb()"><div class="cfgic">🎯</div><div class="cfgb"><div class="cfgn">Alterar objetivo</div><div class="cfgd" id="cfg-obj">—</div></div><div class="cfgar">›</div></div>
-    <div class="cfgi" onclick="openMetasMod()"><div class="cfgic">📋</div><div class="cfgb"><div class="cfgn">Gerenciar metas</div><div class="cfgd">Adicione, remova ou conclua</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="openMetasMod()"><div class="cfgic" data-icon="cfg-metas"></div><div class="cfgb"><div class="cfgn">Gerenciar metas</div><div class="cfgd">Adicione, remova ou conclua</div></div><div class="cfgar">›</div></div>
   </div>
   <!-- PRIVACIDADE -->
   <div class="shr"><div class="sht">Aparência</div></div>
   <div class="cfgsec">
-    <div class="cfgi" style="cursor:default"><div class="cfgic">🌙</div><div class="cfgb"><div class="cfgn">Modo escuro</div><div class="cfgd">Mais conforto à noite</div></div><label class="tog"><input type="checkbox" id="tog-dark" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
+    <div class="cfgi" style="cursor:default"><div class="cfgic" data-icon="cfg-tema"></div><div class="cfgb"><div class="cfgn">Modo escuro</div><div class="cfgd">Mais conforto à noite</div></div><label class="tog"><input type="checkbox" id="tog-dark" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">🕶️</div><div class="cfgb"><div class="cfgn">Modo discreto</div><div class="cfgd">App aparece como "Diário", sem referências a RD</div></div><label class="tog"><input type="checkbox" id="tog-disc" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
   </div>
   <div class="shr"><div class="sht">Segurança</div></div>
   <div class="cfgsec">
-    <div class="cfgi" onclick="cfgPin()"><div class="cfgic">🔒</div><div class="cfgb"><div class="cfgn">PIN de bloqueio</div><div class="cfgd" id="pin-status">Desativado</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="cfgPin()"><div class="cfgic" data-icon="cfg-pin"></div><div class="cfgb"><div class="cfgn">PIN de bloqueio</div><div class="cfgd" id="pin-status">Desativado</div></div><div class="cfgar">›</div></div>
   </div>
   <div class="shr"><div class="sht">Privacidade</div></div>
   <div class="cfgsec">
     <div class="cfgi" onclick="mostrarTermo()"><div class="cfgic">📋</div><div class="cfgb"><div class="cfgn">Termo de consentimento</div><div class="cfgd">Reveja o que você autorizou</div></div><div class="cfgar">›</div></div>
-    <div class="cfgi" onclick="exportar()"><div class="cfgic">📤</div><div class="cfgb"><div class="cfgn">Exportar meus dados</div><div class="cfgd">Baixar histórico em texto</div></div><div class="cfgar">›</div></div>
-    <div class="cfgi" onclick="backupJSON()"><div class="cfgic">💾</div><div class="cfgb"><div class="cfgn">Backup completo</div><div class="cfgd">Salvar tudo em arquivo (restaurável)</div></div><div class="cfgar">›</div></div>
-    <div class="cfgi" onclick="document.getElementById('restore-inp').click()"><div class="cfgic">📥</div><div class="cfgb"><div class="cfgn">Restaurar backup</div><div class="cfgd">Importar arquivo de backup</div></div><div class="cfgar">›</div><input type="file" id="restore-inp" accept=".json" style="display:none" onchange="restoreJSON(this)"></div>
+    <div class="cfgi" onclick="exportar()"><div class="cfgic" data-icon="cfg-exportar"></div><div class="cfgb"><div class="cfgn">Exportar meus dados</div><div class="cfgd">Baixar histórico em texto</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="backupJSON()"><div class="cfgic" data-icon="cfg-backup"></div><div class="cfgb"><div class="cfgn">Backup completo</div><div class="cfgd">Salvar tudo em arquivo (restaurável)</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="document.getElementById('restore-inp').click()"><div class="cfgic" data-icon="cfg-restore"></div><div class="cfgb"><div class="cfgn">Restaurar backup</div><div class="cfgd">Importar arquivo de backup</div></div><div class="cfgar">›</div><input type="file" id="restore-inp" accept=".json" style="display:none" onchange="restoreJSON(this)"></div>
   </div>
   <div class="avcli"><div class="avclic">🌿</div><div class="avclx"><strong>Este app é um recurso complementar.</strong> Ele apoia — mas não substitui — o acompanhamento com um profissional de saúde.</div></div>
-  <div class="cfgsec" style="margin-bottom:20px"><div class="cfgi dan" onclick="logout()"><div class="cfgic">🚪</div><div class="cfgb"><div class="cfgn">Sair da conta</div></div></div></div>
+  <div class="cfgsec" style="margin-bottom:20px"><div class="cfgi dan" onclick="logout()"><div class="cfgic" data-icon="cfg-sair"></div><div class="cfgb"><div class="cfgn">Sair da conta</div></div></div></div>
 </div>
 </div>
 
