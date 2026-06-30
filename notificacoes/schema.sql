@@ -27,12 +27,13 @@ create table if not exists public.push_log (
 --    A Edge Function usa a service_role e ignora RLS.
 alter table public.push_subs enable row level security;
 
--- o app usa a chave anônima e o id do usuário do localStorage (não-Supabase-auth),
--- então liberamos insert/update/delete por endpoint. Se você usa Supabase Auth,
--- troque por políticas baseadas em auth.uid().
+-- o app pode estar logado via Supabase Auth (papel `authenticated`) OU usar a
+-- chave anônima (papel `anon`) — por isso liberamos os dois. A Edge Function usa
+-- a service_role e ignora RLS de qualquer forma.
 drop policy if exists "push_subs_anon_rw" on public.push_subs;
-create policy "push_subs_anon_rw" on public.push_subs
-  for all to anon using (true) with check (true);
+drop policy if exists "push_subs_rw" on public.push_subs;
+create policy "push_subs_rw" on public.push_subs
+  for all to anon, authenticated using (true) with check (true);
 
 -- push_log é só do servidor — sem políticas para anon (fica bloqueado p/ cliente).
 alter table public.push_log enable row level security;
