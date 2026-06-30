@@ -838,6 +838,10 @@ a{color:inherit;text-decoration:none}
 .ta-ic .appicon{width:18px;height:18px;display:inline-block;vertical-align:-3px}
 .cartas-hero-ic .appicon{width:46px;height:46px;display:block;margin:0 auto}
 .grdi .appicon{width:50px;height:50px;display:block;margin:0 auto}
+.zen-moon .appicon{width:70px;height:70px;display:block}
+.zen-sec .appicon{width:15px;height:15px;display:inline-block;vertical-align:-2px}
+.sb-stop .appicon{width:17px;height:17px;display:block;margin:0 auto}
+.si .appicon{width:30px;height:30px;display:block;margin:0 auto}
 .cfgb{flex:1}
 .cfgn{font-size:14px;font-weight:500;color:var(--dk)}
 .cfgd{font-size:12px;color:var(--txm);margin-top:1px;line-height:1.4}
@@ -1509,9 +1513,9 @@ a{color:inherit;text-decoration:none}
 <!-- JOGOS -->
 <div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-jogos">
 <div class="zen-stars" id="zen-stars"></div>
-<div class="zen-moon">🌙</div>
+<div class="zen-moon" data-icon="son-noite"></div>
 <div class="zen-top">
-  <div class="zen-logo">🌿 Pausa pra mente</div>
+  <div class="zen-logo"><span class="tic" data-icon="pausa-mente"></span> Pausa pra mente</div>
   <div class="zen-av" id="tav-j" onclick="goPg('p-cfg')">?</div>
 </div>
 <div class="zen-sc">
@@ -1519,7 +1523,7 @@ a{color:inherit;text-decoration:none}
     <h2>Respira.<br>A vontade é uma onda.</h2>
     <p>Ocupe as mãos e a cabeça enquanto ela sobe, atinge o pico e desce. Não precisa vencer, só atravessar.</p>
   </div>
-  <div class="zen-sec">🌳 Sua trilha de habilidades</div>
+  <div class="zen-sec"><span class="zen-tree-i" data-icon="zen-tree"></span> Sua trilha de habilidades</div>
   <div id="zen-skills"></div>
   <div id="zen-sons">
   <div class="zen-sec" style="margin-top:24px">Sons da natureza · em loop</div>
@@ -1541,18 +1545,18 @@ a{color:inherit;text-decoration:none}
     <div class="sb-ic" id="sb-ic">🌧️</div>
     <div class="sb-info"><div class="sb-t" id="sb-t">Chuva</div><div class="sb-s">tocando em loop</div></div>
     <div class="sb-timer" id="sb-timer"></div>
-    <button class="sb-stop" onclick="pararSom()">⏹</button>
+    <button class="sb-stop" onclick="pararSom()" data-icon="zen-stop"></button>
   </div>
   </div><!-- /zen-sons -->
 
   <div id="zen-freq">
   <div class="zen-sec" style="margin-top:22px">Ruído & frequências · foco e calma</div>
   <div class="snd-row">
-    <div class="snd zc-dark" data-snd="branco" onclick="toggleSom('branco',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">⚪</div><h5>Ruído branco</h5><p>Bloqueia distrações</p></div>
-    <div class="snd zc-dark" data-snd="marrom" onclick="toggleSom('marrom',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🟤</div><h5>Ruído marrom</h5><p>Grave e aconchegante</p></div>
-    <div class="snd zc-teal" data-snd="f432" onclick="toggleSom('f432',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎵</div><h5>432 Hz</h5><p>Relaxamento</p></div>
-    <div class="snd zc-teal" data-snd="f528" onclick="toggleSom('f528',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🎶</div><h5>528 Hz</h5><p>Sensação de bem-estar</p></div>
-    <div class="snd zc-blue" data-snd="binaural" onclick="toggleSom('binaural',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" style="font-size:30px">🧘</div><h5>Binaural θ</h5><p>Ondas theta · meditação</p></div>
+    <div class="snd zc-dark" data-snd="branco" onclick="toggleSom('branco',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="noise-white"></div><h5>Ruído branco</h5><p>Bloqueia distrações</p></div>
+    <div class="snd zc-dark" data-snd="marrom" onclick="toggleSom('marrom',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="noise-brown"></div><h5>Ruído marrom</h5><p>Grave e aconchegante</p></div>
+    <div class="snd zc-teal" data-snd="f432" onclick="toggleSom('f432',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-note"></div><h5>432 Hz</h5><p>Relaxamento</p></div>
+    <div class="snd zc-teal" data-snd="f528" onclick="toggleSom('f528',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-notes"></div><h5>528 Hz</h5><p>Sensação de bem-estar</p></div>
+    <div class="snd zc-blue" data-snd="binaural" onclick="toggleSom('binaural',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-binaural"></div><h5>Binaural θ</h5><p>Ondas theta · meditação</p></div>
   </div>
   </div><!-- /zen-freq -->
 
@@ -2528,6 +2532,13 @@ function setAvatares(){const sv=brotoColorSVG(gAvatar());['hh-av','tav','tav-j',
 function escolherAvatar(v){ls('dr_avatar_'+uid(),v);setAvatares();const pa=document.getElementById('perfil-av');if(pa){pa.innerHTML=brotoColorSVG(v);pa.classList.add('av-broto');}document.querySelectorAll('#perfil-avpick .avpick').forEach(b=>b.classList.toggle('on',b.dataset.v===v));vib(6);toast('🎨 Avatar atualizado!');const pk=document.getElementById('perfil-avpick');if(pk)pk.style.display='none';const bt=document.getElementById('perfil-editav');if(bt)bt.textContent='✏️ Editar avatar';}
 function toggleAvPick(){const pk=document.getElementById('perfil-avpick');const bt=document.getElementById('perfil-editav');if(!pk)return;const open=pk.style.display!=='none';pk.style.display=open?'none':'grid';if(bt)bt.textContent=open?'✏️ Editar avatar':'Toque na cor que quiser';}
 const ICONS={
+  "zen-tree":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="zen-tree-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient></defs><rect x="10.9" y="12.5" width="2.2" height="8" rx="1" fill="#7A4A28"></rect><circle cx="12" cy="9" r="5.6" fill="url(#zen-tree-gg)"></circle><circle cx="8.3" cy="11.4" r="3.5" fill="url(#zen-tree-gg)"></circle><circle cx="15.7" cy="11.4" r="3.5" fill="url(#zen-tree-gg)"></circle></svg>`,
+  "zen-stop":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="zen-stop-gre" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FF8A7A"></stop><stop offset="1" stop-color="#D32F2F"></stop></linearGradient></defs><rect x="6" y="6" width="12" height="12" rx="3.2" fill="url(#zen-stop-gre)"></rect></svg>`,
+  "noise-white":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="noise-white-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#D6DCE6"></stop><stop offset="1" stop-color="#9AA6B8"></stop></linearGradient></defs><circle cx="12" cy="12" r="9" fill="url(#noise-white-ggr)"></circle><rect x="7.5" y="9.5" width="1.5" height="5" rx=".75" fill="#fff"></rect><rect x="10" y="8" width="1.5" height="8" rx=".75" fill="#fff"></rect><rect x="12.5" y="8" width="1.5" height="8" rx=".75" fill="#fff"></rect><rect x="15" y="9.5" width="1.5" height="5" rx=".75" fill="#fff"></rect></svg>`,
+  "noise-brown":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="noise-brown-gbr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#D8B591"></stop><stop offset="1" stop-color="#7A4A28"></stop></linearGradient></defs><circle cx="12" cy="12" r="9" fill="url(#noise-brown-gbr)"></circle><rect x="7.5" y="9.5" width="1.5" height="5" rx=".75" fill="#fff" opacity=".95"></rect><rect x="10" y="8" width="1.5" height="8" rx=".75" fill="#fff" opacity=".95"></rect><rect x="12.5" y="8" width="1.5" height="8" rx=".75" fill="#fff" opacity=".95"></rect><rect x="15" y="9.5" width="1.5" height="5" rx=".75" fill="#fff" opacity=".95"></rect></svg>`,
+  "freq-note":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="freq-note-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient></defs><rect x="13" y="5" width="1.9" height="10.6" rx=".95" fill="url(#freq-note-gt)"></rect><ellipse cx="11" cy="15.8" rx="3" ry="2.3" fill="url(#freq-note-gt)" transform="rotate(-18 11 15.8)"></ellipse><path d="M14.9 5.2c2.3.5 3.7 1.9 3.7 4" fill="none" stroke="url(#freq-note-gt)" stroke-width="1.8" stroke-linecap="round"></path></svg>`,
+  "freq-notes":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="freq-notes-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient></defs><rect x="8.6" y="6" width="1.6" height="10" rx=".8" fill="url(#freq-notes-gt)"></rect><rect x="16" y="5" width="1.6" height="11" rx=".8" fill="url(#freq-notes-gt)"></rect><path d="M9.4 6.4 16.8 5" fill="none" stroke="url(#freq-notes-gt)" stroke-width="2.2" stroke-linecap="round"></path><ellipse cx="7.6" cy="16.2" rx="2.7" ry="2.1" fill="url(#freq-notes-gt)"></ellipse><ellipse cx="15" cy="15.2" rx="2.7" ry="2.1" fill="url(#freq-notes-gt)"></ellipse></svg>`,
+  "freq-binaural":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="freq-binaural-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient></defs><path d="M5 14v-1.5a7 7 0 0 1 14 0V14" fill="none" stroke="url(#freq-binaural-gp)" stroke-width="2" stroke-linecap="round"></path><rect x="3.4" y="13.2" width="3.6" height="6.4" rx="1.7" fill="url(#freq-binaural-gp)"></rect><rect x="17" y="13.2" width="3.6" height="6.4" rx="1.7" fill="url(#freq-binaural-gp)"></rect></svg>`,
   "mix-18":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="mix-18-gre" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FF8A7A"></stop><stop offset="1" stop-color="#D32F2F"></stop></linearGradient></defs><circle cx="12" cy="12" r="9.2" fill="url(#mix-18-gre)"></circle><text x="12" y="15.4" font-family="'DM Sans',sans-serif" font-size="9.2" font-weight="800" fill="#fff" text-anchor="middle">18</text></svg>`,
   "mix-flag":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="mix-flag-gre" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FF8A7A"></stop><stop offset="1" stop-color="#D32F2F"></stop></linearGradient></defs><rect x="5.4" y="3" width="2.1" height="18" rx="1.05" fill="url(#mix-flag-gre)"></rect><path d="M7.5 4h9.6l-2.3 3.3 2.3 3.3H7.5Z" fill="url(#mix-flag-gre)"></path></svg>`,
   "ref-crystal":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="ref-crystal-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient></defs><path d="M6.6 19.2h10.8l-1.3 1.6a1.2 1.2 0 0 1-.92.43H8.82a1.2 1.2 0 0 1-.92-.43Z" fill="url(#ref-crystal-gp)"></path><circle cx="12" cy="10.6" r="6.4" fill="url(#ref-crystal-gp)"></circle><path d="M9 8.4a3.6 3.6 0 0 1 3-1.8" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".85"></path><circle cx="9.7" cy="12.6" r="1" fill="#fff" opacity=".7"></circle></svg>`,
