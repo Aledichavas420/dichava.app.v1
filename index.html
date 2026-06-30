@@ -692,6 +692,29 @@ a{color:inherit;text-decoration:none}
 .tarot-banner::after{content:'';position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-18deg);animation:tarotShine 4.6s ease-in-out infinite}
 @keyframes tarotShine{0%,72%{left:-60%}100%{left:160%}}
 .tarot-brand{position:relative;z-index:1;font-size:11px;font-weight:700;color:rgba(224,190,110,.7);letter-spacing:.05em;margin-top:-2px}
+/* humor da semana — strip visual */
+.humor-week{background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:16px 12px;margin:0 18px 13px}
+#shell.dkm .humor-week{background:#1e1a2c;border-color:rgba(255,255,255,.08)}
+.hw-row{display:flex;justify-content:space-between;gap:4px}
+.hwd{display:flex;flex-direction:column;align-items:center;gap:7px;flex:1}
+.hwb{width:37px;height:37px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 3px 9px rgba(0,0,0,.13)}
+.hwb.hwe{background:var(--cin);box-shadow:none;border:2px dashed var(--cinm)}
+.hwb.today{border-color:var(--ve);border-style:solid}
+.hwl{font-size:11px;font-weight:700;color:var(--txs)}
+.hwl.on{color:var(--ve)}
+.hw-cap{text-align:center;font-size:12px;color:var(--txm);margin-top:14px;line-height:1.45}
+/* resistência ativa — hero + vazio */
+.fss-hero{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#8B5BE0,#6B43C4);border-radius:16px;padding:15px 18px;margin:0 18px 12px;box-shadow:0 6px 18px rgba(107,67,196,.3)}
+.fss-hero-ic{width:46px;height:46px;background:rgba(255,255,255,.95);border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fss-hero-ic .appicon{width:29px;height:29px}
+.fss-hero-n{font-family:'DM Sans',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1}
+.fss-hero-l{font-size:12.5px;color:rgba(255,255,255,.88);margin-top:3px}
+.fss-empty{text-align:center;padding:24px;margin:0 18px 13px;background:#fff;border:1px dashed var(--cinm);border-radius:16px}
+#shell.dkm .fss-empty{background:#1e1a2c}
+.fss-empty .appicon{width:48px;height:48px;opacity:.9}
+.fss-empty-t{font-size:14px;font-weight:700;color:var(--dk);margin-top:11px;line-height:1.4}
+.fss-empty-s{font-size:12.5px;color:var(--txm);margin-top:7px;line-height:1.45}
+.fssie .appicon{width:24px;height:24px}
 /* botões premium */
 .tarot-acts{display:flex;gap:9px;margin-top:14px}
 .ta-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:rgba(124,77,214,.08);border:1.5px solid rgba(124,77,214,.25);border-radius:15px;padding:11px 4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:var(--roxo);box-shadow:0 2px 6px rgba(124,77,214,.1);transition:transform .12s,box-shadow .15s,background .15s}
@@ -1666,15 +1689,9 @@ a{color:inherit;text-decoration:none}
       <button class="ta-btn" onclick="compartilharCarta()"><span class="ta-ic" data-icon="cfg-exportar"></span><span>Compartilhar</span></button>
     </div>
   </div>
-  <div class="ref-carta-link" onclick="abrirCartas()">
-    <span data-icon="sec-cartas" style="width:26px;height:26px;display:inline-block;flex-shrink:0"></span>
-    <div style="flex:1"><div class="rcl-t">Cartas para mim</div><div class="rcl-s">Escreva pro seu eu do futuro</div></div>
-    <span class="rcl-go">›</span>
-  </div>
-
   <!-- HUMOR -->
 <div class="shr"><div class="sht">Meu humor esta semana</div></div>
-  <div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px;margin:0 18px 13px"><canvas id="humor-c" height="130"></canvas></div>
+  <div class="humor-week" id="humor-week"></div>
   <div class="shr"><div class="sht">Resistência ativa <span class="tic" data-icon="resistencia"></span></div></div>
   <div id="fiss-l"></div>
   <div class="shr" style="padding-top:4px"><div class="sht">Artigos de RD 📖</div></div>
@@ -3535,11 +3552,23 @@ function responderCarta(){
 function renderDicaRef(goal){
   const d=dica(goal);document.getElementById('dica-ref').innerHTML=`<div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px"><div style="font-size:25px;margin-bottom:7px">${d.i}</div><div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:5px">${d.t}</div><div style="font-size:13px;color:var(--txs);line-height:1.6">${d.x}</div></div>`;
 }
+const MOOD_W={'😊':['#8FE06B','#2DA257'],'😌':['#5CE3CF','#0C9C8C'],'😵':['#B79AF7','#6B43D6'],'😰':['#FFDD6E','#FB922E'],'😔':['#9DB2C8','#5E6B80']};
 function renderHumorChart(){
-  const regs=gR();const hj=new Date();hj.setHours(12,0,0,0);const em={'😌':4,'😊':5,'😰':2,'😔':1,'😵':3};const lbs=[],vals=[];
-  for(let i=6;i>=0;i--){const d=new Date(hj);d.setDate(hj.getDate()-i);const iso=d.toISOString().split('T')[0];const dias=['D','S','T','Q','Q','S','S'];lbs.push(dias[d.getDay()]);const rD=regs.filter(r=>r.data===iso);vals.push(rD.length?rD.reduce((a,r)=>a+(em[r.emocao]||3),0)/rD.length:null);}
-  const ctx=document.getElementById('humor-c');if(!ctx||typeof Chart==='undefined')return;if(_hC)_hC.destroy();
-  _hC=new Chart(ctx,{type:'line',data:{labels:lbs,datasets:[{label:'Humor',data:vals,borderColor:'rgba(76,175,90,.8)',backgroundColor:'rgba(76,175,90,.08)',tension:.4,pointBackgroundColor:'#4CAF5A',pointRadius:4,spanGaps:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10,family:'DM Sans'}}},y:{display:false,min:0,max:6}}}});
+  const c=document.getElementById('humor-week');if(!c)return;
+  const regs=gR();const hj=new Date();hj.setHours(12,0,0,0);const dias=['D','S','T','Q','Q','S','S'];
+  let row='',cnt=0;
+  for(let i=6;i>=0;i--){
+    const d=new Date(hj);d.setDate(hj.getDate()-i);const iso=d.toISOString().split('T')[0];
+    const wd=dias[d.getDay()];const isToday=i===0;const rD=regs.filter(r=>r.data===iso);
+    if(rD.length){
+      const emo=rD[rD.length-1].emocao||'😌';const m=MOOD_W[emo]||MOOD_W['😌'];cnt++;
+      row+=`<div class="hwd"><div class="hwb" style="background:linear-gradient(145deg,${m[0]},${m[1]})">${emo}</div><div class="hwl${isToday?' on':''}">${wd}</div></div>`;
+    } else {
+      row+=`<div class="hwd"><div class="hwb hwe${isToday?' today':''}"></div><div class="hwl${isToday?' on':''}">${wd}</div></div>`;
+    }
+  }
+  const cap=cnt?`Você registrou seu humor em <strong>${cnt}</strong> ${cnt===1?'dia':'dias'} esta semana 💚`:'Registre como você se sente — cada dia conta, sem cobrança.';
+  c.innerHTML=`<div class="hw-row">${row}</div><div class="hw-cap">${cap}</div>`;
 }
 
 function renderCartas(){
@@ -3558,9 +3587,10 @@ function salvCarta(){
 }
 
 function renderFiss(){
-  const fiss=gFs().slice().reverse();const c=document.getElementById('fiss-l');
-  if(!fiss.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 13px">Nenhum registro de resistência ainda. Use o botão roxo na tela inicial!</div>';return;}
-  c.innerHTML=fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">💪</div><div class="fssib"><div class="fssin">${f.substancia} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
+  const fiss=gFs().slice().reverse();const c=document.getElementById('fiss-l');const n=fiss.length;
+  if(!n){c.innerHTML=`<div class="fss-empty">${icon('resistencia')}<div class="fss-empty-t">Toda vez que a vontade vem e você segura, é uma vitória.</div><div class="fss-empty-s">Use o botão roxo na tela inicial pra registrar uma resistência.</div></div>`;return;}
+  const hero=`<div class="fss-hero"><div class="fss-hero-ic">${icon('resistencia')}</div><div><div class="fss-hero-n">${n}</div><div class="fss-hero-l">${n===1?'vez que você resistiu à vontade':'vezes que você resistiu à vontade'} 💜</div></div></div>`;
+  c.innerHTML=hero+fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">${icon('resistencia')}</div><div class="fssib"><div class="fssin">${f.substancia} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
 }
 
 function renderRefFeed(){
