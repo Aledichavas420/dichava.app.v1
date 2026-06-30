@@ -842,6 +842,7 @@ a{color:inherit;text-decoration:none}
 .zen-sec .appicon{width:15px;height:15px;display:inline-block;vertical-align:-2px}
 .sb-stop .appicon{width:17px;height:17px;display:block;margin:0 auto}
 .si .appicon{width:30px;height:30px;display:block;margin:0 auto}
+.sk-ic .appicon{width:26px;height:26px;display:block}
 .cfgb{flex:1}
 .cfgn{font-size:14px;font-weight:500;color:var(--dk)}
 .cfgd{font-size:12px;color:var(--txm);margin-top:1px;line-height:1.4}
@@ -1785,8 +1786,8 @@ a{color:inherit;text-decoration:none}
     <div style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:9px;font-weight:600">Qual a intensidade agora? (1 a 10)</div>
     <div class="introw" id="crise-int"></div>
   </div>
-  <button class="crc" onclick="showV('vresp')"><div class="crci">🫁</div><div><div class="crcn">Respiração guiada 4-7-8</div><div class="crcd">2 minutos para acalmar o sistema nervoso</div></div></button>
-  <button class="crc" onclick="iniciarOnda()"><div class="crci">🌊</div><div><div class="crcn">Surfar a onda — 20 min</div><div class="crcd">A fissura tem pico e fim. Atravesse com acompanhamento</div></div></button>
+  <button class="crc" onclick="showV('vresp')"><div class="crci" data-icon="tool-lungs"></div><div><div class="crcn">Respiração guiada 4-7-8</div><div class="crcd">2 minutos para acalmar o sistema nervoso</div></div></button>
+  <button class="crc" onclick="iniciarOnda()"><div class="crci" data-icon="son-oceano"></div><div><div class="crcn">Surfar a onda — 20 min</div><div class="crcd">A fissura tem pico e fim. Atravesse com acompanhamento</div></div></button>
   <button class="crc" onclick="showV('vgrd')"><div class="crci" data-icon="crise-mapa"></div><div><div class="crcn">Grounding 5-4-3-2-1</div><div class="crcd">Volte ao presente com seus sentidos</div></div></button>
   <button class="crc" onclick="abrirPlanoCrise()"><div class="crci" data-icon="cfg-plano"></div><div><div class="crcn">Meu plano de segurança</div><div class="crcd">O que você mesmo(a) preparou para esse momento</div></div></button>
   <a class="crc" href="tel:192" style="text-decoration:none"><div class="crci" data-icon="crise-ambulancia"></div><div><div class="crcn">SAMU — 192</div><div class="crcd">Emergência médica, overdose</div></div></a>
@@ -2532,6 +2533,8 @@ function setAvatares(){const sv=brotoColorSVG(gAvatar());['hh-av','tav','tav-j',
 function escolherAvatar(v){ls('dr_avatar_'+uid(),v);setAvatares();const pa=document.getElementById('perfil-av');if(pa){pa.innerHTML=brotoColorSVG(v);pa.classList.add('av-broto');}document.querySelectorAll('#perfil-avpick .avpick').forEach(b=>b.classList.toggle('on',b.dataset.v===v));vib(6);toast('🎨 Avatar atualizado!');const pk=document.getElementById('perfil-avpick');if(pk)pk.style.display='none';const bt=document.getElementById('perfil-editav');if(bt)bt.textContent='✏️ Editar avatar';}
 function toggleAvPick(){const pk=document.getElementById('perfil-avpick');const bt=document.getElementById('perfil-editav');if(!pk)return;const open=pk.style.display!=='none';pk.style.display=open?'none':'grid';if(bt)bt.textContent=open?'✏️ Editar avatar':'Toque na cor que quiser';}
 const ICONS={
+  "tool-slider":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="tool-slider-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient></defs><rect x="4" y="7" width="16" height="1.8" rx=".9" fill="url(#tool-slider-gb)" opacity=".35"></rect><rect x="4" y="11.1" width="16" height="1.8" rx=".9" fill="url(#tool-slider-gb)" opacity=".35"></rect><rect x="4" y="15.2" width="16" height="1.8" rx=".9" fill="url(#tool-slider-gb)" opacity=".35"></rect><circle cx="9" cy="7.9" r="2.6" fill="url(#tool-slider-gb)"></circle><circle cx="15" cy="12" r="2.6" fill="url(#tool-slider-gb)"></circle><circle cx="7.5" cy="16.1" r="2.6" fill="url(#tool-slider-gb)"></circle></svg>`,
+  "tool-lungs":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="tool-lungs-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient></defs><rect x="11.1" y="3.6" width="1.8" height="6.2" rx=".9" fill="url(#tool-lungs-gt)"></rect><path d="M11 9.2c-.4 2-2.4 2.9-3.5 4.5-1 1.5-1.4 3.5-1.2 5.3.1 1 1.2 1.5 2 .9 1.6-1.2 2.7-3 2.7-5Z" fill="url(#tool-lungs-gt)"></path><path d="M13 9.2c.4 2 2.4 2.9 3.5 4.5 1 1.5 1.4 3.5 1.2 5.3-.1 1-1.2 1.5-2 .9-1.6-1.2-2.7-3-2.7-5Z" fill="url(#tool-lungs-gt)"></path></svg>`,
   "zen-tree":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="zen-tree-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient></defs><rect x="10.9" y="12.5" width="2.2" height="8" rx="1" fill="#7A4A28"></rect><circle cx="12" cy="9" r="5.6" fill="url(#zen-tree-gg)"></circle><circle cx="8.3" cy="11.4" r="3.5" fill="url(#zen-tree-gg)"></circle><circle cx="15.7" cy="11.4" r="3.5" fill="url(#zen-tree-gg)"></circle></svg>`,
   "zen-stop":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="zen-stop-gre" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FF8A7A"></stop><stop offset="1" stop-color="#D32F2F"></stop></linearGradient></defs><rect x="6" y="6" width="12" height="12" rx="3.2" fill="url(#zen-stop-gre)"></rect></svg>`,
   "noise-white":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="noise-white-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#D6DCE6"></stop><stop offset="1" stop-color="#9AA6B8"></stop></linearGradient></defs><circle cx="12" cy="12" r="9" fill="url(#noise-white-ggr)"></circle><rect x="7.5" y="9.5" width="1.5" height="5" rx=".75" fill="#fff"></rect><rect x="10" y="8" width="1.5" height="8" rx=".75" fill="#fff"></rect><rect x="12.5" y="8" width="1.5" height="8" rx=".75" fill="#fff"></rect><rect x="15" y="9.5" width="1.5" height="5" rx=".75" fill="#fff"></rect></svg>`,
@@ -3182,9 +3185,9 @@ function fecharInstall(){localStorage.setItem('dr_install_dismiss_'+uid(),'1');r
 // Obs: ferramentas de crise (respiração, grounding, surfar a onda) NÃO entram aqui —
 // são sempre livres no Modo Crise. A trilha só desbloqueia recursos de relaxamento extra.
 const HABS=[
-  {id:'jogos',ic:'🎮',nome:'Jogos de foco',desc:'Ocupe as mãos e a cabeça',cond:()=>true,go:()=>{const g=document.querySelector('#p-jogos .zen-grid');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});}},
-  {id:'sons',ic:'🎧',nome:'Sons da natureza',desc:'Paisagens sonoras em loop',need:'3 dias seguidos',prog:()=>[streak(gR()),3],go:()=>{const s=document.getElementById('zen-sons');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
-  {id:'freq',ic:'🎚️',nome:'Ruído & frequências',desc:'Ruído branco, 432Hz, binaural',need:'7 dias seguidos',prog:()=>[streak(gR()),7],go:()=>{const s=document.getElementById('zen-freq');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
+  {id:'jogos',ic:'jogos',nome:'Jogos de foco',desc:'Ocupe as mãos e a cabeça',cond:()=>true,go:()=>{const g=document.querySelector('#p-jogos .zen-grid');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});}},
+  {id:'sons',ic:'son-floresta',nome:'Sons da natureza',desc:'Paisagens sonoras em loop',need:'3 dias seguidos',prog:()=>[streak(gR()),3],go:()=>{const s=document.getElementById('zen-sons');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
+  {id:'freq',ic:'tool-slider',nome:'Ruído & frequências',desc:'Ruído branco, 432Hz, binaural',need:'7 dias seguidos',prog:()=>[streak(gR()),7],go:()=>{const s=document.getElementById('zen-freq');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
 ];
 function habUnlocked(s){return s.cond?s.cond():s.prog()[0]>=s.prog()[1];}
 function renderHabilidades(){
@@ -3192,7 +3195,7 @@ function renderHabilidades(){
   c.innerHTML='<div class="sktree">'+HABS.map(s=>{
     const un=habUnlocked(s);let sub=s.desc,prog='';
     if(!un&&s.prog){const[a,b]=s.prog();const aa=Math.min(a,b);sub='🔒 '+s.need+' · '+aa+'/'+b;prog=`<div class="sk-bar"><div class="sk-bar-f" style="width:${Math.round(aa/b*100)}%"></div></div>`;}
-    return `<div class="sknode${un?' on':''}" ${un?`onclick="habGo('${s.id}')"`:''}><div class="sk-ic">${un?s.ic:'🔒'}</div><div class="sk-b"><div class="sk-n">${esc(s.nome)}</div><div class="sk-d">${sub}</div>${prog}</div><div class="sk-st">${un?'›':''}</div></div>`;
+    return `<div class="sknode${un?' on':''}" ${un?`onclick="habGo('${s.id}')"`:''}><div class="sk-ic">${un?icon(s.ic):icon('cfg-pin')}</div><div class="sk-b"><div class="sk-n">${esc(s.nome)}</div><div class="sk-d">${sub}</div>${prog}</div><div class="sk-st">${un?'›':''}</div></div>`;
   }).join('')+'</div>';
   const sons=document.getElementById('zen-sons');if(sons)sons.style.display=habUnlocked(HABS.find(h=>h.id==='sons'))?'':'none';
   const freq=document.getElementById('zen-freq');if(freq)freq.style.display=habUnlocked(HABS.find(h=>h.id==='freq'))?'':'none';
