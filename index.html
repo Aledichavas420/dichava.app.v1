@@ -682,11 +682,12 @@ a{color:inherit;text-decoration:none}
 .tarot-emblem{position:relative;width:118px;height:118px;display:flex;align-items:center;justify-content:center;z-index:1;margin:2px 0}
 .tarot-emblem-sm{width:96px;height:96px}
 .tarot-rays{position:absolute;inset:0;border-radius:50%;background:
-  conic-gradient(from 0deg,#FFE9A8 0deg 2deg,transparent 2deg 15deg,#E0BE6E 15deg 17deg,transparent 17deg 30deg);
+  repeating-conic-gradient(from 0deg,#FFE9A8 0deg 2deg,transparent 2deg 15deg,#E0BE6E 15deg 17deg,transparent 17deg 30deg);
   -webkit-mask:radial-gradient(circle,#000 34%,rgba(0,0,0,.5) 46%,transparent 64%);mask:radial-gradient(circle,#000 34%,rgba(0,0,0,.5) 46%,transparent 64%);opacity:.85}
 .tarot-emblem-sym{position:relative;z-index:1;font-size:42px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
 .tarot-emblem-sm .tarot-emblem-sym{font-size:34px}
 .tarot-q{position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;line-height:1.34;letter-spacing:-.2px;padding:0 4px;color:#F6EFD6;text-shadow:0 2px 10px rgba(0,0,0,.4)}
+.tarot-qsub{position:relative;z-index:1;font-size:12.5px;line-height:1.42;color:#D9C99B;opacity:.9;margin-top:9px;padding:0 8px;font-style:italic;max-width:300px}
 .tarot-banner{position:relative;z-index:1;overflow:hidden;font-family:'Bagel Fat One',system-ui;font-size:18px;letter-spacing:.04em;color:#1c1340;background:linear-gradient(#FFE6A0,#E6BE66);border:1.5px solid #B8923E;border-radius:6px;padding:5px 22px;box-shadow:0 3px 10px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.5);transform:rotate(-.5deg);text-transform:uppercase}
 .tarot-banner::after{content:'';position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-18deg);animation:tarotShine 4.6s ease-in-out infinite}
 @keyframes tarotShine{0%,72%{left:-60%}100%{left:160%}}
@@ -1653,6 +1654,7 @@ a{color:inherit;text-decoration:none}
           <div class="tarot-top">✦&ensp;CARTA DE REFLEXÃO&ensp;✦</div>
           <div class="tarot-emblem"><div class="tarot-rays"></div><div class="tarot-emblem-sym" id="tarot-sym">🌙</div></div>
           <div class="tarot-q" id="rcard-q">—</div>
+          <div class="tarot-qsub" id="rcard-qsub"></div>
           <div class="tarot-banner" id="tarot-banner">A LUA</div>
           <div class="tarot-brand">@dichava.app</div>
         </div>
@@ -3428,7 +3430,8 @@ function renderRef(){
   try{if(!/iphone|ipad|ipod/i.test(navigator.userAgent))ativarShake();}catch(e){}
 }
 const RCARDS=['O que seu corpo está pedindo agora?','Qual foi um pequeno cuidado que você teve consigo hoje?','O que costuma vir antes da vontade de usar?','Como você gostaria de se sentir amanhã de manhã?','Que emoção você anda evitando sentir?','O que te trouxe algum alívio recentemente?','Quem é alguém com quem você pode contar?','O que você diria a um amigo na sua situação?','Qual parte do seu dia foi mais leve?','O que você aprendeu sobre si essa semana?','Que necessidade o uso costuma tentar suprir?','Qual seria um próximo passo gentil pra você?','Do que você sente orgulho, mesmo que pequeno?','O que você precisa ouvir hoje?','Qual limite você gostaria de respeitar mais?','O que estava acontecendo da última vez que você se sentiu bem?','Que parte de você merece mais paciência?','O que mudaria se você fosse mais gentil consigo?','Que pensamento tem ocupado mais espaço na sua cabeça?','O que você faria hoje se não tivesse medo de errar?','Quando foi a última vez que você riu de verdade?','O que te ajuda a desacelerar quando tudo aperta?','Qual é uma coisa que você sente falta?','O que seu eu de 5 anos atrás acharia de você hoje?','Que conversa você está adiando ter?','O que costuma te acalmar de verdade?','Onde no corpo você sente a ansiedade?','Que situação costuma te puxar de volta pro uso?','O que seria descansar de verdade pra você?','Qual vitória sua passou despercebida essa semana?','O que você gostaria de soltar hoje?','Que parte do seu dia você gostaria de repetir?','O que você está aprendendo a aceitar?','Quem te faz sentir seguro(a)?','O que mudaria se você confiasse mais em você?','Que cuidado você daria a alguém que ama — e poderia dar a si?','O que te dá esperança ultimamente?','Qual sentimento você gostaria de sentir mais vezes?','O que seu silêncio anda tentando dizer?','Que peso você está carregando que não é seu?'];
-let _rcLast=-1,_rcArc=null;
+const RSUBS=['Talvez descanso, água, comida ou só uma pausa. Escute sem cobrança.','Conta também o que parece banal: respirar, beber água, dizer não.','Um lugar, uma hora, uma emoção? Notar o gatilho já é meio caminho.','Imagine acordar assim. O que de pequeno te aproxima disso hoje?','Sentir não é afundar. Às vezes só nomear já alivia um pouco.','Vale o que durou só um instante. O que te fez bem ali?','Não precisa dar conta sozinho(a). Quem você poderia chamar?','Você costuma ser mais gentil com os outros. Vire isso pra dentro.','Procure o respiro do dia, por menor que tenha sido.','Toda semana ensina algo. O que essa te mostrou?','Calma? fuga? conexão? Entender a função abre outras saídas.','Pequeno e possível conta mais do que grande e distante.','Conquista não precisa ser grande pra ser real.','Que frase te acalmaria agora? Tente dizê-la a si.','Limites são cuidado, não punição. Qual pede atenção?','O que tinha ali? Talvez dê pra recriar um pedaço.','Com qual parte de você o apressar não funciona?','Imagine se tratar como trata quem você ama.','Dar nome ao que ronda costuma tirar parte do peso.','Errar faz parte de tentar. O que você ousaria?','Lembrar disso já muda um pouco o agora.','Vale ter isso à mão pro próximo aperto.','Saudade aponta pro que importa pra você.','Você atravessou coisas. Isso conta.','O que pesa mais: ter a conversa ou seguir adiando?','Diferente do que só distrai — o que de fato te assenta?','Peito, barriga, ombros? O corpo avisa antes da mente.','Mapear a situação ajuda a preparar um plano.','Descanso real nem sempre é dormir. O que seria pra você?','Nem toda vitória faz barulho. Qual passou batido?','O que você poderia largar, nem que por um dia?','O que vale guardar e trazer de novo amanhã?','Aceitar não é desistir; é parar de brigar com o que é.','Guarde esse nome pra quando precisar de chão.','Onde a dúvida te trava mais do que te protege?','Você merece a mesma gentileza que oferece.','Mesmo pequena, a esperança aponta um caminho.','O que aproxima você desse sentimento no dia a dia?','Às vezes o que não falamos pede mais atenção.','Nem toda culpa ou cobrança nasceu em você.'];
+let _rcLast=-1,_rcArc=null,_rcSub='';
 const ARCANAS=[
   {n:'A Lua',s:'🌙'},{n:'O Espelho',s:'🪞'},{n:'A Semente',s:'🌱'},{n:'A Onda',s:'🌊'},
   {n:'A Chama',s:'🕯️'},{n:'O Caminho',s:'🧭'},{n:'A Raiz',s:'🌿'},{n:'O Tempo',s:'⏳'},
@@ -3440,6 +3443,7 @@ function virarCarta(force){
   let i;do{i=Math.floor(Math.random()*RCARDS.length);}while(i===_rcLast&&RCARDS.length>1);_rcLast=i;
   _rcArc=ARCANAS[Math.floor(Math.random()*ARCANAS.length)];
   document.getElementById('rcard-q').textContent=RCARDS[i];
+  _rcSub=RSUBS[i]||'';const qs=document.getElementById('rcard-qsub');if(qs)qs.textContent=_rcSub;
   const sym=document.getElementById('tarot-sym');if(sym)sym.textContent=_rcArc.s;
   const ban=document.getElementById('tarot-banner');if(ban)ban.textContent=_rcArc.n;
   if(force){c.classList.remove('flip');void c.offsetWidth;}
@@ -3491,7 +3495,9 @@ function cartaCanvas(q){
   x.font='120px serif';x.fillText(arc.s,W/2,512);
   // pergunta
   x.fillStyle=CREAM;x.font='800 58px DM Sans, sans-serif';
-  wrapText(x,q,W/2,760,W-230,74);
+  wrapText(x,q,W/2,720,W-230,74);
+  // subtexto reflexivo
+  if(_rcSub){x.fillStyle='#D9C99B';x.font='italic 34px DM Sans, sans-serif';wrapText(x,_rcSub,W/2,960,W-300,46);}
   // selo/banner com nome da carta
   const bw=Math.min(W-220,x.measureText(arc.n.toUpperCase()).width+180),bh=92,bx=(W-bw)/2,by=H-330;
   const bg=x.createLinearGradient(0,by,0,by+bh);bg.addColorStop(0,GOLD2);bg.addColorStop(1,GOLD);x.fillStyle=bg;rrect(x,bx,by,bw,bh,12);x.fill();
