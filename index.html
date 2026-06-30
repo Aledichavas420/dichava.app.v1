@@ -2033,7 +2033,7 @@ a{color:inherit;text-decoration:none}
     <div class="mt c">Consentimento informado</div>
     <div class="mb c">Este app é uma <strong>ferramenta de apoio</strong> baseada na redução de danos. Dados privados, no seu aparelho.<br><br>Não substitui cuidado profissional. Emergências: <strong>SAMU 192</strong> · <strong>CVV 188</strong>.</div>
     <div style="background:var(--erf);border:1px solid var(--erc);border-radius:12px;padding:12px 14px;margin-bottom:15px">
-      <div style="font-size:13px;font-weight:700;color:var(--er);margin-bottom:4px">🔞 Conteúdo para maiores de 18 anos</div>
+      <div style="font-size:13px;font-weight:700;color:var(--er);margin-bottom:4px"><span class="tic" data-icon="mix-18"></span> Conteúdo para maiores de 18 anos</div>
       <div style="font-size:12px;color:var(--txs);line-height:1.55">Este app contém informações sobre substâncias destinadas exclusivamente a pessoas adultas, no contexto de redução de danos.</div>
     </div>
     <div class="fld" style="margin-bottom:13px"><div class="lbl">Data de nascimento</div><input class="inp" id="termo-dob" type="date" onchange="checaIdade()"><div class="em" id="termo-dobe">Informe sua data de nascimento.</div></div>
@@ -2069,7 +2069,7 @@ a{color:inherit;text-decoration:none}
 <div class="ov" id="minfo" onclick="if(event.target===this)closeMod('minfo')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
   <button class="mclose" onclick="closeMod('minfo')" aria-label="Fechar">✕</button>
-  <div class="mt">O que significam? 💡</div>
+  <div class="mt">O que significam? <span class="tic" data-icon="sec-insights"></span></div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:16px">Um resumo rápido do seu acompanhamento — sem cobrança, só pra te situar.</p>
   <div class="infi"><div class="infi-ic" style="background:#E9F9ED">🔥</div><div><div class="infi-t">Dias seguidos</div><div class="infi-d">Quantos dias seguidos você registrou algo. Mede sua <strong>constância</strong> no acompanhamento — não é sobre acertar, é sobre estar presente.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:#E8F1FF" data-icon="agenda"></div><div><div class="infi-t">Esta semana</div><div class="infi-d">Número de registros que você fez nos últimos 7 dias.</div></div></div>
@@ -2511,6 +2511,8 @@ function setAvatares(){const sv=brotoColorSVG(gAvatar());['hh-av','tav','tav-j',
 function escolherAvatar(v){ls('dr_avatar_'+uid(),v);setAvatares();const pa=document.getElementById('perfil-av');if(pa){pa.innerHTML=brotoColorSVG(v);pa.classList.add('av-broto');}document.querySelectorAll('#perfil-avpick .avpick').forEach(b=>b.classList.toggle('on',b.dataset.v===v));vib(6);toast('🎨 Avatar atualizado!');const pk=document.getElementById('perfil-avpick');if(pk)pk.style.display='none';const bt=document.getElementById('perfil-editav');if(bt)bt.textContent='✏️ Editar avatar';}
 function toggleAvPick(){const pk=document.getElementById('perfil-avpick');const bt=document.getElementById('perfil-editav');if(!pk)return;const open=pk.style.display!=='none';pk.style.display=open?'none':'grid';if(bt)bt.textContent=open?'✏️ Editar avatar':'Toque na cor que quiser';}
 const ICONS={
+  "mix-18":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="mix-18-gre" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FF8A7A"></stop><stop offset="1" stop-color="#D32F2F"></stop></linearGradient></defs><circle cx="12" cy="12" r="9.2" fill="url(#mix-18-gre)"></circle><text x="12" y="15.4" font-family="'DM Sans',sans-serif" font-size="9.2" font-weight="800" fill="#fff" text-anchor="middle">18</text></svg>`,
+  "mix-flag":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="mix-flag-gre" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FF8A7A"></stop><stop offset="1" stop-color="#D32F2F"></stop></linearGradient></defs><rect x="5.4" y="3" width="2.1" height="18" rx="1.05" fill="url(#mix-flag-gre)"></rect><path d="M7.5 4h9.6l-2.3 3.3 2.3 3.3H7.5Z" fill="url(#mix-flag-gre)"></path></svg>`,
   "ref-crystal":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="ref-crystal-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient></defs><path d="M6.6 19.2h10.8l-1.3 1.6a1.2 1.2 0 0 1-.92.43H8.82a1.2 1.2 0 0 1-.92-.43Z" fill="url(#ref-crystal-gp)"></path><circle cx="12" cy="10.6" r="6.4" fill="url(#ref-crystal-gp)"></circle><path d="M9 8.4a3.6 3.6 0 0 1 3-1.8" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".85"></path><circle cx="9.7" cy="12.6" r="1" fill="#fff" opacity=".7"></circle></svg>`,
   "ref-shuffle":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="ref-shuffle-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient></defs><path d="M3.5 7h3.2c1.15 0 1.95.55 2.7 1.55l4.3 5.9c.6.8 1.25 1.35 2.3 1.35h1.8" fill="none" stroke="url(#ref-shuffle-gb)" stroke-width="2" stroke-linecap="round"></path><path d="M3.5 17h3.2c1.15 0 1.95-.55 2.7-1.55" fill="none" stroke="url(#ref-shuffle-gb)" stroke-width="2" stroke-linecap="round"></path><path d="M14.5 8.55c.7-.95 1.35-1.55 2.5-1.55h1.8" fill="none" stroke="url(#ref-shuffle-gb)" stroke-width="2" stroke-linecap="round"></path><path d="M16.8 4.6 20.4 7l-3.6 2.4Z" fill="url(#ref-shuffle-gb)"></path><path d="M16.8 14.6 20.4 17l-3.6 2.4Z" fill="url(#ref-shuffle-gb)"></path></svg>`,
   "ref-eye":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="ref-eye-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient></defs><path d="M2.5 12S6 6.5 12 6.5 21.5 12 21.5 12 18 17.5 12 17.5 2.5 12 2.5 12Z" fill="url(#ref-eye-gt)"></path><circle cx="12" cy="12" r="3.3" fill="#fff" opacity=".95"></circle><circle cx="12" cy="12" r="1.6" fill="#16324a"></circle></svg>`,
@@ -4826,7 +4828,7 @@ function calcCombo(){
     <div class="cmb-badge" style="background:${n.cor}">${esc(badge)}</div>
     <div class="cmb-tx" style="color:${n.cor}">${esc(n.x)}</div>`;
   if(nota)h+=`<div class="cmb-obs"><strong>Nessa combinação:</strong> ${esc(nota)}</div>`;
-  if(alerta)h+=`<div class="cmb-alert"><strong>🚩 Sinais de alerta:</strong> ${esc(alerta)}</div>`;
+  if(alerta)h+=`<div class="cmb-alert"><strong><span class="tic">${icon('mix-flag')}</span> Sinais de alerta:</strong> ${esc(alerta)}</div>`;
   h+=`</div>`;
   // cartas de dosagem das duas (expansíveis)
   h+=`<div class="dz-stack">${_doseCard(a)}${_doseCard(b)}</div>`;
