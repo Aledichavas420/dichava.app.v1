@@ -5013,7 +5013,7 @@ window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{rend
 
 /* ══════════ NOTIFICAÇÕES PUSH (Web Push + Supabase) ══════════ */
 /* ── Link do grupo de feedback (beta). Cole aqui o convite do WhatsApp quando criar. ── */
-const LINK_FEEDBACK='';
+const LINK_FEEDBACK='https://chat.whatsapp.com/JhDl4qtVAfm7TDeCnJ6rn9';
 function abrirFeedback(){
   if(!LINK_FEEDBACK){toast('💬 O grupo de feedback abre em breve!');return;}
   try{window.open(LINK_FEEDBACK,'_blank','noopener');}catch(e){location.href=LINK_FEEDBACK;}
