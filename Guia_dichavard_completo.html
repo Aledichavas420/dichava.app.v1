@@ -19,12 +19,13 @@
   .disp{font-family:'Bagel Fat One','Space Grotesk',sans-serif;font-weight:400;letter-spacing:.2px}
   .wrap{max-width:900px;margin:0 auto;padding:0 22px 60px}
   /* ---------- CAPA ---------- */
-  .cover{position:relative;text-align:center;padding:52px 24px 34px;overflow:hidden;background:var(--creme)}
-  .cover::before{content:'';position:absolute;inset:0;background:radial-gradient(120% 78% at 50% -6%, #FFEBB0 0%, #FBF3DF 52%);pointer-events:none}
-  .sunwrap{position:absolute;top:-220px;left:50%;transform:translateX(-50%);width:860px;height:860px;
-     background:url('guia-assets/sunburst.png') center/contain no-repeat;opacity:.6;pointer-events:none}
-  .cover .ico{position:relative;width:92px;height:92px;border-radius:23px;box-shadow:0 8px 22px rgba(58,32,99,.30);border:4px solid #fff;margin-bottom:6px}
-  .logo{position:relative;font-size:60px;line-height:1;margin:4px 0}
+  .cover{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:66px 24px 52px;overflow:hidden;background:var(--creme)}
+  .cover::before{content:'';position:absolute;inset:0;background:radial-gradient(115% 72% at 50% 2%, #FFEDB6 0%, #FBF3DF 58%);pointer-events:none}
+  .sunwrap{position:absolute;top:-260px;left:50%;transform:translateX(-50%);width:820px;height:820px;
+     background:url('guia-assets/sunburst.png') center/contain no-repeat;opacity:.4;pointer-events:none}
+  .cover .icowrap{position:relative;display:inline-flex;background:#fff;padding:9px;border-radius:26px;border:2px solid #efe3c4;margin-bottom:14px}
+  .cover .ico{display:block;width:86px;height:86px;border-radius:19px}
+  .logo{position:relative;font-size:60px;line-height:1;margin:2px 0}
   .logo .g{color:var(--verde);text-shadow:3px 3px 0 var(--roxo)}
   .logo .a{color:var(--laranja);text-shadow:3px 3px 0 var(--roxo)}
   .badge{position:relative;display:inline-block;background:var(--amarelo);color:var(--roxo);border:2.5px solid var(--roxo);
@@ -93,14 +94,12 @@
 
 <div class="cover">
   <div class="sunwrap"></div>
-  <span class="leaf" style="top:46px;left:11%">🌿</span>
-  <span class="leaf" style="top:70px;right:13%">🍃</span>
-  <span class="leaf" style="bottom:26px;left:16%;font-size:18px">✦</span>
-  <span class="leaf" style="bottom:34px;right:15%">🌱</span>
-  <img class="ico" src="guia-assets/icon-192.png" alt="ícone dichava">
+  <span class="leaf" style="top:54px;left:15%">🌿</span>
+  <span class="leaf" style="top:54px;right:15%;font-size:18px">🍃</span>
+  <div class="icowrap"><img class="ico" src="guia-assets/icon-192.png" alt="ícone dichava"></div>
   <div class="logo disp"><span class="g">dichava</span><span class="a">.app</span></div>
   <div class="badge">Guia do aplicativo — no seu ritmo, sem cobrança</div>
-  <div class="sub">Acompanhamento pessoal na lógica da redução de danos. Um passeio por todas as telas, com dicas. 🌿</div>
+  <div class="sub">Acompanhamento pessoal na lógica da redução de danos.<br>Um passeio por todas as telas, com dicas. 🌿</div>
 </div>
 
 <div class="wrap">
