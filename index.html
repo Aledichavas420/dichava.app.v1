@@ -1357,7 +1357,6 @@ a{color:inherit;text-decoration:none}
     <button class="btn bv bfull" onclick="iniciarJornada()">🌱 Iniciar jornada</button>
     <button class="btn bout bfull" style="margin-top:11px" onclick="mostrarLogin()">Já tenho conta · Entrar</button>
   </div>
-  <button class="aw-pro" onclick="mostrarSignupPro()">Sou profissional de saúde →</button>
 </div>
 <!-- AUTH (login / cadastro pro) -->
 <div id="aw-auth" style="display:none">
@@ -1373,13 +1372,6 @@ a{color:inherit;text-decoration:none}
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
     <div class="fld"><div class="lbl">Senha</div><input class="inp" id="su-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><div class="em" id="su-pwe">Mínimo 6 caracteres.</div></div>
-    <div class="fld"><div class="lbl">Tipo de conta</div>
-      <div class="acct-type">
-        <div class="acct-opt on" id="acct-user" onclick="setAcct('user')"><div class="ai">🌱</div><div class="at">Sou usuário</div><div class="ad">Quero cuidar de mim</div></div>
-        <div class="acct-opt" id="acct-pro" onclick="setAcct('pro')"><div class="ai">🩺</div><div class="at">Sou profissional</div><div class="ad">Saúde · quero compor a rede</div></div>
-      </div>
-    </div>
-    <div class="fld" id="pro-reg-fld" style="display:none"><div class="lbl">Registro profissional (CRP, CRM…)</div><input class="inp" id="su-reg" type="text" placeholder="Ex.: CRP 16/7696"><div class="em" id="su-rege">Informe seu registro.</div></div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
   </div>
   <button class="aw-back" onclick="mostrarWelcome()">← voltar</button>
@@ -2453,7 +2445,7 @@ const _SB = (typeof supabase !== 'undefined')
 
 let U=null,_eReg=null,_eFiss=null,_eCmp=null;
 let _acct='user';
-function setAcct(t){_acct=t;document.getElementById('acct-user').classList.toggle('on',t==='user');document.getElementById('acct-pro').classList.toggle('on',t==='pro');document.getElementById('pro-reg-fld').style.display=t==='pro'?'block':'none';}
+function setAcct(t){_acct=t;document.getElementById('acct-user')?.classList.toggle('on',t==='user');document.getElementById('acct-pro')?.classList.toggle('on',t==='pro');const pf=document.getElementById('pro-reg-fld');if(pf)pf.style.display=t==='pro'?'block':'none';}
 let _calDt=new Date(),_calSel=null;
 let _obP=0,_obG=null,_obSubs=[],_obPerfil={},_obNome='',_obMetas=[],_obEdit=false,_passos=null;
 function passosAtivos(){return _obEdit?PASSOS.filter(p=>!['intro','nome','conta'].includes(p.tp)):PASSOS;}
@@ -2767,7 +2759,7 @@ async function doSignup(){
   let ok=true;
   const chk=(id,eid,cond,msg)=>{const el=document.getElementById(id),er=document.getElementById(eid);if(!cond){el.classList.add('err');er.classList.add('on');if(msg)er.textContent=msg;shk(el);ok=false;}else{el.classList.remove('err');er.classList.remove('on');}};
   chk('su-n','su-ne',n,'Informe seu nome.');chk('su-e','su-ee',e&&/\S+@\S+\.\S+/.test(e),'E-mail inválido.');chk('su-pw','su-pwe',pw&&pw.length>=6,'Mínimo 6 caracteres.');
-  const tipo=_acct;const reg=document.getElementById('su-reg').value.trim();
+  const tipo=_acct;const reg=(document.getElementById('su-reg')?.value||'').trim();
   if(tipo==='pro')chk('su-reg','su-rege',reg,'Informe seu registro.');
   if(!ok)return;
   const btn=document.getElementById('btn-signup');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
