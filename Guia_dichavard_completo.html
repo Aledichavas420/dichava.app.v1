@@ -12,77 +12,91 @@
   :root{
     --verde:#3DAE54;--verde2:#2E7D32;--roxo:#3A2063;--laranja:#E98B2F;
     --amarelo:#FFD24A;--pessego:#F4C5BC;--teal:#0E9C8C;--creme:#FBF3DF;
-    --ink:#2a2018;--tx:#4a3f33;
+    --ink:#2a2018;--tx:#4a3f33;--rosa:#E0509E;--lilas:#8B5BE0;--cinza:#5E6B80;--vermelho:#D14b3b;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:'Space Grotesk',-apple-system,sans-serif;color:var(--tx);background:var(--creme);line-height:1.62;-webkit-font-smoothing:antialiased}
+  body{margin:0;font-family:'Space Grotesk',-apple-system,sans-serif;color:var(--tx);background:var(--creme);line-height:1.6;-webkit-font-smoothing:antialiased}
   .disp{font-family:'Bagel Fat One','Space Grotesk',sans-serif;font-weight:400;letter-spacing:.2px}
-  .wrap{max-width:880px;margin:0 auto;padding:0 22px 70px}
-  .cover{position:relative;text-align:center;padding:64px 24px 54px;overflow:hidden;background:
-     radial-gradient(120% 90% at 50% -10%, #FFE9A8 0%, #FFD24A 22%, transparent 55%), var(--creme)}
-  .rays{position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:140%;height:120%;
-     background:repeating-conic-gradient(from 0deg,#FFE9A8 0deg 4deg, transparent 4deg 12deg);
-     -webkit-mask:radial-gradient(circle, #000 0%, transparent 62%);mask:radial-gradient(circle,#000 0%,transparent 62%);opacity:.55;pointer-events:none}
-  .cover .ico{position:relative;width:96px;height:96px;border-radius:24px;box-shadow:0 10px 26px rgba(58,32,99,.28);border:4px solid #fff;margin-bottom:8px}
-  .logo{position:relative;font-size:62px;line-height:1;margin:6px 0 4px}
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px 60px}
+  /* ---------- CAPA ---------- */
+  .cover{position:relative;text-align:center;padding:52px 24px 34px;overflow:hidden;background:var(--creme)}
+  .cover::before{content:'';position:absolute;inset:0;background:radial-gradient(120% 78% at 50% -6%, #FFEBB0 0%, #FBF3DF 52%);pointer-events:none}
+  .sunwrap{position:absolute;top:-220px;left:50%;transform:translateX(-50%);width:860px;height:860px;
+     background:url('guia-assets/sunburst.png') center/contain no-repeat;opacity:.6;pointer-events:none}
+  .cover .ico{position:relative;width:92px;height:92px;border-radius:23px;box-shadow:0 8px 22px rgba(58,32,99,.30);border:4px solid #fff;margin-bottom:6px}
+  .logo{position:relative;font-size:60px;line-height:1;margin:4px 0}
   .logo .g{color:var(--verde);text-shadow:3px 3px 0 var(--roxo)}
   .logo .a{color:var(--laranja);text-shadow:3px 3px 0 var(--roxo)}
   .badge{position:relative;display:inline-block;background:var(--amarelo);color:var(--roxo);border:2.5px solid var(--roxo);
-     border-radius:30px;padding:8px 20px;font-weight:600;font-size:15px;box-shadow:3px 3px 0 var(--roxo);margin-top:6px}
-  .cover .sub{position:relative;margin-top:18px;font-size:15px;color:#7a6a52}
-  .leaf{position:absolute;font-size:26px;opacity:.85}
-  .intro{background:#fff;border:2.5px solid var(--roxo);border-radius:22px;padding:20px 24px;margin:30px 0;
-     box-shadow:5px 5px 0 rgba(58,32,99,.12);font-size:15.5px}
-  .intro .disp{color:var(--roxo);font-size:19px}
-  .sec{display:flex;gap:26px;align-items:center;margin:28px 0;padding:22px;border-radius:24px;border:2.5px solid var(--ink);
+     border-radius:30px;padding:8px 20px;font-weight:600;font-size:14.5px;box-shadow:3px 3px 0 var(--roxo);margin-top:4px}
+  .cover .sub{position:relative;margin:16px auto 0;max-width:560px;font-size:14.5px;color:#7a6a52}
+  .leaf{position:absolute;font-size:22px;opacity:.9;z-index:1}
+  /* ---------- INTRO ---------- */
+  .intro{background:#fff;border:2.5px solid var(--roxo);border-radius:20px;padding:18px 22px;margin:26px 0;
+     box-shadow:5px 5px 0 rgba(58,32,99,.12);font-size:15px}
+  .intro .disp{color:var(--roxo);font-size:18px}
+  /* ---------- ÍNDICE ---------- */
+  .toc-h{text-align:center;margin:34px 0 4px}
+  .toc-h .disp{font-size:26px;color:var(--ink)}
+  .toc-h .s{font-size:14px;color:#8a7a60}
+  .toc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 6px}
+  .ti{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--ink);border-radius:15px;
+     padding:9px 14px;text-decoration:none;color:var(--tx);box-shadow:3px 3px 0 rgba(42,32,24,.08)}
+  .ti .n{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+     font-family:'Bagel Fat One',sans-serif;font-size:16px;color:#fff}
+  .ti .l{font-weight:600;font-size:14px;color:var(--ink);line-height:1.2}
+  .ti .e{margin-left:auto;font-size:16px;opacity:.9}
+  /* ---------- SEÇÕES ---------- */
+  .band{font-family:'Bagel Fat One',sans-serif;color:var(--roxo);font-size:16px;text-align:center;margin:38px 0 10px;letter-spacing:.4px}
+  .band::before,.band::after{content:'✦';color:var(--amarelo);margin:0 10px}
+  .sec{display:flex;gap:24px;align-items:center;margin:22px 0;padding:20px;border-radius:22px;border:2.5px solid var(--ink);
      box-shadow:6px 6px 0 rgba(42,32,24,.10);background:#fff}
   .sec.rev{flex-direction:row-reverse}
   .sec .txt{flex:1;min-width:0}
-  .chip{display:inline-flex;align-items:center;gap:8px;font-family:'Bagel Fat One',sans-serif;font-size:13px;color:#fff;
-     padding:5px 14px;border-radius:30px;margin-bottom:8px;box-shadow:2px 2px 0 rgba(0,0,0,.18)}
-  .sec h2{font-family:'Bagel Fat One',sans-serif;font-weight:400;color:var(--ink);font-size:25px;margin:2px 0 8px;line-height:1.15}
-  .sec p{margin:7px 0;font-size:15px}
-  .sec ul{margin:8px 0;padding-left:20px}.sec li{margin:5px 0;font-size:14.5px}
-  .phone{flex-shrink:0;width:236px;border:8px solid var(--ink);border-radius:34px;overflow:hidden;background:#000;
-     box-shadow:7px 9px 0 rgba(42,32,24,.16);position:relative}
+  .pw{position:relative;flex-shrink:0}
+  .pnum{position:absolute;top:-14px;left:-14px;width:46px;height:46px;border-radius:50%;color:#fff;border:3px solid #fff;
+     display:flex;align-items:center;justify-content:center;font-family:'Bagel Fat One',sans-serif;font-size:20px;
+     box-shadow:3px 3px 0 rgba(42,32,24,.18);z-index:3}
+  .phone{width:230px;border:7px solid var(--ink);border-radius:32px;overflow:hidden;background:#000;box-shadow:6px 8px 0 rgba(42,32,24,.14)}
   .phone img{width:100%;display:block}
-  .duo{display:flex;gap:12px;flex-shrink:0}
-  .duo .phone{width:150px;border-width:6px;border-radius:26px}
-  .tip{background:#EAF7EE;border:2px solid var(--verde);border-radius:16px;padding:12px 16px;margin:12px 0;font-size:14px}
+  .duo{display:flex;gap:12px}
+  .duo .phone{width:148px;border-width:6px;border-radius:24px}
+  .chip{display:inline-flex;align-items:center;gap:8px;font-family:'Bagel Fat One',sans-serif;font-size:13px;color:#fff;
+     padding:5px 14px;border-radius:30px;margin-bottom:6px;box-shadow:2px 2px 0 rgba(0,0,0,.18)}
+  .sec h2{font-family:'Bagel Fat One',sans-serif;font-weight:400;color:var(--ink);font-size:24px;margin:2px 0 6px;line-height:1.14}
+  .sec p{margin:6px 0;font-size:14.5px}
+  .sec ul{margin:7px 0;padding-left:20px}.sec li{margin:4px 0;font-size:14px}
+  .tip{background:#EAF7EE;border:2px solid var(--verde);border-radius:14px;padding:11px 15px;margin:11px 0;font-size:13.5px}
   .tip b,.tip strong{color:var(--verde2)}
-  .warn{background:#FFF3DC;border:2px solid var(--laranja);border-radius:16px;padding:12px 16px;margin:12px 0;font-size:14px}
-  .crisis{background:#FFE6E6;border:2px solid #D14b3b;border-radius:16px;padding:14px 18px;margin:18px 0;font-size:14.5px}
-  b,strong{color:var(--ink)}
-  .crisis b{color:#B23A2c}
-  .band{font-family:'Bagel Fat One',sans-serif;color:var(--roxo);font-size:16px;text-align:center;margin:40px 0 8px;letter-spacing:.5px}
-  .band::before,.band::after{content:'✦';color:var(--amarelo);margin:0 10px}
-  /* bloco de dicas em grade */
-  .tips{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
-  .tipcard{background:#fff;border:2px solid var(--ink);border-radius:18px;padding:15px 18px;box-shadow:4px 4px 0 rgba(42,32,24,.08)}
-  .tipcard .t{font-family:'Bagel Fat One',sans-serif;color:var(--ink);font-size:15px;margin-bottom:3px}
-  .tipcard p{margin:4px 0 0;font-size:13.5px}
+  .warn{background:#FFF3DC;border:2px solid var(--laranja);border-radius:14px;padding:11px 15px;margin:11px 0;font-size:13.5px}
+  .crisis{background:#FFE6E6;border:2px solid var(--vermelho);border-radius:14px;padding:12px 16px;margin:14px 0;font-size:14px}
+  b,strong{color:var(--ink)}.crisis b{color:#B23A2c}
+  .tips{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:14px 0}
+  .tipcard{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:14px 17px;box-shadow:4px 4px 0 rgba(42,32,24,.08)}
+  .tipcard .t{font-family:'Bagel Fat One',sans-serif;color:var(--ink);font-size:15px;margin-bottom:2px}
+  .tipcard p{margin:3px 0 0;font-size:13px}
   .tipcard.g{border-color:var(--verde)}.tipcard.g .t{color:var(--verde2)}
   .tipcard.o{border-color:var(--laranja)}.tipcard.o .t{color:var(--laranja)}
   .tipcard.p{border-color:var(--roxo)}.tipcard.p .t{color:var(--roxo)}
   .tipcard.t2{border-color:var(--teal)}.tipcard.t2 .t{color:var(--teal)}
-  footer{text-align:center;color:#8a7a60;font-size:13.5px;margin-top:48px;padding-top:22px;border-top:2px dashed #e3d6b8}
+  footer{text-align:center;color:#8a7a60;font-size:13px;margin-top:44px;padding-top:20px;border-top:2px dashed #e3d6b8}
   @media print{
     body{background:var(--creme)}
-    .sec,.intro,.tipcard{box-shadow:none}
-    .sec,.tipcard,.intro{break-inside:avoid}
-    .cover{break-after:avoid}
+    .sec,.intro,.tipcard,.ti{box-shadow:none}
+    .sec,.tipcard,.intro,.ti{break-inside:avoid}
+    .cover{break-after:page}
   }
-  @media(max-width:680px){.sec,.sec.rev{flex-direction:column}.phone{width:210px}.tips{grid-template-columns:1fr}.duo{justify-content:center}}
+  @media(max-width:680px){.sec,.sec.rev{flex-direction:column}.phone{width:210px}.tips,.toc{grid-template-columns:1fr}.duo{justify-content:center}}
 </style>
 </head>
 <body>
 
 <div class="cover">
-  <div class="rays"></div>
-  <span class="leaf" style="top:60px;left:12%">🌿</span>
-  <span class="leaf" style="top:90px;right:14%;font-size:20px">🍃</span>
-  <span class="leaf" style="bottom:40px;left:18%;font-size:20px">✦</span>
-  <span class="leaf" style="bottom:60px;right:16%">🌱</span>
+  <div class="sunwrap"></div>
+  <span class="leaf" style="top:46px;left:11%">🌿</span>
+  <span class="leaf" style="top:70px;right:13%">🍃</span>
+  <span class="leaf" style="bottom:26px;left:16%;font-size:18px">✦</span>
+  <span class="leaf" style="bottom:34px;right:15%">🌱</span>
   <img class="ico" src="guia-assets/icon-192.png" alt="ícone dichava">
   <div class="logo disp"><span class="g">dichava</span><span class="a">.app</span></div>
   <div class="badge">Guia do aplicativo — no seu ritmo, sem cobrança</div>
@@ -96,10 +110,31 @@
   Este guia mostra <strong>todas as funcionalidades</strong> do app, com prints de cada tela e <strong>dicas práticas</strong>. Não precisa decorar nada — o dichava.app foi feito pra ser explorado no seu tempo. Use isto como mapa quando bater dúvida.
 </div>
 
+<div class="toc-h">
+  <div class="disp">Índice</div>
+  <div class="s">Toque num item pra pular direto pra ele</div>
+</div>
+<div class="toc">
+  <a class="ti" href="#s1"><span class="n" style="background:var(--verde)">1</span><span class="l">O Dichavaldo te recebe</span><span class="e">🌱</span></a>
+  <a class="ti" href="#s2"><span class="n" style="background:var(--verde)">2</span><span class="l">Tela Início</span><span class="e">🏠</span></a>
+  <a class="ti" href="#s3"><span class="n" style="background:var(--teal)">3</span><span class="l">Registrar um uso</span><span class="e">➕</span></a>
+  <a class="ti" href="#s4"><span class="n" style="background:var(--laranja)">4</span><span class="l">Agenda &amp; Diário</span><span class="e">📅</span></a>
+  <a class="ti" href="#s5"><span class="n" style="background:var(--rosa)">5</span><span class="l">Progresso &amp; conquistas</span><span class="e">📊</span></a>
+  <a class="ti" href="#s6"><span class="n" style="background:var(--roxo)">6</span><span class="l">Meu Perfil &amp; Mestre de Si</span><span class="e">🧑</span></a>
+  <a class="ti" href="#s7"><span class="n" style="background:var(--roxo)">7</span><span class="l">Reflexões &amp; Carta</span><span class="e">🔮</span></a>
+  <a class="ti" href="#s8"><span class="n" style="background:var(--vermelho)">8</span><span class="l">Modo Crise</span><span class="e">🆘</span></a>
+  <a class="ti" href="#s9"><span class="n" style="background:var(--roxo)">9</span><span class="l">Resistência ativa</span><span class="e">💪</span></a>
+  <a class="ti" href="#s10"><span class="n" style="background:var(--verde2)">10</span><span class="l">Misturar substâncias</span><span class="e">⚗️</span></a>
+  <a class="ti" href="#s11"><span class="n" style="background:var(--teal)">11</span><span class="l">Pausa pra mente</span><span class="e">🧘</span></a>
+  <a class="ti" href="#s12"><span class="n" style="background:var(--lilas)">12</span><span class="l">Jogos de foco</span><span class="e">🎮</span></a>
+  <a class="ti" href="#s13"><span class="n" style="background:var(--cinza)">13</span><span class="l">Configurações</span><span class="e">⚙️</span></a>
+  <a class="ti" href="#extra"><span class="n" style="background:var(--amarelo);color:var(--roxo)">+</span><span class="l">Notificações, privacidade &amp; dicas</span><span class="e">💡</span></a>
+</div>
+
 <div class="band">Primeiros passos</div>
 
-<div class="sec">
-  <div class="phone"><img src="guia-assets/onboarding.png" alt="Onboarding com o Dichavaldo"></div>
+<div class="sec" id="s1">
+  <div class="pw"><span class="pnum" style="background:var(--verde)">1</span><div class="phone"><img src="guia-assets/onboarding.png" alt="Onboarding com o Dichavaldo"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--verde)">🌱 Boas-vindas</span>
     <h2>O Dichavaldo te recebe</h2>
@@ -114,8 +149,8 @@
   </div>
 </div>
 
-<div class="sec rev">
-  <div class="phone"><img src="guia-assets/inicio.png" alt="Tela inicial"></div>
+<div class="sec rev" id="s2">
+  <div class="pw"><span class="pnum" style="background:var(--verde)">2</span><div class="phone"><img src="guia-assets/inicio.png" alt="Tela inicial"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--verde)">🏠 Tela Início</span>
     <h2>Seu painel de cuidado</h2>
@@ -130,8 +165,8 @@
   </div>
 </div>
 
-<div class="sec">
-  <div class="phone"><img src="guia-assets/registrar.png" alt="Registrar um uso"></div>
+<div class="sec" id="s3">
+  <div class="pw"><span class="pnum" style="background:var(--teal)">3</span><div class="phone"><img src="guia-assets/registrar.png" alt="Registrar um uso"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--teal)">➕ Registrar</span>
     <h2>Registrar um uso</h2>
@@ -143,8 +178,8 @@
 
 <div class="band">Acompanhar &amp; refletir</div>
 
-<div class="sec rev">
-  <div class="phone"><img src="guia-assets/agenda.png" alt="Agenda e diário"></div>
+<div class="sec rev" id="s4">
+  <div class="pw"><span class="pnum" style="background:var(--laranja)">4</span><div class="phone"><img src="guia-assets/agenda.png" alt="Agenda e diário"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--laranja)">📅 Agenda &amp; Diário</span>
     <h2>Seu calendário e diário</h2>
@@ -158,10 +193,10 @@
   </div>
 </div>
 
-<div class="sec">
-  <div class="phone"><img src="guia-assets/progresso.png" alt="Progresso"></div>
+<div class="sec" id="s5">
+  <div class="pw"><span class="pnum" style="background:var(--rosa)">5</span><div class="phone"><img src="guia-assets/progresso.png" alt="Progresso"></div></div>
   <div class="txt">
-    <span class="chip" style="background:#E0509E">📊 Progresso</span>
+    <span class="chip" style="background:var(--rosa)">📊 Progresso</span>
     <h2>Progresso &amp; conquistas</h2>
     <ul>
       <li><strong>Minhas metas</strong> — se preenchem sozinhas conforme você registra.</li>
@@ -173,8 +208,8 @@
   </div>
 </div>
 
-<div class="sec rev">
-  <div class="phone"><img src="guia-assets/perfil.png" alt="Meu Perfil"></div>
+<div class="sec rev" id="s6">
+  <div class="pw"><span class="pnum" style="background:var(--roxo)">6</span><div class="phone"><img src="guia-assets/perfil.png" alt="Meu Perfil"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--roxo)">🧑 Meu Perfil &amp; Mestre de Si</span>
     <h2>Sua jornada em XP</h2>
@@ -188,8 +223,8 @@
   </div>
 </div>
 
-<div class="sec">
-  <div class="phone"><img src="guia-assets/reflexoes.png" alt="Reflexões e carta"></div>
+<div class="sec" id="s7">
+  <div class="pw"><span class="pnum" style="background:var(--roxo)">7</span><div class="phone"><img src="guia-assets/reflexoes.png" alt="Reflexões e carta"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--roxo)">🔮 Reflexões</span>
     <h2>Carta de reflexão</h2>
@@ -205,13 +240,13 @@
 
 <div class="band">Cuidado na hora difícil</div>
 
-<div class="sec">
-  <div class="duo">
+<div class="sec" id="s8">
+  <div class="pw"><span class="pnum" style="background:var(--vermelho)">8</span><div class="duo">
     <div class="phone"><img src="guia-assets/respiracao.png" alt="Respiração 4-7-8"></div>
     <div class="phone"><img src="guia-assets/grounding.png" alt="Grounding 5-4-3-2-1"></div>
-  </div>
+  </div></div>
   <div class="txt">
-    <span class="chip" style="background:#D14b3b">🆘 Modo Crise</span>
+    <span class="chip" style="background:var(--vermelho)">🆘 Modo Crise</span>
     <h2>Tudo à mão na crise</h2>
     <ul>
       <li><strong>Respiração 4-7-8</strong> — acalma o sistema nervoso.</li>
@@ -223,8 +258,8 @@
   </div>
 </div>
 
-<div class="sec rev">
-  <div class="phone"><img src="guia-assets/resistencia.png" alt="Resistência ativa"></div>
+<div class="sec rev" id="s9">
+  <div class="pw"><span class="pnum" style="background:var(--roxo)">9</span><div class="phone"><img src="guia-assets/resistencia.png" alt="Resistência ativa"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--roxo)">💪 Resistência ativa</span>
     <h2>Toda vontade que você segura é uma vitória</h2>
@@ -233,8 +268,8 @@
   </div>
 </div>
 
-<div class="sec">
-  <div class="phone"><img src="guia-assets/misturar.png" alt="Misturar substâncias"></div>
+<div class="sec" id="s10">
+  <div class="pw"><span class="pnum" style="background:var(--verde2)">10</span><div class="phone"><img src="guia-assets/misturar.png" alt="Misturar substâncias"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--verde2)">⚗️ Misturar</span>
     <h2>Interações entre substâncias</h2>
@@ -245,8 +280,8 @@
 
 <div class="band">Pausa &amp; diversão</div>
 
-<div class="sec rev">
-  <div class="phone"><img src="guia-assets/pausa.png" alt="Pausa pra mente"></div>
+<div class="sec rev" id="s11">
+  <div class="pw"><span class="pnum" style="background:var(--teal)">11</span><div class="phone"><img src="guia-assets/pausa.png" alt="Pausa pra mente"></div></div>
   <div class="txt">
     <span class="chip" style="background:var(--teal)">🧘 Pausa pra mente</span>
     <h2>Sons, frequências e trilha</h2>
@@ -259,10 +294,10 @@
   </div>
 </div>
 
-<div class="sec">
-  <div class="phone"><img src="guia-assets/jogo.png" alt="Flappy Marola"></div>
+<div class="sec" id="s12">
+  <div class="pw"><span class="pnum" style="background:var(--lilas)">12</span><div class="phone"><img src="guia-assets/jogo.png" alt="Flappy Marola"></div></div>
   <div class="txt">
-    <span class="chip" style="background:#8B5BE0">🎮 Jogos de foco</span>
+    <span class="chip" style="background:var(--lilas)">🎮 Jogos de foco</span>
     <h2>Ocupe as mãos e a cabeça</h2>
     <p>Mini-games leves — como o <strong>Flappy Marola</strong>, Blocos, Ping-pong e Bolhas — pra atravessar a fissura distraindo. O botão <strong>Sair</strong> fica sempre acessível.</p>
     <div class="tip"><b>💡 Dica:</b> a fissura costuma durar poucos minutos. Um joguinho rápido ajuda a "surfar" esse tempo.</div>
@@ -271,10 +306,10 @@
 
 <div class="band">Ajustes &amp; privacidade</div>
 
-<div class="sec rev">
-  <div class="phone"><img src="guia-assets/config.png" alt="Configurações"></div>
+<div class="sec rev" id="s13">
+  <div class="pw"><span class="pnum" style="background:var(--cinza)">13</span><div class="phone"><img src="guia-assets/config.png" alt="Configurações"></div></div>
   <div class="txt">
-    <span class="chip" style="background:#5E6B80">⚙️ Configurações</span>
+    <span class="chip" style="background:var(--cinza)">⚙️ Configurações</span>
     <h2>Sua conta e preferências</h2>
     <ul>
       <li><strong>Enviar feedback</strong> direto pro grupo de testes 💚</li>
@@ -287,6 +322,7 @@
   </div>
 </div>
 
+<div id="extra"></div>
 <div class="intro" style="border-color:var(--teal)">
   <div class="disp" style="color:var(--teal)">🔔 Notificações de cuidado</div>
   Em <strong>Configurações → Notificações de cuidado</strong>, você ativa avisos que chegam <strong>mesmo com o app fechado</strong> — mensagens de acolhimento conforme a substância, os dias desde o último uso e seu objetivo. No máximo <strong>1 por dia</strong>, sem spam.
