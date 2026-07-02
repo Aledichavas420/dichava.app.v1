@@ -834,7 +834,9 @@ a{color:inherit;text-decoration:none}
 .cfgic{font-size:18px;width:23px;text-align:center;flex-shrink:0}
 .cfgic .appicon{width:23px;height:23px;display:block}
 .pwwrap{position:relative}.pwwrap .inp{padding-right:46px}
-.pweye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:17px;padding:7px;line-height:1;opacity:.55}
+.pweye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:7px;line-height:0;opacity:.92}
+.pweye .appicon{width:21px;height:21px;display:block}
+#lock-eye .appicon{width:22px;height:22px;display:block;margin:0 auto}
 .alink{background:none;border:none;color:var(--roxo);font-size:12.5px;font-weight:600;cursor:pointer;padding:2px 0}
 .tic{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.16em}.tic .appicon{width:100%;height:100%;display:block}
 .infi-ic .appicon{width:20px;height:20px;display:block;margin:0 auto}
@@ -1371,15 +1373,15 @@ a{color:inherit;text-decoration:none}
   <div class="atabs"><button class="atab on" onclick="authTab('login',this)">Entrar</button><button class="atab" onclick="authTab('signup',this)">Criar conta</button></div>
   <div id="alogin">
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="li-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="li-ee">E-mail inválido.</div></div>
-    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"><button type="button" class="pweye" onclick="togPw('li-pw',this)">👁️</button></div><div class="em" id="li-pwe">E-mail ou senha incorretos.</div></div>
+    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('li-pw',this)"></button></div><div class="em" id="li-pwe">E-mail ou senha incorretos.</div></div>
     <div style="text-align:right;margin:-4px 0 6px"><button type="button" class="alink" onclick="esqueciSenha()">Esqueci a senha</button></div>
     <button class="btn bdk bfull" id="btn-login" onclick="doLogin()">Entrar</button>
   </div>
   <div id="asignup" style="display:none">
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
-    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><button type="button" class="pweye" onclick="togPw('su-pw',this)">👁️</button></div><div class="em" id="su-pwe">Mínimo 6 caracteres.</div></div>
-    <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="su-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" onclick="togPw('su-pw2',this)">👁️</button></div><div class="em" id="su-pw2e">As senhas não conferem.</div></div>
+    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw',this)"></button></div><div class="em" id="su-pwe">Mínimo 6 caracteres.</div></div>
+    <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="su-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw2',this)"></button></div><div class="em" id="su-pw2e">As senhas não conferem.</div></div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
   </div>
   <button class="aw-back" onclick="mostrarWelcome()">← voltar</button>
@@ -2019,7 +2021,7 @@ a{color:inherit;text-decoration:none}
   <div class="alogo" style="font-size:28px">dichava<em>.rd</em></div>
   <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:8px" id="lock-msg">Digite seu PIN</div>
   <div class="lockdots" id="lock-dots"><div class="lockdot"></div><div class="lockdot"></div><div class="lockdot"></div><div class="lockdot"></div></div>
-  <button type="button" id="lock-eye" onclick="togLockShow(this)" style="background:none;border:none;color:rgba(255,255,255,.55);font-size:18px;cursor:pointer;margin:-16px 0 14px;padding:6px">👁️</button>
+  <button type="button" id="lock-eye" data-icon="pw-eye" onclick="togLockShow(this)" style="background:none;border:none;cursor:pointer;margin:-16px 0 14px;padding:6px"></button>
   <div class="lockpad">
     <button class="lockkey" onclick="lockKey(1)">1</button><button class="lockkey" onclick="lockKey(2)">2</button><button class="lockkey" onclick="lockKey(3)">3</button>
     <button class="lockkey" onclick="lockKey(4)">4</button><button class="lockkey" onclick="lockKey(5)">5</button><button class="lockkey" onclick="lockKey(6)">6</button>
@@ -2453,7 +2455,7 @@ const _SB = (typeof supabase !== 'undefined')
     )
   : null;
 /* ── mostrar/ocultar senha ── */
-function togPw(id,btn){const el=document.getElementById(id);if(!el)return;const hid=el.type==='password';el.type=hid?'text':'password';btn.textContent=hid?'🙈':'👁️';}
+function togPw(id,btn){const el=document.getElementById(id);if(!el)return;const hid=el.type==='password';el.type=hid?'text':'password';btn.innerHTML=icon(hid?'pw-eyeoff':'pw-eye');}
 /* ── esqueci a senha (envia link por e-mail) ── */
 async function esqueciSenha(){
   const e=(document.getElementById('li-e').value||'').trim();
@@ -2568,6 +2570,8 @@ function setAvatares(){const sv=brotoColorSVG(gAvatar());['hh-av','tav','tav-j',
 function escolherAvatar(v){ls('dr_avatar_'+uid(),v);setAvatares();const pa=document.getElementById('perfil-av');if(pa){pa.innerHTML=brotoColorSVG(v);pa.classList.add('av-broto');}document.querySelectorAll('#perfil-avpick .avpick').forEach(b=>b.classList.toggle('on',b.dataset.v===v));vib(6);toast('🎨 Avatar atualizado!');const pk=document.getElementById('perfil-avpick');if(pk)pk.style.display='none';const bt=document.getElementById('perfil-editav');if(bt)bt.textContent='✏️ Editar avatar';}
 function toggleAvPick(){const pk=document.getElementById('perfil-avpick');const bt=document.getElementById('perfil-editav');if(!pk)return;const open=pk.style.display!=='none';pk.style.display=open?'none':'grid';if(bt)bt.textContent=open?'✏️ Editar avatar':'Toque na cor que quiser';}
 const ICONS={
+  "pw-eye":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" fill="#0C9C8C"></path><circle cx="12" cy="12" r="3.3" fill="#fff"></circle><circle cx="12" cy="12" r="1.6" fill="#0C9C8C"></circle></svg>`,
+  "pw-eyeoff":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" fill="#0C9C8C" opacity=".4"></path><circle cx="12" cy="12" r="3.3" fill="#fff" opacity=".55"></circle><path d="M4.5 4.5 19.5 19.5" stroke="#fff" stroke-width="3.4" stroke-linecap="round"></path><path d="M4.5 4.5 19.5 19.5" stroke="#0C9C8C" stroke-width="2" stroke-linecap="round"></path></svg>`,
   "cq-fire":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="cq-fire-gor" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFB264"></stop><stop offset="1" stop-color="#EA580C"></stop></linearGradient></defs><path d="M12 2.6c.6 3.2-2.6 4.2-2.6 7.2a2.6 2.6 0 0 0 5.2 0c0-1 .7-1.4.7-1.4 1.7 1.2 2.7 3.1 2.7 5.1a6 6 0 0 1-12 0c0-4.7 6-6.5 6-10.9Z" fill="url(#cq-fire-gor)"></path><path d="M12 13.2c-.3 1.6 1.1 2.1 1.1 3.5a1.5 1.5 0 0 1-3 0c0-1.3 1.6-1.9 1.9-3.5Z" fill="#FFE36B"></path></svg>`,
   "cq-bolt":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="cq-bolt-gye" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFE36B"></stop><stop offset="1" stop-color="#F2B705"></stop></linearGradient></defs><path d="M13.2 2 5.5 13.2H11l-1.3 8.8L19 9.8h-6Z" fill="url(#cq-bolt-gye)"></path></svg>`,
   "cq-medal":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="cq-medal-gye" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFE36B"></stop><stop offset="1" stop-color="#F2B705"></stop></linearGradient></defs><path d="M9 3l2.3 5.2-2.5 1.2L6.4 4Z" fill="#E0509E"></path><path d="M15 3l-2.3 5.2 2.5 1.2L17.6 4Z" fill="#6B43D6"></path><circle cx="12" cy="15" r="6.3" fill="url(#cq-medal-gye)"></circle><path d="M12 11.4l1.05 2.1 2.35.34-1.7 1.65.4 2.35L12 16.8l-2.1 1.04.4-2.35-1.7-1.65 2.35-.34Z" fill="#fff" opacity=".92"></path></svg>`,
@@ -4725,7 +4729,7 @@ const gPin=()=>ls('dr_pin_'+uid());
 let _lockBuf='',_lockMode='check',_lockTmp='';
 function maybeLock(){if(gPin()){_lockBuf='';_lockMode='check';document.getElementById('lock-msg').textContent='Digite seu PIN';lockDots();document.getElementById('vlock').classList.add('on');}}
 let _lockShow=false;
-function togLockShow(btn){_lockShow=!_lockShow;btn.textContent=_lockShow?'🙈':'👁️';document.getElementById('lock-dots').classList.toggle('showing',_lockShow);lockDots();}
+function togLockShow(btn){_lockShow=!_lockShow;btn.innerHTML=icon(_lockShow?'pw-eyeoff':'pw-eye');document.getElementById('lock-dots').classList.toggle('showing',_lockShow);lockDots();}
 function lockDots(){document.querySelectorAll('#lock-dots .lockdot').forEach((d,i)=>{const filled=i<_lockBuf.length;d.classList.toggle('full',filled);d.textContent=(_lockShow&&filled)?_lockBuf[i]:'';});}
 function lockKey(n){
   if(_lockBuf.length>=4)return;
