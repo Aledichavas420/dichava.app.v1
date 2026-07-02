@@ -27,7 +27,7 @@
     var t=e.target;
     if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')){
       var sh=document.getElementById('shell');if(sh)sh.classList.add('kbd');
-      setTimeout(function(){try{t.scrollIntoView({block:'center',behavior:'smooth'});}catch(_){}},300);
+      // o iOS já sobe o campo acima do teclado; não forçamos scroll (evita subir demais)
     }
   });
   document.addEventListener('focusout',function(){
