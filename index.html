@@ -194,6 +194,8 @@ a{color:inherit;text-decoration:none}
 .shr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 18px}
 .sht{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--dk)}
 .shl{font-size:12px;color:var(--ve);cursor:pointer;font-weight:600}
+.shi{width:22px;height:22px;flex-shrink:0;border-radius:50%;border:1.5px solid var(--cinm);background:#fff;color:var(--txs);font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#shell.dkm .shi{background:#212A21;border-color:#32402F;color:#9fb0a4}
 /* HISTÓRICO EM DESTAQUE (progresso) */
 .hist-hd{display:flex;align-items:center;justify-content:space-between;margin:22px 18px 13px;padding-bottom:11px;border-bottom:2px solid var(--cinm)}
 .hist-hd-t{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;color:var(--dk);letter-spacing:-.3px}
@@ -1668,8 +1670,9 @@ a{color:inherit;text-decoration:none}
   <div class="shr"><div class="sht">Insights do seu padrão <span class="tic" data-icon="sec-insights"></span></div></div>
   <div id="insights-l"></div>
 
-  <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div></div>
+  <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
   <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
+  <div style="text-align:center;font-size:11.5px;color:var(--txm);margin:-6px 18px 8px">Registros de uso por semana</div>
 
   <div class="shr"><div class="sht">Conquistas <span class="tic" data-icon="sec-conquistas"></span></div></div>
   <div class="cqr" id="cqr"></div>
@@ -2143,6 +2146,20 @@ a{color:inherit;text-decoration:none}
   <div class="mb c" style="margin-bottom:14px">Confirme o e-mail da sua conta. Vamos enviar um link para você criar uma nova senha.</div>
   <div class="fld"><div class="lbl">E-mail da conta</div><input class="inp" id="esq-email" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="esq-e">E-mail inválido.</div></div>
   <button class="btn bv bfull" onclick="enviarResetSenha()" style="margin-top:4px">Enviar link 💚</button>
+</div></div></div>
+
+<!-- INFO: Atividade semanal -->
+<div class="ov" id="matividade" onclick="if(event.target===this)closeMod('matividade')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt c">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div>
+  <div style="font-size:14px;color:var(--tx);line-height:1.65;margin:6px 4px 4px">
+    Cada barra mostra <strong>quantos registros de uso</strong> você fez em cada uma das <strong>últimas 7 semanas</strong>.
+    <br><br>
+    <span style="color:var(--txm)">• Conta só os <strong>registros de uso</strong> (o botão <strong>+</strong>) — não inclui check-ins, reflexões nem resistências.<br>
+    • As semanas seguem o calendário (segunda a domingo). A última barra (<strong>"agora"</strong>) é a semana atual.<br>
+    • Serve pra você enxergar se a <strong>frequência de uso</strong> vem caindo, subindo ou estável — sem julgamento, só informação. 🌿</span>
+  </div>
+  <button class="btn bout bfull" onclick="closeMod('matividade')" style="margin-top:16px">Entendi</button>
 </div></div></div>
 
 <!-- O QUE SIGNIFICAM (hero) -->
@@ -3563,11 +3580,19 @@ function togMetaMod(i){const m=gM();m[i].ok=!m[i].ok;sM(m);openMetasMod();render
 function remMeta(i){const m=gM();m.splice(i,1);sM(m);openMetasMod();renderMetas();}
 function addMeta(){const inp=document.getElementById('nova-meta');const tx=inp.value.trim();if(!tx){shk(inp);return;}const m=gM();m.push({id:'m'+Date.now(),titulo:tx,ok:false,criada:hoje()});sM(m);inp.value='';blurAll();openMetasMod();renderMetas();toast('✓ Meta adicionada!');}
 
+function infoAtividade(){openMod('matividade');try{aplicarIcones(document.getElementById('matividade'));}catch(e){}}
 function renderGraf(){
   const regs=gR();const lbs=[],dt=[];const hj=new Date();hj.setHours(12,0,0,0);
-  for(let i=6;i>=0;i--){const d=new Date(hj);d.setDate(hj.getDate()-i*7);const s=semISO(d.toISOString().split('T')[0]);const prx=new Date(d);prx.setDate(d.getDate()+6);dt.push(regs.filter(r=>r.data>=s&&r.data<=prx.toISOString().split('T')[0]).length);lbs.push('S-'+(7-i));}
+  for(let i=6;i>=0;i--){
+    const d=new Date(hj);d.setDate(hj.getDate()-i*7);
+    const s=semISO(d.toISOString().slice(0,10)); // início da semana (segunda)
+    const ini=new Date(s+'T12:00:00');const fim=new Date(ini);fim.setDate(ini.getDate()+6);
+    const fimISO=fim.toISOString().slice(0,10);
+    dt.push(regs.filter(r=>r.data>=s&&r.data<=fimISO).length);
+    const p=s.split('-');lbs.push(i===0?'agora':(p[2]+'/'+p[1]));
+  }
   const ctx=document.getElementById('graf');if(!ctx||typeof Chart==='undefined')return;if(_gC)_gC.destroy();
-  _gC=new Chart(ctx,{type:'bar',data:{labels:lbs,datasets:[{label:'Registros',data:dt,backgroundColor:'rgba(76,175,90,.75)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11,family:'DM Sans'}}},y:{display:false,beginAtZero:true}}}});
+  _gC=new Chart(ctx,{type:'bar',data:{labels:lbs,datasets:[{label:'Registros',data:dt,backgroundColor:dt.map((v,idx)=>idx===dt.length-1?'rgba(45,162,87,.95)':'rgba(76,175,90,.55)'),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:it=>it[0].label==='agora'?'Esta semana':'Semana de '+it[0].label,label:it=>it.raw+(it.raw===1?' registro de uso':' registros de uso')}}},scales:{x:{grid:{display:false},ticks:{font:{size:11,family:'DM Sans'}}},y:{display:false,beginAtZero:true,ticks:{precision:0}}}}});
 }
 
 function renderCqs(){
