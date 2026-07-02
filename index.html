@@ -1656,7 +1656,7 @@ a{color:inherit;text-decoration:none}
     <div class="pghead-tt">Progresso</div>
     <div class="pghead-ss">Suas conquistas e evolução</div>
   </div>
-  <div class="shr"><div class="sht">Minhas metas</div><div class="shl" onclick="openMetasMod()">editar</div></div>
+  <div class="shr"><div style="display:flex;align-items:center;gap:9px"><div class="sht">Minhas metas</div><button class="shi" onclick="infoMetas()" aria-label="Sobre">i</button></div><div class="shl" onclick="openMetasMod()">editar</div></div>
   <div id="metas-l"></div>
 
   <!-- HISTÓRICO EM DESTAQUE -->
@@ -1667,14 +1667,14 @@ a{color:inherit;text-decoration:none}
   <div id="hist-l" style="padding:0 18px;display:flex;flex-direction:column;gap:9px;padding-bottom:4px"></div>
   <div style="text-align:center;padding:4px 18px 6px"><button class="hist-clear" onclick="if(confirm('Apagar todos os registros?'))limparRegs()">↺ limpar histórico</button></div>
 
-  <div class="shr"><div class="sht">Insights do seu padrão <span class="tic" data-icon="sec-insights"></span></div></div>
+  <div class="shr"><div class="sht">Insights do seu padrão <span class="tic" data-icon="sec-insights"></span></div><button class="shi" onclick="infoInsights()" aria-label="Sobre">i</button></div>
   <div id="insights-l"></div>
 
   <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
   <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
   <div style="text-align:center;font-size:11.5px;color:var(--txm);margin:-6px 18px 8px">Registros de uso por semana</div>
 
-  <div class="shr"><div class="sht">Conquistas <span class="tic" data-icon="sec-conquistas"></span></div></div>
+  <div class="shr"><div class="sht">Conquistas <span class="tic" data-icon="sec-conquistas"></span></div><button class="shi" onclick="infoConquistas()" aria-label="Sobre">i</button></div>
   <div class="cqr" id="cqr"></div>
 </div>
 </div>
@@ -1724,9 +1724,9 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
   <!-- HUMOR -->
-<div class="shr"><div class="sht">Meu humor esta semana</div></div>
+<div class="shr"><div class="sht">Meu humor esta semana</div><button class="shi" onclick="infoHumor()" aria-label="Sobre">i</button></div>
   <div class="humor-week" id="humor-week"></div>
-  <div class="shr"><div class="sht">Resistência ativa <span class="tic" data-icon="resistencia"></span></div></div>
+  <div class="shr"><div class="sht">Resistência ativa <span class="tic" data-icon="resistencia"></span></div><button class="shi" onclick="infoResist()" aria-label="Sobre">i</button></div>
   <div id="fiss-l"></div>
   <div class="shr" style="padding-top:4px"><div class="sht">Artigos de RD 📖</div></div>
   <div id="arts-l"></div>
@@ -2160,6 +2160,14 @@ a{color:inherit;text-decoration:none}
     • Serve pra você enxergar se a <strong>frequência de uso</strong> vem caindo, subindo ou estável — sem julgamento, só informação. 🌿</span>
   </div>
   <button class="btn bout bfull" onclick="closeMod('matividade')" style="margin-top:16px">Entendi</button>
+</div></div></div>
+
+<!-- INFO genérico (reutilizável) -->
+<div class="ov" id="minfobox" onclick="if(event.target===this)closeMod('minfobox')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt c" id="minfobox-t">—</div>
+  <div style="font-size:14px;color:var(--tx);line-height:1.65;margin:8px 4px 4px" id="minfobox-b"></div>
+  <button class="btn bout bfull" onclick="closeMod('minfobox')" style="margin-top:16px">Entendi</button>
 </div></div></div>
 
 <!-- O QUE SIGNIFICAM (hero) -->
@@ -3581,6 +3589,12 @@ function remMeta(i){const m=gM();m.splice(i,1);sM(m);openMetasMod();renderMetas(
 function addMeta(){const inp=document.getElementById('nova-meta');const tx=inp.value.trim();if(!tx){shk(inp);return;}const m=gM();m.push({id:'m'+Date.now(),titulo:tx,ok:false,criada:hoje()});sM(m);inp.value='';blurAll();openMetasMod();renderMetas();toast('✓ Meta adicionada!');}
 
 function infoAtividade(){openMod('matividade');try{aplicarIcones(document.getElementById('matividade'));}catch(e){}}
+function showInfo(t,html){document.getElementById('minfobox-t').textContent=t;document.getElementById('minfobox-b').innerHTML=html;openMod('minfobox');}
+function infoMetas(){showInfo('Minhas metas','Suas metas de cuidado. Podem ser <strong>manuais</strong> (você marca como concluída quando quiser) ou <strong>automáticas</strong> — as com <strong>📊 "atualiza sozinho"</strong> acompanham seus registros e completam <strong>ou desmarcam</strong> conforme a realidade (ex.: "2 dias sem usar" reseta se você registra um uso).<br><br>Toque em <strong>editar</strong> para adicionar, remover ou concluir metas. 🌿');}
+function infoInsights(){showInfo('Insights do seu padrão','Observações geradas a partir dos <strong>seus registros</strong> — horários mais comuns, contextos, gatilhos, gasto estimado e mais.<br><br>Quanto <strong>mais você registra</strong>, mais certeiros ficam. É só informação pra te ajudar a se conhecer — <strong>sem julgamento</strong>. 💚');}
+function infoConquistas(){showInfo('Conquistas','Marcos da sua jornada que você desbloqueia usando o app: 1º registro, dias seguidos, 1ª reflexão, 1ª resistência, metas concluídas…<br><br>As <strong>esmaecidas</strong> ainda não foram alcançadas. Não é competição — é pra <strong>celebrar cada passo seu</strong>. 🌟');}
+function infoHumor(){showInfo('Meu humor esta semana','Uma bolinha por dia, com a <strong>cor e o emoji</strong> do humor que você registrou no check-in. Dias sem registro ficam <strong>vazios (tracejados)</strong>.<br><br>Serve pra você enxergar <strong>como a semana foi</strong> emocionalmente, sem cobrança. 🌿');}
+function infoResist(){showInfo('Resistência ativa','Toda vez que a vontade veio e <strong>você segurou</strong>, vira uma vitória aqui. Mostra <strong>quantas vezes você resistiu</strong> e o que fez no lugar.<br><br>Ótimo pra olhar num dia difícil e <strong>lembrar da sua força</strong>. 💪');}
 function renderGraf(){
   const regs=gR();const lbs=[],dt=[];const hj=new Date();hj.setHours(12,0,0,0);
   for(let i=6;i>=0;i--){
