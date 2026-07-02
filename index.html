@@ -2159,7 +2159,7 @@ a{color:inherit;text-decoration:none}
   <div class="mt">Novo registro 📓</div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Sem julgamento — só registre como foi.</p>
   <div class="fr2" style="margin-bottom:12px">
-    <div class="fld" style="margin:0"><div class="lbl">Substância <span class="ob">*</span></div>
+    <div class="fld" style="margin:0"><div class="lbl">Substância <span class="ob">*</span> <span style="font-weight:500;color:var(--txs);font-size:11px">· pode escolher mais de uma (uso combinado)</span></div>
       <div class="subgrid" id="reg-subgrid" data-target="reg-sub"></div><input type="hidden" id="reg-sub" value="" onchange="regSubChg()">
     </div>
     <div class="fld" style="margin:0"><div class="lbl">Quantidade</div><input class="inp" id="reg-qtd" type="text" placeholder="ex: 2 doses"></div>
@@ -2683,11 +2683,17 @@ function montarSubGrid(gridId,lista){
 }
 function selSub(gridId,target,btn){
   const grid=document.getElementById(gridId);
+  if(target==='reg-sub'){
+    // poliuso: permite escolher mais de uma substância
+    btn.classList.toggle('on');
+    _regSubs=[...grid.querySelectorAll('.subbtn.on')].map(b=>b.dataset.val);
+    document.getElementById(target).value=_regSubs[0]||'';
+    vib(5);regSubChg();return;
+  }
   grid.querySelectorAll('.subbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById(target).value=btn.dataset.val;
   vib(5);
-  if(target==='reg-sub')regSubChg();
   if(target==='fiss-sub')fissSubChg();
 }
 
@@ -3182,7 +3188,7 @@ function limiteSemana(){return gC().limS||12;}
 function registroRapido(){
   const regs=gR();if(!regs.length){openMod('mreg');return;}
   const last=regs[regs.length-1];
-  _quickData={substancia:last.substancia,qtd:last.qtd||'',hr:periodoAgora(),ctx:last.ctx||'',emocao:last.emocao||'😐',emoLabel:last.emoLabel||'',custo:last.custo||''};
+  _quickData={substancia:last.substancia,substancias:regSubsArr(last),qtd:last.qtd||'',hr:periodoAgora(),ctx:last.ctx||'',emocao:last.emocao||'😐',emoLabel:last.emoLabel||'',custo:last.custo||''};
   document.getElementById('quick-card').innerHTML=`<div class="quick-card"><div class="quick-card-ic">${nem(last.substancia)}</div><div><div class="quick-card-n">${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</div><div class="quick-card-m">${periodoAgora()} · agora</div></div></div>`;
   // alertas de cuidado
   const hj=hoje();const hojeRegs=regs.filter(r=>r.data===hj);const semRegs=regs.filter(r=>r.data>=semISO(hj));const lim=limiteDia(),limS=limiteSemana();const al=[];
@@ -3196,7 +3202,7 @@ function registroRapido(){
 function confirmarQuick(){
   if(!_quickData){closeMod('mquick');return;}
   const q=_quickData;
-  const reg={id:'r'+Date.now(),substancia:q.substancia,qtd:q.qtd,hr:q.hr,ctx:q.ctx,emocao:q.emocao,emoLabel:q.emoLabel,custo:q.custo,gatilhos:[],obs:'',data:hoje(),criado:new Date().toISOString()};
+  const reg={id:'r'+Date.now(),substancia:q.substancia,substancias:q.substancias||[q.substancia],qtd:q.qtd,hr:q.hr,ctx:q.ctx,emocao:q.emocao,emoLabel:q.emoLabel,custo:q.custo,gatilhos:[],obs:'',data:hoje(),criado:new Date().toISOString()};
   const r2=gR();r2.push(reg);sR(r2);
   try{addXP(5,'registro');}catch(e){}
   closeMod('mquick');vib(12);_quickData=null;
@@ -3285,7 +3291,7 @@ function envResumoWPP(){const regs=gR(),sw=regs.filter(r=>r.data>=semISO(hoje())
 function renderHistMini(regs){
   const c=document.getElementById('h-hist');const ul=regs.slice(-5).reverse();
   if(!ul.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);text-align:center;padding:16px 18px">Nenhum registro ainda.<br>Toque em <strong>+</strong> para começar.</div>';return;}
-  c.innerHTML=ul.map(r=>`<div class="hi" style="margin:0 18px"><div class="hie">${nem(r.substancia)}</div><div class="hib"><div class="hin">${esc(r.substancia)}</div><div class="him">${fdt(r.data)}${r.ctx?' · '+esc(r.ctx):''}${r.hr?' · '+r.hr:''}</div></div><div style="font-size:19px">${r.emocao||''}</div></div>`).join('');
+  c.innerHTML=ul.map(r=>`<div class="hi" style="margin:0 18px"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}</div><div class="him">${fdt(r.data)}${r.ctx?' · '+esc(r.ctx):''}${r.hr?' · '+r.hr:''}</div></div><div style="font-size:19px">${r.emocao||''}</div></div>`).join('');
 }
 
 /* ══ REGISTRO ══ */
@@ -3293,13 +3299,19 @@ function selEReg(btn,e,l){document.querySelectorAll('#reg-emg .emb').forEach(b=>
 function togChip(el){el.classList.toggle('on')}
 function regSubChg(){document.getElementById('reg-outra-w').style.display=document.getElementById('reg-sub').value==='outra'?'block':'none';}
 function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(w)w.style.display=document.getElementById('fiss-sub').value==='outra'?'block':'none';}
+let _regSubs=[];
+function regSubsArr(r){return (r&&r.substancias&&r.substancias.length)?r.substancias:(r&&r.substancia?[r.substancia]:[]);}
+function regSubLabel(r){return regSubsArr(r).join(' + ');}
 function salvReg(){
   blurAll();
   const sub=document.getElementById('reg-sub').value;
   if(!sub){toast('⚠️ Selecione uma substância.');shk(document.getElementById('reg-sub'));return;}
   if(!_eReg){toast('⚠️ Selecione um estado emocional.');shk(document.getElementById('reg-emg'));return;}
   const chips=[...document.querySelectorAll('#mreg .chip.on')].map(c=>c.textContent);
-  const dados={substancia:sub==='outra'?document.getElementById('reg-outra').value.trim():sub.replace(/^[^\w]+ /,''),qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:document.getElementById('reg-ctx').value,emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim()};
+  const selVals=_regSubs.length?_regSubs:(sub?[sub]:[]);
+  const outraTxt=document.getElementById('reg-outra').value.trim();
+  const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
+  const dados={substancia:subsNomes[0],substancias:subsNomes,qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:document.getElementById('reg-ctx').value,emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim()};
   const regs=gR();
   const editando=_editRegId;
   if(editando){const i=regs.findIndex(r=>r.id===editando);if(i>=0)regs[i]={...regs[i],...dados};}
@@ -3309,7 +3321,7 @@ function salvReg(){
   document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-custo').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-outra-w').style.display='none';
   document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.remove('on'));
-  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_regSubs=[];
   const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Novo registro 📓';
   _eReg=null;_editRegId=null;closeMod('mreg');vib(15);
   if(!editando)try{addXP(5,'registro');}catch(e){}
@@ -3455,7 +3467,7 @@ function renderHist(){
   const regs=gR().slice().reverse();const c=document.getElementById('hist-l');
   const cnt=document.getElementById('hist-count');if(cnt)cnt.textContent=regs.length+(regs.length===1?' registro':' registros');
   if(!regs.length){c.innerHTML='<div style="text-align:center;padding:24px 18px;color:var(--txm)"><div class="hist-empty-ic">'+icon('prog-empty')+'</div><div style="font-size:13.5px;font-weight:600">Nenhum registro ainda</div><div style="font-size:12px;margin-top:3px">Toque em <strong>+ novo</strong> para começar a registrar.</div></div>';return;}
-  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${nem(r.substancia)}</div><div class="hib"><div class="hin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
+  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
 }
 function delReg(id){
   if(!confirm('Excluir este registro?'))return;
@@ -3474,12 +3486,13 @@ function editReg(id){
   _editRegId=id;
   openMod('mreg');
   // preenche os campos
-  const subVal=SUBS_REG.find(s=>s.replace(/^[^\w]+ /,'')===r.substancia);
+  const names=regSubsArr(r);_regSubs=[];
   const hidden=document.getElementById('reg-sub');
-  if(subVal){hidden.value=subVal;}else{hidden.value='outra';document.getElementById('reg-outra').value=r.substancia;}
+  names.forEach(nm=>{const sv=SUBS_REG.find(s=>s.replace(/^[^\w]+ /,'')===nm);if(sv){_regSubs.push(sv);}else{_regSubs.push('outra');document.getElementById('reg-outra').value=nm;}});
+  hidden.value=_regSubs[0]||'';
   regSubChg();
-  // marca botão da substância
-  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.toggle('on',b.dataset.val===hidden.value));
+  // marca os botões das substâncias (poliuso)
+  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.toggle('on',_regSubs.includes(b.dataset.val)));
   document.getElementById('reg-qtd').value=r.qtd||'';
   document.getElementById('reg-hr').value=r.hr||'';
   document.getElementById('reg-ctx').value=r.ctx||'';
