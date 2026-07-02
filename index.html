@@ -2879,7 +2879,7 @@ function mostrarTermo(){
 function startOb(){
   _obEdit=!!(U&&ls('dr_termo_'+U.id));
   _passos=passosAtivos();
-  _obP=0;_obG=(gO()?.goal)||null;_obSubs=[];_obPerfil=gPerfil()||{};_obNome=U?.nome||'';_obMetas=[];
+  _obP=0;_obG=(gO()?.goal)||null;_obSubs=(gO()?.subs)||[];_obPerfil=gPerfil()||{};_obNome=U?.nome||'';_obMetas=[];
   document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));
   document.getElementById('vo').classList.add('on');
   document.getElementById('bnav').classList.remove('on');
@@ -2951,8 +2951,9 @@ function renderOb(){
     });
   } else if(p.tp==='meta'){
     const note=document.createElement('div');note.style.cssText='font-size:12px;color:var(--txm);margin-bottom:10px;padding:8px 12px;background:var(--ams);border-radius:10px';note.textContent='✓ Marque as que fazem sentido agora';body.appendChild(note);
+    const curMetas=(gM()||[]).map(x=>x.titulo||x.txt||'');
     (MPAD[_obG]||[]).forEach(m=>{
-      const d=document.createElement('div');d.className='gc';
+      const d=document.createElement('div');d.className='gc'+(curMetas.includes(m)?' on':'');
       d.innerHTML=`<div class="gi" style="background:var(--vf)">✅</div><div class="gb"><div class="gn">${m}</div></div><div class="gck">✓</div>`;
       d.onclick=()=>d.classList.toggle('on');d._meta=m;body.appendChild(d);
     });
