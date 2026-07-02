@@ -35,6 +35,8 @@
       var a=document.activeElement;
       if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'))return;
       var sh=document.getElementById('shell');if(sh)sh.classList.remove('kbd');
+      // iOS às vezes deixa o layout "rolado" após o teclado fechar — volta ao topo
+      try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(_){}
     },150);
   });
 })();
@@ -2789,7 +2791,7 @@ function goPg(id,btn){
 
 /* ══ MODALS ══ */
 function openMod(id){blurAll();document.getElementById(id).classList.add('on');aplicarIcones(document.getElementById(id));if(id==='mreg')montarSubGrid('reg-subgrid',SUBS_REG);if(id==='mfiss')montarSubGrid('fiss-subgrid',SUBS_FISS);}
-function closeMod(id){blurAll();document.getElementById(id).classList.remove('on')}
+function closeMod(id){blurAll();document.getElementById(id).classList.remove('on');try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(_){}}
 // arrastar a folha pra baixo (no topo) fecha o modal
 (function(){
   let sy=0,dragging=false,sheet=null,moved=0;
@@ -3486,7 +3488,18 @@ function renderProg(){renderMetas();renderInsights();renderGraf();renderCqs();re
 
 // ── progresso automático das metas (lê os registros) ──
 function _diasAtivosN(){const s=new Set();gR().forEach(r=>s.add(r.data));gRef().forEach(r=>s.add(r.data));(gProt()||[]).forEach(d=>s.add(d));return s.size;}
-function _consecSemUso(){const dias=new Set(gR().map(r=>r.data));const base=new Date();base.setHours(12,0,0,0);let n=0;for(let i=0;i<366;i++){const x=new Date(base);x.setDate(base.getDate()-i);if(dias.has(x.toISOString().slice(0,10)))break;n++;}return n;}
+function _consecSemUso(){
+  const regs=gR();const dias=new Set(regs.map(r=>r.data));
+  const base=new Date();base.setHours(12,0,0,0);
+  // início do acompanhamento: objetivo, ou registro mais antigo, ou hoje — não conta dias vazios antes disso
+  const o=(typeof gO==='function'?gO():null);
+  let startISO=(o&&o.data)?o.data:null;
+  if(regs.length){const min=regs.map(r=>r.data).sort()[0];if(!startISO||min<startISO)startISO=min;}
+  if(!startISO)startISO=base.toISOString().slice(0,10);
+  let n=0;
+  for(let i=0;i<366;i++){const x=new Date(base);x.setDate(base.getDate()-i);const iso=x.toISOString().slice(0,10);if(iso<startISO)break;if(dias.has(iso))break;n++;}
+  return n;
+}
 function metaProg(m){
   const t=(m.titulo||'').toLowerCase();const regs=gR(),refs=gRef(),fiss=(typeof gFs==='function'?gFs():[]);
   const semStart=semISO(hoje());const regSem=regs.filter(r=>r.data>=semStart).length;const refSem=refs.filter(r=>r.data>=semStart).length;
@@ -3507,7 +3520,9 @@ function renderMetas(){
     const p=metaProg(m);
     if(p){
       const cur=Math.max(0,Math.min(p.cur,p.tot)),tot=p.tot,pct=Math.round(cur/tot*100);
+      // metas automáticas refletem a condição atual (completam e des-completam sozinhas)
       if(pct>=100&&!m.ok){m.ok=true;mudou=true;}
+      else if(pct<100&&m.ok){m.ok=false;mudou=true;}
       const done=m.ok;
       return `<div class="mc ${done?'ok':''}"><div class="mch"><div class="mct">${esc(m.titulo)}</div><span class="mcbg ${done?'bok':'band'}">${done?'✓ Concluída':cur+'/'+tot}</span></div><div class="pgb"><div class="pgf" style="width:${done?100:pct}%;background:${done?'var(--v)':'linear-gradient(90deg,#9CF06B,#5CE3CF)'}"></div></div><div class="mc-auto">📊 Atualiza sozinho conforme seus registros</div></div>`;
     }
