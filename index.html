@@ -1760,6 +1760,7 @@ a{color:inherit;text-decoration:none}
   <div class="shr"><div class="sht">Segurança</div></div>
   <div class="cfgsec">
     <div class="cfgi" onclick="cfgPin()"><div class="cfgic" data-icon="cfg-pin"></div><div class="cfgb"><div class="cfgn">PIN de bloqueio</div><div class="cfgd" id="pin-status">Desativado</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="abrirTrocarSenha()"><div class="cfgic" data-icon="cfg-pin"></div><div class="cfgb"><div class="cfgn">Alterar senha</div><div class="cfgd">Defina uma nova senha da conta</div></div><div class="cfgar">›</div></div>
   </div>
   <div class="shr"><div class="sht">Privacidade</div></div>
   <div class="cfgsec">
@@ -2100,6 +2101,17 @@ a{color:inherit;text-decoration:none}
   <div class="termo-ro"><strong>dichava.rd — Termo de Consentimento e Política de Privacidade</strong><br><br><strong>1. Natureza do app.</strong> Ferramenta de apoio ao autoconhecimento, baseada na redução de danos. <strong>Não substitui</strong> acompanhamento profissional de saúde. Emergências: SAMU 192 · CVV 188.<br><br><strong>2. Público.</strong> Destinado a pessoas com <strong>18 anos ou mais</strong>.<br><br><strong>3. Dados tratados.</strong> Apenas os dados que <strong>você mesmo(a) insere</strong>: registros de uso, humor, reflexões, metas, configurações e dados de conta (e-mail e senha). Não coletamos localização, contatos nem dados para publicidade.<br><br><strong>4. Finalidade.</strong> Usados <strong>só para o app funcionar</strong>: exibir seu histórico e insights, sincronizar entre aparelhos (backup) e enviar as notificações de cuidado que você ativar.<br><br><strong>5. Armazenamento e compartilhamento.</strong> Seus dados ficam no seu aparelho e são sincronizados com o <strong>servidor próprio do projeto (Supabase)</strong>. <strong>Não são vendidos nem compartilhados com terceiros</strong> para fins comerciais ou publicitários.<br><br><strong>6. Base legal (LGPD).</strong> O tratamento se dá com base no <strong>seu consentimento</strong> (art. 7º, I, da Lei nº 13.709/2018 — LGPD), que você pode <strong>revogar a qualquer momento</strong>.<br><br><strong>7. Seus direitos (LGPD).</strong> A qualquer momento você pode <strong>acessar, corrigir, exportar</strong> (Configurações → Exportar / Backup) e <strong>apagar</strong> seus dados, além de <strong>revogar o consentimento</strong>.<br><br><strong>8. Segurança.</strong> Você conta com <strong>PIN de bloqueio</strong> e <strong>Modo discreto</strong>. Ainda assim, mantenha seu aparelho protegido.<br><br><strong>9. Retenção.</strong> Os dados são mantidos enquanto sua conta existir; ao apagá-los, são removidos do servidor.<br><br><strong>10. Contato.</strong> Dúvidas ou solicitações sobre seus dados: <strong>dichavandoard@gmail.com</strong>.</div>
   <div style="background:var(--vf);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--ve);font-weight:600;margin-bottom:15px;text-align:center">✓ Aceito em: <span id="termo-dt">—</span></div>
   <button class="btn bout bfull" onclick="closeMod('mtermol')">Fechar</button>
+</div></div></div>
+
+<!-- NOVA SENHA (recuperação por e-mail OU troca em Configurações) -->
+<div class="ov" id="mrecpw" onclick="if(event.target===this)closeMod('mrecpw')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="font-size:30px;text-align:center;margin-bottom:6px">🔑</div>
+  <div class="mt c">Criar nova senha</div>
+  <div class="mb c" style="margin-bottom:14px">Escolha uma nova senha para a sua conta.</div>
+  <div class="fld"><div class="lbl">Nova senha</div><div class="pwwrap"><input class="inp" id="rec-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw',this)"></button></div><div class="em" id="rec-pw-e">Mínimo 6 caracteres.</div></div>
+  <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="rec-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw2',this)"></button></div><div class="em" id="rec-pw2-e">As senhas não conferem.</div></div>
+  <button class="btn bv bfull" onclick="salvarNovaSenha()" style="margin-top:6px">Salvar nova senha 💚</button>
 </div></div></div>
 
 <!-- O QUE SIGNIFICAM (hero) -->
@@ -2466,13 +2478,24 @@ async function esqueciSenha(){
   catch(err){toast('Não consegui enviar agora. Tente mais tarde.');}
 }
 /* ── define nova senha após clicar no link do e-mail ── */
-async function novaSenhaFlow(){
-  const np=prompt('Redefinir senha\n\nDigite a nova senha (mínimo 6 caracteres):');
-  if(np===null)return;
-  if(np.length<6){toast('Senha muito curta (mín. 6).');return novaSenhaFlow();}
-  try{const{error}=await _SB.auth.updateUser({password:np});if(error)throw error;
-    toast('✓ Senha redefinida! Você já está logado(a) 💚');}
-  catch(err){toast('Não consegui redefinir. Peça o link de novo.');}
+function novaSenhaFlow(){abrirTrocarSenha();}
+function abrirTrocarSenha(){
+  ['rec-pw','rec-pw2'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['rec-pw-e','rec-pw2-e'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('on');});
+  openMod('mrecpw');aplicarIcones(document.getElementById('mrecpw'));
+}
+async function salvarNovaSenha(){
+  const p=document.getElementById('rec-pw').value,p2=document.getElementById('rec-pw2').value;
+  const e1=document.getElementById('rec-pw-e'),e2=document.getElementById('rec-pw2-e');e1.classList.remove('on');e2.classList.remove('on');
+  if(p.length<6){e1.classList.add('on');shk(document.getElementById('rec-pw'));return;}
+  if(p!==p2){e2.classList.add('on');shk(document.getElementById('rec-pw2'));return;}
+  if(!_SB){toast('Indisponível offline.');return;}
+  try{const{error}=await _SB.auth.updateUser({password:p});if(error)throw error;
+    closeMod('mrecpw');vib(15);
+    const jaNoApp=document.getElementById('vapp')?.classList.contains('on');
+    if(jaNoApp){toast('✓ Senha alterada 💚');}
+    else{toast('✓ Senha redefinida! Entrando… 💚');try{history.replaceState(null,'',location.pathname);}catch(_){}setTimeout(()=>{location.href=location.pathname;},900);}
+  }catch(err){e1.textContent='Não consegui salvar. Tente novamente.';e1.classList.add('on');}
 }
 if(_SB&&_SB.auth&&_SB.auth.onAuthStateChange){try{_SB.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY')novaSenhaFlow();});}catch(_){}}
 
