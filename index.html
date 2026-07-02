@@ -2165,6 +2165,7 @@ a{color:inherit;text-decoration:none}
     <div class="fld" style="margin:0"><div class="lbl">Quantidade</div><input class="inp" id="reg-qtd" type="text" placeholder="ex: 2 doses"></div>
   </div>
   <div id="reg-outra-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual substância?</div><input class="inp" id="reg-outra" type="text" placeholder="Escreva…"></div>
+  <button type="button" id="reg-mix-btn" onclick="verMisturaReg()" style="display:none;width:100%;align-items:center;justify-content:center;gap:8px;background:var(--roxof);border:1.5px solid var(--roxo);color:var(--roxo);border-radius:14px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:12px">⚗️ Verificar risco da mistura →</button>
   <div class="fr2" style="margin-bottom:12px">
     <div class="fld" style="margin:0"><div class="lbl">Horário</div><select class="fs" id="reg-hr"><option>Manhã</option><option>Tarde</option><option selected>Noite</option><option>Madrugada</option></select></div>
     <div class="fld" style="margin:0"><div class="lbl">Contexto</div><select class="fs" id="reg-ctx"><option value="">Onde?</option><option>Em casa, sozinho(a)</option><option>Em casa, com alguém</option><option>Com amigos</option><option>Festa / balada</option><option>Rave / festival</option><option>Trabalho / estudo</option><option>Natureza / cerimônia</option><option>Prefiro não dizer</option></select></div>
@@ -2688,6 +2689,7 @@ function selSub(gridId,target,btn){
     btn.classList.toggle('on');
     _regSubs=[...grid.querySelectorAll('.subbtn.on')].map(b=>b.dataset.val);
     document.getElementById(target).value=_regSubs[0]||'';
+    const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display=_regSubs.length>=2?'flex':'none';
     vib(5);regSubChg();return;
   }
   grid.querySelectorAll('.subbtn').forEach(b=>b.classList.remove('on'));
@@ -3302,6 +3304,22 @@ function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(w)w.sty
 let _regSubs=[];
 function regSubsArr(r){return (r&&r.substancias&&r.substancias.length)?r.substancias:(r&&r.substancia?[r.substancia]:[]);}
 function regSubLabel(r){return regSubsArr(r).join(' + ');}
+/* abre a tabela de misturas por cima do registro, pré-preenchida */
+function verMisturaReg(){
+  const nomes=_regSubs.map(v=>v==='outra'?'Outra':v.replace(/^[^\w]+ /,''));
+  if(nomes.length<2){toast('Selecione duas substâncias.');return;}
+  const map={'Cocaína':'Cocaína / Crack','Crack':'Cocaína / Crack'};
+  const toCmb=n=>map[n]||n;
+  try{openCombo();
+    const mc=document.getElementById('mcombo');if(mc)mc.style.zIndex='500';
+    const sa=document.getElementById('cmb-a'),sb=document.getElementById('cmb-b');
+    const has=(s,v)=>[...s.options].some(o=>o.value===v);
+    const a=toCmb(nomes[0]),b=toCmb(nomes[1]);
+    if(has(sa,a))sa.value=a;if(has(sb,b))sb.value=b;
+    if(nomes.length>2)toast('Mostrando as 2 primeiras — confira os outros pares também.');
+    calcCombo();
+  }catch(e){}
+}
 function salvReg(){
   blurAll();
   const sub=document.getElementById('reg-sub').value;
@@ -3321,7 +3339,7 @@ function salvReg(){
   document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-custo').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-outra-w').style.display='none';
   document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.remove('on'));
-  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_regSubs=[];
+  document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_regSubs=[];{const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display='none';}
   const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Novo registro 📓';
   _eReg=null;_editRegId=null;closeMod('mreg');vib(15);
   if(!editando)try{addXP(5,'registro');}catch(e){}
@@ -3493,6 +3511,7 @@ function editReg(id){
   regSubChg();
   // marca os botões das substâncias (poliuso)
   document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.toggle('on',_regSubs.includes(b.dataset.val)));
+  {const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display=_regSubs.length>=2?'flex':'none';}
   document.getElementById('reg-qtd').value=r.qtd||'';
   document.getElementById('reg-hr').value=r.hr||'';
   document.getElementById('reg-ctx').value=r.ctx||'';
