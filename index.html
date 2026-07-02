@@ -5142,7 +5142,19 @@ function applyTheme(){
 
 /* ══════════ v6: SERVICE WORKER ══════════ */
 if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  var _hadController=!!navigator.serviceWorker.controller;
+  var _refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(_refreshing)return;_refreshing=true;
+    if(_hadController)location.reload(); // recarrega só em ATUALIZAÇÃO (não na 1ª instalação)
+  });
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      try{reg.update();}catch(_){}
+      // checa nova versão sempre que o app volta pro primeiro plano
+      document.addEventListener('visibilitychange',function(){if(!document.hidden){try{reg.update();}catch(_){}}});
+    }).catch(function(){});
+  });
 }
 // captura o prompt de instalação (Android/Chrome)
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._deferredPrompt=e;try{renderInstall();}catch(x){}});
