@@ -109,7 +109,7 @@
 }
 /* CRÍTICO: font-size 16px em TUDO impede zoom automático no iOS */
 html{font-size:16px;height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
-body{font-family:'DM Sans',sans-serif;background:#ECECE8;color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;position:fixed;top:0;left:0;width:100%;height:var(--app-h,100vh)}
+body{font-family:'DM Sans',sans-serif;background:#141A14;color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh}
 input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:16px}
 input:not([type="checkbox"]),select,textarea{-webkit-appearance:none;appearance:none}
 input[type="checkbox"]{width:18px;height:18px;accent-color:var(--v);cursor:pointer;flex-shrink:0}
@@ -118,7 +118,7 @@ input:focus,select:focus,textarea:focus{outline:none}
 a{color:inherit;text-decoration:none}
 
 /* APP SHELL */
-#shell{width:100%;height:var(--app-h,100%);max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
+#shell{width:100%;height:100vh;height:100dvh;max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
 @media(min-width:431px){body{background:#ECECE8;display:flex;align-items:flex-start;justify-content:center}}
 
 /* VIEW SYSTEM */
@@ -2133,6 +2133,16 @@ a{color:inherit;text-decoration:none}
   <button class="btn bv bfull" onclick="salvarNovaSenha()" style="margin-top:6px">Salvar nova senha 💚</button>
 </div></div></div>
 
+<!-- ESQUECI A SENHA (confirma e-mail antes de enviar o link) -->
+<div class="ov" id="mesqueci" onclick="if(event.target===this)closeMod('mesqueci')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="font-size:30px;text-align:center;margin-bottom:6px">📧</div>
+  <div class="mt c">Redefinir senha</div>
+  <div class="mb c" style="margin-bottom:14px">Confirme o e-mail da sua conta. Vamos enviar um link para você criar uma nova senha.</div>
+  <div class="fld"><div class="lbl">E-mail da conta</div><input class="inp" id="esq-email" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="esq-e">E-mail inválido.</div></div>
+  <button class="btn bv bfull" onclick="enviarResetSenha()" style="margin-top:4px">Enviar link 💚</button>
+</div></div></div>
+
 <!-- O QUE SIGNIFICAM (hero) -->
 <div class="ov" id="minfo" onclick="if(event.target===this)closeMod('minfo')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
@@ -2491,13 +2501,25 @@ const _SB = (typeof supabase !== 'undefined')
 /* ── mostrar/ocultar senha ── */
 function togPw(id,btn){const el=document.getElementById(id);if(!el)return;const hid=el.type==='password';el.type=hid?'text':'password';btn.innerHTML=icon(hid?'pw-eyeoff':'pw-eye');}
 /* ── esqueci a senha (envia link por e-mail) ── */
-async function esqueciSenha(){
-  const e=(document.getElementById('li-e').value||'').trim();
-  if(!e||!/\S+@\S+\.\S+/.test(e)){toast('Digite seu e-mail no campo acima e toque de novo.');try{document.getElementById('li-e').focus();}catch(_){}return;}
+function esqueciSenha(){
+  const inp=document.getElementById('esq-email');if(inp)inp.value='';
+  const er=document.getElementById('esq-e');if(er)er.classList.remove('on');
+  openMod('mesqueci');
+  setTimeout(()=>{try{document.getElementById('esq-email').focus();}catch(_){}},250);
+}
+async function enviarResetSenha(){
+  const e=(document.getElementById('esq-email').value||'').trim();
+  const er=document.getElementById('esq-e');er.classList.remove('on');
+  if(!/\S+@\S+\.\S+/.test(e)){er.textContent='E-mail inválido.';er.classList.add('on');shk(document.getElementById('esq-email'));return;}
   if(!_SB){toast('Indisponível offline.');return;}
+  // limite: no máximo 3 pedidos por semana (por aparelho)
+  var KEY='dr_resetlog',log=[];try{log=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(_){}
+  var agora=Date.now(),semana=7*86400000;log=log.filter(function(t){return agora-t<semana;});
+  if(log.length>=3){er.textContent='Limite de 3 pedidos por semana atingido. Tente novamente mais tarde.';er.classList.add('on');return;}
   try{const{error}=await _SB.auth.resetPasswordForEmail(e,{redirectTo:location.origin+location.pathname});if(error)throw error;
-    toast('📧 Se houver conta com esse e-mail, enviamos o link de redefinição.');}
-  catch(err){toast('Não consegui enviar agora. Tente mais tarde.');}
+    log.push(agora);localStorage.setItem(KEY,JSON.stringify(log));
+    closeMod('mesqueci');toast('📧 Se houver conta com esse e-mail, enviamos o link (confira também o spam). 💚');}
+  catch(err){er.textContent='Não consegui enviar agora. Tente mais tarde.';er.classList.add('on');}
 }
 /* ── define nova senha após clicar no link do e-mail ── */
 function novaSenhaFlow(){abrirTrocarSenha();}
