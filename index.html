@@ -109,7 +109,7 @@
 }
 /* CRÍTICO: font-size 16px em TUDO impede zoom automático no iOS */
 html{font-size:16px;height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
-body{font-family:'DM Sans',sans-serif;background:#141A14;color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh}
+body{font-family:'DM Sans',sans-serif;background:#141A14;color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;position:fixed;top:0;right:0;bottom:0;left:0}
 input,select,textarea,button{font-family:'DM Sans',sans-serif;font-size:16px}
 input:not([type="checkbox"]),select,textarea{-webkit-appearance:none;appearance:none}
 input[type="checkbox"]{width:18px;height:18px;accent-color:var(--v);cursor:pointer;flex-shrink:0}
@@ -118,7 +118,7 @@ input:focus,select:focus,textarea:focus{outline:none}
 a{color:inherit;text-decoration:none}
 
 /* APP SHELL */
-#shell{width:100%;height:100vh;height:100dvh;max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
+#shell{width:100%;height:100%;max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
 @media(min-width:431px){body{background:#ECECE8;display:flex;align-items:flex-start;justify-content:center}}
 
 /* VIEW SYSTEM */
@@ -5159,6 +5159,24 @@ if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
 // captura o prompt de instalação (Android/Chrome)
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._deferredPrompt=e;try{renderInstall();}catch(x){}});
 window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{renderInstall();}catch(x){}});
+/* ── Botão Voltar (Android): fecha modal / volta pra Início em vez de sair do app ── */
+(function(){
+  function guard(){try{history.pushState({dr:1},'');}catch(_){}}
+  window.addEventListener('load',function(){setTimeout(guard,400);});
+  window.addEventListener('popstate',function(){
+    // 1) algum modal (bottom sheet) aberto? fecha o de cima
+    var mods=document.querySelectorAll('.ov.on');
+    if(mods.length){try{closeMod(mods[mods.length-1].id);}catch(_){}guard();return;}
+    // 2) tela sobreposta (crise, respiração, grounding, cartas, artigos…)? volta pro app
+    var cur=document.querySelector('.V.on');var id=cur&&cur.id;
+    if(id&&id!=='vapp'&&id!=='va'&&id!=='vo'){try{showV('vapp');}catch(_){}guard();return;}
+    // 3) dentro do app, mas fora da Início? volta pra Início
+    var vapp=document.getElementById('vapp'),home=document.getElementById('p-home');
+    if(vapp&&vapp.classList.contains('on')&&home&&getComputedStyle(home).display==='none'){try{goPg('p-home');}catch(_){}guard();return;}
+    // 4) senão, mantém no app (não sai sem querer)
+    guard();
+  });
+})();
 
 /* ══════════ NOTIFICAÇÕES PUSH (Web Push + Supabase) ══════════ */
 /* ── Link do grupo de feedback (beta). Cole aqui o convite do WhatsApp quando criar. ── */
