@@ -207,7 +207,7 @@ a{color:inherit;text-decoration:none}
 
 .emg{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
 .emb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:var(--r);border:1.5px solid var(--cinm);background:var(--cin);cursor:pointer;transition:all .15s}
-.emb.on{border-color:var(--v);background:var(--vf)}
+.emb.on{border-color:var(--v);background:var(--vf);border-width:2px;box-shadow:0 2px 9px rgba(45,162,87,.28);transform:scale(1.04)}
 .eme{font-size:24px;line-height:1}
 .eml{font-size:9px;font-weight:600;color:var(--txs);text-align:center}
 
@@ -819,7 +819,8 @@ a{color:inherit;text-decoration:none}
 
 /* INTENSIDADE */
 .introw{display:flex;gap:5px;margin:11px 0}
-.ib{flex:1;height:36px;border-radius:9px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.ib{flex:1;height:36px;border-radius:9px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;box-shadow:inset 0 0 0 0 rgba(20,30,20,0)}
+.ib.on{box-shadow:inset 0 0 0 3px rgba(20,30,20,.82);transform:scale(1.12);position:relative;z-index:1}
 
 /* RESPIRAÇÃO */
 #vresp{background:var(--dk);z-index:501}
@@ -2254,7 +2255,7 @@ a{color:inherit;text-decoration:none}
   <div class="mh"></div>
   <div class="mt">Resistência ativa 💪</div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Quis usar mas não usou. Isso é um ato de cuidado com você mesmo(a).</p>
-  <div class="fld"><div class="lbl">Substância que veio à mente <span class="ob">*</span></div>
+  <div class="fld"><div class="lbl">Substância que veio à mente <span class="ob">*</span> <span style="font-weight:500;color:var(--txs);font-size:11px">· pode escolher mais de uma</span></div>
     <div class="subgrid" id="fiss-subgrid" data-target="fiss-sub"></div><input type="hidden" id="fiss-sub" value="" onchange="fissSubChg()">
   </div>
   <div id="fiss-outra-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual substância?</div><input class="inp" id="fiss-outra" type="text" placeholder="Escreva…"></div>
@@ -2767,7 +2768,7 @@ const SUBICONS={
 }
 
 const SUBS_REG=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','🍄 Cogumelo','🌀 Ketamina','🔥 Crack','🌸 Opioide','💤 Benzodiaz.','🌿✨ Ayahuasca','☕ Cafeína','➕ Outra'];
-const SUBS_FISS=['🍺 Álcool','🌿 Cannabis','🚬 Tabaco','❄️ Cocaína','💊 MDMA','✨ LSD','➕ Outra'];
+const SUBS_FISS=SUBS_REG;
 function subKey(nome){const m={'Álcool':'alcool','Cannabis':'cannabis','Tabaco':'tabaco','Cocaína':'cocaina','MDMA':'mdma','LSD':'lsd','Cogumelo':'cogumelo','Ketamina':'ketamina','Crack':'crack','Opioide':'opioide','Benzodiaz.':'benzo','Ayahuasca':'ayahuasca','Cafeína':'cafeina','Outra':'outra'};return m[nome]||'';}
 function subIcon(nome){const k=subKey(nome);return k&&SUBICONS[k]?SUBICONS[k]:'';}
 function montarSubGrid(gridId,lista){
@@ -2790,11 +2791,17 @@ function selSub(gridId,target,btn){
     const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display=_regSubs.length>=2?'flex':'none';
     vib(5);regSubChg();return;
   }
+  if(target==='fiss-sub'){
+    // poliuso na resistência: permite mais de uma substância
+    btn.classList.toggle('on');
+    _fissSubs=[...grid.querySelectorAll('.subbtn.on')].map(b=>b.dataset.val);
+    document.getElementById(target).value=_fissSubs[0]||'';
+    vib(5);fissSubChg();return;
+  }
   grid.querySelectorAll('.subbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById(target).value=btn.dataset.val;
   vib(5);
-  if(target==='fiss-sub')fissSubChg();
 }
 
 const PAGES=['p-home','p-jogos','p-agenda','p-prog','p-ref','p-cfg'];
@@ -2859,8 +2866,8 @@ function buildIntRow(elId,varRef){
     const b=document.createElement('button');
     b.className='ib';b.textContent=i;b.style.background=cls[i-1];b.style.color=i>=7?'#fff':'#333';
     b.onclick=function(){
-      this.closest('.introw').querySelectorAll('.ib').forEach(x=>x.style.outline='none');
-      this.style.outline='2px solid var(--dk)';
+      this.closest('.introw').querySelectorAll('.ib').forEach(x=>x.classList.remove('on'));
+      this.classList.add('on');
       if(varRef==='cr')_crI=i;else _fI=i;
     };
     el.appendChild(b);
@@ -3408,7 +3415,7 @@ function selEReg(btn,e,l){document.querySelectorAll('#reg-emg .emb').forEach(b=>
 function togChip(el){el.classList.toggle('on')}
 function regSubChg(){document.getElementById('reg-outra-w').style.display=document.getElementById('reg-sub').value==='outra'?'block':'none';}
 function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(w)w.style.display=document.getElementById('fiss-sub').value==='outra'?'block':'none';}
-let _regSubs=[];
+let _regSubs=[];let _fissSubs=[];
 function regSubsArr(r){return (r&&r.substancias&&r.substancias.length)?r.substancias:(r&&r.substancia?[r.substancia]:[]);}
 function regSubLabel(r){return regSubsArr(r).join(' + ');}
 /* abre a tabela de misturas por cima do registro, pré-preenchida */
@@ -3470,15 +3477,17 @@ function selEFiss(btn,e,l){document.querySelectorAll('#fiss-emg .emb').forEach(b
 function salvFiss(){
   blurAll();
   const sub=document.getElementById('fiss-sub').value;if(!sub){toast('⚠️ Selecione uma substância.');return;}
-  const substancia=sub==='outra'?document.getElementById('fiss-outra').value.trim():sub.replace(/^[^\w]+ /,'');
-  if(sub==='outra'&&!substancia){toast('⚠️ Escreva a substância.');return;}
-  const fiss={id:'fs'+Date.now(),substancia:substancia,intens:_fI||'—',emocao:_eFiss?.emoji||'',fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
+  const selVals=_fissSubs.length?_fissSubs:(sub?[sub]:[]);
+  const outraTxt=document.getElementById('fiss-outra').value.trim();
+  const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
+  if(selVals.includes('outra')&&!outraTxt){toast('⚠️ Escreva a substância.');return;}
+  const fiss={id:'fs'+Date.now(),substancia:subsNomes[0],substancias:subsNomes,intens:_fI||'—',emocao:_eFiss?.emoji||'',fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
   const fs=gFs();fs.push(fiss);sFs(fs);
   document.getElementById('fiss-sub').value='';document.getElementById('fiss-fez').value='';document.getElementById('fiss-dep').value='';
   document.getElementById('fiss-outra').value='';const fow=document.getElementById('fiss-outra-w');if(fow)fow.style.display='none';
-  document.querySelectorAll('#fiss-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#fiss-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_fissSubs=[];
   document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('#fiss-int .ib').forEach(b=>b.style.outline='none');
+  document.querySelectorAll('#fiss-int .ib').forEach(b=>b.classList.remove('on'));
   _eFiss=null;_fI=null;closeMod('mfiss');vib([20,40,20]);confete();try{addXP(15,'resistencia');}catch(e){}toast('🏆 Registrado! Resistir é um ato de cuidado.');renderHome();
 }
 
@@ -3809,7 +3818,7 @@ function renderFiss(){
   const fiss=gFs().slice().reverse();const c=document.getElementById('fiss-l');const n=fiss.length;
   if(!n){c.innerHTML=`<div class="fss-empty">${icon('resistencia')}<div class="fss-empty-t">Toda vez que a vontade vem e você segura, é uma vitória.</div><div class="fss-empty-s">Use o botão roxo na tela inicial pra registrar uma resistência.</div></div>`;return;}
   const hero=`<div class="fss-hero"><div class="fss-hero-ic">${icon('resistencia')}</div><div><div class="fss-hero-n">${n}</div><div class="fss-hero-l">${n===1?'vez que você resistiu à vontade':'vezes que você resistiu à vontade'} 💜</div></div></div>`;
-  c.innerHTML=hero+fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">${icon('resistencia')}</div><div class="fssib"><div class="fssin">${f.substancia} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
+  c.innerHTML=hero+fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">${icon('resistencia')}</div><div class="fssib"><div class="fssin">${esc(regSubLabel(f))} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
 }
 
 function renderRefFeed(){
