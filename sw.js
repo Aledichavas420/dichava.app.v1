@@ -1,5 +1,5 @@
-// dichava.rd — service worker v138
-const CACHE = 'dichavard-v138';
+// dichava.rd — service worker v139
+const CACHE = 'dichavard-v139';
 const ASSETS = ['./', './index.html'];
 
 self.addEventListener('install', e => {
@@ -17,12 +17,18 @@ self.addEventListener('activate', e => {
 // network-first com fallback pro cache (app continua abrindo offline)
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const req = e.request;
+  // Para navegação/HTML, ignoramos o cache HTTP do navegador (cache:'no-store'),
+  // senão o GitHub Pages pode devolver uma versão antiga do index.html mesmo online.
+  const isHTML = req.mode === 'navigate' ||
+    (req.headers.get('accept') || '').includes('text/html');
+  const fetchReq = isHTML ? new Request(req.url, { cache: 'no-store' }) : req;
   e.respondWith(
-    fetch(e.request).then(res => {
+    fetch(fetchReq).then(res => {
       const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy)).catch(()=>{});
+      caches.open(CACHE).then(c => c.put(req, copy)).catch(()=>{});
       return res;
-    }).catch(() => caches.match(e.request).then(r => r || caches.match('./')))
+    }).catch(() => caches.match(req).then(r => r || caches.match('./')))
   );
 });
 
