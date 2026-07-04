@@ -1796,6 +1796,7 @@ a{color:inherit;text-decoration:none}
   <div class="shr"><div class="sht">Grupo de testes</div></div>
   <div class="cfgsec">
     <div class="cfgi" onclick="abrirFeedback()"><div class="cfgic" data-icon="duvidas"></div><div class="cfgb"><div class="cfgn">Enviar feedback</div><div class="cfgd">Relate bugs e ideias no grupo do WhatsApp 💚</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="atualizarApp()"><div class="cfgic">🔄</div><div class="cfgb"><div class="cfgn">Forçar atualização</div><div class="cfgd">Buscar a versão mais nova do app agora</div></div><div class="cfgar">›</div></div>
   </div>
   <!-- ÁREA EXCLUSIVA PROFISSIONAL -->
   <div id="pro-area" style="display:none">
@@ -5494,6 +5495,21 @@ if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
       document.addEventListener('visibilitychange',function(){if(!document.hidden){try{reg.update();}catch(_){}}});
     }).catch(function(){});
   });
+}
+// força atualização: apaga caches, atualiza/reinstala o SW e recarrega do servidor
+async function atualizarApp(){
+  try{toast('🔄 Buscando a versão mais nova…');}catch(_){}
+  try{
+    if('caches' in window){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}
+    if('serviceWorker' in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r=>r.update().catch(()=>r.unregister())));
+    }
+  }catch(_){}
+  setTimeout(function(){
+    try{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u.toString());}
+    catch(_){location.reload(true);}
+  },600);
 }
 // captura o prompt de instalação (Android/Chrome)
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._deferredPrompt=e;try{renderInstall();}catch(x){}});
