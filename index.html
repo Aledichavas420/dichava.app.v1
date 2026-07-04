@@ -2356,7 +2356,7 @@ a{color:inherit;text-decoration:none}
   </div>
   <div class="fld"><div class="lbl">Gasto de referência por semana <span style="font-weight:500;color:var(--txs);font-size:11px">· opcional</span></div>
     <div style="display:flex;gap:8px"><input class="inp" id="mfin-base" type="text" inputmode="decimal" placeholder="ex: R$ 200,00" style="flex:1"><button class="btn bv bsm" onclick="salvarBase()">Salvar</button></div>
-    <div style="font-size:11px;color:var(--txs);margin-top:6px">Tudo que você gastar abaixo dessa referência conta como economia.</div>
+    <div style="font-size:11px;color:var(--txs);margin-top:6px">Tudo que você gastar abaixo dessa referência conta como economia.<span id="mfin-base-mes"></span></div>
   </div>
   <div class="lbl" style="margin-top:6px">Histórico de compras</div>
   <div id="mfin-hist" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
@@ -2508,6 +2508,7 @@ const PASSOS=[
   {tp:'choice',key:'tentativas',multi:false,ti:'Já tentou mudar antes?',su:'Toda tentativa conta como aprendizado.',opts:[['✨','É a primeira vez'],['🔁','1 a 3 vezes'],['💪','Várias vezes']]},
   {tp:'choice',key:'desafio',multi:true,ti:'O que costuma ser mais difícil?',su:'Isso me ajuda a te apoiar melhor.',opts:[['🌊','Fissura forte'],['😤','Estresse'],['😔','Ansiedade ou tristeza'],['🎉','Situações sociais'],['↩️','Recair'],['🎯','Perder o foco'],['🌙','Sono'],['🥱','Tédio']]},
   {tp:'meta',ti:'Que metas fazem sentido agora?',su:'Marque as que te animam — ou nenhuma, sem problema.'},
+  {tp:'fin',ti:'Quer cuidar também do bolso?',su:'Posso acompanhar seus gastos e economias — e te avisar quando passar da sua média. Dá pra mudar depois em Finanças.'},
   {tp:'conta',ti:'Pra guardar seu progresso 💚',su:'Crie sua conta — assim seus registros ficam salvos e sincronizados.',btn:'Criar conta e entrar'},
 ];
 const OB_VALID=['Anotado! 📝','Entendi 💚','Boa escolha 👍','Tá no jeito ✨','Show, segue comigo 🌿'];
@@ -2702,7 +2703,7 @@ let U=null,_eReg=null,_eFiss=null,_eCmp=null;
 let _acct='user';
 function setAcct(t){_acct=t;document.getElementById('acct-user')?.classList.toggle('on',t==='user');document.getElementById('acct-pro')?.classList.toggle('on',t==='pro');const pf=document.getElementById('pro-reg-fld');if(pf)pf.style.display=t==='pro'?'block':'none';}
 let _calDt=new Date(),_calSel=null;
-let _obP=0,_obG=null,_obSubs=[],_obPerfil={},_obNome='',_obMetas=[],_obEdit=false,_passos=null;
+let _obP=0,_obG=null,_obSubs=[],_obPerfil={},_obNome='',_obMetas=[],_obEdit=false,_passos=null,_obFin={ativo:false,mensal:'',reduzir:0};
 function passosAtivos(){return _obEdit?PASSOS.filter(p=>!['intro','nome','conta'].includes(p.tp)):PASSOS;}
 const gPerfil=()=>ls('dr_perfil_'+uid())||{};
 const sPerfil=p=>ls('dr_perfil_'+uid(),p);
@@ -3122,6 +3123,7 @@ function startOb(){
   _obEdit=!!(U&&ls('dr_termo_'+U.id));
   _passos=passosAtivos();
   _obP=0;_obG=(gO()?.goal)||null;_obSubs=(gO()?.subs)||[];_obPerfil=gPerfil()||{};_obNome=U?.nome||'';_obMetas=[];
+  {const _f=gFin();_obFin={ativo:!!_f.base,mensal:_f.mensalAtual||'',reduzir:_f.reduzir||0};}
   document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));
   document.getElementById('vo').classList.add('on');
   document.getElementById('bnav').classList.remove('on');
@@ -3199,7 +3201,43 @@ function renderOb(){
       d.innerHTML=`<div class="gi" style="background:var(--vf)">✅</div><div class="gb"><div class="gn">${m}</div></div><div class="gck">✓</div>`;
       d.onclick=()=>d.classList.toggle('on');d._meta=m;body.appendChild(d);
     });
+  } else if(p.tp==='fin'){
+    body.innerHTML=`
+      <div class="gc obfin-op${_obFin.ativo?' on':''}" id="obfin-sim"><div class="gi" style="background:var(--vf)">💰</div><div class="gb"><div class="gn">Sim, quero acompanhar</div><div class="gd">Gastos, economias e avisos</div></div><div class="gr"></div></div>
+      <div class="gc obfin-op${_obFin.ativo?'':' on'}" id="obfin-nao"><div class="gi" style="background:var(--cin)">🙂</div><div class="gb"><div class="gn">Agora não</div><div class="gd">Posso ativar depois em Finanças</div></div><div class="gr"></div></div>
+      <div id="ob-fin-det" style="display:${_obFin.ativo?'block':'none'};margin-top:6px">
+        <div class="fld"><div class="lbl">Quanto costuma gastar por mês?</div><input class="inp" id="ob-fin-mensal" type="text" inputmode="decimal" placeholder="R$ 0,00" value="${esc(_obFin.mensal)}"></div>
+        <div class="lbl">Quer reduzir?</div>
+        <div class="chips" id="ob-fin-red">
+          <span class="chip" data-r="0">Só acompanhar</span>
+          <span class="chip" data-r="10">10%</span>
+          <span class="chip" data-r="25">25%</span>
+          <span class="chip" data-r="50">50%</span>
+        </div>
+        <div id="ob-fin-prev" style="font-size:12.5px;color:var(--ve);font-weight:700;margin-top:11px;line-height:1.5"></div>
+      </div>`;
+    setTimeout(()=>{
+      const sim=document.getElementById('obfin-sim'),nao=document.getElementById('obfin-nao'),det=document.getElementById('ob-fin-det');
+      const setAtivo=v=>{_obFin.ativo=v;sim.classList.toggle('on',v);nao.classList.toggle('on',!v);det.style.display=v?'block':'none';vib(4);};
+      if(sim)sim.onclick=()=>setAtivo(true);
+      if(nao)nao.onclick=()=>setAtivo(false);
+      const mi=document.getElementById('ob-fin-mensal');if(mi)mi.oninput=()=>{_obFin.mensal=mi.value;_obFinPrev();};
+      document.querySelectorAll('#ob-fin-red .chip').forEach(c=>{
+        if(+c.dataset.r===(+_obFin.reduzir||0))c.classList.add('on');
+        c.onclick=()=>{document.querySelectorAll('#ob-fin-red .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');_obFin.reduzir=+c.dataset.r;vib(4);_obFinPrev();};
+      });
+      _obFinPrev();
+    },10);
   }
+}
+function _obFinPrev(){
+  const el=document.getElementById('ob-fin-prev');if(!el)return;
+  const mensal=parseBRL(_obFin.mensal),red=+_obFin.reduzir||0;
+  if(mensal<=0){el.textContent='';return;}
+  const alvo=mensal*(1-red/100);
+  let txt='📩 Vou te avisar se passar de '+brl(alvo)+' por mês.';
+  if(red>0)txt+=' Isso é uma economia de '+brl(mensal-alvo)+'/mês. 🌱';
+  el.textContent=txt;
 }
 async function obNext(){
   blurAll();
@@ -3215,9 +3253,10 @@ async function obNext(){
     // modo edição (usuário já logado): salva e entra direto
     if(_obEdit){salvarOnboard();document.getElementById('vo').classList.remove('on');entrar();return;}
   }
+  if(p.tp==='fin'){const mi=document.getElementById('ob-fin-mensal');if(mi)_obFin.mensal=mi.value;}
   // passo final: criar conta + termos + maioridade
   if(p.tp==='conta'){await finalizarOnboarding();return;}
-  const ehPergunta=['nome','obj','sub','meta','choice'].includes(p.tp);
+  const ehPergunta=['nome','obj','sub','meta','choice','fin'].includes(p.tp);
   _obP++;
   if(ehPergunta){
     // bolha de validação rápida do Broto antes da próxima pergunta
@@ -3239,6 +3278,14 @@ function salvarOnboard(){
   sO({goal:_obG,subs:_obSubs,data:hoje()});
   sM(_obMetas.map((t,i)=>({id:'m'+i+Date.now(),titulo:t,ok:false,criada:hoje()})));
   sPerfil(_obPerfil);
+  // finanças: se a pessoa optou por acompanhar e informou a média mensal,
+  // define a referência (guardada por semana, usada nos avisos e na economia)
+  {const f=gFin();
+   if(_obFin&&_obFin.ativo){
+     const mensal=parseBRL(_obFin.mensal),red=+_obFin.reduzir||0;
+     if(mensal>0){const alvo=mensal*(1-red/100);f.base=(alvo/4.345).toFixed(2);f.baseMensal=alvo.toFixed(2);f.mensalAtual=mensal.toFixed(2);f.reduzir=red;}
+   }
+   sFin(f);}
 }
 async function criarConta(n,e,pw,tipo,reg){
   if(!_SB){const us=ls('dr_users')||[];if(us.find(u=>u.email===e))return{ok:false,err:'E-mail já cadastrado.'};const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw),tipo,reg:tipo==='pro'?reg:null};us.push(nU);ls('dr_users',us);U={id:nU.id,nome:n,email:e,tipo:nU.tipo,reg:nU.reg};ls('dr_session',U);return{ok:true};}
@@ -3372,6 +3419,7 @@ function renderFinModal(){
   document.getElementById('mfin-eco-r').textContent=brl(f.ecoResist);
   document.getElementById('mfin-eco-b').textContent=brl(f.ecoBase);
   const bi=document.getElementById('mfin-base');if(bi&&document.activeElement!==bi)bi.value=gFin().base||'';
+  {const bm=document.getElementById('mfin-base-mes'),bv=parseBRL(gFin().base);if(bm)bm.textContent=bv>0?' Equivale a ~'+brl(bv*4.345)+'/mês.':'';}
   // histórico de compras
   const compras=gCompras().slice().sort((a,b)=>(b.criado||'').localeCompare(a.criado||''));
   const el=document.getElementById('mfin-hist');
