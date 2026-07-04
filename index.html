@@ -2239,8 +2239,9 @@ a{color:inherit;text-decoration:none}
   <button type="button" id="reg-mix-btn" onclick="verMisturaReg()" style="display:none;width:100%;align-items:center;justify-content:center;gap:8px;background:var(--roxof);border:1.5px solid var(--roxo);color:var(--roxo);border-radius:14px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:12px">⚗️ Verificar risco da mistura →</button>
   <div class="fr2" style="margin-bottom:12px">
     <div class="fld" style="margin:0"><div class="lbl">Horário</div><select class="fs" id="reg-hr"><option>Manhã</option><option>Tarde</option><option selected>Noite</option><option>Madrugada</option></select></div>
-    <div class="fld" style="margin:0"><div class="lbl">Contexto</div><select class="fs" id="reg-ctx"><option value="">Onde?</option><option>Em casa, sozinho(a)</option><option>Em casa, com alguém</option><option>Com amigos</option><option>Festa / balada</option><option>Rave / festival</option><option>Trabalho / estudo</option><option>Natureza / cerimônia</option><option>Prefiro não dizer</option></select></div>
+    <div class="fld" style="margin:0"><div class="lbl">Contexto</div><select class="fs" id="reg-ctx" onchange="ctxChg()"><option value="">Onde?</option><option>Em casa, sozinho(a)</option><option>Em casa, com alguém</option><option>Com amigos</option><option>Festa / balada</option><option>Rave / festival</option><option>Trabalho / estudo</option><option>Natureza / cerimônia</option><option>Outro</option><option>Prefiro não dizer</option></select></div>
   </div>
+  <div id="reg-ctx-outro-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual foi o contexto?</div><input class="inp" id="reg-ctx-outro" type="text" placeholder="Descreva a situação…" maxlength="60"></div>
   <div class="fld"><div class="lbl">Valor gasto (opcional)</div><input class="inp" id="reg-custo" type="text" inputmode="decimal" placeholder="R$ 0,00"></div>
   <div class="fld"><div class="lbl">Estado emocional <span class="ob">*</span></div>
     <div class="emg" id="reg-emg"><button class="emb" onclick="selEReg(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEReg(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEReg(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEReg(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEReg(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
@@ -3349,7 +3350,9 @@ const HABS=[
   {id:'sons',ic:'son-floresta',nome:'Sons da natureza',desc:'Paisagens sonoras em loop',need:'3 dias seguidos',prog:()=>[streak(gR()),3],go:()=>{const s=document.getElementById('zen-sons');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
   {id:'freq',ic:'tool-slider',nome:'Ruído & frequências',desc:'Ruído branco, 432Hz, binaural',need:'7 dias seguidos',prog:()=>[streak(gR()),7],go:()=>{const s=document.getElementById('zen-freq');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
 ];
-function habUnlocked(s){return s.cond?s.cond():s.prog()[0]>=s.prog()[1];}
+/* versão de testes: trilha liberada (troque para false pra reativar o bloqueio por streak) */
+const TRILHA_LIVRE=true;
+function habUnlocked(s){return TRILHA_LIVRE||(s.cond?s.cond():s.prog()[0]>=s.prog()[1]);}
 function renderHabilidades(){
   const c=document.getElementById('zen-skills');if(!c)return;
   c.innerHTML='<div class="sktree">'+HABS.map(s=>{
@@ -3413,8 +3416,9 @@ function renderHistMini(regs){
 /* ══ REGISTRO ══ */
 function selEReg(btn,e,l){document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_eReg={emoji:e,label:l};}
 function togChip(el){el.classList.toggle('on')}
-function regSubChg(){document.getElementById('reg-outra-w').style.display=document.getElementById('reg-sub').value==='outra'?'block':'none';}
-function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(w)w.style.display=document.getElementById('fiss-sub').value==='outra'?'block':'none';}
+function regSubChg(){const mostra=(_regSubs&&_regSubs.includes('outra'))||document.getElementById('reg-sub').value==='outra';document.getElementById('reg-outra-w').style.display=mostra?'block':'none';}
+function ctxChg(){const w=document.getElementById('reg-ctx-outro-w');if(w)w.style.display=document.getElementById('reg-ctx').value==='Outro'?'block':'none';}
+function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(!w)return;const mostra=(_fissSubs&&_fissSubs.includes('outra'))||document.getElementById('fiss-sub').value==='outra';w.style.display=mostra?'block':'none';}
 let _regSubs=[];let _fissSubs=[];
 function regSubsArr(r){return (r&&r.substancias&&r.substancias.length)?r.substancias:(r&&r.substancia?[r.substancia]:[]);}
 function regSubLabel(r){return regSubsArr(r).join(' + ');}
@@ -3443,14 +3447,14 @@ function salvReg(){
   const selVals=_regSubs.length?_regSubs:(sub?[sub]:[]);
   const outraTxt=document.getElementById('reg-outra').value.trim();
   const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
-  const dados={substancia:subsNomes[0],substancias:subsNomes,qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:document.getElementById('reg-ctx').value,emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim()};
+  const dados={substancia:subsNomes[0],substancias:subsNomes,qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:(document.getElementById('reg-ctx').value==='Outro'?(document.getElementById('reg-ctx-outro').value.trim()||'Outro'):document.getElementById('reg-ctx').value),emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim()};
   const regs=gR();
   const editando=_editRegId;
   if(editando){const i=regs.findIndex(r=>r.id===editando);if(i>=0)regs[i]={...regs[i],...dados};}
   else{regs.push({id:'r'+Date.now(),...dados,data:hoje(),criado:new Date().toISOString()});}
   sR(regs);
   // reset
-  document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-custo').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-outra-w').style.display='none';
+  document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-custo').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-outra-w').style.display='none';{const co=document.getElementById('reg-ctx-outro');if(co)co.value='';const cow=document.getElementById('reg-ctx-outro-w');if(cow)cow.style.display='none';}
   document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.remove('on'));
   document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_regSubs=[];{const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display='none';}
@@ -3657,7 +3661,7 @@ function editReg(id){
   {const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display=_regSubs.length>=2?'flex':'none';}
   document.getElementById('reg-qtd').value=r.qtd||'';
   document.getElementById('reg-hr').value=r.hr||'';
-  document.getElementById('reg-ctx').value=r.ctx||'';
+  {const sel=document.getElementById('reg-ctx'),ctxv=r.ctx||'';const opts=[...sel.options].map(o=>o.value||o.textContent);if(ctxv&&opts.indexOf(ctxv)<0){sel.value='Outro';document.getElementById('reg-ctx-outro').value=ctxv;}else{sel.value=ctxv;}ctxChg();}
   document.getElementById('reg-obs').value=r.obs||'';
   document.getElementById('reg-custo').value=r.custo||'';
   // emoção
