@@ -2264,6 +2264,8 @@ a{color:inherit;text-decoration:none}
   <div class="fld"><div class="lbl">O que estava sentindo</div>
     <div class="emg" id="fiss-emg"><button class="emb" onclick="selEFiss(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEFiss(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEFiss(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEFiss(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEFiss(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
   </div>
+  <div class="fld"><div class="lbl">Contexto (onde/situação)</div><select class="fs" id="fiss-ctx" onchange="fissCtxChg()"><option value="">Onde?</option><option>Em casa, sozinho(a)</option><option>Em casa, com alguém</option><option>Com amigos</option><option>Festa / balada</option><option>Rave / festival</option><option>Trabalho / estudo</option><option>Natureza / cerimônia</option><option>Outro</option><option>Prefiro não dizer</option></select></div>
+  <div id="fiss-ctx-outro-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual foi o contexto?</div><input class="inp" id="fiss-ctx-outro" type="text" placeholder="Descreva a situação…" maxlength="60"></div>
   <div class="fld"><div class="lbl">O que fiz no lugar</div><input class="inp" id="fiss-fez" type="text" placeholder="ex: fui caminhar, liguei para alguém…"></div>
   <div class="fld"><div class="lbl">Como me senti depois</div><textarea class="ft" id="fiss-dep" rows="2" placeholder="Como foi atravessar essa vontade?"></textarea></div>
   <button class="btn bv bfull" onclick="salvFiss()">Registrar conquista 🏆</button>
@@ -3418,6 +3420,7 @@ function selEReg(btn,e,l){document.querySelectorAll('#reg-emg .emb').forEach(b=>
 function togChip(el){el.classList.toggle('on')}
 function regSubChg(){const mostra=(_regSubs&&_regSubs.includes('outra'))||document.getElementById('reg-sub').value==='outra';document.getElementById('reg-outra-w').style.display=mostra?'block':'none';}
 function ctxChg(){const w=document.getElementById('reg-ctx-outro-w');if(w)w.style.display=document.getElementById('reg-ctx').value==='Outro'?'block':'none';}
+function fissCtxChg(){const w=document.getElementById('fiss-ctx-outro-w');if(w)w.style.display=document.getElementById('fiss-ctx').value==='Outro'?'block':'none';}
 function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(!w)return;const mostra=(_fissSubs&&_fissSubs.includes('outra'))||document.getElementById('fiss-sub').value==='outra';w.style.display=mostra?'block':'none';}
 let _regSubs=[];let _fissSubs=[];
 function regSubsArr(r){return (r&&r.substancias&&r.substancias.length)?r.substancias:(r&&r.substancia?[r.substancia]:[]);}
@@ -3485,9 +3488,10 @@ function salvFiss(){
   const outraTxt=document.getElementById('fiss-outra').value.trim();
   const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
   if(selVals.includes('outra')&&!outraTxt){toast('⚠️ Escreva a substância.');return;}
-  const fiss={id:'fs'+Date.now(),substancia:subsNomes[0],substancias:subsNomes,intens:_fI||'—',emocao:_eFiss?.emoji||'',fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
+  const cs=document.getElementById('fiss-ctx');const ctxVal=cs?(cs.value==='Outro'?(document.getElementById('fiss-ctx-outro').value.trim()||'Outro'):cs.value):'';
+  const fiss={id:'fs'+Date.now(),substancia:subsNomes[0],substancias:subsNomes,intens:_fI||'—',emocao:_eFiss?.emoji||'',ctx:ctxVal,fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
   const fs=gFs();fs.push(fiss);sFs(fs);
-  document.getElementById('fiss-sub').value='';document.getElementById('fiss-fez').value='';document.getElementById('fiss-dep').value='';
+  document.getElementById('fiss-sub').value='';document.getElementById('fiss-fez').value='';document.getElementById('fiss-dep').value='';{const fc=document.getElementById('fiss-ctx');if(fc)fc.value='';const fco=document.getElementById('fiss-ctx-outro');if(fco)fco.value='';const fcw=document.getElementById('fiss-ctx-outro-w');if(fcw)fcw.style.display='none';}
   document.getElementById('fiss-outra').value='';const fow=document.getElementById('fiss-outra-w');if(fow)fow.style.display='none';
   document.querySelectorAll('#fiss-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_fissSubs=[];
   document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));
@@ -3822,7 +3826,7 @@ function renderFiss(){
   const fiss=gFs().slice().reverse();const c=document.getElementById('fiss-l');const n=fiss.length;
   if(!n){c.innerHTML=`<div class="fss-empty">${icon('resistencia')}<div class="fss-empty-t">Toda vez que a vontade vem e você segura, é uma vitória.</div><div class="fss-empty-s">Use o botão roxo na tela inicial pra registrar uma resistência.</div></div>`;return;}
   const hero=`<div class="fss-hero"><div class="fss-hero-ic">${icon('resistencia')}</div><div><div class="fss-hero-n">${n}</div><div class="fss-hero-l">${n===1?'vez que você resistiu à vontade':'vezes que você resistiu à vontade'} 💜</div></div></div>`;
-  c.innerHTML=hero+fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">${icon('resistencia')}</div><div class="fssib"><div class="fssin">${esc(regSubLabel(f))} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
+  c.innerHTML=hero+fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">${icon('resistencia')}</div><div class="fssib"><div class="fssin">${esc(regSubLabel(f))} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}${f.ctx?' · '+esc(f.ctx):''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
 }
 
 function renderRefFeed(){
