@@ -13,9 +13,12 @@
   function setH(){
     var vv=window.visualViewport;
     var h=(vv&&vv.height)||window.innerHeight;
-    // Se o teclado estiver aberto (a viewport encolheu bastante), NÃO encolhe a tela.
-    // Assim o layout não colapsa e o iOS rola o campo focado pra cima do teclado.
-    if(vv && h < window.innerHeight-120){ return; }
+    // Só ignoramos o encolhimento quando é o TECLADO (há um campo focado).
+    // Para outros casos (ex: barra do Safari reaparecendo ao tocar áudio),
+    // atualizamos a altura real para a navegação não sobrar e criar faixa branca.
+    var ae=document.activeElement;
+    var kbd=ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA');
+    if(kbd&&vv&&h<window.innerHeight-120){ return; }
     document.documentElement.style.setProperty('--app-h',h+'px');
   }
   window.__setH=setH;
