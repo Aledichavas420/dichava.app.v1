@@ -362,6 +362,43 @@ a{color:inherit;text-decoration:none}
 .hn span{color:var(--v)}
 .hpill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border-radius:20px;padding:5px 13px;margin-top:9px;font-size:12px;color:rgba(255,255,255,.7);position:relative;z-index:1}
 .hpill strong{color:#fff}
+.finbox{position:relative;z-index:1;margin-top:11px;background:linear-gradient(135deg,rgba(92,227,207,.16),rgba(156,240,107,.12));border:1px solid rgba(124,217,138,.28);border-radius:16px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;max-width:270px}
+.fincol{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+.finrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.finlb{font-size:11.5px;color:rgba(255,255,255,.6);white-space:nowrap}
+.finv{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:#fff;letter-spacing:.3px;white-space:nowrap}
+.finv.fineco{color:#9CF06B}
+.fineye{flex:0 0 auto;background:rgba(255,255,255,.12);border:none;border-radius:9px;width:30px;height:30px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
+.novoc{position:relative;display:flex;align-items:center;gap:14px;background:var(--card,#fff);border:1.5px solid var(--bd,#e6e6e6);border-radius:18px;padding:15px 16px;cursor:pointer;text-align:left;width:100%;overflow:hidden;transition:transform .12s,border-color .12s,box-shadow .12s}
+.novoc:active{transform:scale(.97)}
+.novoc.nc-uso{border-color:rgba(45,162,87,.35);box-shadow:0 4px 16px rgba(45,162,87,.1)}
+.novoc.nc-compra{border-color:rgba(12,156,140,.35);box-shadow:0 4px 16px rgba(12,156,140,.1)}
+.novoc.nc-uso::before,.novoc.nc-compra::before{content:'';position:absolute;top:0;right:0;width:120px;height:120px;border-radius:50%;transform:translate(38%,-38%);opacity:.1}
+.novoc.nc-uso::before{background:radial-gradient(circle,#2DA257,transparent 70%)}
+.novoc.nc-compra::before{background:radial-gradient(circle,#0C9C8C,transparent 70%)}
+.novoc-ic{flex:0 0 auto;width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.novoc.nc-uso .novoc-ic{background:linear-gradient(145deg,rgba(143,224,107,.22),rgba(45,162,87,.16))}
+.novoc.nc-compra .novoc-ic{background:linear-gradient(145deg,rgba(92,227,207,.22),rgba(12,156,140,.16))}
+.novoc-ic .appicon{width:32px!important;height:32px!important}
+.novoc-tx{flex:1;position:relative;z-index:1}
+.novoc b{display:block;font-size:15.5px;font-weight:800;color:var(--tx,#222);margin-bottom:2px;font-family:'DM Sans',sans-serif}
+.novoc small{display:block;font-size:12px;color:var(--txs);line-height:1.3}
+.novoc-arw{flex:0 0 auto;font-size:24px;color:var(--txs);opacity:.45;font-weight:700;position:relative;z-index:1}
+.finstat{flex:1;background:var(--card,#fff);border:1.5px solid var(--bd,#eee);border-radius:16px;padding:14px 12px;text-align:center;border-top:3px solid var(--fc)}
+.finstat-v{font-family:'DM Sans',sans-serif;font-size:19px;font-weight:800;color:var(--fc)}
+.finstat-l{font-size:11.5px;color:var(--txs);margin-top:3px}
+.finstat-ic{display:block;width:26px;height:26px;margin:0 auto 6px}.finstat-ic .appicon{width:100%;height:100%;display:block}
+.tic-lg{width:1.3em;height:1.3em;vertical-align:-.24em}
+.finlb .tic{width:14px;height:14px;vertical-align:-2px;margin-right:1px}
+.cpitem{display:flex;align-items:center;gap:11px;background:var(--card,#fff);border:1px solid var(--bd,#eee);border-radius:13px;padding:10px 12px}
+.cpdel{flex:0 0 auto;background:none;border:none;color:var(--txs);font-size:15px;cursor:pointer;padding:2px 4px;opacity:.6}
+.cpdel:active{opacity:1}
+.aviso-ic{width:60px;height:60px;margin:2px auto 6px;border-radius:50%;background:linear-gradient(145deg,#FFE0B2,#FFCCBC);display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 6px 18px rgba(224,85,85,.22)}
+.aviso-box{background:var(--cardm,rgba(224,85,85,.06));border:1px solid rgba(224,85,85,.2);border-radius:14px;padding:12px 15px;margin-top:12px;display:flex;flex-direction:column;gap:7px}
+.aviso-row{display:flex;justify-content:space-between;font-size:13px;color:var(--txs)}
+.aviso-row b{color:var(--tx,#222);font-weight:700}
+.aviso-row.aviso-over b{color:#E05555}
+.aviso-row.aviso-over{border-top:1px solid rgba(224,85,85,.18);padding-top:7px}
 
 /* STATS */
 .srow{display:flex;gap:9px;padding:14px 18px}
@@ -1444,7 +1481,15 @@ a{color:inherit;text-decoration:none}
 <!-- HOME -->
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
 <div class="sc scpad">
-  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
+  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div>
+    <div class="finbox" id="finbox" onclick="abrirFin(event)">
+      <div class="fincol">
+        <div class="finrow"><span class="finlb"><span class="tic" data-icon="fin-gasto"></span> Gastou</span><b class="finv" id="fin-gasto">R$ ••••</b></div>
+        <div class="finrow"><span class="finlb"><span class="tic" data-icon="fin-eco"></span> Economizou</span><b class="finv fineco" id="fin-eco">R$ ••••</b></div>
+      </div>
+      <button class="fineye" id="fin-eye" onclick="togFin(event)" aria-label="Mostrar/ocultar">👁️</button>
+    </div>
+  </div>
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
     <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
@@ -1619,7 +1664,7 @@ a{color:inherit;text-decoration:none}
 </div>
 <!-- AGENDA -->
 <div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-agenda">
-<div class="topbar"><div class="tlogo">dichava<em>.</em>rd</div><div style="display:flex;align-items:center;gap:9px"><div style="cursor:pointer;font-size:21px" onclick="openMod('mreg')">➕</div><div class="tav" id="tav" onclick="goPg('p-cfg')">?</div></div></div>
+<div class="topbar"><div class="tlogo">dichava<em>.</em>rd</div><div style="display:flex;align-items:center;gap:9px"><div style="cursor:pointer;font-size:21px" onclick="abrirNovo()">➕</div><div class="tav" id="tav" onclick="goPg('p-cfg')">?</div></div></div>
 <div class="sc scpad">
   <div class="calb">
     <div class="calnr"><button class="calnb" onclick="calNav(-1)">‹</button><div class="calm" id="cal-mes">—</div><button class="calnb" onclick="calNav(1)">›</button></div>
@@ -1805,7 +1850,7 @@ a{color:inherit;text-decoration:none}
   <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic" data-icon="inicio"></div><span>Início</span></button>
   <button class="ni" data-p="p-jogos" onclick="goPg('p-jogos',this)"><div class="ni-ic" data-icon="jogos"></div><span>Jogos</span></button>
   <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic" data-icon="agenda"></div><span>Agenda</span></button>
-  <div class="fabw"><div class="fab" onclick="openMod('mreg')" data-icon="registrar">+</div></div>
+  <div class="fabw"><div class="fab" onclick="abrirNovo()" data-icon="registrar">+</div></div>
   <button class="ni" data-p="p-prog" onclick="goPg('p-prog',this)"><div class="ni-ic" data-icon="progresso"></div><span>Progresso</span></button>
   <button class="ni" data-p="p-ref" onclick="goPg('p-ref',this)"><div class="ni-ic" data-icon="reflexoes"></div><span>Reflexões</span></button>
   <button class="ni" data-p="p-cfg" onclick="goPg('p-cfg',this)"><div class="ni-ic">⚙️</div><span>Config.</span></button>
@@ -2230,7 +2275,7 @@ a{color:inherit;text-decoration:none}
   <div class="mt">Novo registro 📓</div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Sem julgamento — só registre como foi.</p>
   <div class="fr2" style="margin-bottom:12px">
-    <div class="fld" style="margin:0"><div class="lbl">Substância <span class="ob">*</span> <span style="font-weight:500;color:var(--txs);font-size:11px">· pode escolher mais de uma (uso combinado)</span></div>
+    <div class="fld" style="margin:0"><div class="lbl">Substância <span style="font-weight:500;color:var(--txs);font-size:11px">· opcional · pode escolher mais de uma</span></div>
       <div class="subgrid" id="reg-subgrid" data-target="reg-sub"></div><input type="hidden" id="reg-sub" value="" onchange="regSubChg()">
     </div>
     <div class="fld" style="margin:0"><div class="lbl">Quantidade</div><input class="inp" id="reg-qtd" type="text" placeholder="ex: 2 doses"></div>
@@ -2251,6 +2296,74 @@ a{color:inherit;text-decoration:none}
   <div style="display:flex;gap:9px"><button class="btn bout" style="flex:0 0 38%" onclick="fecharReg()">Cancelar</button><button class="btn bv" style="flex:1" onclick="salvReg()">Salvar registro</button></div>
 </div></div></div>
 
+<!-- ESCOLHA: USO ou COMPRA -->
+<div class="ov" id="mnovo" onclick="if(event.target===this)closeMod('mnovo')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mnovo')" aria-label="Fechar">✕</button>
+  <div class="mt">O que quer registrar?</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:16px">Escolha o tipo de registro.</p>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <button class="novoc nc-uso" onclick="closeMod('mnovo');openMod('mreg')"><span class="novoc-ic" data-icon="reguso"></span><span class="novoc-tx"><b>Registro de uso</b><small>Como foi o uso — substância, contexto, gasto</small></span><span class="novoc-arw">›</span></button>
+    <button class="novoc nc-compra" onclick="closeMod('mnovo');openMod('mcompra')"><span class="novoc-ic" data-icon="regcompra"></span><span class="novoc-tx"><b>Registro de compra</b><small>Uma compra que você fez — com histórico próprio</small></span><span class="novoc-arw">›</span></button>
+  </div>
+</div></div></div>
+
+<!-- NOVA COMPRA -->
+<div class="ov" id="mcompra" onclick="if(event.target===this)closeMod('mcompra')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mcompra')" aria-label="Fechar">✕</button>
+  <div class="mt">Nova compra 🛒</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Registre quanto gastou. Entra no seu contador de finanças.</p>
+  <div class="fr2" style="margin-bottom:12px">
+    <div class="fld" style="margin:0"><div class="lbl">O que comprou</div><input class="inp" id="cp-item" type="text" placeholder="ex: cerveja, cigarro…"></div>
+    <div class="fld" style="margin:0"><div class="lbl">Valor <span class="ob">*</span></div><input class="inp" id="cp-valor" type="text" inputmode="decimal" placeholder="R$ 0,00"></div>
+  </div>
+  <div class="fld"><div class="lbl">Substância <span style="font-weight:500;color:var(--txs);font-size:11px">· opcional</span></div>
+    <div class="subgrid" id="cp-subgrid" data-target="cp-sub"></div><input type="hidden" id="cp-sub" value="">
+  </div>
+  <div class="fr2" style="margin-bottom:12px">
+    <div class="fld" style="margin:0"><div class="lbl">Quantidade</div><input class="inp" id="cp-qtd" type="text" placeholder="ex: 6 latas"></div>
+    <div class="fld" style="margin:0"><div class="lbl">Onde</div><input class="inp" id="cp-local" type="text" placeholder="ex: mercado"></div>
+  </div>
+  <div class="fld"><div class="lbl">Data</div><input class="inp" id="cp-data" type="date"></div>
+  <div class="fld"><div class="lbl">Observação</div><textarea class="ft" id="cp-obs" rows="2" placeholder="Algo a lembrar?"></textarea></div>
+  <div style="display:flex;gap:9px"><button class="btn bout" style="flex:0 0 38%" onclick="closeMod('mcompra')">Cancelar</button><button class="btn bv" style="flex:1" onclick="salvCompra()">Salvar compra</button></div>
+</div></div></div>
+
+<!-- FINANÇAS -->
+<div class="ov" id="mfin" onclick="if(event.target===this)closeMod('mfin')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mfin')" aria-label="Fechar">✕</button>
+  <div class="mt"><span class="tic tic-lg" data-icon="financas"></span> Minhas finanças</div>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:15px">Quanto gastou e quanto conseguiu economizar.</p>
+  <div style="display:flex;gap:10px;margin-bottom:14px">
+    <div class="finstat" style="--fc:#E05555"><span class="finstat-ic" data-icon="fin-gasto"></span><div class="finstat-v" id="mfin-gasto">R$ 0,00</div><div class="finstat-l">Gastou</div></div>
+    <div class="finstat" style="--fc:var(--dk)"><span class="finstat-ic" data-icon="fin-eco"></span><div class="finstat-v" id="mfin-eco">R$ 0,00</div><div class="finstat-l">Economizou</div></div>
+  </div>
+  <div style="background:var(--cardm,rgba(0,0,0,.03));border-radius:14px;padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:var(--txs)">
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span>🏆 Nas resistências</span><b id="mfin-eco-r" style="color:var(--dk)">R$ 0,00</b></div>
+    <div style="display:flex;justify-content:space-between"><span>📉 Abaixo da sua referência</span><b id="mfin-eco-b" style="color:var(--dk)">R$ 0,00</b></div>
+  </div>
+  <div class="fld"><div class="lbl">Gasto de referência por semana <span style="font-weight:500;color:var(--txs);font-size:11px">· opcional</span></div>
+    <div style="display:flex;gap:8px"><input class="inp" id="mfin-base" type="text" inputmode="decimal" placeholder="ex: R$ 200,00" style="flex:1"><button class="btn bv bsm" onclick="salvarBase()">Salvar</button></div>
+    <div style="font-size:11px;color:var(--txs);margin-top:6px">Tudo que você gastar abaixo dessa referência conta como economia.</div>
+  </div>
+  <div class="lbl" style="margin-top:6px">Histórico de compras</div>
+  <div id="mfin-hist" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
+  <button class="btn bout bfull" onclick="closeMod('mfin');openMod('mcompra')">+ Registrar compra</button>
+</div></div></div>
+
+<!-- AVISO DE GASTO -->
+<div class="ov" id="maviso" onclick="if(event.target===this)closeMod('maviso')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="aviso-ic">⚠️</div>
+  <div class="mt" style="text-align:center;color:#E05555">Passou do seu gasto médio</div>
+  <p id="aviso-txt" style="font-size:13.5px;color:var(--txs);text-align:center;margin:8px 0 4px;line-height:1.5"></p>
+  <div class="aviso-box"><div class="aviso-row"><span>Gasto na semana</span><b id="aviso-sem">R$ 0,00</b></div><div class="aviso-row"><span>Sua referência</span><b id="aviso-base">R$ 0,00</b></div><div class="aviso-row aviso-over"><span>Acima em</span><b id="aviso-over">R$ 0,00</b></div></div>
+  <p style="font-size:12.5px;color:var(--txs);text-align:center;margin:14px 0 4px">Sem julgamento — é só um lembrete pra você acompanhar. 💚</p>
+  <div style="display:flex;gap:9px;margin-top:12px"><button class="btn bout" style="flex:1" onclick="closeMod('maviso')">Entendi</button><button class="btn bv" style="flex:1" onclick="closeMod('maviso');openMod('mfin')">Ver finanças</button></div>
+</div></div></div>
+
 <!-- FISSURA -->
 <div class="ov" id="mfiss" onclick="if(event.target===this)closeMod('mfiss')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
@@ -2267,6 +2380,7 @@ a{color:inherit;text-decoration:none}
   <div class="fld"><div class="lbl">Contexto (onde/situação)</div><select class="fs" id="fiss-ctx" onchange="fissCtxChg()"><option value="">Onde?</option><option>Em casa, sozinho(a)</option><option>Em casa, com alguém</option><option>Com amigos</option><option>Festa / balada</option><option>Rave / festival</option><option>Trabalho / estudo</option><option>Natureza / cerimônia</option><option>Outro</option><option>Prefiro não dizer</option></select></div>
   <div id="fiss-ctx-outro-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual foi o contexto?</div><input class="inp" id="fiss-ctx-outro" type="text" placeholder="Descreva a situação…" maxlength="60"></div>
   <div class="fld"><div class="lbl">O que fiz no lugar</div><input class="inp" id="fiss-fez" type="text" placeholder="ex: fui caminhar, liguei para alguém…"></div>
+  <div class="fld"><div class="lbl">Quanto deixaria de gastar? <span style="font-weight:500;color:var(--txs);font-size:11px">· opcional, entra na economia</span></div><input class="inp" id="fiss-eco" type="text" inputmode="decimal" placeholder="R$ 0,00"></div>
   <div class="fld"><div class="lbl">Como me senti depois</div><textarea class="ft" id="fiss-dep" rows="2" placeholder="Como foi atravessar essa vontade?"></textarea></div>
   <button class="btn bv bfull" onclick="salvFiss()">Registrar conquista 🏆</button>
 </div></div></div>
@@ -2610,6 +2724,14 @@ const gP=()=>ls('dr_p_'+uid())||{};
 const sP=p=>ls('dr_p_'+uid(),p);
 const gCK=()=>ls('dr_ck_'+uid())||{};
 const sCK=c=>ls('dr_ck_'+uid(),c);
+// compras + finanças — LOCAL apenas (prefixo fora do syncToCloud, ainda em testes)
+const gCompras=()=>ls('dr_cp_'+uid())||[];
+const sCompras=c=>ls('dr_cp_'+uid(),c);
+const gFin=()=>ls('dr_fin_'+uid())||{base:'',oculto:false};
+const sFin=f=>ls('dr_fin_'+uid(),f);
+// dinheiro
+const parseBRL=s=>{if(typeof s==='number')return s;if(!s)return 0;let t=String(s).replace(/[^\d,.-]/g,'').trim();if(!t)return 0;if(t.indexOf(',')>-1){t=t.replace(/\./g,'').replace(',','.');}const n=parseFloat(t);return isNaN(n)?0:n;};
+const brl=n=>'R$ '+(Number(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 
 /* ══ UTILS ══ */
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
@@ -2716,6 +2838,11 @@ const ICONS={
   "inicio":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-inicio-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient> <linearGradient id="btn-inicio-gg2" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FCF74"></stop><stop offset="1" stop-color="#1E8F4D"></stop></linearGradient> <linearGradient id="btn-inicio-ggd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#39B566"></stop><stop offset="1" stop-color="#177038"></stop></linearGradient> <linearGradient id="btn-inicio-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient> <linearGradient id="btn-inicio-gbd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#2E92E6"></stop><stop offset="1" stop-color="#1E5AC4"></stop></linearGradient> <linearGradient id="btn-inicio-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient> <linearGradient id="btn-inicio-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient> <linearGradient id="btn-inicio-gpd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#9067ED"></stop><stop offset="1" stop-color="#5326BE"></stop></linearGradient> <linearGradient id="btn-inicio-gc" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFA470"></stop><stop offset="1" stop-color="#F0402A"></stop></linearGradient> <linearGradient id="btn-inicio-ga" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6E"></stop><stop offset="1" stop-color="#FB922E"></stop></linearGradient> <linearGradient id="btn-inicio-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#AEB7C6"></stop><stop offset="1" stop-color="#5E6B80"></stop></linearGradient> </defs> <path d="M12 3.4 3.5 10.9a1.2 1.2 0 0 0-.4.9V19a1.6 1.6 0 0 0 1.6 1.6H19.3A1.6 1.6 0 0 0 20.9 19v-7.2a1.2 1.2 0 0 0-.4-.9L12 3.4Z" fill="url(#btn-inicio-gg)"></path> <path d="M12 3.4 3.5 10.9a1.2 1.2 0 0 0-.4.9v.3l8.9-7.86 8.9 7.86v-.3a1.2 1.2 0 0 0-.4-.9L12 3.4Z" fill="#fff" opacity=".28"></path> <path d="M9.6 20.6v-4.2a2.4 2.4 0 0 1 4.8 0v4.2Z" fill="#fff" opacity=".92"></path> </svg>`,
   "jogos":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-jogos-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient> <linearGradient id="btn-jogos-gg2" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FCF74"></stop><stop offset="1" stop-color="#1E8F4D"></stop></linearGradient> <linearGradient id="btn-jogos-ggd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#39B566"></stop><stop offset="1" stop-color="#177038"></stop></linearGradient> <linearGradient id="btn-jogos-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient> <linearGradient id="btn-jogos-gbd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#2E92E6"></stop><stop offset="1" stop-color="#1E5AC4"></stop></linearGradient> <linearGradient id="btn-jogos-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient> <linearGradient id="btn-jogos-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient> <linearGradient id="btn-jogos-gpd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#9067ED"></stop><stop offset="1" stop-color="#5326BE"></stop></linearGradient> <linearGradient id="btn-jogos-gc" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFA470"></stop><stop offset="1" stop-color="#F0402A"></stop></linearGradient> <linearGradient id="btn-jogos-ga" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6E"></stop><stop offset="1" stop-color="#FB922E"></stop></linearGradient> <linearGradient id="btn-jogos-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#AEB7C6"></stop><stop offset="1" stop-color="#5E6B80"></stop></linearGradient> </defs> <path d="M7.6 7.6h8.8a5 5 0 0 1 4.94 4.25l.55 3.75A2.7 2.7 0 0 1 17 17.2l-1.15-1.6a2 2 0 0 0-1.63-.85H9.78a2 2 0 0 0-1.63.85L7 17.2a2.7 2.7 0 0 1-4.93-1.6l.55-3.75A5 5 0 0 1 7.6 7.6Z" fill="url(#btn-jogos-gp)"></path> <path d="M6.4 11.4v3M4.9 12.9h3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".92"></path> <circle cx="15.7" cy="11.6" r="1.05" fill="#fff" opacity=".92"></circle> <circle cx="17.5" cy="13.3" r="1.05" fill="#fff" opacity=".92"></circle> </svg>`,
   "registrar":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-registrar-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient> <linearGradient id="btn-registrar-gg2" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FCF74"></stop><stop offset="1" stop-color="#1E8F4D"></stop></linearGradient> <linearGradient id="btn-registrar-ggd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#39B566"></stop><stop offset="1" stop-color="#177038"></stop></linearGradient> <linearGradient id="btn-registrar-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient> <linearGradient id="btn-registrar-gbd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#2E92E6"></stop><stop offset="1" stop-color="#1E5AC4"></stop></linearGradient> <linearGradient id="btn-registrar-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient> <linearGradient id="btn-registrar-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient> <linearGradient id="btn-registrar-gpd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#9067ED"></stop><stop offset="1" stop-color="#5326BE"></stop></linearGradient> <linearGradient id="btn-registrar-gc" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFA470"></stop><stop offset="1" stop-color="#F0402A"></stop></linearGradient> <linearGradient id="btn-registrar-ga" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6E"></stop><stop offset="1" stop-color="#FB922E"></stop></linearGradient> <linearGradient id="btn-registrar-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#AEB7C6"></stop><stop offset="1" stop-color="#5E6B80"></stop></linearGradient> </defs> <circle cx="12" cy="12" r="9" fill="url(#btn-registrar-gg)"></circle> <path d="M12 7.4v9.2M7.4 12h9.2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path> </svg>`,
+  "reguso":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-reguso-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient> </defs> <rect x="5.2" y="3.4" width="13.6" height="17.2" rx="2.6" fill="url(#btn-reguso-g)"></rect> <rect x="5.2" y="3.4" width="3.8" height="17.2" rx="1.6" fill="#0f5c2e" opacity=".35"></rect> <path d="M11.4 8.2h4.6M11.4 11.7h4.6M11.4 15.2h3" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"></path> <path d="M6.9 6.6l.9.9 1.6-1.7" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path> </svg>`,
+  "regcompra":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-regcompra-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient> </defs> <path d="M9 7.2V6.6a3 3 0 0 1 6 0v.6" fill="none" stroke="#0C9C8C" stroke-width="1.8" stroke-linecap="round"></path> <path d="M6.3 7.2h11.4a1 1 0 0 1 1 1.08l-.86 10.4A2 2 0 0 1 15.86 20.5H8.14a2 2 0 0 1-1.99-1.82L5.3 8.28A1 1 0 0 1 6.3 7.2Z" fill="url(#btn-regcompra-g)"></path> <path d="M9.4 11.2c0 1.7 1.15 2.9 2.6 2.9s2.6-1.2 2.6-2.9" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"></path> </svg>`,
+  "fin-gasto":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <circle cx="12" cy="12" r="9" fill="#EA5A45"></circle> <circle cx="12" cy="12" r="9" fill="#F0402A" opacity=".28"></circle> <path d="M14.3 9.6c0-1.1-1-1.9-2.3-1.9s-2.3.8-2.3 1.8c0 1.1.9 1.6 2.3 1.9 1.4.3 2.4.8 2.4 2 0 1.1-1 1.9-2.4 1.9s-2.4-.8-2.4-2" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 6.2v11.6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"></path> </svg>`,
+  "fin-eco":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <circle cx="12" cy="13.4" r="7.8" fill="#3BB365"></circle> <circle cx="12" cy="13.4" r="7.8" fill="#177038" opacity=".22"></circle> <path d="M12 14.4c0-2.5 1.1-4.6 3.8-4.9-.2 2.6-1.5 4.4-3.8 4.9Z" fill="#fff" opacity=".95"></path> <path d="M12 14.4c0-1.9-.85-3.5-3-3.8.1 2.1 1 3.5 3 3.8Z" fill="#fff" opacity=".75"></path> <path d="M12 14.2v3.6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"></path> </svg>`,
+  "financas":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <rect x="3.4" y="6.2" width="17.2" height="12.4" rx="2.8" fill="#12B5A3"></rect> <rect x="3.4" y="6.2" width="17.2" height="12.4" rx="2.8" fill="#0C9C8C" opacity=".3"></rect> <path d="M3.6 8.6a2.6 2.6 0 0 1 2.6-2.5h9.4c-.4-1.3-1.8-2-3.1-1.65L5.2 6.25" fill="#0a7d70" opacity=".5"></path> <rect x="13.8" y="10.6" width="6.8" height="4.2" rx="1.3" fill="#0a6b62"></rect> <circle cx="16.6" cy="12.7" r="1.1" fill="#fff"></circle> </svg>`,
   "agenda":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-agenda-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient> <linearGradient id="btn-agenda-gg2" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FCF74"></stop><stop offset="1" stop-color="#1E8F4D"></stop></linearGradient> <linearGradient id="btn-agenda-ggd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#39B566"></stop><stop offset="1" stop-color="#177038"></stop></linearGradient> <linearGradient id="btn-agenda-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient> <linearGradient id="btn-agenda-gbd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#2E92E6"></stop><stop offset="1" stop-color="#1E5AC4"></stop></linearGradient> <linearGradient id="btn-agenda-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient> <linearGradient id="btn-agenda-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient> <linearGradient id="btn-agenda-gpd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#9067ED"></stop><stop offset="1" stop-color="#5326BE"></stop></linearGradient> <linearGradient id="btn-agenda-gc" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFA470"></stop><stop offset="1" stop-color="#F0402A"></stop></linearGradient> <linearGradient id="btn-agenda-ga" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6E"></stop><stop offset="1" stop-color="#FB922E"></stop></linearGradient> <linearGradient id="btn-agenda-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#AEB7C6"></stop><stop offset="1" stop-color="#5E6B80"></stop></linearGradient> </defs> <rect x="3.4" y="5.4" width="17.2" height="15.2" rx="3.4" fill="url(#btn-agenda-gb)"></rect> <path d="M3.4 8.6a3.2 3.2 0 0 1 3.2-3.2h10.8a3.2 3.2 0 0 1 3.2 3.2v.7H3.4Z" fill="url(#btn-agenda-gbd)"></path> <rect x="6.8" y="3" width="2.4" height="4.4" rx="1.2" fill="url(#btn-agenda-gbd)"></rect> <rect x="14.8" y="3" width="2.4" height="4.4" rx="1.2" fill="url(#btn-agenda-gbd)"></rect> <rect x="6.6" y="12" width="3" height="3" rx="1" fill="#fff" opacity=".92"></rect> <rect x="10.5" y="12" width="3" height="3" rx="1" fill="#fff" opacity=".6"></rect> <rect x="14.4" y="12" width="3" height="3" rx="1" fill="#fff" opacity=".6"></rect> <rect x="6.6" y="15.8" width="3" height="3" rx="1" fill="#fff" opacity=".6"></rect> <rect x="10.5" y="15.8" width="3" height="3" rx="1" fill="#fff" opacity=".92"></rect> </svg>`,
   "progresso":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-progresso-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient> <linearGradient id="btn-progresso-gg2" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FCF74"></stop><stop offset="1" stop-color="#1E8F4D"></stop></linearGradient> <linearGradient id="btn-progresso-ggd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#39B566"></stop><stop offset="1" stop-color="#177038"></stop></linearGradient> <linearGradient id="btn-progresso-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient> <linearGradient id="btn-progresso-gbd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#2E92E6"></stop><stop offset="1" stop-color="#1E5AC4"></stop></linearGradient> <linearGradient id="btn-progresso-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient> <linearGradient id="btn-progresso-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient> <linearGradient id="btn-progresso-gpd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#9067ED"></stop><stop offset="1" stop-color="#5326BE"></stop></linearGradient> <linearGradient id="btn-progresso-gc" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFA470"></stop><stop offset="1" stop-color="#F0402A"></stop></linearGradient> <linearGradient id="btn-progresso-ga" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6E"></stop><stop offset="1" stop-color="#FB922E"></stop></linearGradient> <linearGradient id="btn-progresso-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#AEB7C6"></stop><stop offset="1" stop-color="#5E6B80"></stop></linearGradient> </defs> <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="4.6" fill="url(#btn-progresso-gt)"></rect> <rect x="3.4" y="3.4" width="17.2" height="8.6" rx="4.6" fill="#fff" opacity=".14"></rect> <rect x="6.6" y="12.4" width="2.6" height="4.8" rx="1.3" fill="#fff" opacity=".92"></rect> <rect x="10.7" y="9.4" width="2.6" height="7.8" rx="1.3" fill="#fff" opacity=".92"></rect> <rect x="14.8" y="6.8" width="2.6" height="10.4" rx="1.3" fill="#fff" opacity=".92"></rect> </svg>`,
   "reflexoes":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <defs> <linearGradient id="btn-reflexoes-gg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2DA257"></stop></linearGradient> <linearGradient id="btn-reflexoes-gg2" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FCF74"></stop><stop offset="1" stop-color="#1E8F4D"></stop></linearGradient> <linearGradient id="btn-reflexoes-ggd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#39B566"></stop><stop offset="1" stop-color="#177038"></stop></linearGradient> <linearGradient id="btn-reflexoes-gb" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#2A74E8"></stop></linearGradient> <linearGradient id="btn-reflexoes-gbd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#2E92E6"></stop><stop offset="1" stop-color="#1E5AC4"></stop></linearGradient> <linearGradient id="btn-reflexoes-gt" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0C9C8C"></stop></linearGradient> <linearGradient id="btn-reflexoes-gp" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B79AF7"></stop><stop offset="1" stop-color="#6B43D6"></stop></linearGradient> <linearGradient id="btn-reflexoes-gpd" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#9067ED"></stop><stop offset="1" stop-color="#5326BE"></stop></linearGradient> <linearGradient id="btn-reflexoes-gc" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFA470"></stop><stop offset="1" stop-color="#F0402A"></stop></linearGradient> <linearGradient id="btn-reflexoes-ga" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6E"></stop><stop offset="1" stop-color="#FB922E"></stop></linearGradient> <linearGradient id="btn-reflexoes-ggr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#AEB7C6"></stop><stop offset="1" stop-color="#5E6B80"></stop></linearGradient> </defs> <g transform="rotate(45 12 12)"> <rect x="9" y="3.6" width="6" height="11.2" rx="1.2" fill="url(#btn-reflexoes-ga)"></rect> <rect x="9" y="3.6" width="6" height="2.6" rx="1.2" fill="#fff" opacity=".32"></rect> <path d="M9 14.8h6l-3 4.6Z" fill="url(#btn-reflexoes-ga)"></path> <path d="M10.8 17.2h2.4L12 19.4Z" fill="#fff" opacity=".9"></path> </g> </svg>`,
@@ -2825,7 +2952,7 @@ function goPg(id,btn){
 }
 
 /* ══ MODALS ══ */
-function openMod(id){blurAll();document.getElementById(id).classList.add('on');aplicarIcones(document.getElementById(id));if(id==='mreg')montarSubGrid('reg-subgrid',SUBS_REG);if(id==='mfiss')montarSubGrid('fiss-subgrid',SUBS_FISS);}
+function openMod(id){blurAll();document.getElementById(id).classList.add('on');aplicarIcones(document.getElementById(id));if(id==='mreg')montarSubGrid('reg-subgrid',SUBS_REG);if(id==='mfiss')montarSubGrid('fiss-subgrid',SUBS_FISS);if(id==='mcompra'){montarSubGrid('cp-subgrid',SUBS_REG);const d=document.getElementById('cp-data');if(d&&!d.value)d.value=hoje();}}
 function closeMod(id){blurAll();document.getElementById(id).classList.remove('on');try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(_){}}
 // arrastar a folha pra baixo (no topo) fecha o modal
 (function(){
@@ -3176,7 +3303,73 @@ function renderHome(){
   const mes=hoje().slice(0,7);document.getElementById('hs-mes').textContent=regs.filter(r=>r.data.slice(0,7)===mes).length;
   renderHero(st,mp);
   renderTempo();renderDiaHoje();renderQuick();renderInstall();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
+  try{renderFin();}catch(e){}
 }
+/* ══ FINANÇAS ══ */
+function calcFin(){
+  const regs=gR(),compras=gCompras(),fiss=gFs(),fin=gFin();
+  let gasto=0;
+  regs.forEach(r=>{gasto+=parseBRL(r.custo);});
+  compras.forEach(c=>{gasto+=parseBRL(c.valor);});
+  // economia (a) durante resistências, quando a pessoa informa quanto deixaria de gastar
+  let ecoResist=0;fiss.forEach(f=>{ecoResist+=parseBRL(f.economia);});
+  // economia (b) comparação com um gasto de referência semanal definido pela pessoa
+  let ecoBase=0;const base=parseBRL(fin.base);
+  if(base>0){
+    // semanas desde o início do acompanhamento (objetivo, ou registro/compra mais antigo)
+    const datas=[gO()?.data,...regs.map(r=>r.data),...compras.map(c=>c.data)].filter(Boolean).sort();
+    if(datas.length){
+      const ini=new Date(datas[0]+'T00:00:00'),hj=new Date(hoje()+'T00:00:00');
+      const dias=Math.max(1,Math.round((hj-ini)/864e5)+1);const semanas=dias/7;
+      ecoBase=Math.max(0,base*semanas-gasto);
+    }
+  }
+  const eco=ecoResist+ecoBase;
+  return{gasto,eco,ecoResist,ecoBase,base,oculto:!!fin.oculto};
+}
+function renderFin(){
+  const box=document.getElementById('finbox');if(!box)return;
+  if(!box.dataset.ico){try{aplicarIcones(box);box.dataset.ico='1';}catch(e){}}
+  const f=calcFin();
+  const g=document.getElementById('fin-gasto'),e=document.getElementById('fin-eco'),ey=document.getElementById('fin-eye');
+  if(f.oculto){g.textContent='R$ ••••';e.textContent='R$ ••••';if(ey)ey.textContent='🙈';}
+  else{g.textContent=brl(f.gasto);e.textContent=brl(f.eco);if(ey)ey.textContent='👁️';}
+}
+function togFin(ev){if(ev){ev.stopPropagation();}const f=gFin();f.oculto=!f.oculto;sFin(f);renderFin();vib(8);}
+// gasto da semana atual (usos + compras)
+function gastoSemana(){
+  const sem=semISO(hoje());let t=0;
+  gR().forEach(r=>{if(r.data>=sem)t+=parseBRL(r.custo);});
+  gCompras().forEach(c=>{if(c.data>=sem)t+=parseBRL(c.valor);});
+  return t;
+}
+// aviso explícito quando passa do gasto médio (referência semanal)
+function checkGastoAviso(){
+  const base=parseBRL(gFin().base);if(base<=0)return;
+  const sem=gastoSemana();if(sem<=base)return;
+  const over=sem-base;
+  document.getElementById('aviso-txt').textContent='Você já gastou mais do que a sua média semanal definida.';
+  document.getElementById('aviso-sem').textContent=brl(sem);
+  document.getElementById('aviso-base').textContent=brl(base);
+  document.getElementById('aviso-over').textContent=brl(over);
+  openMod('maviso');vib([40,60,40]);
+}
+function abrirFin(ev){if(ev&&ev.target&&ev.target.closest('.fineye'))return;openMod('mfin');renderFinModal();}
+function renderFinModal(){
+  const f=calcFin();
+  document.getElementById('mfin-gasto').textContent=brl(f.gasto);
+  document.getElementById('mfin-eco').textContent=brl(f.eco);
+  document.getElementById('mfin-eco-r').textContent=brl(f.ecoResist);
+  document.getElementById('mfin-eco-b').textContent=brl(f.ecoBase);
+  const bi=document.getElementById('mfin-base');if(bi&&document.activeElement!==bi)bi.value=gFin().base||'';
+  // histórico de compras
+  const compras=gCompras().slice().sort((a,b)=>(b.criado||'').localeCompare(a.criado||''));
+  const el=document.getElementById('mfin-hist');
+  if(!compras.length){el.innerHTML='<div style="text-align:center;color:var(--txs);font-size:13px;padding:14px 0">Nenhuma compra registrada ainda.</div>';}
+  else{el.innerHTML=compras.map(c=>`<div class="cpitem"><div style="flex:1"><div style="font-weight:700;font-size:13.5px">${esc(c.item||c.substancia||'Compra')}</div><div style="font-size:11.5px;color:var(--txs)">${fdt(c.data)}${c.local?' · '+esc(c.local):''}</div></div><div style="font-weight:800;color:var(--dk);white-space:nowrap">${brl(parseBRL(c.valor))}</div><button class="cpdel" onclick="delCompra('${c.id}')" aria-label="Excluir">✕</button></div>`).join('');}
+}
+function salvarBase(){const v=document.getElementById('mfin-base').value.trim();const f=gFin();f.base=v;sFin(f);renderFinModal();renderFin();toast('✓ Referência salva');}
+function delCompra(id){const c=gCompras().filter(x=>x.id!==id);sCompras(c);renderFinModal();renderFin();vib(10);toast('Compra removida');}
 function renderHero(st,mp){
   // mascote
   const mEl=document.getElementById('hero-mascot');
@@ -3424,7 +3617,7 @@ function fissCtxChg(){const w=document.getElementById('fiss-ctx-outro-w');if(w)w
 function fissSubChg(){const w=document.getElementById('fiss-outra-w');if(!w)return;const mostra=(_fissSubs&&_fissSubs.includes('outra'))||document.getElementById('fiss-sub').value==='outra';w.style.display=mostra?'block':'none';}
 let _regSubs=[];let _fissSubs=[];
 function regSubsArr(r){return (r&&r.substancias&&r.substancias.length)?r.substancias:(r&&r.substancia?[r.substancia]:[]);}
-function regSubLabel(r){return regSubsArr(r).join(' + ');}
+function regSubLabel(r){const a=regSubsArr(r);return a.length?a.join(' + '):'Sem substância';}
 /* abre a tabela de misturas por cima do registro, pré-preenchida */
 function verMisturaReg(){
   const nomes=_regSubs.map(v=>v==='outra'?'Outra':v.replace(/^[^\w]+ /,''));
@@ -3444,13 +3637,12 @@ function verMisturaReg(){
 function salvReg(){
   blurAll();
   const sub=document.getElementById('reg-sub').value;
-  if(!sub){toast('⚠️ Selecione uma substância.');shk(document.getElementById('reg-sub'));return;}
   if(!_eReg){toast('⚠️ Selecione um estado emocional.');shk(document.getElementById('reg-emg'));return;}
   const chips=[...document.querySelectorAll('#mreg .chip.on')].map(c=>c.textContent);
   const selVals=_regSubs.length?_regSubs:(sub?[sub]:[]);
   const outraTxt=document.getElementById('reg-outra').value.trim();
   const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
-  const dados={substancia:subsNomes[0],substancias:subsNomes,qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:(document.getElementById('reg-ctx').value==='Outro'?(document.getElementById('reg-ctx-outro').value.trim()||'Outro'):document.getElementById('reg-ctx').value),emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim()};
+  const dados={substancia:subsNomes[0]||'',substancias:subsNomes,qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:(document.getElementById('reg-ctx').value==='Outro'?(document.getElementById('reg-ctx-outro').value.trim()||'Outro'):document.getElementById('reg-ctx').value),emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim(),custo:document.getElementById('reg-custo').value.trim()};
   const regs=gR();
   const editando=_editRegId;
   if(editando){const i=regs.findIndex(r=>r.id===editando);if(i>=0)regs[i]={...regs[i],...dados};}
@@ -3467,12 +3659,31 @@ function salvReg(){
   toast(editando?'✓ Registro atualizado':'✓ Registro guardado 💚');
   try{renderHome();renderHist();renderGraf();renderCqs();}catch(e){}
   try{if(getComputedStyle(document.getElementById('p-agenda')).display!=='none')renderCal();}catch(e){}
+  if(parseBRL(dados.custo)>0){try{checkGastoAviso();}catch(e){}}
   if(editando)return;
   const cfg=gC();const cH=regs.filter(r=>r.data===hoje()).length;const cS=regs.filter(r=>r.data>=semISO(hoje())).length;
   if(cfg.notif&&cH===cfg.limD)notif('⚠️','Limite diário atingido',`Você chegou a ${cH} registros hoje.`);
   else if(cfg.notif&&cS===cfg.limS)notif('📊','Limite semanal atingido',`${cS} registros essa semana.`);
 }
 function limparRegs(){sR([]);renderHome();toast('Registros apagados.');}
+/* ══ COMPRAS ══ */
+let _cpSubs=[];
+function salvCompra(){
+  blurAll();
+  const valor=document.getElementById('cp-valor').value.trim();
+  if(parseBRL(valor)<=0){toast('⚠️ Informe o valor da compra.');shk(document.getElementById('cp-valor'));return;}
+  const sub=document.getElementById('cp-sub').value;
+  const subNome=sub?sub.replace(/^[^\w]+ /,''):'';
+  const dataV=document.getElementById('cp-data').value||hoje();
+  const compra={id:'cp'+Date.now(),item:document.getElementById('cp-item').value.trim(),valor,substancia:subNome,qtd:document.getElementById('cp-qtd').value.trim(),local:document.getElementById('cp-local').value.trim(),obs:document.getElementById('cp-obs').value.trim(),data:dataV,criado:new Date().toISOString()};
+  const cs=gCompras();cs.push(compra);sCompras(cs);
+  document.getElementById('cp-item').value='';document.getElementById('cp-valor').value='';document.getElementById('cp-qtd').value='';document.getElementById('cp-local').value='';document.getElementById('cp-obs').value='';document.getElementById('cp-sub').value='';document.getElementById('cp-data').value='';
+  document.querySelectorAll('#cp-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
+  closeMod('mcompra');vib(15);toast('✓ Compra registrada 🛒');
+  try{renderFin();}catch(e){}
+  try{checkGastoAviso();}catch(e){}
+}
+function abrirNovo(){openMod('mnovo');}
 function fecharReg(){
   _editRegId=null;_eReg=null;
   const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Novo registro 📓';
@@ -3489,8 +3700,9 @@ function salvFiss(){
   const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
   if(selVals.includes('outra')&&!outraTxt){toast('⚠️ Escreva a substância.');return;}
   const cs=document.getElementById('fiss-ctx');const ctxVal=cs?(cs.value==='Outro'?(document.getElementById('fiss-ctx-outro').value.trim()||'Outro'):cs.value):'';
-  const fiss={id:'fs'+Date.now(),substancia:subsNomes[0],substancias:subsNomes,intens:_fI||'—',emocao:_eFiss?.emoji||'',ctx:ctxVal,fez:document.getElementById('fiss-fez').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
+  const fiss={id:'fs'+Date.now(),substancia:subsNomes[0],substancias:subsNomes,intens:_fI||'—',emocao:_eFiss?.emoji||'',ctx:ctxVal,fez:document.getElementById('fiss-fez').value.trim(),economia:document.getElementById('fiss-eco').value.trim(),depois:document.getElementById('fiss-dep').value.trim(),data:hoje(),criado:new Date().toISOString()};
   const fs=gFs();fs.push(fiss);sFs(fs);
+  {const fe=document.getElementById('fiss-eco');if(fe)fe.value='';}
   document.getElementById('fiss-sub').value='';document.getElementById('fiss-fez').value='';document.getElementById('fiss-dep').value='';{const fc=document.getElementById('fiss-ctx');if(fc)fc.value='';const fco=document.getElementById('fiss-ctx-outro');if(fco)fco.value='';const fcw=document.getElementById('fiss-ctx-outro-w');if(fcw)fcw.style.display='none';}
   document.getElementById('fiss-outra').value='';const fow=document.getElementById('fiss-outra-w');if(fow)fow.style.display='none';
   document.querySelectorAll('#fiss-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_fissSubs=[];
