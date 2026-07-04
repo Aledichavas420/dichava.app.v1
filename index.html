@@ -363,13 +363,18 @@ a{color:inherit;text-decoration:none}
 .hn span{color:var(--v)}
 .hpill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border-radius:20px;padding:5px 13px;margin-top:9px;font-size:12px;color:rgba(255,255,255,.7);position:relative;z-index:1}
 .hpill strong{color:#fff}
-.finbox{position:relative;z-index:1;margin-top:11px;background:linear-gradient(135deg,rgba(92,227,207,.16),rgba(156,240,107,.12));border:1px solid rgba(124,217,138,.28);border-radius:16px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;max-width:270px}
-.fincol{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
-.finrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.finlb{font-size:11.5px;color:rgba(255,255,255,.6);white-space:nowrap}
-.finv{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:#fff;letter-spacing:.3px;white-space:nowrap}
-.finv.fineco{color:#9CF06B}
-.fineye{flex:0 0 auto;background:rgba(255,255,255,.12);border:none;border-radius:9px;width:30px;height:30px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
+/* contador de finanças — versão reduzida e discreta dentro do painel hero */
+.finbox{position:relative;z-index:2;margin-top:12px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:8px 10px 8px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:background .15s}
+.finbox:active{background:rgba(0,0,0,.26)}
+.hf-lb{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.2px;white-space:nowrap}
+.hf-lb .tic{width:14px;height:14px}
+.hf-vals{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
+.hf-v{display:flex;flex-direction:column;align-items:flex-end;line-height:1.05}
+.hf-v b{font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:800;color:#fff;letter-spacing:.2px;white-space:nowrap}
+.hf-v b.fineco{color:#9CF06B}
+.hf-v small{font-size:8.5px;text-transform:uppercase;letter-spacing:.4px;color:rgba(255,255,255,.4);margin-top:1px}
+.hf-sep{width:1px;height:20px;background:rgba(255,255,255,.12);flex:0 0 auto}
+.fineye{flex:0 0 auto;background:rgba(255,255,255,.1);border:none;border-radius:8px;width:26px;height:26px;font-size:12.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
 .novoc{position:relative;display:flex;align-items:center;gap:14px;background:var(--card,#fff);border:1.5px solid var(--bd,#e6e6e6);border-radius:18px;padding:15px 16px;cursor:pointer;text-align:left;width:100%;overflow:hidden;transition:transform .12s,border-color .12s,box-shadow .12s}
 .novoc:active{transform:scale(.97)}
 .novoc.nc-uso{border-color:rgba(45,162,87,.35);box-shadow:0 4px 16px rgba(45,162,87,.1)}
@@ -1482,15 +1487,7 @@ a{color:inherit;text-decoration:none}
 <!-- HOME -->
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
 <div class="sc scpad">
-  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div>
-    <div class="finbox" id="finbox" onclick="abrirFin(event)">
-      <div class="fincol">
-        <div class="finrow"><span class="finlb"><span class="tic" data-icon="fin-gasto"></span> Gastou</span><b class="finv" id="fin-gasto">R$ ••••</b></div>
-        <div class="finrow"><span class="finlb"><span class="tic" data-icon="fin-eco"></span> Economizou</span><b class="finv fineco" id="fin-eco">R$ ••••</b></div>
-      </div>
-      <button class="fineye" id="fin-eye" onclick="togFin(event)" aria-label="Mostrar/ocultar">👁️</button>
-    </div>
-  </div>
+  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
     <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
@@ -1513,6 +1510,15 @@ a{color:inherit;text-decoration:none}
       <div class="hchip"><b id="hs-mes">0</b><span>este mês</span></div>
     </div>
     <div class="hero-rank" id="hero-rank" onclick="abrirRank()"></div>
+    <div class="finbox" id="finbox" onclick="abrirFin(event)">
+      <span class="hf-lb"><span class="tic" data-icon="financas"></span> Finanças</span>
+      <span class="hf-vals">
+        <span class="hf-v"><b id="fin-gasto">R$ ••••</b><small>gasto</small></span>
+        <span class="hf-sep"></span>
+        <span class="hf-v"><b class="fineco" id="fin-eco">R$ ••••</b><small>economia</small></span>
+      </span>
+      <button class="fineye" id="fin-eye" onclick="togFin(event)" aria-label="Mostrar/ocultar">👁️</button>
+    </div>
     <div class="xp-flash" id="xp-flash"></div>
   </div>
   <div id="h-install"></div>
@@ -2728,7 +2734,7 @@ const sCK=c=>ls('dr_ck_'+uid(),c);
 // compras + finanças — LOCAL apenas (prefixo fora do syncToCloud, ainda em testes)
 const gCompras=()=>ls('dr_cp_'+uid())||[];
 const sCompras=c=>ls('dr_cp_'+uid(),c);
-const gFin=()=>ls('dr_fin_'+uid())||{base:'',oculto:false};
+const gFin=()=>ls('dr_fin_'+uid())||{base:'',oculto:true};
 const sFin=f=>ls('dr_fin_'+uid(),f);
 // dinheiro
 const parseBRL=s=>{if(typeof s==='number')return s;if(!s)return 0;let t=String(s).replace(/[^\d,.-]/g,'').trim();if(!t)return 0;if(t.indexOf(',')>-1){t=t.replace(/\./g,'').replace(',','.');}const n=parseFloat(t);return isNaN(n)?0:n;};
