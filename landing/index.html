@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dichava.app — redução de danos no seu bolso</title>
+<meta name="description" content="O app de redução de danos feito pra você: registre, entenda seus padrões, cuide da mente e do bolso. Grátis, privado, sem julgamento.">
+<meta property="og:title" content="dichava.app — redução de danos no seu bolso">
+<meta property="og:description" content="Registre, entenda seus padrões, cuide da mente e do bolso. Grátis, privado, sem julgamento.">
+<link rel="icon" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Poppins:wght@600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --v:#4CAF5A;--ve:#2E7D32;--vc:#A5D6A7;--vf:#E8F5E9;
+  --am:#FFD600;--dk:#141A14;--dk2:#1B2A1C;--dk3:#22301F;
+  --roxo:#7C3AED;--rosa:#E0509E;--lrj:#EA580C;--teal:#0E9C8C;
+  --tx:#1B2A1C;--txs:#5D7060;--creme:#FBF7EC;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--dk);color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+.disp{font-family:'Bagel Fat One',system-ui;font-weight:400;letter-spacing:.4px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;transition:background .3s,backdrop-filter .3s}
+nav.solid{background:rgba(20,26,20,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-logo{font-family:'Bagel Fat One',system-ui;font-size:22px;color:#5BC06F;text-shadow:1.5px 2px 0 #3A2063}
+.nav-logo span{color:#FFD600}
+.nav-cta{background:var(--am);color:#3A2063;font-weight:800;font-size:14px;padding:10px 20px;border-radius:30px;
+  border:2.5px solid #3A2063;box-shadow:3px 3px 0 #3A2063;transition:transform .15s,box-shadow .15s;display:inline-block}
+.nav-cta:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #3A2063}
+.nav-cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #3A2063}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:110px 22px 60px;overflow:hidden;
+  background:radial-gradient(130% 90% at 50% -10%, #24402a 0%, #141A14 58%)}
+.stars{position:absolute;inset:0;pointer-events:none}
+.star{position:absolute;background:#fff;border-radius:50%;opacity:.7;animation:tw 2.6s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:.85;transform:scale(1.15)}}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;pointer-events:none}
+.blob.g{width:480px;height:480px;background:#2E9244;top:-120px;left:-140px;animation:drift 14s ease-in-out infinite alternate}
+.blob.p{width:420px;height:420px;background:#7C3AED;bottom:-160px;right:-120px;animation:drift 17s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.12)}}
+.hero-mascot{width:150px;position:relative;z-index:2;animation:bob 3.6s ease-in-out infinite;filter:drop-shadow(0 14px 26px rgba(0,0,0,.4))}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+.hero h1{position:relative;z-index:2;font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:clamp(46px,9vw,86px);
+  line-height:1;color:#5BC06F;-webkit-text-stroke:2.5px #3A2063;paint-order:stroke fill;text-shadow:3px 5px 0 #3A2063;margin:14px 0 6px}
+.hero h1 span{color:#FFD600}
+.hero .tag{position:relative;z-index:2;font-size:clamp(17px,3vw,23px);font-weight:700;color:#D9EBDB;max-width:560px;line-height:1.45}
+.hero .tag em{font-style:normal;color:var(--am);position:relative;white-space:nowrap}
+.hero .tag em::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:6px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='8' viewBox='0 0 80 8'%3E%3Cpath d='M1 6 Q 20 1 40 5 T 79 3' fill='none' stroke='%23FFD600' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;background-size:80px 8px}
+.hero .sub{position:relative;z-index:2;margin-top:12px;font-size:15px;color:#93AC96;max-width:460px;line-height:1.55}
+.hero-ctas{position:relative;z-index:2;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+.cta-big{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:17px;padding:16px 30px;border-radius:36px;
+  background:var(--am);color:#3A2063;border:3px solid #3A2063;box-shadow:4px 4px 0 #3A2063;transition:transform .15s,box-shadow .15s}
+.cta-big:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #3A2063}
+.cta-big:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #3A2063}
+.cta-ghost{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;padding:16px 24px;border-radius:36px;
+  color:#D9EBDB;border:2px solid rgba(255,255,255,.25);transition:border-color .2s,background .2s}
+.cta-ghost:hover{border-color:#5BC06F;background:rgba(91,192,111,.1)}
+.hero-phones{position:relative;z-index:2;margin-top:52px;display:flex;justify-content:center;align-items:flex-end;gap:-30px}
+.hphone{width:min(230px,56vw);border-radius:34px;border:8px solid #0d120d;box-shadow:0 30px 60px rgba(0,0,0,.55);overflow:hidden;background:#0d120d}
+.hphone.l{transform:rotate(-9deg) translate(34px,26px);width:min(190px,42vw);z-index:1}
+.hphone.c{z-index:3;animation:heroFloat 5s ease-in-out infinite}
+.hphone.r{transform:rotate(9deg) translate(-34px,26px);width:min(190px,42vw);z-index:1}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.scrolldown{position:relative;z-index:2;margin-top:44px;font-size:12.5px;font-weight:700;letter-spacing:2px;color:#6d8570;text-transform:uppercase;animation:bob 2.8s ease-in-out infinite}
+
+/* ── MARQUEE ── */
+.marq{background:var(--am);border-top:3px solid #3A2063;border-bottom:3px solid #3A2063;overflow:hidden;padding:12px 0;transform:rotate(-1.3deg);margin:-14px -20px 0;position:relative;z-index:5}
+.marq-in{display:flex;gap:38px;white-space:nowrap;animation:marq 26s linear infinite;width:max-content}
+.marq-in span{font-family:'Bagel Fat One',system-ui;font-size:19px;color:#3A2063}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ── SECTIONS ── */
+section{padding:90px 22px}
+.wrap{max-width:1060px;margin:0 auto}
+.kicker{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--am);
+  border:2px solid rgba(255,214,0,.4);border-radius:30px;padding:6px 16px;margin-bottom:16px}
+h2{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:clamp(30px,5.4vw,50px);line-height:1.08;color:#fff}
+h2 .hl{color:#5BC06F}
+h2 .hl2{color:var(--am)}
+.lead{font-size:17px;color:#A8BFAB;line-height:1.65;max-width:640px;margin-top:14px}
+.lead b,.lead strong{color:#fff}
+
+/* problema */
+.prob{background:var(--dk);text-align:center}
+.prob-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:44px;text-align:left}
+.pcard{background:var(--dk3);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:26px 24px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+.pcard:hover{transform:translateY(-6px);border-color:rgba(91,192,111,.4)}
+.pcard .em{font-size:34px;margin-bottom:12px;display:block}
+.pcard b{display:block;font-size:17.5px;color:#fff;margin-bottom:6px}
+.pcard p{font-size:14px;color:#93AC96;line-height:1.55}
+
+/* ── FEATURES showcase ── */
+.feats{background:var(--creme);color:var(--tx);border-radius:44px 44px 0 0;position:relative}
+.feats .kicker{color:var(--ve);border-color:rgba(46,125,50,.35)}
+.feats h2{color:var(--tx)}
+.feats h2 .hl{color:var(--ve)}
+.feats .lead{color:var(--txs)}
+.feat{display:flex;align-items:center;gap:clamp(26px,6vw,80px);margin-top:90px}
+.feat:nth-child(even){flex-direction:row-reverse}
+.feat .txt{flex:1;min-width:0}
+.feat .chip{display:inline-flex;align-items:center;gap:8px;font-family:'Bagel Fat One',system-ui;font-size:13.5px;color:#fff;
+  padding:7px 18px;border-radius:30px;box-shadow:2.5px 2.5px 0 rgba(0,0,0,.2);margin-bottom:14px}
+.feat h3{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:clamp(24px,3.6vw,34px);color:var(--tx);line-height:1.15;margin-bottom:12px}
+.feat p{font-size:16px;color:var(--txs);line-height:1.65;margin-bottom:8px}
+.feat p b{color:var(--tx)}
+.feat ul{margin:12px 0 0;padding:0;list-style:none}
+.feat li{font-size:15px;color:var(--txs);margin:9px 0;padding-left:30px;position:relative;line-height:1.5}
+.feat li::before{content:'✿';position:absolute;left:2px;color:var(--v);font-size:15px}
+.feat li b{color:var(--tx)}
+.fphone{width:min(260px,68vw);flex-shrink:0;border-radius:36px;border:9px solid var(--dk);overflow:hidden;background:var(--dk);
+  box-shadow:14px 18px 0 rgba(27,42,28,.12);transform:rotate(3deg);transition:transform .35s}
+.feat:nth-child(even) .fphone{transform:rotate(-3deg);box-shadow:-14px 18px 0 rgba(27,42,28,.12)}
+.feat:hover .fphone{transform:rotate(0) scale(1.02)}
+@media(max-width:760px){.feat,.feat:nth-child(even){flex-direction:column}.fphone,.feat:nth-child(even) .fphone{transform:rotate(0)}}
+
+/* ── SOS band ── */
+.sos{background:linear-gradient(135deg,#3A2063,#5b2d8f);text-align:center;position:relative;overflow:hidden}
+.sos::before{content:'';position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 0%,rgba(224,80,158,.25),transparent 70%)}
+.sos .wrap{position:relative}
+.sos h2 .hl{color:#F4C5BC}
+.sos .lead{margin-left:auto;margin-right:auto;color:#D8C9F2}
+.sos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px;text-align:left}
+.sos-c{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px);border-radius:20px;padding:22px}
+.sos-c b{display:block;color:#fff;font-size:16px;margin-bottom:5px}
+.sos-c p{font-size:13.5px;color:#D8C9F2;line-height:1.5}
+.sos-c .em{font-size:28px;display:block;margin-bottom:10px}
+
+/* ── GALLERY marquee ── */
+.gal{background:var(--dk);padding:70px 0}
+.gal-head{text-align:center;padding:0 22px;margin-bottom:44px}
+.gal-track{display:flex;gap:22px;width:max-content;animation:marq 40s linear infinite;padding:10px 0}
+.gal:hover .gal-track{animation-play-state:paused}
+.gal-track img{width:190px;border-radius:26px;border:6px solid #0d120d;box-shadow:0 18px 38px rgba(0,0,0,.5);transition:transform .3s}
+.gal-track img:nth-child(odd){transform:rotate(2deg)}
+.gal-track img:nth-child(even){transform:rotate(-2deg) translateY(14px)}
+.gal-track img:hover{transform:scale(1.06) rotate(0)}
+
+/* ── privacidade ── */
+.priv{background:var(--dk2);text-align:center;border-radius:44px;margin:0 14px;border:1px solid rgba(255,255,255,.06)}
+.priv .lead{margin-left:auto;margin-right:auto}
+.priv-badges{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:32px}
+.pb{display:inline-flex;align-items:center;gap:9px;background:rgba(91,192,111,.1);border:1.5px solid rgba(91,192,111,.35);
+  color:#A5D6A7;font-weight:700;font-size:14px;padding:11px 20px;border-radius:30px}
+
+/* ── install ── */
+.inst{background:var(--dk)}
+.inst-tabs{display:flex;gap:10px;margin:30px 0 22px}
+.itab{flex:none;background:var(--dk3);border:2px solid rgba(255,255,255,.12);color:#A8BFAB;font-family:'DM Sans',sans-serif;
+  font-weight:800;font-size:15px;padding:12px 26px;border-radius:30px;cursor:pointer;transition:all .2s}
+.itab.on{background:var(--am);color:#3A2063;border-color:#3A2063;box-shadow:3px 3px 0 #3A2063}
+.steps{display:none;counter-reset:st}
+.steps.on{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.step{background:var(--dk3);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px 22px;counter-increment:st;position:relative}
+.step::before{content:counter(st);position:absolute;top:-14px;left:20px;width:32px;height:32px;border-radius:50%;
+  background:var(--am);color:#3A2063;border:2.5px solid #3A2063;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:2px 2px 0 #3A2063}
+.step b{display:block;color:#fff;font-size:15.5px;margin:8px 0 6px}
+.step p{font-size:13.5px;color:#93AC96;line-height:1.55}
+.step p code{background:rgba(255,255,255,.1);border-radius:6px;padding:1px 7px;font-family:inherit;color:#fff;font-size:12.5px}
+
+/* ── final CTA ── */
+.final{position:relative;text-align:center;overflow:hidden;padding:120px 22px;
+  background:radial-gradient(120% 100% at 50% 100%,#24402a 0%,#141A14 60%)}
+.final .hero-mascot{width:120px;margin:0 auto 8px}
+.final h2{font-size:clamp(34px,6.4vw,60px)}
+.final .lead{margin:16px auto 0}
+.final .hero-ctas{margin-top:34px}
+
+footer{background:#0d120d;padding:36px 22px;text-align:center;font-size:13px;color:#5d7060;line-height:1.8}
+footer .disp{color:#5BC06F;font-size:17px}
+footer a{color:#93AC96;text-decoration:underline}
+
+/* reveal on scroll */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+
+/* sticky mobile CTA */
+.mob-cta{position:fixed;left:14px;right:14px;bottom:14px;z-index:60;display:none;justify-content:center}
+.mob-cta a{width:100%;max-width:430px;text-align:center;justify-content:center}
+@media(max-width:640px){.mob-cta.show{display:flex}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="nav-logo" href="#top">dichava<span>.app</span></a>
+  <a class="nav-cta" href="../" target="_blank">Abrir o app →</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="stars" id="stars"></div>
+  <div class="blob g"></div><div class="blob p"></div>
+  <img class="hero-mascot" src="../guia-assets/dichavaldo.svg" alt="Dichavaldo, o mascote">
+  <h1>dichava<span>.app</span></h1>
+  <p class="tag">Redução de danos <em>sem julgamento</em>, direto no seu bolso.</p>
+  <p class="sub">Registre seu uso, entenda seus padrões, cuide da mente e do dinheiro — tudo num app gratuito, privado e feito com carinho.</p>
+  <div class="hero-ctas">
+    <a class="cta-big" href="../" target="_blank">🌱 Usar agora — é grátis</a>
+    <a class="cta-ghost" href="#funcoes">Ver o que ele faz ↓</a>
+  </div>
+  <div class="hero-phones">
+    <div class="hphone l"><img src="../guia-assets/pausa.png" alt="Pausa pra mente"></div>
+    <div class="hphone c"><img src="../guia-assets/inicio.png" alt="Tela inicial do app"></div>
+    <div class="hphone r"><img src="../guia-assets/progresso.png" alt="Progresso"></div>
+  </div>
+  <div class="scrolldown">role pra descobrir ↓</div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marq"><div class="marq-in" id="marq">
+  <span>✦ sem julgamento</span><span>✦ 100% gratuito</span><span>✦ seus dados são seus</span><span>✦ funciona offline</span><span>✦ redução de danos</span><span>✦ autoconhecimento</span><span>✦ feito no Brasil</span>
+</div></div>
+
+<!-- O PROBLEMA -->
+<section class="prob">
+  <div class="wrap">
+    <span class="kicker rv">por que ele existe</span>
+    <h2 class="rv">Ninguém te ensina a ter uma<br><span class="hl">relação consciente</span> com o uso.</h2>
+    <p class="lead rv" style="margin-inline:auto">Ou é proibição, ou é vale-tudo. O dichava.app fica no meio do caminho real: te ajuda a <b>enxergar seus padrões</b> e a decidir, com informação, o que faz sentido pra <b>você</b>.</p>
+    <div class="prob-cards">
+      <div class="pcard rv"><span class="em">🌀</span><b>"Nem percebo quanto uso"</b><p>Os dias se misturam e o uso vira automático. Sem registro, não tem como enxergar padrão nenhum.</p></div>
+      <div class="pcard rv"><span class="em">💸</span><b>"Não sei quanto gasto"</b><p>Aquele valor que sai aos poucos e ninguém soma. No fim do mês, o bolso sente — mas você não viu acontecer.</p></div>
+      <div class="pcard rv"><span class="em">😮‍💨</span><b>"Uso pra lidar com a ansiedade"</b><p>Quando a única ferramenta é o uso, toda emoção difícil vira gatilho. Faltam alternativas no momento H.</p></div>
+      <div class="pcard rv"><span class="em">🫥</span><b>"Tenho vergonha de falar disso"</b><p>Medo de julgamento afasta as pessoas de qualquer cuidado. Aqui não tem sermão — tem acolhimento.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="feats" id="funcoes">
+  <div class="wrap">
+    <span class="kicker rv">o que tem dentro</span>
+    <h2 class="rv">Um kit completo de <span class="hl">autocuidado</span>.</h2>
+    <p class="lead rv">Cada função foi pensada pra um momento real do seu dia — do registro rapidinho ao socorro na crise.</p>
+
+    <div class="feat rv">
+      <div class="txt">
+        <span class="chip" style="background:var(--ve)">📝 Registros</span>
+        <h3>Registre em segundos, entenda em semanas</h3>
+        <p>Cada uso vira um registro rapidinho: o quê, quanto, onde, com quem e <b>como você estava se sentindo</b>.</p>
+        <ul>
+          <li><b>Padrões automáticos:</b> o app cruza horários, contextos e emoções e te mostra o que se repete.</li>
+          <li><b>Resistências contam!</b> Bateu a vontade e você segurou? Registra também — isso é vitória.</li>
+          <li>Histórico completo, editável, só seu.</li>
+        </ul>
+      </div>
+      <div class="fphone"><img src="../guia-assets/registrar.png" alt="Tela de registro" loading="lazy"></div>
+    </div>
+
+    <div class="feat rv">
+      <div class="txt">
+        <span class="chip" style="background:var(--teal)">💰 Finanças</span>
+        <h3>Seu bolso também entra na conta</h3>
+        <p>Registre compras e veja <b>quanto gastou</b> e <b>quanto economizou</b> — inclusive cada vez que resistiu a uma vontade.</p>
+        <ul>
+          <li>Defina um <b>gasto de referência</b> e receba um aviso gentil se passar.</li>
+          <li>Valores <b>ocultos por padrão</b> — ninguém vê por cima do seu ombro.</li>
+          <li>A economia vira motivação: dá pra ver o dinheiro que ficou com você.</li>
+        </ul>
+      </div>
+      <div class="fphone" style="align-self:center"><img src="../guia-assets/fin-painel.png" alt="Painel Minhas finanças" loading="lazy"></div>
+    </div>
+
+    <div class="feat rv">
+      <div class="txt">
+        <span class="chip" style="background:var(--roxo)">🧘 Pausa pra mente</span>
+        <h3>Alternativas pro momento da fissura</h3>
+        <p>Quando a vontade aperta, o app te dá <b>ferramentas de verdade</b> em vez de força de vontade sozinha.</p>
+        <ul>
+          <li><b>Respiração guiada</b> com animação que acalma de olhar.</li>
+          <li><b>Sons da natureza</b> pra desacelerar a cabeça.</li>
+          <li><b>Grounding 5-4-3-2-1</b> e exercícios rápidos de presença.</li>
+        </ul>
+      </div>
+      <div class="fphone"><img src="../guia-assets/respiracao.png" alt="Respiração guiada" loading="lazy"></div>
+    </div>
+
+    <div class="feat rv">
+      <div class="txt">
+        <span class="chip" style="background:var(--lrj)">🏆 Progresso</span>
+        <h3>Evoluir vira um jogo (do bem)</h3>
+        <p>Dias seguidos, conquistas, ranking e um <b>jardim que cresce com você</b>. Recaída não zera sua história — ela faz parte dela.</p>
+        <ul>
+          <li>Conquistas por autoconhecimento, não só por abstinência.</li>
+          <li>Estatísticas visuais do seu mês.</li>
+          <li>Reflexões guiadas pra fechar o dia.</li>
+        </ul>
+      </div>
+      <div class="fphone"><img src="../guia-assets/jogo.png" alt="Progresso e jogo" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOS -->
+<section class="sos">
+  <div class="wrap">
+    <span class="kicker rv" style="color:#F4C5BC;border-color:rgba(244,197,188,.4)">quando aperta de verdade</span>
+    <h2 class="rv">Modo <span class="hl">SOS</span> pra momentos difíceis.</h2>
+    <p class="lead rv">Bad trip, crise de ansiedade, vontade insuportável: um toque abre um passo a passo calmo, com técnicas guiadas e contatos de ajuda de verdade.</p>
+    <div class="sos-grid">
+      <div class="sos-c rv"><span class="em">🚨</span><b>Botão de crise</b><p>Sempre visível. Sem menu, sem enrolação — ajuda em um toque.</p></div>
+      <div class="sos-c rv"><span class="em">🫁</span><b>Acalmar o corpo</b><p>Respiração e grounding guiados até a onda passar.</p></div>
+      <div class="sos-c rv"><span class="em">📞</span><b>Ajuda real</b><p>CVV 188 e serviços de apoio a um toque de distância.</p></div>
+      <div class="sos-c rv"><span class="em">💌</span><b>Carta pra você</b><p>Escreva uma mensagem pro seu eu do futuro ler no momento difícil.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="gal">
+  <div class="gal-head">
+    <span class="kicker rv">dá uma espiada</span>
+    <h2 class="rv">Bonito de usar, <span class="hl2">fácil de manter</span>.</h2>
+  </div>
+  <div class="gal-track" id="galtrack">
+    <img src="../guia-assets/inicio.png" alt="Início" loading="lazy">
+    <img src="../guia-assets/registrar.png" alt="Registrar" loading="lazy">
+    <img src="../guia-assets/pausa.png" alt="Pausa pra mente" loading="lazy">
+    <img src="../guia-assets/progresso.png" alt="Progresso" loading="lazy">
+    <img src="../guia-assets/reflexoes.png" alt="Reflexões" loading="lazy">
+    <img src="../guia-assets/crise.png" alt="SOS" loading="lazy">
+    <img src="../guia-assets/agenda.png" alt="Agenda" loading="lazy">
+    <img src="../guia-assets/respiracao.png" alt="Respiração" loading="lazy">
+    <img src="../guia-assets/perfil.png" alt="Perfil" loading="lazy">
+  </div>
+</div>
+
+<!-- PRIVACIDADE -->
+<section class="priv">
+  <div class="wrap">
+    <span class="kicker rv">privacidade</span>
+    <h2 class="rv">O que é seu, <span class="hl">fica com você</span>.</h2>
+    <p class="lead rv">A gente sabe que esse assunto é delicado. Por isso o app foi desenhado pra proteger você em primeiro lugar — em conformidade com a <b>LGPD</b>.</p>
+    <div class="priv-badges">
+      <span class="pb rv">🔒 Dados protegidos</span>
+      <span class="pb rv">👁️ Valores ocultáveis</span>
+      <span class="pb rv">📵 Funciona offline</span>
+      <span class="pb rv">🗑️ Apague tudo quando quiser</span>
+      <span class="pb rv">🚫 Zero anúncios</span>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section class="inst" id="baixar">
+  <div class="wrap">
+    <span class="kicker rv">como instalar</span>
+    <h2 class="rv">Sem loja, sem cadastro chato.<br><span class="hl">Direto do navegador.</span></h2>
+    <p class="lead rv">O dichava.app é um app de verdade que se instala pelo navegador — leve, rápido e funciona até sem internet.</p>
+    <div class="inst-tabs rv">
+      <button class="itab on" data-t="ios" onclick="tab('ios')">🍎 iPhone</button>
+      <button class="itab" data-t="and" onclick="tab('and')">🤖 Android</button>
+    </div>
+    <div class="steps on" id="st-ios">
+      <div class="step rv"><b>Abra no Safari</b><p>Toque em <code>Usar agora</code> aqui na página — precisa ser no <b>Safari</b>.</p></div>
+      <div class="step rv"><b>Toque em compartilhar</b><p>O ícone <code>⬆︎</code> (quadrado com seta) na barra do navegador.</p></div>
+      <div class="step rv"><b>Adicionar à Tela de Início</b><p>Role o menu e toque em <code>Adicionar à Tela de Início</code>.</p></div>
+      <div class="step rv"><b>Pronto! 🌱</b><p>O ícone aparece na sua tela e abre como um app normal.</p></div>
+    </div>
+    <div class="steps" id="st-and">
+      <div class="step rv"><b>Abra no Chrome</b><p>Toque em <code>Usar agora</code> aqui na página.</p></div>
+      <div class="step rv"><b>Menu ⋮</b><p>Toque nos três pontinhos no canto superior direito.</p></div>
+      <div class="step rv"><b>Instalar app</b><p>Toque em <code>Instalar app</code> (ou <code>Adicionar à tela inicial</code>).</p></div>
+      <div class="step rv"><b>Pronto! 🌱</b><p>O app aparece na gaveta de apps como qualquer outro.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="stars" id="stars2"></div>
+  <img class="hero-mascot rv" src="../guia-assets/dichavaldo.svg" alt="">
+  <h2 class="rv">Sua relação com o uso<br>pode ser <span class="hl2">mais consciente</span>.</h2>
+  <p class="lead rv" style="text-align:center">Grátis. Privado. Sem julgamento. Começa em menos de um minuto.</p>
+  <div class="hero-ctas rv">
+    <a class="cta-big" href="../" target="_blank">🌱 Começar agora</a>
+  </div>
+</section>
+
+<footer>
+  <div class="disp">dichava.app</div>
+  cuidado, informação e redução de danos — feito com 💚 no Brasil<br>
+  Este app não substitui acompanhamento médico ou psicológico. Em crise, ligue <a href="tel:188">CVV 188</a>.
+</footer>
+
+<div class="mob-cta" id="mobcta"><a class="cta-big" href="../" target="_blank">🌱 Usar o app agora</a></div>
+
+<script>
+// estrelas
+function mkStars(id,n){var c=document.getElementById(id);if(!c)return;var h='';
+  for(var i=0;i<n;i++){var s=(Math.random()*2.2+1).toFixed(1);
+    h+='<span class="star" style="width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(Math.random()*2.6).toFixed(2)+'s"></span>';}
+  c.innerHTML=h;}
+mkStars('stars',40);mkStars('stars2',30);
+// marquee duplica
+var mq=document.getElementById('marq');mq.innerHTML+=mq.innerHTML;
+var gt=document.getElementById('galtrack');gt.innerHTML+=gt.innerHTML;
+// nav solid + cta mobile
+var nav=document.getElementById('nav'),mc=document.getElementById('mobcta');
+addEventListener('scroll',function(){
+  nav.classList.toggle('solid',scrollY>40);
+  mc.classList.toggle('show',scrollY>innerHeight*0.9);
+},{passive:true});
+// reveal
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+// tabs instalação
+function tab(t){
+  document.querySelectorAll('.itab').forEach(function(b){b.classList.toggle('on',b.dataset.t===t);});
+  document.getElementById('st-ios').classList.toggle('on',t==='ios');
+  document.getElementById('st-and').classList.toggle('on',t==='and');
+  document.querySelectorAll('.steps.on .rv').forEach(function(el){el.classList.add('in');});
+}
+</script>
+</body>
+</html>
