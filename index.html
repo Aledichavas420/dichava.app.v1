@@ -2292,7 +2292,7 @@ a{color:inherit;text-decoration:none}
   <div id="reg-outra-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual substância?</div><input class="inp" id="reg-outra" type="text" placeholder="Escreva…"></div>
   <button type="button" id="reg-mix-btn" onclick="verMisturaReg()" style="display:none;width:100%;align-items:center;justify-content:center;gap:8px;background:var(--roxof);border:1.5px solid var(--roxo);color:var(--roxo);border-radius:14px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:12px">⚗️ Verificar risco da mistura →</button>
   <div class="fr2" style="margin-bottom:12px">
-    <div class="fld" style="margin:0"><div class="lbl">Horário</div><select class="fs" id="reg-hr"><option>Manhã</option><option>Tarde</option><option selected>Noite</option><option>Madrugada</option></select></div>
+    <div class="fld" style="margin:0"><div class="lbl">Quando aconteceu?</div><input class="inp" id="reg-quando" type="datetime-local"></div>
     <div class="fld" style="margin:0"><div class="lbl">Contexto</div><select class="fs" id="reg-ctx" onchange="ctxChg()"><option value="">Onde?</option><option>Em casa, sozinho(a)</option><option>Em casa, com alguém</option><option>Com amigos</option><option>Festa / balada</option><option>Rave / festival</option><option>Trabalho / estudo</option><option>Natureza / cerimônia</option><option>Outro</option><option>Prefiro não dizer</option></select></div>
   </div>
   <div id="reg-ctx-outro-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual foi o contexto?</div><input class="inp" id="reg-ctx-outro" type="text" placeholder="Descreva a situação…" maxlength="60"></div>
@@ -2746,6 +2746,13 @@ const brl=n=>'R$ '+(Number(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const isoLocal=d=>{const p=n=>String(n).padStart(2,'0');return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`};
 const hoje=()=>isoLocal(new Date());
+// valor "YYYY-MM-DDTHH:MM" pro input datetime-local
+const dtLocal=d=>{const p=n=>String(n).padStart(2,'0');return`${isoLocal(d)}T${p(d.getHours())}:${p(d.getMinutes())}`};
+const agoraDT=()=>dtLocal(new Date());
+// período do dia a partir da hora (0-23) — mantém compatível com r.hr
+const periodoDe=h=>h>=5&&h<12?'Manhã':h>=12&&h<18?'Tarde':h>=18?'Noite':'Madrugada';
+// "HH:MM" a partir de um registro (usa r.quando se existir)
+const fhora=r=>{if(!r||!r.quando)return'';const m=String(r.quando).match(/T(\d{2}:\d{2})/);return m?m[1]:'';};
 const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const vib=ms=>{try{if(navigator.vibrate)navigator.vibrate(ms||10)}catch{}};
 const fdt=iso=>{if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`};
@@ -2961,7 +2968,7 @@ function goPg(id,btn){
 }
 
 /* ══ MODALS ══ */
-function openMod(id){blurAll();document.getElementById(id).classList.add('on');aplicarIcones(document.getElementById(id));if(id==='mreg')montarSubGrid('reg-subgrid',SUBS_REG);if(id==='mfiss')montarSubGrid('fiss-subgrid',SUBS_FISS);if(id==='mcompra'){montarSubGrid('cp-subgrid',SUBS_REG);const d=document.getElementById('cp-data');if(d&&!d.value)d.value=hoje();}}
+function openMod(id){blurAll();document.getElementById(id).classList.add('on');aplicarIcones(document.getElementById(id));if(id==='mreg'){montarSubGrid('reg-subgrid',SUBS_REG);const q=document.getElementById('reg-quando');if(q&&!q.value&&!_editRegId)q.value=agoraDT();}if(id==='mfiss')montarSubGrid('fiss-subgrid',SUBS_FISS);if(id==='mcompra'){montarSubGrid('cp-subgrid',SUBS_REG);const d=document.getElementById('cp-data');if(d&&!d.value)d.value=hoje();}}
 function closeMod(id){blurAll();document.getElementById(id).classList.remove('on');try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(_){}}
 // arrastar a folha pra baixo (no topo) fecha o modal
 (function(){
@@ -3661,7 +3668,7 @@ function envResumoWPP(){const regs=gR(),sw=regs.filter(r=>r.data>=semISO(hoje())
 function renderHistMini(regs){
   const c=document.getElementById('h-hist');const ul=regs.slice(-5).reverse();
   if(!ul.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);text-align:center;padding:16px 18px">Nenhum registro ainda.<br>Toque em <strong>+</strong> para começar.</div>';return;}
-  c.innerHTML=ul.map(r=>`<div class="hi" style="margin:0 18px"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}</div><div class="him">${fdt(r.data)}${r.ctx?' · '+esc(r.ctx):''}${r.hr?' · '+r.hr:''}</div></div><div style="font-size:19px">${r.emocao||''}</div></div>`).join('');
+  c.innerHTML=ul.map(r=>`<div class="hi" style="margin:0 18px"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${r.ctx?' · '+esc(r.ctx):''}${!fhora(r)&&r.hr?' · '+r.hr:''}</div></div><div style="font-size:19px">${r.emocao||''}</div></div>`).join('');
 }
 
 /* ══ REGISTRO ══ */
@@ -3698,14 +3705,15 @@ function salvReg(){
   const selVals=_regSubs.length?_regSubs:(sub?[sub]:[]);
   const outraTxt=document.getElementById('reg-outra').value.trim();
   const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
-  const dados={substancia:subsNomes[0]||'',substancias:subsNomes,qtd:document.getElementById('reg-qtd').value.trim(),hr:document.getElementById('reg-hr').value,ctx:(document.getElementById('reg-ctx').value==='Outro'?(document.getElementById('reg-ctx-outro').value.trim()||'Outro'):document.getElementById('reg-ctx').value),emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim()};
+  const qv=document.getElementById('reg-quando').value;const qd=qv?new Date(qv):new Date();
+  const dados={substancia:subsNomes[0]||'',substancias:subsNomes,qtd:document.getElementById('reg-qtd').value.trim(),quando:qv||agoraDT(),data:qv?qv.slice(0,10):hoje(),hr:periodoDe(qd.getHours()),ctx:(document.getElementById('reg-ctx').value==='Outro'?(document.getElementById('reg-ctx-outro').value.trim()||'Outro'):document.getElementById('reg-ctx').value),emocao:_eReg.emoji,emoLabel:_eReg.label,gatilhos:chips,obs:document.getElementById('reg-obs').value.trim()};
   const regs=gR();
   const editando=_editRegId;
   if(editando){const i=regs.findIndex(r=>r.id===editando);if(i>=0)regs[i]={...regs[i],...dados};}
-  else{regs.push({id:'r'+Date.now(),...dados,data:hoje(),criado:new Date().toISOString()});}
+  else{regs.push({id:'r'+Date.now(),...dados,criado:new Date().toISOString()});}
   sR(regs);
   // reset
-  document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-outra-w').style.display='none';{const co=document.getElementById('reg-ctx-outro');if(co)co.value='';const cow=document.getElementById('reg-ctx-outro-w');if(cow)cow.style.display='none';}
+  document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-quando').value='';document.getElementById('reg-outra-w').style.display='none';{const co=document.getElementById('reg-ctx-outro');if(co)co.value='';const cow=document.getElementById('reg-ctx-outro-w');if(cow)cow.style.display='none';}
   document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.remove('on'));
   document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_regSubs=[];{const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display='none';}
@@ -3789,7 +3797,7 @@ function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
 function calSel(iso){_calSel=iso;renderCal();}
 function renderDdet(regs){
   const det=document.getElementById('ddet');const ri=regs.filter(r=>r.data===_calSel);det.style.display='block';
-  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nem(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${r.hr||''}${r.ctx?' · '+r.ctx:''}${r.gatilhos?.length?' · '+r.gatilhos.join(', '):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
+  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nem(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${fhora(r)||r.hr||''}${r.ctx?' · '+r.ctx:''}${r.gatilhos?.length?' · '+r.gatilhos.join(', '):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
 }
 
 /* ══ PROGRESSO ══ */
@@ -3903,7 +3911,7 @@ function renderHist(){
   const regs=gR().slice().reverse();const c=document.getElementById('hist-l');
   const cnt=document.getElementById('hist-count');if(cnt)cnt.textContent=regs.length+(regs.length===1?' registro':' registros');
   if(!regs.length){c.innerHTML='<div style="text-align:center;padding:24px 18px;color:var(--txm)"><div class="hist-empty-ic">'+icon('prog-empty')+'</div><div style="font-size:13.5px;font-weight:600">Nenhum registro ainda</div><div style="font-size:12px;margin-top:3px">Toque em <strong>+ novo</strong> para começar a registrar.</div></div>';return;}
-  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
+  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${!fhora(r)&&r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
 }
 function delReg(id){
   if(!confirm('Excluir este registro?'))return;
@@ -3931,7 +3939,8 @@ function editReg(id){
   document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.toggle('on',_regSubs.includes(b.dataset.val)));
   {const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display=_regSubs.length>=2?'flex':'none';}
   document.getElementById('reg-qtd').value=r.qtd||'';
-  document.getElementById('reg-hr').value=r.hr||'';
+  // quando: usa r.quando; senão reconstrói da data + hora aproximada pelo período
+  {const q=document.getElementById('reg-quando');if(r.quando){q.value=r.quando;}else if(r.data){const hMap={'Manhã':'09:00','Tarde':'15:00','Noite':'21:00','Madrugada':'03:00'};q.value=r.data+'T'+(hMap[r.hr]||'12:00');}else{q.value='';}}
   {const sel=document.getElementById('reg-ctx'),ctxv=r.ctx||'';const opts=[...sel.options].map(o=>o.value||o.textContent);if(ctxv&&opts.indexOf(ctxv)<0){sel.value='Outro';document.getElementById('reg-ctx-outro').value=ctxv;}else{sel.value=ctxv;}ctxChg();}
   document.getElementById('reg-obs').value=r.obs||'';
   // emoção
