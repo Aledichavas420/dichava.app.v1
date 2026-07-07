@@ -18,7 +18,10 @@
     // atualizamos a altura real para a navegação não sobrar e criar faixa branca.
     var ae=document.activeElement;
     var kbd=ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA');
-    if(kbd&&vv&&h<window.innerHeight-120){ return; }
+    // Dentro de um modal/sheet aberto, DEIXAMOS o shell encolher com o teclado,
+    // pra sheet caber acima do teclado (senão sobra faixa preta embaixo).
+    var inSheet=kbd&&ae.closest&&ae.closest('.ov.on');
+    if(kbd&&!inSheet&&vv&&h<window.innerHeight-120){ return; }
     document.documentElement.style.setProperty('--app-h',h+'px');
   }
   window.__setH=setH;
