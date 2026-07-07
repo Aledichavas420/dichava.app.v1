@@ -2299,7 +2299,7 @@ a{color:inherit;text-decoration:none}
   <div class="fld"><div class="lbl">Estado emocional <span class="ob">*</span></div>
     <div class="emg" id="reg-emg"><button class="emb" onclick="selEReg(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEReg(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEReg(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEReg(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEReg(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
   </div>
-  <div class="fld"><div class="lbl">Gatilhos percebidos</div><div class="chips"><span class="chip" onclick="togChip(this)">Estresse</span><span class="chip" onclick="togChip(this)">Ansiedade</span><span class="chip" onclick="togChip(this)">Solidão</span><span class="chip" onclick="togChip(this)">Social</span><span class="chip" onclick="togChip(this)">Tédio</span><span class="chip" onclick="togChip(this)">Celebração</span><span class="chip" onclick="togChip(this)">Hábito</span><span class="chip" onclick="togChip(this)">Não sei</span></div></div>
+  <div class="fld"><div class="lbl">Gatilhos percebidos</div><div class="chips"><span class="chip" onclick="togChip(this)">Estresse</span><span class="chip" onclick="togChip(this)">Ansiedade</span><span class="chip" onclick="togChip(this)">Solidão</span><span class="chip" onclick="togChip(this)">Social</span><span class="chip" onclick="togChip(this)">Tédio</span><span class="chip" onclick="togChip(this)">Celebração</span><span class="chip" onclick="togChip(this)">Hábito</span><span class="chip" onclick="togChip(this)">Não sei</span><span class="chip" id="reg-gat-outro-chip" onclick="togGatOutro(this)">Outro</span></div><div id="reg-gat-outro-w" style="display:none;margin-top:8px"><input class="inp" id="reg-gat-outro" type="text" placeholder="Qual gatilho?" maxlength="40"></div></div>
   <div class="fld"><div class="lbl">Observação</div><textarea class="ft" id="reg-obs" rows="3" placeholder="O que quero lembrar?"></textarea></div>
   <div style="display:flex;gap:9px"><button class="btn bout" style="flex:0 0 38%" onclick="fecharReg()">Cancelar</button><button class="btn bv" style="flex:1" onclick="salvReg()">Salvar registro</button></div>
 </div></div></div>
@@ -3674,6 +3674,7 @@ function renderHistMini(regs){
 /* ══ REGISTRO ══ */
 function selEReg(btn,e,l){document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_eReg={emoji:e,label:l};}
 function togChip(el){el.classList.toggle('on')}
+function togGatOutro(el){el.classList.toggle('on');const w=document.getElementById('reg-gat-outro-w');const on=el.classList.contains('on');w.style.display=on?'block':'none';if(on){const i=document.getElementById('reg-gat-outro');i.focus();}else{document.getElementById('reg-gat-outro').value='';}}
 function regSubChg(){const mostra=(_regSubs&&_regSubs.includes('outra'))||document.getElementById('reg-sub').value==='outra';document.getElementById('reg-outra-w').style.display=mostra?'block':'none';}
 function ctxChg(){const w=document.getElementById('reg-ctx-outro-w');if(w)w.style.display=document.getElementById('reg-ctx').value==='Outro'?'block':'none';}
 function fissCtxChg(){const w=document.getElementById('fiss-ctx-outro-w');if(w)w.style.display=document.getElementById('fiss-ctx').value==='Outro'?'block':'none';}
@@ -3701,7 +3702,8 @@ function salvReg(){
   blurAll();
   const sub=document.getElementById('reg-sub').value;
   if(!_eReg){toast('⚠️ Selecione um estado emocional.');shk(document.getElementById('reg-emg'));return;}
-  const chips=[...document.querySelectorAll('#mreg .chip.on')].map(c=>c.textContent);
+  const chips=[...document.querySelectorAll('#mreg .chip.on')].map(c=>c.textContent).filter(t=>t!=='Outro');
+  {const go=document.getElementById('reg-gat-outro-chip');const gv=document.getElementById('reg-gat-outro').value.trim();if(go&&go.classList.contains('on')&&gv)chips.push(gv);}
   const selVals=_regSubs.length?_regSubs:(sub?[sub]:[]);
   const outraTxt=document.getElementById('reg-outra').value.trim();
   const subsNomes=selVals.map(v=>v==='outra'?(outraTxt||'Outra'):v.replace(/^[^\w]+ /,''));
@@ -3716,6 +3718,7 @@ function salvReg(){
   document.getElementById('reg-sub').value='';document.getElementById('reg-qtd').value='';document.getElementById('reg-obs').value='';document.getElementById('reg-ctx').value='';document.getElementById('reg-quando').value='';document.getElementById('reg-outra-w').style.display='none';{const co=document.getElementById('reg-ctx-outro');if(co)co.value='';const cow=document.getElementById('reg-ctx-outro-w');if(cow)cow.style.display='none';}
   document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.remove('on'));
+  {const gw=document.getElementById('reg-gat-outro-w');if(gw)gw.style.display='none';const gi=document.getElementById('reg-gat-outro');if(gi)gi.value='';}
   document.querySelectorAll('#reg-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_regSubs=[];{const mb=document.getElementById('reg-mix-btn');if(mb)mb.style.display='none';}
   const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Novo registro 📓';
   _eReg=null;_editRegId=null;closeMod('mreg');vib(15);
@@ -3948,6 +3951,11 @@ function editReg(id){
   document.querySelectorAll('#reg-emg .emb').forEach(b=>b.classList.toggle('on',b.textContent.includes(r.emocao||' ')));
   // gatilhos
   document.querySelectorAll('#mreg .chip').forEach(c=>c.classList.toggle('on',(r.gatilhos||[]).includes(c.textContent)));
+  // gatilho customizado ("Outro"): qualquer gatilho salvo que não seja um chip conhecido
+  {const known=[...document.querySelectorAll('#mreg .chips .chip')].map(c=>c.textContent).filter(t=>t!=='Outro');
+   const custom=(r.gatilhos||[]).filter(g=>!known.includes(g));
+   const oc=document.getElementById('reg-gat-outro-chip'),ow=document.getElementById('reg-gat-outro-w'),oi=document.getElementById('reg-gat-outro');
+   if(custom.length){oc.classList.add('on');oi.value=custom.join(', ');ow.style.display='block';}else{oc.classList.remove('on');oi.value='';ow.style.display='none';}}
   const tt=document.querySelector('#mreg .mt');if(tt)tt.textContent='Editar registro ✏️';
 }
 
