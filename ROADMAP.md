@@ -83,7 +83,11 @@ delas** (que fica com 15–30%) — ficamos com quase 100%.
 - [ ] Revisar segurança e backup do Supabase (Fase infra abaixo)
 
 ### Fase 3 — Infra pra aguentar acessos
-- [ ] **RLS ativo em TODAS as tabelas** do Supabase (cada user só vê o próprio dado) 🔒
+- [x] **RLS ativo e auditado** (jul/2026) — ver resultado abaixo 🔒
+  - `registros`: ✅ trancada em `auth.uid() = user_id`
+  - `push_subs`: ✅ corrigida (era aberta a `anon`; agora só o dono, `auth.uid()::text = user_id`)
+  - `push_log`: ✅ ok (sem policy, acesso só via backend `service_role`)
+  - `profissionais`: ⏳ sem policy — **criar quando o espaço de profissionais for pro app**
 - [ ] **Índices** nas colunas mais consultadas (`user_id`, data)
 - [ ] **Confirmação de e-mail + rate limiting** no Supabase Auth
 - [ ] Decidir **Supabase Pro** (US$ 25/mês) antes do pico — principalmente pelo **backup diário**
