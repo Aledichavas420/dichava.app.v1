@@ -67,9 +67,55 @@ delas** (que fica com 15–30%) — ficamos com quase 100%.
 
 ---
 
+## Checklist de lançamento (do fim do teste até ir ao ar)
+
+### Fase 1 — Fechar o ciclo de testes
+- [ ] Consolidar feedback dos testers numa lista única
+- [ ] Priorizar: bug crítico → confuso → "seria legal"
+- [ ] Corrigir bugs que travam ou confundem (foco em **confiável**, não perfeito)
+- [ ] Definir a **linha free × premium** (ver regra de ouro abaixo)
+
+### Fase 2 — Preparar pro público geral
+- [ ] **Domínio próprio** (ex: dichava.app) apontando pro app (~R$ 40–60/ano)
+- [ ] HTTPS no domínio (automático no GitHub/Cloudflare Pages)
+- [ ] **Analytics privacy-friendly** (Plausible ou Umami — sem cookies, LGPD ok)
+- [ ] **Política de Privacidade** e **Termos de Uso** publicados e linkados no app
+- [ ] Revisar segurança e backup do Supabase (Fase infra abaixo)
+
+### Fase 3 — Infra pra aguentar acessos
+- [ ] **RLS ativo em TODAS as tabelas** do Supabase (cada user só vê o próprio dado) 🔒
+- [ ] **Índices** nas colunas mais consultadas (`user_id`, data)
+- [ ] **Confirmação de e-mail + rate limiting** no Supabase Auth
+- [ ] Decidir **Supabase Pro** (US$ 25/mês) antes do pico — principalmente pelo **backup diário**
+- [ ] (Futuro) Avaliar migrar hospedagem do app pra **Cloudflare Pages** (banda ilimitada, grátis)
+
+### Fase 4 — Monetização (quando o público já responde)
+- [ ] Campo `plano: free|premium` (+ `plano_expira`) no perfil (Supabase)
+- [ ] Checkout **Pix / Mercado Pago** (ou Stripe/Hotmart)
+- [ ] **Webhook** que marca `plano='premium'` após pagamento confirmado
+- [ ] *Gating* no app: telas/funções premium checam o plano antes de abrir
+- [ ] **Contador / nota fiscal / tributação** acertados antes de cobrar
+
+### Fase 5 — Lançamento e pós
+- [ ] Landing com CTA claro (✅ já pronta em `/landing/`)
+- [ ] Plano de divulgação (Instagram, grupos, coletivos de redução de danos)
+- [ ] Monitorar aceitação por 1–3 meses
+- [ ] Só então: abrir o **módulo profissionais**
+
+### Regra de ouro do free × premium
+O **núcleo de redução de danos é sempre gratuito** (registro, modo SOS, respiração,
+informação de segurança) — cobrar por isso criaria barreira ao cuidado. Premium só
+nos **extras**: relatórios avançados, exportação, backup na nuvem, mais conteúdos
+guiados, temas.
+
+---
+
 ## Histórico rápido de infra
 - Deploy: **GitHub Pages** a partir da branch `main`.
 - Já houve travamento da fila de deploy do Pages (jul/2026) — resolvido deletando o
   environment `github-pages` e reconfigurando a source. Se travar de novo, esse é o caminho.
 - Service worker: **network-first** com `cache: 'no-store'` pra HTML, evitando
   versões antigas travadas. Botão **"Forçar atualização"** em Config → Grupo de testes.
+- Backend: **Supabase** (projeto `gnpwaywiyq...`). Muito dado fica em **localStorage**
+  no aparelho — o backend cuida sobretudo de **auth** e do que for sincronizado, o que
+  mantém a carga do banco leve.
