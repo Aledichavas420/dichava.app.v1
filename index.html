@@ -1671,6 +1671,10 @@ a{color:inherit;text-decoration:none}
       <div class="zi" data-icon="jogo-bolhas"></div>
       <div><h4>Estoura bolhas</h4><p>Foco no aqui e agora</p></div>
     </div>
+    <div class="zcard zc-teal tall" onclick="abrirMemoria()">
+      <div class="zi"><svg viewBox="0 0 24 24" width="30" height="30"><rect x="3" y="3" width="8" height="8" rx="2" fill="#fff"></rect><rect x="13" y="3" width="8" height="8" rx="2" fill="#fff" opacity=".55"></rect><rect x="3" y="13" width="8" height="8" rx="2" fill="#fff" opacity=".55"></rect><rect x="13" y="13" width="8" height="8" rx="2" fill="#fff"></rect></svg></div>
+      <div><h4>Jogo da memória</h4><p>Ache os pares · com fases</p></div>
+    </div>
   </div>
 
   <div class="zen-foot">Se a vontade continuar muito forte, o <strong onclick="showV('vcrise')">Modo Crise</strong> tem mais ferramentas de apoio.</div>
@@ -1707,6 +1711,10 @@ a{color:inherit;text-decoration:none}
       <span class="rb-plus">+</span>
     </button>
   </div>
+  <!-- ATIVIDADE SEMANAL -->
+  <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
+  <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
+  <div style="text-align:center;font-size:11.5px;color:var(--txm);margin:-6px 18px 10px">Registros de uso por semana</div>
   <!-- REGISTROS DE USO -->
   <div class="hist-hd">
     <div class="hist-hd-l"><div class="hist-hd-t"><span class="tic" data-icon="reguso"></span> Registros de uso</div><div class="hist-hd-c" id="hist-count">0 registros</div></div>
@@ -1717,11 +1725,7 @@ a{color:inherit;text-decoration:none}
   <div class="hist-hd">
     <div class="hist-hd-l"><div class="hist-hd-t"><span class="tic" data-icon="regcompra"></span> Registros de compra <span class="premtag">👑 Premium</span></div><div class="hist-hd-c" id="compras-count">0 compras</div></div>
   </div>
-  <div id="compras-l" style="padding:0 18px 4px;display:flex;flex-direction:column;gap:9px"></div>
-  <!-- ATIVIDADE SEMANAL -->
-  <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
-  <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
-  <div style="text-align:center;font-size:11.5px;color:var(--txm);margin:-6px 18px 8px">Registros de uso por semana</div>
+  <div id="compras-l" style="padding:0 18px 8px;display:flex;flex-direction:column;gap:9px"></div>
 </div>
 </div>
 
@@ -1954,6 +1958,26 @@ a{color:inherit;text-decoration:none}
         <button class="snes-ab snes-a" id="pad-rot"><span>A</span><small>Girar</small></button>
         <button class="snes-ab snes-b" id="pad-drop"><span>B</span><small>Soltar</small></button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- JOGO DA MEMÓRIA -->
+<div class="V" id="vmemoria">
+  <div class="gv-top"><button class="gv-exit" onclick="fecharMemoria()">✕ Sair</button><div class="gv-title">Jogo da memória</div></div>
+  <div class="mem-stage">
+    <div class="mem-hud">
+      <div class="mem-stat"><span id="mem-fase">1</span><small>fase</small></div>
+      <div class="mem-stat"><span id="mem-moves">0</span><small>jogadas</small></div>
+      <div class="mem-stat"><span id="mem-pairs">0/0</span><small>pares</small></div>
+    </div>
+    <div class="mem-grid" id="mem-grid"></div>
+    <div class="mem-hint" id="mem-hint">Vire duas cartas e ache os pares 🧠</div>
+    <div class="gv-over" id="mem-over">
+      <h3 id="mem-over-t">Fase completa! 🎉</h3>
+      <p id="mem-over-p">Boa! Sua mente deu uma pausa e um respiro.</p>
+      <button class="gv-btn" id="mem-next" onclick="memProxFase()">Próxima fase →</button>
+      <button class="gv-btn ghost" onclick="fecharMemoria()">Voltar</button>
     </div>
   </div>
 </div>
@@ -2336,6 +2360,22 @@ a{color:inherit;text-decoration:none}
 .premtag{white-space:nowrap}
 /* coroa premium alinhada à direita no cabeçalho */
 .hero-prem{margin-left:auto}
+/* jogo da memória */
+.mem-stage{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 16px calc(20px + var(--sb));background:radial-gradient(120% 80% at 50% 0%,#2a2260,#161a2e);overflow-y:auto;position:relative}
+.mem-hud{display:flex;gap:11px;margin-bottom:16px}
+.mem-stat{background:rgba(255,255,255,.1);border-radius:14px;padding:8px 18px;text-align:center;min-width:64px}
+.mem-stat span{display:block;font-size:21px;font-weight:800;color:#fff;font-family:'Poppins',sans-serif;line-height:1.1}
+.mem-stat small{font-size:10px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.05em}
+.mem-grid{display:grid;gap:9px;width:100%;max-width:400px;margin:0 auto}
+.mem-card{aspect-ratio:1;perspective:600px;cursor:pointer}
+.mem-card-in{position:relative;width:100%;height:100%;transition:transform .4s;transform-style:preserve-3d}
+.mem-card.flip .mem-card-in,.mem-card.done .mem-card-in{transform:rotateY(180deg)}
+.mem-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:clamp(24px,7vw,36px)}
+.mem-back{background:linear-gradient(150deg,#7BD0C1,#4FB3A4);box-shadow:0 4px 10px rgba(0,0,0,.28)}
+.mem-back::after{content:'✦';color:rgba(255,255,255,.6);font-size:22px}
+.mem-front{background:#fff;transform:rotateY(180deg);box-shadow:0 4px 10px rgba(0,0,0,.2)}
+.mem-card.done .mem-front{background:#EAF7EE;box-shadow:0 0 0 2.5px #4CAF5A inset}
+.mem-hint{color:rgba(255,255,255,.72);font-size:13px;margin-top:16px;text-align:center}
 /* painel "você é premium" */
 .preminfo{background:var(--roxof);border:1.5px solid rgba(124,58,237,.2);border-radius:15px;padding:6px 14px;margin-top:14px}
 .pinfr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(124,58,237,.12);font-size:13.5px}
@@ -4891,6 +4931,49 @@ let _game=null,_gameType=null,_gRAF=null;
 const gBest=t=>ls('dr_gbest_'+t+'_'+uid())||0;
 const gSetBest=(t,v)=>ls('dr_gbest_'+t+'_'+uid(),v);
 
+/* ══ JOGO DA MEMÓRIA (premium) ══ */
+const MEM_EMOJIS=['🌿','🌙','💧','☀️','🍄','🌊','✨','🌱','🦋','🍃','🔥','🪷','⭐','🌸','🐝','🌈'];
+let _memFase=1,_memFlip=[],_memLock=false,_memPairs=0,_memMoves=0,_memTotal=0;
+function memConfig(f){const paresArr=[4,6,8,10];const pares=paresArr[Math.min(f-1,paresArr.length-1)];const cols=pares<=8?4:5;return{pares,cols};}
+function abrirMemoria(){_memFase=1;showV('vmemoria');memBuild();}
+function fecharMemoria(){document.getElementById('mem-over').classList.remove('on');showV('vapp');}
+function memBuild(){
+  const{pares,cols}=memConfig(_memFase);
+  _memFlip=[];_memLock=false;_memPairs=0;_memMoves=0;_memTotal=pares;
+  document.getElementById('mem-fase').textContent=_memFase;
+  document.getElementById('mem-moves').textContent='0';
+  document.getElementById('mem-pairs').textContent='0/'+pares;
+  document.getElementById('mem-over').classList.remove('on');
+  const emojis=MEM_EMOJIS.slice(0,pares);let deck=emojis.concat(emojis);
+  for(let i=deck.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[deck[i],deck[j]]=[deck[j],deck[i]];}
+  const g=document.getElementById('mem-grid');g.style.gridTemplateColumns='repeat('+cols+',1fr)';
+  g.innerHTML=deck.map(e=>`<div class="mem-card" data-e="${e}" onclick="memClick(this)"><div class="mem-card-in"><div class="mem-face mem-back"></div><div class="mem-face mem-front">${e}</div></div></div>`).join('');
+}
+function memClick(el){
+  if(_memLock||el.classList.contains('flip')||el.classList.contains('done'))return;
+  el.classList.add('flip');_memFlip.push(el);try{vib(8);}catch(e){}
+  if(_memFlip.length===2){
+    _memMoves++;document.getElementById('mem-moves').textContent=_memMoves;_memLock=true;
+    const[a,b]=_memFlip;
+    if(a.dataset.e===b.dataset.e){
+      setTimeout(()=>{a.classList.add('done');b.classList.add('done');_memFlip=[];_memLock=false;_memPairs++;
+        document.getElementById('mem-pairs').textContent=_memPairs+'/'+_memTotal;try{vib(15);}catch(e){}
+        if(_memPairs>=_memTotal)memVenceu();},380);
+    }else{
+      setTimeout(()=>{a.classList.remove('flip');b.classList.remove('flip');_memFlip=[];_memLock=false;},760);
+    }
+  }
+}
+function memVenceu(){
+  try{vib([30,50,30]);confete();}catch(e){}
+  try{const best=+(ls('dr_membest_'+uid())||0);if(_memFase>best)ls('dr_membest_'+uid(),_memFase);}catch(e){}
+  try{xpPausa();}catch(e){}
+  document.getElementById('mem-over-t').textContent='Fase '+_memFase+' completa! 🎉';
+  document.getElementById('mem-over-p').textContent='Você achou os pares em '+_memMoves+' jogadas. Sua mente deu um respiro. 💚';
+  document.getElementById('mem-next').style.display=_memFase>=10?'none':'';
+  document.getElementById('mem-over').classList.add('on');
+}
+function memProxFase(){_memFase++;memBuild();}
 function abrirJogo(tipo){
   _gameType=tipo;
   try{xpPausa();}catch(e){}
