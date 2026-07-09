@@ -1808,7 +1808,7 @@ a{color:inherit;text-decoration:none}
   <!-- DICHAVA PREMIUM -->
   <div class="prembanner" id="prem-banner" onclick="abrirPremium()"><span class="pbic">✨</span><div><div class="pbt">Seja dichava premium</div><div class="pbd">Relatórios, temas, backup e mais</div></div><span class="pbar">›</span></div>
   <div class="cfgsec" style="margin:0 18px 11px">
-    <div class="cfgi" onclick="premGate('Relatórios avançados')"><div class="cfgic">📊</div><div class="cfgb"><div class="cfgn">Relatórios avançados <span class="premlock">🔒 Premium</span></div><div class="cfgd">Estatísticas e gráficos aprofundados</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="premDo(abrirRelatorios)"><div class="cfgic">📊</div><div class="cfgb"><div class="cfgn">Relatórios avançados <span class="premlock">🔒 Premium</span></div><div class="cfgd">Tendências, comparações, mapa de calor e PDF</div></div><div class="cfgar">›</div></div>
   </div>
   <!-- GRUPO DE TESTES -->
   <div class="shr"><div class="sht">Grupo de testes</div></div>
@@ -1956,6 +1956,45 @@ a{color:inherit;text-decoration:none}
       <button class="gv-btn" id="mem-next" onclick="memProxFase()">Próxima fase →</button>
       <button class="gv-btn ghost" onclick="fecharMemoria()">Voltar</button>
     </div>
+  </div>
+</div>
+
+<!-- RELATÓRIOS AVANÇADOS -->
+<style>
+.rel-periods{display:flex;gap:8px;padding:4px 18px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.relchip{flex:none;background:var(--cin);border:1.5px solid var(--cinm);color:var(--txs);font-weight:700;font-size:13px;padding:8px 16px;border-radius:30px;cursor:pointer}
+.relchip.on{background:var(--roxo);border-color:var(--roxo);color:#fff}
+.rel-card{background:#fff;border:1px solid var(--cinm);border-radius:16px;margin:0 18px 12px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+#shell.dkm .rel-card{background:#1D2520;border-color:#33402F}
+.rel-ct{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:var(--dk);margin-bottom:11px;display:flex;align-items:center;gap:6px}
+#shell.dkm .rel-ct{color:#E8EDE6}
+.rel-cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rel-metric{background:var(--cin);border-radius:13px;padding:11px 12px}
+#shell.dkm .rel-metric{background:#232C25}
+.rel-metric .rm-v{font-size:19px;font-weight:800;color:var(--dk);font-family:'Poppins',sans-serif;display:flex;align-items:baseline;flex-wrap:wrap}
+#shell.dkm .rel-metric .rm-v{color:#fff}
+.rel-metric .rm-l{font-size:11px;color:var(--txs);margin-top:1px}
+.rel-delta{font-size:11.5px;font-weight:800;margin-left:6px}
+.rel-delta.good{color:#2DA257}.rel-delta.bad{color:#E0533B}
+.rel-heat{display:grid;grid-template-columns:auto repeat(4,1fr);gap:4px;align-items:center}
+.rel-heat .hh{font-size:9.5px;color:var(--txs);text-align:center;font-weight:700}
+.rel-heat .hd{font-size:11px;color:var(--txs);font-weight:700;padding-right:2px}
+.rel-heat .hc{aspect-ratio:1.7;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff}
+.rel-card .inschart{padding:2px 0}
+.rel-empty{font-size:13px;color:var(--txm);padding:6px 2px}
+</style>
+<div class="V" id="vrelatorios">
+  <div class="ptb" style="background:var(--roxo)"><button class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit">📊 Relatórios avançados</div></div>
+  <div class="sc" style="padding:14px 0 40px">
+    <div class="rel-periods" id="rel-periods">
+      <button class="relchip on" data-d="30" onclick="relSet(30)">30 dias</button>
+      <button class="relchip" data-d="90" onclick="relSet(90)">90 dias</button>
+      <button class="relchip" data-d="365" onclick="relSet(365)">1 ano</button>
+      <button class="relchip" data-d="9999" onclick="relSet(9999)">Tudo</button>
+    </div>
+    <div id="rel-body"></div>
+    <div style="padding:6px 18px 0"><button class="btn bv bfull" onclick="exportarRelatorioPDF()">📄 Exportar em PDF</button></div>
+    <div style="text-align:center;font-size:11px;color:var(--txm);padding:10px 24px 0">Ótimo pra guardar ou compartilhar com seu terapeuta 💚</div>
   </div>
 </div>
 
@@ -4917,6 +4956,89 @@ function popularEstrelas(){
 let _game=null,_gameType=null,_gRAF=null;
 const gBest=t=>ls('dr_gbest_'+t+'_'+uid())||0;
 const gSetBest=(t,v)=>ls('dr_gbest_'+t+'_'+uid(),v);
+
+/* ══ RELATÓRIOS AVANÇADOS (premium) ══ */
+let _relDias=30;
+function isoNAgo(n){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n);return isoLocal(d);}
+function abrirRelatorios(){_relDias=30;showV('vrelatorios');relChips();renderRelatorio();}
+function relSet(d){_relDias=d;relChips();renderRelatorio();}
+function relChips(){document.querySelectorAll('#rel-periods .relchip').forEach(c=>c.classList.toggle('on',+c.dataset.d===_relDias));}
+function relStats(ini,fim){
+  const regs=gR().filter(x=>x.data>=ini&&x.data<=fim),compras=gCompras().filter(x=>x.data>=ini&&x.data<=fim),fiss=gFs().filter(x=>x.data>=ini&&x.data<=fim);
+  return {regs,compras,fiss,usos:regs.length,gasto:compras.reduce((a,c)=>a+parseBRL(c.valor),0),resist:fiss.length,eco:fiss.reduce((a,f)=>a+parseBRL(f.economia),0)};
+}
+function relDelta(cur,prev,goodWhenDown){
+  if(prev===0)return '';
+  const p=Math.round((cur-prev)/prev*100);if(p===0)return '<span class="rel-delta">0%</span>';
+  const good=goodWhenDown?p<0:p>0;return `<span class="rel-delta ${good?'good':'bad'}">${p>0?'+':''}${p}%</span>`;
+}
+function relBars(vals){const m={};vals.filter(Boolean).forEach(v=>m[v]=(m[v]||0)+1);const arr=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6);if(!arr.length)return '<div class="rel-empty">Sem registros no período.</div>';const max=arr[0][1];return '<div class="inschart">'+arr.map(([k,n])=>`<div class="insbar"><div class="ibl">${esc(k)}</div><div class="ibt"><div class="ibf" style="width:${Math.round(n/max*100)}%"></div></div><div class="ibn">${n}</div></div>`).join('')+'</div>';}
+function relBarsVals(obj){const arr=Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,6);if(!arr.length)return '';const max=Math.max(...arr.map(x=>x[1]),1);return '<div class="inschart">'+arr.map(([k,v])=>`<div class="insbar"><div class="ibl">${esc(k)}</div><div class="ibt"><div class="ibf" style="width:${Math.round(v/max*100)}%"></div></div><div class="ibn" style="width:auto;min-width:40px">${brl(v).replace('R$ ','')}</div></div>`).join('')+'</div>';}
+function relTrendSVG(regs,ini,dias){
+  const bd=dias<=14?1:(dias<=90?7:30);const n=Math.max(2,Math.ceil(dias/bd));
+  const counts=new Array(n).fill(0);const iniD=new Date(ini+'T12:00');
+  regs.forEach(r=>{const idx=Math.floor((new Date(r.data+'T12:00')-iniD)/86400000/bd);if(idx>=0&&idx<n)counts[idx]++;});
+  const max=Math.max(1,...counts);const W=300,H=90,pad=8;
+  const pts=counts.map((c,i)=>[pad+(W-2*pad)*(n<=1?0:i/(n-1)),H-pad-(H-2*pad)*(c/max)]);
+  const poly=pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  const area=`${pad},${H-pad} `+poly+` ${W-pad},${H-pad}`;
+  const dots=pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.6" fill="#7C3AED"></circle>`).join('');
+  const lbl=bd===1?'por dia':(bd===7?'por semana':'por mês');
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block"><polygon points="${area}" fill="rgba(124,58,237,.12)"></polygon><polyline points="${poly}" fill="none" stroke="#7C3AED" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dots}</svg><div style="font-size:11px;color:var(--txm);text-align:center;margin-top:4px">Registros de uso ${lbl} · pico de ${max}</div>`;
+}
+function relHeatmap(regs){
+  const per=['Madrugada','Manhã','Tarde','Noite'],wd=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const m=Array.from({length:7},()=>[0,0,0,0]);
+  regs.forEach(r=>{const d=new Date(r.data+'T12:00').getDay();const pi=per.indexOf(r.hr);if(pi>=0)m[d][pi]++;});
+  const max=Math.max(1,...m.flat());
+  let h='<div class="rel-heat"><div class="hd"></div>'+per.map(p=>`<div class="hh">${p==='Madrugada'?'Madru':p}</div>`).join('');
+  for(let d=0;d<7;d++){h+=`<div class="hd">${wd[d]}</div>`+m[d].map(c=>{const o=c/max;const bg=c?`background:rgba(124,58,237,${(0.16+o*0.8).toFixed(2)})`:'background:var(--cin)';return `<div class="hc" style="${bg}">${c||''}</div>`;}).join('');}
+  return h+'</div>';
+}
+function renderRelatorio(){
+  const hj=hoje();const dias=_relDias>=9999?3650:_relDias;const iniCur=isoNAgo(dias-1);
+  const cur=relStats(iniCur,hj);const showCmp=_relDias<9999;
+  let prev={usos:0,gasto:0,resist:0,eco:0};if(showCmp)prev=relStats(isoNAgo(2*dias-1),isoNAgo(dias));
+  let html='';
+  const cmpLbl=showCmp?`<div style="font-size:11px;color:var(--txs);margin-top:9px">vs. os ${dias} dias anteriores</div>`:'';
+  html+=`<div class="rel-card"><div class="rel-ct">📊 Resumo do período</div><div class="rel-cmp">
+    <div class="rel-metric"><div class="rm-v">${cur.usos}${showCmp?relDelta(cur.usos,prev.usos,true):''}</div><div class="rm-l">registros de uso</div></div>
+    <div class="rel-metric"><div class="rm-v">${cur.resist}${showCmp?relDelta(cur.resist,prev.resist,false):''}</div><div class="rm-l">resistências</div></div>
+    <div class="rel-metric"><div class="rm-v">${brl(cur.gasto)}${showCmp?relDelta(cur.gasto,prev.gasto,true):''}</div><div class="rm-l">gasto</div></div>
+    <div class="rel-metric"><div class="rm-v">${brl(cur.eco)}${showCmp?relDelta(cur.eco,prev.eco,false):''}</div><div class="rm-l">economia</div></div>
+  </div>${cmpLbl}</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">📈 Tendência de uso</div>${cur.usos?relTrendSVG(cur.regs,iniCur,dias):'<div class="rel-empty">Sem registros no período.</div>'}</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">🗓️ Quando você mais usa</div>${cur.usos?relHeatmap(cur.regs):'<div class="rel-empty">Sem registros no período.</div>'}</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">🎯 Substâncias</div>${relBars(cur.regs.map(r=>r.substancia))}</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">💰 Financeiro</div>`;
+  if(cur.compras.length){const bySub={};cur.compras.forEach(c=>{const k=c.substancia||c.item||'Outro';bySub[k]=(bySub[k]||0)+parseBRL(c.valor);});html+=relBarsVals(bySub)+`<div style="font-size:12.5px;color:var(--txs);margin-top:9px">Gasto total: <b style="color:var(--dk)">${brl(cur.gasto)}</b> · Economia: <b style="color:#2DA257">${brl(cur.eco)}</b></div>`;}
+  else html+='<div class="rel-empty">Nenhuma compra registrada no período.</div>';
+  html+=`</div>`;
+  const total=cur.usos+cur.resist;const taxa=total?Math.round(cur.resist/total*100):0;
+  html+=`<div class="rel-card"><div class="rel-ct">💪 Resistências</div><div style="font-size:13.5px;color:var(--txs);line-height:1.55">Você resistiu <b style="color:var(--dk)">${cur.resist}</b> vez(es) no período. Taxa de resistência: <b style="color:#6B43D6">${taxa}%</b> das vezes em que a vontade apareceu.</div></div>`;
+  document.getElementById('rel-body').innerHTML=html;
+}
+function exportarRelatorioPDF(){
+  try{
+    const dias=_relDias>=9999?3650:_relDias;const cur=relStats(isoNAgo(dias-1),hoje());
+    const periodoTxt=_relDias>=9999?'Todo o período':`Últimos ${_relDias} dias`;
+    const bySub={};cur.compras.forEach(c=>{const k=c.substancia||c.item||'Outro';bySub[k]=(bySub[k]||0)+parseBRL(c.valor);});
+    const subCount={};cur.regs.forEach(r=>{const k=r.substancia||'—';subCount[k]=(subCount[k]||0)+1;});
+    const rows=Object.entries(subCount).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<tr><td>${esc(k)}</td><td style="text-align:right">${n}</td></tr>`).join('');
+    const gastoRows=Object.entries(bySub).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td style="text-align:right">${brl(v)}</td></tr>`).join('');
+    const total=cur.usos+cur.resist;const taxa=total?Math.round(cur.resist/total*100):0;
+    const html=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Relatório · dichava.app</title><style>body{font-family:-apple-system,system-ui,sans-serif;color:#1B2A1C;max-width:720px;margin:0 auto;padding:28px 22px;line-height:1.5}h1{color:#2E7D32;font-size:24px;margin:0 0 2px}.sub{color:#888;font-size:13px;margin-bottom:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.m{border:1px solid #e6e6e2;border-radius:12px;padding:12px}.m b{font-size:22px;display:block}.m span{font-size:12px;color:#888}h2{font-size:15px;margin:24px 0 8px;color:#2E7D32}table{width:100%;border-collapse:collapse;font-size:14px}td{padding:6px 0;border-bottom:1px solid #eee}.foot{margin-top:28px;font-size:11px;color:#999;border-top:1px solid #eee;padding-top:12px}@media print{.noprint{display:none}}</style></head><body>
+<h1>Relatório · dichava.app</h1><div class="sub">${periodoTxt} · gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
+<div class="grid"><div class="m"><b>${cur.usos}</b><span>registros de uso</span></div><div class="m"><b>${cur.resist}</b><span>resistências (taxa ${taxa}%)</span></div><div class="m"><b>${brl(cur.gasto)}</b><span>gasto</span></div><div class="m"><b>${brl(cur.eco)}</b><span>economia</span></div></div>
+<h2>Substâncias registradas</h2><table>${rows||'<tr><td>Sem registros no período</td></tr>'}</table>
+${gastoRows?`<h2>Gastos por item</h2><table>${gastoRows}</table>`:''}
+<div class="foot">Gerado pelo dichava.app · ferramenta de autoconhecimento e redução de danos. Não substitui acompanhamento profissional. Você pode compartilhar este relatório com seu terapeuta ou médico.</div>
+<p class="noprint" style="text-align:center;margin-top:22px"><button onclick="window.print()" style="background:#2E7D32;color:#fff;border:none;padding:12px 26px;border-radius:30px;font-size:15px;font-weight:700;cursor:pointer">🖨️ Salvar como PDF / Imprimir</button></p>
+</body></html>`;
+    const blob=new Blob([html],{type:'text/html'});const url=URL.createObjectURL(blob);const w=window.open(url,'_blank');
+    if(!w)toast('Permita pop-ups pra abrir o relatório 💚');else vib(15);
+  }catch(e){toast('Não consegui gerar o relatório agora.');}
+}
 
 /* ══ JOGO DA MEMÓRIA (premium) ══ */
 const MEM_EMOJIS=['🌿','🌙','💧','☀️','🍄','🌊','✨','🌱','🦋','🍃','🔥','🪷','⭐','🌸','🐝','🌈'];
