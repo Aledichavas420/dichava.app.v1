@@ -1687,13 +1687,34 @@ a{color:inherit;text-decoration:none}
     <div class="cal-leg"><span><i style="background:var(--vf)"></i>algum uso</span><span><i style="background:#FFE0CC"></i>uso intenso</span><span><i style="box-shadow:inset 0 0 0 2px var(--dk)"></i>hoje</span></div>
   </div>
   <div id="ddet" style="display:none"></div>
-  <!-- MEUS REGISTROS -->
+  <!-- BOTÕES DE REGISTRO -->
+  <div class="regbtns">
+    <button class="regbtn rb-uso" onclick="openMod('mreg')">
+      <span class="rb-plus">+</span>
+      <span class="rb-ic" data-icon="reguso"></span>
+      <span class="rb-tx"><b>Registrar uso</b><small>Seu diário de uso</small></span>
+    </button>
+    <button class="regbtn rb-compra" onclick="premDo(()=>openMod('mcompra'))">
+      <span class="rb-plus">+</span>
+      <span class="rb-ic" data-icon="regcompra"></span>
+      <span class="rb-tx"><b>Registrar compra <span class="premlock">👑</span></b><small>Gastos e economia</small></span>
+    </button>
+  </div>
+  <!-- REGISTROS DE USO -->
   <div class="hist-hd">
-    <div class="hist-hd-l"><div class="hist-hd-t"><span class="tic" data-icon="dia-notebook"></span> Meus registros</div><div class="hist-hd-c" id="hist-count">0 registros</div></div>
-    <button class="hist-add" onclick="openMod('mreg')">+ novo</button>
+    <div class="hist-hd-l"><div class="hist-hd-t"><span class="tic" data-icon="reguso"></span> Registros de uso</div><div class="hist-hd-c" id="hist-count">0 registros</div></div>
   </div>
   <div id="hist-l" style="padding:0 18px;display:flex;flex-direction:column;gap:9px;padding-bottom:4px"></div>
-  <div style="text-align:center;padding:4px 18px 6px"><button class="hist-clear" onclick="if(confirm('Apagar todos os registros?'))limparRegs()">↺ limpar histórico</button></div>
+  <div style="text-align:center;padding:4px 18px 8px"><button class="hist-clear" onclick="if(confirm('Apagar todos os registros?'))limparRegs()">↺ limpar histórico</button></div>
+  <!-- REGISTROS DE COMPRA -->
+  <div class="hist-hd">
+    <div class="hist-hd-l"><div class="hist-hd-t"><span class="tic" data-icon="regcompra"></span> Registros de compra <span class="premtag">👑 Premium</span></div><div class="hist-hd-c" id="compras-count">0 compras</div></div>
+  </div>
+  <div id="compras-l" style="padding:0 18px 4px;display:flex;flex-direction:column;gap:9px"></div>
+  <!-- ATIVIDADE SEMANAL -->
+  <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
+  <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
+  <div style="text-align:center;font-size:11.5px;color:var(--txm);margin:-6px 18px 8px">Registros de uso por semana</div>
 </div>
 </div>
 
@@ -1719,10 +1740,6 @@ a{color:inherit;text-decoration:none}
     <div class="insbox-hd"><div class="insbox-t"><span class="tic" data-icon="sec-insights"></span> Insights do seu padrão</div><span class="premtag">👑 Premium</span><button class="insbox-i" onclick="infoInsights()" aria-label="Sobre">i</button></div>
     <div id="insights-l"></div>
   </div>
-
-  <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
-  <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
-  <div style="text-align:center;font-size:11.5px;color:var(--txm);margin:-6px 18px 8px">Registros de uso por semana</div>
 
   <div class="shr"><div class="sht">Conquistas <span class="tic" data-icon="sec-conquistas"></span></div><button class="shi" onclick="infoConquistas()" aria-label="Sobre">i</button></div>
   <div class="cqr" id="cqr"></div>
@@ -2285,6 +2302,18 @@ a{color:inherit;text-decoration:none}
 .insbox .insc{margin-left:14px;margin-right:14px}
 .insbar .ibt{height:18px}
 .insbar .ibf{background:linear-gradient(90deg,#7C3AED,#4CAF5A)}
+/* botões chamativos de registro (aba Registros) */
+.regbtns{display:flex;gap:11px;padding:6px 18px 14px}
+.regbtn{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:7px;border:none;border-radius:18px;padding:14px 13px 13px;cursor:pointer;text-align:left;position:relative;color:#fff;box-shadow:0 7px 16px rgba(0,0,0,.14);transition:transform .12s}
+.regbtn.rb-uso{background:linear-gradient(135deg,#5FCF74,#2DA257)}
+.regbtn.rb-compra{background:linear-gradient(135deg,#5CE3CF,#0C9C8C)}
+.regbtn .rb-ic{width:34px;height:34px;background:rgba(255,255,255,.92);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.regbtn .rb-ic .appicon{width:24px;height:24px}
+.regbtn .rb-tx b{font-size:14.5px;font-weight:800;display:block;line-height:1.15}
+.regbtn .rb-tx small{font-size:11px;opacity:.92;font-weight:600}
+.regbtn .rb-plus{position:absolute;top:11px;right:12px;font-size:19px;font-weight:800;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.24);display:flex;align-items:center;justify-content:center;line-height:1}
+.regbtn .premlock{background:rgba(255,255,255,.28);color:#fff}
+.regbtn:active{transform:scale(.97)}
 /* painel "você é premium" */
 .preminfo{background:var(--roxof);border:1.5px solid rgba(124,58,237,.2);border-radius:15px;padding:6px 14px;margin-top:14px}
 .pinfr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(124,58,237,.12);font-size:13.5px}
@@ -3099,7 +3128,7 @@ function goPg(id,btn){
   else document.querySelectorAll(`.ni[data-p="${id}"]`).forEach(b=>b.classList.add('on'));
   blurAll();
   if(id!=='p-ref')desativarShake();
-  if(id==='p-agenda')renderCal();
+  if(id==='p-agenda'){renderCal();renderHist();renderCompras();renderGraf();}
   if(id==='p-prog')renderProg();
   if(id==='p-ref')renderRef();
   if(id==='p-cfg'){renderCfg();renderPremUI();}
@@ -3575,7 +3604,18 @@ function renderFinModal(){
   else{el.innerHTML=compras.map(c=>`<div class="cpitem"><div style="flex:1"><div style="font-weight:700;font-size:13.5px">${esc(c.item||c.substancia||'Compra')}</div><div style="font-size:11.5px;color:var(--txs)">${fdt(c.data)}${c.local?' · '+esc(c.local):''}</div></div><div style="font-weight:800;color:var(--dk);white-space:nowrap">${brl(parseBRL(c.valor))}</div><button class="cpdel" onclick="delCompra('${c.id}')" aria-label="Excluir">✕</button></div>`).join('');}
 }
 function salvarBase(){const v=document.getElementById('mfin-base').value.trim();const f=gFin();f.base=v;sFin(f);renderFinModal();renderFin();toast('✓ Referência salva');}
-function delCompra(id){const c=gCompras().filter(x=>x.id!==id);sCompras(c);renderFinModal();renderFin();vib(10);toast('Compra removida');}
+function delCompra(id){const c=gCompras().filter(x=>x.id!==id);sCompras(c);renderFinModal();renderFin();renderCompras();vib(10);toast('Compra removida');}
+// lista de compras na aba Registros (premium)
+function renderCompras(){
+  const c=document.getElementById('compras-l');if(!c)return;
+  const compras=gCompras().slice().sort((a,b)=>(b.criado||'').localeCompare(a.criado||''));
+  const cnt=document.getElementById('compras-count');if(cnt)cnt.textContent=compras.length+(compras.length===1?' compra':' compras');
+  let body;
+  if(!compras.length)body='<div style="font-size:13px;color:var(--txm);padding:0 4px 12px">Nenhuma compra registrada ainda.</div>';
+  else body=compras.map(cp=>`<div class="hi"><div class="hie">${nem(cp.substancia||'')}</div><div class="hib"><div class="hin">${esc(cp.item||cp.substancia||'Compra')}</div><div class="him">${fdt(cp.data)}${cp.local?' · '+esc(cp.local):''}</div></div><div style="font-weight:800;color:var(--dk);white-space:nowrap;align-self:center">${brl(parseBRL(cp.valor))}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button class="dan" onclick="delCompra('${cp.id}')">🗑️ Apagar</button></div></div></div>`).join('');
+  if(isPremium()){c.classList.remove('premgate','locked');c.innerHTML=body;}
+  else{c.classList.add('premgate','locked');c.innerHTML=`<div class="premgate-body">${body}</div>`+premOverlayHTML('Registros de compra','Acompanhe seus gastos e o quanto você economiza — no premium.');}
+}
 function renderHero(st,mp){
   // mascote
   const mEl=document.getElementById('hero-mascot');
@@ -3889,7 +3929,7 @@ function salvCompra(){
   document.getElementById('cp-item').value='';document.getElementById('cp-valor').value='';document.getElementById('cp-qtd').value='';document.getElementById('cp-local').value='';document.getElementById('cp-obs').value='';document.getElementById('cp-sub').value='';document.getElementById('cp-data').value='';
   document.querySelectorAll('#cp-subgrid .subbtn').forEach(b=>b.classList.remove('on'));
   closeMod('mcompra');vib(15);toast('✓ Compra registrada 🛒');
-  try{renderFin();}catch(e){}
+  try{renderFin();renderCompras();}catch(e){}
   try{checkGastoAviso();}catch(e){}
 }
 function abrirNovo(){openMod('mnovo');}
@@ -3936,7 +3976,6 @@ function renderCal(){
   }
   document.getElementById('calg').innerHTML=html;
   if(_calSel)renderDdet(regs);
-  renderHist();
 }
 function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
 function calSel(iso){_calSel=iso;renderCal();}
@@ -3946,7 +3985,7 @@ function renderDdet(regs){
 }
 
 /* ══ PROGRESSO ══ */
-function renderProg(){renderMetas();renderInsights();renderGraf();renderCqs();}
+function renderProg(){renderMetas();renderInsights();renderCqs();}
 
 // ── progresso automático das metas (lê os registros) ──
 function _diasAtivosN(){const s=new Set();gR().forEach(r=>s.add(r.data));gRef().forEach(r=>s.add(r.data));(gProt()||[]).forEach(d=>s.add(d));return s.size;}
@@ -5839,6 +5878,7 @@ function reRenderGated(){
   try{renderInsights();}catch(e){}
   try{renderCartas();}catch(e){}
   try{const m=document.getElementById('mfin');if(m&&m.classList.contains('on'))renderFinModal();}catch(e){}
+  try{renderCompras();}catch(e){}
   try{aplicarGateSons();}catch(e){}
 }
 // atualiza banner (Config) + botão coroa (hero) + cadeados
