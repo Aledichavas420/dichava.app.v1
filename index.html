@@ -1691,6 +1691,9 @@ a{color:inherit;text-decoration:none}
     <div class="cal-leg"><span><i style="background:var(--vf)"></i>algum uso</span><span><i style="background:#FFE0CC"></i>uso intenso</span><span><i style="box-shadow:inset 0 0 0 2px var(--dk)"></i>hoje</span></div>
   </div>
   <div id="ddet" style="display:none"></div>
+  <!-- HUMOR DA SEMANA -->
+  <div class="shr"><div class="sht">Meu humor esta semana</div><button class="shi" onclick="infoHumor()" aria-label="Sobre">i</button></div>
+  <div class="humor-week" id="humor-week"></div>
   <!-- ATIVIDADE SEMANAL -->
   <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
   <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
@@ -1792,9 +1795,6 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
   <div id="ref-feed"></div>
-  <!-- HUMOR -->
-<div class="shr"><div class="sht">Meu humor esta semana</div><button class="shi" onclick="infoHumor()" aria-label="Sobre">i</button></div>
-  <div class="humor-week" id="humor-week"></div>
   <div class="shr" style="padding-top:4px"><div class="sht">Artigos de RD 📖</div></div>
   <div id="arts-l"></div>
 </div>
@@ -3177,7 +3177,7 @@ function goPg(id,btn){
   else document.querySelectorAll(`.ni[data-p="${id}"]`).forEach(b=>b.classList.add('on'));
   blurAll();
   if(id!=='p-ref')desativarShake();
-  if(id==='p-agenda'){renderCal();renderHist();renderCompras();renderFiss();renderGraf();}
+  if(id==='p-agenda'){renderCal();renderHumorChart();renderHist();renderCompras();renderFiss();renderGraf();}
   if(id==='p-prog')renderProg();
   if(id==='p-ref')renderRef();
   if(id==='p-cfg'){renderCfg();renderPremUI();}
@@ -4191,7 +4191,7 @@ function editReg(id){
 
 /* ══ REFLEXÕES ══ */
 function renderRef(){
-  const obj=gO();renderHumorChart();renderCartas();renderArts(obj?.goal);
+  const obj=gO();renderCartas();renderArts(obj?.goal);
   // diário (movido pra Reflexões)
   const prtEl=document.getElementById('prt');if(prtEl)prtEl.textContent=prmp(obj?.goal);renderRefFeed();
   // reseta carta de reflexão pro verso
