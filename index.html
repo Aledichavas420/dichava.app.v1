@@ -1687,18 +1687,13 @@ a{color:inherit;text-decoration:none}
     <div class="cal-leg"><span><i style="background:var(--vf)"></i>algum uso</span><span><i style="background:#FFE0CC"></i>uso intenso</span><span><i style="box-shadow:inset 0 0 0 2px var(--dk)"></i>hoje</span></div>
   </div>
   <div id="ddet" style="display:none"></div>
-  <!-- DIÁRIO -->
-  <div class="shr" style="padding-top:4px"><div class="sht">Diário <span class="tic" data-icon="reflexoes"></span></div></div>
-  <div class="prc"><div class="prl"><span class="tic" data-icon="sec-pergunta"></span> Pergunta do dia</div><div class="prt" id="prt">—</div><button class="prb" onclick="respPrm()">Responder agora</button></div>
-  <div class="cmp" id="composer" onclick="focaCmp()">
-    <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
-    <div id="cmpex" style="display:none">
-      <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin:9px 0 7px">Como você está?</div>
-      <div class="emg" id="cmpemg"><button class="emb" onclick="selECmp(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selECmp(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selECmp(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selECmp(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selECmp(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
-      <div class="cmpact"><button class="btn bout bsm" onclick="fechaCmp()">Cancelar</button><button class="btn bsa bsm" onclick="salvRef()">Guardar</button></div>
-    </div>
+  <!-- MEUS REGISTROS -->
+  <div class="hist-hd">
+    <div class="hist-hd-l"><div class="hist-hd-t"><span class="tic" data-icon="dia-notebook"></span> Meus registros</div><div class="hist-hd-c" id="hist-count">0 registros</div></div>
+    <button class="hist-add" onclick="openMod('mreg')">+ novo</button>
   </div>
-  <div id="ref-feed"></div>
+  <div id="hist-l" style="padding:0 18px;display:flex;flex-direction:column;gap:9px;padding-bottom:4px"></div>
+  <div style="text-align:center;padding:4px 18px 6px"><button class="hist-clear" onclick="if(confirm('Apagar todos os registros?'))limparRegs()">↺ limpar histórico</button></div>
 </div>
 </div>
 
@@ -1719,16 +1714,11 @@ a{color:inherit;text-decoration:none}
   <div class="shr"><div style="display:flex;align-items:center;gap:9px"><div class="sht">Minhas metas</div><button class="shi" onclick="infoMetas()" aria-label="Sobre">i</button></div><div class="shl" onclick="openMetasMod()">editar</div></div>
   <div id="metas-l"></div>
 
-  <!-- HISTÓRICO EM DESTAQUE -->
-  <div class="hist-hd">
-    <div class="hist-hd-l"><div class="hist-hd-t"><span class="tic" data-icon="dia-notebook"></span> Meus registros</div><div class="hist-hd-c" id="hist-count">0 registros</div></div>
-    <button class="hist-add" onclick="openMod('mreg')">+ novo</button>
+  <!-- INSIGHTS EM DESTAQUE -->
+  <div class="insbox">
+    <div class="insbox-hd"><div class="insbox-t"><span class="tic" data-icon="sec-insights"></span> Insights do seu padrão</div><span class="premtag">👑 Premium</span><button class="insbox-i" onclick="infoInsights()" aria-label="Sobre">i</button></div>
+    <div id="insights-l"></div>
   </div>
-  <div id="hist-l" style="padding:0 18px;display:flex;flex-direction:column;gap:9px;padding-bottom:4px"></div>
-  <div style="text-align:center;padding:4px 18px 6px"><button class="hist-clear" onclick="if(confirm('Apagar todos os registros?'))limparRegs()">↺ limpar histórico</button></div>
-
-  <div class="shr"><div class="sht">Insights do seu padrão <span class="tic" data-icon="sec-insights"></span><span class="premtag">👑 Premium</span></div><button class="shi" onclick="infoInsights()" aria-label="Sobre">i</button></div>
-  <div id="insights-l"></div>
 
   <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
   <div class="gw" style="height:170px"><canvas id="graf"></canvas></div>
@@ -1753,6 +1743,18 @@ a{color:inherit;text-decoration:none}
     <div class="pghead-tt">Reflexões</div>
     <div class="pghead-ss">Um espaço só seu, sem julgamento</div>
   </div>
+  <!-- DIÁRIO -->
+  <div class="shr" style="padding-top:6px"><div class="sht">Diário <span class="tic" data-icon="reflexoes"></span></div></div>
+  <div class="prc"><div class="prl"><span class="tic" data-icon="sec-pergunta"></span> Pergunta do dia</div><div class="prt" id="prt">—</div><button class="prb" onclick="respPrm()">Responder agora</button></div>
+  <div class="cmp" id="composer" onclick="focaCmp()">
+    <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
+    <div id="cmpex" style="display:none">
+      <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin:9px 0 7px">Como você está?</div>
+      <div class="emg" id="cmpemg"><button class="emb" onclick="selECmp(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selECmp(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selECmp(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selECmp(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selECmp(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
+      <div class="cmpact"><button class="btn bout bsm" onclick="fechaCmp()">Cancelar</button><button class="btn bsa bsm" onclick="salvRef()">Guardar</button></div>
+    </div>
+  </div>
+  <div id="ref-feed"></div>
   <!-- CARTA DE REFLEXÃO (tarot) -->
   <div class="shr" style="padding-top:6px"><div class="sht">Carta de reflexão <span class="tic" data-icon="ref-crystal"></span></div></div>
   <div class="rcard-wrap">
@@ -1869,7 +1871,7 @@ a{color:inherit;text-decoration:none}
 <nav id="bnav" class="on">
   <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic" data-icon="inicio"></div><span>Início</span></button>
   <button class="ni" data-p="p-jogos" onclick="goPg('p-jogos',this)"><div class="ni-ic" data-icon="jogos"></div><span>Jogos</span></button>
-  <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic" data-icon="agenda"></div><span>Agenda</span></button>
+  <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic" data-icon="agenda"></div><span>Registros</span></button>
   <div class="fabw"><div class="fab" onclick="abrirNovo()" data-icon="registrar">+</div></div>
   <button class="ni" data-p="p-prog" onclick="goPg('p-prog',this)"><div class="ni-ic" data-icon="progresso"></div><span>Progresso</span></button>
   <button class="ni" data-p="p-ref" onclick="goPg('p-ref',this)"><div class="ni-ic" data-icon="reflexoes"></div><span>Reflexões</span></button>
@@ -2271,6 +2273,18 @@ a{color:inherit;text-decoration:none}
 .insbar .ibn{font-size:11.5px;font-weight:700;color:var(--txs);width:26px;text-align:right;flex-shrink:0}
 .inschart-t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--txs);margin:10px 18px 2px}
 .insci svg{width:22px;height:22px;display:block}
+/* seção Insights em destaque (card) */
+.insbox{margin:14px 14px 16px;border-radius:22px;background:#fff;border:2px solid rgba(124,58,237,.2);box-shadow:0 10px 26px rgba(124,58,237,.12);overflow:hidden;padding-bottom:10px}
+#shell.dkm .insbox{background:#1D2520;border-color:#3a2d55}
+.insbox-hd{display:flex;align-items:center;gap:8px;padding:15px 16px 12px;background:linear-gradient(120deg,rgba(124,58,237,.13),rgba(76,175,90,.13));margin-bottom:6px}
+.insbox-t{font-family:'Poppins',sans-serif;font-weight:800;font-size:16.5px;color:var(--dk);display:flex;align-items:center;gap:7px}
+#shell.dkm .insbox-t{color:#E8EDE6}
+.insbox-t .appicon{width:21px;height:21px}
+.insbox-i{margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--cinm);background:#fff;color:var(--txs);font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0}
+.insbox .inschart,.insbox .inschart-t{padding-left:16px;padding-right:16px;margin-left:0;margin-right:0}
+.insbox .insc{margin-left:14px;margin-right:14px}
+.insbar .ibt{height:18px}
+.insbar .ibf{background:linear-gradient(90deg,#7C3AED,#4CAF5A)}
 /* painel "você é premium" */
 .preminfo{background:var(--roxof);border:1.5px solid rgba(124,58,237,.2);border-radius:15px;padding:6px 14px;margin-top:14px}
 .pinfr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(124,58,237,.12);font-size:13.5px}
@@ -3645,7 +3659,7 @@ function renderXP(){
 const MISSOES=[
   {id:'reg',ic:'📓',t:'Registre como você está hoje',cta:'Registrar',go:()=>openMod('mreg'),done:()=>gR().some(r=>r.data===hoje())},
   {id:'pausa',ic:'🧘',t:'Faça uma pausa de 2 minutos',cta:'Ir',go:()=>goPg('p-jogos'),done:()=>!!localStorage.getItem('dr_xp_pausa_'+uid()+'_'+hoje())},
-  {id:'diario',ic:'✍️',t:'Escreva uma linha no diário',cta:'Escrever',go:()=>{goPg('p-agenda');setTimeout(()=>{const t=document.getElementById('cmpta');if(t){try{expCmp();}catch(e){}t.focus();}},90);},done:()=>gRef().some(r=>r.data===hoje())},
+  {id:'diario',ic:'✍️',t:'Escreva uma linha no diário',cta:'Escrever',go:()=>{goPg('p-ref');setTimeout(()=>{const t=document.getElementById('cmpta');if(t){try{expCmp();}catch(e){}t.focus();}},90);},done:()=>gRef().some(r=>r.data===hoje())},
   {id:'carta',ic:'🔮',t:'Sorteie uma carta de reflexão',cta:'Ir',go:()=>goPg('p-ref'),done:()=>!!localStorage.getItem('dr_carta_'+uid()+'_'+hoje())},
 ];
 function missaoDoDia(){const s=hoje();let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return MISSOES[h%MISSOES.length];}
@@ -3776,7 +3790,7 @@ function renderWds(regs){
 
 function renderFeed(goal){
   const d=dica(goal),p=prmp(goal),c=document.getElementById('h-feed');
-  c.innerHTML=`<div class="fc"><div class="fh"><div class="fav" style="background:var(--vf);color:var(--ve)">${d.i}</div><div style="flex:1"><div class="fn">Dica de RD</div><div class="ftm">Hoje</div></div><span class="ftag ftd">Dica</span></div><div class="ftt"><strong>${d.t}</strong><br>${d.x}</div><div class="fa"><button class="fab2" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div><div class="fc"><div class="fh"><div class="fav" style="background:var(--roxof);color:var(--roxo)">💭</div><div style="flex:1"><div class="fn">Pergunta do dia</div><div class="ftm">Para refletir</div></div><span class="ftag ftr">Reflexão</span></div><div class="ftt">${p}</div><div class="fa"><button class="fab2" onclick="goPg('p-agenda');respPrm()">✍️ Responder</button></div></div>`;
+  c.innerHTML=`<div class="fc"><div class="fh"><div class="fav" style="background:var(--vf);color:var(--ve)">${d.i}</div><div style="flex:1"><div class="fn">Dica de RD</div><div class="ftm">Hoje</div></div><span class="ftag ftd">Dica</span></div><div class="ftt"><strong>${d.t}</strong><br>${d.x}</div><div class="fa"><button class="fab2" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div><div class="fc"><div class="fh"><div class="fav" style="background:var(--roxof);color:var(--roxo)">💭</div><div style="flex:1"><div class="fn">Pergunta do dia</div><div class="ftm">Para refletir</div></div><span class="ftag ftr">Reflexão</span></div><div class="ftt">${p}</div><div class="fa"><button class="fab2" onclick="goPg('p-ref');respPrm()">✍️ Responder</button></div></div>`;
 }
 
 function renderResumo(regs,goal){
@@ -3922,8 +3936,7 @@ function renderCal(){
   }
   document.getElementById('calg').innerHTML=html;
   if(_calSel)renderDdet(regs);
-  // diário
-  const obj=gO();const prtEl=document.getElementById('prt');if(prtEl)prtEl.textContent=prmp(obj?.goal);renderRefFeed();
+  renderHist();
 }
 function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
 function calSel(iso){_calSel=iso;renderCal();}
@@ -3933,7 +3946,7 @@ function renderDdet(regs){
 }
 
 /* ══ PROGRESSO ══ */
-function renderProg(){renderMetas();renderInsights();renderGraf();renderCqs();renderHist();}
+function renderProg(){renderMetas();renderInsights();renderGraf();renderCqs();}
 
 // ── progresso automático das metas (lê os registros) ──
 function _diasAtivosN(){const s=new Set();gR().forEach(r=>s.add(r.data));gRef().forEach(r=>s.add(r.data));(gProt()||[]).forEach(d=>s.add(d));return s.size;}
@@ -4091,6 +4104,8 @@ function editReg(id){
 /* ══ REFLEXÕES ══ */
 function renderRef(){
   const obj=gO();renderHumorChart();renderCartas();renderFiss();renderArts(obj?.goal);
+  // diário (movido pra Reflexões)
+  const prtEl=document.getElementById('prt');if(prtEl)prtEl.textContent=prmp(obj?.goal);renderRefFeed();
   // reseta carta de reflexão pro verso
   const rc=document.getElementById('rcard');if(rc){rc.classList.remove('flip');const ac=document.getElementById('rcard-acts');if(ac)ac.style.display='none';}
   try{if(!/iphone|ipad|ipod/i.test(navigator.userAgent))ativarShake();}catch(e){}
@@ -4194,7 +4209,7 @@ async function compartilharCarta(){
 }
 function responderCarta(){
   const q=document.getElementById('rcard-q').textContent;
-  goPg('p-agenda');
+  goPg('p-ref');
   setTimeout(()=>{const ta=document.getElementById('cmpta');if(!ta)return;ta.value=q+'\n\n';expCmp();autoR(ta);ta.focus();},80);
 }
 function renderDicaRef(goal){
@@ -4294,7 +4309,7 @@ function expCmp(){document.getElementById('cmpex').style.display='';document.get
 function fechaCmp(){document.getElementById('cmpex').style.display='none';document.getElementById('composer').classList.remove('foc');document.getElementById('cmpta').value='';_cmpEo=null;blurAll();}
 function autoR(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
 function focaCmp(){expCmp();document.getElementById('cmpta').focus();}
-function respPrm(){if(getComputedStyle(document.getElementById('p-agenda')).display==='none')goPg('p-agenda');const obj=gO();const p=prmp(obj?.goal);document.getElementById('cmpta').value=p+'\n\n';expCmp();document.getElementById('cmpta').focus();}
+function respPrm(){if(getComputedStyle(document.getElementById('p-ref')).display==='none')goPg('p-ref');const obj=gO();const p=prmp(obj?.goal);document.getElementById('cmpta').value=p+'\n\n';expCmp();document.getElementById('cmpta').focus();}
 function salvRef(){
   blurAll();const tx=document.getElementById('cmpta').value.trim();if(!tx){toast('⚠️ Escreva algo antes.');return;}
   const obj=gO();const p=prmp(obj?.goal);const isP=tx.startsWith(p);
