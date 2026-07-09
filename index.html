@@ -1497,6 +1497,7 @@ a{color:inherit;text-decoration:none}
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
     <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
+    <button class="hero-prem" id="hero-prem" onclick="abrirPremium()" aria-label="dichava premium"><span class="hpc">👑</span><span id="hero-prem-lb">Premium</span></button>
     <div class="hero-top">
       <div class="hero-ring-wrap">
         <svg class="hero-ring" viewBox="0 0 104 104"><defs><linearGradient id="hgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9CF06B"></stop><stop offset="1" stop-color="#5CE3CF"></stop></linearGradient></defs><circle class="hr-bg" cx="52" cy="52" r="46"></circle><circle class="hr-fg" id="hero-ring-fg" cx="52" cy="52" r="46"></circle></svg>
@@ -1517,7 +1518,7 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="hero-rank" id="hero-rank" onclick="abrirRank()"></div>
     <div class="finbox" id="finbox" onclick="abrirFin(event)">
-      <span class="hf-lb"><span class="tic" data-icon="financas"></span> Finanças</span>
+      <span class="hf-lb"><span class="tic" data-icon="financas"></span> Finanças <span class="premlock">👑</span></span>
       <span class="hf-vals">
         <span class="hf-v"><b id="fin-gasto">R$ ••••</b><small>gasto</small></span>
         <span class="hf-sep"></span>
@@ -1724,7 +1725,7 @@ a{color:inherit;text-decoration:none}
   <div id="hist-l" style="padding:0 18px;display:flex;flex-direction:column;gap:9px;padding-bottom:4px"></div>
   <div style="text-align:center;padding:4px 18px 6px"><button class="hist-clear" onclick="if(confirm('Apagar todos os registros?'))limparRegs()">↺ limpar histórico</button></div>
 
-  <div class="shr"><div class="sht">Insights do seu padrão <span class="tic" data-icon="sec-insights"></span></div><button class="shi" onclick="infoInsights()" aria-label="Sobre">i</button></div>
+  <div class="shr"><div class="sht">Insights do seu padrão <span class="tic" data-icon="sec-insights"></span><span class="premtag">👑 Premium</span></div><button class="shi" onclick="infoInsights()" aria-label="Sobre">i</button></div>
   <div id="insights-l"></div>
 
   <div class="shr"><div class="sht">Atividade semanal <span class="tic" data-icon="sec-atividade"></span></div><button class="shi" onclick="infoAtividade()" aria-label="Sobre a atividade semanal">i</button></div>
@@ -2062,7 +2063,7 @@ a{color:inherit;text-decoration:none}
       <div class="cartas-hero-ic" data-icon="sec-cartas"></div>
       <h2>Uma carta pro seu<br>eu do futuro</h2>
       <p>Escreva o que está sentindo hoje. Guardamos com carinho e você lê quando chegar a hora.</p>
-      <button class="btn bv bfull cartas-nova" onclick="openMod('mcarta')">✍️ Escrever carta pro meu eu do futuro</button>
+      <button class="btn bv bfull cartas-nova" onclick="premDo(()=>openMod('mcarta'))">✍️ Escrever carta pro meu eu do futuro</button>
     </div>
     <div class="shr" style="margin-top:8px"><div class="sht">Minhas cartas</div></div>
     <div id="cartas-l" style="padding:0 4px"></div>
@@ -2238,6 +2239,30 @@ a{color:inherit;text-decoration:none}
 .premnote{font-size:11.5px;color:var(--txs);text-align:center;margin-top:12px;line-height:1.45}
 .premdemo{font-size:11px;color:var(--lrj);text-align:center;margin-top:8px;font-weight:600}
 .premlock{font-size:10px;background:var(--roxof);color:var(--roxo);font-weight:700;padding:2px 7px;border-radius:20px;vertical-align:middle;margin-left:4px}
+/* selo premium nos títulos de seção */
+.premtag{display:inline-flex;align-items:center;gap:2px;font-size:9.5px;font-weight:800;background:linear-gradient(120deg,#7C3AED,#B387F2);color:#fff;padding:2px 8px;border-radius:20px;vertical-align:middle;margin-left:5px;letter-spacing:.02em}
+/* container com prévia embaçada + convite premium */
+.premgate{position:relative}
+.premgate.locked>*:not(.premgate-over){filter:blur(6px);pointer-events:none;user-select:none;opacity:.55}
+.premgate.locked>.premgate-body{max-height:340px;min-height:150px;overflow:hidden}
+.premgate-over{display:none}
+.premgate.locked>.premgate-over{display:flex;position:absolute;inset:0;z-index:6;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;gap:6px}
+.premgate-over .pgo-crown{font-size:34px;filter:drop-shadow(0 4px 8px rgba(124,58,237,.4))}
+.premgate-over .pgo-t{font-family:'Poppins',sans-serif;font-weight:800;color:var(--tx);font-size:16px}
+.premgate-over .pgo-d{font-size:12.5px;color:var(--txs);max-width:250px;line-height:1.45}
+.premgate-over .pgo-btn{margin-top:4px;background:linear-gradient(120deg,#7C3AED,#B387F2);color:#fff;font-weight:800;font-size:13px;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.4)}
+/* botão coroa premium no hero */
+.hero-prem{position:absolute;top:calc(var(--st) + 12px);left:14px;z-index:3;display:flex;align-items:center;gap:5px;background:linear-gradient(120deg,#7C3AED,#B387F2);color:#fff;border:none;border-radius:30px;padding:7px 12px 7px 10px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:12px;cursor:pointer;box-shadow:0 4px 12px rgba(124,58,237,.45)}
+.hero-prem.on{background:linear-gradient(120deg,#177038,#2DA257)}
+.hero-prem .hpc{font-size:15px;line-height:1}
+/* mini gráfico de barras dos insights (premium) */
+.inschart{padding:2px 18px 6px}
+.insbar{display:flex;align-items:center;gap:9px;margin:8px 0}
+.insbar .ibl{font-size:12px;font-weight:700;color:var(--tx);width:82px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.insbar .ibt{flex:1;height:16px;background:var(--cin);border-radius:8px;overflow:hidden}
+.insbar .ibf{height:100%;border-radius:8px;background:linear-gradient(90deg,#5CE3CF,#4CAF5A);transition:width .7s cubic-bezier(.4,.1,.2,1)}
+.insbar .ibn{font-size:11.5px;font-weight:700;color:var(--txs);width:26px;text-align:right;flex-shrink:0}
+.inschart-t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--txs);margin:10px 18px 2px}
 </style>
 <div class="ov" id="mprem" onclick="if(event.target===this)closeMod('mprem')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
@@ -2391,7 +2416,7 @@ a{color:inherit;text-decoration:none}
   <p style="font-size:13px;color:var(--txs);margin-bottom:16px">Escolha o tipo de registro.</p>
   <div style="display:flex;flex-direction:column;gap:12px">
     <button class="novoc nc-uso" onclick="closeMod('mnovo');openMod('mreg')"><span class="novoc-ic" data-icon="reguso"></span><span class="novoc-tx"><b>Registro de uso</b><small>Como foi o uso — substância, contexto, gasto</small></span><span class="novoc-arw">›</span></button>
-    <button class="novoc nc-compra" onclick="closeMod('mnovo');openMod('mcompra')"><span class="novoc-ic" data-icon="regcompra"></span><span class="novoc-tx"><b>Registro de compra</b><small>Uma compra que você fez — com histórico próprio</small></span><span class="novoc-arw">›</span></button>
+    <button class="novoc nc-compra" onclick="closeMod('mnovo');premDo(()=>openMod('mcompra'))"><span class="novoc-ic" data-icon="regcompra"></span><span class="novoc-tx"><b>Registro de compra <span class="premlock">👑</span></b><small>Uma compra que você fez — com histórico próprio</small></span><span class="novoc-arw">›</span></button>
   </div>
 </div></div></div>
 
@@ -3416,6 +3441,7 @@ function entrar(){
   buildIntRow('crise-int','cr');
   buildIntRow('fiss-int','fs');
   agNotif();
+  try{renderPremUI();aplicarGateSons();}catch(e){}
   setTimeout(pedirPushPrimeiroAcesso,1400);
 }
 
@@ -3496,7 +3522,7 @@ function checkGastoAviso(){
   document.getElementById('aviso-over').textContent=brl(over);
   openMod('maviso');vib([40,60,40]);
 }
-function abrirFin(ev){if(ev&&ev.target&&ev.target.closest('.fineye'))return;openMod('mfin');renderFinModal();}
+function abrirFin(ev){if(ev&&ev.target&&ev.target.closest('.fineye'))return;if(!isPremium()){abrirPremium();return;}openMod('mfin');renderFinModal();}
 function renderFinModal(){
   const f=calcFin();
   document.getElementById('mfin-gasto').textContent=brl(f.gasto);
@@ -4171,11 +4197,14 @@ function renderHumorChart(){
 }
 
 function renderCartas(){
-  const cartas=gCt();const c=document.getElementById('cartas-l');const hj=new Date();hj.setHours(0,0,0,0);
-  if(!cartas.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 13px">Nenhuma carta ainda. Escreva uma para você do futuro!</div>';return;}
-  c.innerHTML=cartas.map((ct,i)=>{const ab=new Date(ct.abre);ab.setHours(0,0,0,0);const pode=hj>=ab;const dias=Math.max(0,Math.round((ab-hj)/864e5));
+  const cartas=gCt();const c=document.getElementById('cartas-l');if(!c)return;const hj=new Date();hj.setHours(0,0,0,0);
+  let body;
+  if(!cartas.length){body='<div style="font-size:13px;color:var(--txm);padding:0 18px 13px">Nenhuma carta ainda. Escreva uma para você do futuro!</div>';}
+  else{body=cartas.map((ct,i)=>{const ab=new Date(ct.abre);ab.setHours(0,0,0,0);const pode=hj>=ab;const dias=Math.max(0,Math.round((ab-hj)/864e5));
     return pode?`<div class="carta ok"><div class="cartai">✉️</div><div class="cartat">Carta para mim</div><div class="cartax" style="margin-top:6px">${esc(ct.texto)}</div><div class="cartabg">✓ Disponível para leitura</div></div>`:`<div class="carta"><div class="cartai">✉️</div><div class="cartat">Carta para mim</div><div class="cartax">Escrita em ${fdt(ct.data)}. Disponível em ${dias} dias.</div><div class="cartabg">🔒 Abre em ${fdt(ct.abre)}</div></div>`;
-  }).join('');
+  }).join('');}
+  if(isPremium()){c.classList.remove('premgate','locked');c.innerHTML=body;}
+  else{c.classList.add('premgate','locked');c.innerHTML=`<div class="premgate-body">${body}</div>`+premOverlayHTML('Cartas para mim','Escreva mensagens pro seu eu do futuro e leia quando chegar a hora — no premium.');}
 }
 
 function salvCarta(){
@@ -5176,11 +5205,19 @@ function salvD1(emoji,label){
 
 /* ══════════ v6: INSIGHTS ══════════ */
 function topOf(arr){const m={};arr.forEach(x=>{if(x)m[x]=(m[x]||0)+1});const e=Object.entries(m).sort((a,b)=>b[1]-a[1]);return e.length?{k:e[0][0],n:e[0][1],tot:arr.filter(Boolean).length}:null}
+// mini gráfico de barras: conta ocorrências e mostra top 5
+function distBars(vals,titulo){
+  const m={};vals.filter(Boolean).forEach(v=>{m[v]=(m[v]||0)+1});
+  const arr=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(!arr.length)return'';
+  const max=arr[0][1];
+  return`<div class="inschart-t">${titulo}</div><div class="inschart">`+arr.map(([k,n])=>`<div class="insbar"><div class="ibl">${esc(k)}</div><div class="ibt"><div class="ibf" style="width:${Math.round(n/max*100)}%"></div></div><div class="ibn">${n}</div></div>`).join('')+`</div>`;
+}
 function renderInsights(){
   const c=document.getElementById('insights-l');if(!c)return;
   const corte=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-30);return isoLocal(d)})();
   const regs=gR().filter(r=>r.data>=corte);
-  if(regs.length<5){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Com pelo menos 5 registros em 30 dias, o app começa a revelar seus padrões aqui. 🔍</div>';return;}
+  if(regs.length<5){c.classList.remove('premgate','locked');c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Com pelo menos 5 registros em 30 dias, o app começa a revelar seus padrões aqui. 🔍</div>';return;}
   const ins=[];
   const tCtx=topOf(regs.map(r=>r.ctx));
   if(tCtx&&tCtx.n/tCtx.tot>=.4)ins.push({i:'📍',t:'Contexto mais comum',x:`${Math.round(tCtx.n/tCtx.tot*100)}% dos seus registros aconteceram em: <strong>${esc(tCtx.k)}</strong>. O ambiente é parte do padrão.`});
@@ -5196,7 +5233,15 @@ function renderInsights(){
   if(custo>0)ins.push({i:'💸',t:'Gasto em 30 dias',x:`Você registrou <strong>R$ ${custo.toFixed(2).replace('.',',')}</strong> em uso no último mês. Sem julgamento — só informação.`});
   const fiss=gFs().filter(f=>f.data>=corte).length;
   if(fiss>0)ins.push({i:'💪',t:'Resistências no mês',x:`Você atravessou <strong>${fiss} fissura${fiss>1?'s':''}</strong> sem usar nos últimos 30 dias. Isso é capacidade real e crescente.`});
-  c.innerHTML=ins.slice(0,5).map(n=>`<div class="insc"><div class="insci">${n.i}</div><div><div class="insct">${n.t}</div><div class="inscx">${n.x}</div></div></div>`).join('')||'<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Continue registrando para gerar insights.</div>';
+  const chart=distBars(regs.map(r=>r.substancia),'Substâncias · 30 dias')+distBars(regs.map(r=>r.emoLabel),'Emoções · 30 dias');
+  const cards=ins.slice(0,5).map(n=>`<div class="insc"><div class="insci">${n.i}</div><div><div class="insct">${n.t}</div><div class="inscx">${n.x}</div></div></div>`).join('');
+  const full=chart+cards||'<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Continue registrando para gerar insights.</div>';
+  if(isPremium()){
+    c.classList.remove('premgate','locked');c.innerHTML=full;
+  }else{
+    c.classList.add('premgate','locked');
+    c.innerHTML=`<div class="premgate-body">${full}</div>`+premOverlayHTML('Insights avançados','Veja seus padrões em gráficos e descubra o que mais se repete — disponível no premium.');
+  }
 }
 
 /* ══════════ v6: SURFAR A ONDA ══════════ */
@@ -5706,11 +5751,31 @@ function renderPremMod(){
   if(f)f.style.display=on?'none':'';
   if(a)a.style.display=on?'':'none';
 }
-function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();}
-function cancelarPremiumDemo(){ls('dr_prem_'+uid(),0);toast('Assinatura de teste cancelada.');renderPremMod();renderPremUI();closeMod('mprem');}
+function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();reRenderGated();}
+function cancelarPremiumDemo(){ls('dr_prem_'+uid(),0);toast('Assinatura de teste cancelada.');renderPremMod();renderPremUI();reRenderGated();closeMod('mprem');}
 // recurso premium: libera se assinante, senão abre o convite
 function premGate(nome){if(isPremium()){toast('🔓 '+nome+' — recurso premium (demo). Em breve! 💚');return;}abrirPremium();}
-// atualiza banner + cadeados na tela de Config
+// overlay de "recurso premium" pra sobrepor conteúdo embaçado
+function premOverlayHTML(titulo,desc){
+  return `<div class="premgate-over"><div class="pgo-crown">👑</div><div class="pgo-t">${titulo}</div><div class="pgo-d">${desc}</div><button class="pgo-btn" onclick="abrirPremium()">✨ Desbloquear premium</button></div>`;
+}
+// executa uma ação premium; se conta grátis, abre o convite em vez da ação
+function premDo(fn){if(isPremium()){try{fn();}catch(e){}}else{abrirPremium();}}
+// gate dos sons/frequências extras (básico continua grátis)
+function aplicarGateSons(){
+  const el=document.getElementById('zen-freq');if(!el)return;
+  const ov=el.querySelector(':scope > .premgate-over');
+  if(isPremium()){el.classList.remove('premgate','locked');if(ov)ov.remove();}
+  else{el.classList.add('premgate','locked');if(!ov)el.insertAdjacentHTML('beforeend',premOverlayHTML('Sons & frequências extras','Ruído branco, frequências e batidas binaurais pra foco e sono — no premium.'));}
+}
+// re-renderiza as seções com gating quando o plano muda
+function reRenderGated(){
+  try{renderInsights();}catch(e){}
+  try{renderCartas();}catch(e){}
+  try{const m=document.getElementById('mfin');if(m&&m.classList.contains('on'))renderFinModal();}catch(e){}
+  try{aplicarGateSons();}catch(e){}
+}
+// atualiza banner (Config) + botão coroa (hero) + cadeados
 function renderPremUI(){
   const on=isPremium();
   const b=document.getElementById('prem-banner');
@@ -5721,6 +5786,8 @@ function renderPremUI(){
     if(d)d.textContent=on?'Todos os recursos liberados · gerenciar':'Relatórios, temas, backup e mais';
     if(ic)ic.textContent=on?'👑':'✨';
   }
+  const hp=document.getElementById('hero-prem'),hpl=document.getElementById('hero-prem-lb');
+  if(hp){hp.classList.toggle('on',on);if(hpl)hpl.textContent=on?'Premium':'Premium';}
   document.querySelectorAll('.premlock').forEach(el=>{el.style.display=on?'none':'';});
 }
 
