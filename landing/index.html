@@ -354,6 +354,65 @@ footer a{color:#93AC96;text-decoration:underline}
   </div>
 </section>
 
+<!-- PLANOS -->
+<style>
+.planos{background:var(--dk);text-align:center}
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:20px;margin:44px auto 26px;max-width:740px}
+.plan{background:var(--dk3);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:32px 26px;text-align:left;position:relative}
+.plan.best{border-color:var(--roxo);box-shadow:0 14px 44px rgba(124,58,237,.28);background:linear-gradient(180deg,#241a3a,#1b1526)}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(120deg,#7C3AED,#B387F2);color:#fff;font-weight:800;font-size:12px;padding:5px 16px;border-radius:30px;white-space:nowrap;box-shadow:0 4px 12px rgba(124,58,237,.4)}
+.plan-tag{font-family:'Bagel Fat One',system-ui;font-size:22px;color:#fff}
+.plan.best .plan-tag{color:#C9B3F7}
+.plan-price{font-size:34px;font-weight:800;color:#fff;margin:6px 0 2px}
+.plan-price span{font-size:15px;font-weight:600;color:#93AC96}
+.plan-sub{font-size:13px;color:var(--am);font-weight:700;margin-bottom:4px}
+.plan-feats{list-style:none;margin:18px 0 24px;padding:0}
+.plan-feats li{font-size:14.5px;color:#C7D6C9;padding:7px 0 7px 26px;position:relative;line-height:1.4}
+.plan-feats li::before{content:'✓';position:absolute;left:0;color:#5BC06F;font-weight:800}
+.plan.best .plan-feats li:first-child{color:#fff;font-weight:700}
+.plan-cta{display:block;text-align:center;font-weight:800;font-size:15px;padding:14px;border-radius:30px;background:var(--am);color:#3A2063;border:2.5px solid #3A2063;box-shadow:3px 3px 0 #3A2063;transition:transform .15s,box-shadow .15s}
+.plan-cta:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #3A2063}
+.plan-cta.ghost{background:transparent;color:#D9EBDB;border:2px solid rgba(255,255,255,.25);box-shadow:none}
+.plan-cta.ghost:hover{border-color:#5BC06F;background:rgba(91,192,111,.1);transform:none}
+</style>
+<section class="planos" id="planos">
+  <div class="wrap">
+    <span class="kicker rv">planos</span>
+    <h2 class="rv">Comece de graça. <span class="hl2">Evolua se quiser</span>.</h2>
+    <p class="lead rv" style="margin-inline:auto">O cuidado essencial é <b>sempre gratuito</b>. O Premium libera os extras e ajuda a manter o app no ar pra quem precisa. 💚</p>
+    <div class="plan-grid">
+      <div class="plan rv">
+        <div class="plan-tag">Grátis</div>
+        <div class="plan-price">R$ 0<span>/sempre</span></div>
+        <ul class="plan-feats">
+          <li>Registro de uso e resistências</li>
+          <li>Modo SOS e plano de segurança</li>
+          <li>Respiração, sons e grounding</li>
+          <li>Finanças e economia</li>
+          <li>Notificações de cuidado</li>
+        </ul>
+        <a class="plan-cta ghost" href="../" target="_blank">Usar grátis</a>
+      </div>
+      <div class="plan best rv">
+        <div class="plan-badge">✨ mais completo</div>
+        <div class="plan-tag">Premium</div>
+        <div class="plan-price">R$ 9,90<span>/mês</span></div>
+        <div class="plan-sub">ou R$ 79,90/ano · economize 33%</div>
+        <ul class="plan-feats">
+          <li>Tudo do plano grátis, e mais:</li>
+          <li>Relatórios e estatísticas avançadas</li>
+          <li>Exportar em PDF e planilha</li>
+          <li>Temas e personalização</li>
+          <li>Áudios e conteúdos guiados extras</li>
+          <li>Backup automático na nuvem</li>
+        </ul>
+        <a class="plan-cta" href="../" target="_blank">✨ Assinar premium</a>
+      </div>
+    </div>
+    <p class="lead rv" style="margin-inline:auto;font-size:14px;opacity:.85">Sem loja e sem intermediário: paga direto por <b>Pix</b> ou cartão. Cancela quando quiser.</p>
+  </div>
+</section>
+
 <!-- INSTALL -->
 <section class="inst" id="baixar">
   <div class="wrap">

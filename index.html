@@ -1795,6 +1795,11 @@ a{color:inherit;text-decoration:none}
 <div class="cfgh"><div class="cfgt">Configurações</div><div class="cfgs">Sua conta e preferências</div></div>
 <div class="sc scpad">
   <div class="pfc"><div class="pfav" id="pfav">?</div><div><div class="pfn" id="pfn">—</div><div class="pfe" id="pfe">—</div><div class="pfm" id="pfm">—</div><div class="probadge" id="pf-badge" style="display:none">🩺 Profissional verificado</div></div></div>
+  <!-- DICHAVA PREMIUM -->
+  <div class="prembanner" id="prem-banner" onclick="abrirPremium()"><span class="pbic">✨</span><div><div class="pbt">Seja dichava premium</div><div class="pbd">Relatórios, temas, backup e mais</div></div><span class="pbar">›</span></div>
+  <div class="cfgsec" style="margin:0 18px 11px">
+    <div class="cfgi" onclick="premGate('Relatórios avançados')"><div class="cfgic">📊</div><div class="cfgb"><div class="cfgn">Relatórios avançados <span class="premlock">🔒 Premium</span></div><div class="cfgd">Estatísticas e gráficos aprofundados</div></div><div class="cfgar">›</div></div>
+  </div>
   <!-- GRUPO DE TESTES -->
   <div class="shr"><div class="sht">Grupo de testes</div></div>
   <div class="cfgsec">
@@ -2205,6 +2210,66 @@ a{color:inherit;text-decoration:none}
   <button class="btn bv bfull" id="mpush-ok" onclick="pushAtivar()" style="margin-bottom:10px">🔔 Ativar notificações</button>
   <button class="btn bout bfull" onclick="pushLater()">Agora não</button>
   <div class="mb c" style="margin-top:12px;font-size:11.5px;opacity:.7">Você pode ativar ou desativar quando quiser em Configurações.</div>
+</div></div></div>
+
+<!-- DICHAVA PREMIUM -->
+<style>
+.prembanner{margin:0 18px 14px;border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;
+  background:linear-gradient(120deg,#3A2063,#6B43D6);color:#fff;box-shadow:0 6px 18px rgba(58,32,99,.28);position:relative;overflow:hidden}
+.prembanner::after{content:'✦';position:absolute;right:2px;top:-10px;font-size:64px;color:rgba(255,255,255,.10);pointer-events:none}
+.prembanner .pbic{font-size:26px;flex-shrink:0;position:relative;z-index:1}
+.prembanner .pbt{font-weight:800;font-size:15px;line-height:1.15;position:relative;z-index:1}
+.prembanner .pbd{font-size:12px;opacity:.85;margin-top:1px;position:relative;z-index:1}
+.prembanner .pbar{margin-left:auto;font-size:22px;opacity:.8;position:relative;z-index:1}
+.prembanner.on{background:linear-gradient(120deg,#177038,#2DA257)}
+.premadv{margin:16px 0 4px;display:flex;flex-direction:column;gap:12px}
+.premadv .pa{display:flex;align-items:flex-start;gap:11px;font-size:14px;color:var(--tx)}
+.premadv .pa .pae{font-size:21px;flex-shrink:0;line-height:1.1}
+.premadv .pa b{font-weight:700}
+.premadv .pa small{display:block;color:var(--txs);font-size:12px;font-weight:500;margin-top:1px}
+.premprice{display:flex;gap:10px;margin:18px 0 14px}
+.premprice .pp{flex:1;border:2px solid var(--cinm);border-radius:15px;padding:13px 10px 11px;text-align:center;position:relative}
+.premprice .pp.best{border-color:var(--roxo)}
+.premprice .pp .ppt{font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.4px}
+.premprice .pp .ppv{font-size:20px;font-weight:800;color:var(--tx);margin-top:3px}
+.premprice .pp .ppv small{font-size:12px;font-weight:600;color:var(--txs)}
+.premprice .pp .ppx{font-size:11px;color:var(--ve);font-weight:700;margin-top:2px}
+.premprice .pp .pptag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--roxo);color:#fff;font-size:9.5px;font-weight:700;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.premnote{font-size:11.5px;color:var(--txs);text-align:center;margin-top:12px;line-height:1.45}
+.premdemo{font-size:11px;color:var(--lrj);text-align:center;margin-top:8px;font-weight:600}
+.premlock{font-size:10px;background:var(--roxof);color:var(--roxo);font-weight:700;padding:2px 7px;border-radius:20px;vertical-align:middle;margin-left:4px}
+</style>
+<div class="ov" id="mprem" onclick="if(event.target===this)closeMod('mprem')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="text-align:center">
+    <div style="font-size:40px;line-height:1">✨</div>
+    <div class="mt c" style="font-size:23px">dichava <span style="color:var(--roxo)">premium</span></div>
+    <div class="mb c" style="margin-bottom:2px">Desbloqueie tudo e ajude a manter o app no ar 💚</div>
+  </div>
+  <div id="prem-free">
+    <div class="premadv">
+      <div class="pa"><span class="pae">📊</span><div><b>Relatórios e estatísticas avançadas</b><small>Padrões, gráficos e insights aprofundados do seu histórico</small></div></div>
+      <div class="pa"><span class="pae">📄</span><div><b>Exportar em PDF e planilha</b><small>Um relatório bonito dos seus dados (o texto simples segue grátis)</small></div></div>
+      <div class="pa"><span class="pae">🎨</span><div><b>Temas e personalização</b><small>Deixe o app com a sua cara</small></div></div>
+      <div class="pa"><span class="pae">🧘</span><div><b>Áudios e conteúdos guiados extras</b><small>Mais respirações, sons e trilhas de cuidado</small></div></div>
+      <div class="pa"><span class="pae">☁️</span><div><b>Backup automático na nuvem</b><small>Seus dados salvos e sincronizados entre aparelhos</small></div></div>
+      <div class="pa"><span class="pae">💚</span><div><b>Apoiar o projeto</b><small>Sua assinatura mantém o dichava gratuito pra quem precisa</small></div></div>
+    </div>
+    <div class="premprice">
+      <div class="pp"><div class="ppt">Mensal</div><div class="ppv">R$ 9,90<small>/mês</small></div></div>
+      <div class="pp best"><div class="pptag">melhor valor</div><div class="ppt">Anual</div><div class="ppv">R$ 79,90<small>/ano</small></div><div class="ppx">≈ R$ 6,66/mês</div></div>
+    </div>
+    <button class="btn bv bfull" onclick="assinarPremiumDemo()">✨ Assinar premium</button>
+    <button class="btn bout bfull" onclick="closeMod('mprem')" style="margin-top:9px">Talvez depois</button>
+    <div class="premnote">O núcleo de redução de danos — registro, SOS, respiração e informação — é <b>sempre gratuito</b>. Premium é só pros extras.</div>
+    <div class="premdemo">🧪 Modo teste: por enquanto a assinatura é simulada (sem cobrança).</div>
+  </div>
+  <div id="prem-active" style="display:none;text-align:center">
+    <div style="font-size:44px">💚</div>
+    <div class="mt c" style="font-size:19px">Você é premium!</div>
+    <div class="mb c">Obrigado por apoiar o dichava. Todos os recursos estão liberados pra você. 🌟</div>
+    <button class="btn bout bfull" onclick="cancelarPremiumDemo()" style="margin-top:10px">Cancelar assinatura (teste)</button>
+  </div>
 </div></div></div>
 
 <!-- ESQUECI A SENHA (confirma e-mail antes de enviar o link) -->
@@ -2976,7 +3041,7 @@ function goPg(id,btn){
   if(id==='p-agenda')renderCal();
   if(id==='p-prog')renderProg();
   if(id==='p-ref')renderRef();
-  if(id==='p-cfg')renderCfg();
+  if(id==='p-cfg'){renderCfg();renderPremUI();}
   if(id==='p-jogos'){popularEstrelas();try{renderHabilidades();}catch(e){}}
   else if(_somAtual)pararSom();
 }
@@ -5631,6 +5696,33 @@ async function pedirPushPrimeiroAcesso(){
 }
 function pushAtivar(){ls('dr_pushask_'+uid(),true);closeMod('mpush');togglePush();}
 function pushLater(){ls('dr_pushask_'+uid(),true);closeMod('mpush');}
+
+/* ══ DICHAVA PREMIUM (demo local — assinatura simulada) ══ */
+const isPremium=()=>!!ls('dr_prem_'+uid());
+function abrirPremium(){renderPremMod();openMod('mprem');}
+function renderPremMod(){
+  const on=isPremium();
+  const f=document.getElementById('prem-free'),a=document.getElementById('prem-active');
+  if(f)f.style.display=on?'none':'';
+  if(a)a.style.display=on?'':'none';
+}
+function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();}
+function cancelarPremiumDemo(){ls('dr_prem_'+uid(),0);toast('Assinatura de teste cancelada.');renderPremMod();renderPremUI();closeMod('mprem');}
+// recurso premium: libera se assinante, senão abre o convite
+function premGate(nome){if(isPremium()){toast('🔓 '+nome+' — recurso premium (demo). Em breve! 💚');return;}abrirPremium();}
+// atualiza banner + cadeados na tela de Config
+function renderPremUI(){
+  const on=isPremium();
+  const b=document.getElementById('prem-banner');
+  if(b){
+    b.classList.toggle('on',on);
+    const t=b.querySelector('.pbt'),d=b.querySelector('.pbd'),ic=b.querySelector('.pbic');
+    if(t)t.textContent=on?'Você é premium 💚':'Seja dichava premium';
+    if(d)d.textContent=on?'Todos os recursos liberados · gerenciar':'Relatórios, temas, backup e mais';
+    if(ic)ic.textContent=on?'👑':'✨';
+  }
+  document.querySelectorAll('.premlock').forEach(el=>{el.style.display=on?'none':'';});
+}
 
 /* ══ NOTIF ══ */
 function agNotif(){
