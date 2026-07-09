@@ -1493,11 +1493,10 @@ a{color:inherit;text-decoration:none}
 <!-- HOME -->
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
 <div class="sc scpad">
-  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hpill">🎯 <strong id="h-mt">—</strong></div></div>
+  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hrow"><div class="hpill">🎯 <strong id="h-mt">—</strong></div><button class="hero-prem" id="hero-prem" onclick="abrirPremium()" aria-label="dichava premium"><span class="hpc">👑</span><span id="hero-prem-lb">Premium</span></button></div></div>
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
     <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
-    <button class="hero-prem" id="hero-prem" onclick="abrirPremium()" aria-label="dichava premium"><span class="hpc">👑</span><span id="hero-prem-lb">Premium</span></button>
     <div class="hero-top">
       <div class="hero-ring-wrap">
         <svg class="hero-ring" viewBox="0 0 104 104"><defs><linearGradient id="hgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9CF06B"></stop><stop offset="1" stop-color="#5CE3CF"></stop></linearGradient></defs><circle class="hr-bg" cx="52" cy="52" r="46"></circle><circle class="hr-fg" id="hero-ring-fg" cx="52" cy="52" r="46"></circle></svg>
@@ -1653,6 +1652,13 @@ a{color:inherit;text-decoration:none}
       <div class="zi" data-icon="jogo-abelha"></div>
       <div><h4>Flappy Marola</h4><p>Toque pra voar e desviar</p></div>
     </div>
+    <div class="zcard zc-yellow tall" onclick="showV('vresp')">
+      <div class="zi" data-icon="jogo-respiracao"></div>
+      <div><h4>Respiração guiada</h4><p>Siga o círculo: inspira e solta</p></div>
+    </div>
+  </div>
+  <div class="zen-sec" style="margin-top:22px">Mais jogos <span class="premtag">👑 Premium</span></div>
+  <div class="zen-grid" id="zen-jogos-extra">
     <div class="zcard zc-orange tall" onclick="abrirJogo('tetris')">
       <div class="zi" data-icon="jogo-blocos"></div>
       <div><h4>Blocos</h4><p>Encaixe e complete linhas</p></div>
@@ -1664,10 +1670,6 @@ a{color:inherit;text-decoration:none}
     <div class="zcard zc-pink tall" onclick="abrirJogo('pop')">
       <div class="zi" data-icon="jogo-bolhas"></div>
       <div><h4>Estoura bolhas</h4><p>Foco no aqui e agora</p></div>
-    </div>
-    <div class="zcard zc-yellow tall" onclick="showV('vresp')" style="grid-column:span 2;min-height:120px;flex-direction:row;align-items:center;gap:16px">
-      <div class="zi" data-icon="jogo-respiracao"></div>
-      <div><h4>Respiração guiada</h4><p>Siga o círculo: inspira, segura, solta</p></div>
     </div>
   </div>
 
@@ -2225,7 +2227,8 @@ a{color:inherit;text-decoration:none}
 .prembanner.on{background:linear-gradient(120deg,#177038,#2DA257)}
 .premadv{margin:16px 0 4px;display:flex;flex-direction:column;gap:12px}
 .premadv .pa{display:flex;align-items:flex-start;gap:11px;font-size:14px;color:var(--tx)}
-.premadv .pa .pae{font-size:21px;flex-shrink:0;line-height:1.1}
+.premadv .pa .pae{font-size:21px;flex-shrink:0;line-height:1.1;width:24px;display:flex;align-items:center;justify-content:center}
+.premadv .pa .pae svg{width:23px;height:23px;display:block}
 .premadv .pa b{font-weight:700}
 .premadv .pa small{display:block;color:var(--txs);font-size:12px;font-weight:500;margin-top:1px}
 .premprice{display:flex;gap:10px;margin:18px 0 14px}
@@ -2251,10 +2254,14 @@ a{color:inherit;text-decoration:none}
 .premgate-over .pgo-t{font-family:'Poppins',sans-serif;font-weight:800;color:var(--tx);font-size:16px}
 .premgate-over .pgo-d{font-size:12.5px;color:var(--txs);max-width:250px;line-height:1.45}
 .premgate-over .pgo-btn{margin-top:4px;background:linear-gradient(120deg,#7C3AED,#B387F2);color:#fff;font-weight:800;font-size:13px;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.4)}
-/* botão coroa premium no hero */
-.hero-prem{position:absolute;top:calc(var(--st) + 12px);left:14px;z-index:3;display:flex;align-items:center;gap:5px;background:linear-gradient(120deg,#7C3AED,#B387F2);color:#fff;border:none;border-radius:30px;padding:7px 12px 7px 10px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:12px;cursor:pointer;box-shadow:0 4px 12px rgba(124,58,237,.45)}
+/* botão coroa premium no cabeçalho (ao lado da meta) */
+.hrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.hero-prem{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(120deg,#7C3AED,#B387F2);color:#fff;border:none;border-radius:30px;padding:6px 13px 6px 10px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:12px;cursor:pointer;box-shadow:0 4px 12px rgba(124,58,237,.4)}
 .hero-prem.on{background:linear-gradient(120deg,#177038,#2DA257)}
 .hero-prem .hpc{font-size:15px;line-height:1}
+/* overlay premium em fundo escuro (Pausa pra mente) */
+.premgate-over.premdark .pgo-t{color:#fff}
+.premgate-over.premdark .pgo-d{color:rgba(255,255,255,.82)}
 /* mini gráfico de barras dos insights (premium) */
 .inschart{padding:2px 18px 6px}
 .insbar{display:flex;align-items:center;gap:9px;margin:8px 0}
@@ -2263,22 +2270,36 @@ a{color:inherit;text-decoration:none}
 .insbar .ibf{height:100%;border-radius:8px;background:linear-gradient(90deg,#5CE3CF,#4CAF5A);transition:width .7s cubic-bezier(.4,.1,.2,1)}
 .insbar .ibn{font-size:11.5px;font-weight:700;color:var(--txs);width:26px;text-align:right;flex-shrink:0}
 .inschart-t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--txs);margin:10px 18px 2px}
+.insci svg{width:22px;height:22px;display:block}
+/* painel "você é premium" */
+.preminfo{background:var(--roxof);border:1.5px solid rgba(124,58,237,.2);border-radius:15px;padding:6px 14px;margin-top:14px}
+.pinfr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(124,58,237,.12);font-size:13.5px}
+.pinfr:last-child{border-bottom:none}
+.pinfr span{color:var(--txs)}
+.pinfr b{color:var(--tx);font-weight:800}
+.premsec-t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--txs);margin:16px 2px 8px}
+.premfeats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.premfeats .pf{background:var(--cin);border-radius:11px;padding:9px 11px;font-size:12.5px;font-weight:700;color:var(--tx)}
+.premuse{display:flex;gap:10px}
+.premuse .pu{flex:1;background:var(--cin);border-radius:13px;padding:11px 6px;text-align:center}
+.premuse .pu b{display:block;font-size:20px;font-weight:800;color:var(--roxo)}
+.premuse .pu span{font-size:11px;color:var(--txs);font-weight:600}
 </style>
 <div class="ov" id="mprem" onclick="if(event.target===this)closeMod('mprem')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
   <div style="text-align:center">
-    <div style="font-size:40px;line-height:1">✨</div>
-    <div class="mt c" style="font-size:23px">dichava <span style="color:var(--roxo)">premium</span></div>
+    <img id="prem-mascot" alt="" style="width:78px;height:78px;object-fit:contain;margin:2px auto 0;display:block;filter:drop-shadow(0 6px 13px rgba(58,32,99,.28))">
+    <div class="mt c" style="font-size:23px;margin-top:2px">dichava <span style="color:var(--roxo)">premium</span> <span style="font-size:18px">✨</span></div>
     <div class="mb c" style="margin-bottom:2px">Desbloqueie tudo e ajude a manter o app no ar 💚</div>
   </div>
   <div id="prem-free">
     <div class="premadv">
-      <div class="pa"><span class="pae">📊</span><div><b>Insights avançados com gráficos</b><small>Seus padrões de substâncias e emoções em gráficos visuais</small></div></div>
-      <div class="pa"><span class="pae">💰</span><div><b>Finanças</b><small>Acompanhe gastos e o quanto você economiza</small></div></div>
-      <div class="pa"><span class="pae">✉️</span><div><b>Cartas pra mim</b><small>Escreva pro seu eu do futuro e leia quando chegar a hora</small></div></div>
-      <div class="pa"><span class="pae">🧘</span><div><b>Sons e frequências extras</b><small>Ruído branco, 432Hz e binaural (o básico segue grátis)</small></div></div>
-      <div class="pa"><span class="pae">☁️</span><div><b>Exportar dados e backup na nuvem</b><small>Seus dados salvos e sincronizados entre aparelhos</small></div></div>
-      <div class="pa"><span class="pae">💚</span><div><b>Apoiar o projeto</b><small>Sua assinatura mantém o dichava gratuito pra quem precisa</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="4.6" fill="#12B5A3"></rect><rect x="6.6" y="12.6" width="2.8" height="4.8" rx="1.4" fill="#fff"></rect><rect x="10.6" y="9.4" width="2.8" height="8" rx="1.4" fill="#fff"></rect><rect x="14.6" y="6.6" width="2.8" height="10.8" rx="1.4" fill="#fff"></rect></svg></span><div><b>Insights avançados com gráficos</b><small>Seus padrões de substâncias e emoções em gráficos visuais</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.4" y="6.2" width="17.2" height="12.4" rx="2.8" fill="#12B5A3"></rect><path d="M3.6 8.6a2.6 2.6 0 0 1 2.6-2.5h9.4c-.4-1.3-1.8-2-3.1-1.65L5.2 6.25" fill="#0a7d70" opacity=".5"></path><rect x="13.8" y="10.6" width="6.8" height="4.2" rx="1.3" fill="#0a6b62"></rect><circle cx="16.6" cy="12.7" r="1.1" fill="#fff"></circle></svg></span><div><b>Finanças</b><small>Acompanhe gastos e o quanto você economiza</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2.6" fill="#F97B54"></rect><path d="M4.6 7.6 12 13l7.4-5.4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><div><b>Cartas pra mim</b><small>Escreva pro seu eu do futuro e leia quando chegar a hora</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><circle cx="12" cy="5.8" r="3" fill="#FDBA4D"></circle><path d="M12 9.6c-2.5 0-4.6 1.5-5.4 3.7-.3.8-.9 1.2-1.5 1.7-.7.6-1.2 1.3-1.2 2.3 0 1 .8 1.7 1.9 1.7h12.4c1.1 0 1.9-.7 1.9-1.7 0-1-.5-1.7-1.2-2.3-.6-.5-1.2-.9-1.5-1.7C16.6 11.1 14.5 9.6 12 9.6Z" fill="#FDBA4D"></path></svg></span><div><b>Sons e frequências extras</b><small>Ruído branco, 432Hz e binaural (o básico segue grátis)</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><path d="M7.5 18.5a4.2 4.2 0 0 1-.5-8.37A5.6 5.6 0 0 1 17.6 11.2 3.8 3.8 0 0 1 17.2 18.5Z" fill="#5FA8E6"></path><path d="M12 12.4v4M9.9 14.6 12 16.7l2.1-2.1" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><div><b>Exportar dados e backup na nuvem</b><small>Seus dados salvos e sincronizados entre aparelhos</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><path d="M12 20.2S3.5 14.6 3.5 8.9A4.4 4.4 0 0 1 12 6.7 4.4 4.4 0 0 1 20.5 8.9C20.5 14.6 12 20.2 12 20.2Z" fill="#4DBE63"></path></svg></span><div><b>Apoiar o projeto</b><small>Sua assinatura mantém o dichava gratuito pra quem precisa</small></div></div>
     </div>
     <div class="premprice">
       <div class="pp"><div class="ppt">Mensal</div><div class="ppv">R$ 9,90<small>/mês</small></div></div>
@@ -2289,11 +2310,12 @@ a{color:inherit;text-decoration:none}
     <div class="premnote">O núcleo de redução de danos — registro, SOS, respiração e informação — é <b>sempre gratuito</b>. Premium é só pros extras.</div>
     <div class="premdemo">🧪 Modo teste: por enquanto a assinatura é simulada (sem cobrança).</div>
   </div>
-  <div id="prem-active" style="display:none;text-align:center">
-    <div style="font-size:44px">💚</div>
+  <div id="prem-active" style="display:none">
+    <div style="text-align:center"><div style="font-size:42px">💚</div>
     <div class="mt c" style="font-size:19px">Você é premium!</div>
-    <div class="mb c">Obrigado por apoiar o dichava. Todos os recursos estão liberados pra você. 🌟</div>
-    <button class="btn bout bfull" onclick="cancelarPremiumDemo()" style="margin-top:10px">Cancelar assinatura (teste)</button>
+    <div class="mb c" style="margin-bottom:4px">Obrigado por apoiar o dichava. Todos os recursos estão liberados. 🌟</div></div>
+    <div id="prem-info"></div>
+    <button class="btn bout bfull" onclick="cancelarPremiumDemo()" style="margin-top:14px">Cancelar assinatura (teste)</button>
   </div>
 </div></div></div>
 
@@ -3067,6 +3089,7 @@ function goPg(id,btn){
   if(id==='p-prog')renderProg();
   if(id==='p-ref')renderRef();
   if(id==='p-cfg'){renderCfg();renderPremUI();}
+  if(id==='p-jogos')aplicarGateSons();
   if(id==='p-jogos'){popularEstrelas();try{renderHabilidades();}catch(e){}}
   else if(_somAtual)pararSom();
 }
@@ -5218,21 +5241,30 @@ function renderInsights(){
   const corte=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-30);return isoLocal(d)})();
   const regs=gR().filter(r=>r.data>=corte);
   if(regs.length<5){c.classList.remove('premgate','locked');c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Com pelo menos 5 registros em 30 dias, o app começa a revelar seus padrões aqui. 🔍</div>';return;}
+  const II={
+    ctx:'<svg viewBox="0 0 24 24"><path d="M12 2.6c-3.6 0-6.5 2.9-6.5 6.5 0 4.6 6.5 12.3 6.5 12.3s6.5-7.7 6.5-12.3c0-3.6-2.9-6.5-6.5-6.5Z" fill="#EA5A45"></path><circle cx="12" cy="9" r="2.4" fill="#fff"></circle></svg>',
+    emo:'<svg viewBox="0 0 24 24"><path d="M12 20.2S3.5 14.6 3.5 8.9A4.4 4.4 0 0 1 12 6.7 4.4 4.4 0 0 1 20.5 8.9C20.5 14.6 12 20.2 12 20.2Z" fill="#E0509E"></path></svg>',
+    gat:'<svg viewBox="0 0 24 24"><path d="M13 2 4 13h6l-1 9 9-11h-6l1-9Z" fill="#FBB431"></path></svg>',
+    hr:'<svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" fill="#7C6BE0"></path></svg>',
+    sub:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#12B5A3"></circle><circle cx="12" cy="12" r="5.4" fill="#fff"></circle><circle cx="12" cy="12" r="2.3" fill="#12B5A3"></circle></svg>',
+    gasto:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#EA5A45"></circle><path d="M14.3 9.6c0-1.1-1-1.9-2.3-1.9s-2.3.8-2.3 1.8c0 1.1.9 1.6 2.3 1.9 1.4.3 2.4.8 2.4 2 0 1.1-1 1.9-2.4 1.9s-2.4-.8-2.4-2M12 6.2v11.6" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path></svg>',
+    res:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#4DBE63"></circle><path d="M7.5 13.6 10.5 10l2.4 2.4 3.6-3.9" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.9 8.5h2.7v2.7" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>'
+  };
   const ins=[];
   const tCtx=topOf(regs.map(r=>r.ctx));
-  if(tCtx&&tCtx.n/tCtx.tot>=.4)ins.push({i:'📍',t:'Contexto mais comum',x:`${Math.round(tCtx.n/tCtx.tot*100)}% dos seus registros aconteceram em: <strong>${esc(tCtx.k)}</strong>. O ambiente é parte do padrão.`});
+  if(tCtx&&tCtx.n/tCtx.tot>=.4)ins.push({i:II.ctx,t:'Contexto mais comum',x:`${Math.round(tCtx.n/tCtx.tot*100)}% dos seus registros aconteceram em: <strong>${esc(tCtx.k)}</strong>. O ambiente é parte do padrão.`});
   const tEmo=topOf(regs.map(r=>r.emoLabel));
-  if(tEmo)ins.push({i:'🫀',t:'Emoção mais presente',x:`"<strong>${esc(tEmo.k)}</strong>" apareceu em ${tEmo.n} de ${regs.length} registros. O que essa emoção está pedindo?`});
+  if(tEmo)ins.push({i:II.emo,t:'Emoção mais presente',x:`"<strong>${esc(tEmo.k)}</strong>" apareceu em ${tEmo.n} de ${regs.length} registros. O que essa emoção está pedindo?`});
   const gat=regs.flatMap(r=>r.gatilhos||[]);const tGat=topOf(gat);
-  if(tGat)ins.push({i:'⚡',t:'Gatilho número 1',x:`<strong>${esc(tGat.k)}</strong> foi seu gatilho mais frequente (${tGat.n}x). Vale planejar uma alternativa para esse momento.`});
+  if(tGat)ins.push({i:II.gat,t:'Gatilho número 1',x:`<strong>${esc(tGat.k)}</strong> foi seu gatilho mais frequente (${tGat.n}x). Vale planejar uma alternativa para esse momento.`});
   const tHr=topOf(regs.map(r=>r.hr));
-  if(tHr&&tHr.n/tHr.tot>=.5)ins.push({i:'🌙',t:'Horário de atenção',x:`${Math.round(tHr.n/tHr.tot*100)}% do seu uso acontece à <strong>${esc(tHr.k.toLowerCase())}</strong>. Que tal preparar esse horário com antecedência?`});
+  if(tHr&&tHr.n/tHr.tot>=.5)ins.push({i:II.hr,t:'Horário de atenção',x:`${Math.round(tHr.n/tHr.tot*100)}% do seu uso acontece à <strong>${esc(tHr.k.toLowerCase())}</strong>. Que tal preparar esse horário com antecedência?`});
   const tSub=topOf(regs.map(r=>r.substancia));
-  if(tSub&&tSub.n/regs.length>=.5)ins.push({i:'🎯',t:'Substância principal',x:`<strong>${esc(tSub.k)}</strong> representa ${Math.round(tSub.n/regs.length*100)}% dos registros dos últimos 30 dias.`});
+  if(tSub&&tSub.n/regs.length>=.5)ins.push({i:II.sub,t:'Substância principal',x:`<strong>${esc(tSub.k)}</strong> representa ${Math.round(tSub.n/regs.length*100)}% dos registros dos últimos 30 dias.`});
   const custo=regs.reduce((a,r)=>a+(parseFloat(String(r.custo||'').replace(',','.'))||0),0);
-  if(custo>0)ins.push({i:'💸',t:'Gasto em 30 dias',x:`Você registrou <strong>R$ ${custo.toFixed(2).replace('.',',')}</strong> em uso no último mês. Sem julgamento — só informação.`});
+  if(custo>0)ins.push({i:II.gasto,t:'Gasto em 30 dias',x:`Você registrou <strong>R$ ${custo.toFixed(2).replace('.',',')}</strong> em uso no último mês. Sem julgamento — só informação.`});
   const fiss=gFs().filter(f=>f.data>=corte).length;
-  if(fiss>0)ins.push({i:'💪',t:'Resistências no mês',x:`Você atravessou <strong>${fiss} fissura${fiss>1?'s':''}</strong> sem usar nos últimos 30 dias. Isso é capacidade real e crescente.`});
+  if(fiss>0)ins.push({i:II.res,t:'Resistências no mês',x:`Você atravessou <strong>${fiss} fissura${fiss>1?'s':''}</strong> sem usar nos últimos 30 dias. Isso é capacidade real e crescente.`});
   const chart=distBars(regs.map(r=>r.substancia),'Substâncias · 30 dias')+distBars(regs.map(r=>r.emoLabel),'Emoções · 30 dias');
   const cards=ins.slice(0,5).map(n=>`<div class="insc"><div class="insci">${n.i}</div><div><div class="insct">${n.t}</div><div class="inscx">${n.x}</div></div></div>`).join('');
   const full=chart+cards||'<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Continue registrando para gerar insights.</div>';
@@ -5744,29 +5776,48 @@ function pushLater(){ls('dr_pushask_'+uid(),true);closeMod('mpush');}
 
 /* ══ DICHAVA PREMIUM (demo local — assinatura simulada) ══ */
 const isPremium=()=>!!ls('dr_prem_'+uid());
-function abrirPremium(){renderPremMod();openMod('mprem');}
+function abrirPremium(){renderPremMod();openMod('mprem');const m=document.getElementById('prem-mascot');if(m&&!m.getAttribute('src')){try{if(typeof brotoDataURI==='function')m.src=brotoDataURI();}catch(e){}}}
 function renderPremMod(){
   const on=isPremium();
   const f=document.getElementById('prem-free'),a=document.getElementById('prem-active');
   if(f)f.style.display=on?'none':'';
   if(a)a.style.display=on?'':'none';
+  if(on){
+    const sinceISO=ls('dr_prem_since_'+uid())||new Date().toISOString();
+    const since=new Date(sinceISO),renew=new Date(since);renew.setDate(renew.getDate()+30);
+    const fmt=d=>{try{return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return isoLocal(d)}};
+    const nCartas=(typeof gCt==='function'?gCt().length:0),nCompras=(typeof gCompras==='function'?gCompras().length:0),nReg=(typeof gR==='function'?gR().length:0);
+    const info=document.getElementById('prem-info');
+    if(info)info.innerHTML=`<div class="preminfo"><div class="pinfr"><span>Membro desde</span><b>${fmt(since)}</b></div><div class="pinfr"><span>Próxima renovação</span><b>${fmt(renew)}</b></div><div class="pinfr"><span>Plano</span><b>Mensal · R$ 9,90</b></div></div>`
+      +`<div class="premsec-t">Recursos liberados pra você 👑</div><div class="premfeats"><div class="pf">📊 Insights avançados</div><div class="pf">💰 Finanças</div><div class="pf">✉️ Cartas pra mim</div><div class="pf">🧘 Sons extras</div><div class="pf">🎮 Jogos extras</div><div class="pf">☁️ Backup na nuvem</div></div>`
+      +`<div class="premsec-t">Seu uso até agora</div><div class="premuse"><div class="pu"><b>${nReg}</b><span>registros</span></div><div class="pu"><b>${nCartas}</b><span>cartas</span></div><div class="pu"><b>${nCompras}</b><span>compras</span></div></div>`;
+  }
 }
-function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();reRenderGated();}
+function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);if(!ls('dr_prem_since_'+uid()))ls('dr_prem_since_'+uid(),new Date().toISOString());vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();reRenderGated();}
 function cancelarPremiumDemo(){ls('dr_prem_'+uid(),0);toast('Assinatura de teste cancelada.');renderPremMod();renderPremUI();reRenderGated();closeMod('mprem');}
 // recurso premium: libera se assinante, senão abre o convite
 function premGate(nome){if(isPremium()){toast('🔓 '+nome+' — recurso premium (demo). Em breve! 💚');return;}abrirPremium();}
 // overlay de "recurso premium" pra sobrepor conteúdo embaçado
-function premOverlayHTML(titulo,desc){
-  return `<div class="premgate-over"><div class="pgo-crown">👑</div><div class="pgo-t">${titulo}</div><div class="pgo-d">${desc}</div><button class="pgo-btn" onclick="abrirPremium()">✨ Desbloquear premium</button></div>`;
+function premOverlayHTML(titulo,desc,dark){
+  return `<div class="premgate-over${dark?' premdark':''}"><div class="pgo-crown">👑</div><div class="pgo-t">${titulo}</div><div class="pgo-d">${desc}</div><button class="pgo-btn" onclick="abrirPremium()">✨ Desbloquear premium</button></div>`;
 }
 // executa uma ação premium; se conta grátis, abre o convite em vez da ação
 function premDo(fn){if(isPremium()){try{fn();}catch(e){}}else{abrirPremium();}}
-// gate dos sons/frequências extras (básico continua grátis)
+// gate dos sons/frequências extras + jogos extras (básico continua grátis)
 function aplicarGateSons(){
-  const el=document.getElementById('zen-freq');if(!el)return;
-  const ov=el.querySelector(':scope > .premgate-over');
-  if(isPremium()){el.classList.remove('premgate','locked');if(ov)ov.remove();}
-  else{el.classList.add('premgate','locked');if(!ov)el.insertAdjacentHTML('beforeend',premOverlayHTML('Sons & frequências extras','Ruído branco, frequências e batidas binaurais pra foco e sono — no premium.'));}
+  const on=isPremium();
+  // sons & frequências extras
+  const el=document.getElementById('zen-freq');
+  if(el){const ov=el.querySelector(':scope > .premgate-over');
+    if(on){el.classList.remove('premgate','locked');if(ov)ov.remove();}
+    else{el.classList.add('premgate','locked');if(!ov)el.insertAdjacentHTML('beforeend',premOverlayHTML('Sons & frequências extras','Ruído branco, frequências e batidas binaurais pra foco e sono — no premium.',true));}
+  }
+  // jogos extras (Flappy Marola segue grátis)
+  const jg=document.getElementById('zen-jogos-extra');
+  if(jg){const ov=jg.querySelector(':scope > .premgate-over');
+    if(on){jg.classList.remove('premgate','locked');if(ov)ov.remove();}
+    else{jg.classList.add('premgate','locked');if(!ov)jg.insertAdjacentHTML('beforeend',premOverlayHTML('Mais jogos pra distrair','Blocos, ping-pong e estourar bolhas — no premium. O Flappy Marola é grátis.',true));}
+  }
 }
 // re-renderiza as seções com gating quando o plano muda
 function reRenderGated(){
