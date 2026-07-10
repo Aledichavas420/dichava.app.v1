@@ -9,15 +9,20 @@ cuidado conforme a substância, os dias desde o último uso e a meta da pessoa.
 
 ---
 
-## 🔑 Chaves VAPID (já geradas pra você)
+## 🔑 Chaves VAPID
 
 ```
 VAPID_PUBLIC  = BNWG_B7SsJFIhvTO-aJAX8WzdvDyixqKhAF6qc17vYzpUWu0OzZjJ2IIJgK6sASfHrfvZ4WbzDrndFOqXa1FsPU
-VAPID_PRIVATE = Du3q0roS7qC5n2T6eEEwfu4Jkl-3y7SnYhhixmkAawY
+VAPID_PRIVATE = <SUA_CHAVE_PRIVADA_VAPID>   # NUNCA commitar — só nos secrets da função
 ```
 
-- A **pública** já está embutida no app (`index.html`, const `VAPID_PUB`). Não precisa mexer.
-- A **privada** é segredo — só vai nos secrets da Edge Function (passo 3). Nunca exponha no front.
+- A **pública** já está embutida no app (`index.html`, const `VAPID_PUB`). É pública por natureza.
+- A **privada** é **segredo**: fica **apenas** nos secrets da Edge Function (passo 3). Nunca exponha no front nem no repositório.
+
+> ⚠️ **Segurança:** uma versão anterior deste README continha a chave privada em texto.
+> Ela foi **removida** e **deve ser rotacionada** (gere um novo par VAPID e atualize os
+> secrets `VAPID_PUBLIC`/`VAPID_PRIVATE` na função + o `VAPID_PUB` no `index.html`).
+> Remover do arquivo **não** apaga do histórico do Git — por isso a rotação é obrigatória.
 
 ---
 
@@ -40,8 +45,8 @@ supabase functions deploy notificar --no-verify-jwt
 ### 3) Configurar os secrets da função
 ```bash
 supabase secrets set \
-  VAPID_PUBLIC=BNWG_B7SsJFIhvTO-aJAX8WzdvDyixqKhAF6qc17vYzpUWu0OzZjJ2IIJgK6sASfHrfvZ4WbzDrndFOqXa1FsPU \
-  VAPID_PRIVATE=Du3q0roS7qC5n2T6eEEwfu4Jkl-3y7SnYhhixmkAawY \
+  VAPID_PUBLIC=<SUA_CHAVE_PUBLICA_VAPID> \
+  VAPID_PRIVATE=<SUA_CHAVE_PRIVADA_VAPID> \
   VAPID_SUBJECT=mailto:seu-email@exemplo.com \
   CRON_SECRET=troque-por-uma-senha-aleatoria
 ```
