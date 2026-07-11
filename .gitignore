@@ -1,0 +1,14 @@
+# Dependências
+node_modules/
+# Ambiente / segredos (NUNCA commitar)
+.env
+.env.*
+*.key
+*.pem
+secrets.*
+# Sistema
+.DS_Store
+Thumbs.db
+# Temp
+*.log
+tmp/

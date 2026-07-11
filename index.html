@@ -3616,7 +3616,7 @@ function renderHome(){
   const regs=gR(),obj=gO(),goal=OBJS.find(g=>g.id===obj?.goal),nome=U?.nome||'',in2=ini(nome);
   try{setAvatares();}catch(e){const tav=document.getElementById('tav');if(tav)tav.textContent=in2;}
   document.getElementById('h-sd').textContent=saud();
-  document.getElementById('h-n').innerHTML=`${nome} <span>cuida de si.</span>`;
+  document.getElementById('h-n').innerHTML=`${esc(nome)} <span>cuida de si.</span>`;
   document.getElementById('h-mt').textContent=goal?.nome||'—';
   const st=streak(regs),sw=regs.filter(r=>r.data>=semISO(hoje())).length,mts=gM(),mp=mts.length?Math.round(mts.filter(m=>m.ok).length/mts.length*100):0;
   document.getElementById('hs-st').textContent=st;
