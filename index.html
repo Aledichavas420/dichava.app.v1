@@ -3558,9 +3558,22 @@ function salvarOnboard(){
 // regra de senha — precisa bater com a política do Supabase (Auth)
 const SENHA_REGRA='Use 8+ caracteres com maiúscula, minúscula, número e símbolo.';
 function senhaValida(pw){return !!pw&&pw.length>=8&&/[a-z]/.test(pw)&&/[A-Z]/.test(pw)&&/\d/.test(pw)&&/[^A-Za-z0-9]/.test(pw);}
-async function criarConta(n,e,pw,tipo,reg){
+async function criarConta(n,e,pw,tipo,reg,extra){
   if(!_SB){const us=ls('dr_users')||[];if(us.find(u=>u.email===e))return{ok:false,err:'E-mail já cadastrado.'};const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw),tipo,reg:tipo==='pro'?reg:null};us.push(nU);ls('dr_users',us);U={id:nU.id,nome:n,email:e,tipo:nU.tipo,reg:nU.reg};ls('dr_session',U);return{ok:true};}
-  try{const{data,error}=await _SB.auth.signUp({email:e,password:pw,options:{data:{nome:n,tipo,reg:tipo==='pro'?reg:null}}});if(error)return{ok:false,err:error.message.includes('already')?'E-mail já cadastrado.':error.message};if(!data.session)return{ok:true,needsConfirm:true,email:e};U={id:data.user.id,nome:n,email:data.user.email,tipo,reg:tipo==='pro'?reg:null};ls('dr_session',U);return{ok:true};}catch(err){return{ok:false,err:'Não consegui criar a conta agora.'};}
+  try{const{data,error}=await _SB.auth.signUp({email:e,password:pw,options:{data:Object.assign({nome:n,tipo,reg:tipo==='pro'?reg:null},extra||{})}});if(error)return{ok:false,err:error.message.includes('already')?'E-mail já cadastrado.':error.message};if(!data.session)return{ok:true,needsConfirm:true,email:e};U={id:data.user.id,nome:n,email:data.user.email,tipo,reg:tipo==='pro'?reg:null};ls('dr_session',U);return{ok:true};}catch(err){return{ok:false,err:'Não consegui criar a conta agora.'};}
+}
+// reconstrói o onboarding salvo no metadata do cadastro (usado ao voltar do link de confirmação)
+function aplicarOnboardMeta(ob){
+  try{
+    if(!ob||!ob.goal||!U)return false;
+    if(ob.nome){U.nome=ob.nome;ls('dr_session',U);}
+    sO({goal:ob.goal,subs:ob.subs||[],data:hoje()});
+    if(ob.metas&&ob.metas.length)sM(ob.metas.map((t,i)=>({id:'m'+i+Date.now(),titulo:t,ok:false,criada:hoje()})));
+    if(ob.perfil)sPerfil(ob.perfil);
+    {const f=gFin();if(ob.fin&&ob.fin.ativo){const mensal=parseBRL(ob.fin.mensal),red=+ob.fin.reduzir||0;if(mensal>0){const alvo=mensal*(1-red/100);f.base=(alvo/4.345).toFixed(2);f.baseMensal=alvo.toFixed(2);f.mensalAtual=mensal.toFixed(2);f.reduzir=red;}}sFin(f);}
+    ls('dr_termo_'+U.id,new Date().toISOString());
+    return true;
+  }catch(e){return false;}
 }
 async function finalizarOnboarding(){
   const eEl=document.getElementById('ob-email'),pwEl=document.getElementById('ob-pw'),err=document.getElementById('ob-conta-e');
@@ -3573,7 +3586,8 @@ async function finalizarOnboarding(){
   if(!document.getElementById('ob-18').checked){err.textContent='⚠️ Confirme que você tem 18 anos ou mais.';err.classList.add('on');return;}
   if(!document.getElementById('ob-termo').checked){err.textContent='⚠️ Aceite os termos e as regras da comunidade.';err.classList.add('on');return;}
   const btn=document.getElementById('ob-btn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
-  const r=await criarConta(_obNome,e,pw,'user',null);
+  const obMeta={ob:{goal:_obG,subs:_obSubs,metas:_obMetas,perfil:_obPerfil,fin:_obFin,nome:_obNome}};
+  const r=await criarConta(_obNome,e,pw,'user',null,obMeta);
   btn.disabled=false;btn.textContent='Criar conta e entrar';
   if(!r.ok){err.textContent=r.err;err.classList.add('on');return;}
   if(r.needsConfirm){mostrarConfirmeEmail(r.email);return;}
@@ -3586,7 +3600,7 @@ function mostrarConfirmeEmail(email){
   try{document.getElementById('vo').classList.remove('on');}catch(e){}
   showV('va');
   try{mostrarLogin();document.getElementById('li-e').value=email||'';}catch(e){}
-  toast('📧 Enviamos um link de confirmação para '+(email||'seu e-mail')+'. Confirme e depois faça login. 💚');
+  toast('📧 Enviamos um link de confirmação para '+(email||'seu e-mail')+'. Toque no link (confira o spam) e você já entra com tudo salvo. 💚');
 }
 function abrirRegras(){const dt=document.getElementById('termo-dt');if(dt)dt.textContent='—';openMod('mtermol');}
 
@@ -6156,6 +6170,8 @@ document.addEventListener('touchstart',function(e){if(!e.target.closest('input,t
     // restaura os dados da nuvem no init (crucial em aparelho/domínio novo,
     // senão o usuário parece "novo" e cai no onboarding sem seus dados)
     try{await syncFromCloud();}catch(e){}
+    // 1º acesso após confirmar o e-mail: reconstrói o onboarding salvo no cadastro
+    try{const md=sbU.user_metadata||{};if(!gO()&&md.ob&&md.ob.goal)aplicarOnboardMeta(md.ob);}catch(e){}
   } else {
     const sess=ls('dr_session');
     if(sess&&sess.id) U=sess;
