@@ -3604,6 +3604,7 @@ function entrar(){
   buildIntRow('fiss-int','fs');
   agNotif();
   try{renderPremUI();aplicarGateSons();}catch(e){}
+  try{carregarPlano();}catch(e){}
   setTimeout(pedirPushPrimeiroAcesso,1400);
 }
 
@@ -6050,8 +6051,23 @@ async function pedirPushPrimeiroAcesso(){
 function pushAtivar(){ls('dr_pushask_'+uid(),true);closeMod('mpush');togglePush();}
 function pushLater(){ls('dr_pushask_'+uid(),true);closeMod('mpush');}
 
-/* ══ DICHAVA PREMIUM (demo local — assinatura simulada) ══ */
-const isPremium=()=>!!ls('dr_prem_'+uid());
+/* ══ DICHAVA PREMIUM ══ */
+// _premServer = verdade do servidor (Supabase, tabela perfis). Fonte segura.
+// dr_prem_ = simulação LOCAL de teste (some quando o pagamento real entrar).
+let _premServer=false;
+const isPremium=()=>_premServer||!!ls('dr_prem_'+uid());
+// lê o plano do servidor no login e re-renderiza os gates
+async function carregarPlano(){
+  try{_premServer=!!ls('dr_premsrv_'+uid());}catch(e){}   // cache (funciona offline)
+  try{
+    if(typeof _SB!=='undefined'&&_SB&&U&&U.id&&U.id!=='demo'){
+      const{data}=await _SB.from('perfis').select('plano,plano_expira').eq('user_id',U.id).maybeSingle();
+      const ativo=!!(data&&data.plano==='premium'&&(!data.plano_expira||new Date(data.plano_expira)>new Date()));
+      _premServer=ativo;ls('dr_premsrv_'+uid(),ativo?1:0);
+    }
+  }catch(e){}
+  try{renderPremUI();reRenderGated();}catch(e){}
+}
 function abrirPremium(){renderPremMod();openMod('mprem');const m=document.getElementById('prem-mascot');if(m&&!m.getAttribute('src')){try{if(typeof brotoDataURI==='function')m.src=brotoDataURI();}catch(e){}}}
 function renderPremMod(){
   const on=isPremium();
