@@ -114,6 +114,35 @@ guiados, temas.
 
 ---
 
+## 🔐 Checklist de segurança
+
+### ✅ Resolvido (jul/2026)
+- [x] **RLS auditado** — `registros` e `push_subs` trancados em `auth.uid()`; `push_log`/`profissionais` só backend
+- [x] **Chave VAPID rotacionada** — a antiga (que vazou no README/histórico) não funciona mais
+- [x] **Chave VAPID removida** dos arquivos do repo (placeholder + aviso)
+- [x] **Audit de XSS** — todos os `innerHTML` revisados; campos de texto livre escapados com `esc()` (nome, contexto/gatilhos no calendário, título de meta)
+- [x] **Content-Security-Policy** no `<head>` — scripts só self+jsdelivr, connect só Supabase, object-src none
+- [x] **.gitignore** criado
+
+### 🟡 Antes do lançamento — painel Supabase (você faz)
+- [ ] **Confirmação de e-mail obrigatória** no Auth
+- [ ] **Rate limiting** de login/signup
+- [ ] **Política de senha** (mínimo de caracteres)
+- [ ] **Índices** em `user_id` e `data`
+- [ ] **Supabase Pro** (US$ 25/mês) → backup diário
+
+### 🔴 Antes de COBRAR (monetização)
+- [ ] **Premium server-side** — validar plano no servidor (campo `plano` + webhook de pagamento); hoje é flag no `localStorage` (burlável)
+
+### 🟢 Contínuo / fases futuras
+- [ ] Policy RLS de `profissionais` quando o módulo entrar (aí XSS deixa de ser só "self")
+- [ ] Secret scanning do GitHub ligado
+- [ ] Limpar histórico do Git da chave VAPID antiga (opcional, já rotacionada)
+- [ ] Avaliar criptografia em repouso para os campos mais sensíveis
+- [ ] Revisão/pentest leve antes do lançamento público
+
+---
+
 ## Histórico rápido de infra
 - Deploy: **GitHub Pages** a partir da branch `main`.
 - Já houve travamento da fila de deploy do Pages (jul/2026) — resolvido deletando o
