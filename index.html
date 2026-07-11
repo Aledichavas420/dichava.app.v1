@@ -5982,7 +5982,7 @@ function abrirFeedback(){
   if(!LINK_FEEDBACK){toast('💬 O grupo de feedback abre em breve!');return;}
   try{window.open(LINK_FEEDBACK,'_blank','noopener');}catch(e){location.href=LINK_FEEDBACK;}
 }
-const VAPID_PUB='BNWG_B7SsJFIhvTO-aJAX8WzdvDyixqKhAF6qc17vYzpUWu0OzZjJ2IIJgK6sASfHrfvZ4WbzDrndFOqXa1FsPU';
+const VAPID_PUB='BHsXMrwzV3w79-PocjNk3YdPLDSXGnxbDTcm1Y24GxbIXdekHedGp_qUSMb2g0OsN2BNmMCGJP0Djg2O-WPfKYo';
 function _b64ToU8(s){const pad='='.repeat((4-s.length%4)%4);const b=(s+pad).replace(/-/g,'+').replace(/_/g,'/');const r=atob(b);const a=new Uint8Array(r.length);for(let i=0;i<r.length;i++)a[i]=r.charCodeAt(i);return a;}
 function pushSuportado(){return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;}
 function pushInstaladoIOS(){const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);return !(isIOS&&!standalone);}
