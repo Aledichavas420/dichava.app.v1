@@ -133,7 +133,10 @@ guiados, temas.
 - [ ] **Supabase Pro** (US$ 25/mês) → backup diário
 
 ### 🔴 Antes de COBRAR (monetização)
-- [ ] **Premium server-side** — validar plano no servidor (campo `plano` + webhook de pagamento); hoje é flag no `localStorage` (burlável)
+- [x] **Premium server-side — fundação** (jul/2026): tabela `perfis` (RLS read-own, só servidor escreve); app lê o plano no login (`carregarPlano`), cache offline; comp por SQL. A simulação local (`dr_prem_`) segue só como fallback de teste.
+- [ ] **Integração de pagamento** — checkout (Pix/Mercado Pago) + **webhook** que marca `plano='premium'` na tabela `perfis`
+- [ ] **Remover a simulação local** (`dr_prem_`) quando o pagamento entrar (deixar `isPremium()` só server)
+- [ ] **MEI/CNPJ + contador + termos** pra emitir NF e receber legalmente
 
 ### 🟢 Contínuo / fases futuras
 - [ ] Policy RLS de `profissionais` quando o módulo entrar (aí XSS deixa de ser só "self")
