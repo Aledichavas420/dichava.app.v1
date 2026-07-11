@@ -1454,7 +1454,7 @@ a{color:inherit;text-decoration:none}
   <div id="asignup" style="display:none">
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
-    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw',this)"></button></div><div class="em" id="su-pwe">Mínimo 6 caracteres.</div></div>
+    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="su-pwe">Senha muito fraca.</div></div>
     <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="su-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw2',this)"></button></div><div class="em" id="su-pw2e">As senhas não conferem.</div></div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
   </div>
@@ -2266,7 +2266,7 @@ a{color:inherit;text-decoration:none}
   <div style="font-size:30px;text-align:center;margin-bottom:6px">🔑</div>
   <div class="mt c">Criar nova senha</div>
   <div class="mb c" style="margin-bottom:14px">Escolha uma nova senha para a sua conta.</div>
-  <div class="fld"><div class="lbl">Nova senha</div><div class="pwwrap"><input class="inp" id="rec-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw',this)"></button></div><div class="em" id="rec-pw-e">Mínimo 6 caracteres.</div></div>
+  <div class="fld"><div class="lbl">Nova senha</div><div class="pwwrap"><input class="inp" id="rec-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="rec-pw-e">Senha muito fraca.</div></div>
   <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="rec-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw2',this)"></button></div><div class="em" id="rec-pw2-e">As senhas não conferem.</div></div>
   <button class="btn bv bfull" onclick="salvarNovaSenha()" style="margin-top:6px">Salvar nova senha 💚</button>
 </div></div></div>
@@ -2377,6 +2377,10 @@ a{color:inherit;text-decoration:none}
 .premtag{white-space:nowrap}
 /* coroa premium alinhada à direita no cabeçalho */
 .hero-prem{margin-left:auto}
+/* dica de regra de senha */
+.pwhint{font-size:11px;color:var(--txs);margin-top:5px;line-height:1.45}
+.pwhint b{color:var(--tx);font-weight:700}
+#shell.dkm .pwhint b{color:#E8EDE6}
 /* cabeçalhos visuais dos históricos (aba Registros) */
 .histsec{display:flex;align-items:center;gap:11px;margin:18px 18px 11px}
 .histsec .hs-ic{width:38px;height:38px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 11px rgba(0,0,0,.16)}
@@ -2943,7 +2947,7 @@ function abrirTrocarSenha(){
 async function salvarNovaSenha(){
   const p=document.getElementById('rec-pw').value,p2=document.getElementById('rec-pw2').value;
   const e1=document.getElementById('rec-pw-e'),e2=document.getElementById('rec-pw2-e');e1.classList.remove('on');e2.classList.remove('on');
-  if(p.length<6){e1.classList.add('on');shk(document.getElementById('rec-pw'));return;}
+  if(!senhaValida(p)){e1.textContent=SENHA_REGRA;e1.classList.add('on');shk(document.getElementById('rec-pw'));return;}
   if(p!==p2){e2.classList.add('on');shk(document.getElementById('rec-pw2'));return;}
   if(!_SB){toast('Indisponível offline.');return;}
   try{const{error}=await _SB.auth.updateUser({password:p});if(error)throw error;
@@ -3307,7 +3311,7 @@ async function doSignup(){
   let ok=true;
   const chk=(id,eid,cond,msg)=>{const el=document.getElementById(id),er=document.getElementById(eid);if(!cond){el.classList.add('err');er.classList.add('on');if(msg)er.textContent=msg;shk(el);ok=false;}else{el.classList.remove('err');er.classList.remove('on');}};
   const pw2=document.getElementById('su-pw2')?.value||'';
-  chk('su-n','su-ne',n,'Informe seu nome.');chk('su-e','su-ee',e&&/\S+@\S+\.\S+/.test(e),'E-mail inválido.');chk('su-pw','su-pwe',pw&&pw.length>=6,'Mínimo 6 caracteres.');chk('su-pw2','su-pw2e',pw2&&pw2===pw,'As senhas não conferem.');
+  chk('su-n','su-ne',n,'Informe seu nome.');chk('su-e','su-ee',e&&/\S+@\S+\.\S+/.test(e),'E-mail inválido.');chk('su-pw','su-pwe',senhaValida(pw),SENHA_REGRA);chk('su-pw2','su-pw2e',pw2&&pw2===pw,'As senhas não conferem.');
   const tipo=_acct;const reg=(document.getElementById('su-reg')?.value||'').trim();
   if(tipo==='pro')chk('su-reg','su-rege',reg,'Informe seu registro.');
   if(!ok)return;
@@ -3424,7 +3428,7 @@ function renderOb(){
   if(p.tp==='conta'){
     body.innerHTML=`
       <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="ob-email" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="ob-email-e">E-mail inválido.</div></div>
-      <div class="fld"><div class="lbl">Senha</div><input class="inp" id="ob-pw" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"><div class="em" id="ob-pw-e">Mínimo 6 caracteres.</div></div>
+      <div class="fld"><div class="lbl">Senha</div><input class="inp" id="ob-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="ob-pw-e">Senha muito fraca.</div></div>
       <label class="ob-check"><input type="checkbox" id="ob-18"><span>Confirmo que tenho <strong>18 anos ou mais</strong>.</span></label>
       <label class="ob-check"><input type="checkbox" id="ob-termo"><span>Li e aceito os <a onclick="event.preventDefault();abrirRegras()" style="color:var(--ve);font-weight:700">termos e as regras da comunidade</a>.</span></label>
       <div class="em" id="ob-conta-e" style="margin-top:4px"></div>`;
@@ -3551,6 +3555,9 @@ function salvarOnboard(){
    }
    sFin(f);}
 }
+// regra de senha — precisa bater com a política do Supabase (Auth)
+const SENHA_REGRA='Use 8+ caracteres com maiúscula, minúscula, número e símbolo.';
+function senhaValida(pw){return !!pw&&pw.length>=8&&/[a-z]/.test(pw)&&/[A-Z]/.test(pw)&&/\d/.test(pw)&&/[^A-Za-z0-9]/.test(pw);}
 async function criarConta(n,e,pw,tipo,reg){
   if(!_SB){const us=ls('dr_users')||[];if(us.find(u=>u.email===e))return{ok:false,err:'E-mail já cadastrado.'};const nU={id:'u_'+Date.now(),nome:n,email:e,pw:btoa(pw),tipo,reg:tipo==='pro'?reg:null};us.push(nU);ls('dr_users',us);U={id:nU.id,nome:n,email:e,tipo:nU.tipo,reg:nU.reg};ls('dr_session',U);return{ok:true};}
   try{const{data,error}=await _SB.auth.signUp({email:e,password:pw,options:{data:{nome:n,tipo,reg:tipo==='pro'?reg:null}}});if(error)return{ok:false,err:error.message.includes('already')?'E-mail já cadastrado.':error.message};if(!data.session)return{ok:true,needsConfirm:true,email:e};U={id:data.user.id,nome:n,email:data.user.email,tipo,reg:tipo==='pro'?reg:null};ls('dr_session',U);return{ok:true};}catch(err){return{ok:false,err:'Não consegui criar a conta agora.'};}
@@ -3561,7 +3568,7 @@ async function finalizarOnboarding(){
   err.classList.remove('on');
   if(!/\S+@\S+\.\S+/.test(e)){document.getElementById('ob-email-e').classList.add('on');shk(eEl);return;}
   document.getElementById('ob-email-e').classList.remove('on');
-  if(pw.length<6){document.getElementById('ob-pw-e').classList.add('on');shk(pwEl);return;}
+  if(!senhaValida(pw)){const pe=document.getElementById('ob-pw-e');pe.textContent=SENHA_REGRA;pe.classList.add('on');shk(pwEl);return;}
   document.getElementById('ob-pw-e').classList.remove('on');
   if(!document.getElementById('ob-18').checked){err.textContent='⚠️ Confirme que você tem 18 anos ou mais.';err.classList.add('on');return;}
   if(!document.getElementById('ob-termo').checked){err.textContent='⚠️ Aceite os termos e as regras da comunidade.';err.classList.add('on');return;}
