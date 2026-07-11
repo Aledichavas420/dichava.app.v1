@@ -6153,6 +6153,9 @@ document.addEventListener('touchstart',function(e){if(!e.target.closest('input,t
     const sbU=session.user;const m=sbU.user_metadata||{};
     U={id:sbU.id,nome:m.nome||sbU.email.split('@')[0],email:sbU.email,tipo:m.tipo||'user',reg:m.reg||null};
     ls('dr_session',U);
+    // restaura os dados da nuvem no init (crucial em aparelho/domínio novo,
+    // senão o usuário parece "novo" e cai no onboarding sem seus dados)
+    try{await syncFromCloud();}catch(e){}
   } else {
     const sess=ls('dr_session');
     if(sess&&sess.id) U=sess;
