@@ -207,15 +207,16 @@ Deno.serve(async (req) => {
       if (hit) { pick = { k: `tl:${sub}:${hit.d}`, t: hit.t, b: hit.b }; break; }
     }
 
-    // 2) sem marco hoje? lembrete de registro / meta (a cada poucos dias)
+    // 2) sem marco hoje? lembrete DIÁRIO de registro (só se ainda não registrou hoje)
     if (!pick) {
       const registrouHoje = regs.some((r) => r.data === hoje);
-      const goal = obj?.goal || s.goal;
-      if (!registrouHoje && goal && META_MSG[goal]) {
-        // limita a no máx 1 lembrete a cada 3 dias (chave com semana/dia)
-        const bloco = Math.floor(Date.now() / (3 * 86400000));
-        const m = META_MSG[goal][0];
-        pick = { k: `meta:${goal}:${bloco}`, t: m.t, b: m.b };
+      if (!registrouHoje) {
+        const goal = obj?.goal || s.goal;
+        const m = (goal && META_MSG[goal])
+          ? META_MSG[goal][0]
+          : { t: "Como está indo? 📓", b: "Um registro rápido te ajuda a enxergar seus padrões — sem certo ou errado." };
+        // chave por dia => no máx 1 lembrete por dia (o dedupe do push_log garante)
+        pick = { k: `lembrete:${hoje}`, t: m.t, b: m.b };
       }
     }
 
