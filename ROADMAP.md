@@ -76,8 +76,8 @@ delas** (que fica com 15–30%) — ficamos com quase 100%.
 - [ ] Definir a **linha free × premium** (ver regra de ouro abaixo)
 
 ### Fase 2 — Preparar pro público geral
-- [ ] **Domínio próprio** (ex: dichava.app) apontando pro app (~R$ 40–60/ano)
-- [ ] HTTPS no domínio (automático no GitHub/Cloudflare Pages)
+- [x] **Domínio próprio** — **dichava.app** (Cloudflare) apontando pro GitHub Pages (jul/2026)
+- [x] HTTPS no domínio (Let's Encrypt via GitHub Pages; DNS-only na Cloudflare)
 - [ ] **Analytics privacy-friendly** (Plausible ou Umami — sem cookies, LGPD ok)
 - [ ] **Política de Privacidade** e **Termos de Uso** publicados e linkados no app
 - [ ] Revisar segurança e backup do Supabase (Fase infra abaixo)
@@ -127,7 +127,8 @@ guiados, temas.
 ### 🟡 Antes do lançamento — painel Supabase (você faz)
 - [ ] **Confirmação de e-mail obrigatória** no Auth
 - [ ] **Rate limiting** de login/signup
-- [ ] **Política de senha** (mínimo de caracteres)
+- [x] **Confirmação de e-mail** ativada · **Política de senha** (8+ com maiúscula/minúscula/número/símbolo, validada também no app)
+- [x] **Índices** criados (`user_id`, etc.)
 - [ ] **Índices** em `user_id` e `data`
 - [ ] **Supabase Pro** (US$ 25/mês) → backup diário
 
