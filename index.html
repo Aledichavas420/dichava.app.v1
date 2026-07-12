@@ -1816,6 +1816,7 @@ a{color:inherit;text-decoration:none}
   <div class="cfgsec">
     <div class="cfgi" onclick="abrirFeedback()"><div class="cfgic" data-icon="duvidas"></div><div class="cfgb"><div class="cfgn">Enviar feedback</div><div class="cfgd">Relate bugs e ideias no grupo do WhatsApp 💚</div></div><div class="cfgar">›</div></div>
     <div class="cfgi" onclick="atualizarApp()"><div class="cfgic">🔄</div><div class="cfgb"><div class="cfgn">Forçar atualização</div><div class="cfgd">Buscar a versão mais nova do app agora</div></div><div class="cfgar">›</div></div>
+    <div class="cfgi" onclick="abrirTutorial()"><div class="cfgic">🎓</div><div class="cfgb"><div class="cfgn">Rever tutorial</div><div class="cfgd">Um tour rápido pelas ferramentas do app</div></div><div class="cfgar">›</div></div>
   </div>
   <!-- ÁREA EXCLUSIVA PROFISSIONAL -->
   <div id="pro-area" style="display:none">
@@ -1996,6 +1997,49 @@ a{color:inherit;text-decoration:none}
     <div id="rel-body"></div>
     <div style="padding:6px 18px 0"><button class="btn bv bfull" onclick="exportarRelatorioPDF()">📄 Exportar em PDF</button></div>
     <div style="text-align:center;font-size:11px;color:var(--txm);padding:10px 24px 0">Ótimo pra guardar ou compartilhar com seu terapeuta 💚</div>
+  </div>
+</div>
+
+<!-- TUTORIAL (primeiro acesso) -->
+<style>
+#vtutorial{background:#141A14}
+.tut-wrap{flex:1;display:flex;flex-direction:column;height:100%}
+.tut-slide{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 26px 10px;position:relative;overflow:hidden}
+.tut-slide.anim{animation:tutIn .38s cubic-bezier(.3,.7,.3,1)}
+@keyframes tutIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.tut-hero{width:148px;height:148px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:26px;position:relative;box-shadow:0 16px 42px rgba(0,0,0,.4);animation:tutBob 3.4s ease-in-out infinite}
+@keyframes tutBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.tut-hero .tic-ic{font-size:66px;line-height:1}
+.tut-hero img{width:98px;height:98px;object-fit:contain}
+.tut-spark{position:absolute;color:rgba(255,255,255,.8);animation:tw 2.6s ease-in-out infinite;pointer-events:none}
+.tut-t{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:26px;color:#fff;margin-bottom:12px;line-height:1.15}
+.tut-x{font-size:15px;color:rgba(255,255,255,.82);line-height:1.6;max-width:330px;margin:0 auto}
+.tut-badges{display:flex;flex-direction:column;gap:8px;margin-top:22px;width:100%;max-width:330px}
+.tut-badge{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:10px 14px;font-size:13.5px;font-weight:700;color:#fff}
+.tut-badge .tb-i{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.tut-badge.free .tb-i{background:#4CAF5A}
+.tut-badge.prem .tb-i{background:linear-gradient(120deg,#7C3AED,#B387F2)}
+.tut-badge small{font-weight:700;margin-left:auto;font-size:10px;text-transform:uppercase;letter-spacing:.04em;opacity:.7}
+.tut-nav{padding:14px 22px calc(20px + var(--sb));display:flex;flex-direction:column;gap:13px;background:#141A14}
+.tut-dots{display:flex;gap:7px;justify-content:center}
+.tut-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .3s}
+.tut-dot.on{background:#fff;width:22px;border-radius:4px}
+.tut-btns{display:flex;gap:10px}
+.tut-btns .btn{border-radius:30px}
+#tut-back{background:rgba(255,255,255,.13);color:#fff;border:none}
+.tut-skip{position:absolute;top:calc(var(--st) + 14px);right:18px;z-index:3;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:30px;padding:7px 15px;font-weight:700;font-size:13px;cursor:pointer}
+</style>
+<div class="V" id="vtutorial">
+  <div class="tut-wrap">
+    <button class="tut-skip" id="tut-skip" onclick="fecharTutorial()">Pular ✕</button>
+    <div class="tut-slide anim" id="tut-slide"></div>
+    <div class="tut-nav">
+      <div class="tut-dots" id="tut-dots"></div>
+      <div class="tut-btns">
+        <button class="btn" id="tut-back" style="flex:0 0 32%;display:none" onclick="tutIr(-1)">Voltar</button>
+        <button class="btn bv" id="tut-next" style="flex:1" onclick="tutIr(1)">Próximo →</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3619,7 +3663,7 @@ function entrar(){
   agNotif();
   try{renderPremUI();aplicarGateSons();}catch(e){}
   try{carregarPlano();}catch(e){}
-  setTimeout(pedirPushPrimeiroAcesso,1400);
+  setTimeout(()=>{try{if(!ls('dr_tut_'+uid()))abrirTutorial();else pedirPushPrimeiroAcesso();}catch(e){}},1200);
 }
 
 /* ══ CHECK-IN ══ */
@@ -4979,6 +5023,33 @@ function popularEstrelas(){
 let _game=null,_gameType=null,_gRAF=null;
 const gBest=t=>ls('dr_gbest_'+t+'_'+uid())||0;
 const gSetBest=(t,v)=>ls('dr_gbest_'+t+'_'+uid(),v);
+
+/* ══ TUTORIAL (primeiro acesso) ══ */
+const TUTORIAL=[
+  {bg:'linear-gradient(160deg,#3A2063,#6B43D6)',mascot:true,t:'Bem-vindo(a)! 💚',x:'Que bom te ver aqui. Deixa eu te mostrar rapidinho como o dichava funciona — leva 30 segundos.',badges:[]},
+  {bg:'linear-gradient(160deg,#5FCF74,#2DA257)',ic:'📝',t:'Registre em segundos',x:'Toque no <b>+</b> pra registrar um uso, uma resistência ou uma compra. Cada registro te ajuda a enxergar seus padrões.',badges:[{t:'Registro de uso e resistência',f:true},{t:'Registro de compras',f:false}]},
+  {bg:'linear-gradient(160deg,#B79AF7,#6B43D6)',ic:'🧘',t:'Atravesse a fissura',x:'Na <b>Pausa pra mente</b>: respiração, grounding e sons pra acalmar. E o <b>Modo SOS</b> pros momentos de crise.',badges:[{t:'Respiração, grounding, SOS e sons',f:true},{t:'Sons/frequências e jogos extras',f:false}]},
+  {bg:'linear-gradient(160deg,#5CE3CF,#0C9C8C)',ic:'📊',t:'Entenda seus padrões',x:'Em <b>Registros</b> e <b>Progresso</b>: calendário, humor, atividade e insights do seu padrão.',badges:[{t:'Histórico, humor e metas',f:true},{t:'Insights avançados e relatórios em PDF',f:false}]},
+  {bg:'linear-gradient(160deg,#FFA470,#F0402A)',ic:'✉️',t:'Cuide da mente e do bolso',x:'Em <b>Reflexões</b>: diário e carta pro seu eu do futuro. E o controle de <b>Finanças</b>.',badges:[{t:'Diário e reflexões',f:true},{t:'Cartas pra mim e finanças',f:false}]},
+  {bg:'linear-gradient(160deg,#177038,#2DA257)',mascot:true,t:'O essencial é sempre grátis',x:'Registro, SOS, respiração e informação <b>nunca custam nada</b>. A coroa 👑 Premium libera só os extras. Comece no seu ritmo!',badges:[],final:true},
+];
+let _tutI=0;
+function abrirTutorial(){_tutI=0;showV('vtutorial');tutRender();}
+function fecharTutorial(){try{ls('dr_tut_'+uid(),1);}catch(e){}showV('vapp');try{pedirPushPrimeiroAcesso();}catch(e){}}
+function tutIr(d){_tutI+=d;if(_tutI<0)_tutI=0;if(_tutI>=TUTORIAL.length){fecharTutorial();return;}tutRender();}
+function tutRender(){
+  const s=TUTORIAL[_tutI],el=document.getElementById('tut-slide');if(!el)return;
+  let sparks='';for(let i=0;i<6;i++)sparks+=`<span class="tut-spark" style="left:${(Math.random()*86+7)|0}%;top:${(Math.random()*66+6)|0}%;font-size:${(Math.random()*10+8)|0}px;animation-delay:${(Math.random()*2).toFixed(1)}s">✦</span>`;
+  const heroInner=s.mascot?`<img id="tut-masc" alt="">`:`<span class="tic-ic">${s.ic}</span>`;
+  const badges=(s.badges||[]).map(bd=>`<div class="tut-badge ${bd.f?'free':'prem'}"><span class="tb-i">${bd.f?'✓':'👑'}</span><span>${bd.t}</span><small>${bd.f?'grátis':'premium'}</small></div>`).join('');
+  el.innerHTML=`${sparks}<div class="tut-hero" style="background:${s.bg}">${heroInner}</div><div class="tut-t">${s.t}</div><div class="tut-x">${s.x}</div>${badges?`<div class="tut-badges">${badges}</div>`:''}`;
+  el.classList.remove('anim');void el.offsetWidth;el.classList.add('anim');
+  if(s.mascot){const m=document.getElementById('tut-masc');if(m&&typeof brotoDataURI==='function'){try{m.src=brotoDataURI();}catch(e){}}}
+  document.getElementById('tut-dots').innerHTML=TUTORIAL.map((_,i)=>`<span class="tut-dot ${i===_tutI?'on':''}"></span>`).join('');
+  document.getElementById('tut-back').style.display=_tutI>0?'':'none';
+  document.getElementById('tut-next').textContent=(_tutI===TUTORIAL.length-1)?'Começar 💚':'Próximo →';
+  document.getElementById('tut-skip').style.display=(_tutI===TUTORIAL.length-1)?'none':'';
+}
 
 /* ══ RELATÓRIOS AVANÇADOS (premium) ══ */
 let _relDias=30;
