@@ -2004,10 +2004,6 @@ a{color:inherit;text-decoration:none}
 <style>
 #vtutorial{background:#0d1017}
 .tut-bg{position:absolute;inset:0;z-index:0;transition:background .7s ease}
-.tut-blob{position:absolute;border-radius:50%;filter:blur(72px);opacity:.55;z-index:0;transition:background .7s ease}
-.tut-blob.b1{width:340px;height:340px;top:-100px;left:-90px;animation:tutDrift 15s ease-in-out infinite alternate}
-.tut-blob.b2{width:300px;height:300px;bottom:-70px;right:-80px;animation:tutDrift 18s ease-in-out infinite alternate-reverse}
-@keyframes tutDrift{to{transform:translate(46px,38px) scale(1.15)}}
 .tut-stars{position:absolute;inset:0;z-index:0;pointer-events:none}
 .tut-star{position:absolute;background:#fff;border-radius:50%;opacity:.6;animation:tw 2.8s ease-in-out infinite}
 .tut-wrap{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;height:100%}
@@ -2089,7 +2085,6 @@ a{color:inherit;text-decoration:none}
 </style>
 <div class="V" id="vtutorial">
   <div class="tut-bg" id="tut-bg"></div>
-  <div class="tut-blob b1" id="tut-blob1"></div><div class="tut-blob b2" id="tut-blob2"></div>
   <div class="tut-stars" id="tut-stars"></div>
   <div class="tut-wrap">
     <button class="tut-skip" id="tut-skip" onclick="fecharTutorial()">Pular ✕</button>
@@ -5123,7 +5118,7 @@ function fecharTutorial(){try{ls('dr_tut_'+uid(),1);}catch(e){}showV('vapp');try
 function tutIr(d){_tutI+=d;if(_tutI<0)_tutI=0;if(_tutI>=TUTORIAL.length){fecharTutorial();return;}tutRender();}
 function tutRender(){
   const s=TUTORIAL[_tutI],el=document.getElementById('tut-slide');if(!el)return;
-  try{document.getElementById('tut-bg').style.background=s.bg;document.getElementById('tut-blob1').style.background=s.c1;document.getElementById('tut-blob2').style.background=s.c2;}catch(e){}
+  try{document.getElementById('tut-bg').style.background=`radial-gradient(62% 46% at 14% 6%, ${s.c1}66, transparent 72%),radial-gradient(62% 46% at 86% 94%, ${s.c2}55, transparent 72%),${s.bg}`;}catch(e){}
   const visual=s.mascot
     ?`<div class="tut-visual"><div class="tut-mascot"><span class="tut-halo"></span><span class="tut-halo d"></span><img id="tut-masc" alt=""></div></div>`
     :`<div class="tut-visual">${tutMock(s.id)}</div>`;
