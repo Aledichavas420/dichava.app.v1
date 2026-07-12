@@ -160,7 +160,7 @@ input:focus,select:focus,textarea:focus{outline:none}
 a{color:inherit;text-decoration:none}
 
 /* APP SHELL */
-#shell{width:100%;height:100%;height:100dvh;height:var(--app-h,100dvh);max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
+#shell{width:100%;height:100%;height:var(--app-h,100%);max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
 @media(min-width:431px){body{background:#ECECE8;display:flex;align-items:flex-start;justify-content:center}}
 
 /* VIEW SYSTEM */
@@ -193,7 +193,8 @@ a{color:inherit;text-decoration:none}
 #bnav.on{display:flex}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;padding:4px 1px;font-size:7.5px;color:var(--txm);font-weight:500;transition:color .15s}
 .ni.on{color:var(--ve)}
-.ni-ic{font-size:18px;line-height:1}
+.ni-ic{font-size:18px;line-height:1;height:22px;display:flex;align-items:center;justify-content:center}
+.ni-ic .appicon{width:21px;height:21px;display:block}
 .fabw{flex:0 0 56px;display:flex;justify-content:center}
 .fab{width:48px;height:48px;border-radius:50%;background:var(--dk);border:3px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:-18px;box-shadow:0 4px 18px rgba(0,0,0,.3);font-size:24px;color:#fff}
 
