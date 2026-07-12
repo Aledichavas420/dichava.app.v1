@@ -1061,6 +1061,14 @@ a{color:inherit;text-decoration:none}
 .lib-back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--ve);font-family:'DM Sans',sans-serif;font-weight:700;font-size:13.5px;padding:2px 18px 8px;cursor:pointer}
 .lib-back svg{width:16px;height:16px}
 #shell.dkm .lib-back{color:#7BD98A}
+/* gancho premium com dados reais */
+.prem-hook{background:linear-gradient(135deg,#2a1f45,#1c1530);border:1px solid rgba(124,58,237,.4);border-radius:16px;padding:14px 15px;margin:6px 0 14px}
+.prem-hook-t{font-weight:800;font-size:13px;color:#C9B3F7;margin-bottom:10px}
+.prem-hook-row{display:flex;gap:8px;margin-bottom:11px}
+.prem-hook-row>div{flex:1;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 6px;text-align:center}
+.prem-hook-row b{display:block;font-family:'DM Sans',sans-serif;font-size:19px;font-weight:800;color:#fff;line-height:1;margin-bottom:3px}
+.prem-hook-row span{font-size:10.5px;color:#a394c8}
+.prem-hook-x{font-size:12.5px;color:#cfc4e6;line-height:1.5}
 
 /* ── FLUIDEZ v5 ── */
 .ov{opacity:0;transition:opacity .22s ease;pointer-events:none}
@@ -2642,16 +2650,15 @@ a{color:inherit;text-decoration:none}
   <div style="text-align:center">
     <img id="prem-mascot" alt="" style="width:78px;height:78px;object-fit:contain;margin:2px auto 0;display:block;filter:drop-shadow(0 6px 13px rgba(58,32,99,.28))">
     <div class="mt c" style="font-size:23px;margin-top:2px">dichava <span style="color:var(--roxo)">premium</span> <span style="font-size:18px">✨</span></div>
-    <div class="mb c" style="margin-bottom:2px">Desbloqueie tudo e ajude a manter o app no ar 💚</div>
+    <div class="mb c" style="margin-bottom:2px">Entenda de verdade sua relação com o uso.</div>
   </div>
   <div id="prem-free">
+    <div id="prem-hook"></div>
     <div class="premadv">
-      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="4.6" fill="#12B5A3"></rect><rect x="6.6" y="12.6" width="2.8" height="4.8" rx="1.4" fill="#fff"></rect><rect x="10.6" y="9.4" width="2.8" height="8" rx="1.4" fill="#fff"></rect><rect x="14.6" y="6.6" width="2.8" height="10.8" rx="1.4" fill="#fff"></rect></svg></span><div><b>Insights avançados com gráficos</b><small>Seus padrões de substâncias e emoções em gráficos visuais</small></div></div>
-      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.4" y="6.2" width="17.2" height="12.4" rx="2.8" fill="#12B5A3"></rect><path d="M3.6 8.6a2.6 2.6 0 0 1 2.6-2.5h9.4c-.4-1.3-1.8-2-3.1-1.65L5.2 6.25" fill="#0a7d70" opacity=".5"></path><rect x="13.8" y="10.6" width="6.8" height="4.2" rx="1.3" fill="#0a6b62"></rect><circle cx="16.6" cy="12.7" r="1.1" fill="#fff"></circle></svg></span><div><b>Finanças</b><small>Acompanhe gastos e o quanto você economiza</small></div></div>
-      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2.6" fill="#F97B54"></rect><path d="M4.6 7.6 12 13l7.4-5.4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><div><b>Cartas pra mim</b><small>Escreva pro seu eu do futuro e leia quando chegar a hora</small></div></div>
-      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><circle cx="12" cy="5.8" r="3" fill="#FDBA4D"></circle><path d="M12 9.6c-2.5 0-4.6 1.5-5.4 3.7-.3.8-.9 1.2-1.5 1.7-.7.6-1.2 1.3-1.2 2.3 0 1 .8 1.7 1.9 1.7h12.4c1.1 0 1.9-.7 1.9-1.7 0-1-.5-1.7-1.2-2.3-.6-.5-1.2-.9-1.5-1.7C16.6 11.1 14.5 9.6 12 9.6Z" fill="#FDBA4D"></path></svg></span><div><b>Sons e frequências extras</b><small>Ruído branco, 432Hz e binaural (o básico segue grátis)</small></div></div>
-      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><path d="M7.5 18.5a4.2 4.2 0 0 1-.5-8.37A5.6 5.6 0 0 1 17.6 11.2 3.8 3.8 0 0 1 17.2 18.5Z" fill="#5FA8E6"></path><path d="M12 12.4v4M9.9 14.6 12 16.7l2.1-2.1" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><div><b>Exportar dados e backup na nuvem</b><small>Seus dados salvos e sincronizados entre aparelhos</small></div></div>
-      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><path d="M12 20.2S3.5 14.6 3.5 8.9A4.4 4.4 0 0 1 12 6.7 4.4 4.4 0 0 1 20.5 8.9C20.5 14.6 12 20.2 12 20.2Z" fill="#4DBE63"></path></svg></span><div><b>Apoiar o projeto</b><small>Sua assinatura mantém o dichava gratuito pra quem precisa</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="4.6" fill="#7C3AED"></rect><rect x="6.6" y="12.6" width="2.8" height="4.8" rx="1.4" fill="#fff"></rect><rect x="10.6" y="9.4" width="2.8" height="8" rx="1.4" fill="#fff"></rect><rect x="14.6" y="6.6" width="2.8" height="10.8" rx="1.4" fill="#fff"></rect></svg></span><div><b>Entenda seus padrões</b><small>Horários, gatilhos e emoções que se repetem — em gráficos claros. O autoconhecimento que muda o jogo.</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><rect x="3.4" y="6.2" width="17.2" height="12.4" rx="2.8" fill="#12B5A3"></rect><path d="M3.6 8.6a2.6 2.6 0 0 1 2.6-2.5h9.4c-.4-1.3-1.8-2-3.1-1.65L5.2 6.25" fill="#0a7d70" opacity=".5"></path><rect x="13.8" y="10.6" width="6.8" height="4.2" rx="1.3" fill="#0a6b62"></rect><circle cx="16.6" cy="12.7" r="1.1" fill="#fff"></circle></svg></span><div><b>Veja o dinheiro que você recupera</b><small>Seus gastos e a economia de cada resistência, somados. Motivação que dá pra ver.</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><path d="M12 21V11" stroke="#4CAF50" stroke-width="2" stroke-linecap="round"></path><path d="M12 13C9 13 6.6 11 6 8c3 0 5.4 2 6 5Z" fill="#4CAF50"></path><path d="M12 11c0-3 2.4-5 5.4-5 0 3-2.4 5-5.4 5Z" fill="#6BC77B"></path></svg></span><div><b>Acompanhe sua evolução</b><small>Relatórios, metas e conquistas pra ver o caminho — no seu ritmo, sem cobrança.</small></div></div>
+      <div class="pa"><span class="pae"><svg viewBox="0 0 24 24"><path d="M12 20.2S3.5 14.6 3.5 8.9A4.4 4.4 0 0 1 12 6.7 4.4 4.4 0 0 1 20.5 8.9C20.5 14.6 12 20.2 12 20.2Z" fill="#E0509E"></path></svg></span><div><b>Faça parte da causa</b><small>Sua assinatura mantém o dichava gratuito pra quem precisa e fortalece o movimento de redução de danos.</small></div></div>
     </div>
     <div class="premprice">
       <div class="pp"><div class="ppt">Mensal</div><div class="ppv">R$ 9,90<small>/mês</small></div></div>
@@ -6442,11 +6449,27 @@ async function carregarPlano(){
   try{renderPremUI();reRenderGated();}catch(e){}
 }
 function abrirPremium(){renderPremMod();openMod('mprem');const m=document.getElementById('prem-mascot');if(m&&!m.getAttribute('src')){try{if(typeof brotoDataURI==='function')m.src=brotoDataURI();}catch(e){}}}
+function renderPremHook(){
+  const el=document.getElementById('prem-hook');if(!el)return;
+  const regs=(typeof gR==='function'?gR():[]);
+  const nReg=regs.length;
+  const nRes=(typeof gFs==='function'?gFs().length:0);
+  const dias=(typeof streak==='function'?streak(regs):0);
+  let eco=0;try{eco=calcFin().eco;}catch(e){}
+  if(nReg<1){
+    el.innerHTML=`<div class="prem-hook"><div class="prem-hook-t">📊 Seu raio-x começa aqui</div><div class="prem-hook-x">Comece a registrar e o premium transforma seus dados em <b>padrões, gatilhos e economia</b> — o raio-x da sua relação com o uso.</div></div>`;
+    return;
+  }
+  const cells=[`<div><b>${nReg}</b><span>registros</span></div>`,`<div><b>${nRes}</b><span>resistências</span></div>`];
+  if(eco>0)cells.push(`<div><b>${brl(eco)}</b><span>economia</span></div>`);else cells.push(`<div><b>${dias}</b><span>dias seq.</span></div>`);
+  el.innerHTML=`<div class="prem-hook"><div class="prem-hook-t">📊 O que já dá pra ver nos seus dados</div><div class="prem-hook-row">${cells.join('')}</div><div class="prem-hook-x">Você já construiu uma baita base. O premium transforma isso no seu <b>raio-x completo</b>: horários, gatilhos, emoções e o dinheiro que você recupera.</div></div>`;
+}
 function renderPremMod(){
   const on=isPremium();
   const f=document.getElementById('prem-free'),a=document.getElementById('prem-active');
   if(f)f.style.display=on?'none':'';
   if(a)a.style.display=on?'':'none';
+  if(!on){try{renderPremHook();}catch(e){}}
   if(on){
     const sinceISO=ls('dr_prem_since_'+uid())||new Date().toISOString();
     const since=new Date(sinceISO),renew=new Date(since);renew.setDate(renew.getDate()+30);
