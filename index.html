@@ -1001,6 +1001,25 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .acat.on{background:var(--v);border-color:var(--v);color:#fff}
 .artref{margin-top:16px;padding-top:12px;border-top:1px solid #EBEBEB;font-size:11.5px;color:var(--txm);line-height:1.5}
 #shell.dkm .artref{border-color:#32402F}
+.acat-ic{margin-right:5px;font-size:13px}
+/* ── BIBLIOTECA ── */
+.lib-hero{position:relative;overflow:hidden;margin:6px 14px 16px;border-radius:22px;padding:24px 20px 20px;background:linear-gradient(140deg,#1B2A1C 0%,#2d4a30 70%,#356b3d 100%);color:#fff}
+.lib-hero-glow{position:absolute;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(126,220,154,.55),transparent 70%);top:-70px;right:-50px;pointer-events:none}
+.lib-hero-ic{font-size:34px;line-height:1;margin-bottom:8px;position:relative}
+.lib-hero-t{font-family:'DM Sans',sans-serif;font-size:23px;font-weight:800;position:relative}
+.lib-hero-s{font-size:12.5px;color:#cfe0d3;line-height:1.55;margin-top:5px;position:relative}
+.lib-search{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:30px;padding:11px 15px;margin-top:15px;position:relative;color:#bfe0c8}
+.lib-search input{flex:1;min-width:0;background:none;border:none;outline:none;color:#fff;font-size:14.5px;font-family:'DM Sans',sans-serif}
+.lib-search input::placeholder{color:#a9c9b1}
+.lib-search input::-webkit-search-cancel-button{-webkit-appearance:none}
+.lib-count{padding:0 20px 12px;font-size:12px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.4px}
+.lib-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 14px 16px}
+.lib-grid .artc{margin:0;display:flex;flex-direction:column}
+.lib-grid .artcimg{height:78px;font-size:34px}
+.lib-grid .artcb{padding:11px 11px 12px;flex:1;display:flex;flex-direction:column}
+.lib-grid .artct{font-size:13px;margin-bottom:5px}
+.lib-grid .artcx{margin-top:auto;font-size:11px}
+#shell.dkm .lib-count{color:#7C8C78}
 
 /* ── FLUIDEZ v5 ── */
 .ov{opacity:0;transition:opacity .22s ease;pointer-events:none}
@@ -2276,11 +2295,21 @@ a{color:inherit;text-decoration:none}
 <!-- ARTIGO -->
 <!-- LISTA DE ARTIGOS -->
 <div class="V" id="varts" style="background:var(--cin)">
-<div class="ptb" style="background:var(--cin)"><button class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk">Artigos de RD</div></div>
+<div class="ptb" style="background:var(--cin)"><button class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk">Biblioteca</div></div>
 <div class="sc" style="padding-bottom:30px">
-  <div style="padding:4px 18px 12px;font-size:13px;color:var(--txs)">Uma mini-biblioteca de conteúdo baseado em evidências, sem julgamento. Fontes como Ministério da Saúde, Conselho Federal de Psicologia, Plataforma Brasileira de Política de Drogas, coletivos de redução de danos e literatura científica. Escolha um tema:</div>
+  <div class="lib-hero">
+    <div class="lib-hero-glow"></div>
+    <div class="lib-hero-ic">📚</div>
+    <div class="lib-hero-t">Biblioteca dichava</div>
+    <div class="lib-hero-s">Textos de redução de danos, baseados em evidências e sem julgamento — de fontes como Ministério da Saúde, CFP, Plataforma Brasileira de Política de Drogas e coletivos de RD.</div>
+    <label class="lib-search">
+      <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="arts-search" type="search" placeholder="Buscar na biblioteca…" oninput="renderArtsGrid()" autocomplete="off">
+    </label>
+  </div>
   <div id="varts-tabs" class="acats"></div>
-  <div id="varts-grid" style="padding:0 18px 16px"></div>
+  <div id="varts-count" class="lib-count"></div>
+  <div id="varts-grid" class="lib-grid"></div>
 </div>
 </div>
 
@@ -3058,7 +3087,17 @@ const ARTS=[
 
   // ═══ MENTE & CORPO ═══
   {id:'funcionalproblema',ic:'⚖️',bg:'#E8F5E9',tag:'Mente & corpo',cat:'mente',ti:'Uso funcional x uso problemático',tm:'4 min',corpo:`<h3>Uso não é tudo igual</h3><p>Existe um espectro: do não uso, ao uso ocasional, ao uso regular, até o uso problemático e a dependência. Nem todo uso é problema — e enxergar isso com honestidade é mais útil do que rótulos.</p><h3>O que caracteriza o uso problemático</h3><p>Alguns sinais: <strong>perda de controle</strong> (usar mais ou por mais tempo do que pretendia), o uso passando à frente de responsabilidades e relações, continuar apesar de prejuízos claros (saúde, trabalho, dinheiro), precisar de doses maiores para o mesmo efeito (tolerância) e desconforto ao ficar sem (abstinência).</p><h3>Um autoexame gentil</h3><p>Vale se perguntar: o uso está no lugar que eu quero na minha vida? Ele está me aproximando ou me afastando do que importa pra mim? Consigo passar sem quando decido? As respostas dão mais informação que qualquer rótulo externo.</p><h3>Onde este app entra</h3><p>Registrar uso, gatilhos e emoções ao longo do tempo torna esse espectro visível. Você começa a ver para que lado está indo — e a decidir, com dados e sem julgamento, o que faz sentido mudar.</p><div class="artref"><b>Referências:</b> Organização Mundial da Saúde (espectro de uso de substâncias); critérios de transtorno por uso de substâncias (DSM-5). Não substitui avaliação profissional.</div>`},
-  {id:'pausacanabica',ic:'🌱',bg:'#E8F5E9',tag:'Cannabis',cat:'subs',ti:'Pausa canábica (t-break): como e por quê',tm:'5 min',corpo:`<h3>O que é a pausa canábica</h3><p>Usar cannabis com frequência regula "para baixo" os receptores canabinoides do tipo <strong>CB1</strong>: com menos receptores disponíveis, é preciso mais THC para sentir o mesmo efeito — é a tolerância. A pausa de tolerância (tolerance break, ou <strong>t-break</strong>) dá tempo para o sistema se reajustar, e muita gente relata voltar a sentir os efeitos quase como no começo.</p><h3>Quanto tempo ficar sem?</h3><p>Depende do seu padrão de uso e do seu corpo. Para quem usa pouco, cerca de <strong>uma semana</strong> já causa impacto no sistema endocanabinoide. Para uso regular, <strong>duas a três semanas</strong> costumam ser mais adequadas para modificar a tolerância.</p><h3>Quando considerar</h3><p>A pausa pode ser um ponto de partida para repensar a relação com o uso — especialmente se aparecem oscilações de humor, ansiedade, dificuldade de concentração ou de memória. Uma boa pergunta: "para além de gostar, que sentido meu uso tem tido agora?" A autoconsciência é um bom caminho para melhorar a relação com qualquer coisa — inclusive com as substâncias.</p><h3>O sistema endocanabinoide (e como apoiá-lo)</h3><p>O sistema endocanabinoide (SEC) é um regulador do equilíbrio do corpo, atuando nos sistemas nervoso, endócrino, imune e no metabolismo. Dá para apoiá-lo além da cannabis: <strong>exercício aeróbico</strong> (correr, nadar, pedalar) aumenta a anandamida, endocanabinoide ligado à sensação de bem-estar; alimentos ricos em <strong>ômega-3</strong> (peixes, nozes, linhaça, chia, soja) fornecem matéria-prima para produzir endocanabinoides; e o terpeno <strong>cariofileno</strong> (pimenta-do-reino, orégano, alecrim) também interage com o SEC.</p><h3>E o CBD?</h3><p>Usar CBD durante o t-break não prejudica a recuperação dos receptores CB1. Ainda assim, o ideal é pausar também o CBD — porque a tolerância não é só química, é também <strong>comportamental</strong> (os rituais e hábitos do uso). Se não der para parar o CBD, duas estratégias: usá-lo só nos primeiros dias, caso a abstinência esteja forte, reduzindo aos poucos; e preferir formas "sem graça" (gotas de óleo ou comestível simples) em vez de flor em bong/beck.</p><div class="artref"><b>Referências:</b> Guia de Pausa Canábica — Desprô / @dichavando (Bruno Logan, Alexandre Monteiro e col.); Acharya et al., PNAS (2017); Komorowski & Stępień (2007); estudos sobre exercício aeróbico e anandamida (University of Illinois).</div>`}
+  {id:'pausacanabica',ic:'🌱',bg:'#E8F5E9',tag:'Cannabis',cat:'subs',ti:'Pausa canábica (t-break): como e por quê',tm:'5 min',corpo:`<h3>O que é a pausa canábica</h3><p>Usar cannabis com frequência regula "para baixo" os receptores canabinoides do tipo <strong>CB1</strong>: com menos receptores disponíveis, é preciso mais THC para sentir o mesmo efeito — é a tolerância. A pausa de tolerância (tolerance break, ou <strong>t-break</strong>) dá tempo para o sistema se reajustar, e muita gente relata voltar a sentir os efeitos quase como no começo.</p><h3>Quanto tempo ficar sem?</h3><p>Depende do seu padrão de uso e do seu corpo. Para quem usa pouco, cerca de <strong>uma semana</strong> já causa impacto no sistema endocanabinoide. Para uso regular, <strong>duas a três semanas</strong> costumam ser mais adequadas para modificar a tolerância.</p><h3>Quando considerar</h3><p>A pausa pode ser um ponto de partida para repensar a relação com o uso — especialmente se aparecem oscilações de humor, ansiedade, dificuldade de concentração ou de memória. Uma boa pergunta: "para além de gostar, que sentido meu uso tem tido agora?" A autoconsciência é um bom caminho para melhorar a relação com qualquer coisa — inclusive com as substâncias.</p><h3>O sistema endocanabinoide (e como apoiá-lo)</h3><p>O sistema endocanabinoide (SEC) é um regulador do equilíbrio do corpo, atuando nos sistemas nervoso, endócrino, imune e no metabolismo. Dá para apoiá-lo além da cannabis: <strong>exercício aeróbico</strong> (correr, nadar, pedalar) aumenta a anandamida, endocanabinoide ligado à sensação de bem-estar; alimentos ricos em <strong>ômega-3</strong> (peixes, nozes, linhaça, chia, soja) fornecem matéria-prima para produzir endocanabinoides; e o terpeno <strong>cariofileno</strong> (pimenta-do-reino, orégano, alecrim) também interage com o SEC.</p><h3>E o CBD?</h3><p>Usar CBD durante o t-break não prejudica a recuperação dos receptores CB1. Ainda assim, o ideal é pausar também o CBD — porque a tolerância não é só química, é também <strong>comportamental</strong> (os rituais e hábitos do uso). Se não der para parar o CBD, duas estratégias: usá-lo só nos primeiros dias, caso a abstinência esteja forte, reduzindo aos poucos; e preferir formas "sem graça" (gotas de óleo ou comestível simples) em vez de flor em bong/beck.</p><div class="artref"><b>Referências:</b> Guia de Pausa Canábica — Desprô / @dichavando (Bruno Logan, Alexandre Monteiro e col.); Acharya et al., PNAS (2017); Komorowski & Stępień (2007); estudos sobre exercício aeróbico e anandamida (University of Illinois).</div>`},
+
+  // ═══ VOZES & MOVIMENTO (Revista Platô / PBPD) ═══
+  {id:'esperancar',ic:'✊',bg:'#FBE9E7',tag:'Vozes & movimento',cat:'mov',ti:'Reduzir danos é esperançar',tm:'3 min',corpo:`<h3>Esperançar, não esperar</h3><p>Inspirada em Paulo Freire, a ideia de "esperançar" é ativa: não é ficar parado esperando, é agir para que outro mundo seja possível. Aplicada às drogas, ela aponta uma saída para a guerra — e essa saída é a redução de danos.</p><h3>Ruptura com a lógica de morte</h3><p>O proibicionismo apostou por décadas no controle: internação, prisão, humilhação, tortura. A redução de danos propõe o oposto — autonomia, consciência crítica e um cuidado que parte do saber da própria pessoa que usa.</p><h3>Um convite</h3><p>Reduzir danos é reinventar um mundo em que drogas, pessoas e culturas coexistem com menos sofrimento. É uma aposta ao mesmo tempo ética, estética e política — e cabe a cada um de nós.</p><div class="artref"><b>Referências:</b> Luana Malheiro, "Notas para esperançar" — Revista Drogas & Políticas v.6 (2024), Plataforma Brasileira de Política de Drogas; conceito de "esperançar" em Paulo Freire.</div>`},
+  {id:'feminismoanti',ic:'♀️',bg:'#FCE4EC',tag:'Vozes & movimento',cat:'mov',ti:'Feminismo antiproibicionista: o que é',tm:'4 min',corpo:`<h3>Uma crítica que parte das mulheres</h3><p>O feminismo antiproibicionista analisa como a guerra às drogas recai de forma desigual sobre as mulheres — sobretudo negras e periféricas. Elas são a população que mais cresce nas prisões brasileiras, boa parte por envolvimento com o tráfico ligado à sobrevivência. Esse olhar une a luta antiproibicionista à luta feminista e antirracista.</p><h3>Redução de danos como organização política</h3><p>Para além do cuidado individual, a redução de danos é pensada aqui como tecnologia de organização e resistência: mulheres que usam drogas se articulando, produzindo conhecimento a partir da própria experiência e disputando políticas públicas.</p><h3>Por que importa</h3><p>Porque mostra que a política de drogas não é neutra — ela pesa sobre corpos específicos. Reconhecer isso amplia a redução de danos para além da saúde, como uma questão de justiça social.</p><div class="artref"><b>Referências:</b> Ingrid Farias, "O que é o Feminismo Antiproibicionista?" e Luana Malheiro & Ingrid Farias — Revista Drogas & Políticas v.6 (2024), Plataforma Brasileira de Política de Drogas; Rede Nacional de Feministas Antiproibicionistas (RENFA).</div>`},
+  {id:'corrapabraco',ic:'🤗',bg:'#E1F5FE',tag:'Vozes & movimento',cat:'mov',ti:'Redução de danos nas ruas: o Corra pro Abraço',tm:'3 min',corpo:`<h3>Cuidado onde a vida acontece</h3><p>O Corra pro Abraço é uma ação pública de redução de danos, na Bahia, que atua com pessoas em situação de rua e uso de substâncias. Em vez de exigir que a pessoa "se ajeite" primeiro, o cuidado vai até ela — no território, no vínculo, no encontro.</p><h3>Arte-educação como ferramenta de cuidado</h3><p>Em contextos de grande vulnerabilidade, e especialmente durante a pandemia, a arte-educação apareceu como forma de cuidado: criar, expressar e se reconhecer como estratégia de saúde e de garantia de direitos.</p><h3>A lição</h3><p>Programas assim mostram que redução de danos é também política de presença: estar junto, sem exigir abstinência como condição, garantindo dignidade e direitos a quem o Estado costuma abandonar.</p><div class="artref"><b>Referências:</b> Tricia V. Lima Calmon, "Programa Corra pro Abraço" — Revista Drogas & Políticas v.6 (2024), Plataforma Brasileira de Política de Drogas.</div>`},
+  {id:'educacaopares',ic:'🫂',bg:'#E8F5E9',tag:'Vozes & movimento',cat:'mov',ti:'Educação entre pares: aprender com quem viveu',tm:'3 min',corpo:`<h3>Quem viveu, ensina</h3><p>A educação entre pares parte de uma ideia simples e poderosa: pessoas que usam ou usaram drogas carregam um saber que nenhum manual substitui. Formar redutores e redutoras de danos a partir dessa experiência é uma prática de liberdade — e de eficácia.</p><h3>A Escola Livre de Redução de Danos</h3><p>Iniciativas como a Escola Livre de RD organizam esse percurso: transformam a vivência em formação, valorizam o conhecimento de quem está na ponta e constroem uma rede de cuidado que não vem "de cima para baixo".</p><h3>Por que funciona</h3><p>Porque o vínculo entre pares reduz o estigma e aproxima justamente quem costuma fugir dos serviços. Informação que vem de alguém que entende, sem julgamento, chega de outro jeito.</p><div class="artref"><b>Referências:</b> Priscilla Gadelha, "Educação entre pares é prática de liberdade: a Escola Livre de Redução de Danos" — Revista Drogas & Políticas v.6 (2024), Plataforma Brasileira de Política de Drogas.</div>`},
+
+  // ═══ CLÍNICA & FILOSOFIA (Claude Olievenstein) ═══
+  {id:'olievencontro',ic:'🧩',bg:'#EDE7F6',tag:'Mente & corpo',cat:'mente',ti:'Olievenstein: a droga é sempre um encontro',tm:'4 min',corpo:`<h3>Não é só a substância</h3><p>O psiquiatra francês Claude Olievenstein (1933–2008), fundador do centro Marmottan, em Paris, formulou uma das ideias mais influentes da clínica das drogas: a toxicomania não se explica só pela substância. Ela é o <strong>encontro entre um produto, uma personalidade e um momento sociocultural</strong>.</p><h3>Os três vértices</h3><p>O <strong>produto</strong> (a substância e seus efeitos), a <strong>pessoa</strong> (sua história, seu sofrimento, sua subjetividade) e o <strong>contexto</strong> (a época, a cultura, as condições sociais). Nenhum dos três, sozinho, explica o uso problemático. É a combinação que produz cada relação singular com a droga.</p><h3>Por que isso muda o cuidado</h3><p>Se a droga não é "o mal em si", o cuidado não pode se resumir a eliminar a substância. Ele precisa acolher a pessoa inteira e o contexto em que ela vive. Essa é a base de uma clínica humanista — e um dos fundamentos da redução de danos.</p><div class="artref"><b>Referências:</b> Claude Olievenstein, "A Droga" e "Destino do Toxicômano". Tese da toxicomania como encontro entre produto, personalidade e momento sociocultural.</div>`},
+  {id:'olievenfelizes',ic:'🕯️',bg:'#ECEFF1',tag:'Mente & corpo',cat:'mente',ti:'Por que "os drogados não são felizes"',tm:'3 min',corpo:`<h3>Contra a romantização</h3><p>No livro que no Brasil recebeu o título "Os Drogados não são felizes", Olievenstein confronta ao mesmo tempo a moralização e a idealização do uso. Ele recusa tanto a caricatura do "viciado sem salvação" quanto o mito do prazer sem custo.</p><h3>O sofrimento por trás</h3><p>Sua tese central: por trás do uso problemático costuma haver <strong>sofrimento</strong> — não uma simples busca de prazer. Compreender esse sofrimento, e não apenas condenar o comportamento, é o que abre caminho para o cuidado de verdade.</p><h3>A pessoa antes do rótulo</h3><p>Olievenstein insiste em ver o sujeito antes do "toxicômano". Essa inversão — a pessoa no centro, não a substância — é exatamente o ponto de partida da redução de danos.</p><div class="artref"><b>Referências:</b> Claude Olievenstein, "Os Drogados não são felizes" (do original "Il n'y a pas de drogue heureuse") e "Destino do Toxicômano".</div>`}
 ];
 const GRPS=[
   {n:'5',i:'👁️',t:'5 coisas que você VÊ',x:'Olhe ao redor. Nomeie 5 coisas que consegue ver agora. Pode ser qualquer coisa — uma cor, um objeto, uma textura.'},
@@ -4600,30 +4639,36 @@ function renderArts(goal){
 }
 
 const ARTCATS=[
-  {k:'todos',n:'Todos'},
-  {k:'rd',n:'Redução de danos'},
-  {k:'subs',n:'Substâncias'},
-  {k:'pol',n:'Política & direitos'},
-  {k:'mito',n:'Mitos e verdades'},
-  {k:'mente',n:'Mente & corpo'}
+  {k:'todos',n:'Todos',ic:'📚'},
+  {k:'rd',n:'Redução de danos',ic:'🛡️'},
+  {k:'subs',n:'Substâncias',ic:'⚗️'},
+  {k:'pol',n:'Política & direitos',ic:'⚖️'},
+  {k:'mov',n:'Vozes & movimento',ic:'✊'},
+  {k:'mito',n:'Mitos e verdades',ic:'💡'},
+  {k:'mente',n:'Mente & corpo',ic:'🧠'}
 ];
 // categoria dos artigos já existentes (os novos trazem .cat no próprio objeto)
 const ARTCAT={fissura:'mente',sono:'subs',settsetting:'subs',rdconceito:'rd',gatilhos:'mente',recaida:'mente',dependencia:'mente',cannabis:'subs',alcool:'subs',ansiedade:'mente'};
 function artCat(a){return a.cat||ARTCAT[a.id]||'rd';}
 function artCard(a){return `<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg" style="background:${a.bg}">${a.svg||(a.ic?`<span style="font-size:44px">${a.ic}</span>`:'')}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm} de leitura</div></div></div>`;}
+let _artCat='todos';
 function renderArtsGrid(cat){
-  cat=cat||'todos';
+  if(typeof cat==='string')_artCat=cat;
   const grid=document.getElementById('varts-grid');if(!grid)return;
-  const list=ARTS.filter(a=>cat==='todos'||artCat(a)===cat);
-  grid.innerHTML=list.length?list.map(artCard).join(''):'<div style="text-align:center;color:var(--txm);font-size:13px;padding:24px">Nenhum artigo neste tema ainda.</div>';
-  document.querySelectorAll('#varts-tabs .acat').forEach(t=>t.classList.toggle('on',t.dataset.k===cat));
-  try{document.getElementById('varts-grid').scrollIntoView&&0;}catch(e){}
+  const q=(document.getElementById('arts-search')?.value||'').trim().toLowerCase();
+  const list=ARTS.filter(a=>(_artCat==='todos'||artCat(a)===_artCat)&&(!q||(a.ti+' '+a.tag).toLowerCase().includes(q)));
+  grid.innerHTML=list.length?list.map(artCard).join(''):'<div style="grid-column:1/-1;text-align:center;color:var(--txm);font-size:13px;padding:28px 10px">Nada encontrado.<br>Tente outro tema ou outra busca.</div>';
+  const cnt=document.getElementById('varts-count');
+  if(cnt)cnt.textContent=list.length+(list.length===1?' artigo':' artigos')+(_artCat!=='todos'||q?' encontrado'+(list.length===1?'':'s'):' na biblioteca');
+  document.querySelectorAll('#varts-tabs .acat').forEach(t=>t.classList.toggle('on',t.dataset.k===_artCat));
 }
 function abrirArts(cat){
   showV('varts');
+  _artCat=cat||'todos';
+  const s=document.getElementById('arts-search');if(s)s.value='';
   const tabs=document.getElementById('varts-tabs');
-  if(tabs)tabs.innerHTML=ARTCATS.map(c=>`<button class="acat" data-k="${c.k}" onclick="renderArtsGrid('${c.k}')">${c.n}</button>`).join('');
-  renderArtsGrid(cat||'todos');
+  if(tabs)tabs.innerHTML=ARTCATS.map(c=>`<button class="acat" data-k="${c.k}" onclick="renderArtsGrid('${c.k}')"><span class="acat-ic">${c.ic||''}</span>${c.n}</button>`).join('');
+  renderArtsGrid(_artCat);
 }
 
 function abrirArt(id){
