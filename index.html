@@ -31,13 +31,17 @@
   function setH(){
     var vv=window.visualViewport;
     var h=(vv&&vv.height)||window.innerHeight;
-    // Com o TECLADO aberto, o iOS não redimensiona o layout sozinho (ao contrário
-    // do Android). Então encolhemos a altura visível pra que campos e modais fiquem
-    // SEMPRE acima do teclado — em qualquer tela, não só nos modais.
-    document.documentElement.style.setProperty('--app-h',h+'px');
-    // Compensa o quanto o iOS empurrou a página (visualViewport.offsetTop).
-    var off=(vv&&vv.offsetTop)||0;
-    document.documentElement.style.setProperty('--vv-top',off+'px');
+    var ae=document.activeElement;
+    var kbd=ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA');
+    // SÓ encolhemos a altura quando o TECLADO está aberto (iOS não redimensiona o
+    // layout sozinho). Aí o campo/modal fica acima do teclado.
+    if(kbd&&vv&&h<window.innerHeight-100){
+      document.documentElement.style.setProperty('--app-h',h+'px');
+    }else{
+      // Sem teclado: altura cheia (100dvh) — a barra de funções encosta na borda
+      // de baixo, igual no Android (sem faixa branca sobrando).
+      document.documentElement.style.removeProperty('--app-h');
+    }
   }
   window.__setH=setH;
   setH();
@@ -156,7 +160,7 @@ input:focus,select:focus,textarea:focus{outline:none}
 a{color:inherit;text-decoration:none}
 
 /* APP SHELL */
-#shell{width:100%;height:100%;height:var(--app-h,100%);max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
+#shell{width:100%;height:100%;height:100dvh;height:var(--app-h,100dvh);max-width:430px;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.2)}
 @media(min-width:431px){body{background:#ECECE8;display:flex;align-items:flex-start;justify-content:center}}
 
 /* VIEW SYSTEM */
