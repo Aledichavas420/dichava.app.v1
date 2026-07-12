@@ -1020,6 +1020,47 @@ a{color:inherit;text-decoration:none}
 .lib-grid .artct{font-size:13px;margin-bottom:5px}
 .lib-grid .artcx{margin-top:auto;font-size:11px}
 #shell.dkm .lib-count{color:#7C8C78}
+/* card de entrada na home */
+.libcard{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#153726,#245c37 62%,#2f7d45);border-radius:22px;padding:16px 18px;margin:0 0 13px;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.libcard-art{flex:0 0 82px;height:82px}.libcard-art svg{width:100%;height:100%}
+.libcard-b{flex:1;min-width:0;color:#fff}
+.libcard-k{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#8FE3A6;margin-bottom:2px}
+.libcard-t{font-size:18px;font-weight:800;line-height:1.15}
+.libcard-d{font-size:12.5px;color:rgba(255,255,255,.72);margin-top:2px}
+.libcard-cta{margin-top:10px;display:inline-flex;align-items:center;font-size:12px;font-weight:800;color:#153726;background:#8FE3A6;padding:6px 13px;border-radius:20px}
+/* prateleira horizontal na home */
+.hshelf{display:flex;gap:11px;overflow-x:auto;padding:2px 18px 8px;scrollbar-width:none}
+.hshelf::-webkit-scrollbar{display:none}
+.hshelf-c{flex:0 0 148px;background:#fff;border:1px solid #EBEBEB;border-radius:14px;overflow:hidden;text-align:left;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hshelf-img{height:70px;display:flex;align-items:center;justify-content:center}.hshelf-img svg{width:100%;height:100%}
+.hshelf-t{font-size:12.5px;font-weight:700;color:var(--dk);line-height:1.25;padding:9px 10px 2px}
+.hshelf-x{font-size:10.5px;color:var(--txm);padding:0 10px 10px}
+#shell.dkm .hshelf-c{background:#1D2520;border-color:#32402F}
+#shell.dkm .hshelf-t{color:#E9EFE7}
+/* biblioteca: seções, tiles, destaque */
+.lib-sec{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:var(--dk);margin:8px 20px 12px}
+#shell.dkm .lib-sec{color:#E9EFE7}
+.libcat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 14px 12px}
+.libcat{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid #EBEBEB;border-radius:18px;padding:14px 13px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;transition:transform .12s}
+.libcat:active{transform:scale(.97)}
+.libcat-ic{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--ct);color:var(--cc)}
+.libcat-ic svg{width:22px;height:22px}
+.libcat-tx{display:flex;flex-direction:column;min-width:0}
+.libcat-n{font-weight:800;font-size:13.5px;color:var(--dk);line-height:1.2}
+.libcat-c{font-size:11.5px;color:var(--txm);font-weight:600;margin-top:2px}
+#shell.dkm .libcat{background:#1D2520;border-color:#32402F}
+#shell.dkm .libcat-n{color:#E9EFE7}
+.lib-feat{display:flex;width:calc(100% - 28px);margin:0 14px 8px;background:#fff;border:1px solid #EBEBEB;border-radius:18px;overflow:hidden;cursor:pointer;text-align:left;padding:0;-webkit-tap-highlight-color:transparent}
+.lib-feat-img{flex:0 0 116px;display:flex;align-items:center;justify-content:center}.lib-feat-img svg{width:100%;height:100%}
+.lib-feat-b{flex:1;min-width:0;padding:13px 14px;display:flex;flex-direction:column;justify-content:center}
+.lib-feat-tag{align-self:flex-start;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--vf);color:var(--ve);margin-bottom:6px}
+.lib-feat-t{font-size:15px;font-weight:800;color:var(--dk);line-height:1.25}
+.lib-feat-x{font-size:11.5px;color:var(--ve);font-weight:700;margin-top:7px}
+#shell.dkm .lib-feat{background:#1D2520;border-color:#32402F}
+#shell.dkm .lib-feat-t{color:#E9EFE7}
+.lib-back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--ve);font-family:'DM Sans',sans-serif;font-weight:700;font-size:13.5px;padding:2px 18px 8px;cursor:pointer}
+.lib-back svg{width:16px;height:16px}
+#shell.dkm .lib-back{color:#7BD98A}
 
 /* ── FLUIDEZ v5 ── */
 .ov{opacity:0;transition:opacity .22s ease;pointer-events:none}
@@ -1641,12 +1682,14 @@ a{color:inherit;text-decoration:none}
       <div class="qacw-go">›</div>
     </div>
   </div>
-  <div onclick="abrirArts()" style="background:linear-gradient(135deg,#1B2A1C 0%,#2d4a30 100%);border-radius:20px;padding:20px 22px;margin:0 0 13px;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent" role="button" aria-label="Ver artigos de redução de danos">
-    <div style="position:absolute;top:-18px;right:-18px;width:90px;height:90px;border-radius:50%;background:rgba(76,175,90,.15)"></div>
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#7BD98A;margin-bottom:6px">📖 Conteúdo de RD</div>
-    <div style="font-size:18px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:4px">Artigos de redução de danos</div>
-    <div style="font-size:13px;color:rgba(255,255,255,.65)">Ciência sem julgamento sobre uso, efeitos e cuidado</div>
-    <div style="margin-top:12px;font-size:12px;font-weight:700;color:#4CAF5A">Explorar artigos →</div>
+  <div onclick="abrirArts()" class="libcard" role="button" aria-label="Abrir a biblioteca">
+    <div class="libcard-art"><svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="18" width="11" height="42" rx="2.5" fill="#8FE3A6"/><rect x="25" y="14" width="11" height="46" rx="2.5" fill="#FFD166"/><rect x="38" y="22" width="11" height="38" rx="2.5" fill="#5CC8E8"/><g transform="rotate(13 60 40)"><rect x="53" y="20" width="11" height="40" rx="2.5" fill="#E0709E"/></g><rect x="6" y="60" width="70" height="6" rx="3" fill="rgba(255,255,255,.35)"/><circle cx="62" cy="14" r="3" fill="#FFD166" opacity=".85"/></svg></div>
+    <div class="libcard-b">
+      <div class="libcard-k">Biblioteca dichava</div>
+      <div class="libcard-t">Textos que valem a leitura</div>
+      <div class="libcard-d" id="libcard-count">Substâncias, direitos, mitos e mais</div>
+      <div class="libcard-cta">Abrir a biblioteca →</div>
+    </div>
   </div>
   <div id="h-resumo"></div>
 </div>
@@ -1849,8 +1892,8 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
   <div id="ref-feed"></div>
-  <div class="shr" style="padding-top:4px"><div class="sht">Artigos de RD 📖</div></div>
-  <div id="arts-l"></div>
+  <div class="shr" style="padding-top:4px"><div class="sht">Da biblioteca</div></div>
+  <div id="arts-l" class="hshelf"></div>
 </div>
 </div>
 
@@ -2299,17 +2342,26 @@ a{color:inherit;text-decoration:none}
 <div class="sc" style="padding-bottom:30px">
   <div class="lib-hero">
     <div class="lib-hero-glow"></div>
-    <div class="lib-hero-ic">📚</div>
+    <div class="lib-hero-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8FE3A6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="30" height="30"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10a2 2 0 0 1 2 2v13a2 2 0 0 0-2-1.5H5.5A1.5 1.5 0 0 1 4 16z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14a2 2 0 0 0-2 2v13a2 2 0 0 1 2-1.5h4.5A1.5 1.5 0 0 0 20 16z"/></svg></div>
     <div class="lib-hero-t">Biblioteca dichava</div>
     <div class="lib-hero-s">Textos de redução de danos, baseados em evidências e sem julgamento — de fontes como Ministério da Saúde, CFP, Plataforma Brasileira de Política de Drogas e coletivos de RD.</div>
     <label class="lib-search">
       <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <input id="arts-search" type="search" placeholder="Buscar na biblioteca…" oninput="renderArtsGrid()" autocomplete="off">
+      <input id="arts-search" type="search" placeholder="Buscar na biblioteca…" oninput="libSearch()" autocomplete="off">
     </label>
   </div>
-  <div id="varts-tabs" class="acats"></div>
-  <div id="varts-count" class="lib-count"></div>
-  <div id="varts-grid" class="lib-grid"></div>
+  <div id="lib-home">
+    <div class="lib-sec">Comece por aqui</div>
+    <div id="lib-featured"></div>
+    <div class="lib-sec">Explorar por tema</div>
+    <div id="lib-cats" class="libcat-grid"></div>
+  </div>
+  <div id="lib-list" style="display:none">
+    <button class="lib-back" onclick="libHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg> Todos os temas</button>
+    <div id="lib-list-h" class="lib-sec" style="margin-bottom:3px"></div>
+    <div id="varts-count" class="lib-count"></div>
+    <div id="varts-grid" class="lib-grid"></div>
+  </div>
 </div>
 </div>
 
@@ -4634,41 +4686,71 @@ function delRef(id){
   sRef(gRef().filter(r=>r.id!==id));renderRefFeed();toast('Anotação apagada.');
 }
 function renderArts(goal){
-  const c=document.getElementById('arts-l');
-  if(c)c.innerHTML=ARTS.slice(0,4).map(a=>`<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg" style="background:${a.bg}">${a.svg||(a.ic?`<span style="font-size:44px">${a.ic}</span>`:'')}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm} de leitura</div></div></div>`).join('')+'<div style="text-align:center;padding:8px 0 4px"><button class="btn bout bsm" onclick="abrirArts()">Ver todos os artigos →</button></div>';
+  const c=document.getElementById('arts-l');if(!c)return;
+  c.innerHTML=ARTS.slice(0,8).map(a=>`<button class="hshelf-c" onclick="abrirArt('${a.id}')"><div class="hshelf-img" style="background:${a.bg}">${a.svg||''}</div><div class="hshelf-t">${a.ti}</div><div class="hshelf-x">⏱ ${a.tm}</div></button>`).join('');
+  const cc=document.getElementById('libcard-count');if(cc)cc.textContent=`${ARTS.length} textos · ${ARTCATS.length-1} temas`;
 }
 
 const ARTCATS=[
-  {k:'todos',n:'Todos',ic:'📚'},
-  {k:'rd',n:'Redução de danos',ic:'🛡️'},
-  {k:'subs',n:'Substâncias',ic:'⚗️'},
-  {k:'pol',n:'Política & direitos',ic:'⚖️'},
-  {k:'mov',n:'Vozes & movimento',ic:'✊'},
-  {k:'mito',n:'Mitos e verdades',ic:'💡'},
-  {k:'mente',n:'Mente & corpo',ic:'🧠'}
+  {k:'todos',n:'Todos os textos',col:'#2E7D32',tint:'#E8F5E9',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10a2 2 0 0 1 2 2v13a2 2 0 0 0-2-1.5H5.5A1.5 1.5 0 0 1 4 16z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14a2 2 0 0 0-2 2v13a2 2 0 0 1 2-1.5h4.5A1.5 1.5 0 0 0 20 16z"/></svg>'},
+  {k:'rd',n:'Redução de danos',col:'#00897B',tint:'#E0F2F1',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>'},
+  {k:'subs',n:'Substâncias',col:'#8E24AA',tint:'#F3E5F5',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5.2 9.4A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-2.6L14 9V3"/><path d="M7.5 14h9"/></svg>'},
+  {k:'pol',n:'Política & direitos',col:'#3949AB',tint:'#E8EAF6',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M6 21h12M5 7h14M7 7l-3 6a3 3 0 0 0 6 0zM17 7l-3 6a3 3 0 0 0 6 0z"/></svg>'},
+  {k:'mov',n:'Vozes & movimento',col:'#E64A19',tint:'#FBE9E7',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 8a5 5 0 0 1 0 8M18 5.5a9 9 0 0 1 0 13"/></svg>'},
+  {k:'mito',n:'Mitos e verdades',col:'#F9A825',tint:'#FFF9C4',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>'},
+  {k:'mente',n:'Mente & corpo',col:'#5E35B1',tint:'#EDE7F6',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 0 0-3 3 3 3 0 0 0-2 5.2A3 3 0 0 0 9 18a3 3 0 0 0 6 0 3 3 0 0 0 2-4.8A3 3 0 0 0 15 8a3 3 0 0 0-3-3z"/><path d="M12 5v13"/></svg>'}
 ];
 // categoria dos artigos já existentes (os novos trazem .cat no próprio objeto)
 const ARTCAT={fissura:'mente',sono:'subs',settsetting:'subs',rdconceito:'rd',gatilhos:'mente',recaida:'mente',dependencia:'mente',cannabis:'subs',alcool:'subs',ansiedade:'mente'};
 function artCat(a){return a.cat||ARTCAT[a.id]||'rd';}
-function artCard(a){return `<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg" style="background:${a.bg}">${a.svg||(a.ic?`<span style="font-size:44px">${a.ic}</span>`:'')}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm} de leitura</div></div></div>`;}
+function artCard(a){return `<div class="artc" onclick="abrirArt('${a.id}')"><div class="artcimg" style="background:${a.bg}">${a.svg||''}</div><div class="artcb"><div class="artctag">${a.tag}</div><div class="artct">${a.ti}</div><div class="artcx">⏱ ${a.tm} de leitura</div></div></div>`;}
 let _artCat='todos';
-function renderArtsGrid(cat){
-  if(typeof cat==='string')_artCat=cat;
+function renderArtsGrid(){
   const grid=document.getElementById('varts-grid');if(!grid)return;
   const q=(document.getElementById('arts-search')?.value||'').trim().toLowerCase();
   const list=ARTS.filter(a=>(_artCat==='todos'||artCat(a)===_artCat)&&(!q||(a.ti+' '+a.tag).toLowerCase().includes(q)));
   grid.innerHTML=list.length?list.map(artCard).join(''):'<div style="grid-column:1/-1;text-align:center;color:var(--txm);font-size:13px;padding:28px 10px">Nada encontrado.<br>Tente outro tema ou outra busca.</div>';
   const cnt=document.getElementById('varts-count');
-  if(cnt)cnt.textContent=list.length+(list.length===1?' artigo':' artigos')+(_artCat!=='todos'||q?' encontrado'+(list.length===1?'':'s'):' na biblioteca');
-  document.querySelectorAll('#varts-tabs .acat').forEach(t=>t.classList.toggle('on',t.dataset.k===_artCat));
+  if(cnt)cnt.textContent=list.length+(list.length===1?' texto':' textos');
+}
+function renderFeatured(){
+  const el=document.getElementById('lib-featured');if(!el)return;
+  const a=ARTS.find(x=>x.id==='rdconceito')||ARTS[0];
+  el.innerHTML=`<button class="lib-feat" onclick="abrirArt('${a.id}')"><div class="lib-feat-img" style="background:${a.bg}">${a.svg||''}</div><div class="lib-feat-b"><span class="lib-feat-tag">${a.tag}</span><div class="lib-feat-t">${a.ti}</div><div class="lib-feat-x">⏱ ${a.tm} · Ler agora →</div></div></button>`;
+}
+function renderCats(){
+  const el=document.getElementById('lib-cats');if(!el)return;
+  el.innerHTML=ARTCATS.map(c=>{const n=c.k==='todos'?ARTS.length:ARTS.filter(a=>artCat(a)===c.k).length;return `<button class="libcat" style="--cc:${c.col};--ct:${c.tint}" onclick="openCat('${c.k}')"><span class="libcat-ic">${c.svg}</span><span class="libcat-tx"><span class="libcat-n">${c.n}</span><span class="libcat-c">${n} ${n===1?'texto':'textos'}</span></span></button>`;}).join('');
+}
+function libHome(){
+  const h=document.getElementById('lib-home'),l=document.getElementById('lib-list');
+  if(h)h.style.display='';if(l)l.style.display='none';
+  const s=document.getElementById('arts-search');if(s)s.value='';
+  _artCat='todos';renderFeatured();renderCats();
+  try{document.querySelector('#varts .sc').scrollTop=0;}catch(e){}
+}
+function openCat(k){
+  _artCat=k;
+  const h=document.getElementById('lib-home'),l=document.getElementById('lib-list');
+  if(h)h.style.display='none';if(l)l.style.display='';
+  const c=ARTCATS.find(x=>x.k===k);
+  document.getElementById('lib-list-h').textContent=c?c.n:'Textos';
+  renderArtsGrid();
+  try{document.querySelector('#varts .sc').scrollTop=0;}catch(e){}
+}
+function libSearch(){
+  const q=(document.getElementById('arts-search')?.value||'').trim();
+  if(!q){libHome();return;}
+  _artCat='todos';
+  const h=document.getElementById('lib-home'),l=document.getElementById('lib-list');
+  if(h)h.style.display='none';if(l)l.style.display='';
+  document.getElementById('lib-list-h').textContent='Resultados';
+  renderArtsGrid();
 }
 function abrirArts(cat){
   showV('varts');
-  _artCat=cat||'todos';
   const s=document.getElementById('arts-search');if(s)s.value='';
-  const tabs=document.getElementById('varts-tabs');
-  if(tabs)tabs.innerHTML=ARTCATS.map(c=>`<button class="acat" data-k="${c.k}" onclick="renderArtsGrid('${c.k}')"><span class="acat-ic">${c.ic||''}</span>${c.n}</button>`).join('');
-  renderArtsGrid(_artCat);
+  if(cat&&cat!=='todos')openCat(cat);else libHome();
 }
 
 function abrirArt(id){
