@@ -31,28 +31,38 @@
   function setH(){
     var vv=window.visualViewport;
     var h=(vv&&vv.height)||window.innerHeight;
-    // Só ignoramos o encolhimento quando é o TECLADO (há um campo focado).
-    // Para outros casos (ex: barra do Safari reaparecendo ao tocar áudio),
-    // atualizamos a altura real para a navegação não sobrar e criar faixa branca.
-    var ae=document.activeElement;
-    var kbd=ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA');
-    // Dentro de um modal/sheet aberto, DEIXAMOS o shell encolher com o teclado,
-    // pra sheet caber acima do teclado (senão sobra faixa preta embaixo).
-    var inSheet=kbd&&ae.closest&&ae.closest('.ov.on');
-    if(kbd&&!inSheet&&vv&&h<window.innerHeight-120){ return; }
+    // Com o TECLADO aberto, o iOS não redimensiona o layout sozinho (ao contrário
+    // do Android). Então encolhemos a altura visível pra que campos e modais fiquem
+    // SEMPRE acima do teclado — em qualquer tela, não só nos modais.
     document.documentElement.style.setProperty('--app-h',h+'px');
+    // Compensa o quanto o iOS empurrou a página (visualViewport.offsetTop).
+    var off=(vv&&vv.offsetTop)||0;
+    document.documentElement.style.setProperty('--vv-top',off+'px');
   }
   window.__setH=setH;
   setH();
   window.addEventListener('resize',setH);
   window.addEventListener('orientationchange',function(){setTimeout(setH,250);});
-  if(window.visualViewport)window.visualViewport.addEventListener('resize',setH);
-  // Reforço: ao focar um campo, marca "teclado aberto" e rola o campo pra área visível.
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize',setH);
+    window.visualViewport.addEventListener('scroll',setH);
+  }
+  // iOS empurra a PÁGINA inteira pra cima ao focar um campo ("a tela sobe e some
+  // o que você digita"). Como o app já cabe na área visível, travamos o scroll
+  // da janela no topo — isso mantém o campo focado sempre à vista.
+  function pin(){ if(window.pageYOffset!==0){ try{window.scrollTo(0,0);}catch(_){} } }
+  window.addEventListener('scroll',pin,{passive:true});
   document.addEventListener('focusin',function(e){
     var t=e.target;
     if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')){
       var sh=document.getElementById('shell');if(sh)sh.classList.add('kbd');
-      // o iOS já sobe o campo acima do teclado; não forçamos scroll (evita subir demais)
+      // Depois que o teclado abre e a altura encolhe, garantimos que o campo fique
+      // visível rolando só o container interno (o sheet/tela), nunca a página.
+      setTimeout(function(){
+        pin();
+        try{t.scrollIntoView({block:'center'});}catch(_){}
+        pin();
+      },300);
     }
   });
   document.addEventListener('focusout',function(){
@@ -62,6 +72,7 @@
       var sh=document.getElementById('shell');if(sh)sh.classList.remove('kbd');
       // iOS às vezes deixa o layout "rolado" após o teclado fechar — volta ao topo
       try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(_){}
+      if(window.__setH)window.__setH();
     },150);
   });
 })();
