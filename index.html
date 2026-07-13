@@ -1939,7 +1939,7 @@ a{color:inherit;text-decoration:none}
     <div id="cmpex" style="display:none">
       <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin:9px 0 7px">Como você está?</div>
       <div class="emg" id="cmpemg"><button class="emb" onclick="selECmp(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selECmp(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selECmp(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selECmp(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selECmp(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
-      <div class="cmpact"><button class="btn bout bsm" onclick="fechaCmp()">Cancelar</button><button class="btn bsa bsm" onclick="salvRef()">Guardar</button></div>
+      <div class="cmpact"><button class="btn bout bsm" onclick="event.stopPropagation();fechaCmp()">Cancelar</button><button class="btn bsa bsm" onclick="event.stopPropagation();salvRef()">Guardar</button></div>
     </div>
   </div>
   <div id="ref-feed"></div>
@@ -3395,7 +3395,7 @@ function showV(id){document.querySelectorAll('.V').forEach(v=>v.classList.remove
 
 /* ══ PAGES ══ */
 const BROTO_INNER=`<defs><linearGradient id="bodyGrad" gradientUnits="userSpaceOnUse" x1="97.41" y1="347.86" x2="325.56" y2="12.14"><stop offset="0" stop-color="#5BC06F"></stop><stop offset="1" stop-color="#2E9244"></stop></linearGradient></defs><g transform="translate(0,360) scale(1,-1)"><path d="M80.54 266.24 C64.81 314.03 32.99 314.15 6.37 287.73 C32.75 250.51 61.89 242.44 85.80 255.61 Z Z" fill="#46b85e" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M340.52 227.60 C349.86 277.03 381.39 281.31 411.24 258.60 C389.95 218.25 362.12 206.45 336.69 216.37 Z Z" fill="#46b85e" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M60.74 127.50 C15.74 127.50 0.73 97.50 11.98 67.50 C53.23 75 71.98 97.50 71.98 123.75 Z Z" fill="#46b85e" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M345.73 127.50 C390.73 127.50 405.73 97.50 394.48 67.50 C353.23 75 334.48 97.50 334.48 123.75 Z Z" fill="#46b85e" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M45.73 240 L94.48 228.75 M338.23 228.75 L360.73 240 M26.98 82.50 L68.23 105 M379.48 82.50 L338.23 105 M379.48 82.50 L379.48 82.50 Z Z" fill="#000000" stroke="#e8862f" stroke-width="9.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M203.24 352.50 C248.23 352.50 278.23 326.25 285.73 288.75 C326.98 300 368.23 273.75 368.23 228.75 C368.23 198.75 353.23 180 334.48 172.50 C364.48 153.75 371.98 108.75 345.73 78.75 C323.23 52.50 285.73 56.25 266.98 71.25 C259.48 33.75 233.23 7.50 203.24 7.50 C173.24 7.50 146.98 33.75 139.49 71.25 C120.73 56.25 83.24 52.50 60.74 78.75 C34.48 108.75 41.99 153.75 71.98 172.50 C53.23 180 38.24 198.75 38.24 228.75 C38.24 273.75 79.48 300 120.73 288.75 C128.24 326.25 158.24 352.50 203.24 352.50" fill="url(#bodyGrad)"></path><path d="M191.98 270 C191.98 286.57 170.16 300 143.23 300 C116.31 300 94.48 286.57 94.48 270 C94.48 253.43 116.31 240 143.23 240 C170.16 240 191.98 253.43 191.98 270" fill="#ffffff" fill-opacity="0.18"></path><path d="M203.24 352.50 C248.23 352.50 278.23 326.25 285.73 288.75 C326.98 300 368.23 273.75 368.23 228.75 C368.23 198.75 353.23 180 334.48 172.50 C364.48 153.75 371.98 108.75 345.73 78.75 C323.23 52.50 285.73 56.25 266.98 71.25 C259.48 33.75 233.23 7.50 203.24 7.50 C173.24 7.50 146.98 33.75 139.49 71.25 C120.73 56.25 83.24 52.50 60.74 78.75 C34.48 108.75 41.99 153.75 71.98 172.50 C53.23 180 38.24 198.75 38.24 228.75 C38.24 273.75 79.48 300 120.73 288.75 C128.24 326.25 158.24 352.50 203.24 352.50 Z" fill="none" stroke="#3a2063" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"></path><path d="M142.02 309.59 C108.18 306.77 85.62 323.69 85.62 349.07 C113.82 357.53 144.84 337.79 142.02 309.59 Z" fill="#46b85e" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M259.48 262.50 C304.48 258.75 334.48 281.25 334.48 315 C296.99 326.25 255.73 300 259.48 262.50 Z" fill="#46b85e" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M266.98 273.75 L266.98 273.75 Z Z" fill="#000000" stroke="#e8862f" stroke-width="9.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M269.11 275.45 L304.48 303.75" fill="none" stroke="#e8862f" stroke-width="7.09" stroke-linejoin="round" stroke-linecap="round"></path><path d="M135.65 315.25 L107.45 337.81" fill="none" stroke="#e8862f" stroke-width="7.09" stroke-linejoin="round" stroke-linecap="round"></path><path d="M199.49 185.22 C199.49 208.01 181.02 226.47 158.24 226.47 C135.45 226.47 116.98 208.01 116.98 185.22 C116.98 162.44 135.45 143.97 158.24 143.97 C181.02 143.97 199.49 162.44 199.49 185.22 Z" fill="#fcd5d6" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M289.48 185.22 C289.48 208.01 271.02 226.47 248.23 226.47 C225.45 226.47 206.98 208.01 206.98 185.22 C206.98 162.44 225.45 143.97 248.23 143.97 C271.02 143.97 289.48 162.44 289.48 185.22 Z" fill="#fcd5d6" stroke="#3a2063" stroke-width="12.75" stroke-linejoin="round" stroke-linecap="round"></path><path d="M260.91 170.22 C260.91 179.29 253.56 186.65 244.48 186.65 C235.41 186.65 228.06 179.29 228.06 170.22 C228.06 161.15 235.41 153.80 244.48 153.80 C253.56 153.80 260.91 161.15 260.91 170.22" fill="#3a2063"></path><path d="M179.61 179.22 C179.61 183.57 176.08 187.10 171.74 187.10 C167.39 187.10 163.86 183.57 163.86 179.22 C163.86 174.87 167.39 171.35 171.74 171.35 C176.08 171.35 179.61 174.87 179.61 179.22" fill="#ffffff"></path><path d="M175.04 170.22 C175.04 179.29 167.69 186.65 158.62 186.65 C149.55 186.65 142.19 179.29 142.19 170.22 C142.19 161.15 149.55 153.80 158.62 153.80 C167.69 153.80 175.04 161.15 175.04 170.22" fill="#3a2063"></path><path d="M262.11 179.22 C262.11 183.57 258.58 187.10 254.23 187.10 C249.89 187.10 246.36 183.57 246.36 179.22 C246.36 174.87 249.89 171.35 254.23 171.35 C258.58 171.35 262.11 174.87 262.11 179.22" fill="#ffffff"></path><path d="M116.99 185.22 C116.99 207.05 138.25 225.82 158.24 226.47 C179.46 227.17 199.49 208.40 199.49 185.22 C178.86 173.43 137.61 172.98 116.99 185.22 Z" fill="#46b85e" stroke="#3a2063" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"></path><path d="M289.48 187.84 C289.48 208.22 271.27 226.01 251.03 226.38 C230.03 226.76 206.98 208.97 206.98 187.84 C217.37 177.39 234.66 175.98 250.24 176.05 C265.60 176.12 279.24 177.54 289.48 187.84 Z" fill="#46b85e" stroke="#3a2063" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"></path><path d="M135.74 125.22 C135.74 135.58 127.34 143.97 116.98 143.97 C106.63 143.97 98.23 135.58 98.23 125.22 C98.23 114.87 106.63 106.47 116.98 106.47 C127.34 106.47 135.74 114.87 135.74 125.22" fill="#f4a0b0" fill-opacity="0.72"></path><path d="M308.23 125.22 C308.23 135.58 299.84 143.97 289.48 143.97 C279.13 143.97 270.73 135.58 270.73 125.22 C270.73 114.87 279.13 106.47 289.48 106.47 C299.84 106.47 308.23 114.87 308.23 125.22" fill="#f4a0b0" fill-opacity="0.72"></path><path d="M250.26 110.32 C243.12 91.38 224.82 77.90 203.38 77.90 C181.64 77.90 163.13 91.76 156.21 111.12" fill="none" stroke="#3a2063" stroke-width="11.34" stroke-linejoin="round" stroke-linecap="round"></path></g>`;
-function brotoSVG(cls){return '<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-1 -1 419.61 362\"'+(cls?' class=\"'+cls+'\"':'')+'>'+BROTO_INNER+'</svg>';}
+function brotoSVG(cls){return uniqSvgIds('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-1 -1 419.61 362\"'+(cls?' class=\"'+cls+'\"':'')+'>'+BROTO_INNER+'</svg>');}
 function brotoDataURI(){return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"207\" viewBox=\"-1 -1 419.61 362\">'+BROTO_INNER+'</svg>');}
 // ── Dichavaldo em cores (avatar) ──
 const AVATARES={
@@ -3409,9 +3409,9 @@ const AVATARES={
   amarelo:{c1:'#FFD86B',c2:'#F2B705',leaf:'#f5c93c',n:'Amarelo'},
 };
 function brotoColorInner(variant){const v=AVATARES[variant]||AVATARES.verde;return BROTO_INNER.split('#5BC06F').join(v.c1).split('#2E9244').join(v.c2).split('#46b85e').join(v.leaf);}
-function brotoColorSVG(variant){return '<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-1 -1 419.61 362\" class=\"avbroto\">'+brotoColorInner(variant)+'</svg>';}
+function brotoColorSVG(variant){return uniqSvgIds('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-1 -1 419.61 362\" class=\"avbroto\">'+brotoColorInner(variant)+'</svg>');}
 const gAvatar=()=>ls('dr_avatar_'+uid())||'verde';
-function setAvatares(){const sv=brotoColorSVG(gAvatar());['hh-av','tav','tav-j','cmpav'].forEach(id=>{const el=document.getElementById(id);if(el){el.innerHTML=sv;el.classList.add('av-broto');}});}
+function setAvatares(){const v=gAvatar();['hh-av','tav','tav-j','cmpav'].forEach(id=>{const el=document.getElementById(id);if(el){el.innerHTML=brotoColorSVG(v);el.classList.add('av-broto');}});}
 function escolherAvatar(v){ls('dr_avatar_'+uid(),v);setAvatares();const pa=document.getElementById('perfil-av');if(pa){pa.innerHTML=brotoColorSVG(v);pa.classList.add('av-broto');}document.querySelectorAll('#perfil-avpick .avpick').forEach(b=>b.classList.toggle('on',b.dataset.v===v));vib(6);toast('🎨 Avatar atualizado!');const pk=document.getElementById('perfil-avpick');if(pk)pk.style.display='none';const bt=document.getElementById('perfil-editav');if(bt)bt.textContent='✏️ Editar avatar';}
 function toggleAvPick(){const pk=document.getElementById('perfil-avpick');const bt=document.getElementById('perfil-editav');if(!pk)return;const open=pk.style.display!=='none';pk.style.display=open?'none':'grid';if(bt)bt.textContent=open?'✏️ Editar avatar':'Toque na cor que quiser';}
 const ICONS={
@@ -5861,11 +5861,18 @@ function initPong(){
     if(started&&!dead){
       bx+=bvx*sp;by+=bvy*sp;
       if(by<7){by=7;bvy=Math.abs(bvy);}if(by>H-7){by=H-7;bvy=-Math.abs(bvy);}
-      // raquete jogador
-      if(bx-7<14+PW&&bx-7>14&&by>py&&by<py+PH&&bvx<0){bvx=Math.abs(bvx);const hit=(by-(py+PH/2))/(PH/2);bvy=hit*4.5;score++;document.getElementById('gv-score').textContent=score;sp+=0.04;vib(6);}
+      // raquete jogador (esquerda) — detecção por cruzamento de plano (evita "furar" em alta velocidade)
+      const plL=14+PW;
+      if(bvx<0 && bx-7<=plL && (bx-7)-bvx*sp>plL){
+        if(by>py-7 && by<py+PH+7){bx=plL+7;bvx=Math.abs(bvx);const hit=Math.max(-1,Math.min(1,(by-(py+PH/2))/(PH/2)));bvy=hit*4.5;score++;document.getElementById('gv-score').textContent=score;sp=Math.min(2.3,sp+0.04);vib(6);}
+      }
       // cpu segue a bola com folga
       const tgt=by-PH/2;ay+=Math.max(-aiSpd,Math.min(aiSpd,(tgt-ay)*0.12));
-      if(bx+7>W-14-PW&&bx+7<W-14&&by>ay&&by<ay+PH&&bvx>0){bvx=-Math.abs(bvx);const hit=(by-(ay+PH/2))/(PH/2);bvy=hit*4.5;}
+      // raquete cpu (direita) — mesmo método
+      const plR=W-14-PW;
+      if(bvx>0 && bx+7>=plR && (bx+7)-bvx*sp<plR){
+        if(by>ay-7 && by<ay+PH+7){bx=plR-7;bvx=-Math.abs(bvx);const hit=Math.max(-1,Math.min(1,(by-(ay+PH/2))/(PH/2)));bvy=hit*4.5;}
+      }
       if(bx<0){dead=true;fimJogo(score);}      // jogador perdeu
       if(bx>W){reset(-1);}                       // cpu perdeu ponto, recomeça (modo treino infinito)
     }
@@ -6446,7 +6453,9 @@ window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{rend
 /* ── Botão Voltar (Android): fecha modal / volta pra Início em vez de sair do app ── */
 (function(){
   function guard(){try{history.pushState({dr:1},'');}catch(_){}}
-  window.addEventListener('load',function(){setTimeout(guard,400);});
+  guard();                                                   // arma imediatamente
+  window.addEventListener('load',function(){setTimeout(guard,300);});
+  window.addEventListener('pageshow',function(){setTimeout(guard,60);});   // volta do bfcache
   window.addEventListener('popstate',function(){
     // 1) algum modal (bottom sheet) aberto? fecha o de cima
     var mods=document.querySelectorAll('.ov.on');
