@@ -5698,42 +5698,65 @@ function initPop(){
   if(_gRAF)cancelAnimationFrame(_gRAF);
   const cv=document.getElementById('game-cv'),ctx=cv.getContext('2d');
   const W=cv.width,H=cv.height;
-  let score=0,bubbles=[],t=0,lost=0,dead=false;
+  let score=0,bubbles=[],t=0,lost=0,dead=false,level=1,spawnInt=54,boom=false,endFrames=0;
   const COL=['#4CAF5A','#00897B','#7C3AED','#EA580C','#FFB300'];
-  document.getElementById('gv-hint').textContent='Toque nas bolhas antes que escapem';
+  document.getElementById('gv-hint').textContent='Toque nas bolhas — mas NÃO toque nas bombas 💣';
   document.getElementById('gv-score').textContent='0';
-  function spawn(){const r=22+Math.random()*16;bubbles.push({x:r+Math.random()*(W-2*r),y:H+r,r,vy:0.8+Math.random()*1.1,c:COL[(Math.random()*COL.length)|0],pop:0});}
+  function spawn(){
+    const bombChance=Math.min(0.30,0.05+level*0.025);        // bombas ficam mais frequentes a cada nível
+    const isBomb=Math.random()<bombChance;
+    const r=isBomb?25:(20+Math.random()*15);
+    const vy=(0.75+level*0.16)*(0.85+Math.random()*0.5);      // sobem mais rápido a cada nível
+    bubbles.push({x:r+Math.random()*(W-2*r),y:H+r,r,vy,c:isBomb?'#22262e':COL[(Math.random()*COL.length)|0],pop:0,bomb:isBomb});
+  }
   function draw(){
     ctx.fillStyle='#0E1712';ctx.fillRect(0,0,W,H);
     bubbles.forEach(b=>{
       ctx.globalAlpha=b.pop?Math.max(0,1-b.pop/8):1;
       const rr=b.pop?b.r*(1+b.pop/6):b.r;
       ctx.beginPath();ctx.arc(b.x,b.y,rr,0,7);ctx.fillStyle=b.c;ctx.fill();
-      ctx.beginPath();ctx.arc(b.x-rr/3,b.y-rr/3,rr/4,0,7);ctx.fillStyle='rgba(255,255,255,.45)';ctx.fill();
+      if(b.bomb){
+        ctx.globalAlpha=b.pop?Math.max(0,1-b.pop/8):1;
+        ctx.font='bold '+(rr*1.15)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText('💣',b.x,b.y);ctx.textBaseline='alphabetic';
+      } else {
+        ctx.beginPath();ctx.arc(b.x-rr/3,b.y-rr/3,rr/4,0,7);ctx.fillStyle='rgba(255,255,255,.45)';ctx.fill();
+      }
       ctx.globalAlpha=1;
     });
     ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold 26px sans-serif';ctx.textAlign='center';ctx.fillText(score,W/2,42);
-    // vidas (bolhas escapadas)
+    ctx.font='bold 13px sans-serif';ctx.fillStyle='rgba(120,230,150,.95)';ctx.textAlign='left';ctx.fillText('Nível '+level,12,26);
     ctx.font='15px sans-serif';ctx.fillStyle='rgba(255,255,255,.5)';ctx.textAlign='right';
     ctx.fillText('escaparam: '+lost+'/5',W-12,26);
   }
   function loop(){
-    t++;
-    if(t%52===0)spawn();
-    bubbles.forEach(b=>{if(!b.pop)b.y-=b.vy;else b.pop++;});
-    bubbles=bubbles.filter(b=>{
-      if(b.pop>8)return false;
-      if(b.y+b.r<0&&!b.pop){lost++;vib(8);if(lost>=5)dead=true;return false;}
-      return true;
-    });
+    if(!dead){
+      t++;
+      if(t%spawnInt===0)spawn();
+      bubbles.forEach(b=>{if(!b.pop)b.y-=b.vy;else b.pop++;});
+      bubbles=bubbles.filter(b=>{
+        if(b.pop>8)return false;
+        if(b.y+b.r<0&&!b.pop){if(!b.bomb){lost++;vib(8);if(lost>=5)dead=true;}return false;} // bomba que escapa NÃO penaliza
+        return true;
+      });
+    }
     draw();
-    if(dead){fimJogo(score);return;}
+    if(dead){
+      if(boom&&endFrames<10){endFrames++;ctx.fillStyle='rgba(230,60,60,'+(0.5-endFrames*0.05)+')';ctx.fillRect(0,0,W,H);_gRAF=requestAnimationFrame(loop);return;}
+      fimJogo(score);return;
+    }
     _gRAF=requestAnimationFrame(loop);
   }
   const hit=(cx,cy)=>{
+    if(dead)return;
     const rect=cv.getBoundingClientRect(),sx=cv.width/rect.width,sy=cv.height/rect.height;
     const x=(cx-rect.left)*sx,y=(cy-rect.top)*sy;
-    for(let i=bubbles.length-1;i>=0;i--){const b=bubbles[i];if(!b.pop&&Math.hypot(b.x-x,b.y-y)<b.r+6){b.pop=1;score++;document.getElementById('gv-score').textContent=score;vib(6);break;}}
+    for(let i=bubbles.length-1;i>=0;i--){const b=bubbles[i];if(!b.pop&&Math.hypot(b.x-x,b.y-y)<b.r+6){
+      if(b.bomb){b.pop=1;boom=true;dead=true;vib([50,40,70]);return;}   // tocou na bomba = fim
+      b.pop=1;score++;document.getElementById('gv-score').textContent=score;vib(6);
+      if(score%10===0&&spawnInt>18){level++;spawnInt-=3;}               // sobe de nível a cada 10 estouradas
+      break;
+    }}
   };
   cv.ontouchstart=e=>{e.preventDefault();const tt=e.changedTouches[0];hit(tt.clientX,tt.clientY);};
   cv.onmousedown=e=>{e.preventDefault();hit(e.clientX,e.clientY);};
