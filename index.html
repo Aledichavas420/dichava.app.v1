@@ -2535,7 +2535,7 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="fld" style="margin-bottom:13px"><div class="lbl">Data de nascimento</div><input class="inp" id="termo-dob" type="date" onchange="checaIdade()"><div class="em" id="termo-dobe">Informe sua data de nascimento.</div></div>
     <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;cursor:pointer" for="chk-18"><input type="checkbox" id="chk-18"><span style="font-size:13px;color:var(--txs);line-height:1.6">Declaro que tenho <strong>18 anos ou mais</strong> e que as informações acima são verdadeiras.</span></label>
-    <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-t"><input type="checkbox" id="chk-t"><span style="font-size:13px;color:var(--txs);line-height:1.6">Li e concordo com o <strong>Termo de Consentimento e a Política de Privacidade (LGPD)</strong>. Autorizo o tratamento dos meus dados conforme descrito, ciente de que posso <strong>revogar e apagá-los</strong> quando quiser.</span></label>
+    <label style="display:flex;gap:9px;align-items:flex-start;margin-bottom:17px;cursor:pointer" for="chk-t"><input type="checkbox" id="chk-t"><span style="font-size:13px;color:var(--txs);line-height:1.6">Li e concordo com os <a href="#" onclick="event.preventDefault();event.stopPropagation();verDoc('termos')" style="color:var(--ve);text-decoration:underline;font-weight:700">Termos de Uso</a> e a <a href="#" onclick="event.preventDefault();event.stopPropagation();verDoc('privacidade')" style="color:var(--ve);text-decoration:underline;font-weight:700">Política de Privacidade</a>. Autorizo o tratamento dos meus dados conforme descrito, ciente de que posso <strong>revogar e apagá-los</strong> quando quiser.</span></label>
   </div>
   <div id="termo-pro-content" style="display:none">
     <div style="font-size:30px;text-align:center;margin-bottom:9px">🩺</div>
@@ -2560,6 +2560,14 @@ a{color:inherit;text-decoration:none}
   <div class="termo-ro"><strong>dichava.rd — Termo de Consentimento e Política de Privacidade</strong><br><br><strong>1. Natureza do app.</strong> Ferramenta de apoio ao autoconhecimento, baseada na redução de danos. <strong>Não substitui</strong> acompanhamento profissional de saúde. Emergências: SAMU 192 · CVV 188.<br><br><strong>2. Público.</strong> Destinado a pessoas com <strong>18 anos ou mais</strong>.<br><br><strong>3. Dados tratados.</strong> Apenas os dados que <strong>você mesmo(a) insere</strong>: registros de uso, humor, reflexões, metas, <strong>valores e gastos (compras e economias que você registrar)</strong>, configurações e dados de conta (e-mail e senha). Não coletamos localização, contatos nem dados para publicidade.<br><br><strong>4. Finalidade.</strong> Usados <strong>só para o app funcionar</strong>: exibir seu histórico e insights, sincronizar entre aparelhos (backup) e enviar as notificações de cuidado que você ativar.<br><br><strong>5. Armazenamento e compartilhamento.</strong> Seus dados ficam no seu aparelho e são sincronizados com o <strong>servidor próprio do projeto (Supabase)</strong>. <strong>Não são vendidos nem compartilhados com terceiros</strong> para fins comerciais ou publicitários.<br><br><strong>6. Base legal (LGPD).</strong> O tratamento se dá com base no <strong>seu consentimento</strong> (art. 7º, I, da Lei nº 13.709/2018 — LGPD), que você pode <strong>revogar a qualquer momento</strong>.<br><br><strong>7. Seus direitos (LGPD).</strong> A qualquer momento você pode <strong>acessar, corrigir, exportar</strong> (Configurações → Exportar / Backup) e <strong>apagar</strong> seus dados, além de <strong>revogar o consentimento</strong>.<br><br><strong>8. Segurança.</strong> Você conta com <strong>PIN de bloqueio</strong> e <strong>Modo discreto</strong>. Ainda assim, mantenha seu aparelho protegido.<br><br><strong>9. Retenção.</strong> Os dados são mantidos enquanto sua conta existir; ao apagá-los, são removidos do servidor.<br><br><strong>10. Contato.</strong> Dúvidas ou solicitações sobre seus dados: <strong>contato@dichava.app</strong>.</div>
   <div style="background:var(--vf);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--ve);font-weight:600;margin-bottom:15px;text-align:center">✓ Aceito em: <span id="termo-dt">—</span></div>
   <button class="btn bout bfull" onclick="closeMod('mtermol')">Fechar</button>
+</div></div></div>
+
+<!-- LEITURA DE DOCUMENTO (Termos/Privacidade sobre o onboarding) -->
+<div class="ov" id="mdocread" onclick="if(event.target===this)closeMod('mdocread')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt c" id="mdocread-t">Documento</div>
+  <div id="mdocread-b" class="docbody" style="max-height:58vh;overflow-y:auto;-webkit-overflow-scrolling:touch;margin:4px 0 14px"></div>
+  <button class="btn bv bfull" onclick="closeMod('mdocread')">Entendi</button>
 </div></div></div>
 
 <!-- NOVA SENHA (recuperação por e-mail OU troca em Configurações) -->
@@ -3314,7 +3322,7 @@ let _fI=null,_crI=null;
 let _syncT=null;
 function syncToCloud(){if(!_SB||!U||U.id==='demo')return;clearTimeout(_syncT);_syncT=setTimeout(async()=>{try{const dados={};Object.keys(localStorage).forEach(k=>{if(k.startsWith('dr_')&&k.includes(U.id))dados[k]=localStorage.getItem(k);});const{data:ex}=await _SB.from('registros').select('id').eq('user_id',U.id).maybeSingle();if(ex)await _SB.from('registros').update({dados}).eq('user_id',U.id);else await _SB.from('registros').insert({user_id:U.id,dados});}catch(e){}},2000);}
 async function syncFromCloud(){if(!_SB||!U||U.id==='demo')return;try{const{data}=await _SB.from('registros').select('dados').eq('user_id',U.id).maybeSingle();if(data?.dados)Object.entries(data.dados).forEach(([k,v])=>{if(!localStorage.getItem(k))localStorage.setItem(k,v);});}catch(e){}}
-function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('dr_r_')||k.startsWith('dr_rf_')||k.startsWith('dr_fs_')||k.startsWith('dr_m_')||k.startsWith('dr_ct_')||k.startsWith('dr_o_'))syncToCloud();}catch{}}
+function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('dr_r_')||k.startsWith('dr_rf_')||k.startsWith('dr_fs_')||k.startsWith('dr_m_')||k.startsWith('dr_ct_')||k.startsWith('dr_o_')||k.startsWith('dr_cp_')||k.startsWith('dr_fin_'))syncToCloud();}catch{}}
 const uid=()=>U?.id||'x';
 const gR=()=>ls('dr_r_'+uid())||[];
 const sR=r=>ls('dr_r_'+uid(),r);
@@ -6598,6 +6606,8 @@ const DOCS={
 let _docFrom='cfg';
 function openDoc(id,from){const d=DOCS[id];if(!d)return;_docFrom=from||'cfg';document.getElementById('doc-tit').textContent=d.t;document.getElementById('doc-body').innerHTML=d.h;showV('vdoc');try{document.querySelector('#vdoc .sc').scrollTop=0;}catch(e){}}
 function fecharDoc(){if(_docFrom==='planos'){showV('vplanos');}else{showV('vapp');try{goPg('p-cfg');}catch(e){}}}
+// leitura de documento em modal (sem sair do onboarding/consentimento)
+function verDoc(id){const d=DOCS[id];if(!d)return;try{document.getElementById('mdocread-t').textContent=d.t;document.getElementById('mdocread-b').innerHTML=d.h;openMod('mdocread');const sc=document.querySelector('#mdocread .sheet');if(sc)sc.scrollTop=0;}catch(e){}}
 
 // ── GATILHOS CONTEXTUAIS DO PREMIUM ──
 let _snackTO=null;
