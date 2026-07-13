@@ -50,6 +50,24 @@ nav.solid{background:rgba(20,26,20,.86);backdrop-filter:blur(14px);border-bottom
   border:2.5px solid #3A2063;box-shadow:3px 3px 0 #3A2063;transition:transform .15s,box-shadow .15s;display:inline-block}
 .nav-cta:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #3A2063}
 .nav-cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #3A2063}
+.nav-links{display:flex;align-items:center;gap:22px}
+.nav-links>a:not(.nav-cta){color:#D9EBDB;font-weight:700;font-size:14px;transition:color .2s}
+.nav-links>a:not(.nav-cta):hover{color:#5BC06F}
+.nav-prem{color:#C9B3F7!important}
+.nav-prem:hover{color:#B387F2!important}
+.nav-burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;z-index:60}
+.nav-burger span{display:block;width:26px;height:3px;border-radius:3px;background:#D9EBDB;transition:transform .25s,opacity .25s}
+.nav-burger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+[id]{scroll-margin-top:74px}
+@media(max-width:760px){
+  .nav-burger{display:flex}
+  .nav-links{position:fixed;top:0;right:0;height:100dvh;width:min(80vw,300px);flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;padding:82px 24px 24px;background:rgba(14,18,14,.98);backdrop-filter:blur(16px);border-left:1px solid rgba(255,255,255,.08);transform:translateX(105%);transition:transform .3s cubic-bezier(.32,.72,.27,1);z-index:55;box-shadow:-14px 0 40px rgba(0,0,0,.4)}
+  .nav-links.open{transform:translateX(0)}
+  .nav-links>a:not(.nav-cta){font-size:17px;padding:15px 2px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .nav-cta{margin-top:18px;text-align:center}
+}
 
 /* ── HERO ── */
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -208,7 +226,14 @@ footer a{color:#93AC96;text-decoration:underline}
 
 <nav id="nav">
   <a class="nav-logo" href="#top">dichava<span>.app</span></a>
-  <a class="nav-cta" href="../" target="_blank">Abrir o app →</a>
+  <button class="nav-burger" id="navBurger" onclick="toggleMenu()" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  <div class="nav-links" id="navLinks">
+    <a href="#funcoes" onclick="closeMenu()">Funções</a>
+    <a href="#respaldo" onclick="closeMenu()">Respaldo</a>
+    <a href="#quem" onclick="closeMenu()">Quem faz</a>
+    <a href="#planos" class="nav-prem" onclick="closeMenu()">✨ Premium</a>
+    <a class="nav-cta" href="../" target="_blank" onclick="closeMenu()">Abrir o app →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -624,6 +649,9 @@ footer a{color:#93AC96;text-decoration:underline}
 <div class="mob-cta" id="mobcta"><a class="cta-big" href="../" target="_blank"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="13.4" r="7.8" fill="#3BB365"/><circle cx="12" cy="13.4" r="7.8" fill="#177038" opacity=".22"/><path d="M12 14.4c0-2.5 1.1-4.6 3.8-4.9-.2 2.6-1.5 4.4-3.8 4.9Z" fill="#fff" opacity=".95"/><path d="M12 14.4c0-1.9-.85-3.5-3-3.8.1 2.1 1 3.5 3 3.8Z" fill="#fff" opacity=".75"/><path d="M12 14.2v3.6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg> Usar o app agora</a></div>
 
 <script>
+// menu de navegação (mobile)
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');document.getElementById('navBurger').classList.toggle('open');}
+function closeMenu(){document.getElementById('navLinks').classList.remove('open');document.getElementById('navBurger').classList.remove('open');}
 // estrelas
 function mkStars(id,n){var c=document.getElementById(id);if(!c)return;var h='';
   for(var i=0;i<n;i++){var s=(Math.random()*2.2+1).toFixed(1);
