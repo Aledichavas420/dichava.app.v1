@@ -3517,9 +3517,10 @@ function icon(nome){return ICONS[nome]?uniqSvgIds(ICONS[nome]):"";}
 // Torna os IDs de gradiente/clip únicos por instância. Sem isso, o mesmo ícone
 // usado em dois lugares (ex.: Reflexões na aba e na barra) tem IDs iguais e o
 // Android/WebView pinta só o primeiro, deixando o segundo "sem preenchimento".
-let _svgSeq=0;
+// contador numa propriedade da própria função (função é "hoisted", sem TDZ) —
+// assim uniqSvgIds pode ser chamada em qualquer ponto da inicialização.
 function uniqSvgIds(svg){
-  _svgSeq++;const s='_u'+_svgSeq;
+  uniqSvgIds._n=(uniqSvgIds._n||0)+1;const s='_u'+uniqSvgIds._n;
   return svg
     .replace(/id="([^"]+)"/g,'id="$1'+s+'"')
     .replace(/url\(#([^")]+)\)/g,'url(#$1'+s+')')
