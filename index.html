@@ -1768,6 +1768,7 @@ a{color:inherit;text-decoration:none}
     <div class="snd zc-teal" data-snd="stream" onclick="toggleSom('stream',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-riacho"></div><h5>Riacho</h5><p>Água corrente</p></div>
     <div class="snd zc-dark" data-snd="wind" onclick="toggleSom('wind',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-vento"></div><h5>Vento</h5><p>Brisa entre folhas</p></div>
     <div class="snd zc-blue" data-snd="forest" onclick="toggleSom('forest',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-floresta"></div><h5>Floresta</h5><p>Pássaros e mata</p></div>
+    <div class="snd zc-teal" data-snd="f528r" onclick="toggleSom('f528r',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-note"></div><h5>Bem-estar</h5><p>528 Hz · amostra grátis</p></div>
   </div>
   <div class="snd-times" id="snd-times">
     <div class="snd-time" data-min="5" onclick="setSomTempo(5,this)">5 min</div>
@@ -1784,13 +1785,24 @@ a{color:inherit;text-decoration:none}
   </div><!-- /zen-sons -->
 
   <div id="zen-freq">
-  <div class="zen-sec" style="margin-top:22px">Ruído & frequências · foco e calma</div>
+  <div class="zen-sec" style="margin-top:22px">Ambientes pra relaxar</div>
   <div class="snd-row">
+    <div class="snd zc-teal" data-snd="aguas" onclick="toggleSom('aguas',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-riacho"></div><h5>Águas serenas</h5><p>Fluxo suave</p></div>
+    <div class="snd zc-blue" data-snd="luz" onclick="toggleSom('luz',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-notes"></div><h5>Luz que cura</h5><p>Aconchego</p></div>
+    <div class="snd zc-dark" data-snd="yoga" onclick="toggleSom('yoga',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-note"></div><h5>Yoga & meditação</h5><p>Respire fundo</p></div>
+  </div>
+  <div class="zen-sec" style="margin-top:18px">Frequências & ruídos</div>
+  <div class="snd-row">
+    <div class="snd zc-teal" data-snd="cura" onclick="toggleSom('cura',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-notes"></div><h5>Frequências de cura</h5><p>174 · 396 · 528 Hz</p></div>
     <div class="snd zc-dark" data-snd="branco" onclick="toggleSom('branco',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="noise-white"></div><h5>Ruído branco</h5><p>Bloqueia distrações</p></div>
     <div class="snd zc-dark" data-snd="marrom" onclick="toggleSom('marrom',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="noise-brown"></div><h5>Ruído marrom</h5><p>Grave e aconchegante</p></div>
-    <div class="snd zc-teal" data-snd="f432" onclick="toggleSom('f432',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-note"></div><h5>432 Hz</h5><p>Relaxamento</p></div>
-    <div class="snd zc-teal" data-snd="f528" onclick="toggleSom('f528',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-notes"></div><h5>528 Hz</h5><p>Sensação de bem-estar</p></div>
-    <div class="snd zc-blue" data-snd="binaural" onclick="toggleSom('binaural',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-binaural"></div><h5>Binaural θ</h5><p>Ondas theta · meditação</p></div>
+  </div>
+  <div class="zen-sec" style="margin-top:18px">Binaurais <span style="font-weight:600;font-size:11px;color:var(--v)">· 🎧 melhor com fones</span></div>
+  <div class="snd-row">
+    <div class="snd zc-blue" data-snd="deriva" onclick="toggleSom('deriva',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-binaural"></div><h5>À deriva</h5><p>Ondas binaurais</p></div>
+    <div class="snd zc-teal" data-snd="serenidade" onclick="toggleSom('serenidade',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-binaural"></div><h5>Serenidade</h5><p>Calma profunda</p></div>
+    <div class="snd zc-blue" data-snd="ceuazul" onclick="toggleSom('ceuazul',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="freq-binaural"></div><h5>Céu azul</h5><p>Leveza</p></div>
+    <div class="snd zc-dark" data-snd="sono" onclick="toggleSom('sono',this)"><div class="playing"><i></i><i></i><i></i></div><div class="si" data-icon="son-noite"></div><h5>Sono profundo</h5><p>4 Hz · dormir</p></div>
   </div>
   </div><!-- /zen-freq -->
 
@@ -5115,10 +5127,10 @@ function abrirEdicaoPerfil(){
 
 /* ═══════════ SONS DA NATUREZA (Web Audio, offline, em loop) ═══════════ */
 let _ac=null,_somNodes=null,_somAtual=null,_somTempo=10,_somTimerId=null,_somFim=0,_somTickId=null,_somAudio=null;
-const SOM_INFO={rain:{e:'🌧️',n:'Chuva'},ocean:{e:'🌊',n:'Oceano'},night:{e:'🦗',n:'Noite'},stream:{e:'🏞️',n:'Riacho'},wind:{e:'🍃',n:'Vento'},forest:{e:'🌲',n:'Floresta'},branco:{e:'⚪',n:'Ruído branco'},marrom:{e:'🟤',n:'Ruído marrom'},f432:{e:'🎵',n:'432 Hz'},f528:{e:'🎶',n:'528 Hz'},binaural:{e:'🧘',n:'Binaural θ'}};
+const SOM_INFO={rain:{e:'🌧️',n:'Chuva'},ocean:{e:'🌊',n:'Oceano'},night:{e:'🦗',n:'Noite'},stream:{e:'🏞️',n:'Riacho'},wind:{e:'🍃',n:'Vento'},forest:{e:'🌲',n:'Floresta'},branco:{e:'⚪',n:'Ruído branco'},marrom:{e:'🟤',n:'Ruído marrom'},f432:{e:'🎵',n:'432 Hz'},f528:{e:'🎶',n:'528 Hz'},binaural:{e:'🧘',n:'Binaural θ'},f528r:{e:'💚',n:'Bem-estar · 528 Hz'},aguas:{e:'💧',n:'Águas serenas'},luz:{e:'✨',n:'Luz que cura'},yoga:{e:'🧘',n:'Yoga & meditação'},cura:{e:'🔮',n:'Frequências de cura'},deriva:{e:'🌊',n:'À deriva'},serenidade:{e:'🕊️',n:'Serenidade'},ceuazul:{e:'🌌',n:'Céu azul'},sono:{e:'🌙',n:'Sono profundo'}};
 // Sons reais hospedados no Supabase Storage (bucket público "sons"). Se o arquivo não existir, cai no som sintetizado.
 const _SOM_BUCKET='https://gnpwaywyexcevtzbwiyq.supabase.co/storage/v1/object/public/sons/';
-const SOM_SRC={rain:'chuva.mp3',ocean:'oceano.mp3',night:'noite.mp3',stream:'riacho.mp3',wind:'vento.mp3',forest:'floresta.mp3'};
+const SOM_SRC={rain:'chuva.mp3',ocean:'oceano.mp3',night:'noite.mp3',stream:'riacho.mp3',wind:'vento.mp3',forest:'floresta.mp3',f528r:'freq-528.mp3',aguas:'amb-aguas.mp3',luz:'amb-luz.mp3',yoga:'amb-yoga.mp3',cura:'freq-cura.mp3',deriva:'bin-deriva.mp3',serenidade:'bin-serenidade.mp3',ceuazul:'bin-ceu-azul.mp3',sono:'bin-sono.mp3'};
 
 function _noiseBuffer(tipo){
   const len=_ac.sampleRate*4,buf=_ac.createBuffer(1,len,_ac.sampleRate),d=buf.getChannelData(0);
