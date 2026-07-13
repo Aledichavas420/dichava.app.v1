@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="dichava">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <meta name="theme-color" content="#1B2A1C">
 <title>dichava.app — cuidar de si, sem julgamento</title>
 <meta name="description" content="Redução de danos, sem julgamento. Diário de uso, modo crise, respiração e ferramentas de cuidado — no seu tempo.">
@@ -3061,8 +3064,11 @@ a{color:inherit;text-decoration:none}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbFail=1"></script>
 <script>
 /* ══ DIAGNÓSTICO ══ */
-window.onerror=function(msg,src,ln){
+window.onerror=function(msg,src,ln,col,err){
   try{
+    // Ignora erros opacos de cross-origin ("Script error." linha 0) — vêm de scripts
+    // externos (CDN) e não trazem informação útil nem indicam bug do app.
+    if((!ln||ln===0)&&(!msg||/script error/i.test(msg))&&!err)return;
     var d=document.createElement('div');
     d.style.cssText='position:fixed;top:0;left:0;right:0;background:#B71C1C;color:#fff;font:12px/1.5 monospace;padding:10px 14px;z-index:99999;word-break:break-word';
     d.innerHTML='⚠️ <b>Erro no app:</b> '+msg+' (linha '+ln+')<br><small>Tire um print desta mensagem.</small>';
