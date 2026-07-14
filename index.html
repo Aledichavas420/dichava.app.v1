@@ -38,7 +38,9 @@
     var vv=window.visualViewport;
     var ae=document.activeElement;
     var typing=ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA');
-    var kb=(typing&&vv)?Math.max(0,Math.round(window.innerHeight-vv.height)):0;
+    // usa o LAYOUT viewport (clientHeight não encolhe com o teclado, ao contrário do innerHeight no PWA iOS)
+    var layoutH=document.documentElement.clientHeight||window.innerHeight;
+    var kb=(typing&&vv)?Math.max(0,Math.round(layoutH-vv.height-vv.offsetTop)):0;
     // ignora oscilações mínimas (barra do Safari) — só conta como teclado se >120
     if(kb<120)kb=0;
     document.documentElement.style.setProperty('--kb',kb+'px');
@@ -268,7 +270,7 @@ a{color:inherit;text-decoration:none}
 /* OVERLAY + SHEET */
 .ov{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;box-sizing:border-box;padding-bottom:var(--kb,0px);transition:padding-bottom .18s ease}
 
-.sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;max-height:92%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;max-height:calc(92% - var(--kb,0px));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .sp{padding:0 18px calc(28px + var(--sb))}
 .mh{width:36px;height:4px;background:#E0E0E0;border-radius:2px;margin:12px auto 18px}
 .mclose{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:none;background:var(--cin);color:var(--txs);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
@@ -3493,7 +3495,7 @@ a{color:inherit;text-decoration:none}
   <div class="mh"></div>
   <div class="conv-head"><img class="conv-av" id="conv-av" alt=""><div><div class="conv-name">Dichavaldo</div><div class="conv-dots" id="conv-dots"></div></div><button class="conv-close" onclick="closeMod('mconv')">✕</button></div>
   <div class="conv-q" id="conv-q"></div>
-  <textarea class="ft" id="conv-tx" rows="4" placeholder="Escreva aqui… pode ser curtinho."></textarea>
+  <textarea class="ft" id="conv-tx" rows="3" placeholder="Escreva aqui… pode ser curtinho." onfocus="setTimeout(function(){try{window.__setH&&window.__setH();var s=document.querySelector('#mconv .sheet');if(s)s.scrollTop=s.scrollHeight;}catch(e){}},350)"></textarea>
   <div style="display:flex;gap:9px;margin-top:11px"><button class="btn bout" id="conv-back" style="flex:0 0 52px" onclick="convPrev()">←</button><button class="btn bv" style="flex:1" id="conv-next" onclick="convNext()">Próxima</button></div>
 </div></div></div>
 
