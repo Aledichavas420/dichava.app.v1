@@ -938,6 +938,15 @@ a{color:inherit;text-decoration:none}
 .conv-q{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:800;color:var(--dk);line-height:1.32;margin-bottom:12px}
 #shell.dkm .conv-q{color:#E9EFE7}
 /* Roda das emoções */
+.emo-wheel{width:270px;max-width:80vw;height:auto;display:block;margin:6px auto 4px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.14));animation:emowheelin .5s cubic-bezier(.34,1.3,.5,1) both}
+@keyframes emowheelin{from{opacity:0;transform:scale(.8) rotate(-12deg)}to{opacity:1;transform:none}}
+.emo-seg{cursor:pointer;stroke:#fff;stroke-width:2.5;transition:opacity .12s;transform-box:fill-box;transform-origin:center}
+.emo-seg:active{opacity:.72}
+#shell.dkm .emo-seg{stroke:#141A18}
+.emo-wheel-c{fill:#fff;stroke:#EEE;stroke-width:1.5}
+#shell.dkm .emo-wheel-c{fill:#1D2520;stroke:#32402F}
+.emo-wheel-t{fill:#5B6B5D}
+#shell.dkm .emo-wheel-t{fill:#ADBDA9}
 .emo-core{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .emo-cbtn{display:flex;align-items:center;gap:11px;padding:14px;border-radius:16px;border:1.5px solid #ECECEC;background:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;border-left:4px solid var(--c)}
 .emo-cbtn:active{transform:scale(.96)}
@@ -2389,6 +2398,7 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
   <!-- DIÁRIO -->
+  <div class="diario-sec">
   <div class="diario-banner">
     <div class="db-deco"></div>
     <div class="db-ic">📖</div>
@@ -2404,6 +2414,7 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
   <div id="ref-feed"></div>
+  </div><!-- /diario-sec -->
   <div class="shr" style="padding-top:4px"><div class="sht">Da biblioteca</div></div>
   <div id="arts-l" class="hshelf"></div>
 </div>
@@ -3195,7 +3206,12 @@ a{color:inherit;text-decoration:none}
 .rb-wide .rb-tx{flex:1}
 .rb-wide .rb-plus{top:50%;transform:translateY(-50%)}
 /* diário destacado (Reflexões) */
-.diario-banner{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;margin:18px 18px 12px;padding:16px 18px;border-radius:20px;background:linear-gradient(120deg,#6B43D6,#8E5BE8 45%,#2BB3A3);box-shadow:0 8px 22px rgba(107,67,214,.28)}
+/* seção unificada do diário (fundo tintado dá a sensação de "uma coisa só") */
+.diario-sec{background:linear-gradient(180deg,#F1EEFA,#EDF4F3 60%,#EDF4F3);border-radius:28px 28px 0 0;margin-top:14px;padding:6px 0 22px;position:relative}
+.diario-sec::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:44px;height:5px;border-radius:5px;background:rgba(107,67,214,.18);margin-top:9px}
+#shell.dkm .diario-sec{background:linear-gradient(180deg,#1B1826,#141A18 60%,#141A18)}
+#shell.dkm .diario-sec::before{background:rgba(179,135,242,.28)}
+.diario-banner{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;margin:20px 16px 12px;padding:16px 18px;border-radius:20px;background:linear-gradient(120deg,#6B43D6,#8E5BE8 45%,#2BB3A3);box-shadow:0 8px 22px rgba(107,67,214,.28)}
 .db-deco{position:absolute;inset:0;pointer-events:none}
 .db-deco::before{content:'';position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);top:-70px;right:-30px;animation:tbcglow 5s ease-in-out infinite}
 .db-deco::after{content:'✦ ✧ ✦';position:absolute;top:10px;right:14px;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:6px}
@@ -5432,11 +5448,28 @@ const EMO_CORE=[
 ];
 let _emoStep=0,_emoCore=null,_emoSub=null;
 function abrirRodaEmo(){_emoStep=0;_emoCore=null;_emoSub=null;openMod('memo');renderEmo();}
+function _emoWheel(){
+  const N=EMO_CORE.length,cx=125,cy=125,R=118,r=54,gap=0.028;
+  let segs='';
+  for(let i=0;i<N;i++){
+    const a0=(-90+i*360/N)*Math.PI/180+gap,a1=(-90+(i+1)*360/N)*Math.PI/180-gap;
+    const xo0=cx+R*Math.cos(a0),yo0=cy+R*Math.sin(a0),xo1=cx+R*Math.cos(a1),yo1=cy+R*Math.sin(a1);
+    const xi1=cx+r*Math.cos(a1),yi1=cy+r*Math.sin(a1),xi0=cx+r*Math.cos(a0),yi0=cy+r*Math.sin(a0);
+    const large=(a1-a0)>Math.PI?1:0;
+    const d='M '+xo0.toFixed(1)+' '+yo0.toFixed(1)+' A '+R+' '+R+' 0 '+large+' 1 '+xo1.toFixed(1)+' '+yo1.toFixed(1)+' L '+xi1.toFixed(1)+' '+yi1.toFixed(1)+' A '+r+' '+r+' 0 '+large+' 0 '+xi0.toFixed(1)+' '+yi0.toFixed(1)+' Z';
+    const mid=(a0+a1)/2,mr=(R+r)/2+4,ex=cx+mr*Math.cos(mid),ey=cy+mr*Math.sin(mid);
+    const o=EMO_CORE[i];
+    segs+='<path d="'+d+'" fill="'+o.c+'" class="emo-seg" onclick="emoPickCore('+i+')"></path>';
+    segs+='<circle cx="'+ex.toFixed(1)+'" cy="'+ey.toFixed(1)+'" r="18" fill="rgba(255,255,255,.92)" onclick="emoPickCore('+i+')" style="cursor:pointer"></circle>';
+    segs+='<text x="'+ex.toFixed(1)+'" y="'+(ey+9).toFixed(1)+'" text-anchor="middle" font-size="25" onclick="emoPickCore('+i+')" style="cursor:pointer">'+o.e+'</text>';
+  }
+  return '<svg viewBox="0 0 250 250" class="emo-wheel">'+segs+'<circle cx="125" cy="125" r="'+r+'" class="emo-wheel-c"></circle><text x="125" y="120" text-anchor="middle" font-size="13" font-weight="800" class="emo-wheel-t">Toque no</text><text x="125" y="137" text-anchor="middle" font-size="13" font-weight="800" class="emo-wheel-t">que sente</text></svg>';
+}
 function renderEmo(){
   const b=document.getElementById('emo-body'),sub=document.getElementById('emo-sub');if(!b)return;
   if(_emoStep===0){
-    sub.textContent='O que você está sentindo agora? Toque na emoção principal.';
-    b.innerHTML='<div class="emo-core">'+EMO_CORE.map(function(o,i){return '<button class="emo-cbtn" style="--c:'+o.c+'" onclick="emoPickCore('+i+')"><span class="emo-ce">'+o.e+'</span><span class="emo-cn">'+o.n+'</span></button>';}).join('')+'</div>';
+    sub.textContent='O que você está sentindo agora? Toque na fatia da emoção.';
+    b.innerHTML=_emoWheel();
   } else if(_emoStep===1){
     const o=EMO_CORE[_emoCore];sub.innerHTML='Você marcou <b style="color:'+o.c+'">'+o.e+' '+o.n+'</b>. Consegue afinar um pouco mais?';
     b.innerHTML='<div class="emo-subs">'+o.subs.map(function(s){return '<button class="emo-subb" style="--c:'+o.c+'" onclick="emoPickSub(\''+s+'\')">'+s+'</button>';}).join('')+'</div><button class="btn bout bsm bfull" style="margin-top:12px" onclick="emoBack()">← Voltar</button>';
