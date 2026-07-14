@@ -1117,8 +1117,15 @@ a{color:inherit;text-decoration:none}
 .premsnack-x{flex:0 0 auto;background:none;border:none;color:rgba(255,255,255,.55);font-size:15px;padding:4px 4px 4px 2px;cursor:pointer;line-height:1}
 /* ── GUIA DO T-BREAK ── */
 .tbcard{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;margin:14px 0 6px;padding:16px;border-radius:22px;background:linear-gradient(135deg,#1f1533,#2d1f52 55%,#3a2063);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.tbcard-glow{position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(179,135,242,.4),transparent 70%);top:-70px;right:-40px;pointer-events:none}
-.tbcard-art{flex:0 0 58px;height:58px;position:relative}.tbcard-art svg{width:100%;height:100%}
+.tbcard-glow{position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(179,135,242,.4),transparent 70%);top:-70px;right:-40px;pointer-events:none;animation:tbcglow 4s ease-in-out infinite}
+@keyframes tbcglow{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
+.tbcard-shine{position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.16),transparent);transform:skewX(-18deg);pointer-events:none;animation:tbcshine 5.5s ease-in-out infinite}
+@keyframes tbcshine{0%,55%{left:-60%}80%,100%{left:130%}}
+.tbcard-stars{position:absolute;inset:0;pointer-events:none}.tbcard-stars svg{width:100%;height:100%}
+.tbcard-art{flex:0 0 58px;height:58px;position:relative;z-index:1}.tbcard-art svg{width:100%;height:100%}
+.tbcard-home{grid-column:1/-1;margin:10px 0 0;padding:17px;box-shadow:0 8px 22px rgba(45,31,82,.32)}
+.tbcard-home .tbcard-art{flex:0 0 64px;height:64px;animation:tbbob 3.6s ease-in-out infinite}
+.tbcard-home:active{transform:scale(.985)}
 .tbcard-b{position:relative;color:#fff;min-width:0}
 .tbcard-k{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#C9B3F7;margin-bottom:2px}
 .tbcard-t{font-family:'DM Sans',sans-serif;font-size:19px;font-weight:800;line-height:1.1}
@@ -1475,6 +1482,18 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .tsup{background:linear-gradient(135deg,#16301C,#0F2310);border-color:#2E5A35}
 
 /* ── v6→v13: COMBO RICO ── */
+.cmb-legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+.cmb-lg{font-size:10.5px;font-weight:800;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);border:1px solid color-mix(in srgb,var(--c) 35%,transparent);border-radius:20px;padding:5px 10px;letter-spacing:.2px}
+.cmb-hint{font-size:12.5px;font-weight:700;color:var(--txm);text-align:center;margin-bottom:10px}
+.cmb-hint b{color:var(--dk)}#shell.dkm .cmb-hint b{color:#E9EFE7}
+.cmb-pick{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.cmb-chip{position:relative;display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #E6E6E6;border-radius:22px;padding:8px 13px;font-size:13px;font-weight:700;color:var(--txs);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s}
+.cmb-chip:active{transform:scale(.94)}
+.cmb-chip-e{font-size:15px}
+.cmb-chip.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c)}
+.cmb-chip-n{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:var(--c);color:#fff;font-size:10.5px;font-weight:800}
+#shell.dkm .cmb-chip{background:#1D2520;border-color:#32402F;color:#ADBDA9}
+#shell.dkm .cmb-chip.on{background:color-mix(in srgb,var(--c) 26%,#1D2520);color:#fff}
 .cmbwrap{margin-top:13px}
 .cmb-head{border-radius:16px;padding:16px;border:1.5px solid;animation:pgslide .25s ease}
 .cmb-subs{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap}
@@ -1959,18 +1978,17 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="qacw-go">›</div>
     </div>
-    <div class="qac-wide qac-tbreak" onclick="premDo(abrirTbreak)">
-      <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="344" cy="30" r="60" fill="rgba(143,227,166,.14)"/>
-        <circle cx="300" cy="90" r="46" fill="rgba(179,135,242,.16)"/>
-        <g fill="#fff" opacity=".5"><circle cx="250" cy="26" r="1.5"/><circle cx="292" cy="58" r="1.3"/><circle cx="372" cy="80" r="1.4"/><circle cx="228" cy="70" r="1.2"/></g>
-      </svg>
-      <div class="qacw-ic"><svg viewBox="0 0 40 40" width="26" height="26"><circle cx="28" cy="12" r="7" fill="#FFD86B"/><path d="M20 34V20" stroke="#8FE3A6" stroke-width="3" stroke-linecap="round"/><path d="M20 24c-5 0-9-3-10-8 6 0 10 3 10 8Z" fill="#7BD98A"/><path d="M20 20c0-6 4-10 10-10 0 6-4 10-10 10Z" fill="#5BC06F"/></svg></div>
-      <div class="qacw-tx">
-        <div class="qacw-t">Pausa de Tolerância 👑</div>
-        <div class="qacw-s">Um t-break guiado dia a dia, com check-in e sua análise no fim</div>
+    <div class="tbcard tbcard-home" onclick="premDo(abrirTbreak)">
+      <div class="tbcard-glow"></div>
+      <div class="tbcard-shine"></div>
+      <div class="tbcard-stars"><svg viewBox="0 0 400 120" preserveAspectRatio="none"><g fill="#fff"><circle cx="250" cy="24" r="1.5" opacity=".7"/><circle cx="300" cy="60" r="1.2" opacity=".5"/><circle cx="360" cy="30" r="1.6" opacity=".8"/><circle cx="330" cy="92" r="1.3" opacity=".55"/><circle cx="380" cy="72" r="1.4" opacity=".6"/></g></svg></div>
+      <div class="tbcard-art"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="46" cy="18" r="11" fill="#FFD86B"/><path d="M40 14a11 11 0 0 0 10 13 11 11 0 1 1-10-13Z" fill="#F2B705"/><path d="M32 56V38" stroke="#8FE3A6" stroke-width="3.5" stroke-linecap="round"/><path d="M32 42c-7 0-13-5-14-12 8 0 14 5 14 12Z" fill="#7BD98A"/><path d="M32 38c0-8 6-14 14-14 0 8-6 14-14 14Z" fill="#5BC06F"/></svg></div>
+      <div class="tbcard-b">
+        <div class="tbcard-k">👑 Premium · novo</div>
+        <div class="tbcard-t">Pausa de Tolerância</div>
+        <div class="tbcard-d">Um t-break guiado dia a dia, com check-in do corpo e humor — e a análise da sua pausa no fim.</div>
+        <div class="tbcard-cta">Começar agora →</div>
       </div>
-      <div class="qacw-go">›</div>
     </div>
     <div class="qac-wide qac-cartas" onclick="abrirCartas()">
       <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -2821,11 +2839,12 @@ a{color:inherit;text-decoration:none}
 <div class="ov" id="mcombo" onclick="if(event.target===this)closeMod('mcombo')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
   <div class="mt">⚗️ Interações entre substâncias</div>
-  <p style="font-size:12px;color:var(--txs);margin-bottom:14px;line-height:1.6">Referência rápida baseada em dados do <strong>TripSit</strong>. Sempre pesquise mais antes de decidir — combinações têm riscos individuais.</p>
-  <div class="fr2" style="margin-bottom:4px">
-    <div class="fld"><div class="lbl">Primeira substância</div><select class="fs" id="cmb-a" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
-    <div class="fld"><div class="lbl">Segunda substância</div><select class="fs" id="cmb-b" onchange="calcCombo()"><option value="">Selecione…</option></select></div>
-  </div>
+  <p style="font-size:12px;color:var(--txs);margin-bottom:12px;line-height:1.6">Referência rápida baseada em dados do <strong>TripSit</strong>. Sempre pesquise mais antes de decidir — combinações têm riscos individuais.</p>
+  <div class="cmb-legend" id="cmb-legend"></div>
+  <div class="cmb-hint" id="cmb-hint">Toque em <b>duas substâncias</b> pra ver o risco 👇</div>
+  <div class="cmb-pick" id="cmb-pick"></div>
+  <select class="fs" id="cmb-a" onchange="calcCombo()" style="display:none"><option value="">Selecione…</option></select>
+  <select class="fs" id="cmb-b" onchange="calcCombo()" style="display:none"><option value="">Selecione…</option></select>
   <div id="cmb-res" class="cmbwrap"></div>
   <div style="font-size:11px;color:var(--txm);margin-top:14px;line-height:1.6">Fontes: combo.tripsit.me e PsychonautWiki · uso não-comercial. Faixas de dose são <strong>aproximadas</strong> e variam com peso, tolerância e pureza. Não cobre medicamentos de uso contínuo.</div>
   <button class="btn bout bfull" style="margin-top:13px" onclick="closeMod('mcombo')">Fechar</button>
@@ -6592,10 +6611,34 @@ const CMB_MAP={
   'Opioide|Benzodiaz.':'P','Opioide|Cafeína':'N',
   'Benzodiaz.|Cafeína':'N',
 };
+let _cmbPick=[];
+function renderCmbLegend(){
+  const el=document.getElementById('cmb-legend');if(!el)return;
+  const ord=['P','I','C','S','B','N'];
+  el.innerHTML=ord.map(function(k){const n=CMB_NIVEIS[k];const lab=n.t.replace(/^[^\s]+\s/,'');return '<span class="cmb-lg" style="--c:'+n.cor+'">'+n.t.split(' ')[0]+' '+lab+'</span>';}).join('');
+}
+function renderCmbChips(){
+  const el=document.getElementById('cmb-pick');if(!el)return;
+  el.innerHTML=CMB_SUBS.map(function(s){const th=DZ_THEME[s]||{emo:'✨',cor:'#888'};const sel=_cmbPick.indexOf(s);const on=sel>=0;return '<button type="button" class="cmb-chip'+(on?' on':'')+'" style="--c:'+th.cor+'" onclick="cmbPickTap(\''+s.replace(/'/g,"\\'")+'\')"><span class="cmb-chip-e">'+th.emo+'</span>'+esc(s)+(on?'<span class="cmb-chip-n">'+(sel+1)+'</span>':'')+'</button>';}).join('');
+}
+function cmbPickTap(s){
+  vib(6);const i=_cmbPick.indexOf(s);
+  if(i>=0){_cmbPick.splice(i,1);}
+  else{if(_cmbPick.length>=2)_cmbPick.shift();_cmbPick.push(s);}
+  const sa=document.getElementById('cmb-a'),sb=document.getElementById('cmb-b');
+  sa.value=_cmbPick[0]||'';sb.value=_cmbPick[1]||'';
+  const hint=document.getElementById('cmb-hint');if(hint)hint.style.display=_cmbPick.length>=2?'none':'block';
+  renderCmbChips();
+  if(_cmbPick.length>=2){calcCombo();try{sfx('tap');}catch(e){}setTimeout(function(){const r=document.getElementById('cmb-res');if(r)r.scrollIntoView({behavior:'smooth',block:'nearest'});},80);}
+  else{document.getElementById('cmb-res').innerHTML='';}
+}
 function openCombo(){
   const sa=document.getElementById('cmb-a'),sb=document.getElementById('cmb-b');
   if(sa.options.length<=1){CMB_SUBS.forEach(x=>{sa.add(new Option(x,x));sb.add(new Option(x,x));});}
+  _cmbPick=[];sa.value='';sb.value='';
   document.getElementById('cmb-res').innerHTML='';
+  renderCmbLegend();renderCmbChips();
+  const hint=document.getElementById('cmb-hint');if(hint)hint.style.display='block';
   openMod('mcombo');
 }
 const DZ_THEME={
