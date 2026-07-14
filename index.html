@@ -1228,6 +1228,36 @@ a{color:inherit;text-decoration:none}
 .tb-complete-t{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;margin-top:6px}
 .tb-complete-x{font-size:13px;font-weight:700;color:rgba(255,255,255,.9);margin-top:5px}
 .tb-complete-m{font-size:13px;line-height:1.55;color:rgba(255,255,255,.86);margin-top:11px}
+/* check-in diário */
+.tbq-intro{font-size:12.5px;line-height:1.5;color:var(--txm);background:var(--roxof);border-radius:12px;padding:9px 12px;margin-bottom:4px}
+#shell.dkm .tbq-intro{background:#241a3a;color:#b9a9dd}
+.tbq-scale{display:flex;gap:7px;margin-top:2px}
+.tbq-scale button{flex:1;background:#fff;border:1.5px solid #E3E3E3;border-radius:11px;padding:10px 0;font-size:14px;font-weight:800;color:var(--txs);cursor:pointer}
+.tbq-scale button.on{border-color:var(--roxo);background:var(--roxo);color:#fff}
+.tbq-ends{display:flex;justify-content:space-between;font-size:10.5px;color:var(--txm);margin-top:4px}
+.tbq-bool{display:flex;gap:8px;margin-top:2px}
+.tbq-bool button{flex:1;background:#fff;border:1.5px solid #E3E3E3;border-radius:11px;padding:10px 0;font-size:13.5px;font-weight:800;color:var(--txs);cursor:pointer}
+.tbq-bool button.on{border-color:var(--roxo);background:var(--roxof);color:var(--roxo)}
+.tbq-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.tbq-chips button{background:#fff;border:1.5px solid #E3E3E3;border-radius:18px;padding:7px 13px;font-size:12.5px;font-weight:700;color:var(--txs);cursor:pointer}
+.tbq-chips button.on{border-color:var(--roxo);background:var(--roxof);color:var(--roxo)}
+#shell.dkm .tbq-scale button,#shell.dkm .tbq-bool button,#shell.dkm .tbq-chips button{background:#1D2520;border-color:#32402F}
+/* análise */
+.tba-sub,.tba-empty{text-align:center;font-size:13px;color:var(--txs);line-height:1.5;margin-bottom:12px}
+.tba-empty{padding:20px 8px}
+.tba-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.tba-tile{background:var(--vf);border-radius:14px;padding:12px 6px;text-align:center}
+#shell.dkm .tba-tile{background:#1D2520}
+.tba-emo{font-size:22px}.tba-tile b{display:block;font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:var(--dk);margin-top:2px}
+#shell.dkm .tba-tile b{color:#E9EFE7}
+.tba-tile span{font-size:10.5px;color:var(--txm);line-height:1.2;display:block;margin-top:1px}
+.tba-sect{font-weight:800;font-size:13px;color:var(--dk);margin:16px 0 8px}
+#shell.dkm .tba-sect{color:#E9EFE7}
+.tba-sint{display:flex;flex-wrap:wrap;gap:7px}
+.tba-chip{background:var(--lrjf);color:#B45309;border-radius:16px;padding:6px 12px;font-size:12px;font-weight:700}
+#shell.dkm .tba-chip{background:#3B2A18;color:#E0A106}
+.tba-note{font-size:11px;color:var(--txm);margin-top:14px;line-height:1.5}
+.tbcert-ghost{background:rgba(255,255,255,.16);color:#fff;box-shadow:none;margin-top:9px}
 .tbcert-btn{position:relative;z-index:1;margin-top:16px;background:#fff;color:#2d1f52;border:none;border-radius:24px;padding:13px 22px;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.22)}
 .tbcert-btn:active{transform:scale(.95)}
 .tb-aur-c{position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.18),transparent 45%);pointer-events:none}
@@ -2685,6 +2715,15 @@ a{color:inherit;text-decoration:none}
   <div class="tbfaq-q"><div class="tbfaq-h" onclick="tbFaqTog(this)"><span>🩺</span><b>Quando procurar ajuda profissional?</b><span class="tbfaq-cv">▾</span></div><div class="tbfaq-a">Se surgir <b>sofrimento intenso, ideias de se machucar, ou o uso estiver fora do seu controle</b>, buscar apoio é cuidado, não fracasso. CAPS-AD (SUS), psicólogo(a) ou o CVV (188, 24h) são portas de entrada. Este guia <b>não substitui</b> acompanhamento profissional.</div></div>
   <button class="btn bv bfull" style="margin-top:10px" onclick="closeMod('mtbfaq')">Entendi 💚</button>
   <div class="premnote">Baseado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre síndrome de abstinência de cannabis (DSM-5; Budney et al.).</div>
+</div></div></div>
+
+<!-- ANÁLISE DA TRAVESSIA (t-break) -->
+<div class="ov" id="mtbanalise" onclick="if(event.target===this)closeMod('mtbanalise')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="text-align:center;font-size:38px;margin-bottom:2px">📊</div>
+  <div class="mt c">Análise da travessia</div>
+  <div id="mtbanalise-c"></div>
+  <button class="btn bv bfull" style="margin-top:12px" onclick="closeMod('mtbanalise')">Fechar</button>
 </div></div></div>
 
 <!-- ONDA -->
@@ -6925,6 +6964,25 @@ const TB_HUMOR=['😣','😕','😐','🙂','😌'];
 // REVISÃO: libera todos os dias (trocar para false antes do lançamento p/ voltar ao desbloqueio diário)
 const TB_UNLOCK_ALL=true;
 function tbLiberadoAte(tb){return TB_UNLOCK_ALL?tb.trilha:tbDiaAtual(tb);}
+// check-in diário (inspirado nos formulários de acompanhamento do grupo de pausa — Desprô/Platô)
+const TB_SINT=['Dor de cabeça','Náusea','Irritabilidade','Concentração','Apetite','Humor','Insônia'];
+const TB_SUBS=['Álcool','Tabaco','Outra'];
+let _tbQ={};
+function tbQScale(k,n,el){_tbQ[k]=n;try{const row=el.parentElement;row.querySelectorAll('button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');}catch(e){}vib(5);}
+function tbQBool(k,v,el){_tbQ[k]=v;try{el.parentElement.querySelectorAll('button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');}catch(e){}if(k==='sonho'){const box=document.getElementById('tbq-sonhotxt');if(box)box.style.display=v?'block':'none';}vib(5);}
+function tbQChip(k,v,el){
+  if(k==='subs'&&v==='Nenhuma'){_tbQ.subs=[];_tbQ.subsNone=true;}
+  else if(k==='sint'&&v==='Nenhum'){_tbQ.sint=[];_tbQ.sintNone=true;}
+  else{
+    const arr=_tbQ[k]||[];const i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v);_tbQ[k]=arr;
+    if(k==='subs')_tbQ.subsNone=false;if(k==='sint')_tbQ.sintNone=false;
+  }
+  // re-render chips do grupo
+  try{
+    const wrap=el.closest('.tbq-chips');if(wrap){const isN=(k==='sint'?_tbQ.sintNone:_tbQ.subsNone);wrap.querySelectorAll('button').forEach(function(b){const val=b.getAttribute('data-v');const none=(val==='Nenhum'||val==='Nenhuma');b.classList.toggle('on',none?!!isN:((_tbQ[k]||[]).indexOf(val)>=0));});}
+  }catch(e){}
+  vib(5);
+}
 const TBREAK7=[
   {ic:'🌱',tema:'O primeiro passo',esperar:'No começo o corpo ainda está se ajustando — talvez você sinta pouca coisa hoje, ou uma leve inquietação. O mais importante agora é a <b>decisão</b> e o porquê dela.',ferramenta:{t:'Defina sua intenção',x:'Antes de tudo: por que você quer essa pausa? Ter isso claro é o que te segura nos dias difíceis. Respire fundo 3 vezes e escreva.'},prompt:'Por que decidi fazer essa pausa agora? O que espero sentir ou ganhar?',ref:'Guia de Pausa Canábica — Desprô/@dichavando.'},
   {ic:'🌊',tema:'A onda começa a subir',esperar:'Entre 24 e 72h os sintomas costumam aparecer: sono mais agitado, irritabilidade, talvez menos apetite. Não é fraqueza — é o cérebro <b>reajustando os receptores</b>.',ferramenta:{t:'Respiração 4-7-8',x:'Inspire por 4, segure por 7, solte por 8. Ativa o sistema nervoso parassimpático e acalma a fissura.',acao:{label:'Abrir respiração',fn:"showV('vresp')"}},prompt:'Como está meu corpo hoje? O que eu sinto quando bate a vontade?'},
@@ -7005,6 +7063,39 @@ function tbDesenharCert(cb){
   try{if(typeof brotoDataURI==='function'){const img=new Image();img.onload=function(){c.drawImage(img,W/2-70,260,140,140);cv.toBlob(function(b){cb(b);},'image/png');};img.onerror=function(){cv.toBlob(function(b){cb(b);},'image/png');};img.src=brotoDataURI();return;}}catch(e){}
   cv.toBlob(function(b){cb(b);},'image/png');
 }
+function tbResumo(){
+  const tb=gTb();if(!tb)return null;const N=tb.trilha;
+  let dias=0,sono=[],bfis=[],bemo=[],exerc=0,exercTot=0,sonhos=0,sonhoTot=0,subsDias=0,sint={};
+  for(let d=1;d<=N;d++){const x=tb.dias&&tb.dias[d];if(!x)continue;const q=x.q||{};
+    const has=x.humor||q.sono||q.bfis||q.sonho!==undefined||q.exerc!==undefined||(q.sint&&q.sint.length)||(q.subs&&q.subs.length)||x.texto;if(!has)continue;dias++;
+    if(q.sono)sono.push(q.sono);if(q.bfis)bfis.push(q.bfis);if(x.humor&&TB_HVAL[x.humor])bemo.push(TB_HVAL[x.humor]);
+    if(q.exerc!==undefined){exercTot++;if(q.exerc===1)exerc++;}
+    if(q.sonho!==undefined){sonhoTot++;if(q.sonho===1)sonhos++;}
+    if((q.subs&&q.subs.length))subsDias++;
+    (q.sint||[]).forEach(function(s){sint[s]=(sint[s]||0)+1;});
+  }
+  const avg=function(a){return a.length?(a.reduce(function(x,y){return x+y;},0)/a.length):0;};
+  const sintTop=Object.keys(sint).sort(function(a,b){return sint[b]-sint[a];}).slice(0,4).map(function(k){return [k,sint[k]];});
+  return {dias:dias,sono:avg(sono),bfis:avg(bfis),bemo:avg(bemo),exerc:exerc,exercTot:exercTot,sonhos:sonhos,sonhoTot:sonhoTot,subsDias:subsDias,sintTop:sintTop};
+}
+function abrirTbAnalise(){
+  const r=tbResumo();const el=document.getElementById('mtbanalise-c');if(!el)return;
+  if(!r||r.dias===0){el.innerHTML='<div class="tba-empty">Faça os check-ins diários e sua análise aparece aqui — médias de sono, bem-estar, sintomas e mais. 🌱</div>';openMod('mtbanalise');return;}
+  const f1=function(v){return v?v.toFixed(1).replace('.',','):'—';};
+  let h='<div class="tba-sub">Compilado dos seus '+r.dias+' check-in'+(r.dias>1?'s':'')+' — o retrato da sua travessia.</div>';
+  h+='<div class="tba-grid">';
+  h+='<div class="tba-tile"><div class="tba-emo">😴</div><b>'+f1(r.sono)+'</b><span>sono médio</span></div>';
+  h+='<div class="tba-tile"><div class="tba-emo">💪</div><b>'+f1(r.bfis)+'</b><span>bem-estar físico</span></div>';
+  h+='<div class="tba-tile"><div class="tba-emo">💚</div><b>'+f1(r.bemo)+'</b><span>bem-estar emocional</span></div>';
+  h+='<div class="tba-tile"><div class="tba-emo">🏃</div><b>'+r.exerc+'/'+(r.exercTot||0)+'</b><span>dias com exercício</span></div>';
+  h+='<div class="tba-tile"><div class="tba-emo">💭</div><b>'+r.sonhos+'/'+(r.sonhoTot||0)+'</b><span>noites com sonhos</span></div>';
+  h+='<div class="tba-tile"><div class="tba-emo">🌿</div><b>'+r.subsDias+'</b><span>dias c/ outra subst.</span></div>';
+  h+='</div>';
+  if(r.sintTop.length){h+='<div class="tba-sect">Sintomas mais frequentes</div><div class="tba-sint">'+r.sintTop.map(function(o){return '<span class="tba-chip">'+o[0]+' · '+o[1]+'x</span>';}).join('')+'</div>';}
+  else h+='<div class="tba-sect">Sintomas</div><div class="tba-sint"><span class="tba-chip">Nenhum sintoma registrado 🙌</span></div>';
+  h+='<div class="tba-note">Escala de 1 (muito ruim) a 5 (muito bom). Este é um retrato pessoal do seu processo — leve pra reflexão, não é diagnóstico.</div>';
+  el.innerHTML=h;openMod('mtbanalise');
+}
 function tbGerarCert(){
   toast('🎨 Gerando seu certificado...');
   try{sfx('star');}catch(e){}
@@ -7047,7 +7138,7 @@ function renderTbreak(){
   let h='';
   if(allDone){
     if(!ls('dr_tbdone_'+uid())){ls('dr_tbdone_'+uid(),1);setTimeout(function(){try{confete();}catch(e){}try{sfx('complete');}catch(e){}},350);}
-    h+='<div class="tb-complete"><div class="tb-aur-c"></div><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div><button class="tbcert-btn" onclick="tbGerarCert()">📤 Compartilhar meu certificado</button></div>';
+    h+='<div class="tb-complete"><div class="tb-aur-c"></div><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div><button class="tbcert-btn" onclick="tbGerarCert()">📤 Compartilhar meu certificado</button><button class="tbcert-btn tbcert-ghost" onclick="abrirTbAnalise()">📊 Ver análise da travessia</button></div>';
   } else {
     h+='<div class="tb-guide"><img class="tb-guide-av" alt=""><div class="tb-guide-b"><div class="tb-guide-t">Dia '+atual+' de '+N+' · '+info.tema+'</div><div class="tb-guide-x">'+TB_GUIA[(atual-1)%7]+'</div><div class="tb-prog-bar"><div style="width:'+Math.round(feitos/N*100)+'%"></div></div></div></div>';
   }
@@ -7070,6 +7161,8 @@ function renderTbreak(){
   if(hd.length>=2){
     h+='<div class="tb-sec">Sua jornada 📈</div><div class="tb-chart">'+hd.map(function(o){const pct=o[1]/5*100;return '<div class="tbc-col"><div class="tbc-bar-wrap"><div class="tbc-bar" style="height:'+pct+'%"></div></div><div class="tbc-emo">'+o[2]+'</div><div class="tbc-day">'+o[0]+'</div></div>';}).join('')+'</div><div class="tbc-cap">Seu humor a cada dia da pausa</div>';
   }
+  let temCheck=false;for(let d=1;d<=N;d++){const x=tb.dias&&tb.dias[d];if(x&&(x.humor||(x.q&&Object.keys(x.q).length)))temCheck=true;}
+  if(temCheck)h+='<div style="text-align:center;padding:6px 16px 0"><button class="btn bout bsm" onclick="abrirTbAnalise()">📊 Ver análise da travessia</button></div>';
   const logs=[];for(let d=N;d>=1;d--){const x=tb.dias&&tb.dias[d];if(x&&tbDayDone(tb,d)&&(x.texto||x.humor))logs.push([d,x]);}
   if(logs.length)h+='<div class="tb-sec">Meu diário da pausa 📔</div>'+logs.map(function(l){return '<div class="tbdi"><div class="tbdi-h">'+(l[1].humor||'🌱')+' Dia '+l[0]+' · '+tbInfo(l[0]).tema+'</div>'+(l[1].texto?'<div class="tbdi-x">'+esc(l[1].texto)+'</div>':'')+'</div>';}).join('');
   h+='<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">'+(allDone?'Fazer outra pausa':'Recomeçar jornada')+'</button></div>';
@@ -7080,17 +7173,38 @@ let _tbSelDia=null,_tbHumor=null;
 function abrirTbDia(d){
   const tb=gTb();if(!tb)return;const atual=tbLiberadoAte(tb);
   if(d>atual){toast('🔒 Esse dia libera em '+(d-atual)+(d-atual===1?' dia':' dias'));return;}
-  _tbSelDia=d;_tbHumor=((tb.dias&&tb.dias[d])||{}).humor||null;renderTbDiaModal();openMod('mtbdia');
+  _tbSelDia=d;const _dd=((tb.dias&&tb.dias[d])||{});_tbHumor=_dd.humor||null;_tbQ=Object.assign({},_dd.q||{});renderTbDiaModal();openMod('mtbdia');
 }
 function tbMissToggle(hEl){hEl.parentElement.classList.toggle('open');}
 function tbFaqTog(hEl){hEl.parentElement.classList.toggle('open');}
+function _tbScaleHTML(k,lo,hi){let s='<div class="tbq-scale">';for(let n=1;n<=5;n++)s+='<button class="'+(_tbQ[k]===n?'on':'')+'" onclick="tbQScale(\''+k+'\','+n+',this)">'+n+'</button>';return s+'</div><div class="tbq-ends"><span>'+lo+'</span><span>'+hi+'</span></div>';}
+function _tbBoolHTML(k){return '<div class="tbq-bool"><button class="'+(_tbQ[k]===1?'on':'')+'" onclick="tbQBool(\''+k+'\',1,this)">Sim</button><button class="'+(_tbQ[k]===0?'on':'')+'" onclick="tbQBool(\''+k+'\',0,this)">Não</button></div>';}
+function _tbChipsHTML(k,opts,noneLabel){
+  const isN=(k==='sint'?_tbQ.sintNone:_tbQ.subsNone);let s='<div class="tbq-chips">';
+  s+='<button class="'+(isN?'on':'')+'" data-v="'+noneLabel+'" onclick="tbQChip(\''+k+'\',\''+noneLabel+'\',this)">'+noneLabel+'</button>';
+  opts.forEach(function(o){s+='<button class="'+(((_tbQ[k]||[]).indexOf(o)>=0)?'on':'')+'" data-v="'+o+'" onclick="tbQChip(\''+k+'\',\''+o+'\',this)">'+o+'</button>';});
+  return s+'</div>';
+}
+function tbCheckinHTML(dd){
+  let h='<div class="tbq-intro">Um check-in rápido do seu dia — vira parte da sua <b>análise da travessia</b> no fim. 💚</div>';
+  h+='<div class="tbd-label" style="margin-top:2px">Como está seu ânimo hoje?</div><div class="tbd-emorow" id="tbd-humor">'+TB_HUMOR.map(function(e){return '<button class="'+(dd.humor===e?'on':'')+'" onclick="tbSelHumor(\''+e+'\',this)">'+e+'</button>';}).join('')+'</div>';
+  h+='<div class="tbd-label">Como você dormiu na noite passada?</div>'+_tbScaleHTML('sono','Muito ruim','Muito bem');
+  h+='<div class="tbd-label">Bem-estar físico hoje</div>'+_tbScaleHTML('bfis','Muito ruim','Muito bom');
+  h+='<div class="tbd-label">Você lembra se sonhou?</div>'+_tbBoolHTML('sonho');
+  h+='<textarea class="ft" id="tbq-sonhotxt" rows="2" style="margin-top:8px;display:'+(_tbQ.sonho===1?'block':'none')+'" placeholder="Se lembrar, relate o sonho — um lugar, uma pessoa, um sentimento...">'+esc(_tbQ.sonhoTxt||'')+'</textarea>';
+  h+='<div class="tbd-label">Fez exercício físico hoje?</div>'+_tbBoolHTML('exerc');
+  h+='<div class="tbd-label">Sentiu algum destes sintomas?</div>'+_tbChipsHTML('sint',TB_SINT,'Nenhum');
+  h+='<div class="tbd-label">Usou outra substância?</div>'+_tbChipsHTML('subs',TB_SUBS,'Nenhuma');
+  h+='<div class="tbd-label">Considerações (opcional)</div><textarea class="ft" id="tbd-texto" rows="2" placeholder="'+esc(tbInfo(_tbSelDia).prompt)+'">'+esc(dd.texto||'')+'</textarea>';
+  return h;
+}
 function renderTbDiaModal(){
   const d=_tbSelDia,tb=gTb();if(!tb)return;const info=tbInfo(d),art=TB_ART[(d-1)%7],dd=(tb.dias&&tb.dias[d])||{},m=dd.m||[false,false,false];
   const lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0);let sb='';for(let s=0;s<3;s++)sb+='<span class="'+(s<lit?'on':'')+'">★</span>';
   let h='<div class="tbd-head"><div class="tbd-art">'+art+'</div><div class="tbd-dia">Dia '+d+' · '+lit+'/3 missões</div><div class="tbd-tema">'+info.tema+'</div><div class="tbd-starsbig">'+sb+'</div></div>';
   h+='<div class="tbm'+(m[0]?' done':' open')+'"><div class="tbm-h" onclick="tbMissToggle(this)"><span class="tbm-ic">📖</span><b>Entenda a fase</b><span class="tbm-st">'+(m[0]?'★':'○')+'</span><span class="tbm-chev">▾</span></div><div class="tbm-b">'+info.esperar+(m[0]?'':'<button class="tbm-btn" onclick="tbDoMiss(0)">Entendi ✓</button>')+'</div></div>';
   h+='<div class="tbm'+(m[1]?' done':' open')+'"><div class="tbm-h" onclick="tbMissToggle(this)"><span class="tbm-ic">🧰</span><b>'+info.ferramenta.t+'</b><span class="tbm-st">'+(m[1]?'★':'○')+'</span><span class="tbm-chev">▾</span></div><div class="tbm-b">'+info.ferramenta.x+(info.ferramenta.acao?'<br><span class="tbd-act" onclick="closeMod(\'mtbdia\');'+info.ferramenta.acao.fn+'">'+info.ferramenta.acao.label+' →</span>':'')+(m[1]?'':'<br><button class="tbm-btn" onclick="tbDoMiss(1)">Fiz isso ✓</button>')+'</div></div>';
-  h+='<div class="tbm open'+(m[2]?' done':'')+'"><div class="tbm-h" onclick="tbMissToggle(this)"><span class="tbm-ic">📝</span><b>Registre seu momento</b><span class="tbm-st">'+(m[2]?'★':'○')+'</span><span class="tbm-chev">▾</span></div><div class="tbm-b"><div class="tbd-label" style="margin-top:0">Como você está agora?</div><div class="tbd-emorow" id="tbd-humor">'+TB_HUMOR.map(function(e){return '<button class="'+(dd.humor===e?'on':'')+'" onclick="tbSelHumor(\''+e+'\',this)">'+e+'</button>';}).join('')+'</div><textarea class="ft" id="tbd-texto" rows="3" style="margin-top:9px" placeholder="'+esc(info.prompt)+'">'+esc(dd.texto||'')+'</textarea><button class="tbm-btn" onclick="tbDoMiss(2)">'+(m[2]?'Salvar alterações':'Guardar ✓')+'</button></div></div>';
+  h+='<div class="tbm open'+(m[2]?' done':'')+'"><div class="tbm-h" onclick="tbMissToggle(this)"><span class="tbm-ic">📝</span><b>Check-in do dia</b><span class="tbm-st">'+(m[2]?'★':'○')+'</span><span class="tbm-chev">▾</span></div><div class="tbm-b">'+tbCheckinHTML(dd)+'<button class="tbm-btn" onclick="tbDoMiss(2)">'+(m[2]?'Salvar alterações':'Guardar check-in ✓')+'</button></div></div>';
   if(info.ref)h+='<div class="tbd-ref">📚 '+info.ref+'</div>';
   if(m[0]&&m[1]&&m[2])h+='<div class="tbd-done">🎉 Dia '+d+' completo! '+(d<tb.trilha?'O próximo libera amanhã.':'Você concluiu a jornada! 🏆')+'</div>';
   document.getElementById('mtbdia-c').innerHTML=h;
@@ -7099,7 +7213,7 @@ function tbSelHumor(e,btn){document.querySelectorAll('#tbd-humor button').forEac
 function tbDoMiss(i){
   const tb=gTb(),d=_tbSelDia;if(!tb)return;tb.dias=tb.dias||{};const dd=tb.dias[d]||{};dd.m=dd.m||[false,false,false];
   const already=dd.m[i];
-  if(i===2){if(_tbHumor)dd.humor=_tbHumor;const ta=document.getElementById('tbd-texto');if(ta)dd.texto=ta.value.trim();blurAll();}
+  if(i===2){if(_tbHumor)dd.humor=_tbHumor;const ta=document.getElementById('tbd-texto');if(ta)dd.texto=ta.value.trim();const st=document.getElementById('tbq-sonhotxt');if(st)_tbQ.sonhoTxt=st.value.trim();dd.q=Object.assign({},_tbQ);blurAll();}
   dd.m[i]=true;dd.data=hoje();tb.dias[d]=dd;sTb(tb);vib(12);
   const full=dd.m[0]&&dd.m[1]&&dd.m[2];
   if(full&&!dd._cel){dd._cel=1;tb.dias[d]=dd;sTb(tb);try{addXP(20,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}try{sfx('day');}catch(e){}toast('🌱 Dia '+d+' completo!');renderTbDiaModal();setTimeout(function(){closeMod('mtbdia');renderTbreak();},1100);return;}
