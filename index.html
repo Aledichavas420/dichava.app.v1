@@ -53,8 +53,11 @@
   }
   // iOS empurra a PÁGINA inteira pra cima ao focar um campo ("a tela sobe").
   // Como o shell é fixo e cheio, travamos o scroll da janela no topo.
-  function pin(){ if(window.pageYOffset!==0){ try{window.scrollTo(0,0);}catch(_){} } }
+  function pinShell(){ var sh=document.getElementById('shell'); if(sh&&sh.scrollTop!==0){ sh.scrollTop=0; } }
+  function pin(){ if(window.pageYOffset!==0){ try{window.scrollTo(0,0);}catch(_){} } pinShell(); }
   window.addEventListener('scroll',pin,{passive:true});
+  // o #shell nunca deve rolar (scrollIntoView de campos em modais pode empurrá-lo) — trava em 0
+  document.addEventListener('DOMContentLoaded',function(){var sh=document.getElementById('shell');if(sh)sh.addEventListener('scroll',pinShell,{passive:true});});
   document.addEventListener('focusin',function(e){
     var t=e.target;
     if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')){
@@ -70,7 +73,7 @@
       if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'))return;
       var sh=document.getElementById('shell');if(sh)sh.classList.remove('kbd');
       document.documentElement.style.setProperty('--kb','0px');
-      try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(_){}
+      try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;if(sh)sh.scrollTop=0;}catch(_){}
       // força o iOS a repintar a área que o teclado deixou (evita branco fantasma)
       if(sh){sh.style.transform='translateZ(0)';requestAnimationFrame(function(){sh.style.transform='';});}
     },150);
@@ -4072,7 +4075,7 @@ function goPg(id,btn){
 
 /* ══ MODALS ══ */
 function openMod(id){blurAll();document.getElementById(id).classList.add('on');aplicarIcones(document.getElementById(id));if(id==='mreg'){montarSubGrid('reg-subgrid',SUBS_REG);const q=document.getElementById('reg-quando');if(q&&!q.value&&!_editRegId)q.value=agoraDT();}if(id==='mfiss')montarSubGrid('fiss-subgrid',SUBS_FISS);if(id==='mcompra'){montarSubGrid('cp-subgrid',SUBS_REG);const d=document.getElementById('cp-data');if(d&&!d.value)d.value=hoje();}}
-function closeMod(id){blurAll();document.getElementById(id).classList.remove('on');try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(_){}}
+function closeMod(id){blurAll();document.getElementById(id).classList.remove('on');try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;const sh=document.getElementById('shell');if(sh)sh.scrollTop=0;}catch(_){}}
 // arrastar a folha pra baixo (no topo) fecha o modal
 (function(){
   let sy=0,dragging=false,sheet=null,moved=0;
