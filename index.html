@@ -845,6 +845,73 @@ a{color:inherit;text-decoration:none}
 .cartas-hero p{font-size:13.5px;color:#8a6d2a;margin:9px auto 18px;line-height:1.55;max-width:300px}
 #shell.dkm .cartas-hero h2{color:#F0D89A}#shell.dkm .cartas-hero p{color:#c9b079}
 .cartas-nova{background:linear-gradient(135deg,#E8862F,#F0A24A)!important;box-shadow:0 6px 18px rgba(200,120,30,.3)}
+/* ── Ferramentas de reflexão (grid + modais) ── */
+.reftools{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 18px 6px}
+.reftool{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:#fff;border:1.5px solid #ECECEC;border-radius:18px;padding:14px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;transition:transform .12s;border-top:3px solid var(--c)}
+.reftool:active{transform:scale(.96)}
+#shell.dkm .reftool{background:#1D2520;border-color:#32402F;border-top-color:var(--c)}
+.rt-ic{font-size:26px;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 15%,#fff);margin-bottom:6px}
+#shell.dkm .rt-ic{background:color-mix(in srgb,var(--c) 26%,#1D2520)}
+.rt-t{font-family:'DM Sans',sans-serif;font-weight:800;font-size:14px;color:var(--dk);line-height:1.15}
+#shell.dkm .rt-t{color:#E9EFE7}
+.rt-x{font-size:11.5px;color:var(--txm);margin-top:1px}
+/* Conversa */
+.conv-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.conv-av{width:50px;height:50px;object-fit:contain;flex:0 0 50px;filter:drop-shadow(0 3px 7px rgba(0,0,0,.15));animation:tbbob 3.6s ease-in-out infinite}
+.conv-name{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:var(--dk)}
+#shell.dkm .conv-name{color:#E9EFE7}
+.conv-dots{display:flex;gap:5px;margin-top:5px}
+.conv-dots span{width:8px;height:8px;border-radius:50%;background:#E0E0E0;transition:all .2s}
+.conv-dots span.on{background:var(--roxo);transform:scale(1.25)}.conv-dots span.done{background:#8FE3A6}
+.conv-close{margin-left:auto;background:none;border:none;font-size:16px;color:var(--txm);cursor:pointer;align-self:flex-start}
+.conv-q{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:800;color:var(--dk);line-height:1.32;margin-bottom:12px}
+#shell.dkm .conv-q{color:#E9EFE7}
+/* Roda das emoções */
+.emo-core{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.emo-cbtn{display:flex;align-items:center;gap:11px;padding:14px;border-radius:16px;border:1.5px solid #ECECEC;background:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;border-left:4px solid var(--c)}
+.emo-cbtn:active{transform:scale(.96)}
+#shell.dkm .emo-cbtn{background:#1D2520;border-color:#32402F;border-left-color:var(--c)}
+.emo-ce{font-size:28px}.emo-cn{font-weight:800;font-size:14.5px;color:var(--dk)}
+#shell.dkm .emo-cn{color:#E9EFE7}
+.emo-subs{display:flex;flex-wrap:wrap;gap:9px}
+.emo-subb{background:color-mix(in srgb,var(--c) 12%,#fff);border:1.5px solid var(--c);color:var(--c);border-radius:22px;padding:10px 16px;font-size:13.5px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.emo-subb:active{transform:scale(.94)}
+#shell.dkm .emo-subb{background:color-mix(in srgb,var(--c) 24%,#1D2520)}
+/* Cofre de vitórias */
+.viz-add{display:flex;gap:8px}.viz-add .inp{flex:1}
+.viz-empty{text-align:center;font-size:26px;line-height:1.9;color:var(--txm);padding:16px}
+.viz-it{display:flex;align-items:flex-start;gap:11px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:1.5px solid #F0D98A;border-radius:14px;padding:12px 13px;margin-bottom:9px}
+#shell.dkm .viz-it{background:linear-gradient(135deg,#2A2410,#1E1C0E);border-color:#8a7a2a}
+.viz-tro{font-size:19px}.viz-tx{flex:1;font-size:13.5px;color:var(--dk);line-height:1.4}
+#shell.dkm .viz-tx{color:#E9EFE7}
+.viz-d{display:block;font-size:11px;color:var(--txm);margin-top:2px}
+.viz-del{background:none;border:none;font-size:14px;cursor:pointer;opacity:.55}
+/* Trilha de escrita */
+.wt-theme{display:flex;align-items:center;gap:13px;width:100%;background:#fff;border:1.5px solid #ECECEC;border-radius:16px;padding:15px;margin-bottom:10px;cursor:pointer;text-align:left;border-left:4px solid var(--c);-webkit-tap-highlight-color:transparent}
+.wt-theme:active{transform:scale(.98)}
+#shell.dkm .wt-theme{background:#1D2520;border-color:#32402F;border-left-color:var(--c)}
+.wt-e{font-size:30px;flex:0 0 auto}
+.wt-tb{flex:1;min-width:0}.wt-tn{display:block;font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:var(--dk)}
+#shell.dkm .wt-tn{color:#E9EFE7}
+.wt-tx{font-size:12.5px;color:var(--txm)}.wt-go{font-size:19px;color:var(--c);font-weight:800}
+.wt-hd{display:flex;align-items:center;gap:13px;margin-bottom:12px;padding-left:12px;border-left:4px solid var(--c)}
+.wt-prog{font-size:12.5px;color:var(--txm);margin-top:1px}
+.wt-bar{height:8px;border-radius:8px;background:#EDEDED;overflow:hidden;margin-bottom:14px}.wt-bar>div{height:100%;border-radius:8px;transition:width .4s}
+#shell.dkm .wt-bar{background:#2a352a}
+.wt-days{display:flex;flex-direction:column;gap:9px}
+.wt-day{display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #ECECEC;border-radius:13px;padding:12px 13px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
+.wt-day:active{transform:scale(.98)}
+#shell.dkm .wt-day{background:#1D2520;border-color:#32402F}
+.wt-day.done{background:rgba(143,227,166,.1);border-color:#8FE3A6}
+.wt-dn{flex:0 0 30px;height:30px;border-radius:50%;background:var(--roxof);color:var(--roxo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.wt-day.done .wt-dn{background:#5BC06F;color:#fff}
+.wt-dp{font-size:13px;color:var(--dk);line-height:1.35}
+#shell.dkm .wt-dp{color:#D6E0D4}
+.wt-wr-h{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;color:var(--dk);margin-bottom:12px}
+#shell.dkm .wt-wr-h{color:#E9EFE7}
+.wt-x{background:none;border:none;font-size:20px;cursor:pointer;color:var(--txs)}
+.wt-prompt{background:var(--roxof);border-radius:13px;padding:13px 15px;font-size:14px;font-weight:700;color:var(--dk);line-height:1.4;margin-bottom:11px}
+#shell.dkm .wt-prompt{background:#241a3a;color:#E9EFE7}
 .ref-carta-link{display:flex;align-items:center;gap:12px;margin:0 18px 14px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:18px;padding:14px 16px;cursor:pointer}
 .rcl-t{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:#7a5e10}
 .rcl-s{font-size:12px;color:#9a7d2a;margin-top:1px}
@@ -2212,6 +2279,14 @@ a{color:inherit;text-decoration:none}
     <div class="pghead-tt">Reflexões</div>
     <div class="pghead-ss">Um espaço só seu, sem julgamento</div>
   </div>
+  <!-- FERRAMENTAS DE REFLEXÃO -->
+  <div class="shr" style="padding-top:10px"><div class="sht">Ferramentas de reflexão</div></div>
+  <div class="reftools">
+    <button class="reftool" style="--c:#4CAF5A" onclick="abrirConversa()"><span class="rt-ic">🌱</span><span class="rt-t">Conversa com o Dichavaldo</span><span class="rt-x">Um papo guiado</span></button>
+    <button class="reftool" style="--c:#EC5B95" onclick="abrirRodaEmo()"><span class="rt-ic">🎡</span><span class="rt-t">Roda das emoções</span><span class="rt-x">Nomeie o que sente</span></button>
+    <button class="reftool" style="--c:#F2B705" onclick="abrirCofre()"><span class="rt-ic">🏆</span><span class="rt-t">Cofre de vitórias</span><span class="rt-x" id="viz-count">Guarde conquistas</span></button>
+    <button class="reftool" style="--c:#7C3AED" onclick="abrirTrilhaEsc()"><span class="rt-ic">✍️</span><span class="rt-t">Trilha de escrita</span><span class="rt-x">7 dias por tema</span></button>
+  </div>
   <!-- CARTA DE REFLEXÃO (tarot) -->
   <div class="shr" style="padding-top:6px"><div class="sht">Carta de reflexão <span class="tic" data-icon="ref-crystal"></span></div></div>
   <div class="rcard-wrap">
@@ -3361,6 +3436,39 @@ a{color:inherit;text-decoration:none}
   <div class="mt">✏️ Editar anotação</div>
   <div class="fld"><textarea class="ft" id="edref-tx" rows="6" placeholder="Sua reflexão…" oninput="autoR(this)"></textarea></div>
   <div style="display:flex;gap:9px"><button class="btn bout" style="flex:1" onclick="closeMod('medref')">Cancelar</button><button class="btn bv" style="flex:1" onclick="salvEditRef()">Salvar</button></div>
+</div></div></div>
+
+<!-- CONVERSA COM O DICHAVALDO -->
+<div class="ov" id="mconv" onclick="if(event.target===this)closeMod('mconv')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="conv-head"><img class="conv-av" id="conv-av" alt=""><div><div class="conv-name">Dichavaldo</div><div class="conv-dots" id="conv-dots"></div></div><button class="conv-close" onclick="closeMod('mconv')">✕</button></div>
+  <div class="conv-q" id="conv-q"></div>
+  <textarea class="ft" id="conv-tx" rows="4" placeholder="Escreva aqui… pode ser curtinho."></textarea>
+  <div style="display:flex;gap:9px;margin-top:11px"><button class="btn bout" id="conv-back" style="flex:0 0 52px" onclick="convPrev()">←</button><button class="btn bv" style="flex:1" id="conv-next" onclick="convNext()">Próxima</button></div>
+</div></div></div>
+
+<!-- RODA DAS EMOÇÕES -->
+<div class="ov" id="memo" onclick="if(event.target===this)closeMod('memo')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">🎡 Roda das emoções</div>
+  <div class="mb c" id="emo-sub" style="margin-bottom:13px"></div>
+  <div id="emo-body"></div>
+</div></div></div>
+
+<!-- COFRE DE VITÓRIAS -->
+<div class="ov" id="mviz" onclick="if(event.target===this)closeMod('mviz')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div class="mt">🏆 Cofre de vitórias</div>
+  <div class="mb c" style="margin-bottom:11px">Guarde as conquistas — grandes e pequenas. Nos dias difíceis, volte aqui pra lembrar do que você já superou.</div>
+  <div class="viz-add"><input class="inp" id="viz-in" placeholder="Uma vitória de hoje…" onkeydown="if(event.key==='Enter')addViz()"><button class="btn bv bsm" onclick="addViz()">Guardar</button></div>
+  <button class="btn bout bsm bfull" style="margin:11px 0" onclick="vizRandom()">✨ Me lembra de uma vitória</button>
+  <div id="viz-list"></div>
+</div></div></div>
+
+<!-- TRILHA DE ESCRITA -->
+<div class="ov" id="mtrilha" onclick="if(event.target===this)closeMod('mtrilha')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div id="trilha-body"></div>
 </div></div></div>
 
 <!-- PLANO -->
@@ -4986,7 +5094,7 @@ function editReg(id){
 function renderRef(){
   const obj=gO();renderCartas();renderArts(obj?.goal);
   // diário (movido pra Reflexões)
-  const prtEl=document.getElementById('prt');if(prtEl)prtEl.textContent=prmp(obj?.goal);renderRefFeed();
+  const prtEl=document.getElementById('prt');if(prtEl)prtEl.textContent=prmp(obj?.goal);renderRefFeed();try{renderVizCount();}catch(e){}
   // reseta carta de reflexão pro verso
   const rc=document.getElementById('rcard');if(rc){rc.classList.remove('flip');const ac=document.getElementById('rcard-acts');if(ac)ac.style.display='none';}
   try{if(!/iphone|ipad|ipod/i.test(navigator.userAgent))ativarShake();}catch(e){}
@@ -5164,6 +5272,125 @@ function delRef(id){
   if(!confirm('Apagar esta anotação?'))return;
   sRef(gRef().filter(r=>r.id!==id));renderRefFeed();toast('Anotação apagada.');
 }
+
+// ═══ FERRAMENTAS DE REFLEXÃO (Conversa, Roda das emoções, Cofre, Trilha) ═══
+function addReflex(texto,emocao,tag){if(!texto)return;const refs=gRef();refs.push({id:'f'+Date.now(),texto:texto,emocao:emocao||'✍️',tag:tag||'reflexão',data:hoje(),criado:new Date().toISOString()});sRef(refs);try{addXP(8,'reflexao');}catch(e){}try{renderRefFeed();}catch(e){}}
+
+// 1) Conversa com o Dichavaldo
+const CONV_Q=['Como você está chegando aqui agora? Sem filtro — do jeitinho que tá.','O que tem ocupado mais a sua cabeça hoje?','E como isso tem mexido com você — no corpo, no humor, na vontade?','Do que você mais precisa neste momento? (descanso, acolhimento, uma decisão, companhia…)','Qual pequeno passo, por menor que seja, você pode dar hoje pra se cuidar?'];
+let _convStep=0,_convAns=[];
+function abrirConversa(){_convStep=0;_convAns=[];openMod('mconv');renderConv();try{const av=document.getElementById('conv-av');if(av&&typeof brotoDataURI==='function')av.src=brotoDataURI();}catch(e){}}
+function renderConv(){
+  const q=document.getElementById('conv-q'),tx=document.getElementById('conv-tx'),dots=document.getElementById('conv-dots'),nx=document.getElementById('conv-next'),bk=document.getElementById('conv-back');
+  if(!q)return;
+  q.textContent=CONV_Q[_convStep];
+  tx.value=_convAns[_convStep]||'';
+  dots.innerHTML=CONV_Q.map(function(_,i){return '<span class="'+(i===_convStep?'on':(i<_convStep?'done':''))+'"></span>';}).join('');
+  nx.textContent=_convStep>=CONV_Q.length-1?'Guardar 💚':'Próxima';
+  bk.style.visibility=_convStep>0?'visible':'hidden';
+  setTimeout(function(){try{tx.focus();}catch(e){}},60);
+}
+function convNext(){
+  const tx=document.getElementById('conv-tx');_convAns[_convStep]=tx.value.trim();
+  if(_convStep<CONV_Q.length-1){_convStep++;renderConv();try{vib(6);}catch(e){}return;}
+  let txt='';for(let i=0;i<CONV_Q.length;i++){if(_convAns[i])txt+='💭 '+CONV_Q[i]+'\n'+_convAns[i]+'\n\n';}
+  txt=txt.trim();
+  if(!txt){toast('Escreva ao menos uma resposta 💚');return;}
+  addReflex(txt,'🌱','conversa');
+  closeMod('mconv');toast('✓ Conversa guardada no diário 💚');try{confete();}catch(e){}
+}
+function convPrev(){const tx=document.getElementById('conv-tx');_convAns[_convStep]=tx.value.trim();if(_convStep>0){_convStep--;renderConv();}}
+
+// 2) Roda das emoções
+const EMO_CORE=[
+  {n:'Alegria',e:'😊',c:'#F2B705',subs:['Feliz','Grato(a)','Animado(a)','Orgulhoso(a)','Esperançoso(a)','Aliviado(a)']},
+  {n:'Tristeza',e:'😔',c:'#5B8DEF',subs:['Desanimado(a)','Solitário(a)','Magoado(a)','Vazio(a)','Cansado(a)','Saudoso(a)']},
+  {n:'Raiva',e:'😠',c:'#F0584A',subs:['Irritado(a)','Frustrado(a)','Injustiçado(a)','Impaciente','Ressentido(a)']},
+  {n:'Medo',e:'😨',c:'#9B5DE5',subs:['Ansioso(a)','Inseguro(a)','Preocupado(a)','Com vergonha','Sobrecarregado(a)']},
+  {n:'Calma',e:'😌',c:'#2BB3A3',subs:['Tranquilo(a)','Em paz','Presente','Confiante','Descansado(a)']},
+  {n:'Amor',e:'🥰',c:'#EC5B95',subs:['Acolhido(a)','Conectado(a)','Carinhoso(a)','Pertencente','Cuidado(a)']},
+  {n:'Confuso(a)',e:'😵‍💫',c:'#A1887F',subs:['Perdido(a)','Indeciso(a)','Entorpecido(a)','Dividido(a)','Sem chão']}
+];
+let _emoStep=0,_emoCore=null,_emoSub=null;
+function abrirRodaEmo(){_emoStep=0;_emoCore=null;_emoSub=null;openMod('memo');renderEmo();}
+function renderEmo(){
+  const b=document.getElementById('emo-body'),sub=document.getElementById('emo-sub');if(!b)return;
+  if(_emoStep===0){
+    sub.textContent='O que você está sentindo agora? Toque na emoção principal.';
+    b.innerHTML='<div class="emo-core">'+EMO_CORE.map(function(o,i){return '<button class="emo-cbtn" style="--c:'+o.c+'" onclick="emoPickCore('+i+')"><span class="emo-ce">'+o.e+'</span><span class="emo-cn">'+o.n+'</span></button>';}).join('')+'</div>';
+  } else if(_emoStep===1){
+    const o=EMO_CORE[_emoCore];sub.innerHTML='Você marcou <b style="color:'+o.c+'">'+o.e+' '+o.n+'</b>. Consegue afinar um pouco mais?';
+    b.innerHTML='<div class="emo-subs">'+o.subs.map(function(s){return '<button class="emo-subb" style="--c:'+o.c+'" onclick="emoPickSub(\''+s+'\')">'+s+'</button>';}).join('')+'</div><button class="btn bout bsm bfull" style="margin-top:12px" onclick="emoBack()">← Voltar</button>';
+  } else {
+    const o=EMO_CORE[_emoCore];sub.innerHTML='<b style="color:'+o.c+'">'+o.e+' '+esc(_emoSub)+'</b> — quer escrever um pouco sobre isso? (opcional)';
+    b.innerHTML='<textarea class="ft" id="emo-note" rows="3" placeholder="O que pode ter trazido esse sentimento?"></textarea><button class="btn bv bfull" style="margin-top:11px" onclick="emoSave()">Guardar no diário 💚</button><button class="btn bout bsm bfull" style="margin-top:8px" onclick="emoBack()">← Escolher outra</button>';
+  }
+}
+function emoPickCore(i){_emoCore=i;_emoStep=1;try{vib(6);}catch(e){}renderEmo();}
+function emoPickSub(s){_emoSub=s;_emoStep=2;try{vib(6);}catch(e){}renderEmo();}
+function emoBack(){if(_emoStep>0){_emoStep--;renderEmo();}}
+function emoSave(){
+  const o=EMO_CORE[_emoCore];const noteEl=document.getElementById('emo-note');const note=noteEl?noteEl.value.trim():'';
+  let txt='Me senti '+_emoSub.toLowerCase()+' ('+o.n.toLowerCase()+').';if(note)txt+='\n'+note;
+  addReflex(txt,o.e,'emoção');
+  closeMod('memo');toast('✓ Emoção registrada no diário 💚');
+}
+
+// 3) Cofre de vitórias
+const gViz=function(){return ls('dr_viz_'+uid())||[];};
+const sViz=function(v){ls('dr_viz_'+uid(),v);};
+function abrirCofre(){openMod('mviz');renderViz();setTimeout(function(){try{document.getElementById('viz-in').focus();}catch(e){}},80);}
+function addViz(){const inp=document.getElementById('viz-in');const t=(inp.value||'').trim();if(!t){toast('Escreva sua vitória 💚');return;}const v=gViz();v.push({id:'v'+Date.now(),t:t,data:hoje()});sViz(v);inp.value='';try{vib(10);sfx('star');}catch(e){}renderViz();renderVizCount();}
+function delViz(id){sViz(gViz().filter(function(x){return x.id!==id;}));renderViz();renderVizCount();}
+function renderViz(){
+  const el=document.getElementById('viz-list');if(!el)return;const v=gViz().slice().reverse();
+  if(!v.length){el.innerHTML='<div class="viz-empty">🏆<br>Seu cofre está esperando a primeira vitória.</div>';return;}
+  el.innerHTML=v.map(function(x){return '<div class="viz-it"><span class="viz-tro">🏆</span><div class="viz-tx">'+esc(x.t)+'<span class="viz-d">'+fdt(x.data)+'</span></div><button class="viz-del" onclick="delViz(\''+x.id+'\')">🗑️</button></div>';}).join('');
+}
+function renderVizCount(){const el=document.getElementById('viz-count');if(el){const n=gViz().length;el.textContent=n?(n+(n===1?' vitória guardada':' vitórias guardadas')):'Guarde conquistas';}}
+function vizRandom(){const v=gViz();if(!v.length){toast('Guarde uma vitória primeiro 💚');return;}const x=v[Math.floor(Math.random()*v.length)];toast('🏆 '+x.t);try{vib(10);}catch(e){}}
+
+// 4) Trilha de escrita (7 dias por tema)
+const WTRILHAS=[
+  {k:'gatilhos',n:'Conhecendo meus gatilhos',e:'🎯',c:'#F0584A',ps:['Em que momentos a vontade costuma aparecer?','Que emoções costumam vir antes do uso?','Quem, ou que lugares, puxam mais esse impulso?','O que costuma vir depois — como me sinto?','Que sinais no corpo me avisam que a vontade está chegando?','O que já me ajudou a atravessar sem ceder?','Que plano posso deixar pronto pro próximo gatilho?']},
+  {k:'porque',n:'Meu porquê',e:'🧭',c:'#4CAF5A',ps:['Por que eu quero mudar minha relação com o uso?','Como eu gostaria que fosse meu dia a dia?','O que o uso tem me dado — e o que tem me tirado?','Quem eu sou quando estou bem comigo?','O que é importante pra mim, no fundo?','Como seria minha vida daqui a um ano cuidando disso?','Que frase resume o meu porquê?']},
+  {k:'autocomp',n:'Autocompaixão',e:'💚',c:'#EC5B95',ps:['Como eu costumo falar comigo quando erro?','O que eu diria a um amigo querido na minha situação?','Do que eu posso me orgulhar hoje, mesmo que pequeno?','O que eu preciso ouvir agora?','Onde eu tenho me cobrado demais?','Como posso ser mais gentil comigo amanhã?','Uma carta curtinha de carinho pra mim.']}
+];
+const gWt=function(){return ls('dr_wtrilha_'+uid())||null;};
+const sWt=function(o){ls('dr_wtrilha_'+uid(),o);};
+let _wtWrite=-1;
+function abrirTrilhaEsc(){_wtWrite=-1;openMod('mtrilha');renderTrilhaEsc();}
+function renderTrilhaEsc(){
+  const b=document.getElementById('trilha-body');if(!b)return;const st=gWt();
+  if(!st){
+    b.innerHTML='<div class="mt">✍️ Trilha de escrita</div><div class="mb c" style="margin-bottom:13px">Um mini-percurso de journaling: 7 dias, um tema. Escolha por onde começar.</div>'+WTRILHAS.map(function(t){return '<button class="wt-theme" style="--c:'+t.c+'" onclick="wtStart(\''+t.k+'\')"><span class="wt-e">'+t.e+'</span><span class="wt-tb"><span class="wt-tn">'+t.n+'</span><span class="wt-tx">7 dias de escrita guiada</span></span><span class="wt-go">→</span></button>';}).join('');
+    return;
+  }
+  const t=WTRILHAS.find(function(x){return x.k===st.k;});const feitos=st.feitos||[];const n=feitos.filter(Boolean).length;
+  if(_wtWrite>=0){
+    const p=t.ps[_wtWrite];
+    b.innerHTML='<div class="wt-wr-h"><button class="wt-x" onclick="_wtWrite=-1;renderTrilhaEsc()">←</button><span>Dia '+(_wtWrite+1)+' de 7 · '+esc(t.n)+'</span></div><div class="wt-prompt">💭 '+esc(p)+'</div><textarea class="ft" id="wt-tx" rows="6" placeholder="Escreva no seu ritmo…">'+esc((st.txt&&st.txt[_wtWrite])||'')+'</textarea><button class="btn bv bfull" style="margin-top:11px" onclick="wtSaveDay()">'+(feitos[_wtWrite]?'Salvar alterações':'Guardar e concluir dia ✓')+'</button>';
+    setTimeout(function(){try{document.getElementById('wt-tx').focus();}catch(e){}},60);
+    return;
+  }
+  b.innerHTML='<div class="wt-hd" style="--c:'+t.c+'"><span class="wt-e">'+t.e+'</span><div><div class="wt-tn">'+esc(t.n)+'</div><div class="wt-prog">'+n+'/7 dias · '+(n>=7?'concluída! 🏆':'siga no seu ritmo')+'</div></div></div><div class="wt-bar"><div style="width:'+(n/7*100)+'%;background:'+t.c+'"></div></div><div class="wt-days">'+t.ps.map(function(p,i){return '<button class="wt-day'+(feitos[i]?' done':'')+'" onclick="_wtWrite='+i+';renderTrilhaEsc()"><span class="wt-dn">'+(feitos[i]?'✓':(i+1))+'</span><span class="wt-dp">'+esc(p)+'</span></button>';}).join('')+'</div><button class="btn bout bsm bfull" style="margin-top:12px" onclick="wtReset()">Trocar de tema</button>';
+}
+function wtStart(k){sWt({k:k,feitos:[],txt:[]});try{vib(8);}catch(e){}renderTrilhaEsc();}
+function wtReset(){if(!confirm('Trocar de tema? As reflexões que você já escreveu continuam salvas no diário, mas a trilha reinicia.'))return;sWt(null);_wtWrite=-1;renderTrilhaEsc();}
+function wtSaveDay(){
+  const st=gWt();if(!st)return;const t=WTRILHAS.find(function(x){return x.k===st.k;});const tx=(document.getElementById('wt-tx').value||'').trim();
+  if(!tx){toast('Escreva algo 💚');return;}
+  st.txt=st.txt||[];st.feitos=st.feitos||[];
+  const jaFeito=st.feitos[_wtWrite];
+  st.txt[_wtWrite]=tx;st.feitos[_wtWrite]=true;sWt(st);
+  addReflex('✍️ '+t.n+' · '+t.ps[_wtWrite]+'\n'+tx,t.e,'trilha');
+  try{vib(12);sfx('star');}catch(e){}
+  const n=st.feitos.filter(Boolean).length;
+  toast(jaFeito?'✓ Atualizado':'✓ Dia guardado no diário 💚');
+  if(!jaFeito&&n>=7){try{confete();sfx('day');}catch(e){}}
+  _wtWrite=-1;renderTrilhaEsc();
+}
+
 function renderArts(goal){
   const c=document.getElementById('arts-l');if(!c)return;
   c.innerHTML=ARTS.slice(0,8).map(a=>`<button class="hshelf-c" onclick="abrirArt('${a.id}')"><div class="hshelf-img" style="background:${a.bg}">${a.svg||''}</div><div class="hshelf-t">${a.ti}</div><div class="hshelf-x">⏱ ${a.tm}</div></button>`).join('');
