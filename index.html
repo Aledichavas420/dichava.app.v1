@@ -1140,24 +1140,27 @@ a{color:inherit;text-decoration:none}
 .tb-prog-x{font-size:12.5px;color:#c9bfe0;margin-top:2px}
 .tb-prog-bar{height:8px;border-radius:8px;background:rgba(255,255,255,.12);margin-top:11px;overflow:hidden}
 .tb-prog-bar>div{height:100%;border-radius:8px;background:linear-gradient(90deg,#8FE3A6,#C9B3F7);transition:width .4s}
-.tb-path{position:relative;padding:24px 0 8px;margin:0 auto;max-width:360px}
-.tb-path::before{content:'';position:absolute;left:50%;top:34px;bottom:34px;width:4px;transform:translateX(-50%);background:repeating-linear-gradient(#dce2dc 0 9px,transparent 9px 18px);z-index:0}
-#shell.dkm .tb-path::before{background:repeating-linear-gradient(#32402F 0 9px,transparent 9px 18px)}
-.tb-node{position:relative;height:82px;display:flex;align-items:center;justify-content:center;z-index:2}
-.tb-nlabel{position:absolute;top:50%;transform:translateY(-50%);width:120px}
-.tb-node:not(.right) .tb-nlabel{left:calc(50% + 45px)}
-.tb-node.right .tb-nlabel{right:calc(50% + 45px);text-align:right}
-.tb-dot{flex:0 0 62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;background:#E4E7E4;color:#9aa89c;border:3px solid #d5dcd5;position:relative}
-.tb-node.done .tb-dot{background:linear-gradient(135deg,#5BC06F,#2E9244);border-color:#3E9B4F;color:#fff}
-.tb-node.now .tb-dot{background:linear-gradient(135deg,#B387F2,#7C3AED);border-color:#C9B3F7;color:#fff;animation:tbpulse 1.9s ease-in-out infinite}
-@keyframes tbpulse{0%,100%{box-shadow:0 0 0 6px rgba(124,58,237,.18)}50%{box-shadow:0 0 0 13px rgba(124,58,237,.05)}}
-.tb-node.locked{opacity:.65}
-.tb-nlabel b{display:block;font-weight:800;font-size:14px;color:var(--dk)}
-.tb-nlabel span{font-size:11.5px;color:var(--txm)}
-#shell.dkm .tb-nlabel b{color:#E9EFE7}
-.tb-node.locked .tb-nlabel b{color:var(--txm)}
-.tb-conn{position:absolute;left:50%;transform:translateX(-50%);width:4px;background:#dfe4df;z-index:1;border-radius:4px}
-#shell.dkm .tb-conn{background:#32402F}
+.tb-path{position:relative;margin:6px auto 0}
+.tb-svg{position:absolute;left:0;top:0;z-index:0;pointer-events:none}
+.tb-node{position:absolute;width:80px;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:2;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tb-dot{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;background:#EDF0ED;color:#9aa89c;border:3px solid #dbe1db;transition:transform .15s}
+.tb-node:active .tb-dot{transform:scale(.9)}
+.tb-node.done .tb-dot{background:linear-gradient(135deg,#5BC06F,#2E9244);border-color:#3E9B4F;color:#fff;box-shadow:0 6px 16px rgba(46,146,68,.35)}
+.tb-node.now .tb-dot{background:linear-gradient(135deg,#B387F2,#7C3AED);border-color:#e0d0ff;color:#fff;animation:tbpulse 1.8s ease-in-out infinite}
+.tb-node.avail .tb-dot{background:linear-gradient(135deg,#fff,#f1f4f1);color:#7C3AED;border-color:#C9B3F7}
+@keyframes tbpulse{0%,100%{box-shadow:0 0 0 5px rgba(124,58,237,.22),0 8px 18px rgba(124,58,237,.35)}50%{box-shadow:0 0 0 13px rgba(124,58,237,.05),0 8px 18px rgba(124,58,237,.25)}}
+.tb-node.locked{opacity:.6}
+.tb-stars{display:flex;gap:3px;font-size:13px;line-height:1}
+.tb-stars span{color:#cfd6cf}
+.tb-stars span.on{color:#FFC531;animation:tbstar .5s ease}
+@keyframes tbstar{0%{transform:scale(0) rotate(-40deg)}60%{transform:scale(1.4)}100%{transform:scale(1)}}
+.tb-now-tag{position:absolute;top:-13px;background:#7C3AED;color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;padding:2px 8px;border-radius:20px;box-shadow:0 3px 8px rgba(124,58,237,.4)}
+.tb-guide{display:flex;align-items:center;gap:12px;margin:12px 16px 6px;background:linear-gradient(135deg,#241a3a,#1b1526);border-radius:20px;padding:14px 15px;color:#fff}
+.tb-guide-av{flex:0 0 52px;width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3));animation:tbbob 3.4s ease-in-out infinite}
+@keyframes tbbob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-5px) rotate(3deg)}}
+.tb-guide-b{flex:1;min-width:0}
+.tb-guide-t{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px}
+.tb-guide-x{font-size:12.5px;color:#cfc4e6;margin:2px 0 8px;line-height:1.4}
 .tbd-head{text-align:center;margin-bottom:4px}
 .tbd-emo{font-size:40px}
 .tbd-dia{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--roxo)}
@@ -1186,6 +1189,23 @@ a{color:inherit;text-decoration:none}
 .tbtut-row b{display:block;font-size:14px;color:var(--dk)}
 .tbtut-row small{font-size:12.5px;color:var(--txs);line-height:1.45}
 #shell.dkm .tbtut-row b{color:#E9EFE7}
+.tbd-starsbig{font-size:20px;letter-spacing:4px;margin-top:6px;color:#cfd6cf}
+.tbd-starsbig span.on{color:#FFC531}
+.tbm{border:1.5px solid #EBEBEB;border-radius:16px;margin:11px 0;overflow:hidden;transition:border-color .2s}
+.tbm.done{border-color:#8FE3A6;background:rgba(143,227,166,.08)}
+#shell.dkm .tbm{border-color:#32402F}
+.tbm-h{display:flex;align-items:center;gap:10px;padding:12px 14px;font-size:14px;font-weight:800;color:var(--dk)}
+#shell.dkm .tbm-h{color:#E9EFE7}
+.tbm-h b{flex:1;min-width:0}
+.tbm-ic{font-size:18px}
+.tbm-st{font-size:17px;color:#cfd6cf}
+.tbm.done .tbm-st{color:#FFC531}
+.tbm-b{padding:0 14px 14px;font-size:13.5px;line-height:1.6;color:var(--txs)}
+.tbm-b b{color:var(--dk)}
+#shell.dkm .tbm-b{color:#ADBDA9}
+.tbm.done .tbm-b{display:none}
+.tbm-btn{margin-top:11px;display:block;width:100%;background:var(--roxo);color:#fff;border:none;border-radius:22px;padding:11px;font-weight:800;font-size:14px;cursor:pointer}
+.tbd-done{margin-top:14px;text-align:center;background:linear-gradient(135deg,#5BC06F,#2E9244);color:#fff;font-weight:800;font-size:14px;padding:14px;border-radius:16px}
 
 /* ── FLUIDEZ v5 ── */
 .ov{opacity:0;transition:opacity .22s ease;pointer-events:none}
@@ -6804,52 +6824,65 @@ function tbDiaAtual(tb){if(!tb)return 0;const i=new Date(tb.inicio+'T12:00:00'),
 function abrirTbreak(){showV('vtbreak');if(!ls('dr_tbtut_'+uid())){ls('dr_tbtut_'+uid(),1);setTimeout(()=>openMod('mtbtut'),200);}renderTbreak();}
 function tbIniciar(n){if(n!==7){toast('🔒 As trilhas de 14 e 31 dias chegam em breve!');return;}sTb({trilha:n,inicio:hoje(),dias:{}});vib(12);renderTbreak();}
 function tbReset(){if(!confirm('Recomeçar a jornada? O diário desta pausa será apagado.'))return;ls('dr_tb_'+uid(),null);renderTbreak();}
+function tbMissOf(tb,d){const x=(tb.dias&&tb.dias[d])||{};return x.m||[false,false,false];}
+function tbDayDone(tb,d){const m=tbMissOf(tb,d);return m[0]&&m[1]&&m[2];}
+const TB_GUIA=['Cada dia é um passo. Bora começar? \u{1F331}','Respira — você consegue atravessar. \u{1F4AA}','Hoje pode ser o mais difícil, e você já está aqui.','Seu corpo agradece o cuidado. \u{1F957}','Perceba os padrões, sem se julgar. \u{1F504}','Sente a onda descendo? \u{1F305}','Você chegou até aqui. Que orgulho! \u{1F3C6}'];
 function renderTbreak(){
   const c=document.getElementById('tb-body');if(!c)return;
   const tb=gTb();
   if(!tb){
     const tracks=[[7,'Reset rápido','Uma semana já impacta a tolerância.',''],[14,'Pausa firme','Duas semanas pra um reajuste mais profundo.','em breve'],[31,'Reinício','Um mês pra reencontrar sua relação com o uso.','em breve']];
-    c.innerHTML=`<div class="tb-intro">Uma pausa planejada do uso pra reequilibrar seu corpo. Você atravessa <b>dia a dia</b>, com uma missão por dia — no seu ritmo.</div><div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">${tracks.map(([n,t,d,tag])=>`<button class="tb-track" onclick="tbIniciar(${n})"><span class="tbt-n"><b>${n}</b><span>dias</span></span><span style="min-width:0"><span class="tbt-t">${t}${tag?` · <span style="color:var(--txm);font-weight:600">${tag}</span>`:''}</span><div class="tbt-d">${d}</div></span></button>`).join('')}</div><div class="premnote" style="margin:8px 20px">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>`;
+    c.innerHTML='<div class="tb-intro">Uma pausa planejada do uso pra reequilibrar seu corpo. Você atravessa <b>dia a dia</b>, com missões simples — no seu ritmo.</div><div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">'+tracks.map(function(t){return '<button class="tb-track" onclick="tbIniciar('+t[0]+')"><span class="tbt-n"><b>'+t[0]+'</b><span>dias</span></span><span style="min-width:0"><span class="tbt-t">'+t[1]+(t[3]?' · <span style=\'color:var(--txm);font-weight:600\'>'+t[3]+'</span>':'')+'</span><div class="tbt-d">'+t[2]+'</div></span></button>';}).join('')+'</div><div class="premnote" style="margin:8px 20px">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>';
     return;
   }
-  const N=tb.trilha,atual=tbDiaAtual(tb),feitos=Object.keys(tb.dias||{}).filter(k=>tb.dias[k]&&tb.dias[k].done).length;
-  let h=`<div class="tb-prog"><div class="tb-prog-d">Dia ${atual} de ${N}</div><div class="tb-prog-x">${feitos} ${feitos===1?'fase concluída':'fases concluídas'} 🌱</div><div class="tb-prog-bar"><div style="width:${Math.round(feitos/N*100)}%"></div></div></div><div class="tb-path">`;
+  const N=tb.trilha,atual=tbDiaAtual(tb),info=tbInfo(atual);
+  let feitos=0;for(let d=1;d<=N;d++){if(tbDayDone(tb,d))feitos++;}
+  let h='<div class="tb-guide"><img class="tb-guide-av" alt=""><div class="tb-guide-b"><div class="tb-guide-t">Dia '+atual+' de '+N+' · '+info.tema+'</div><div class="tb-guide-x">'+TB_GUIA[(atual-1)%7]+'</div><div class="tb-prog-bar"><div style="width:'+Math.round(feitos/N*100)+'%"></div></div></div></div>';
+  const W=320,cx0=160,amp=86,rowH=110,r=31;
+  const pts=[];for(let d=1;d<=N;d++)pts.push({x:cx0+amp*Math.sin((d-1)*0.85),y:46+(d-1)*rowH});
+  const totalH=pts[N-1].y+96;
+  function curve(list){if(list.length<2)return list.length?('M '+list[0].x+' '+list[0].y):'';let s='M '+list[0].x+' '+list[0].y;for(let i=0;i<list.length-1;i++){const a=list[i],b=list[i+1],my=(a.y+b.y)/2;s+=' C '+a.x+' '+my+' '+b.x+' '+my+' '+b.x+' '+b.y;}return s;}
+  let lastDone=0;for(let d=1;d<=N;d++){if(tbDayDone(tb,d))lastDone=d;}
+  const upto=Math.max(1,Math.min(atual,lastDone+1));
+  h+='<div class="tb-path" style="height:'+totalH+'px;width:'+W+'px"><svg class="tb-svg" viewBox="0 0 '+W+' '+totalH+'" width="'+W+'" height="'+totalH+'"><defs><linearGradient id="tbgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FE3A6"></stop><stop offset="1" stop-color="#B387F2"></stop></linearGradient></defs><path d="'+curve(pts)+'" fill="none" stroke="#d7ddd7" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.5 14"></path><path d="'+curve(pts.slice(0,upto))+'" fill="none" stroke="url(#tbgrad)" stroke-width="7" stroke-linecap="round"></path></svg>';
   for(let d=1;d<=N;d++){
-    const done=!!(tb.dias&&tb.dias[d]&&tb.dias[d].done),avail=d<=atual,now=!done&&d===atual,info=tbInfo(d);
-    const st=done?' done':(now?' now':(avail?'':' locked')),side=d%2===0?' right':'';
-    const ic=done?'✓':(avail?info.ic:'🔒');
-    h+=`<div class="tb-node${side}${st}" onclick="abrirTbDia(${d})"><div class="tb-dot">${ic}</div><div class="tb-nlabel"><b>Dia ${d}</b><span>${avail?info.tema:'em breve'}</span></div></div>`;
+    const m=tbMissOf(tb,d),done=m[0]&&m[1]&&m[2],avail=d<=atual,now=!done&&d===atual,info2=tbInfo(d),lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0),p=pts[d-1];
+    const st=done?' done':(now?' now':(avail?' avail':' locked')),ic=done?'✓':(avail?info2.ic:'\u{1F512}');
+    let stars='';for(let s=0;s<3;s++)stars+='<span class="'+(s<lit?'on':'')+'">★</span>';
+    h+='<div class="tb-node'+st+'" style="left:'+(p.x-40)+'px;top:'+(p.y-r)+'px" onclick="abrirTbDia('+d+')"><div class="tb-dot">'+ic+'</div><div class="tb-stars">'+stars+'</div>'+(now?'<div class="tb-now-tag">HOJE</div>':'')+'</div>';
   }
   h+='</div>';
-  const logs=[];for(let d=N;d>=1;d--){const x=tb.dias&&tb.dias[d];if(x&&x.done&&(x.texto||x.humor))logs.push([d,x]);}
-  if(logs.length){h+='<div class="tb-sec">Meu diário da pausa 📔</div>'+logs.map(([d,x])=>`<div class="tbdi"><div class="tbdi-h">${x.humor||'🌱'} Dia ${d} · ${tbInfo(d).tema}</div>${x.texto?`<div class="tbdi-x">${esc(x.texto)}</div>`:''}</div>`).join('');}
-  h+=`<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">Recomeçar jornada</button></div>`;
+  const logs=[];for(let d=N;d>=1;d--){const x=tb.dias&&tb.dias[d];if(x&&tbDayDone(tb,d)&&(x.texto||x.humor))logs.push([d,x]);}
+  if(logs.length)h+='<div class="tb-sec">Meu diário da pausa \u{1F4D4}</div>'+logs.map(function(l){return '<div class="tbdi"><div class="tbdi-h">'+(l[1].humor||'\u{1F331}')+' Dia '+l[0]+' · '+tbInfo(l[0]).tema+'</div>'+(l[1].texto?'<div class="tbdi-x">'+esc(l[1].texto)+'</div>':'')+'</div>';}).join('');
+  h+='<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">Recomeçar jornada</button></div>';
   c.innerHTML=h;
+  try{const av=c.querySelector('.tb-guide-av');if(av&&typeof brotoDataURI==='function')av.src=brotoDataURI();}catch(e){}
 }
 let _tbSelDia=null,_tbHumor=null;
 function abrirTbDia(d){
   const tb=gTb();if(!tb)return;const atual=tbDiaAtual(tb);
-  if(d>atual){toast('🔒 Esse dia libera em '+(d-atual)+(d-atual===1?' dia':' dias'));return;}
-  _tbSelDia=d;const info=tbInfo(d),dd=(tb.dias&&tb.dias[d])||{};_tbHumor=dd.humor||null;const done=!!dd.done;
-  document.getElementById('mtbdia-c').innerHTML=`<div class="tbd-head"><div class="tbd-emo">${info.ic}</div><div class="tbd-dia">Dia ${d}</div><div class="tbd-tema">${info.tema}</div></div>`
-    +`<div class="tbd-box"><b>O que esperar hoje</b><br>${info.esperar}</div>`
-    +`<div class="tbd-box tool"><span class="tbd-bt">🧰 ${info.ferramenta.t}</span>${info.ferramenta.x}${info.ferramenta.acao?`<br><span class="tbd-act" onclick="closeMod('mtbdia');${info.ferramenta.acao.fn}">${info.ferramenta.acao.label} →</span>`:''}</div>`
-    +`<div class="tbd-label">Como você está agora?</div><div class="tbd-emorow" id="tbd-humor">${TB_HUMOR.map(e=>`<button class="${dd.humor===e?'on':''}" onclick="tbSelHumor('${e}',this)">${e}</button>`).join('')}</div>`
-    +`<div class="tbd-label">Sua reflexão de hoje</div><textarea class="ft" id="tbd-texto" rows="3" placeholder="${esc(info.prompt)}">${esc(dd.texto||'')}</textarea>`
-    +(info.ref?`<div class="tbd-ref">📚 ${info.ref}</div>`:'')
-    +`<button class="btn bv bfull" style="margin-top:14px" onclick="concluirTbDia()">${done?'Salvar alterações':'Concluir dia ✓'}</button>`
-    +(done?'':`<div class="premnote">Ao concluir, o próximo dia libera amanhã.</div>`);
-  openMod('mtbdia');
+  if(d>atual){toast('\u{1F512} Esse dia libera em '+(d-atual)+(d-atual===1?' dia':' dias'));return;}
+  _tbSelDia=d;_tbHumor=((tb.dias&&tb.dias[d])||{}).humor||null;renderTbDiaModal();openMod('mtbdia');
 }
-function tbSelHumor(e,btn){document.querySelectorAll('#tbd-humor button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_tbHumor=e;vib(6);}
-function concluirTbDia(){
-  const tb=gTb();if(!tb||!_tbSelDia)return;blurAll();
-  const texto=document.getElementById('tbd-texto').value.trim();
-  tb.dias=tb.dias||{};const novo=!(tb.dias[_tbSelDia]&&tb.dias[_tbSelDia].done);
-  tb.dias[_tbSelDia]={done:true,humor:_tbHumor,texto,data:hoje()};sTb(tb);
-  closeMod('mtbdia');
-  if(novo){try{addXP(15,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}toast('🌱 Dia '+_tbSelDia+' concluído!');}else toast('✓ Salvo');
-  renderTbreak();
+function renderTbDiaModal(){
+  const d=_tbSelDia,tb=gTb();if(!tb)return;const info=tbInfo(d),dd=(tb.dias&&tb.dias[d])||{},m=dd.m||[false,false,false];
+  const lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0);let sb='';for(let s=0;s<3;s++)sb+='<span class="'+(s<lit?'on':'')+'">★</span>';
+  let h='<div class="tbd-head"><div class="tbd-emo">'+info.ic+'</div><div class="tbd-dia">Dia '+d+' · '+lit+'/3 missões</div><div class="tbd-tema">'+info.tema+'</div><div class="tbd-starsbig">'+sb+'</div></div>';
+  h+='<div class="tbm'+(m[0]?' done':'')+'"><div class="tbm-h"><span class="tbm-ic">\u{1F4D6}</span><b>Entenda a fase</b><span class="tbm-st">'+(m[0]?'★':'○')+'</span></div><div class="tbm-b">'+info.esperar+(m[0]?'':'<button class="tbm-btn" onclick="tbDoMiss(0)">Entendi ✓</button>')+'</div></div>';
+  h+='<div class="tbm'+(m[1]?' done':'')+'"><div class="tbm-h"><span class="tbm-ic">\u{1F9F0}</span><b>'+info.ferramenta.t+'</b><span class="tbm-st">'+(m[1]?'★':'○')+'</span></div><div class="tbm-b">'+info.ferramenta.x+(info.ferramenta.acao?'<br><span class="tbd-act" onclick="closeMod(\''+'mtbdia\');'+info.ferramenta.acao.fn+'">'+info.ferramenta.acao.label+' →</span>':'')+(m[1]?'':'<br><button class="tbm-btn" onclick="tbDoMiss(1)">Fiz isso ✓</button>')+'</div></div>';
+  h+='<div class="tbm'+(m[2]?' done':'')+'"><div class="tbm-h"><span class="tbm-ic">\u{1F4DD}</span><b>Registre seu momento</b><span class="tbm-st">'+(m[2]?'★':'○')+'</span></div><div class="tbm-b"><div class="tbd-label" style="margin-top:0">Como você está agora?</div><div class="tbd-emorow" id="tbd-humor">'+TB_HUMOR.map(function(e){return '<button class="'+(dd.humor===e?'on':'')+'" onclick="tbSelHumor(\''+e+'\',this)">'+e+'</button>';}).join('')+'</div><textarea class="ft" id="tbd-texto" rows="3" style="margin-top:9px" placeholder="'+esc(info.prompt)+'">'+esc(dd.texto||'')+'</textarea>'+(m[2]?'':'<button class="tbm-btn" onclick="tbDoMiss(2)">Guardar ✓</button>')+'</div></div>';
+  if(info.ref)h+='<div class="tbd-ref">\u{1F4DA} '+info.ref+'</div>';
+  if(m[0]&&m[1]&&m[2])h+='<div class="tbd-done">\u{1F389} Dia '+d+' completo! '+(d<tb.trilha?'O próximo libera amanhã.':'Você concluiu a jornada! \u{1F3C6}')+'</div>';
+  document.getElementById('mtbdia-c').innerHTML=h;
+}
+function tbSelHumor(e,btn){document.querySelectorAll('#tbd-humor button').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');_tbHumor=e;vib(6);}
+function tbDoMiss(i){
+  const tb=gTb(),d=_tbSelDia;if(!tb)return;tb.dias=tb.dias||{};const dd=tb.dias[d]||{};dd.m=dd.m||[false,false,false];
+  if(i===2){if(_tbHumor)dd.humor=_tbHumor;const ta=document.getElementById('tbd-texto');if(ta)dd.texto=ta.value.trim();blurAll();}
+  dd.m[i]=true;dd.data=hoje();tb.dias[d]=dd;sTb(tb);vib(12);
+  const full=dd.m[0]&&dd.m[1]&&dd.m[2];
+  if(full&&!dd._cel){dd._cel=1;tb.dias[d]=dd;sTb(tb);try{addXP(20,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}toast('\u{1F331} Dia '+d+' completo!');renderTbDiaModal();setTimeout(function(){closeMod('mtbdia');renderTbreak();},1100);return;}
+  toast('⭐ Estrela conquistada!');renderTbDiaModal();
 }
 function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);if(!ls('dr_prem_since_'+uid()))ls('dr_prem_since_'+uid(),new Date().toISOString());vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();reRenderGated();}
 function cancelarPremiumDemo(){ls('dr_prem_'+uid(),0);toast('Assinatura de teste cancelada.');renderPremMod();renderPremUI();reRenderGated();closeMod('mprem');}
