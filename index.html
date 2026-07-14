@@ -958,40 +958,86 @@ a{color:inherit;text-decoration:none}
 .emo-subb:active{transform:scale(.94)}
 #shell.dkm .emo-subb{background:color-mix(in srgb,var(--c) 24%,#1D2520)}
 /* Cofre de vitórias */
+/* Cofre de vitórias v2 */
+.viz-hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:13px;border-radius:20px;padding:16px;margin-bottom:13px;color:#fff;background:linear-gradient(120deg,#F2B705,#EA8B0C 55%,#E0632E);box-shadow:0 8px 22px rgba(224,120,20,.3)}
+.viz-hero-glow{position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 70%);top:-70px;right:-30px;animation:tbcglow 5s ease-in-out infinite}
+.viz-hero-ic{position:relative;font-size:34px;width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:tbtro 3s ease-in-out infinite}
+.viz-hero-tx{position:relative;min-width:0}
+.viz-hero-n{font-family:'DM Sans',sans-serif;font-weight:800;font-size:18px;line-height:1.1}.viz-hero-n b{font-size:22px}
+.viz-hero-s{font-size:12.5px;color:rgba(255,255,255,.9);margin-top:3px;line-height:1.35}
 .viz-add{display:flex;gap:8px}.viz-add .inp{flex:1}
-.viz-empty{text-align:center;font-size:26px;line-height:1.9;color:var(--txm);padding:16px}
-.viz-it{display:flex;align-items:flex-start;gap:11px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:1.5px solid #F0D98A;border-radius:14px;padding:12px 13px;margin-bottom:9px}
-#shell.dkm .viz-it{background:linear-gradient(135deg,#2A2410,#1E1C0E);border-color:#8a7a2a}
-.viz-tro{font-size:19px}.viz-tx{flex:1;font-size:13.5px;color:var(--dk);line-height:1.4}
-#shell.dkm .viz-tx{color:#E9EFE7}
-.viz-d{display:block;font-size:11px;color:var(--txm);margin-top:2px}
-.viz-del{background:none;border:none;font-size:14px;cursor:pointer;opacity:.55}
+.viz-addb{background:#EA8B0C;color:#fff;border:none;white-space:nowrap}
+.viz-remind{display:block;width:100%;margin:11px 0;background:#FFF6E0;border:1.5px dashed #E8B84B;color:#9a6b10;border-radius:16px;padding:12px;font-size:13.5px;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.viz-remind:active{transform:scale(.98)}
+#shell.dkm .viz-remind{background:#2A2410;border-color:#8a7a2a;color:#E8C877}
+.viz-empty{text-align:center;padding:20px 16px;color:var(--txm)}
+.viz-empty b{display:block;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--dk);margin:8px 0 5px;font-weight:800}
+#shell.dkm .viz-empty b{color:#E9EFE7}
+.viz-empty span{font-size:13px;line-height:1.5;display:block;max-width:270px;margin:0 auto}
+.viz-empty{font-size:40px}
+.viz-medal{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #EEE;border-left:5px solid var(--c);border-radius:14px;padding:12px 13px;margin-bottom:9px}
+#shell.dkm .viz-medal{background:#1D2520;border-color:#32402F;border-left-color:var(--c)}
+.viz-medal-ic{flex:0 0 40px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;background:color-mix(in srgb,var(--c) 16%,#fff)}
+#shell.dkm .viz-medal-ic{background:color-mix(in srgb,var(--c) 28%,#1D2520)}
+.viz-medal-b{flex:1;min-width:0}
+.viz-medal-t{font-size:13.5px;color:var(--dk);line-height:1.4;font-weight:600}
+#shell.dkm .viz-medal-t{color:#E9EFE7}
+.viz-medal-d{font-size:11px;color:var(--txm);margin-top:2px}
+.viz-del{background:none;border:none;font-size:14px;cursor:pointer;opacity:.5;flex:0 0 auto}
+.viz-flash{text-align:center;padding:28px 18px;animation:cqpop .4s cubic-bezier(.34,1.56,.64,1)}
+.viz-flash-ic{font-size:52px;animation:tbtro 2.4s ease-in-out infinite}
+.viz-flash-t{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;color:var(--dk);margin-top:8px;line-height:1.3}
+#shell.dkm .viz-flash-t{color:#E9EFE7}
+.viz-flash-d{font-size:12px;color:var(--txm);margin-top:5px}
 /* Trilha de escrita */
-.wt-theme{display:flex;align-items:center;gap:13px;width:100%;background:#fff;border:1.5px solid #ECECEC;border-radius:16px;padding:15px;margin-bottom:10px;cursor:pointer;text-align:left;border-left:4px solid var(--c);-webkit-tap-highlight-color:transparent}
-.wt-theme:active{transform:scale(.98)}
-#shell.dkm .wt-theme{background:#1D2520;border-color:#32402F;border-left-color:var(--c)}
-.wt-e{font-size:30px;flex:0 0 auto}
-.wt-tb{flex:1;min-width:0}.wt-tn{display:block;font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:var(--dk)}
-#shell.dkm .wt-tn{color:#E9EFE7}
-.wt-tx{font-size:12.5px;color:var(--txm)}.wt-go{font-size:19px;color:var(--c);font-weight:800}
-.wt-hd{display:flex;align-items:center;gap:13px;margin-bottom:12px;padding-left:12px;border-left:4px solid var(--c)}
-.wt-prog{font-size:12.5px;color:var(--txm);margin-top:1px}
-.wt-bar{height:8px;border-radius:8px;background:#EDEDED;overflow:hidden;margin-bottom:14px}.wt-bar>div{height:100%;border-radius:8px;transition:width .4s}
-#shell.dkm .wt-bar{background:#2a352a}
-.wt-days{display:flex;flex-direction:column;gap:9px}
-.wt-day{display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #ECECEC;border-radius:13px;padding:12px 13px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
-.wt-day:active{transform:scale(.98)}
-#shell.dkm .wt-day{background:#1D2520;border-color:#32402F}
-.wt-day.done{background:rgba(143,227,166,.1);border-color:#8FE3A6}
-.wt-dn{flex:0 0 30px;height:30px;border-radius:50%;background:var(--roxof);color:var(--roxo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
-.wt-day.done .wt-dn{background:#5BC06F;color:#fff}
-.wt-dp{font-size:13px;color:var(--dk);line-height:1.35}
-#shell.dkm .wt-dp{color:#D6E0D4}
-.wt-wr-h{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;color:var(--dk);margin-bottom:12px}
-#shell.dkm .wt-wr-h{color:#E9EFE7}
-.wt-x{background:none;border:none;font-size:20px;cursor:pointer;color:var(--txs)}
-.wt-prompt{background:var(--roxof);border-radius:13px;padding:13px 15px;font-size:14px;font-weight:700;color:var(--dk);line-height:1.4;margin-bottom:11px}
-#shell.dkm .wt-prompt{background:#241a3a;color:#E9EFE7}
+/* Trilha de escrita v2 */
+.wt-card{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;width:100%;border:none;border-radius:20px;padding:17px 16px;margin-bottom:12px;cursor:pointer;text-align:left;color:#fff;background:linear-gradient(120deg,var(--c),var(--c2));box-shadow:0 8px 20px color-mix(in srgb,var(--c) 32%,transparent);-webkit-tap-highlight-color:transparent;transition:transform .12s}
+.wt-card:active{transform:scale(.98)}
+.wt-card-glow{position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);top:-60px;right:-30px;pointer-events:none}
+.wt-card-e{position:relative;font-size:34px;width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wt-card-b{position:relative;flex:1;min-width:0}
+.wt-card-n{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;line-height:1.15}
+.wt-card-d{font-size:12.5px;color:rgba(255,255,255,.85);margin-top:3px;line-height:1.35}
+.wt-card-tag{display:inline-block;font-size:10.5px;font-weight:800;background:rgba(255,255,255,.22);padding:3px 9px;border-radius:20px;margin-top:8px}
+/* journey */
+.wt-jhd{position:relative;display:flex;align-items:center;gap:12px;border-radius:20px;padding:15px 16px;margin-bottom:14px;color:#fff;background:linear-gradient(120deg,var(--c),var(--c2));box-shadow:0 8px 20px color-mix(in srgb,var(--c) 30%,transparent)}
+.wt-jx{position:absolute;top:10px;right:12px;background:rgba(255,255,255,.22);border:none;color:#fff;width:24px;height:24px;border-radius:50%;font-size:12px;cursor:pointer}
+.wt-je{font-size:32px;flex:0 0 auto}
+.wt-jt{flex:1;min-width:0}.wt-jn{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;line-height:1.15}
+.wt-js{font-size:12.5px;color:rgba(255,255,255,.88);margin-top:2px}
+.wt-ring{width:58px;height:58px;flex:0 0 58px}
+.wt-done{text-align:center;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:1.5px solid #F0D98A;border-radius:16px;padding:14px;margin-bottom:14px;font-size:34px}
+#shell.dkm .wt-done{background:linear-gradient(135deg,#2A2410,#1E1C0E);border-color:#8a7a2a}
+.wt-done-t{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:#7a5e10;margin-top:2px}
+.wt-done-x{font-size:12.5px;color:#9a7d2a;margin-top:3px}
+#shell.dkm .wt-done-t{color:#F0D89A}#shell.dkm .wt-done-x{color:#c9b079}
+.wt-trail{display:flex;flex-direction:column}
+.wt-node{position:relative;display:flex;align-items:center;gap:13px;background:#fff;border:1.5px solid #ECECEC;border-radius:14px;padding:12px 13px;margin-bottom:10px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.wt-node:active{transform:scale(.985)}
+#shell.dkm .wt-node{background:#1D2520;border-color:#32402F}
+.wt-node::before{content:'';position:absolute;left:29px;top:-10px;width:2px;height:10px;background:#E0E0E0}
+.wt-node:first-child::before{display:none}
+#shell.dkm .wt-node::before{background:#32402F}
+.wt-ndot{flex:0 0 32px;height:32px;border-radius:50%;background:#F0F0F0;color:#9aa89c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border:2px solid #E4E4E4}
+#shell.dkm .wt-ndot{background:#242f24;border-color:#3a463a}
+.wt-node.done .wt-ndot{background:var(--c);color:#fff;border-color:var(--c)}
+.wt-node.now{border-color:var(--c)}
+.wt-node.now .wt-ndot{background:#fff;color:var(--c);border-color:var(--c);animation:tbpulse 1.8s ease-in-out infinite}
+#shell.dkm .wt-node.now .wt-ndot{background:#1D2520}
+.wt-nb{flex:1;min-width:0}
+.wt-nd{display:block;font-size:11px;font-weight:800;color:var(--c);text-transform:uppercase;letter-spacing:.3px}
+.wt-np{display:block;font-size:13px;color:var(--dk);line-height:1.35;margin-top:2px}
+#shell.dkm .wt-np{color:#D6E0D4}
+.wt-nchev{font-size:20px;color:#C9C9C9;font-weight:800}
+/* write */
+.wt-wr-h{position:relative;display:flex;align-items:center;gap:11px;border-radius:16px;padding:12px 14px;margin-bottom:13px;color:#fff;background:linear-gradient(120deg,var(--c),var(--c2))}
+.wt-x{background:rgba(255,255,255,.22);border:none;width:30px;height:30px;border-radius:50%;font-size:17px;cursor:pointer;color:#fff;flex:0 0 auto}
+.wt-wr-tt{flex:1;min-width:0}.wt-wr-d{font-size:11px;font-weight:800;opacity:.85;text-transform:uppercase;letter-spacing:.4px}
+.wt-wr-n{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;line-height:1.1}
+.wt-wr-e{font-size:26px}
+.wt-prompt2{position:relative;background:color-mix(in srgb,var(--c) 10%,#fff);border-left:4px solid var(--c);border-radius:12px;padding:13px 15px;font-size:15px;font-weight:700;color:var(--dk);line-height:1.4;margin-bottom:12px}
+#shell.dkm .wt-prompt2{background:color-mix(in srgb,var(--c) 22%,#1D2520);color:#E9EFE7}
+.wt-prompt2-k{display:block;font-size:10.5px;font-weight:800;color:var(--c);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
 .ref-carta-link{display:flex;align-items:center;gap:12px;margin:0 18px 14px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--am);border-radius:18px;padding:14px 16px;cursor:pointer}
 .rcl-t{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:#7a5e10}
 .rcl-s{font-size:12px;color:#9a7d2a;margin-top:1px}
@@ -2404,7 +2450,6 @@ a{color:inherit;text-decoration:none}
     <div class="db-ic">📖</div>
     <div class="db-tx"><div class="db-t">Meu diário</div><div class="db-s" id="diario-stat">Sem filtro, sem julgamento</div></div>
   </div>
-  <div class="prc"><div class="prl"><span class="tic" data-icon="sec-pergunta"></span> Pergunta do dia</div><div class="prt" id="prt">—</div><button class="prb" onclick="respPrm()">Responder agora</button></div>
   <div class="cmp" id="composer" onclick="focaCmp()">
     <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
     <div id="cmpex" style="display:none">
@@ -3558,10 +3603,9 @@ a{color:inherit;text-decoration:none}
 <!-- COFRE DE VITÓRIAS -->
 <div class="ov" id="mviz" onclick="if(event.target===this)closeMod('mviz')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
-  <div class="mt">🏆 Cofre de vitórias</div>
-  <div class="mb c" style="margin-bottom:11px">Guarde as conquistas — grandes e pequenas. Nos dias difíceis, volte aqui pra lembrar do que você já superou.</div>
-  <div class="viz-add"><input class="inp" id="viz-in" placeholder="Uma vitória de hoje…" onkeydown="if(event.key==='Enter')addViz()"><button class="btn bv bsm" onclick="addViz()">Guardar</button></div>
-  <button class="btn bout bsm bfull" style="margin:11px 0" onclick="vizRandom()">✨ Me lembra de uma vitória</button>
+  <div class="viz-hero" id="viz-hero"></div>
+  <div class="viz-add"><input class="inp" id="viz-in" placeholder="Uma vitória de hoje…" onkeydown="if(event.key==='Enter')addViz()"><button class="btn bsm viz-addb" onclick="addViz()">+ Guardar</button></div>
+  <button class="viz-remind" id="viz-remind" onclick="vizRandom()">✨ Me lembra de uma vitória</button>
   <div id="viz-list"></div>
 </div></div></div>
 
@@ -5492,40 +5536,59 @@ function emoSave(){
 const gViz=function(){return ls('dr_viz_'+uid())||[];};
 const sViz=function(v){ls('dr_viz_'+uid(),v);};
 function abrirCofre(){openMod('mviz');renderViz();setTimeout(function(){try{document.getElementById('viz-in').focus();}catch(e){}},80);}
-function addViz(){const inp=document.getElementById('viz-in');const t=(inp.value||'').trim();if(!t){toast('Escreva sua vitória 💚');return;}const v=gViz();v.push({id:'v'+Date.now(),t:t,data:hoje()});sViz(v);inp.value='';try{vib(10);sfx('star');}catch(e){}renderViz();renderVizCount();}
-function delViz(id){sViz(gViz().filter(function(x){return x.id!==id;}));renderViz();renderVizCount();}
+const VIZ_COL=['#F2B705','#7C3AED','#2BB3A3','#EC5B95','#5B8DEF','#4CAF5A','#EA580C'];
+const VIZ_EMO=['🏆','🌟','🥇','💪','🔥','🌱','💚','✨'];
+function _vizStyle(x,i){var seed=(x.id?x.id.length:0)+i;return {c:VIZ_COL[(i)%VIZ_COL.length],e:VIZ_EMO[(seed)%VIZ_EMO.length]};}
+function addViz(){const inp=document.getElementById('viz-in');const t=(inp.value||'').trim();if(!t){toast('Escreva sua vitória 💚');return;}const v=gViz();v.push({id:'v'+Date.now(),t:t,data:hoje()});sViz(v);inp.value='';try{vib(10);sfx('star');}catch(e){}renderViz();renderVizCount();const n=v.length;if(n>0&&n%5===0){try{confete();sfx('day');}catch(e){}toast('🎉 '+n+' vitórias no cofre! Que orgulho.');}}
+function delViz(id){if(!confirm('Tirar esta vitória do cofre?'))return;sViz(gViz().filter(function(x){return x.id!==id;}));renderViz();renderVizCount();}
 function renderViz(){
-  const el=document.getElementById('viz-list');if(!el)return;const v=gViz().slice().reverse();
-  if(!v.length){el.innerHTML='<div class="viz-empty">🏆<br>Seu cofre está esperando a primeira vitória.</div>';return;}
-  el.innerHTML=v.map(function(x){return '<div class="viz-it"><span class="viz-tro">🏆</span><div class="viz-tx">'+esc(x.t)+'<span class="viz-d">'+fdt(x.data)+'</span></div><button class="viz-del" onclick="delViz(\''+x.id+'\')">🗑️</button></div>';}).join('');
+  const hero=document.getElementById('viz-hero');const el=document.getElementById('viz-list');if(!el)return;
+  const all=gViz();const n=all.length;
+  if(hero)hero.innerHTML='<div class="viz-hero-glow"></div><div class="viz-hero-ic">🏆</div><div class="viz-hero-tx"><div class="viz-hero-n">'+(n?('<b>'+n+'</b> '+(n===1?'vitória':'vitórias')+' no cofre'):'Seu cofre de vitórias')+'</div><div class="viz-hero-s">'+(n?'Cada uma é prova do seu caminho. 💛':'Guarde conquistas — grandes e pequenas.')+'</div></div>';
+  const rem=document.getElementById('viz-remind');if(rem)rem.style.display=n?'block':'none';
+  const v=all.slice().reverse();
+  if(!v.length){el.innerHTML='<div class="viz-empty">🏆<br><b>Seu cofre está vazio</b><span>Resistiu a uma vontade? Dormiu bem? Pediu ajuda? Isso é vitória. Guarde a primeira acima.</span></div>';return;}
+  el.innerHTML=v.map(function(x,i){const s=_vizStyle(x,i);return '<div class="viz-medal" style="--c:'+s.c+'"><span class="viz-medal-ic">'+s.e+'</span><div class="viz-medal-b"><div class="viz-medal-t">'+esc(x.t)+'</div><div class="viz-medal-d">'+fdt(x.data)+'</div></div><button class="viz-del" onclick="delViz(\''+x.id+'\')">🗑️</button></div>';}).join('');
 }
 function renderVizCount(){const el=document.getElementById('viz-count');if(el){const n=gViz().length;el.textContent=n?(n+(n===1?' vitória guardada':' vitórias guardadas')):'Guarde conquistas';}}
-function vizRandom(){const v=gViz();if(!v.length){toast('Guarde uma vitória primeiro 💚');return;}const x=v[Math.floor(Math.random()*v.length)];toast('🏆 '+x.t);try{vib(10);}catch(e){}}
+function vizRandom(){const v=gViz();if(!v.length){toast('Guarde uma vitória primeiro 💚');return;}const x=v[Math.floor(Math.random()*v.length)];try{vib(12);sfx('star');}catch(e){}
+  const el=document.getElementById('viz-list');
+  if(el){el.innerHTML='<div class="viz-flash"><div class="viz-flash-ic">🏆</div><div class="viz-flash-t">'+esc(x.t)+'</div><div class="viz-flash-d">'+fdt(x.data)+'</div><button class="btn bout bsm" style="margin-top:12px" onclick="renderViz()">← Ver todas</button></div>';}
+}
 
 // 4) Trilha de escrita (7 dias por tema)
 const WTRILHAS=[
-  {k:'gatilhos',n:'Conhecendo meus gatilhos',e:'🎯',c:'#F0584A',ps:['Em que momentos a vontade costuma aparecer?','Que emoções costumam vir antes do uso?','Quem, ou que lugares, puxam mais esse impulso?','O que costuma vir depois — como me sinto?','Que sinais no corpo me avisam que a vontade está chegando?','O que já me ajudou a atravessar sem ceder?','Que plano posso deixar pronto pro próximo gatilho?']},
-  {k:'porque',n:'Meu porquê',e:'🧭',c:'#4CAF5A',ps:['Por que eu quero mudar minha relação com o uso?','Como eu gostaria que fosse meu dia a dia?','O que o uso tem me dado — e o que tem me tirado?','Quem eu sou quando estou bem comigo?','O que é importante pra mim, no fundo?','Como seria minha vida daqui a um ano cuidando disso?','Que frase resume o meu porquê?']},
-  {k:'autocomp',n:'Autocompaixão',e:'💚',c:'#EC5B95',ps:['Como eu costumo falar comigo quando erro?','O que eu diria a um amigo querido na minha situação?','Do que eu posso me orgulhar hoje, mesmo que pequeno?','O que eu preciso ouvir agora?','Onde eu tenho me cobrado demais?','Como posso ser mais gentil comigo amanhã?','Uma carta curtinha de carinho pra mim.']}
+  {k:'gatilhos',n:'Conhecendo meus gatilhos',e:'🎯',c:'#F0584A',c2:'#C62828',d:'Perceba os padrões que puxam o uso.',ps:['Em que momentos a vontade costuma aparecer?','Que emoções costumam vir antes do uso?','Quem, ou que lugares, puxam mais esse impulso?','O que costuma vir depois — como me sinto?','Que sinais no corpo me avisam que a vontade está chegando?','O que já me ajudou a atravessar sem ceder?','Que plano posso deixar pronto pro próximo gatilho?']},
+  {k:'porque',n:'Meu porquê',e:'🧭',c:'#4CAF5A',c2:'#2E7D32',d:'Reconecte com a sua motivação.',ps:['Por que eu quero mudar minha relação com o uso?','Como eu gostaria que fosse meu dia a dia?','O que o uso tem me dado — e o que tem me tirado?','Quem eu sou quando estou bem comigo?','O que é importante pra mim, no fundo?','Como seria minha vida daqui a um ano cuidando disso?','Que frase resume o meu porquê?']},
+  {k:'autocomp',n:'Autocompaixão',e:'💚',c:'#EC5B95',c2:'#B93A6E',d:'Aprenda a falar consigo com carinho.',ps:['Como eu costumo falar comigo quando erro?','O que eu diria a um amigo querido na minha situação?','Do que eu posso me orgulhar hoje, mesmo que pequeno?','O que eu preciso ouvir agora?','Onde eu tenho me cobrado demais?','Como posso ser mais gentil comigo amanhã?','Uma carta curtinha de carinho pra mim.']}
 ];
 const gWt=function(){return ls('dr_wtrilha_'+uid())||null;};
 const sWt=function(o){ls('dr_wtrilha_'+uid(),o);};
 let _wtWrite=-1;
 function abrirTrilhaEsc(){_wtWrite=-1;openMod('mtrilha');renderTrilhaEsc();}
+function _wtRing(pct,label){const R=25,C=2*Math.PI*R,off=C*(1-pct);return '<svg viewBox="0 0 62 62" class="wt-ring"><circle cx="31" cy="31" r="'+R+'" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="6"/><circle cx="31" cy="31" r="'+R+'" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 31 31)" style="transition:stroke-dashoffset .6s ease"/><text x="31" y="36" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">'+label+'</text></svg>';}
 function renderTrilhaEsc(){
   const b=document.getElementById('trilha-body');if(!b)return;const st=gWt();
   if(!st){
-    b.innerHTML='<div class="mt">✍️ Trilha de escrita</div><div class="mb c" style="margin-bottom:13px">Um mini-percurso de journaling: 7 dias, um tema. Escolha por onde começar.</div>'+WTRILHAS.map(function(t){return '<button class="wt-theme" style="--c:'+t.c+'" onclick="wtStart(\''+t.k+'\')"><span class="wt-e">'+t.e+'</span><span class="wt-tb"><span class="wt-tn">'+t.n+'</span><span class="wt-tx">7 dias de escrita guiada</span></span><span class="wt-go">→</span></button>';}).join('');
+    b.innerHTML='<div class="mt">✍️ Trilha de escrita</div><div class="mb c" style="margin-bottom:14px">Um mini-percurso de journaling: <b>7 dias, um tema</b>. Escolha por onde começar.</div>'+WTRILHAS.map(function(t){return '<button class="wt-card" style="--c:'+t.c+';--c2:'+t.c2+'" onclick="wtStart(\''+t.k+'\')"><div class="wt-card-glow"></div><div class="wt-card-e">'+t.e+'</div><div class="wt-card-b"><div class="wt-card-n">'+esc(t.n)+'</div><div class="wt-card-d">'+esc(t.d)+'</div><div class="wt-card-tag">✍️ 7 dias · escrita guiada</div></div></button>';}).join('');
     return;
   }
   const t=WTRILHAS.find(function(x){return x.k===st.k;});const feitos=st.feitos||[];const n=feitos.filter(Boolean).length;
   if(_wtWrite>=0){
-    const p=t.ps[_wtWrite];
-    b.innerHTML='<div class="wt-wr-h"><button class="wt-x" onclick="_wtWrite=-1;renderTrilhaEsc()">←</button><span>Dia '+(_wtWrite+1)+' de 7 · '+esc(t.n)+'</span></div><div class="wt-prompt">💭 '+esc(p)+'</div><textarea class="ft" id="wt-tx" rows="6" placeholder="Escreva no seu ritmo…">'+esc((st.txt&&st.txt[_wtWrite])||'')+'</textarea><button class="btn bv bfull" style="margin-top:11px" onclick="wtSaveDay()">'+(feitos[_wtWrite]?'Salvar alterações':'Guardar e concluir dia ✓')+'</button>';
+    const p=t.ps[_wtWrite];const jaFeito=feitos[_wtWrite];
+    b.innerHTML='<div class="wt-wr-h" style="--c:'+t.c+';--c2:'+t.c2+'"><button class="wt-x" onclick="_wtWrite=-1;renderTrilhaEsc()">←</button><div class="wt-wr-tt"><div class="wt-wr-d">Dia '+(_wtWrite+1)+' de 7</div><div class="wt-wr-n">'+esc(t.n)+'</div></div><span class="wt-wr-e">'+t.e+'</span></div>'+
+      '<div class="wt-prompt2" style="--c:'+t.c+'"><span class="wt-prompt2-k">💭 Prompt do dia</span>'+esc(p)+'</div>'+
+      '<textarea class="ft" id="wt-tx" rows="6" placeholder="Escreva no seu ritmo… não precisa caprichar, só ser sincero(a).">'+esc((st.txt&&st.txt[_wtWrite])||'')+'</textarea>'+
+      '<button class="btn bv bfull" style="margin-top:11px;background:'+t.c+'" onclick="wtSaveDay()">'+(jaFeito?'Salvar alterações':'Guardar e concluir dia ✓')+'</button>';
     setTimeout(function(){try{document.getElementById('wt-tx').focus();}catch(e){}},60);
     return;
   }
-  b.innerHTML='<div class="wt-hd" style="--c:'+t.c+'"><span class="wt-e">'+t.e+'</span><div><div class="wt-tn">'+esc(t.n)+'</div><div class="wt-prog">'+n+'/7 dias · '+(n>=7?'concluída! 🏆':'siga no seu ritmo')+'</div></div></div><div class="wt-bar"><div style="width:'+(n/7*100)+'%;background:'+t.c+'"></div></div><div class="wt-days">'+t.ps.map(function(p,i){return '<button class="wt-day'+(feitos[i]?' done':'')+'" onclick="_wtWrite='+i+';renderTrilhaEsc()"><span class="wt-dn">'+(feitos[i]?'✓':(i+1))+'</span><span class="wt-dp">'+esc(p)+'</span></button>';}).join('')+'</div><button class="btn bout bsm bfull" style="margin-top:12px" onclick="wtReset()">Trocar de tema</button>';
+  let firstUndone=feitos.findIndex(function(x){return !x;});if(firstUndone<0)firstUndone=(n<7?n:-1);
+  let h='<div class="wt-jhd" style="--c:'+t.c+';--c2:'+t.c2+'"><button class="wt-jx" onclick="wtReset()">✕</button><span class="wt-je">'+t.e+'</span><div class="wt-jt"><div class="wt-jn">'+esc(t.n)+'</div><div class="wt-js">'+(n>=7?'Trilha concluída! 🏆':(n>0?n+' de 7 dias escritos':'Comece pelo dia 1'))+'</div></div>'+_wtRing(n/7,n+'/7')+'</div>';
+  if(n>=7)h+='<div class="wt-done">🏆<div class="wt-done-t">Você concluiu a trilha!</div><div class="wt-done-x">Reler ou reescrever qualquer dia continua liberado.</div></div>';
+  h+='<div class="wt-trail">'+t.ps.map(function(p,i){const done=feitos[i];const now=(i===firstUndone);return '<button class="wt-node'+(done?' done':(now?' now':''))+'" style="--c:'+t.c+'" onclick="_wtWrite='+i+';renderTrilhaEsc()"><span class="wt-ndot">'+(done?'✓':(i+1))+'</span><span class="wt-nb"><span class="wt-nd">Dia '+(i+1)+(now?' · seu próximo':(done?' · escrito':''))+'</span><span class="wt-np">'+esc(p)+'</span></span><span class="wt-nchev">›</span></button>';}).join('')+'</div>';
+  h+='<button class="btn bout bsm bfull" style="margin-top:14px" onclick="wtReset()">Trocar de tema</button>';
+  b.innerHTML=h;
 }
 function wtStart(k){sWt({k:k,feitos:[],txt:[]});try{vib(8);}catch(e){}renderTrilhaEsc();}
 function wtReset(){if(!confirm('Trocar de tema? As reflexões que você já escreveu continuam salvas no diário, mas a trilha reinicia.'))return;sWt(null);_wtWrite=-1;renderTrilhaEsc();}
