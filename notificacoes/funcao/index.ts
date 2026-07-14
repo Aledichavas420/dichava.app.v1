@@ -207,6 +207,30 @@ Deno.serve(async (req) => {
       if (hit) { pick = { k: `tl:${sub}:${hit.d}`, t: hit.t, b: hit.b }; break; }
     }
 
+    // 1.5) PAUSA DE TOLERÂNCIA: lembra quem tem pausa ativa e ainda não fez o check-in de hoje
+    if (!pick) {
+      let tb: any = null;
+      try { tb = JSON.parse(dados["dr_tb_" + s.user_id] || "null"); } catch { tb = null; }
+      if (tb && tb.inicio && tb.trilha) {
+        const diaAtual = diasEntre(tb.inicio, hoje) + 1; // nº do dia da pausa hoje
+        if (diaAtual >= 1 && diaAtual <= tb.trilha) {
+          const dd = tb.dias ? tb.dias[diaAtual] : null;
+          const feitoHoje = !!dd && (
+            dd.data === hoje ||
+            (Array.isArray(dd.m) && dd.m[0] && dd.m[1] && dd.m[2]) ||
+            !!dd.humor
+          );
+          if (!feitoHoje) {
+            pick = {
+              k: `tb:${hoje}`,
+              t: "Sua pausa te espera 🌱",
+              b: `Dia ${diaAtual} da sua pausa de tolerância — você ainda não fez o check-in de hoje. Um minutinho pra registrar como está?`,
+            };
+          }
+        }
+      }
+    }
+
     // 2) sem marco hoje? lembrete DIÁRIO de registro (só se ainda não registrou hoje)
     if (!pick) {
       const registrouHoje = regs.some((r) => r.data === hoje);

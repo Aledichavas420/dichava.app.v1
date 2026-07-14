@@ -3672,7 +3672,7 @@ let _fI=null,_crI=null;
 let _syncT=null;
 function syncToCloud(){if(!_SB||!U||U.id==='demo')return;clearTimeout(_syncT);_syncT=setTimeout(async()=>{try{const dados={};Object.keys(localStorage).forEach(k=>{if(k.startsWith('dr_')&&k.includes(U.id))dados[k]=localStorage.getItem(k);});const{data:ex}=await _SB.from('registros').select('id').eq('user_id',U.id).maybeSingle();if(ex)await _SB.from('registros').update({dados}).eq('user_id',U.id);else await _SB.from('registros').insert({user_id:U.id,dados});}catch(e){}},2000);}
 async function syncFromCloud(){if(!_SB||!U||U.id==='demo')return;try{const{data}=await _SB.from('registros').select('dados').eq('user_id',U.id).maybeSingle();if(data?.dados)Object.entries(data.dados).forEach(([k,v])=>{if(!localStorage.getItem(k))localStorage.setItem(k,v);});}catch(e){}}
-function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('dr_r_')||k.startsWith('dr_rf_')||k.startsWith('dr_fs_')||k.startsWith('dr_m_')||k.startsWith('dr_ct_')||k.startsWith('dr_o_')||k.startsWith('dr_cp_')||k.startsWith('dr_fin_'))syncToCloud();}catch{}}
+function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('dr_r_')||k.startsWith('dr_rf_')||k.startsWith('dr_fs_')||k.startsWith('dr_m_')||k.startsWith('dr_ct_')||k.startsWith('dr_o_')||k.startsWith('dr_cp_')||k.startsWith('dr_fin_')||k.startsWith('dr_tb_'))syncToCloud();}catch{}}
 const uid=()=>U?.id||'x';
 const gR=()=>ls('dr_r_'+uid())||[];
 const sR=r=>ls('dr_r_'+uid(),r);
@@ -7120,7 +7120,19 @@ function sTb(o){ls('dr_tb_'+uid(),o);}
 function tbInfo(d){return TBREAK7[Math.min(d-1,TBREAK7.length-1)];}
 function tbDiaAtual(tb){if(!tb)return 0;const i=new Date(tb.inicio+'T12:00:00'),h=new Date(hoje()+'T12:00:00');const d=Math.floor((h-i)/864e5)+1;return Math.max(1,Math.min(tb.trilha,d));}
 function abrirTbreak(){showV('vtbreak');if(!ls('dr_tbtut_'+uid())){ls('dr_tbtut_'+uid(),1);setTimeout(()=>openMod('mtbtut'),200);}renderTbreak();}
-function tbIniciar(n){if(![7,14,31].includes(n))return;sTb({trilha:n,inicio:hoje(),dias:{}});vib(12);try{sfx('start');}catch(e){}renderTbreak();}
+function tbIniciar(n){if(![7,14,31].includes(n))return;sTb({trilha:n,inicio:hoje(),dias:{}});vib(12);try{sfx('start');}catch(e){}renderTbreak();tbNudgePush();}
+// sugere ativar notificações pra receber o lembrete diário da pausa (1x)
+function tbNudgePush(){
+  try{
+    if(ls('dr_tbpushnudge_'+uid()))return;
+    if(typeof pushSuportado==='function'&&!pushSuportado())return;
+    navigator.serviceWorker.ready.then(function(r){return r.pushManager.getSubscription();}).then(function(sub){
+      if(sub)return; // já recebe notificações
+      ls('dr_tbpushnudge_'+uid(),1);
+      setTimeout(function(){toast('🔔 Ative as notificações de cuidado (em Config) pra receber o lembrete diário da pausa 💚');},1400);
+    }).catch(function(){});
+  }catch(e){}
+}
 function tbReset(){if(!confirm('Recomeçar a jornada? O diário desta pausa será apagado.'))return;ls('dr_tb_'+uid(),null);renderTbreak();}
 // ── CERTIFICADO / STORY compartilhável ──
 function _roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
