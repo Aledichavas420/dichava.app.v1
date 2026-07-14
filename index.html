@@ -727,6 +727,40 @@ a{color:inherit;text-decoration:none}
 .cmpact{display:flex;justify-content:flex-end;gap:9px;margin-top:11px}
 
 /* REFLEXÃO ITEM */
+/* ── Diário v2 (feed visual) ── */
+.ref-filters{display:flex;gap:8px;overflow-x:auto;padding:2px 18px 12px;scrollbar-width:none}
+.ref-filters::-webkit-scrollbar{display:none}
+.ref-fc{flex:0 0 auto;background:#fff;border:1.5px solid #E8E8E8;border-radius:20px;padding:7px 13px;font-size:12.5px;font-weight:700;color:var(--txs);cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.ref-fc:active{transform:scale(.94)}
+.ref-fc.on{background:var(--c);border-color:var(--c);color:#fff}
+#shell.dkm .ref-fc{background:#1D2520;border-color:#32402F;color:#ADBDA9}
+#shell.dkm .ref-fc.on{color:#fff}
+.ref-daygrp{font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--txm);margin:6px 18px 8px;display:flex;align-items:center;gap:8px}
+.ref-daygrp::after{content:'';flex:1;height:1px;background:var(--cinm);opacity:.6}
+.rcard{display:flex;gap:12px;background:#fff;border:1px solid #ECECEC;border-radius:16px;padding:13px;margin:0 18px 10px;position:relative;animation:pgslide .3s ease}
+#shell.dkm .rcard{background:#1D2520;border-color:#32402F}
+.rcard.fav{border-color:#F0B84B;box-shadow:0 2px 12px rgba(240,184,75,.16)}
+.rcard-emo{flex:0 0 44px;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;background:color-mix(in srgb,var(--c) 16%,#fff);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 30%,transparent)}
+#shell.dkm .rcard-emo{background:color-mix(in srgb,var(--c) 26%,#1D2520)}
+.rcard-b{flex:1;min-width:0}
+.rcard-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rcard-tag{font-size:11px;font-weight:800;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent);padding:3px 9px;border-radius:20px;white-space:nowrap}
+.rcard-dt{font-size:11px;color:var(--txm);margin-left:2px}
+.rcard-top .kw{margin-left:auto}
+.rcard-q{font-size:12.5px;color:var(--txs);font-style:italic;line-height:1.5;padding-left:10px;border-left:3px solid color-mix(in srgb,var(--roxo) 40%,transparent);margin-bottom:7px}
+#shell.dkm .rcard-q{color:#9db0a0}
+.rcard-tx{font-size:14px;color:var(--tx);line-height:1.65;white-space:normal;word-break:break-word}
+.rcard-tx.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.rcard-more{background:none;border:none;color:var(--roxo);font-size:12.5px;font-weight:800;cursor:pointer;padding:4px 0 0}
+#shell.dkm .rcard-more{color:#B79AF2}
+.rcard-ft{display:flex;justify-content:flex-end;margin-top:6px}
+.rcard-fav{background:none;border:none;font-size:19px;color:#F0B84B;cursor:pointer;line-height:1;-webkit-tap-highlight-color:transparent;transition:transform .12s}
+.rcard-fav:active{transform:scale(1.3)}
+.ref-empty{text-align:center;padding:26px 24px;color:var(--txm)}
+.ref-empty-ic{font-size:44px;margin-bottom:8px}
+.ref-empty b{display:block;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--dk);margin-bottom:5px}
+#shell.dkm .ref-empty b{color:#E9EFE7}
+.ref-empty span{font-size:13px;line-height:1.55;display:block;max-width:280px;margin:0 auto}
 .rii{background:#fff;border-radius:13px;border:1px solid #EBEBEB;padding:12px 14px;margin:0 18px 9px}
 .rih{display:flex;align-items:center;gap:9px;margin-bottom:7px}
 .riav{width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
@@ -5251,10 +5285,38 @@ function renderFiss(){
   c.innerHTML=hero+fiss.slice(0,5).map(f=>`<div class="fssi"><div class="fssie">${icon('resistencia')}</div><div class="fssib"><div class="fssin">${esc(regSubLabel(f))} — resistência ativa</div><div class="fssim">${fdt(f.data)}${f.intens&&f.intens!=='—'?' · intensidade '+f.intens+'/10':''}${f.ctx?' · '+esc(f.ctx):''}</div>${f.fez?`<div class="fssit">Fiz no lugar: ${esc(f.fez)}</div>`:''}<div class="fssibg">✓ Resistiu!</div></div></div>`).join('');
 }
 
+const REF_TAGS={conversa:{c:'#4CAF5A',i:'🌱',l:'Conversa'},'emoção':{c:'#EC5B95',i:'🎡',l:'Emoção'},trilha:{c:'#7C3AED',i:'✍️',l:'Trilha'},'intenção':{c:'#F2B705',i:'🎯',l:'Intenção'},'reflexão':{c:'#2E9AC4',i:'💭',l:'Diário'}};
+function refTagInfo(t){return REF_TAGS[t]||{c:'#2E9AC4',i:'💭',l:(t?(t.charAt(0).toUpperCase()+t.slice(1)):'Diário')};}
+const EMO_COL={'😊':'#F2B705','😄':'#F2B705','🙂':'#7BC96F','😌':'#2BB3A3','🥰':'#EC5B95','😍':'#EC5B95','😐':'#A1887F','😕':'#A1887F','😔':'#5B8DEF','😢':'#5B8DEF','😰':'#9B5DE5','😨':'#9B5DE5','😠':'#F0584A','😤':'#F0584A','😵':'#F0584A','🌱':'#4CAF5A','🎯':'#F2B705','✍️':'#7C3AED','🧭':'#4CAF5A','💚':'#4CAF5A'};
+function emoCol(e){return EMO_COL[e]||'#8F9C88';}
+function refGroupLabel(d){try{const h=new Date(hoje()+'T12:00:00'),dd=new Date(d+'T12:00:00');const diff=Math.round((h-dd)/864e5);if(diff<=0)return 'Hoje';if(diff===1)return 'Ontem';if(diff<7)return 'Esta semana';return dd.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}).replace(/^\w/,function(m){return m.toUpperCase();});}catch(e){return '';}}
+function refTime(r){try{if(r.criado)return new Date(r.criado).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}catch(e){}return fdt(r.data);}
+let _refFilter='todos';
+function setRefFilter(t){_refFilter=t;renderRefFeed();try{vib(5);}catch(e){}}
+function refToggleMore(btn){const tx=btn.previousElementSibling;if(!tx)return;const cl=tx.classList.toggle('clamp')===false;btn.textContent=tx.classList.contains('clamp')?'ver mais':'ver menos';}
+function favRef(id,btn){const refs=gRef();const r=refs.find(x=>x.id===id);if(!r)return;r.fav=!r.fav;sRef(refs);btn.textContent=r.fav?'♥':'♡';const card=btn.closest('.rcard');if(card)card.classList.toggle('fav',r.fav);try{vib(6);}catch(e){}}
 function renderRefFeed(){
-  const refs=gRef().slice().reverse();const in2=ini(U?.nome);const c=document.getElementById('ref-feed');
-  if(!refs.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px 14px">Nenhuma reflexão ainda.</div>';return;}
-  c.innerHTML=refs.map(r=>`<div class="rii"><div class="rih"><div class="riav" style="background:var(--vf);color:var(--ve)">${in2}</div><div style="flex:1"><div class="rin">${esc(U?.nome)||'Você'}</div><div class="rid">${fdt(r.data)}</div></div><span class="ritg" style="background:var(--vf);color:var(--ve)">${esc(r.tag)||'reflexão'}</span><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editRef('${r.id}')">✏️ Editar</button><button class="dan" onclick="delRef('${r.id}')">🗑️ Apagar</button></div></div></div>${r.prompt?`<div class="rip">💭 ${esc(r.prompt)}</div>`:''}<div class="rit">${esc(r.texto)}</div><div class="rif"><div class="rife">${r.emocao||'✍️'}</div><button style="background:none;border:none;font-size:13px;color:var(--txm);cursor:pointer" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div>`).join('');
+  const all=gRef().slice().reverse();const c=document.getElementById('ref-feed');if(!c)return;
+  if(!all.length){c.innerHTML='<div class="ref-empty"><div class="ref-empty-ic">📖</div><b>Seu diário está em branco</b><span>Escreva uma reflexão, converse com o Dichavaldo ou registre uma emoção — tudo aparece aqui, do seu jeito.</span></div>';return;}
+  const tags=[];all.forEach(function(r){const t=r.tag||'reflexão';if(tags.indexOf(t)<0)tags.push(t);});
+  let h='<div class="ref-filters"><button class="ref-fc'+(_refFilter==='todos'?' on':'')+'" style="--c:#2E7D32" onclick="setRefFilter(\'todos\')">Tudo · '+all.length+'</button>';
+  tags.forEach(function(t){const ti=refTagInfo(t);const n=all.filter(function(r){return (r.tag||'reflexão')===t;}).length;h+='<button class="ref-fc'+(_refFilter===t?' on':'')+'" style="--c:'+ti.c+'" onclick="setRefFilter(\''+t.replace(/'/g,'')+'\')">'+ti.i+' '+ti.l+' · '+n+'</button>';});
+  h+='</div>';
+  const list=all.filter(function(r){return _refFilter==='todos'||(r.tag||'reflexão')===_refFilter;});
+  let lastG='';
+  list.forEach(function(r){
+    const g=refGroupLabel(r.data);if(g!==lastG){h+='<div class="ref-daygrp">'+g+'</div>';lastG=g;}
+    const ti=refTagInfo(r.tag||'reflexão');const emo=r.emocao||'✍️';const col=emoCol(emo);
+    const txt=(r.texto||'');const longo=txt.length>170||((txt.match(/\n/g)||[]).length>2);
+    h+='<div class="rcard'+(r.fav?' fav':'')+'"><div class="rcard-emo" style="--c:'+col+'">'+emo+'</div><div class="rcard-b">'+
+      '<div class="rcard-top"><span class="rcard-tag" style="--c:'+ti.c+'">'+ti.i+' '+ti.l+'</span><span class="rcard-dt">'+refTime(r)+'</span><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editRef(\''+r.id+'\')">✏️ Editar</button><button class="dan" onclick="delRef(\''+r.id+'\')">🗑️ Apagar</button></div></div></div>'+
+      (r.prompt?'<div class="rcard-q">💭 '+esc(r.prompt)+'</div>':'')+
+      '<div class="rcard-tx'+(longo?' clamp':'')+'">'+esc(txt).replace(/\n/g,'<br>')+'</div>'+
+      (longo?'<button class="rcard-more" onclick="refToggleMore(this)">ver mais</button>':'')+
+      '<div class="rcard-ft"><button class="rcard-fav" onclick="favRef(\''+r.id+'\',this)">'+(r.fav?'♥':'♡')+'</button></div>'+
+    '</div></div>';
+  });
+  c.innerHTML=h;
 }
 
 let _editRefId=null;
