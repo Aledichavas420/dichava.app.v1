@@ -6872,24 +6872,40 @@ async function atualizarApp(){
 // captura o prompt de instalação (Android/Chrome)
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._deferredPrompt=e;try{renderInstall();}catch(x){}});
 window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{renderInstall();}catch(x){}});
-/* ── Botão Voltar (Android): fecha modal / volta pra Início em vez de sair do app ── */
+/* ── Botão Voltar (Android): volta uma tela de cada vez, nunca fecha o app sem querer ── */
 (function(){
-  function guard(){try{history.pushState({dr:1},'');}catch(_){}}
-  guard();                                                   // arma imediatamente
+  // guarda referências ORIGINAIS antes de qualquer hook
+  var _showV=window.showV,_goPg=window.goPg,_closeMod=window.closeMod;
+  function armed(){var s;try{s=history.state;}catch(_){return false;}return !!(s&&s.dr);}
+  function guard(){try{history.pushState({dr:1},'');}catch(_){}}     // empurra um estado-tampão
+  function ensure(){if(!armed())guard();}
+  function curPageId(){try{for(var i=0;i<PAGES.length;i++){var el=document.getElementById(PAGES[i]);if(el&&getComputedStyle(el).display!=='none')return PAGES[i];}}catch(_){}return null;}
+
+  guard();                                                    // arma imediatamente
+  window.addEventListener('DOMContentLoaded',ensure);
   window.addEventListener('load',function(){setTimeout(guard,300);});
-  window.addEventListener('pageshow',function(){setTimeout(guard,60);});   // volta do bfcache
+  window.addEventListener('pageshow',function(){setTimeout(guard,60);});    // volta do bfcache
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(ensure,80);});
+  window.addEventListener('focus',function(){setTimeout(ensure,80);});
+
+  // Cada navegação "pra frente" empurra um estado — assim o Voltar sempre tem o que consumir,
+  // e desfaz exatamente UMA tela por vez (modal → sub-tela → página → Início).
+  function hook(name){var o=window[name];if(typeof o!=='function')return;window[name]=function(){var r;try{r=o.apply(this,arguments);}finally{try{guard();}catch(_){}}return r;};}
+  hook('showV');hook('goPg');hook('openMod');
+
   window.addEventListener('popstate',function(){
-    // 1) algum modal (bottom sheet) aberto? fecha o de cima
-    var mods=document.querySelectorAll('.ov.on');
-    if(mods.length){try{closeMod(mods[mods.length-1].id);}catch(_){}guard();return;}
-    // 2) tela sobreposta (crise, respiração, grounding, cartas, artigos…)? volta pro app
-    var cur=document.querySelector('.V.on');var id=cur&&cur.id;
-    if(id&&id!=='vapp'&&id!=='va'&&id!=='vo'){try{showV('vapp');}catch(_){}guard();return;}
-    // 3) dentro do app, mas fora da Início? volta pra Início
-    var vapp=document.getElementById('vapp'),home=document.getElementById('p-home');
-    if(vapp&&vapp.classList.contains('on')&&home&&getComputedStyle(home).display==='none'){try{goPg('p-home');}catch(_){}guard();return;}
-    // 4) senão, mantém no app (não sai sem querer)
-    guard();
+    try{
+      // 1) modal (bottom sheet) aberto? fecha o de cima
+      var mods=document.querySelectorAll('.ov.on');
+      if(mods.length){try{_closeMod(mods[mods.length-1].id);}catch(_){}return;}
+      // 2) tela sobreposta (pausa, crise, respiração, cartas, artigos…)? volta pro app
+      var cur=document.querySelector('.V.on');var id=cur&&cur.id;
+      if(id&&id!=='vapp'){try{_showV('vapp');}catch(_){}return;}
+      // 3) dentro do app, fora da Início? volta pra Início
+      var pg=curPageId();
+      if(pg&&pg!=='p-home'){try{_goPg('p-home');}catch(_){}return;}
+      // 4) na Início: mantém no app (não sai sem querer)
+    }finally{guard();}                                        // re-arma SEMPRE
   });
 })();
 
