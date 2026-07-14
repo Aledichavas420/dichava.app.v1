@@ -1929,8 +1929,8 @@ a{color:inherit;text-decoration:none}
     <div class="tbcard-art"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="46" cy="18" r="11" fill="#FFD86B"/><path d="M40 14a11 11 0 0 0 10 13 11 11 0 1 1-10-13Z" fill="#F2B705"/><path d="M32 56V38" stroke="#8FE3A6" stroke-width="3.5" stroke-linecap="round"/><path d="M32 42c-7 0-13-5-14-12 8 0 14 5 14 12Z" fill="#7BD98A"/><path d="M32 38c0-8 6-14 14-14 0 8-6 14-14 14Z" fill="#5BC06F"/></svg></div>
     <div class="tbcard-b">
       <div class="tbcard-k">👑 Premium · novo</div>
-      <div class="tbcard-t">Guia do T-break</div>
-      <div class="tbcard-d">Uma jornada guiada de pausa canábica — dia a dia, com ferramentas pra atravessar cada fase.</div>
+      <div class="tbcard-t">Travessia</div>
+      <div class="tbcard-d">Seu guia na pausa de tolerância (t-break) — dia a dia, com ferramentas pra atravessar cada fase.</div>
       <div class="tbcard-cta">Começar minha pausa →</div>
     </div>
   </div>
@@ -2647,7 +2647,7 @@ a{color:inherit;text-decoration:none}
 <!-- GUIA DO T-BREAK (pausa canábica) -->
 <div class="V" id="vtbreak" style="background:var(--cin)">
 <div class="tb-aurora"><div class="tb-stars-bg"></div></div>
-<div class="ptb" style="background:var(--cin);position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Guia do T-break</div></div>
+<div class="ptb" style="background:var(--cin);position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Travessia</div></div>
 <div class="sc" style="padding-bottom:40px" id="tb-body"></div>
 <button class="tb-help" onclick="openMod('mtbfaq')" aria-label="Dúvidas da pausa"><span>?</span>Dúvidas</button>
 </div>
@@ -6922,6 +6922,9 @@ function premNudge(kind){
 
 // ══ GUIA DO T-BREAK (pausa canábica) ══
 const TB_HUMOR=['😣','😕','😐','🙂','😌'];
+// REVISÃO: libera todos os dias (trocar para false antes do lançamento p/ voltar ao desbloqueio diário)
+const TB_UNLOCK_ALL=true;
+function tbLiberadoAte(tb){return TB_UNLOCK_ALL?tb.trilha:tbDiaAtual(tb);}
 const TBREAK7=[
   {ic:'🌱',tema:'O primeiro passo',esperar:'No começo o corpo ainda está se ajustando — talvez você sinta pouca coisa hoje, ou uma leve inquietação. O mais importante agora é a <b>decisão</b> e o porquê dela.',ferramenta:{t:'Defina sua intenção',x:'Antes de tudo: por que você quer essa pausa? Ter isso claro é o que te segura nos dias difíceis. Respire fundo 3 vezes e escreva.'},prompt:'Por que decidi fazer essa pausa agora? O que espero sentir ou ganhar?',ref:'Guia de Pausa Canábica — Desprô/@dichavando.'},
   {ic:'🌊',tema:'A onda começa a subir',esperar:'Entre 24 e 72h os sintomas costumam aparecer: sono mais agitado, irritabilidade, talvez menos apetite. Não é fraqueza — é o cérebro <b>reajustando os receptores</b>.',ferramenta:{t:'Respiração 4-7-8',x:'Inspire por 4, segure por 7, solte por 8. Ativa o sistema nervoso parassimpático e acalma a fissura.',acao:{label:'Abrir respiração',fn:"showV('vresp')"}},prompt:'Como está meu corpo hoje? O que eu sinto quando bate a vontade?'},
@@ -7056,7 +7059,7 @@ function renderTbreak(){
   const upto=Math.max(1,Math.min(atual,lastDone+1));
   h+='<div class="tb-path" style="height:'+totalH+'px;width:'+W+'px"><svg class="tb-svg" viewBox="0 0 '+W+' '+totalH+'" width="'+W+'" height="'+totalH+'"><defs><linearGradient id="tbgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FE3A6"></stop><stop offset="1" stop-color="#B387F2"></stop></linearGradient></defs><path d="'+curve(pts)+'" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="10" stroke-linecap="round"></path><path d="'+curve(pts.slice(0,upto))+'" fill="none" stroke="url(#tbgrad)" stroke-width="9" stroke-linecap="round" style="filter:drop-shadow(0 0 6px rgba(143,227,166,.5))"></path></svg>';
   for(let d=1;d<=N;d++){
-    const m=tbMissOf(tb,d),dn=m[0]&&m[1]&&m[2],avail=d<=atual,now=!dn&&d===atual,lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0),p=pts[d-1];
+    const m=tbMissOf(tb,d),dn=m[0]&&m[1]&&m[2],avail=d<=tbLiberadoAte(tb),now=!dn&&d===atual,lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0),p=pts[d-1];
     const st=dn?' done':(now?' now':(avail?' avail':' locked'));
     const inner=dn?'✓':(avail?('<span class="tb-art">'+TB_ART[(d-1)%7]+'</span>'):'🔒');
     let stars='';for(let s=0;s<3;s++)stars+='<span class="'+(s<lit?'on':'')+'">★</span>';
@@ -7075,7 +7078,7 @@ function renderTbreak(){
 }
 let _tbSelDia=null,_tbHumor=null;
 function abrirTbDia(d){
-  const tb=gTb();if(!tb)return;const atual=tbDiaAtual(tb);
+  const tb=gTb();if(!tb)return;const atual=tbLiberadoAte(tb);
   if(d>atual){toast('🔒 Esse dia libera em '+(d-atual)+(d-atual===1?' dia':' dias'));return;}
   _tbSelDia=d;_tbHumor=((tb.dias&&tb.dias[d])||{}).humor||null;renderTbDiaModal();openMod('mtbdia');
 }
