@@ -1257,6 +1257,50 @@ a{color:inherit;text-decoration:none}
 .tba-chip{background:var(--lrjf);color:#B45309;border-radius:16px;padding:6px 12px;font-size:12px;font-weight:700}
 #shell.dkm .tba-chip{background:#3B2A18;color:#E0A106}
 .tba-note{font-size:11px;color:var(--txm);margin-top:14px;line-height:1.5}
+/* análise — donuts, velas, movimento */
+.tba-tile{animation:tbaup .5s ease both;animation-delay:calc(var(--i,0)*.07s)}
+@keyframes tbaup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tba-donuts{display:flex;gap:10px;justify-content:space-between}
+.tba-donut{flex:1;text-align:center;position:relative}
+.tba-donut svg{width:88px;height:88px;transform:rotate(0)}
+.tba-ring{stroke-dashoffset:var(--c);animation:tbring 1.2s .15s cubic-bezier(.3,1,.4,1) forwards}
+@keyframes tbring{to{stroke-dashoffset:var(--fin)}}
+.tba-donut-c{position:absolute;top:0;left:0;right:0;height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.tba-donut-e{font-size:22px;line-height:1}
+.tba-donut-c b{font-size:14px;font-weight:800;color:var(--dk)}
+#shell.dkm .tba-donut-c b{color:#E9EFE7}
+.tba-donut-l{font-size:11px;color:var(--txm);margin-top:2px;line-height:1.2}
+.tba-legend{display:flex;gap:14px;justify-content:center;margin:2px 0 8px;font-size:11px;font-weight:700;color:var(--txm)}
+.tbl-s{display:inline-flex;align-items:center;gap:5px}
+.tbl-s::before{content:'';width:10px;height:10px;border-radius:3px}
+.tbl-sono::before{background:#4F9DE8}.tbl-emo::before{background:#B387F2}
+.tba-candles{display:flex;align-items:flex-end;justify-content:center;gap:6px;height:130px;padding:10px 6px 0;background:var(--vf);border-radius:14px}
+#shell.dkm .tba-candles{background:#1D2520}
+.tba-cd{flex:1;max-width:34px;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px}
+.tba-cd-bars{flex:1;display:flex;align-items:flex-end;gap:3px;width:100%;justify-content:center}
+.tba-cbar{width:8px;border-radius:5px;transform-origin:bottom;animation:tbcgrow .6s cubic-bezier(.34,1.4,.64,1) both;animation-delay:calc(var(--i,0)*.05s)}
+@keyframes tbcgrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.tba-cb-sono{background:linear-gradient(180deg,#7EC0F2,#4F9DE8)}
+.tba-cb-emo{background:linear-gradient(180deg,#C9A9F7,#B387F2)}
+.tba-cd-d{font-size:9.5px;font-weight:800;color:var(--txm)}
+.tba-chip-ok{background:#DCF5E3;color:#2E9244}
+#shell.dkm .tba-chip-ok{background:#1D3320;color:#7BD98A}
+.tba-empty{font-size:26px;line-height:1.9}
+/* botão análise no topo do percurso */
+.tb-analise-top{display:flex;align-items:center;gap:8px;width:calc(100% - 32px);margin:0 16px 10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#EAF3EC;border-radius:16px;padding:12px 15px;font-size:13.5px;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tb-analise-top span{font-size:18px}.tb-analise-top b{margin-left:auto;font-size:18px;color:#8FE3A6}
+.tb-analise-top:active{transform:scale(.98)}
+/* tela de escolha de trilha — imersiva */
+.tb-welcome{display:flex;align-items:center;gap:14px;margin:10px 16px 4px;background:linear-gradient(135deg,rgba(143,227,166,.14),rgba(179,135,242,.14));border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:16px 16px}
+.tb-welcome-av,.tb-welcome .tb-guide-av{flex:0 0 58px;width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35));animation:tbbob 3.4s ease-in-out infinite}
+.tb-welcome-t{font-family:'DM Sans',sans-serif;font-weight:800;font-size:17px;color:#fff}
+.tb-welcome-x{font-size:12.5px;color:#C4D6CC;margin-top:3px;line-height:1.45}
+.tb-welcome-x b{color:#fff}
+#vtbreak .tb-track{position:relative;display:flex;align-items:center;gap:12px;padding:16px 15px}
+.tb-track-tag{position:absolute;top:-9px;right:14px;background:linear-gradient(135deg,#B387F2,#7C3AED);color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;padding:3px 9px;border-radius:20px;box-shadow:0 3px 8px rgba(124,58,237,.4)}
+#vtbreak .tb-track-best{border-color:rgba(179,135,242,.5);background:rgba(179,135,242,.12)}
+.tbt-ic{font-size:24px;flex:0 0 auto}
+.tbt-go{font-size:20px;color:#8FE3A6;font-weight:800;flex:0 0 auto}
 .tbcert-ghost{background:rgba(255,255,255,.16);color:#fff;box-shadow:none;margin-top:9px}
 .tbcert-btn{position:relative;z-index:1;margin-top:16px;background:#fff;color:#2d1f52;border:none;border-radius:24px;padding:13px 22px;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.22)}
 .tbcert-btn:active{transform:scale(.95)}
@@ -1277,7 +1321,7 @@ a{color:inherit;text-decoration:none}
 @keyframes tbaur2{0%,100%{transform:translate(0,0) scale(1.12)}50%{transform:translate(-80px,-70px) scale(1)}}
 /* conteúdo legível sobre o fundo escuro */
 #vtbreak .ptb-tit{color:#EAF3EC!important}
-#vtbreak .bk{color:#EAF3EC}
+#vtbreak .bk,#vtbreak .bk.dk{background:rgba(255,255,255,.16);color:#EAF3EC}
 #vtbreak .tb-intro{color:#C4D6CC}#vtbreak .tb-intro b{color:#fff}
 #vtbreak .tb-sec{color:#EAF3EC!important}
 #vtbreak .tbt-t{color:#fff}#vtbreak .tbt-d{color:#AFC0C6}
@@ -1959,9 +2003,9 @@ a{color:inherit;text-decoration:none}
     <div class="tbcard-art"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="46" cy="18" r="11" fill="#FFD86B"/><path d="M40 14a11 11 0 0 0 10 13 11 11 0 1 1-10-13Z" fill="#F2B705"/><path d="M32 56V38" stroke="#8FE3A6" stroke-width="3.5" stroke-linecap="round"/><path d="M32 42c-7 0-13-5-14-12 8 0 14 5 14 12Z" fill="#7BD98A"/><path d="M32 38c0-8 6-14 14-14 0 8-6 14-14 14Z" fill="#5BC06F"/></svg></div>
     <div class="tbcard-b">
       <div class="tbcard-k">👑 Premium · novo</div>
-      <div class="tbcard-t">Travessia</div>
-      <div class="tbcard-d">Seu guia na pausa de tolerância (t-break) — dia a dia, com ferramentas pra atravessar cada fase.</div>
-      <div class="tbcard-cta">Começar minha pausa →</div>
+      <div class="tbcard-t">Inicie a pausa de tolerância</div>
+      <div class="tbcard-d">Um t-break guiado dia a dia: missões simples, check-in do seu corpo e humor, e a análise da sua travessia no fim. 🌱</div>
+      <div class="tbcard-cta">Começar agora →</div>
     </div>
   </div>
   <div id="zen-sons">
@@ -7065,35 +7109,56 @@ function tbDesenharCert(cb){
 }
 function tbResumo(){
   const tb=gTb();if(!tb)return null;const N=tb.trilha;
-  let dias=0,sono=[],bfis=[],bemo=[],exerc=0,exercTot=0,sonhos=0,sonhoTot=0,subsDias=0,sint={};
+  let dias=0,sono=[],bfis=[],bemo=[],exerc=0,exercTot=0,sonhos=0,sonhoTot=0,subsDias=0,sint={},serie=[];
   for(let d=1;d<=N;d++){const x=tb.dias&&tb.dias[d];if(!x)continue;const q=x.q||{};
     const has=x.humor||q.sono||q.bfis||q.sonho!==undefined||q.exerc!==undefined||(q.sint&&q.sint.length)||(q.subs&&q.subs.length)||x.texto;if(!has)continue;dias++;
-    if(q.sono)sono.push(q.sono);if(q.bfis)bfis.push(q.bfis);if(x.humor&&TB_HVAL[x.humor])bemo.push(TB_HVAL[x.humor]);
+    const bm=(x.humor&&TB_HVAL[x.humor])?TB_HVAL[x.humor]:0;
+    if(q.sono)sono.push(q.sono);if(q.bfis)bfis.push(q.bfis);if(bm)bemo.push(bm);
     if(q.exerc!==undefined){exercTot++;if(q.exerc===1)exerc++;}
     if(q.sonho!==undefined){sonhoTot++;if(q.sonho===1)sonhos++;}
     if((q.subs&&q.subs.length))subsDias++;
     (q.sint||[]).forEach(function(s){sint[s]=(sint[s]||0)+1;});
+    serie.push({d:d,sono:q.sono||0,bemo:bm,bfis:q.bfis||0});
   }
   const avg=function(a){return a.length?(a.reduce(function(x,y){return x+y;},0)/a.length):0;};
   const sintTop=Object.keys(sint).sort(function(a,b){return sint[b]-sint[a];}).slice(0,4).map(function(k){return [k,sint[k]];});
-  return {dias:dias,sono:avg(sono),bfis:avg(bfis),bemo:avg(bemo),exerc:exerc,exercTot:exercTot,sonhos:sonhos,sonhoTot:sonhoTot,subsDias:subsDias,sintTop:sintTop};
+  return {dias:dias,sono:avg(sono),bfis:avg(bfis),bemo:avg(bemo),exerc:exerc,exercTot:exercTot,sonhos:sonhos,sonhoTot:sonhoTot,subsDias:subsDias,sintTop:sintTop,serie:serie};
+}
+function _tbDonut(part,tot,color,emoji,label){
+  const pct=tot?Math.max(0,Math.min(1,part/tot)):0;const R=32,C=2*Math.PI*R,fin=C*(1-pct);
+  return '<div class="tba-donut"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="'+R+'" fill="none" stroke="rgba(140,140,160,.15)" stroke-width="9"/><circle class="tba-ring" cx="40" cy="40" r="'+R+'" fill="none" stroke="'+color+'" stroke-width="9" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" style="--c:'+C.toFixed(1)+';--fin:'+fin.toFixed(1)+'" transform="rotate(-90 40 40)"/></svg><div class="tba-donut-c"><div class="tba-donut-e">'+emoji+'</div><b>'+part+'/'+tot+'</b></div><div class="tba-donut-l">'+label+'</div></div>';
 }
 function abrirTbAnalise(){
   const r=tbResumo();const el=document.getElementById('mtbanalise-c');if(!el)return;
-  if(!r||r.dias===0){el.innerHTML='<div class="tba-empty">Faça os check-ins diários e sua análise aparece aqui — médias de sono, bem-estar, sintomas e mais. 🌱</div>';openMod('mtbanalise');return;}
+  if(!r||r.dias===0){el.innerHTML='<div class="tba-empty">🌱<br>Faça os check-ins diários e sua análise aparece aqui — médias de sono, bem-estar, sintomas e mais.</div>';openMod('mtbanalise');return;}
   const f1=function(v){return v?v.toFixed(1).replace('.',','):'—';};
-  let h='<div class="tba-sub">Compilado dos seus '+r.dias+' check-in'+(r.dias>1?'s':'')+' — o retrato da sua travessia.</div>';
+  let h='<div class="tba-sub">✨ Compilado dos seus <b>'+r.dias+'</b> check-in'+(r.dias>1?'s':'')+' — o retrato da sua travessia.</div>';
+  // médias em destaque
   h+='<div class="tba-grid">';
-  h+='<div class="tba-tile"><div class="tba-emo">😴</div><b>'+f1(r.sono)+'</b><span>sono médio</span></div>';
-  h+='<div class="tba-tile"><div class="tba-emo">💪</div><b>'+f1(r.bfis)+'</b><span>bem-estar físico</span></div>';
-  h+='<div class="tba-tile"><div class="tba-emo">💚</div><b>'+f1(r.bemo)+'</b><span>bem-estar emocional</span></div>';
-  h+='<div class="tba-tile"><div class="tba-emo">🏃</div><b>'+r.exerc+'/'+(r.exercTot||0)+'</b><span>dias com exercício</span></div>';
-  h+='<div class="tba-tile"><div class="tba-emo">💭</div><b>'+r.sonhos+'/'+(r.sonhoTot||0)+'</b><span>noites com sonhos</span></div>';
-  h+='<div class="tba-tile"><div class="tba-emo">🌿</div><b>'+r.subsDias+'</b><span>dias c/ outra subst.</span></div>';
+  h+='<div class="tba-tile" style="--i:0"><div class="tba-emo">😴</div><b>'+f1(r.sono)+'</b><span>sono médio</span></div>';
+  h+='<div class="tba-tile" style="--i:1"><div class="tba-emo">💪</div><b>'+f1(r.bfis)+'</b><span>bem-estar físico</span></div>';
+  h+='<div class="tba-tile" style="--i:2"><div class="tba-emo">💚</div><b>'+f1(r.bemo)+'</b><span>ânimo médio</span></div>';
   h+='</div>';
-  if(r.sintTop.length){h+='<div class="tba-sect">Sintomas mais frequentes</div><div class="tba-sint">'+r.sintTop.map(function(o){return '<span class="tba-chip">'+o[0]+' · '+o[1]+'x</span>';}).join('')+'</div>';}
-  else h+='<div class="tba-sect">Sintomas</div><div class="tba-sint"><span class="tba-chip">Nenhum sintoma registrado 🙌</span></div>';
-  h+='<div class="tba-note">Escala de 1 (muito ruim) a 5 (muito bom). Este é um retrato pessoal do seu processo — leve pra reflexão, não é diagnóstico.</div>';
+  // donuts
+  h+='<div class="tba-sect">🎯 Hábitos na pausa</div><div class="tba-donuts">';
+  h+=_tbDonut(r.exerc,r.exercTot||0,'#5BC06F','🏃','dias c/ exercício');
+  h+=_tbDonut(r.sonhos,r.sonhoTot||0,'#7C3AED','💭','noites c/ sonhos');
+  h+=_tbDonut(r.subsDias,r.dias,'#F2B705','🌿','dias c/ subst.');
+  h+='</div>';
+  // candles — ritmo dia a dia
+  if(r.serie.length>=2){
+    const maxBars=14,serie=r.serie.slice(-maxBars);
+    h+='<div class="tba-sect">🕯️ Ritmo dia a dia</div><div class="tba-legend"><span class="tbl-s tbl-sono">Sono</span><span class="tbl-s tbl-emo">Ânimo</span></div>';
+    h+='<div class="tba-candles">'+serie.map(function(o,i){
+      var hs=o.sono?(o.sono/5*100):0,he=o.bemo?(o.bemo/5*100):0;
+      return '<div class="tba-cd" style="--i:'+i+'"><div class="tba-cd-bars"><span class="tba-cbar tba-cb-sono" style="height:'+hs+'%"></span><span class="tba-cbar tba-cb-emo" style="height:'+he+'%"></span></div><div class="tba-cd-d">'+o.d+'</div></div>';
+    }).join('')+'</div>';
+    if(r.serie.length>maxBars)h+='<div class="tba-note" style="margin-top:6px">Mostrando os últimos '+maxBars+' dias.</div>';
+  }
+  // sintomas
+  if(r.sintTop.length){h+='<div class="tba-sect">🤕 Sintomas mais frequentes</div><div class="tba-sint">'+r.sintTop.map(function(o){return '<span class="tba-chip">'+o[0]+' · '+o[1]+'x</span>';}).join('')+'</div>';}
+  else h+='<div class="tba-sect">🙌 Sintomas</div><div class="tba-sint"><span class="tba-chip tba-chip-ok">Nenhum sintoma registrado!</span></div>';
+  h+='<div class="tba-note">Escala de 1 (muito ruim) a 5 (muito bom). É um retrato pessoal do seu processo — leve pra reflexão, não é diagnóstico. 💚</div>';
   el.innerHTML=h;openMod('mtbanalise');
 }
 function tbGerarCert(){
@@ -7128,14 +7193,20 @@ function renderTbreak(){
   const c=document.getElementById('tb-body');if(!c)return;
   const tb=gTb();
   if(!tb){
-    const tracks=[[7,'Reset rápido','Uma semana já impacta a tolerância.',''],[14,'Pausa firme','Duas semanas pra um reajuste mais profundo.',''],[31,'Reinício','Um mês pra reencontrar sua relação com o uso.','']];
-    c.innerHTML='<div class="tb-intro">Uma pausa planejada do uso pra reequilibrar seu corpo. Você atravessa <b>dia a dia</b>, com missões simples — no seu ritmo.</div><div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">'+tracks.map(function(t){return '<button class="tb-track" onclick="tbIniciar('+t[0]+')"><span class="tbt-n"><b>'+t[0]+'</b><span>dias</span></span><span style="min-width:0"><span class="tbt-t">'+t[1]+(t[3]?' · <span style=\'color:var(--txm);font-weight:600\'>'+t[3]+'</span>':'')+'</span><div class="tbt-d">'+t[2]+'</div></span></button>';}).join('')+'</div><div class="premnote" style="margin:8px 20px">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>';
+    const tracks=[[7,'⚡','Reset rápido','Uma semana já impacta a tolerância.','',''],[14,'🌟','Pausa firme','Duas semanas pra um reajuste mais profundo.','mais escolhida','best'],[31,'🏆','Reinício','Um mês pra reencontrar sua relação com a erva.','transformação','']];
+    let s='<div class="tb-welcome"><img class="tb-guide-av" alt=""><div class="tb-welcome-b"><div class="tb-welcome-t">Bora começar sua travessia? 🌱</div><div class="tb-welcome-x">Uma pausa planejada pra reequilibrar seu corpo e sua relação com a erva — <b>dia a dia</b>, no seu ritmo.</div></div></div>';
+    s+='<div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">'+tracks.map(function(t){return '<button class="tb-track'+(t[5]==='best'?' tb-track-best':'')+'" onclick="tbIniciar('+t[0]+')">'+(t[4]?'<span class="tb-track-tag">'+t[4]+'</span>':'')+'<span class="tbt-n"><b>'+t[0]+'</b><span>dias</span></span><span class="tbt-ic">'+t[1]+'</span><span style="flex:1;min-width:0"><span class="tbt-t">'+t[2]+'</span><div class="tbt-d">'+t[3]+'</div></span><span class="tbt-go">→</span></button>';}).join('')+'</div>';
+    s+='<div class="premnote" style="margin:8px 20px 0">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>';
+    c.innerHTML=s;
+    try{const av=c.querySelector('.tb-guide-av');if(av&&typeof brotoDataURI==='function')av.src=brotoDataURI();}catch(e){}
     return;
   }
   const N=tb.trilha,atual=tbDiaAtual(tb),info=tbInfo(atual);
   let feitos=0;for(let d=1;d<=N;d++){if(tbDayDone(tb,d))feitos++;}
   const allDone=feitos>=N;
+  let temCheck=false;for(let d=1;d<=N;d++){const x=tb.dias&&tb.dias[d];if(x&&(x.humor||(x.q&&Object.keys(x.q).length)))temCheck=true;}
   let h='';
+  if(temCheck&&!allDone)h+='<button class="tb-analise-top" onclick="abrirTbAnalise()"><span>📊</span> Ver análise da travessia <b>›</b></button>';
   if(allDone){
     if(!ls('dr_tbdone_'+uid())){ls('dr_tbdone_'+uid(),1);setTimeout(function(){try{confete();}catch(e){}try{sfx('complete');}catch(e){}},350);}
     h+='<div class="tb-complete"><div class="tb-aur-c"></div><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div><button class="tbcert-btn" onclick="tbGerarCert()">📤 Compartilhar meu certificado</button><button class="tbcert-btn tbcert-ghost" onclick="abrirTbAnalise()">📊 Ver análise da travessia</button></div>';
@@ -7161,8 +7232,6 @@ function renderTbreak(){
   if(hd.length>=2){
     h+='<div class="tb-sec">Sua jornada 📈</div><div class="tb-chart">'+hd.map(function(o){const pct=o[1]/5*100;return '<div class="tbc-col"><div class="tbc-bar-wrap"><div class="tbc-bar" style="height:'+pct+'%"></div></div><div class="tbc-emo">'+o[2]+'</div><div class="tbc-day">'+o[0]+'</div></div>';}).join('')+'</div><div class="tbc-cap">Seu humor a cada dia da pausa</div>';
   }
-  let temCheck=false;for(let d=1;d<=N;d++){const x=tb.dias&&tb.dias[d];if(x&&(x.humor||(x.q&&Object.keys(x.q).length)))temCheck=true;}
-  if(temCheck)h+='<div style="text-align:center;padding:6px 16px 0"><button class="btn bout bsm" onclick="abrirTbAnalise()">📊 Ver análise da travessia</button></div>';
   const logs=[];for(let d=N;d>=1;d--){const x=tb.dias&&tb.dias[d];if(x&&tbDayDone(tb,d)&&(x.texto||x.humor))logs.push([d,x]);}
   if(logs.length)h+='<div class="tb-sec">Meu diário da pausa 📔</div>'+logs.map(function(l){return '<div class="tbdi"><div class="tbdi-h">'+(l[1].humor||'🌱')+' Dia '+l[0]+' · '+tbInfo(l[0]).tema+'</div>'+(l[1].texto?'<div class="tbdi-x">'+esc(l[1].texto)+'</div>':'')+'</div>';}).join('');
   h+='<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">'+(allDone?'Fazer outra pausa':'Recomeçar jornada')+'</button></div>';
