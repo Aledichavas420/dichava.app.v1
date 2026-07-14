@@ -1200,12 +1200,43 @@ a{color:inherit;text-decoration:none}
 .tbm-ic{font-size:18px}
 .tbm-st{font-size:17px;color:#cfd6cf}
 .tbm.done .tbm-st{color:#FFC531}
-.tbm-b{padding:0 14px 14px;font-size:13.5px;line-height:1.6;color:var(--txs)}
+.tbm-b{display:none;padding:0 14px 14px;font-size:13.5px;line-height:1.6;color:var(--txs)}
+.tbm.open .tbm-b{display:block;animation:tbmopen .22s ease}
+@keyframes tbmopen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .tbm-b b{color:var(--dk)}
 #shell.dkm .tbm-b{color:#ADBDA9}
-.tbm.done .tbm-b{display:none}
+.tbm-chev{font-size:13px;color:#b7bfb7;transition:transform .22s;flex:0 0 auto}
+.tbm.open .tbm-chev{transform:rotate(180deg)}
+.tbm-h{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .tbm-btn{margin-top:11px;display:block;width:100%;background:var(--roxo);color:#fff;border:none;border-radius:22px;padding:11px;font-weight:800;font-size:14px;cursor:pointer}
 .tbd-done{margin-top:14px;text-align:center;background:linear-gradient(135deg,#5BC06F,#2E9244);color:#fff;font-weight:800;font-size:14px;padding:14px;border-radius:16px}
+/* ── T-break v2: arte por fase, gráfico, conclusão, fundo animado ── */
+.tb-art{display:block;width:34px;height:34px}.tb-art svg{width:100%;height:100%;display:block}
+.tbd-art{width:88px;height:88px;margin:0 auto 6px;filter:drop-shadow(0 8px 18px rgba(124,58,237,.25));animation:tbfloat 4s ease-in-out infinite}
+.tbd-art svg{width:100%;height:100%}
+@keyframes tbfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.tb-chart{display:flex;align-items:flex-end;justify-content:center;gap:9px;height:132px;margin:6px 20px 2px;padding:12px 8px 0;background:var(--vf);border-radius:16px}
+#shell.dkm .tb-chart{background:#1D2520}
+.tbc-col{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;max-width:42px;height:100%;justify-content:flex-end}
+.tbc-bar-wrap{width:16px;flex:1;display:flex;align-items:flex-end;border-radius:9px;background:rgba(124,58,237,.08)}
+.tbc-bar{width:100%;border-radius:9px;background:linear-gradient(180deg,#B387F2,#7C3AED);min-height:6px;transition:height .5s cubic-bezier(.34,1.4,.64,1)}
+.tbc-emo{font-size:16px;line-height:1}.tbc-day{font-size:10px;font-weight:800;color:var(--txm)}
+.tbc-cap{text-align:center;font-size:11.5px;color:var(--txm);margin:0 20px 4px}
+.tb-complete{position:relative;margin:14px 16px;padding:26px 20px;border-radius:22px;text-align:center;color:#fff;background:linear-gradient(150deg,#2E9244,#7C3AED);box-shadow:0 14px 34px rgba(124,58,237,.3);overflow:hidden}
+.tb-complete-tro{font-size:56px;animation:tbtro 2.4s ease-in-out infinite}
+@keyframes tbtro{0%,100%{transform:rotate(-6deg) scale(1)}50%{transform:rotate(6deg) scale(1.08)}}
+.tb-complete-t{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;margin-top:6px}
+.tb-complete-x{font-size:13px;font-weight:700;color:rgba(255,255,255,.9);margin-top:5px}
+.tb-complete-m{font-size:13px;line-height:1.55;color:rgba(255,255,255,.86);margin-top:11px}
+.tb-aurora{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.tb-aurora::before,.tb-aurora::after{content:'';position:absolute;width:420px;height:420px;border-radius:50%;opacity:.5}
+.tb-aurora::before{background:radial-gradient(circle,rgba(179,135,242,.55),transparent 68%);top:-120px;left:-110px;animation:tbaur1 15s ease-in-out infinite}
+.tb-aurora::after{background:radial-gradient(circle,rgba(143,227,166,.5),transparent 68%);bottom:-140px;right:-120px;animation:tbaur2 18s ease-in-out infinite}
+@keyframes tbaur1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,80px) scale(1.15)}}
+@keyframes tbaur2{0%,100%{transform:translate(0,0) scale(1.1)}50%{transform:translate(-70px,-60px) scale(1)}}
+#shell.dkm .tb-aurora::before{opacity:.35}#shell.dkm .tb-aurora::after{opacity:.32}
+#vtbreak{position:relative;overflow:hidden}
+#vtbreak #tb-body{position:relative;z-index:1}
 
 /* ── FLUIDEZ v5 ── */
 .ov{opacity:0;transition:opacity .22s ease;pointer-events:none}
@@ -2574,7 +2605,8 @@ a{color:inherit;text-decoration:none}
 
 <!-- GUIA DO T-BREAK (pausa canábica) -->
 <div class="V" id="vtbreak" style="background:var(--cin)">
-<div class="ptb" style="background:var(--cin)"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Guia do T-break</div></div>
+<div class="tb-aurora"></div>
+<div class="ptb" style="background:var(--cin);position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Guia do T-break</div></div>
 <div class="sc" style="padding-bottom:40px" id="tb-body"></div>
 </div>
 
@@ -6827,6 +6859,16 @@ function tbReset(){if(!confirm('Recomeçar a jornada? O diário desta pausa ser�
 function tbMissOf(tb,d){const x=(tb.dias&&tb.dias[d])||{};return x.m||[false,false,false];}
 function tbDayDone(tb,d){const m=tbMissOf(tb,d);return m[0]&&m[1]&&m[2];}
 const TB_GUIA=['Cada dia é um passo. Bora começar? \u{1F331}','Respira — você consegue atravessar. \u{1F4AA}','Hoje pode ser o mais difícil, e você já está aqui.','Seu corpo agradece o cuidado. \u{1F957}','Perceba os padrões, sem se julgar. \u{1F504}','Sente a onda descendo? \u{1F305}','Você chegou até aqui. Que orgulho! \u{1F3C6}'];
+const TB_ART=[
+'<svg viewBox="0 0 100 100"><circle cx="74" cy="27" r="13" fill="#FFD86B"/><path d="M50 84V52" stroke="#2E7D32" stroke-width="5" stroke-linecap="round"/><path d="M50 58c-11 0-20-7-22-18 12 0 21 7 22 18Z" fill="#7BD98A"/><path d="M50 52c0-12 9-21 21-21 0 12-9 21-21 21Z" fill="#5BC06F"/><ellipse cx="50" cy="88" rx="24" ry="4" fill="#6B4A2E" opacity=".22"/></svg>',
+'<svg viewBox="0 0 100 100"><path d="M10 72c11-3 15 5 26 5s15-8 26-8 13 5 24 5" fill="none" stroke="#4FC3E8" stroke-width="6" stroke-linecap="round"/><path d="M14 56c15-30 34-13 40-4 8-30 30-11 34-3" fill="none" stroke="#2E9AC4" stroke-width="6" stroke-linecap="round"/><circle cx="80" cy="24" r="9" fill="#BEE7F5"/></svg>',
+'<svg viewBox="0 0 100 100"><circle cx="72" cy="28" r="11" fill="#FFD86B"/><path d="M50 18 84 80H16Z" fill="#7C8FA6"/><path d="M50 18 68 50 58 58 50 47 42 58 32 50Z" fill="#EAF0F6"/><path d="M50 18 84 80H50Z" fill="#5E7286"/></svg>',
+'<svg viewBox="0 0 100 100"><path d="M50 84S16 62 16 39a17 17 0 0 1 34-6 17 17 0 0 1 34 6c0 23-34 45-34 45Z" fill="#F06A8C"/><path d="M50 60c0-12 9-20 20-20 0 12-9 20-20 20Z" fill="#5BC06F"/><path d="M50 60c0-9-7-15-16-15 0 10 7 15 16 15Z" fill="#7BD98A"/></svg>',
+'<svg viewBox="0 0 100 100"><path d="M26 40a28 28 0 0 1 50-5" fill="none" stroke="#9575CD" stroke-width="6.5" stroke-linecap="round"/><path d="M78 18v18H60" fill="none" stroke="#9575CD" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M74 60a28 28 0 0 1-50 5" fill="none" stroke="#7C3AED" stroke-width="6.5" stroke-linecap="round"/><path d="M22 82V64h18" fill="none" stroke="#7C3AED" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="50" r="7" fill="#B387F2"/></svg>',
+'<svg viewBox="0 0 100 100"><path d="M18 66a32 32 0 0 1 64 0Z" fill="#FFB86B"/><circle cx="50" cy="66" r="18" fill="#FFD86B"/><g stroke="#FF9A4D" stroke-width="4.5" stroke-linecap="round"><path d="M50 32v-8"/><path d="M22 44l-6-5"/><path d="M78 44l6-5"/></g><path d="M12 80c11-3 15 3 26 3s15-6 24-6 13 3 26 3" fill="none" stroke="#4FC3E8" stroke-width="5" stroke-linecap="round"/></svg>',
+'<svg viewBox="0 0 100 100"><path d="M33 20h34v15a17 17 0 0 1-34 0Z" fill="#FFD86B"/><path d="M33 25H21c0 11 5 17 13 19M67 25h12c0 11-5 17-13 19" fill="none" stroke="#F2B705" stroke-width="5" stroke-linecap="round"/><rect x="44" y="53" width="12" height="12" fill="#E0A106"/><path d="M32 76a10 10 0 0 1 10-8h16a10 10 0 0 1 10 8v6H32Z" fill="#7A4A28"/><path d="M50 29l3.2 6.4 7 1-5 5 1.2 7-6.4-3.4-6.4 3.4 1.2-7-5-5 7-1Z" fill="#fff"/></svg>'
+];
+const TB_HVAL={'😣':1,'😕':2,'😐':3,'🙂':4,'😌':5};
 function renderTbreak(){
   const c=document.getElementById('tb-body');if(!c)return;
   const tb=gTb();
@@ -6837,7 +6879,14 @@ function renderTbreak(){
   }
   const N=tb.trilha,atual=tbDiaAtual(tb),info=tbInfo(atual);
   let feitos=0;for(let d=1;d<=N;d++){if(tbDayDone(tb,d))feitos++;}
-  let h='<div class="tb-guide"><img class="tb-guide-av" alt=""><div class="tb-guide-b"><div class="tb-guide-t">Dia '+atual+' de '+N+' · '+info.tema+'</div><div class="tb-guide-x">'+TB_GUIA[(atual-1)%7]+'</div><div class="tb-prog-bar"><div style="width:'+Math.round(feitos/N*100)+'%"></div></div></div></div>';
+  const allDone=feitos>=N;
+  let h='';
+  if(allDone){
+    if(!ls('dr_tbdone_'+uid())){ls('dr_tbdone_'+uid(),1);setTimeout(function(){try{confete();}catch(e){}},350);}
+    h+='<div class="tb-complete"><div class="tb-complete-tro">\U0001F3C6</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div></div>';
+  } else {
+    h+='<div class="tb-guide"><img class="tb-guide-av" alt=""><div class="tb-guide-b"><div class="tb-guide-t">Dia '+atual+' de '+N+' · '+info.tema+'</div><div class="tb-guide-x">'+TB_GUIA[(atual-1)%7]+'</div><div class="tb-prog-bar"><div style="width:'+Math.round(feitos/N*100)+'%"></div></div></div></div>';
+  }
   const W=320,cx0=160,amp=86,rowH=110,r=31;
   const pts=[];for(let d=1;d<=N;d++)pts.push({x:cx0+amp*Math.sin((d-1)*0.85),y:46+(d-1)*rowH});
   const totalH=pts[N-1].y+96;
@@ -6846,43 +6895,50 @@ function renderTbreak(){
   const upto=Math.max(1,Math.min(atual,lastDone+1));
   h+='<div class="tb-path" style="height:'+totalH+'px;width:'+W+'px"><svg class="tb-svg" viewBox="0 0 '+W+' '+totalH+'" width="'+W+'" height="'+totalH+'"><defs><linearGradient id="tbgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FE3A6"></stop><stop offset="1" stop-color="#B387F2"></stop></linearGradient></defs><path d="'+curve(pts)+'" fill="none" stroke="#d7ddd7" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.5 14"></path><path d="'+curve(pts.slice(0,upto))+'" fill="none" stroke="url(#tbgrad)" stroke-width="7" stroke-linecap="round"></path></svg>';
   for(let d=1;d<=N;d++){
-    const m=tbMissOf(tb,d),done=m[0]&&m[1]&&m[2],avail=d<=atual,now=!done&&d===atual,info2=tbInfo(d),lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0),p=pts[d-1];
-    const st=done?' done':(now?' now':(avail?' avail':' locked')),ic=done?'✓':(avail?info2.ic:'\u{1F512}');
+    const m=tbMissOf(tb,d),dn=m[0]&&m[1]&&m[2],avail=d<=atual,now=!dn&&d===atual,lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0),p=pts[d-1];
+    const st=dn?' done':(now?' now':(avail?' avail':' locked'));
+    const inner=dn?'✓':(avail?('<span class="tb-art">'+TB_ART[(d-1)%7]+'</span>'):'\U0001F512');
     let stars='';for(let s=0;s<3;s++)stars+='<span class="'+(s<lit?'on':'')+'">★</span>';
-    h+='<div class="tb-node'+st+'" style="left:'+(p.x-40)+'px;top:'+(p.y-r)+'px" onclick="abrirTbDia('+d+')"><div class="tb-dot">'+ic+'</div><div class="tb-stars">'+stars+'</div>'+(now?'<div class="tb-now-tag">HOJE</div>':'')+'</div>';
+    h+='<div class="tb-node'+st+'" style="left:'+(p.x-40)+'px;top:'+(p.y-r)+'px" onclick="abrirTbDia('+d+')"><div class="tb-dot">'+inner+'</div><div class="tb-stars">'+stars+'</div>'+(now?'<div class="tb-now-tag">HOJE</div>':'')+'</div>';
   }
   h+='</div>';
+  const hd=[];for(let d=1;d<=N;d++){const x=tb.dias&&tb.dias[d];if(x&&x.humor&&tbDayDone(tb,d))hd.push([d,TB_HVAL[x.humor]||3,x.humor]);}
+  if(hd.length>=2){
+    h+='<div class="tb-sec">Sua jornada \U0001F4C8</div><div class="tb-chart">'+hd.map(function(o){const pct=o[1]/5*100;return '<div class="tbc-col"><div class="tbc-bar-wrap"><div class="tbc-bar" style="height:'+pct+'%"></div></div><div class="tbc-emo">'+o[2]+'</div><div class="tbc-day">'+o[0]+'</div></div>';}).join('')+'</div><div class="tbc-cap">Seu humor a cada dia da pausa</div>';
+  }
   const logs=[];for(let d=N;d>=1;d--){const x=tb.dias&&tb.dias[d];if(x&&tbDayDone(tb,d)&&(x.texto||x.humor))logs.push([d,x]);}
-  if(logs.length)h+='<div class="tb-sec">Meu diário da pausa \u{1F4D4}</div>'+logs.map(function(l){return '<div class="tbdi"><div class="tbdi-h">'+(l[1].humor||'\u{1F331}')+' Dia '+l[0]+' · '+tbInfo(l[0]).tema+'</div>'+(l[1].texto?'<div class="tbdi-x">'+esc(l[1].texto)+'</div>':'')+'</div>';}).join('');
-  h+='<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">Recomeçar jornada</button></div>';
+  if(logs.length)h+='<div class="tb-sec">Meu diário da pausa \U0001F4D4</div>'+logs.map(function(l){return '<div class="tbdi"><div class="tbdi-h">'+(l[1].humor||'\U0001F331')+' Dia '+l[0]+' · '+tbInfo(l[0]).tema+'</div>'+(l[1].texto?'<div class="tbdi-x">'+esc(l[1].texto)+'</div>':'')+'</div>';}).join('');
+  h+='<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">'+(allDone?'Fazer outra pausa':'Recomeçar jornada')+'</button></div>';
   c.innerHTML=h;
   try{const av=c.querySelector('.tb-guide-av');if(av&&typeof brotoDataURI==='function')av.src=brotoDataURI();}catch(e){}
 }
 let _tbSelDia=null,_tbHumor=null;
 function abrirTbDia(d){
   const tb=gTb();if(!tb)return;const atual=tbDiaAtual(tb);
-  if(d>atual){toast('\u{1F512} Esse dia libera em '+(d-atual)+(d-atual===1?' dia':' dias'));return;}
+  if(d>atual){toast('\U0001F512 Esse dia libera em '+(d-atual)+(d-atual===1?' dia':' dias'));return;}
   _tbSelDia=d;_tbHumor=((tb.dias&&tb.dias[d])||{}).humor||null;renderTbDiaModal();openMod('mtbdia');
 }
+function tbMissToggle(hEl){hEl.parentElement.classList.toggle('open');}
 function renderTbDiaModal(){
-  const d=_tbSelDia,tb=gTb();if(!tb)return;const info=tbInfo(d),dd=(tb.dias&&tb.dias[d])||{},m=dd.m||[false,false,false];
+  const d=_tbSelDia,tb=gTb();if(!tb)return;const info=tbInfo(d),art=TB_ART[(d-1)%7],dd=(tb.dias&&tb.dias[d])||{},m=dd.m||[false,false,false];
   const lit=(m[0]?1:0)+(m[1]?1:0)+(m[2]?1:0);let sb='';for(let s=0;s<3;s++)sb+='<span class="'+(s<lit?'on':'')+'">★</span>';
-  let h='<div class="tbd-head"><div class="tbd-emo">'+info.ic+'</div><div class="tbd-dia">Dia '+d+' · '+lit+'/3 missões</div><div class="tbd-tema">'+info.tema+'</div><div class="tbd-starsbig">'+sb+'</div></div>';
-  h+='<div class="tbm'+(m[0]?' done':'')+'"><div class="tbm-h"><span class="tbm-ic">\u{1F4D6}</span><b>Entenda a fase</b><span class="tbm-st">'+(m[0]?'★':'○')+'</span></div><div class="tbm-b">'+info.esperar+(m[0]?'':'<button class="tbm-btn" onclick="tbDoMiss(0)">Entendi ✓</button>')+'</div></div>';
-  h+='<div class="tbm'+(m[1]?' done':'')+'"><div class="tbm-h"><span class="tbm-ic">\u{1F9F0}</span><b>'+info.ferramenta.t+'</b><span class="tbm-st">'+(m[1]?'★':'○')+'</span></div><div class="tbm-b">'+info.ferramenta.x+(info.ferramenta.acao?'<br><span class="tbd-act" onclick="closeMod(\''+'mtbdia\');'+info.ferramenta.acao.fn+'">'+info.ferramenta.acao.label+' →</span>':'')+(m[1]?'':'<br><button class="tbm-btn" onclick="tbDoMiss(1)">Fiz isso ✓</button>')+'</div></div>';
-  h+='<div class="tbm'+(m[2]?' done':'')+'"><div class="tbm-h"><span class="tbm-ic">\u{1F4DD}</span><b>Registre seu momento</b><span class="tbm-st">'+(m[2]?'★':'○')+'</span></div><div class="tbm-b"><div class="tbd-label" style="margin-top:0">Como você está agora?</div><div class="tbd-emorow" id="tbd-humor">'+TB_HUMOR.map(function(e){return '<button class="'+(dd.humor===e?'on':'')+'" onclick="tbSelHumor(\''+e+'\',this)">'+e+'</button>';}).join('')+'</div><textarea class="ft" id="tbd-texto" rows="3" style="margin-top:9px" placeholder="'+esc(info.prompt)+'">'+esc(dd.texto||'')+'</textarea>'+(m[2]?'':'<button class="tbm-btn" onclick="tbDoMiss(2)">Guardar ✓</button>')+'</div></div>';
-  if(info.ref)h+='<div class="tbd-ref">\u{1F4DA} '+info.ref+'</div>';
-  if(m[0]&&m[1]&&m[2])h+='<div class="tbd-done">\u{1F389} Dia '+d+' completo! '+(d<tb.trilha?'O próximo libera amanhã.':'Você concluiu a jornada! \u{1F3C6}')+'</div>';
+  let h='<div class="tbd-head"><div class="tbd-art">'+art+'</div><div class="tbd-dia">Dia '+d+' · '+lit+'/3 missões</div><div class="tbd-tema">'+info.tema+'</div><div class="tbd-starsbig">'+sb+'</div></div>';
+  h+='<div class="tbm'+(m[0]?' done':' open')+'"><div class="tbm-h" onclick="tbMissToggle(this)"><span class="tbm-ic">\U0001F4D6</span><b>Entenda a fase</b><span class="tbm-st">'+(m[0]?'★':'○')+'</span><span class="tbm-chev">▾</span></div><div class="tbm-b">'+info.esperar+(m[0]?'':'<button class="tbm-btn" onclick="tbDoMiss(0)">Entendi ✓</button>')+'</div></div>';
+  h+='<div class="tbm'+(m[1]?' done':' open')+'"><div class="tbm-h" onclick="tbMissToggle(this)"><span class="tbm-ic">\U0001F9F0</span><b>'+info.ferramenta.t+'</b><span class="tbm-st">'+(m[1]?'★':'○')+'</span><span class="tbm-chev">▾</span></div><div class="tbm-b">'+info.ferramenta.x+(info.ferramenta.acao?'<br><span class="tbd-act" onclick="closeMod(\'mtbdia\');'+info.ferramenta.acao.fn+'">'+info.ferramenta.acao.label+' →</span>':'')+(m[1]?'':'<br><button class="tbm-btn" onclick="tbDoMiss(1)">Fiz isso ✓</button>')+'</div></div>';
+  h+='<div class="tbm open'+(m[2]?' done':'')+'"><div class="tbm-h" onclick="tbMissToggle(this)"><span class="tbm-ic">\U0001F4DD</span><b>Registre seu momento</b><span class="tbm-st">'+(m[2]?'★':'○')+'</span><span class="tbm-chev">▾</span></div><div class="tbm-b"><div class="tbd-label" style="margin-top:0">Como você está agora?</div><div class="tbd-emorow" id="tbd-humor">'+TB_HUMOR.map(function(e){return '<button class="'+(dd.humor===e?'on':'')+'" onclick="tbSelHumor(\''+e+'\',this)">'+e+'</button>';}).join('')+'</div><textarea class="ft" id="tbd-texto" rows="3" style="margin-top:9px" placeholder="'+esc(info.prompt)+'">'+esc(dd.texto||'')+'</textarea><button class="tbm-btn" onclick="tbDoMiss(2)">'+(m[2]?'Salvar alterações':'Guardar ✓')+'</button></div></div>';
+  if(info.ref)h+='<div class="tbd-ref">\U0001F4DA '+info.ref+'</div>';
+  if(m[0]&&m[1]&&m[2])h+='<div class="tbd-done">\U0001F389 Dia '+d+' completo! '+(d<tb.trilha?'O próximo libera amanhã.':'Você concluiu a jornada! \U0001F3C6')+'</div>';
   document.getElementById('mtbdia-c').innerHTML=h;
 }
 function tbSelHumor(e,btn){document.querySelectorAll('#tbd-humor button').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');_tbHumor=e;vib(6);}
 function tbDoMiss(i){
   const tb=gTb(),d=_tbSelDia;if(!tb)return;tb.dias=tb.dias||{};const dd=tb.dias[d]||{};dd.m=dd.m||[false,false,false];
+  const already=dd.m[i];
   if(i===2){if(_tbHumor)dd.humor=_tbHumor;const ta=document.getElementById('tbd-texto');if(ta)dd.texto=ta.value.trim();blurAll();}
   dd.m[i]=true;dd.data=hoje();tb.dias[d]=dd;sTb(tb);vib(12);
   const full=dd.m[0]&&dd.m[1]&&dd.m[2];
-  if(full&&!dd._cel){dd._cel=1;tb.dias[d]=dd;sTb(tb);try{addXP(20,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}toast('\u{1F331} Dia '+d+' completo!');renderTbDiaModal();setTimeout(function(){closeMod('mtbdia');renderTbreak();},1100);return;}
-  toast('⭐ Estrela conquistada!');renderTbDiaModal();
+  if(full&&!dd._cel){dd._cel=1;tb.dias[d]=dd;sTb(tb);try{addXP(20,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}toast('\U0001F331 Dia '+d+' completo!');renderTbDiaModal();setTimeout(function(){closeMod('mtbdia');renderTbreak();},1100);return;}
+  toast(already?'✓ Salvo':'⭐ Estrela conquistada!');renderTbDiaModal();
 }
 function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);if(!ls('dr_prem_since_'+uid()))ls('dr_prem_since_'+uid(),new Date().toISOString());vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();reRenderGated();}
 function cancelarPremiumDemo(){ls('dr_prem_'+uid(),0);toast('Assinatura de teste cancelada.');renderPremMod();renderPremUI();reRenderGated();closeMod('mprem');}
