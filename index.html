@@ -1228,6 +1228,10 @@ a{color:inherit;text-decoration:none}
 .tb-complete-t{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;margin-top:6px}
 .tb-complete-x{font-size:13px;font-weight:700;color:rgba(255,255,255,.9);margin-top:5px}
 .tb-complete-m{font-size:13px;line-height:1.55;color:rgba(255,255,255,.86);margin-top:11px}
+.tbcert-btn{position:relative;z-index:1;margin-top:16px;background:#fff;color:#2d1f52;border:none;border-radius:24px;padding:13px 22px;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.22)}
+.tbcert-btn:active{transform:scale(.95)}
+.tb-aur-c{position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.18),transparent 45%);pointer-events:none}
+.tb-complete-tro,.tb-complete-t,.tb-complete-x,.tb-complete-m{position:relative;z-index:1}
 /* fundo imersivo do T-break — tom "floresta ao amanhecer" (verde-musgo → azul → ameixa) */
 #vtbreak{position:relative;overflow:hidden;background:linear-gradient(178deg,#0d2a1e 0%,#123141 42%,#1f2b52 74%,#2a1e46 100%)!important}
 #vtbreak .ptb{background:transparent!important}
@@ -2185,6 +2189,7 @@ a{color:inherit;text-decoration:none}
   <div class="cfgsec">
     <div class="cfgi" style="cursor:default"><div class="cfgic" data-icon="cfg-tema"></div><div class="cfgb"><div class="cfgn">Modo escuro</div><div class="cfgd">Mais conforto à noite</div></div><label class="tog"><input type="checkbox" id="tog-dark" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">🕶️</div><div class="cfgb"><div class="cfgn">Modo discreto</div><div class="cfgd">App aparece como "Diário", sem referências a RD</div></div><label class="tog"><input type="checkbox" id="tog-disc" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
+    <div class="cfgi" style="cursor:default"><div class="cfgic">🔔</div><div class="cfgb"><div class="cfgn">Sons de interação</div><div class="cfgd">Cliques, conquistas e estrelas do app</div></div><label class="tog"><input type="checkbox" id="tog-sfx" onchange="setSfxCfg(this.checked)"><div class="tsl"></div></label></div>
   </div>
   <div class="shr"><div class="sht">Segurança</div></div>
   <div class="cfgsec">
@@ -5121,6 +5126,7 @@ function renderCfg(){
   const pl=gP();document.getElementById('plano-prev').textContent=pl.frase||'Não configurado ainda';
   document.getElementById('tog-dark').checked=!!cfg.dark;
   document.getElementById('tog-disc').checked=!!cfg.discreto;
+  try{document.getElementById('tog-sfx').checked=sfxOn();}catch(e){}
   document.getElementById('pin-status').textContent=gPin()?'Ativado · toque para remover':'Desativado · toque para criar';
   const isPro=U?.tipo==='pro';
   document.getElementById('pf-badge').style.display=isPro?'inline-flex':'none';
@@ -5347,6 +5353,29 @@ function abrirEdicaoPerfil(){
 
 /* ═══════════ SONS DA NATUREZA (Web Audio, offline, em loop) ═══════════ */
 let _ac=null,_somNodes=null,_somAtual=null,_somTempo=10,_somTimerId=null,_somFim=0,_somTickId=null,_somAudio=null;
+// ── SINAIS SONOROS (feedback de interação) ──
+function sfxOn(){return ls('dr_sfx')!=='0';}
+function setSfxCfg(on){ls('dr_sfx',on?'1':'0');if(on){try{sfx('star');}catch(e){}}toast(on?'🔔 Sons de interação ativados':'🔕 Sons desativados');}
+function _sfxCtx(){try{if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();if(_ac.state==='suspended')_ac.resume().catch(()=>{});return _ac;}catch(e){return null;}}
+// toca uma sequência de notas [freq,inicio(s),dur(s),ganho]
+function _sfxSeq(notes,type){const ac=_sfxCtx();if(!ac)return;const t0=ac.currentTime;notes.forEach(function(n){const o=ac.createOscillator(),g=ac.createGain();o.type=type||'sine';o.frequency.value=n[0];const st=t0+n[1],du=n[2],gain=(n[3]||0.14);o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(0.0001,st);g.gain.exponentialRampToValueAtTime(gain,st+0.012);g.gain.exponentialRampToValueAtTime(0.0001,st+du);o.start(st);o.stop(st+du+0.02);});}
+function sfx(kind){
+  if(!sfxOn())return;
+  try{
+    switch(kind){
+      case 'tap': _sfxSeq([[660,0,0.06,0.05]],'sine');break;
+      case 'star': _sfxSeq([[880,0,0.10,0.10],[1320,0.06,0.12,0.09]],'triangle');break;
+      case 'day': _sfxSeq([[659,0,0.12,0.11],[784,0.10,0.12,0.11],[1047,0.20,0.22,0.12]],'triangle');break;
+      case 'unlock': _sfxSeq([[523,0,0.10,0.09],[698,0.09,0.14,0.09]],'sine');break;
+      case 'start': _sfxSeq([[392,0,0.10,0.09],[523,0.09,0.10,0.09],[659,0.18,0.16,0.10]],'triangle');break;
+      case 'complete': _sfxSeq([[523,0,0.14,0.12],[659,0.12,0.14,0.12],[784,0.24,0.14,0.12],[1047,0.36,0.30,0.13],[1319,0.52,0.34,0.11]],'triangle');break;
+      case 'xp': _sfxSeq([[784,0,0.08,0.08],[1047,0.07,0.12,0.09]],'sine');break;
+      default: _sfxSeq([[660,0,0.06,0.05]],'sine');
+    }
+  }catch(e){}
+}
+// tap sonoro leve e global em itens de navegação/seleção (conquistas têm som próprio)
+document.addEventListener('click',function(ev){try{if(!sfxOn())return;const t=ev.target&&ev.target.closest&&ev.target.closest('.ni,.fab,.chip,.tb-track,.tbm-h,.tbfaq-h,.plncard');if(t)sfx('tap');}catch(e){}},true);
 const SOM_INFO={rain:{e:'🌧️',n:'Chuva'},ocean:{e:'🌊',n:'Oceano'},night:{e:'🦗',n:'Noite'},stream:{e:'🏞️',n:'Riacho'},wind:{e:'🍃',n:'Vento'},forest:{e:'🌲',n:'Floresta'},branco:{e:'⚪',n:'Ruído branco'},marrom:{e:'🟤',n:'Ruído marrom'},f432:{e:'🎵',n:'432 Hz'},f528:{e:'🎶',n:'528 Hz'},binaural:{e:'🧘',n:'Binaural θ'},f528r:{e:'💚',n:'Bem-estar · 528 Hz'},aguas:{e:'💧',n:'Águas serenas'},luz:{e:'✨',n:'Luz que cura'},yoga:{e:'🧘',n:'Yoga & meditação'},cura:{e:'🔮',n:'Frequências de cura'},deriva:{e:'🌊',n:'À deriva'},serenidade:{e:'🕊️',n:'Serenidade'},ceuazul:{e:'🌌',n:'Céu azul'},sono:{e:'🌙',n:'Sono profundo'}};
 // Sons reais hospedados no Supabase Storage (bucket público "sons"). Se o arquivo não existir, cai no som sintetizado.
 const _SOM_BUCKET='https://gnpwaywyexcevtzbwiyq.supabase.co/storage/v1/object/public/sons/';
@@ -6900,15 +6929,94 @@ const TBREAK7=[
   {ic:'🥗',tema:'Cuidar do corpo',esperar:'O pico começa a ceder, mas o sono ainda pode estar instável. Cuidar da <b>alimentação e da hidratação</b> faz diferença agora.',ferramenta:{t:'Ômega-3 no prato',x:'O corpo usa ácidos graxos ômega-3 pra produzir endocanabinoides. Peixes, linhaça, chia, nozes e soja ajudam. Beba água e vá com calma na cafeína.'},prompt:'Como andam meu sono e minha alimentação? Como quero cuidar do corpo amanhã?',ref:'Ômega-3 e endocanabinoides — Guia Desprô.'},
   {ic:'🔄',tema:'Os rituais',esperar:'A tolerância não é só química — é <b>comportamental</b>. Os rituais e horários do uso puxam a vontade. Perceber isso é meio caminho.',ferramenta:{t:'Troque um ritual',x:'Pense num momento que puxava o uso (depois do trampo, antes de dormir…). Escolha algo pra colocar no lugar: um chá, um alongamento, uma música.'},prompt:'Qual ritual mais puxa minha vontade? Por o que eu posso trocar?',ref:'Tolerância comportamental — Guia Desprô.'},
   {ic:'🌅',tema:'A onda desce',esperar:'Muita gente começa a notar melhoras agora: <b>sono mais profundo, mais clareza, humor estabilizando</b>. Repare nos ganhos — isso motiva.',ferramenta:{t:'Colha os ganhos',x:'Feche os olhos e note: o que está melhor do que no dia 1? Reconhecer o progresso fortalece a decisão.'},prompt:'O que melhorou desde que comecei? Do que tenho orgulho?'},
-  {ic:'🏆',tema:'Você atravessou',esperar:'Você completou a primeira semana. Para muitos, <b>uma semana já causa impacto real na tolerância</b>. Agora é escolher o próximo passo com consciência.',ferramenta:{t:'Seu próximo passo',x:'Você pode seguir mais uns dias, encerrar a pausa com um uso mais consciente, ou repetir quando quiser. Não existe certo — existe o SEU caminho.'},prompt:'O que essa semana me ensinou? Como quero seguir a partir daqui?',ref:'1 semana já impacta a tolerância — Guia Desprô.'}
+  {ic:'🏆',tema:'Uma semana atravessada',esperar:'Sete dias! Para muitos, <b>uma semana já causa impacto real na tolerância</b>. A fase mais aguda costuma ficar pra trás agora — daqui pra frente é consolidar.',ferramenta:{t:'Marque a conquista',x:'Pare um instante e reconheça: você atravessou a parte mais dura. Se sua trilha termina aqui, siga com consciência; se continua, o corpo agora joga a seu favor.'},prompt:'O que essa semana me ensinou sobre mim e sobre meu uso?',ref:'1 semana já impacta a tolerância — Guia Desprô.'},
+  {ic:'😴',tema:'Sono em reconstrução',esperar:'Na segunda semana o sono costuma <b>firmar aos poucos</b>. Sonhos muito vívidos ainda podem aparecer — é o cérebro recuperando as fases de sono REM que o uso suprimia.',ferramenta:{t:'Higiene do sono',x:'Horário fixo pra deitar, tela longe 30 min antes, quarto escuro e fresco. Se não dormir, levante e faça algo calmo até o sono voltar — não force.'},prompt:'Como tenho dormido? O que ajuda e o que atrapalha meu sono?',ref:'Recuperação do sono REM na abstinência — literatura de cannabis.'},
+  {ic:'🧠',tema:'A névoa levanta',esperar:'Foco e memória costumam <b>clarear</b> nesta fase. Coisas que pareciam nubladas ficam mais nítidas. Aproveite essa lucidez pra algo que importa.',ferramenta:{t:'Uma tarefa adiada',x:'Escolha UMA coisa que você vinha empurrando e faça só o primeiro passo hoje. A clareza mental nova é combustível — use a favor de você.'},prompt:'O que ficou mais claro na minha cabeça? No que quero usar essa lucidez?'},
+  {ic:'💪',tema:'Energia de volta',esperar:'A disposição tende a <b>voltar</b> agora. O corpo pede movimento — e movimento acelera todo o reequilíbrio químico.',ferramenta:{t:'Movimente-se hoje',x:'20 minutos que seja: caminhar, dançar, pedalar, alongar. Além de melhorar o humor, ajuda o sistema endocanabinoide a se restaurar.',acao:{label:'Abrir respiração',fn:"showV('vresp')"}},prompt:'Como está minha energia? O que meu corpo pede hoje?'},
+  {ic:'🫂',tema:'As situações sociais',esperar:'Rolês, amigos e ambientes ligados ao uso são <b>gatilhos fortes</b>. Não dá pra evitar tudo — dá pra chegar preparado.',ferramenta:{t:'Seu plano social',x:'Pense numa situação que vem por aí. Combine consigo: o que vai responder se te oferecerem, com quem pode contar, e uma saída se apertar.'},prompt:'Que situação social me preocupa? Como quero me cuidar nela?'},
+  {ic:'🎯',tema:'Reencontrar o prazer',esperar:'Nos primeiros dias muita coisa parece sem graça — é a <b>anedonia</b> temporária, o cérebro recalibrando a dopamina. Ela cede, e o prazer nas coisas simples volta.',ferramenta:{t:'Cardápio de prazeres',x:'Liste 3 coisas que te davam prazer sem uso: um som, uma comida, um lugar, uma pessoa. Escolha uma pra fazer hoje, de verdade e presente.'},prompt:'O que me dá prazer sem depender do uso? O que quero reaproximar?',ref:'Anedonia e recalibração da dopamina — literatura de abstinência.'},
+  {ic:'📝',tema:'Seus padrões',esperar:'Você já tem dias de registro. Olhar pra trás revela <b>o que dispara a vontade</b> e o que te ajuda a atravessar. Autoconhecimento vira estratégia.',ferramenta:{t:'Releia seu diário',x:'Volte nos registros desta pausa. Que padrões aparecem? Horários, emoções, situações? Anote o que mais se repete.'},prompt:'Que padrão se repete nos meus registros? O que faço com isso?'},
+  {ic:'🌟',tema:'Duas semanas!',esperar:'Quinze dias. Sono, humor e clareza costumam estar <b>bem mais estáveis</b> agora. Você provou que consegue sustentar — isso muda a relação de força com o hábito.',ferramenta:{t:'Reconheça o quanto andou',x:'Compare como você estava no dia 1 e hoje. Escreva 3 diferenças que você sente. Guardar isso é combustível pros próximos dias.'},prompt:'Como estou diferente de duas semanas atrás? Do que tenho mais orgulho?',ref:'Estabilização em ~2 semanas — Guia Desprô.'},
+  {ic:'🧭',tema:'Quem sou sem isso',esperar:'Nesta fase surge uma pergunta boa: <b>quem eu sou fora do uso?</b> Sem a substância mediando tudo, você reencontra gostos, ritmos e vontades próprias.',ferramenta:{t:'Sua bússola',x:'Escreva 3 valores que importam pra você (ex.: liberdade, cuidado, criatividade). Como o seu dia de hoje conversa com eles?'},prompt:'O que é importante pra mim, no fundo? Estou vivendo perto disso?'},
+  {ic:'🔥',tema:'Quando a vontade volta',esperar:'Mesmo mais firme, a vontade pode <b>reaparecer forte e do nada</b>, puxada por estresse ou memória. Isso é normal e não apaga seu progresso.',ferramenta:{t:'Surfar a fissura',x:'Quando bater: não lute nem obedeça. Observe onde sente no corpo, respire, e acompanhe a onda subir e descer. Em geral passa em 15-20 min.',acao:{label:'Grounding 5-4-3-2-1',fn:"showV('vgrd')"}},prompt:'Quando a vontade bate hoje, o que ela está tentando me dizer?'},
+  {ic:'🌿',tema:'Respira e consolida',esperar:'Dia de <b>assentar</b>. Menos sintoma, mais rotina. A pausa vai deixando de ser esforço e virando um jeito novo de estar.',ferramenta:{t:'Um momento só seu',x:'Reserve 10 minutos de silêncio hoje — um chá, uma janela, um som ambiente. Sem tela. Só você e o momento.'},prompt:'Como é estar comigo mesmo sem pressa hoje?'},
+  {ic:'🤝',tema:'Vínculos que sustentam',esperar:'Atravessar sozinho é mais difícil. <b>Apoio</b> — de gente, de grupo, de profissional — multiplica sua força. Pedir ajuda é estratégia, não fraqueza.',ferramenta:{t:'Chegue em alguém',x:'Mande mensagem pra uma pessoa de confiança e conte que você está numa pausa. Dividir a jornada a torna mais leve e mais real.'},prompt:'Com quem eu posso contar nessa? Como quero cuidar dos meus vínculos?'},
+  {ic:'🎨',tema:'Canalizar a energia',esperar:'Com a disposição de volta, sobra energia. <b>Direcioná-la</b> pra algo que te move — criar, aprender, construir — preenche o espaço que o uso ocupava.',ferramenta:{t:'Faça algo com as mãos',x:'Cozinhar, desenhar, escrever, mexer numa planta, tocar algo. Uma atividade com as mãos ancora a mente no presente.'},prompt:'O que eu gostaria de criar ou retomar com essa energia nova?'},
+  {ic:'🌤️',tema:'Humor mais firme',esperar:'A irritabilidade dos primeiros dias costuma ter <b>ficado pra trás</b>. O humor fica mais constante — menos altos e baixos puxados pela química.',ferramenta:{t:'Termômetro do humor',x:'Repare como seu humor variou nesta semana. Está mais estável? O que mais influenciou os dias bons?'},prompt:'Como está meu humor agora, comparado ao início?'},
+  {ic:'🏅',tema:'Três semanas!',esperar:'Vinte e um dias. Diz o ditado que 3 semanas ajudam a <b>firmar um novo hábito</b> — e você está construindo o seu. O uso já não comanda sua rotina.',ferramenta:{t:'Escreva pra você',x:'Deixe um recado pro você do dia 1, contando como é estar aqui. Guardar essa carta fortalece o caminho que você escolheu.'},prompt:'O que eu diria hoje pra mim mesmo de três semanas atrás?',ref:'Formação de hábitos — literatura comportamental.'},
+  {ic:'🪞',tema:'Autoconhecimento',esperar:'Longe do piloto automático, você enxerga melhor <b>seus gatilhos, defesas e necessidades</b>. Essa é a colheita silenciosa da pausa.',ferramenta:{t:'O que o uso cobria',x:'Com honestidade e sem julgamento: o que o uso costumava anestesiar ou adiar? Nomear isso é o começo de cuidar de verdade.'},prompt:'O que eu percebo em mim agora que antes passava batido?'},
+  {ic:'💰',tema:'O que você recuperou',esperar:'Além da saúde, a pausa devolve <b>tempo e dinheiro</b>. Ver isso concreto costuma ser um empurrão e tanto.',ferramenta:{t:'Faça as contas',x:'Estime quanto você deixou de gastar e quantas horas ganhou nestas semanas. O que você quer fazer com esse tempo e essa grana?'},prompt:'O que eu ganhei de tempo e dinheiro? Onde quero investir isso?'},
+  {ic:'🌊',tema:'Ondas cada vez mais raras',esperar:'A fissura ainda pode dar as caras, mas <b>mais espaçada e mais fraca</b>. Você já tem repertório pra atravessar sem drama.',ferramenta:{t:'Sua âncora',x:'Escolha uma frase-âncora pra quando a vontade vier (ex.: isso passa, e eu escolho como agora). Repita e respire.'},prompt:'Qual frase me segura nos momentos de vontade?'},
+  {ic:'🛠️',tema:'Sua caixa de ferramentas',esperar:'Você foi juntando o que funciona: respiração, movimento, apoio, rituais novos. Essa <b>caixa de ferramentas</b> fica com você pra sempre.',ferramenta:{t:'Liste o que funciona',x:'Anote as 3 estratégias que mais te ajudaram nesta pausa. É seu kit de emergência pra qualquer momento difícil, agora ou depois.'},prompt:'Quais são as ferramentas que mais me ajudaram até aqui?'},
+  {ic:'🌅',tema:'Nova rotina',esperar:'O dia a dia já tem <b>outra forma</b> sem o uso no centro. Vale olhar o que dessa rotina nova você quer manter.',ferramenta:{t:'Desenhe seu dia bom',x:'Como seria um dia realista e bom pra você daqui pra frente? Escreva os pontos principais, do acordar ao dormir.'},prompt:'Que partes da minha rotina nova eu quero guardar?'},
+  {ic:'💚',tema:'Autocompaixão',esperar:'Talvez tenha tido tropeços no caminho — tudo bem. <b>Redução de danos não é perfeição</b>, é cuidado. Falar consigo com gentileza sustenta mudança melhor que cobrança.',ferramenta:{t:'Fale como a um amigo',x:'Pense em algo que você se cobrou nesta pausa. Agora responda como responderia a um amigo querido na mesma situação.'},prompt:'Onde eu posso ser mais gentil comigo nessa jornada?'},
+  {ic:'🧩',tema:'Integrar o aprendido',esperar:'Perto do fim, a pergunta muda: <b>o que dessa experiência fica?</b> A pausa foi um laboratório sobre você e seu uso.',ferramenta:{t:'Suas 3 descobertas',x:'Resuma em 3 frases o que você aprendeu sobre sua relação com a substância nestas semanas.'},prompt:'Quais foram minhas maiores descobertas nesta pausa?'},
+  {ic:'🗺️',tema:'O plano do depois',esperar:'Chegou a hora de decidir <b>o próximo passo com consciência</b>: seguir sem uso, retomar de forma mais consciente e ocasional, ou repetir a pausa quando precisar. Não há certo — há o seu.',ferramenta:{t:'Escreva seu plano',x:'Defina como você quer se relacionar com o uso a partir daqui. Se for voltar, com quais limites? Se for seguir, com quais apoios?'},prompt:'Como quero me relacionar com o uso a partir de agora?',ref:'Uso consciente e prevenção de recaída — redução de danos.'},
+  {ic:'✨',tema:'Véspera',esperar:'Falta um passo. Antes do fim, vale <b>sentir o caminho inteiro</b> — de onde você saiu até aqui.',ferramenta:{t:'Olhe pra trás',x:'Releia seu diário do dia 1 até agora. Perceba a distância que você percorreu. Amanhã você fecha essa jornada.'},prompt:'Olhando toda a pausa, o que mais me marca?'},
+  {ic:'🏆',tema:'Um mês inteiro!',esperar:'Trinta e um dias. Um mês de pausa é uma <b>reconfiguração profunda</b>: tolerância, sono, humor e clareza reequilibrados. Você fez isso. O que vem agora, você escolhe de olhos abertos.',ferramenta:{t:'Celebre e decida',x:'Reconheça o tamanho do que você atravessou. E leve com você o plano que traçou — a pausa acaba, o que você aprendeu não.'},prompt:'Quem eu me tornei neste mês? O que levo daqui pra vida?',ref:'Um mês de pausa e reequilíbrio — Guia Desprô; literatura de cannabis.'}
 ];
 function gTb(){return ls('dr_tb_'+uid())||null;}
 function sTb(o){ls('dr_tb_'+uid(),o);}
-function tbInfo(d){return TBREAK7[(d-1)%TBREAK7.length];}
+function tbInfo(d){return TBREAK7[Math.min(d-1,TBREAK7.length-1)];}
 function tbDiaAtual(tb){if(!tb)return 0;const i=new Date(tb.inicio+'T12:00:00'),h=new Date(hoje()+'T12:00:00');const d=Math.floor((h-i)/864e5)+1;return Math.max(1,Math.min(tb.trilha,d));}
 function abrirTbreak(){showV('vtbreak');if(!ls('dr_tbtut_'+uid())){ls('dr_tbtut_'+uid(),1);setTimeout(()=>openMod('mtbtut'),200);}renderTbreak();}
-function tbIniciar(n){if(n!==7){toast('🔒 As trilhas de 14 e 31 dias chegam em breve!');return;}sTb({trilha:n,inicio:hoje(),dias:{}});vib(12);renderTbreak();}
+function tbIniciar(n){if(![7,14,31].includes(n))return;sTb({trilha:n,inicio:hoje(),dias:{}});vib(12);try{sfx('start');}catch(e){}renderTbreak();}
 function tbReset(){if(!confirm('Recomeçar a jornada? O diário desta pausa será apagado.'))return;ls('dr_tb_'+uid(),null);renderTbreak();}
+// ── CERTIFICADO / STORY compartilhável ──
+function _roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function tbDesenharCert(cb){
+  const tb=gTb();if(!tb){cb(null);return;}
+  const N=tb.trilha;let feitos=0;for(let d=1;d<=N;d++){if(tbDayDone(tb,d))feitos++;}
+  const W=1080,H=1920,cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');
+  // fundo — tom floresta ao amanhecer
+  const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0d2a1e');g.addColorStop(.42,'#123141');g.addColorStop(.74,'#1f2b52');g.addColorStop(1,'#2a1e46');
+  c.fillStyle=g;c.fillRect(0,0,W,H);
+  // estrelas
+  c.fillStyle='#fff';const sr=[[90,150,2],[300,90,1.5],[520,180,1.6],[760,120,2],[960,220,1.5],[140,360,1.5],[900,420,2],[1000,700,1.6],[70,620,1.7],[980,1000,1.6],[60,980,1.5],[120,1500,1.6],[1010,1420,1.7],[80,1650,1.5],[960,1650,1.6]];
+  sr.forEach(function(s){c.globalAlpha=.5;c.beginPath();c.arc(s[0],s[1],s[2],0,7);c.fill();});c.globalAlpha=1;
+  // brilhos
+  const glow1=c.createRadialGradient(180,300,0,180,300,420);glow1.addColorStop(0,'rgba(91,192,111,.35)');glow1.addColorStop(1,'transparent');c.fillStyle=glow1;c.fillRect(0,0,W,H);
+  const glow2=c.createRadialGradient(920,1500,0,920,1500,460);glow2.addColorStop(0,'rgba(179,135,242,.35)');glow2.addColorStop(1,'transparent');c.fillStyle=glow2;c.fillRect(0,0,W,H);
+  c.textAlign='center';
+  // wordmark
+  c.fillStyle='rgba(255,255,255,.72)';c.font='700 40px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText('dichava.app', W/2, 180);
+  c.fillStyle='#8FE3A6';c.font='800 30px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText('GUIA DO T-BREAK', W/2, 232);
+  // troféu
+  c.font='210px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText('🏆', W/2, 560);
+  // título
+  c.fillStyle='#fff';c.font='800 92px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText('Concluí minha', W/2, 720);c.fillText('pausa canábica', W/2, 820);
+  // badge dias
+  const bw=520,bx=(W-bw)/2,by=900,bh=150;const bg=c.createLinearGradient(bx,by,bx+bw,by+bh);bg.addColorStop(0,'#5BC06F');bg.addColorStop(1,'#7C3AED');c.fillStyle=bg;_roundRect(c,bx,by,bw,bh,42);c.fill();
+  c.fillStyle='#fff';c.font='800 110px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText(N+' dias', W/2, by+108);
+  // estrelas conquistadas
+  c.font='64px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText('⭐⭐⭐⭐⭐', W/2, 1180);
+  c.fillStyle='rgba(255,255,255,.85)';c.font='700 46px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText((feitos*3)+' estrelas conquistadas', W/2, 1270);
+  // frase
+  c.fillStyle='rgba(255,255,255,.7)';c.font='400 44px -apple-system,Segoe UI,Roboto,sans-serif';
+  c.fillText('Provei pra mim que consigo.', W/2, 1400);c.fillText('Um passo de cada vez. 💚', W/2, 1466);
+  // data
+  try{const dt=new Date(tb.inicio+'T12:00:00');const opt={day:'2-digit',month:'short',year:'numeric'};const ini=dt.toLocaleDateString('pt-BR',opt);const fim=new Date().toLocaleDateString('pt-BR',opt);c.fillStyle='rgba(255,255,255,.5)';c.font='400 36px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText(ini+'  —  '+fim, W/2, 1560);}catch(e){}
+  // rodapé
+  c.fillStyle='rgba(255,255,255,.55)';c.font='700 40px -apple-system,Segoe UI,Roboto,sans-serif';c.fillText('@dichavandoard · redução de danos', W/2, 1800);
+  // mascote (se disponível) no topo
+  try{if(typeof brotoDataURI==='function'){const img=new Image();img.onload=function(){c.drawImage(img,W/2-70,260,140,140);cv.toBlob(function(b){cb(b);},'image/png');};img.onerror=function(){cv.toBlob(function(b){cb(b);},'image/png');};img.src=brotoDataURI();return;}}catch(e){}
+  cv.toBlob(function(b){cb(b);},'image/png');
+}
+function tbGerarCert(){
+  toast('🎨 Gerando seu certificado...');
+  try{sfx('star');}catch(e){}
+  tbDesenharCert(function(blob){
+    if(!blob){toast('Não consegui gerar agora.');return;}
+    const file=new File([blob],'meu-tbreak-dichava.png',{type:'image/png'});
+    const txt='Concluí minha pausa canábica no dichava.app 🌱🏆';
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      navigator.share({files:[file],title:'Meu T-break',text:txt}).catch(function(){});
+    }else{
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='meu-tbreak-dichava.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+      toast('📥 Certificado salvo! É só postar nos stories 💚');
+    }
+  });
+}
 function tbMissOf(tb,d){const x=(tb.dias&&tb.dias[d])||{};return x.m||[false,false,false];}
 function tbDayDone(tb,d){const m=tbMissOf(tb,d);return m[0]&&m[1]&&m[2];}
 const TB_GUIA=['Cada dia é um passo. Bora começar? \u{1F331}','Respira — você consegue atravessar. \u{1F4AA}','Hoje pode ser o mais difícil, e você já está aqui.','Seu corpo agradece o cuidado. \u{1F957}','Perceba os padrões, sem se julgar. \u{1F504}','Sente a onda descendo? \u{1F305}','Você chegou até aqui. Que orgulho! \u{1F3C6}'];
@@ -6926,7 +7034,7 @@ function renderTbreak(){
   const c=document.getElementById('tb-body');if(!c)return;
   const tb=gTb();
   if(!tb){
-    const tracks=[[7,'Reset rápido','Uma semana já impacta a tolerância.',''],[14,'Pausa firme','Duas semanas pra um reajuste mais profundo.','em breve'],[31,'Reinício','Um mês pra reencontrar sua relação com o uso.','em breve']];
+    const tracks=[[7,'Reset rápido','Uma semana já impacta a tolerância.',''],[14,'Pausa firme','Duas semanas pra um reajuste mais profundo.',''],[31,'Reinício','Um mês pra reencontrar sua relação com o uso.','']];
     c.innerHTML='<div class="tb-intro">Uma pausa planejada do uso pra reequilibrar seu corpo. Você atravessa <b>dia a dia</b>, com missões simples — no seu ritmo.</div><div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">'+tracks.map(function(t){return '<button class="tb-track" onclick="tbIniciar('+t[0]+')"><span class="tbt-n"><b>'+t[0]+'</b><span>dias</span></span><span style="min-width:0"><span class="tbt-t">'+t[1]+(t[3]?' · <span style=\'color:var(--txm);font-weight:600\'>'+t[3]+'</span>':'')+'</span><div class="tbt-d">'+t[2]+'</div></span></button>';}).join('')+'</div><div class="premnote" style="margin:8px 20px">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>';
     return;
   }
@@ -6935,8 +7043,8 @@ function renderTbreak(){
   const allDone=feitos>=N;
   let h='';
   if(allDone){
-    if(!ls('dr_tbdone_'+uid())){ls('dr_tbdone_'+uid(),1);setTimeout(function(){try{confete();}catch(e){}},350);}
-    h+='<div class="tb-complete"><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div></div>';
+    if(!ls('dr_tbdone_'+uid())){ls('dr_tbdone_'+uid(),1);setTimeout(function(){try{confete();}catch(e){}try{sfx('complete');}catch(e){}},350);}
+    h+='<div class="tb-complete"><div class="tb-aur-c"></div><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div><button class="tbcert-btn" onclick="tbGerarCert()">📤 Compartilhar meu certificado</button></div>';
   } else {
     h+='<div class="tb-guide"><img class="tb-guide-av" alt=""><div class="tb-guide-b"><div class="tb-guide-t">Dia '+atual+' de '+N+' · '+info.tema+'</div><div class="tb-guide-x">'+TB_GUIA[(atual-1)%7]+'</div><div class="tb-prog-bar"><div style="width:'+Math.round(feitos/N*100)+'%"></div></div></div></div>';
   }
@@ -6991,7 +7099,8 @@ function tbDoMiss(i){
   if(i===2){if(_tbHumor)dd.humor=_tbHumor;const ta=document.getElementById('tbd-texto');if(ta)dd.texto=ta.value.trim();blurAll();}
   dd.m[i]=true;dd.data=hoje();tb.dias[d]=dd;sTb(tb);vib(12);
   const full=dd.m[0]&&dd.m[1]&&dd.m[2];
-  if(full&&!dd._cel){dd._cel=1;tb.dias[d]=dd;sTb(tb);try{addXP(20,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}toast('🌱 Dia '+d+' completo!');renderTbDiaModal();setTimeout(function(){closeMod('mtbdia');renderTbreak();},1100);return;}
+  if(full&&!dd._cel){dd._cel=1;tb.dias[d]=dd;sTb(tb);try{addXP(20,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}try{sfx('day');}catch(e){}toast('🌱 Dia '+d+' completo!');renderTbDiaModal();setTimeout(function(){closeMod('mtbdia');renderTbreak();},1100);return;}
+  if(!already){try{sfx('star');}catch(e){}}
   toast(already?'✓ Salvo':'⭐ Estrela conquistada!');renderTbDiaModal();
 }
 function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);if(!ls('dr_prem_since_'+uid()))ls('dr_prem_since_'+uid(),new Date().toISOString());vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();reRenderGated();}
