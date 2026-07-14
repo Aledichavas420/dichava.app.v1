@@ -1115,6 +1115,77 @@ a{color:inherit;text-decoration:none}
 #premsnack-t{flex:1;min-width:0;line-height:1.3;cursor:pointer}
 .premsnack-b{flex:0 0 auto;background:#B387F2;color:#231536;font-weight:800;font-size:13px;padding:7px 14px;border-radius:20px;white-space:nowrap;border:none;cursor:pointer}
 .premsnack-x{flex:0 0 auto;background:none;border:none;color:rgba(255,255,255,.55);font-size:15px;padding:4px 4px 4px 2px;cursor:pointer;line-height:1}
+/* ── GUIA DO T-BREAK ── */
+.tbcard{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;margin:14px 0 6px;padding:16px;border-radius:22px;background:linear-gradient(135deg,#1f1533,#2d1f52 55%,#3a2063);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tbcard-glow{position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(179,135,242,.4),transparent 70%);top:-70px;right:-40px;pointer-events:none}
+.tbcard-art{flex:0 0 58px;height:58px;position:relative}.tbcard-art svg{width:100%;height:100%}
+.tbcard-b{position:relative;color:#fff;min-width:0}
+.tbcard-k{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#C9B3F7;margin-bottom:2px}
+.tbcard-t{font-family:'DM Sans',sans-serif;font-size:19px;font-weight:800;line-height:1.1}
+.tbcard-d{font-size:12.5px;color:rgba(255,255,255,.78);margin-top:3px;line-height:1.45}
+.tbcard-cta{margin-top:9px;display:inline-flex;font-size:12px;font-weight:800;color:#2d1f52;background:#C9B3F7;padding:6px 13px;border-radius:20px}
+.tb-intro{padding:16px 20px 4px;color:var(--txs);font-size:14px;line-height:1.6}
+.tb-sec{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:var(--dk);margin:12px 20px}
+#shell.dkm .tb-sec{color:#E9EFE7}
+.tb-tracks{display:flex;flex-direction:column;gap:11px;padding:0 16px 10px}
+.tb-track{display:flex;align-items:center;gap:13px;background:#fff;border:1.5px solid #EBEBEB;border-radius:18px;padding:15px;cursor:pointer;transition:transform .12s,border-color .2s;text-align:left}
+.tb-track:active{transform:scale(.98)}
+.tbt-n{flex:0 0 52px;height:52px;border-radius:15px;background:var(--roxof);color:var(--roxo);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tbt-n b{font-size:20px;line-height:1;font-family:'DM Sans',sans-serif}.tbt-n span{font-size:10px;font-weight:700}
+.tbt-t{font-weight:800;font-size:15px;color:var(--dk)}
+.tbt-d{font-size:12.5px;color:var(--txm);margin-top:2px}
+#shell.dkm .tb-track{background:#1D2520;border-color:#32402F}#shell.dkm .tbt-t{color:#E9EFE7}
+.tb-prog{margin:10px 16px 4px;background:linear-gradient(135deg,#241a3a,#1b1526);border-radius:18px;padding:16px;color:#fff;text-align:center}
+.tb-prog-d{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:800}
+.tb-prog-x{font-size:12.5px;color:#c9bfe0;margin-top:2px}
+.tb-prog-bar{height:8px;border-radius:8px;background:rgba(255,255,255,.12);margin-top:11px;overflow:hidden}
+.tb-prog-bar>div{height:100%;border-radius:8px;background:linear-gradient(90deg,#8FE3A6,#C9B3F7);transition:width .4s}
+.tb-path{position:relative;padding:24px 0 8px;margin:0 auto;max-width:360px}
+.tb-path::before{content:'';position:absolute;left:50%;top:34px;bottom:34px;width:4px;transform:translateX(-50%);background:repeating-linear-gradient(#dce2dc 0 9px,transparent 9px 18px);z-index:0}
+#shell.dkm .tb-path::before{background:repeating-linear-gradient(#32402F 0 9px,transparent 9px 18px)}
+.tb-node{position:relative;height:82px;display:flex;align-items:center;justify-content:center;z-index:2}
+.tb-nlabel{position:absolute;top:50%;transform:translateY(-50%);width:120px}
+.tb-node:not(.right) .tb-nlabel{left:calc(50% + 45px)}
+.tb-node.right .tb-nlabel{right:calc(50% + 45px);text-align:right}
+.tb-dot{flex:0 0 62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;background:#E4E7E4;color:#9aa89c;border:3px solid #d5dcd5;position:relative}
+.tb-node.done .tb-dot{background:linear-gradient(135deg,#5BC06F,#2E9244);border-color:#3E9B4F;color:#fff}
+.tb-node.now .tb-dot{background:linear-gradient(135deg,#B387F2,#7C3AED);border-color:#C9B3F7;color:#fff;animation:tbpulse 1.9s ease-in-out infinite}
+@keyframes tbpulse{0%,100%{box-shadow:0 0 0 6px rgba(124,58,237,.18)}50%{box-shadow:0 0 0 13px rgba(124,58,237,.05)}}
+.tb-node.locked{opacity:.65}
+.tb-nlabel b{display:block;font-weight:800;font-size:14px;color:var(--dk)}
+.tb-nlabel span{font-size:11.5px;color:var(--txm)}
+#shell.dkm .tb-nlabel b{color:#E9EFE7}
+.tb-node.locked .tb-nlabel b{color:var(--txm)}
+.tb-conn{position:absolute;left:50%;transform:translateX(-50%);width:4px;background:#dfe4df;z-index:1;border-radius:4px}
+#shell.dkm .tb-conn{background:#32402F}
+.tbd-head{text-align:center;margin-bottom:4px}
+.tbd-emo{font-size:40px}
+.tbd-dia{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--roxo)}
+.tbd-tema{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:var(--dk)}
+#shell.dkm .tbd-tema{color:#E9EFE7}
+.tbd-box{background:var(--vf);border-radius:14px;padding:13px 15px;margin:12px 0;font-size:13.5px;line-height:1.6;color:var(--txs)}
+.tbd-box b{color:var(--dk)}
+#shell.dkm .tbd-box{background:#1D2520;color:#ADBDA9}#shell.dkm .tbd-box b{color:#E9EFE7}
+.tbd-box.tool{background:#F3EEFF}#shell.dkm .tbd-box.tool{background:#241a3a}
+.tbd-box .tbd-bt{font-weight:800;color:var(--roxo);display:block;margin-bottom:3px}
+.tbd-act{display:inline-flex;margin-top:9px;font-size:12.5px;font-weight:800;color:#fff;background:var(--roxo);padding:8px 14px;border-radius:20px;cursor:pointer}
+.tbd-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--txm);margin:14px 0 7px}
+.tbd-emorow{display:flex;gap:8px}
+.tbd-emorow button{flex:1;background:#fff;border:1.5px solid #E3E3E3;border-radius:12px;padding:9px 0;font-size:20px;cursor:pointer}
+.tbd-emorow button.on{border-color:var(--roxo);background:var(--roxof)}
+#shell.dkm .tbd-emorow button{background:#1D2520;border-color:#32402F}
+.tbd-ref{font-size:11px;color:var(--txm);margin-top:14px;padding-top:9px;border-top:1px solid #EBEBEB}
+#shell.dkm .tbd-ref{border-color:#32402F}
+.tbdi{background:#fff;border:1px solid #EBEBEB;border-radius:14px;padding:12px 14px;margin:0 16px 9px}
+#shell.dkm .tbdi{background:#1D2520;border-color:#32402F}
+.tbdi-h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13.5px;color:var(--dk);margin-bottom:4px}
+#shell.dkm .tbdi-h{color:#E9EFE7}
+.tbdi-x{font-size:13px;color:var(--txs);line-height:1.5}
+.tbtut-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.tbtut-ic{flex:0 0 34px;height:34px;border-radius:11px;background:var(--roxof);display:flex;align-items:center;justify-content:center;font-size:17px}
+.tbtut-row b{display:block;font-size:14px;color:var(--dk)}
+.tbtut-row small{font-size:12.5px;color:var(--txs);line-height:1.45}
+#shell.dkm .tbtut-row b{color:#E9EFE7}
 
 /* ── FLUIDEZ v5 ── */
 .ov{opacity:0;transition:opacity .22s ease;pointer-events:none}
@@ -1761,6 +1832,16 @@ a{color:inherit;text-decoration:none}
   <div class="zen-hero">
     <h2>Respira.<br>A vontade é uma onda.</h2>
     <p>Ocupe as mãos e a cabeça enquanto ela sobe, atinge o pico e desce. Não precisa vencer, só atravessar.</p>
+  </div>
+  <div class="tbcard" onclick="premDo(abrirTbreak)">
+    <div class="tbcard-glow"></div>
+    <div class="tbcard-art"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="46" cy="18" r="11" fill="#FFD86B"/><path d="M40 14a11 11 0 0 0 10 13 11 11 0 1 1-10-13Z" fill="#F2B705"/><path d="M32 56V38" stroke="#8FE3A6" stroke-width="3.5" stroke-linecap="round"/><path d="M32 42c-7 0-13-5-14-12 8 0 14 5 14 12Z" fill="#7BD98A"/><path d="M32 38c0-8 6-14 14-14 0 8-6 14-14 14Z" fill="#5BC06F"/></svg></div>
+    <div class="tbcard-b">
+      <div class="tbcard-k">👑 Premium · novo</div>
+      <div class="tbcard-t">Guia do T-break</div>
+      <div class="tbcard-d">Uma jornada guiada de pausa canábica — dia a dia, com ferramentas pra atravessar cada fase.</div>
+      <div class="tbcard-cta">Começar minha pausa →</div>
+    </div>
   </div>
   <div id="zen-sons">
   <div class="zen-sec">Sons da natureza · em loop</div>
@@ -2470,6 +2551,31 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <div id="premsnack" class="premsnack"><span class="premsnack-ic">👑</span><span id="premsnack-t" onclick="premSnackTap()"></span><button class="premsnack-b" onclick="premSnackTap()">Ver</button><button class="premsnack-x" onclick="hidePremSnack()" aria-label="Fechar">✕</button></div>
+
+<!-- GUIA DO T-BREAK (pausa canábica) -->
+<div class="V" id="vtbreak" style="background:var(--cin)">
+<div class="ptb" style="background:var(--cin)"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Guia do T-break</div></div>
+<div class="sc" style="padding-bottom:40px" id="tb-body"></div>
+</div>
+
+<!-- MISSÃO DO DIA (t-break) -->
+<div class="ov" id="mtbdia" onclick="if(event.target===this)closeMod('mtbdia')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div id="mtbdia-c"></div>
+</div></div></div>
+
+<!-- TUTORIAL do T-break -->
+<div class="ov" id="mtbtut" onclick="if(event.target===this)closeMod('mtbtut')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="text-align:center;font-size:40px;margin-bottom:4px">🌱</div>
+  <div class="mt c">O que é a pausa canábica</div>
+  <div class="mb c" style="margin-bottom:14px">Também chamada de <b>t-break</b> (tolerance break), é uma pausa planejada do uso pra <b>reequilibrar seu corpo</b> — com menos tolerância, o efeito volta a ser mais forte, e você reencontra sua relação com a substância.</div>
+  <div class="tbtut-row"><span class="tbtut-ic">🗺️</span><div><b>Uma jornada dia a dia</b><small>Um percurso guiado: cada dia libera uma nova fase, no seu tempo.</small></div></div>
+  <div class="tbtut-row"><span class="tbtut-ic">🧰</span><div><b>Ferramentas pra cada fase</b><small>O que esperar, como se cuidar e o que fazer — baseado em evidências.</small></div></div>
+  <div class="tbtut-row"><span class="tbtut-ic">📔</span><div><b>Seu diário da pausa</b><small>Registre humor, vontade e reflexões — tudo guardado só aqui, separado do resto.</small></div></div>
+  <button class="btn bv bfull" style="margin-top:8px" onclick="closeMod('mtbtut')">Bora começar 💚</button>
+  <div class="premnote">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>
+</div></div></div>
 
 <!-- ONDA -->
 <div class="V" id="vonda">
@@ -6680,6 +6786,71 @@ function premNudge(kind){
   }catch(e){}
 }
 
+// ══ GUIA DO T-BREAK (pausa canábica) ══
+const TB_HUMOR=['😣','😕','😐','🙂','😌'];
+const TBREAK7=[
+  {ic:'🌱',tema:'O primeiro passo',esperar:'No começo o corpo ainda está se ajustando — talvez você sinta pouca coisa hoje, ou uma leve inquietação. O mais importante agora é a <b>decisão</b> e o porquê dela.',ferramenta:{t:'Defina sua intenção',x:'Antes de tudo: por que você quer essa pausa? Ter isso claro é o que te segura nos dias difíceis. Respire fundo 3 vezes e escreva.'},prompt:'Por que decidi fazer essa pausa agora? O que espero sentir ou ganhar?',ref:'Guia de Pausa Canábica — Desprô/@dichavando.'},
+  {ic:'🌊',tema:'A onda começa a subir',esperar:'Entre 24 e 72h os sintomas costumam aparecer: sono mais agitado, irritabilidade, talvez menos apetite. Não é fraqueza — é o cérebro <b>reajustando os receptores</b>.',ferramenta:{t:'Respiração 4-7-8',x:'Inspire por 4, segure por 7, solte por 8. Ativa o sistema nervoso parassimpático e acalma a fissura.',acao:{label:'Abrir respiração',fn:"showV('vresp')"}},prompt:'Como está meu corpo hoje? O que eu sinto quando bate a vontade?'},
+  {ic:'⛰️',tema:'O pico',esperar:'Aqui costuma ser o dia mais intenso — o <b>pico da abstinência</b>. Irritabilidade, ansiedade, insônia e sonhos vívidos são comuns e passam. Lembre: a onda tem pico E fim.',ferramenta:{t:'Mexa o corpo',x:'Exercício aeróbico (caminhar, correr, pedalar) aumenta a anandamida — um canabinoide natural ligado ao bem-estar — e ajuda o sistema endocanabinoide a se reequilibrar.',acao:{label:'Grounding 5-4-3-2-1',fn:"showV('vgrd')"}},prompt:'Qual foi o momento mais difícil hoje e como eu atravessei?',ref:'Exercício ↑ anandamida — Guia Desprô; literatura de abstinência de cannabis.'},
+  {ic:'🥗',tema:'Cuidar do corpo',esperar:'O pico começa a ceder, mas o sono ainda pode estar instável. Cuidar da <b>alimentação e da hidratação</b> faz diferença agora.',ferramenta:{t:'Ômega-3 no prato',x:'O corpo usa ácidos graxos ômega-3 pra produzir endocanabinoides. Peixes, linhaça, chia, nozes e soja ajudam. Beba água e vá com calma na cafeína.'},prompt:'Como andam meu sono e minha alimentação? Como quero cuidar do corpo amanhã?',ref:'Ômega-3 e endocanabinoides — Guia Desprô.'},
+  {ic:'🔄',tema:'Os rituais',esperar:'A tolerância não é só química — é <b>comportamental</b>. Os rituais e horários do uso puxam a vontade. Perceber isso é meio caminho.',ferramenta:{t:'Troque um ritual',x:'Pense num momento que puxava o uso (depois do trampo, antes de dormir…). Escolha algo pra colocar no lugar: um chá, um alongamento, uma música.'},prompt:'Qual ritual mais puxa minha vontade? Por o que eu posso trocar?',ref:'Tolerância comportamental — Guia Desprô.'},
+  {ic:'🌅',tema:'A onda desce',esperar:'Muita gente começa a notar melhoras agora: <b>sono mais profundo, mais clareza, humor estabilizando</b>. Repare nos ganhos — isso motiva.',ferramenta:{t:'Colha os ganhos',x:'Feche os olhos e note: o que está melhor do que no dia 1? Reconhecer o progresso fortalece a decisão.'},prompt:'O que melhorou desde que comecei? Do que tenho orgulho?'},
+  {ic:'🏆',tema:'Você atravessou',esperar:'Você completou a primeira semana. Para muitos, <b>uma semana já causa impacto real na tolerância</b>. Agora é escolher o próximo passo com consciência.',ferramenta:{t:'Seu próximo passo',x:'Você pode seguir mais uns dias, encerrar a pausa com um uso mais consciente, ou repetir quando quiser. Não existe certo — existe o SEU caminho.'},prompt:'O que essa semana me ensinou? Como quero seguir a partir daqui?',ref:'1 semana já impacta a tolerância — Guia Desprô.'}
+];
+function gTb(){return ls('dr_tb_'+uid())||null;}
+function sTb(o){ls('dr_tb_'+uid(),o);}
+function tbInfo(d){return TBREAK7[(d-1)%TBREAK7.length];}
+function tbDiaAtual(tb){if(!tb)return 0;const i=new Date(tb.inicio+'T12:00:00'),h=new Date(hoje()+'T12:00:00');const d=Math.floor((h-i)/864e5)+1;return Math.max(1,Math.min(tb.trilha,d));}
+function abrirTbreak(){showV('vtbreak');if(!ls('dr_tbtut_'+uid())){ls('dr_tbtut_'+uid(),1);setTimeout(()=>openMod('mtbtut'),200);}renderTbreak();}
+function tbIniciar(n){if(n!==7){toast('🔒 As trilhas de 14 e 31 dias chegam em breve!');return;}sTb({trilha:n,inicio:hoje(),dias:{}});vib(12);renderTbreak();}
+function tbReset(){if(!confirm('Recomeçar a jornada? O diário desta pausa será apagado.'))return;ls('dr_tb_'+uid(),null);renderTbreak();}
+function renderTbreak(){
+  const c=document.getElementById('tb-body');if(!c)return;
+  const tb=gTb();
+  if(!tb){
+    const tracks=[[7,'Reset rápido','Uma semana já impacta a tolerância.',''],[14,'Pausa firme','Duas semanas pra um reajuste mais profundo.','em breve'],[31,'Reinício','Um mês pra reencontrar sua relação com o uso.','em breve']];
+    c.innerHTML=`<div class="tb-intro">Uma pausa planejada do uso pra reequilibrar seu corpo. Você atravessa <b>dia a dia</b>, com uma missão por dia — no seu ritmo.</div><div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">${tracks.map(([n,t,d,tag])=>`<button class="tb-track" onclick="tbIniciar(${n})"><span class="tbt-n"><b>${n}</b><span>dias</span></span><span style="min-width:0"><span class="tbt-t">${t}${tag?` · <span style="color:var(--txm);font-weight:600">${tag}</span>`:''}</span><div class="tbt-d">${d}</div></span></button>`).join('')}</div><div class="premnote" style="margin:8px 20px">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>`;
+    return;
+  }
+  const N=tb.trilha,atual=tbDiaAtual(tb),feitos=Object.keys(tb.dias||{}).filter(k=>tb.dias[k]&&tb.dias[k].done).length;
+  let h=`<div class="tb-prog"><div class="tb-prog-d">Dia ${atual} de ${N}</div><div class="tb-prog-x">${feitos} ${feitos===1?'fase concluída':'fases concluídas'} 🌱</div><div class="tb-prog-bar"><div style="width:${Math.round(feitos/N*100)}%"></div></div></div><div class="tb-path">`;
+  for(let d=1;d<=N;d++){
+    const done=!!(tb.dias&&tb.dias[d]&&tb.dias[d].done),avail=d<=atual,now=!done&&d===atual,info=tbInfo(d);
+    const st=done?' done':(now?' now':(avail?'':' locked')),side=d%2===0?' right':'';
+    const ic=done?'✓':(avail?info.ic:'🔒');
+    h+=`<div class="tb-node${side}${st}" onclick="abrirTbDia(${d})"><div class="tb-dot">${ic}</div><div class="tb-nlabel"><b>Dia ${d}</b><span>${avail?info.tema:'em breve'}</span></div></div>`;
+  }
+  h+='</div>';
+  const logs=[];for(let d=N;d>=1;d--){const x=tb.dias&&tb.dias[d];if(x&&x.done&&(x.texto||x.humor))logs.push([d,x]);}
+  if(logs.length){h+='<div class="tb-sec">Meu diário da pausa 📔</div>'+logs.map(([d,x])=>`<div class="tbdi"><div class="tbdi-h">${x.humor||'🌱'} Dia ${d} · ${tbInfo(d).tema}</div>${x.texto?`<div class="tbdi-x">${esc(x.texto)}</div>`:''}</div>`).join('');}
+  h+=`<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">Recomeçar jornada</button></div>`;
+  c.innerHTML=h;
+}
+let _tbSelDia=null,_tbHumor=null;
+function abrirTbDia(d){
+  const tb=gTb();if(!tb)return;const atual=tbDiaAtual(tb);
+  if(d>atual){toast('🔒 Esse dia libera em '+(d-atual)+(d-atual===1?' dia':' dias'));return;}
+  _tbSelDia=d;const info=tbInfo(d),dd=(tb.dias&&tb.dias[d])||{};_tbHumor=dd.humor||null;const done=!!dd.done;
+  document.getElementById('mtbdia-c').innerHTML=`<div class="tbd-head"><div class="tbd-emo">${info.ic}</div><div class="tbd-dia">Dia ${d}</div><div class="tbd-tema">${info.tema}</div></div>`
+    +`<div class="tbd-box"><b>O que esperar hoje</b><br>${info.esperar}</div>`
+    +`<div class="tbd-box tool"><span class="tbd-bt">🧰 ${info.ferramenta.t}</span>${info.ferramenta.x}${info.ferramenta.acao?`<br><span class="tbd-act" onclick="closeMod('mtbdia');${info.ferramenta.acao.fn}">${info.ferramenta.acao.label} →</span>`:''}</div>`
+    +`<div class="tbd-label">Como você está agora?</div><div class="tbd-emorow" id="tbd-humor">${TB_HUMOR.map(e=>`<button class="${dd.humor===e?'on':''}" onclick="tbSelHumor('${e}',this)">${e}</button>`).join('')}</div>`
+    +`<div class="tbd-label">Sua reflexão de hoje</div><textarea class="ft" id="tbd-texto" rows="3" placeholder="${esc(info.prompt)}">${esc(dd.texto||'')}</textarea>`
+    +(info.ref?`<div class="tbd-ref">📚 ${info.ref}</div>`:'')
+    +`<button class="btn bv bfull" style="margin-top:14px" onclick="concluirTbDia()">${done?'Salvar alterações':'Concluir dia ✓'}</button>`
+    +(done?'':`<div class="premnote">Ao concluir, o próximo dia libera amanhã.</div>`);
+  openMod('mtbdia');
+}
+function tbSelHumor(e,btn){document.querySelectorAll('#tbd-humor button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');_tbHumor=e;vib(6);}
+function concluirTbDia(){
+  const tb=gTb();if(!tb||!_tbSelDia)return;blurAll();
+  const texto=document.getElementById('tbd-texto').value.trim();
+  tb.dias=tb.dias||{};const novo=!(tb.dias[_tbSelDia]&&tb.dias[_tbSelDia].done);
+  tb.dias[_tbSelDia]={done:true,humor:_tbHumor,texto,data:hoje()};sTb(tb);
+  closeMod('mtbdia');
+  if(novo){try{addXP(15,'tbreak');}catch(e){}vib([20,40,20]);try{confete();}catch(e){}toast('🌱 Dia '+_tbSelDia+' concluído!');}else toast('✓ Salvo');
+  renderTbreak();
+}
 function assinarPremiumDemo(){ls('dr_prem_'+uid(),1);if(!ls('dr_prem_since_'+uid()))ls('dr_prem_since_'+uid(),new Date().toISOString());vib(20);toast('✨ Premium ativado! (simulação de teste)');renderPremMod();renderPremUI();reRenderGated();}
 function cancelarPremiumDemo(){ls('dr_prem_'+uid(),0);toast('Assinatura de teste cancelada.');renderPremMod();renderPremUI();reRenderGated();closeMod('mprem');}
 // recurso premium: libera se assinante, senão abre o convite
