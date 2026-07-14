@@ -1307,7 +1307,7 @@ a{color:inherit;text-decoration:none}
 .tb-aur-c{position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.18),transparent 45%);pointer-events:none}
 .tb-complete-tro,.tb-complete-t,.tb-complete-x,.tb-complete-m{position:relative;z-index:1}
 /* fundo imersivo do T-break — tom "floresta ao amanhecer" (verde-musgo → azul → ameixa) */
-#vtbreak{position:relative;overflow:hidden;background:linear-gradient(178deg,#0d2a1e 0%,#123141 42%,#1f2b52 74%,#2a1e46 100%)!important}
+#vtbreak{background:linear-gradient(178deg,#0d2a1e 0%,#123141 42%,#1f2b52 74%,#2a1e46 100%)!important}
 #vtbreak .ptb{background:transparent!important}
 #vtbreak #tb-body{position:relative;z-index:1}
 .tb-aurora{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -1338,10 +1338,9 @@ a{color:inherit;text-decoration:none}
 #vtbreak .tbdi{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12)}
 #vtbreak .tbdi-h{color:#EAF3EC}#vtbreak .tbdi-x{color:#C4D6CC}
 #vtbreak .btn.bout{color:#D9C6Fb;border-color:rgba(217,198,251,.5)}
-.tb-help{position:absolute;right:15px;bottom:80px;z-index:6;display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#B387F2,#7C3AED);color:#fff;border:none;border-radius:26px;padding:11px 16px 11px 13px;font-size:13.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(124,58,237,.45);animation:tbhelpin .3s ease}
-.tb-help span{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.25);font-size:13px}
-.tb-help:active{transform:scale(.94)}
-@keyframes tbhelpin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tb-help-h{margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:rgba(179,135,242,.25);color:#EAF3EC;border:1px solid rgba(217,198,251,.4);border-radius:20px;padding:7px 13px 7px 9px;font-size:12.5px;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.tb-help-h span{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:rgba(255,255,255,.22);font-size:12px}
+.tb-help-h:active{transform:scale(.94)}
 .tbfaq-q{border:1px solid #EBEBEB;border-radius:14px;margin:10px 0;overflow:hidden}
 #shell.dkm .tbfaq-q{border-color:#32402F}
 .tbfaq-h{display:flex;align-items:center;gap:9px;padding:13px 14px;font-weight:800;font-size:14px;color:var(--dk);cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -1563,6 +1562,7 @@ a{color:inherit;text-decoration:none}
 .qac-wide{grid-column:1/-1;display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#262657,#3D3D7A);border-radius:18px;padding:15px 17px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 5px 16px rgba(30,30,70,.28);-webkit-tap-highlight-color:transparent;transition:transform .15s}
 .qac-wide:active{transform:scale(.98)}
 .qac-cartas{background:linear-gradient(135deg,#E07B2E,#F0A24A);box-shadow:0 5px 16px rgba(180,90,20,.28);margin-top:10px}
+.qac-tbreak{background:linear-gradient(135deg,#241a3a,#3f2d68);box-shadow:0 5px 16px rgba(40,25,80,.32);margin-top:10px}
 .qacw-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9}
 .qacw-ic{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;box-shadow:inset 0 1px 1px rgba(255,255,255,.3)}
 .qacw-ic svg,.qacw-ic img{width:30px;height:30px}
@@ -1959,6 +1959,19 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="qacw-go">›</div>
     </div>
+    <div class="qac-wide qac-tbreak" onclick="premDo(abrirTbreak)">
+      <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="344" cy="30" r="60" fill="rgba(143,227,166,.14)"/>
+        <circle cx="300" cy="90" r="46" fill="rgba(179,135,242,.16)"/>
+        <g fill="#fff" opacity=".5"><circle cx="250" cy="26" r="1.5"/><circle cx="292" cy="58" r="1.3"/><circle cx="372" cy="80" r="1.4"/><circle cx="228" cy="70" r="1.2"/></g>
+      </svg>
+      <div class="qacw-ic"><svg viewBox="0 0 40 40" width="26" height="26"><circle cx="28" cy="12" r="7" fill="#FFD86B"/><path d="M20 34V20" stroke="#8FE3A6" stroke-width="3" stroke-linecap="round"/><path d="M20 24c-5 0-9-3-10-8 6 0 10 3 10 8Z" fill="#7BD98A"/><path d="M20 20c0-6 4-10 10-10 0 6-4 10-10 10Z" fill="#5BC06F"/></svg></div>
+      <div class="qacw-tx">
+        <div class="qacw-t">Pausa de Tolerância 👑</div>
+        <div class="qacw-s">Um t-break guiado dia a dia, com check-in e sua análise no fim</div>
+      </div>
+      <div class="qacw-go">›</div>
+    </div>
     <div class="qac-wide qac-cartas" onclick="abrirCartas()">
       <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <g stroke="rgba(255,255,255,.4)" stroke-width="2.5" fill="none"><rect x="296" y="22" width="74" height="52" rx="6"/><path d="M298 26 L333 52 L368 26"/></g>
@@ -2004,7 +2017,7 @@ a{color:inherit;text-decoration:none}
     <div class="tbcard-b">
       <div class="tbcard-k">👑 Premium · novo</div>
       <div class="tbcard-t">Inicie a pausa de tolerância</div>
-      <div class="tbcard-d">Um t-break guiado dia a dia: missões simples, check-in do seu corpo e humor, e a análise da sua travessia no fim. 🌱</div>
+      <div class="tbcard-d">Um t-break guiado dia a dia: missões simples, check-in do seu corpo e humor, e a análise da sua pausa no fim. 🌱</div>
       <div class="tbcard-cta">Começar agora →</div>
     </div>
   </div>
@@ -2721,9 +2734,8 @@ a{color:inherit;text-decoration:none}
 <!-- GUIA DO T-BREAK (pausa canábica) -->
 <div class="V" id="vtbreak" style="background:var(--cin)">
 <div class="tb-aurora"><div class="tb-stars-bg"></div></div>
-<div class="ptb" style="background:var(--cin);position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Travessia</div></div>
+<div class="ptb" style="background:var(--cin);position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Pausa de Tolerância</div><button class="tb-help-h" onclick="openMod('mtbfaq')" aria-label="Dúvidas da pausa"><span>?</span> Dúvidas</button></div>
 <div class="sc" style="padding-bottom:40px" id="tb-body"></div>
-<button class="tb-help" onclick="openMod('mtbfaq')" aria-label="Dúvidas da pausa"><span>?</span>Dúvidas</button>
 </div>
 
 <!-- MISSÃO DO DIA (t-break) -->
@@ -2765,7 +2777,7 @@ a{color:inherit;text-decoration:none}
 <div class="ov" id="mtbanalise" onclick="if(event.target===this)closeMod('mtbanalise')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
   <div style="text-align:center;font-size:38px;margin-bottom:2px">📊</div>
-  <div class="mt c">Análise da travessia</div>
+  <div class="mt c">Análise da pausa</div>
   <div id="mtbanalise-c"></div>
   <button class="btn bv bfull" style="margin-top:12px" onclick="closeMod('mtbanalise')">Fechar</button>
 </div></div></div>
@@ -7132,7 +7144,7 @@ function abrirTbAnalise(){
   const r=tbResumo();const el=document.getElementById('mtbanalise-c');if(!el)return;
   if(!r||r.dias===0){el.innerHTML='<div class="tba-empty">🌱<br>Faça os check-ins diários e sua análise aparece aqui — médias de sono, bem-estar, sintomas e mais.</div>';openMod('mtbanalise');return;}
   const f1=function(v){return v?v.toFixed(1).replace('.',','):'—';};
-  let h='<div class="tba-sub">✨ Compilado dos seus <b>'+r.dias+'</b> check-in'+(r.dias>1?'s':'')+' — o retrato da sua travessia.</div>';
+  let h='<div class="tba-sub">✨ Compilado dos seus <b>'+r.dias+'</b> check-in'+(r.dias>1?'s':'')+' — o retrato da sua pausa.</div>';
   // médias em destaque
   h+='<div class="tba-grid">';
   h+='<div class="tba-tile" style="--i:0"><div class="tba-emo">😴</div><b>'+f1(r.sono)+'</b><span>sono médio</span></div>';
@@ -7194,7 +7206,7 @@ function renderTbreak(){
   const tb=gTb();
   if(!tb){
     const tracks=[[7,'⚡','Reset rápido','Uma semana já impacta a tolerância.','',''],[14,'🌟','Pausa firme','Duas semanas pra um reajuste mais profundo.','mais escolhida','best'],[31,'🏆','Reinício','Um mês pra reencontrar sua relação com a erva.','transformação','']];
-    let s='<div class="tb-welcome"><img class="tb-guide-av" alt=""><div class="tb-welcome-b"><div class="tb-welcome-t">Bora começar sua travessia? 🌱</div><div class="tb-welcome-x">Uma pausa planejada pra reequilibrar seu corpo e sua relação com a erva — <b>dia a dia</b>, no seu ritmo.</div></div></div>';
+    let s='<div class="tb-welcome"><img class="tb-guide-av" alt=""><div class="tb-welcome-b"><div class="tb-welcome-t">Bora começar sua pausa? 🌱</div><div class="tb-welcome-x">Uma pausa planejada pra reequilibrar seu corpo e sua relação com a erva — <b>dia a dia</b>, no seu ritmo.</div></div></div>';
     s+='<div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">'+tracks.map(function(t){return '<button class="tb-track'+(t[5]==='best'?' tb-track-best':'')+'" onclick="tbIniciar('+t[0]+')">'+(t[4]?'<span class="tb-track-tag">'+t[4]+'</span>':'')+'<span class="tbt-n"><b>'+t[0]+'</b><span>dias</span></span><span class="tbt-ic">'+t[1]+'</span><span style="flex:1;min-width:0"><span class="tbt-t">'+t[2]+'</span><div class="tbt-d">'+t[3]+'</div></span><span class="tbt-go">→</span></button>';}).join('')+'</div>';
     s+='<div class="premnote" style="margin:8px 20px 0">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>';
     c.innerHTML=s;
@@ -7204,12 +7216,11 @@ function renderTbreak(){
   const N=tb.trilha,atual=tbDiaAtual(tb),info=tbInfo(atual);
   let feitos=0;for(let d=1;d<=N;d++){if(tbDayDone(tb,d))feitos++;}
   const allDone=feitos>=N;
-  let temCheck=false;for(let d=1;d<=N;d++){const x=tb.dias&&tb.dias[d];if(x&&(x.humor||(x.q&&Object.keys(x.q).length)))temCheck=true;}
   let h='';
-  if(temCheck&&!allDone)h+='<button class="tb-analise-top" onclick="abrirTbAnalise()"><span>📊</span> Ver análise da travessia <b>›</b></button>';
+  if(!allDone)h+='<button class="tb-analise-top" onclick="abrirTbAnalise()"><span>📊</span> Ver análise da pausa <b>›</b></button>';
   if(allDone){
     if(!ls('dr_tbdone_'+uid())){ls('dr_tbdone_'+uid(),1);setTimeout(function(){try{confete();}catch(e){}try{sfx('complete');}catch(e){}},350);}
-    h+='<div class="tb-complete"><div class="tb-aur-c"></div><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div><button class="tbcert-btn" onclick="tbGerarCert()">📤 Compartilhar meu certificado</button><button class="tbcert-btn tbcert-ghost" onclick="abrirTbAnalise()">📊 Ver análise da travessia</button></div>';
+    h+='<div class="tb-complete"><div class="tb-aur-c"></div><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div><button class="tbcert-btn" onclick="tbGerarCert()">📤 Compartilhar meu certificado</button><button class="tbcert-btn tbcert-ghost" onclick="abrirTbAnalise()">📊 Ver análise da pausa</button></div>';
   } else {
     h+='<div class="tb-guide"><img class="tb-guide-av" alt=""><div class="tb-guide-b"><div class="tb-guide-t">Dia '+atual+' de '+N+' · '+info.tema+'</div><div class="tb-guide-x">'+TB_GUIA[(atual-1)%7]+'</div><div class="tb-prog-bar"><div style="width:'+Math.round(feitos/N*100)+'%"></div></div></div></div>';
   }
@@ -7255,7 +7266,7 @@ function _tbChipsHTML(k,opts,noneLabel){
   return s+'</div>';
 }
 function tbCheckinHTML(dd){
-  let h='<div class="tbq-intro">Um check-in rápido do seu dia — vira parte da sua <b>análise da travessia</b> no fim. 💚</div>';
+  let h='<div class="tbq-intro">Um check-in rápido do seu dia — vira parte da sua <b>análise da pausa</b> no fim. 💚</div>';
   h+='<div class="tbd-label" style="margin-top:2px">Como está seu ânimo hoje?</div><div class="tbd-emorow" id="tbd-humor">'+TB_HUMOR.map(function(e){return '<button class="'+(dd.humor===e?'on':'')+'" onclick="tbSelHumor(\''+e+'\',this)">'+e+'</button>';}).join('')+'</div>';
   h+='<div class="tbd-label">Como você dormiu na noite passada?</div>'+_tbScaleHTML('sono','Muito ruim','Muito bem');
   h+='<div class="tbd-label">Bem-estar físico hoje</div>'+_tbScaleHTML('bfis','Muito ruim','Muito bom');
