@@ -567,6 +567,15 @@ footer a{color:#93AC96;text-decoration:underline}
 .plan-price{font-size:34px;font-weight:800;color:#fff;margin:6px 0 2px}
 .plan-price span{font-size:15px;font-weight:600;color:#93AC96}
 .plan-sub{font-size:13px;color:var(--am);font-weight:700;margin-bottom:4px}
+.plan-opts{display:flex;flex-direction:column;gap:9px;margin:14px 0 4px}
+.plan-opt{position:relative;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;border:1.5px solid rgba(255,255,255,.16);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.04)}
+.plan-opt .po-n{font-size:14px;font-weight:800;color:#fff}
+.plan-opt .po-p{font-size:20px;font-weight:800;color:#fff;margin-left:auto}
+.plan-opt .po-u{flex-basis:100%;font-size:12px;color:#9FB6A2;font-weight:600}
+.plan-opt.po-best{border-color:var(--am);background:rgba(232,184,75,.1)}
+.plan-opt.po-best .po-p{color:var(--am)}
+.plan-opt.po-best .po-u{color:var(--am);font-weight:800}
+.po-tag{position:absolute;top:-11px;left:14px;background:var(--am);color:#3A2063;font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:20px}
 .plan-feats{list-style:none;margin:18px 0 24px;padding:0}
 .plan-feats li{font-size:14.5px;color:#C7D6C9;padding:7px 0 7px 26px;position:relative;line-height:1.4}
 .plan-feats li::before{content:'✓';position:absolute;left:0;color:#5BC06F;font-weight:800}
@@ -598,18 +607,20 @@ footer a{color:#93AC96;text-decoration:underline}
       <div class="plan best rv">
         <div class="plan-badge">✨ mais completo</div>
         <div class="plan-tag">Premium</div>
-        <div class="plan-price">R$ 12,90<span>/mês</span></div>
-        <div class="plan-sub">ou R$ 99,90/ano (economize 35%) · ou R$ 189,90 vitalício</div>
+        <div class="plan-opts">
+          <div class="plan-opt"><span class="po-n">Mensal</span><span class="po-p">R$ 12,90</span><span class="po-u">por mês</span></div>
+          <div class="plan-opt po-best"><span class="po-tag">★ mais escolhido</span><span class="po-n">Anual</span><span class="po-p">R$ 99,90</span><span class="po-u">≈ R$ 8,33/mês · economize 35%</span></div>
+          <div class="plan-opt"><span class="po-n">Vitalício</span><span class="po-p">R$ 189,90</span><span class="po-u">pague uma vez, sem mensalidade</span></div>
+        </div>
         <ul class="plan-feats">
           <li>Tudo do plano grátis, e mais:</li>
+          <li><b>Insights avançados</b> — padrões, gatilhos e horários em gráficos</li>
+          <li><b>Finanças</b> — gastos e economia detalhados</li>
+          <li><b>Relatórios em PDF</b> — seu raio-x pra guardar ou levar ao profissional</li>
           <li>Pausa de Tolerância guiada (t-break) 🌱</li>
-          <li>Insights avançados com gráficos</li>
-          <li>Finanças: gastos e economia</li>
-          <li>Relatórios avançados em PDF</li>
           <li>Cartas pra mim (eu do futuro)</li>
-          <li>Sons extras: ambientes, frequências e binaurais 🎧</li>
-          <li>Jogos extras pra distrair</li>
           <li>Backup na nuvem e exportar dados</li>
+          <li>Sons e jogos extras 🎧</li>
         </ul>
         <a class="plan-cta" href="../" target="_blank">✨ Assinar premium</a>
       </div>
