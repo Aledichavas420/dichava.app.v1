@@ -7497,12 +7497,17 @@ let _premServer=false;
 const isPremium=()=>_premServer||!!ls('dr_prem_'+uid());
 // lê o plano do servidor no login e re-renderiza os gates
 async function carregarPlano(){
+  const antes=!!ls('dr_premsrv_'+uid())||_premServer;   // estado premium conhecido
   try{_premServer=!!ls('dr_premsrv_'+uid());}catch(e){}   // cache (funciona offline)
   try{
     if(typeof _SB!=='undefined'&&_SB&&U&&U.id&&U.id!=='demo'){
       const{data}=await _SB.from('perfis').select('plano,plano_expira').eq('user_id',U.id).maybeSingle();
       const ativo=!!(data&&data.plano==='premium'&&(!data.plano_expira||new Date(data.plano_expira)>new Date()));
       _premServer=ativo;ls('dr_premsrv_'+uid(),ativo?1:0);
+      if(ativo&&!antes){   // acabou de virar premium (ex.: pagamento confirmado) → comemora
+        try{confete();}catch(e){}try{sfx('complete');}catch(e){}
+        toast('✨ Premium ativado! Obrigado por apoiar o dichava 💚');
+      }
     }
   }catch(e){}
   try{renderPremUI();reRenderGated();}catch(e){}
@@ -7576,9 +7581,9 @@ window.addEventListener('load',function(){
   if(!/[?&]pago=1/.test(location.search))return;
   try{history.replaceState(null,'',location.pathname);}catch(e){}
   toast('⏳ Confirmando seu pagamento…');
-  var n=0,iv=setInterval(async function(){n++;try{await carregarPlano();}catch(e){}
-    if(isPremium()){clearInterval(iv);try{confete();}catch(e){}toast('✨ Premium ativado! Obrigado 💚');}
-    else if(n>=10){clearInterval(iv);toast('Recebemos seu pagamento? Se já pagou, aguarde 1 min e reabra o app. Qualquer coisa: contato@dichava.app');}
+  var n=0,iv=setInterval(async function(){n++;try{await carregarPlano();}catch(e){}   // carregarPlano comemora ao virar premium
+    if(isPremium()){clearInterval(iv);}
+    else if(n>=24){clearInterval(iv);toast('Se você já pagou, o acesso libera em até 1–2 min. Reabra o app. Dúvidas: contato@dichava.app');}
   },2500);
 });
 
