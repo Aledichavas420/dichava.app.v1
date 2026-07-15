@@ -1852,7 +1852,9 @@ a{color:inherit;text-decoration:none}
 .zen-hero{padding:14px 22px 20px}
 .zen-hero h2{font-family:'DM Sans',sans-serif;font-size:27px;font-weight:800;color:#fff;line-height:1.12;letter-spacing:-.5px}
 .zen-hero p{font-size:14px;color:rgba(255,255,255,.66);margin-top:8px;line-height:1.55;max-width:300px}
-.zen-moon{position:absolute;top:60px;right:-10px;font-size:70px;opacity:.9;pointer-events:none;filter:drop-shadow(0 0 24px rgba(255,221,120,.4))}
+.zen-moon{position:absolute;top:44px;right:8px;width:82px;height:82px;pointer-events:none;filter:drop-shadow(0 0 30px rgba(255,221,120,.65));animation:zmoonglow 5s ease-in-out infinite}
+.zen-moon svg{width:100%;height:100%;display:block}
+@keyframes zmoonglow{0%,100%{filter:drop-shadow(0 0 26px rgba(255,221,120,.5))}50%{filter:drop-shadow(0 0 38px rgba(255,221,120,.8))}}
 .zen-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .zen-star{position:absolute;background:#fff;border-radius:50%;opacity:.7;animation:twk 3s ease-in-out infinite}
 @keyframes twk{0%,100%{opacity:.25}50%{opacity:.9}}
@@ -2248,10 +2250,9 @@ a{color:inherit;text-decoration:none}
 <!-- JOGOS -->
 <div style="position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden" id="p-jogos">
 <div class="zen-stars" id="zen-stars"></div>
-<div class="zen-moon" data-icon="son-noite"></div>
+<div class="zen-moon"><svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="zmoonG" cx="38%" cy="34%" r="70%"><stop offset="0" stop-color="#FFF9E6"></stop><stop offset="55%" stop-color="#FFE79B"></stop><stop offset="100%" stop-color="#F5C44A"></stop></radialGradient></defs><circle cx="40" cy="40" r="26" fill="url(#zmoonG)"></circle><circle cx="31" cy="33" r="4.5" fill="#F0BE55" opacity=".55"></circle><circle cx="48" cy="45" r="6" fill="#F0BE55" opacity=".45"></circle><circle cx="44" cy="29" r="3" fill="#F0BE55" opacity=".5"></circle></svg></div>
 <div class="zen-top">
   <div class="zen-logo"><span class="tic" data-icon="pausa-mente"></span> Pausa pra mente</div>
-  <div class="zen-av" id="tav-j" onclick="goPg('p-cfg')">?</div>
 </div>
 <div class="zen-sc">
   <div class="zen-hero">
@@ -2493,10 +2494,9 @@ a{color:inherit;text-decoration:none}
     <div class="cfgi" onclick="premDo(abrirRelatorios)"><div class="cfgic">📊</div><div class="cfgb"><div class="cfgn">Relatórios avançados <span class="premlock">🔒 Premium</span></div><div class="cfgd">Tendências, comparações, mapa de calor e PDF</div></div><div class="cfgar">›</div></div>
     <div class="cfgi" onclick="abrirTutorial()"><div class="cfgic"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3.6 2.5 8.2 12 12.8l9.5-4.6Z" fill="#6B43D6"></path><path d="M6.3 11.4v4c0 1.5 2.6 2.7 5.7 2.7s5.7-1.2 5.7-2.7v-4" fill="none" stroke="#6B43D6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21.3 8.6v4.4" fill="none" stroke="#6B43D6" stroke-width="1.9" stroke-linecap="round"></path></svg></div><div class="cfgb"><div class="cfgn">Tutorial do app</div><div class="cfgd">Um tour rápido pelas ferramentas (grátis e premium)</div></div><div class="cfgar">›</div></div>
   </div>
-  <!-- GRUPO DE TESTES -->
-  <div class="shr"><div class="sht">Grupo de testes</div></div>
+  <!-- APP -->
+  <div class="shr"><div class="sht">App</div></div>
   <div class="cfgsec">
-    <div class="cfgi" onclick="abrirFeedback()"><div class="cfgic" data-icon="duvidas"></div><div class="cfgb"><div class="cfgn">Enviar feedback</div><div class="cfgd">Relate bugs e ideias no grupo do WhatsApp 💚</div></div><div class="cfgar">›</div></div>
     <div class="cfgi" onclick="atualizarApp()"><div class="cfgic">🔄</div><div class="cfgb"><div class="cfgn">Forçar atualização</div><div class="cfgd">Buscar a versão mais nova do app agora</div></div><div class="cfgar">›</div></div>
   </div>
   <!-- ÁREA EXCLUSIVA PROFISSIONAL -->
