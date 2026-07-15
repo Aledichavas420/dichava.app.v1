@@ -1,6 +1,6 @@
 {
-  "name": "dichava.rd — acompanhamento sem julgamento",
-  "short_name": "dichava.rd",
+  "name": "dichava.app — cuidar de si, sem julgamento",
+  "short_name": "dichava.app",
   "description": "Companion de redução de danos: diário de uso, reflexões, modo crise e ferramentas de cuidado.",
   "start_url": "./",
   "scope": "./",
