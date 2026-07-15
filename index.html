@@ -7556,12 +7556,13 @@ function renderPlanos(){
 function selPlano(k){_planoSel=k;renderPlanos();try{vib(8);}catch(e){}}
 function openPlanos(){try{closeMod('mprem');}catch(e){}renderPlanos();showV('vplanos');try{document.querySelector('#vplanos .sc').scrollTop=0;}catch(e){}}
 function fecharPlanos(){showV('vapp');}
-// vira TRUE quando o PagBank + Edge Functions (pagamento-criar/webhook) estiverem no ar
-const PAGAMENTO_ATIVO=false;
+// Pagamento real. Durante o teste, ligado SÓ pra conta do dono (não afeta os outros).
+// Depois de validar, troque por: function pagamentoAtivo(){return true;}
+function pagamentoAtivo(){try{return (U&&(U.email||'').toLowerCase()==='alex.mnteir@gmail.com');}catch(e){return false;}}
 async function assinarPlano(){
   const chk=document.getElementById('plns-chk');
   if(chk&&!chk.checked){toast('Marque que você leu e aceita os Termos da Assinatura 💚');try{const l=chk.closest('.plns-accept');l.classList.add('shake');setTimeout(()=>l.classList.remove('shake'),450);}catch(e){}return;}
-  if(!PAGAMENTO_ATIVO){assinarPremiumDemo();setTimeout(()=>showV('vapp'),120);return;}
+  if(!pagamentoAtivo()){assinarPremiumDemo();setTimeout(()=>showV('vapp'),120);return;}
   const btn=document.getElementById('plns-cta');const orig=btn?btn.textContent:'';
   try{
     if(btn){btn.disabled=true;btn.textContent='Gerando pagamento seguro…';}
