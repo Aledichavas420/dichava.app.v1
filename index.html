@@ -7556,11 +7556,30 @@ function renderPlanos(){
 function selPlano(k){_planoSel=k;renderPlanos();try{vib(8);}catch(e){}}
 function openPlanos(){try{closeMod('mprem');}catch(e){}renderPlanos();showV('vplanos');try{document.querySelector('#vplanos .sc').scrollTop=0;}catch(e){}}
 function fecharPlanos(){showV('vapp');}
-function assinarPlano(){
+// vira TRUE quando o PagBank + Edge Functions (pagamento-criar/webhook) estiverem no ar
+const PAGAMENTO_ATIVO=false;
+async function assinarPlano(){
   const chk=document.getElementById('plns-chk');
   if(chk&&!chk.checked){toast('Marque que você leu e aceita os Termos da Assinatura 💚');try{const l=chk.closest('.plns-accept');l.classList.add('shake');setTimeout(()=>l.classList.remove('shake'),450);}catch(e){}return;}
-  assinarPremiumDemo();setTimeout(()=>showV('vapp'),120);
+  if(!PAGAMENTO_ATIVO){assinarPremiumDemo();setTimeout(()=>showV('vapp'),120);return;}
+  const btn=document.getElementById('plns-cta');const orig=btn?btn.textContent:'';
+  try{
+    if(btn){btn.disabled=true;btn.textContent='Gerando pagamento seguro…';}
+    const{data,error}=await _SB.functions.invoke('pagamento-criar',{body:{user_id:U.id,email:U.email||'',nome:U.nome||'',plano:_planoSel}});
+    if(error||!data||!data.pay_url)throw(error||new Error('sem link'));
+    window.location.href=data.pay_url;   // vai pro checkout do PagBank
+  }catch(e){toast('Não consegui abrir o pagamento agora. Tente de novo em instantes.');if(btn){btn.disabled=false;btn.textContent=orig;}}
 }
+// Volta do checkout (?pago=1): confere o premium por alguns segundos (o webhook pode demorar)
+window.addEventListener('load',function(){
+  if(!/[?&]pago=1/.test(location.search))return;
+  try{history.replaceState(null,'',location.pathname);}catch(e){}
+  toast('⏳ Confirmando seu pagamento…');
+  var n=0,iv=setInterval(async function(){n++;try{await carregarPlano();}catch(e){}
+    if(isPremium()){clearInterval(iv);try{confete();}catch(e){}toast('✨ Premium ativado! Obrigado 💚');}
+    else if(n>=10){clearInterval(iv);toast('Recebemos seu pagamento? Se já pagou, aguarde 1 min e reabra o app. Qualquer coisa: contato@dichava.app');}
+  },2500);
+});
 
 // ── DOCUMENTOS (termos, privacidade, base científica) ──
 const DOCS={
