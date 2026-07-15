@@ -50,8 +50,11 @@ Deno.serve(async (req) => {
     }
 
     const dias = DIAS[plano] ?? 30;
-    let expira: string | null = null;
-    if (dias !== null) {
+    let expira: string;
+    if (dias === null) {
+      // vitalício: data bem no futuro (a coluna plano_expira é NOT NULL)
+      expira = "2099-12-31T00:00:00.000Z";
+    } else {
       // se já é premium e não venceu, ESTENDE a partir da data atual de expiração
       const { data: perfil } = await sb.from("perfis").select("plano_expira").eq("user_id", user_id).maybeSingle();
       const base = perfil?.plano_expira && new Date(perfil.plano_expira) > new Date()
