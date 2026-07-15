@@ -4,56 +4,83 @@
 <meta name=robots content="index,follow">
 <meta property="og:title" content="dichava.app para profissionais da saúde">
 <meta property="og:description" content="Apareça para quem já busca cuidado e capte novos pacientes. Entre na lista de espera.">
-<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--v:#4CAF5A;--ve:#2E7D32;--am:#FFD600;--dk:#0f150f;--dk2:#18211a;--roxo:#7C3AED;--txs:#A9BCAC}
+:root{--ve:#2E7D32;--v:#4CAF5A;--am:#F2B705;--roxo:#7C3AED;--dk:#16261a;--txs:#5E7062;--line:#E2ECE3}
 *{box-sizing:border-box}
-body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:var(--dk);color:#EAF2EC;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:820px;margin:0 auto;padding:22px 20px 70px}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
-.logo{font-weight:800;font-size:20px;color:#fff;text-decoration:none}.logo span{color:#7BD98A}
-.back{font-size:14px;color:#8FE3A6;text-decoration:none;font-weight:700}
-.hero{text-align:center;padding:14px 0 8px}
-.kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#7BD98A;background:rgba(123,217,138,.12);border:1px solid rgba(123,217,138,.3);padding:6px 14px;border-radius:30px}
-h1{font-size:34px;line-height:1.15;margin:16px 0 10px;font-weight:800;letter-spacing:-.5px}
-h1 span{color:#8FE3A6}
-.lead{font-size:16px;color:var(--txs);max-width:600px;margin:0 auto}
-.why{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:30px 0}
-.why-c{background:var(--dk2);border:1px solid #253026;border-radius:16px;padding:16px}
-.why-c b{display:block;font-size:15px;color:#fff;margin-bottom:3px}
-.why-c small{font-size:13px;color:var(--txs)}
-h2{font-size:23px;font-weight:800;text-align:center;margin:40px 0 6px;letter-spacing:-.3px}
-.sub{text-align:center;color:var(--txs);font-size:14px;margin-bottom:22px}
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.plan{position:relative;background:var(--dk2);border:1.5px solid #253026;border-radius:20px;padding:22px 18px}
-.plan.best{border-color:var(--am);box-shadow:0 10px 30px rgba(255,214,0,.08)}
-.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--am);color:#1B2A1C;font-weight:800;font-size:11.5px;padding:4px 14px;border-radius:20px;white-space:nowrap}
-.plan-n{font-weight:800;font-size:18px;color:#fff}
-.plan-p{font-size:30px;font-weight:800;margin:4px 0 2px;color:#fff}.plan-p small{font-size:14px;font-weight:600;color:var(--txs)}
-.plan-p.best-p{color:var(--am)}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#1B2A1C;line-height:1.6;-webkit-font-smoothing:antialiased;
+background:radial-gradient(120% 60% at 80% -5%,#DFF3E4 0%,transparent 55%),radial-gradient(90% 50% at 0% 5%,#E7EEFB 0%,transparent 50%),linear-gradient(180deg,#F5FAF4,#EEF6EE)}
+.wrap{max-width:900px;margin:0 auto;padding:20px 20px 70px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.logo{font-weight:800;font-size:20px;color:#1B2A1C;text-decoration:none}.logo span{color:#2E7D32}
+.back{font-size:14px;color:#2E7D32;text-decoration:none;font-weight:700}
+.hero{text-align:center;padding:22px 0 6px}
+.kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#2E7D32;background:#DCF0DE;border:1px solid #BFE3C4;padding:6px 14px;border-radius:30px}
+h1{font-size:38px;line-height:1.12;margin:16px 0 12px;font-weight:800;letter-spacing:-.7px}
+h1 span{color:#2E7D32}
+.lead{font-size:17px;color:var(--txs);max-width:620px;margin:0 auto}
+.hero-cta{display:inline-block;margin-top:20px;background:#2fbd6a;color:#fff;text-decoration:none;font-weight:800;font-size:15.5px;padding:14px 26px;border-radius:30px;box-shadow:0 10px 24px rgba(47,189,106,.28)}
+/* preview */
+.preview{display:grid;grid-template-columns:1fr 1.05fr;gap:26px;align-items:center;margin:44px 0 10px;background:#fff;border:1px solid var(--line);border-radius:28px;padding:30px;box-shadow:0 20px 50px rgba(30,60,35,.08)}
+.preview-tx h2{font-size:26px;margin:0 0 10px;letter-spacing:-.4px}
+.preview-tx p{color:var(--txs);font-size:15px;margin:0 0 14px}
+.preview-tx li{color:#2b3b2d;font-size:14.5px;margin:7px 0;list-style:none;padding-left:26px;position:relative}
+.preview-tx li::before{content:'✓';position:absolute;left:0;color:#4CAF5A;font-weight:800}
+.preview-tx ul{padding:0;margin:0}
+.phone{width:290px;margin:0 auto;background:linear-gradient(178deg,#132a1c,#16243a 60%,#221a3a);border-radius:30px;padding:16px 14px 20px;box-shadow:0 24px 50px rgba(20,40,25,.28);border:6px solid #0e1a12;position:relative;overflow:hidden}
+.phone::before{content:'';position:absolute;inset:0;background:radial-gradient(70% 40% at 50% 0,rgba(143,227,166,.14),transparent 70%);pointer-events:none}
+.ph-hd{color:#EAF3EC;font-weight:800;font-size:14px;text-align:center;margin:2px 0 12px;position:relative}
+.procard{background:#fff;border-radius:18px;padding:15px;position:relative}
+.pro-badge{display:inline-flex;align-items:center;gap:4px;background:#DCF0DE;color:#2E7D32;font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:20px;margin-bottom:10px}
+.pro-head{display:flex;align-items:center;gap:11px}
+.pro-av{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#5BC06F,#2E9AC4);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;flex:0 0 52px}
+.pro-name{font-weight:800;font-size:16px;color:#1B2A1C;line-height:1.15}
+.pro-reg{font-size:11.5px;color:#7C8C78}
+.pro-tags{display:flex;flex-wrap:wrap;gap:5px;margin:11px 0}
+.pro-tags span{background:#EEF3EE;color:#4a5c4c;font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:14px}
+.pro-bio{font-size:12.5px;color:#41514300;color:#455546;line-height:1.5;font-style:italic;border-left:3px solid #BFE3C4;padding-left:9px}
+.pro-meta{display:flex;flex-direction:column;gap:5px;margin:12px 0}
+.pro-meta div{font-size:12px;color:#3d4d3f;display:flex;align-items:center;gap:7px}
+.pro-cta{width:100%;background:#25D366;color:#08210f;border:none;border-radius:22px;padding:11px;font-weight:800;font-size:13.5px;font-family:inherit}
+.pro-ex{text-align:center;color:#8fa192;font-size:11px;margin-top:12px}
+/* sections */
+h2.sec{font-size:26px;font-weight:800;text-align:center;margin:52px 0 6px;letter-spacing:-.4px}
+.sub{text-align:center;color:var(--txs);font-size:15px;margin-bottom:24px}
+.why{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.why-c{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(30,60,35,.04)}
+.why-c .i{font-size:24px}
+.why-c b{display:block;font-size:15.5px;margin:6px 0 3px}
+.why-c small{font-size:13.5px;color:var(--txs)}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.plan{position:relative;background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:24px 20px;box-shadow:0 8px 22px rgba(30,60,35,.05)}
+.plan.best{border-color:var(--am);box-shadow:0 16px 40px rgba(242,183,5,.14)}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(120deg,#F2B705,#EA8B0C);color:#fff;font-weight:800;font-size:11.5px;padding:5px 15px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 12px rgba(234,139,12,.35)}
+.plan-n{font-weight:800;font-size:19px}
+.plan-p{font-size:32px;font-weight:800;margin:4px 0 2px}.plan-p small{font-size:15px;font-weight:600;color:var(--txs)}
+.plan.best .plan-p{color:#EA8B0C}
 .plan ul{list-style:none;padding:0;margin:14px 0 0}
-.plan li{font-size:13.5px;color:#CDE0CF;padding:6px 0 6px 24px;position:relative;line-height:1.4}
-.plan li::before{content:'✓';position:absolute;left:0;color:#5BC06F;font-weight:800}
-.plan li.off{color:#5b6b5d}.plan li.off::before{content:'—';color:#3a463a}
-.note{font-size:12.5px;color:var(--txs);text-align:center;margin-top:14px}
-.form{background:var(--dk2);border:1px solid #253026;border-radius:22px;padding:24px 20px;margin-top:16px}
-.form h3{margin:0 0 4px;font-size:20px;font-weight:800}
-.form p.fd{margin:0 0 18px;color:var(--txs);font-size:14px}
-label{display:block;font-size:13px;font-weight:700;color:#C7D6C9;margin:12px 0 5px}
-input,select,textarea{width:100%;background:#0e150f;border:1.5px solid #2a352b;border-radius:12px;padding:12px 13px;color:#fff;font-size:15px;font-family:inherit}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#5BC06F}
+.plan li{font-size:14px;color:#2b3b2d;padding:7px 0 7px 25px;position:relative;line-height:1.4}
+.plan li::before{content:'✓';position:absolute;left:0;color:#4CAF5A;font-weight:800}
+.plan li.off{color:#9aa89c}.plan li.off::before{content:'—';color:#c3cdc4}
+.note{font-size:12.5px;color:var(--txs);text-align:center;margin-top:16px}
+/* form */
+.form{background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px 22px;margin-top:18px;box-shadow:0 14px 40px rgba(30,60,35,.07)}
+.form h3{margin:0 0 4px;font-size:22px;font-weight:800}
+.form p.fd{margin:0 0 18px;color:var(--txs);font-size:14.5px}
+label{display:block;font-size:13px;font-weight:700;color:#3d4d3f;margin:12px 0 5px}
+input,select,textarea{width:100%;background:#F6FAF6;border:1.5px solid #DCE7DD;border-radius:12px;padding:12px 13px;color:#1B2A1C;font-size:15px;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#4CAF5A;background:#fff}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.req{color:#8FE3A6}
-.btn{width:100%;margin-top:20px;background:#2fbd6a;color:#08210f;border:none;border-radius:30px;padding:16px;font-size:16.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:transform .15s}
+.req{color:#2E7D32}
+.btn{width:100%;margin-top:20px;background:#2fbd6a;color:#fff;border:none;border-radius:30px;padding:16px;font-size:16.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:transform .15s;box-shadow:0 10px 24px rgba(47,189,106,.28)}
 .btn:active{transform:scale(.98)}.btn:disabled{opacity:.6}
 .ok{display:none;text-align:center;padding:20px 0}
 .ok .em{font-size:52px}.ok h3{font-size:22px;margin:10px 0 6px}.ok p{color:var(--txs);font-size:14.5px}
-.err{color:#FF9A8B;font-size:13px;margin-top:10px;display:none}
-footer{margin-top:44px;padding-top:18px;border-top:1px solid #202a21;font-size:13px;color:#7d8f80;text-align:center}
-footer a{color:#8FE3A6;text-decoration:none}
-@media(max-width:560px){.why,.plans,.row{grid-template-columns:1fr}h1{font-size:28px}}
+.err{color:#C0392B;font-size:13px;margin-top:10px;display:none}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:#7d8f80;text-align:center}
+footer a{color:#2E7D32;text-decoration:none}
+@media(max-width:640px){.preview{grid-template-columns:1fr;padding:22px}.why,.plans,.row{grid-template-columns:1fr}h1{font-size:30px}.preview-tx{order:2}}
 </style></head><body>
 <div class="wrap">
   <div class="top"><a class="logo" href="/">dichava<span>.app</span></a><a class="back" href="/landing/">← voltar ao site</a></div>
@@ -62,17 +89,49 @@ footer a{color:#8FE3A6;text-decoration:none}
     <span class="kick">para profissionais da saúde</span>
     <h1>Cuide de quem já está <span>buscando cuidado</span>.</h1>
     <p class="lead">O dichava.app reúne pessoas que decidiram olhar pra própria relação com o uso — com dados, sem julgamento. Seja um <b>profissional parceiro</b> e apareça pra elas na hora certa.</p>
+    <a class="hero-cta" href="#lista">Entrar na lista de espera →</a>
+  </div>
+
+  <!-- PREVIEW DO PERFIL NO APP -->
+  <div class="preview">
+    <div class="preview-tx">
+      <h2>Assim seu perfil aparece no app</h2>
+      <p>Os usuários encontram você numa aba de <b>profissionais parceiros</b> — com tudo que precisam pra decidir dar o primeiro passo.</p>
+      <ul>
+        <li>Selo de <b>verificado</b> (conferimos seu registro)</li>
+        <li>Abordagem, formação e temas que você atende</li>
+        <li>Valor médio de sessão e forma de atendimento</li>
+        <li>Botão de contato direto (WhatsApp / link)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="phone">
+        <div class="ph-hd">🩺 Profissionais parceiros</div>
+        <div class="procard">
+          <div class="pro-badge">✓ Parceiro verificado</div>
+          <div class="pro-head">
+            <div class="pro-av">MA</div>
+            <div><div class="pro-name">Marina Alves</div><div class="pro-reg">Psicóloga · CRP 00/00000</div></div>
+          </div>
+          <div class="pro-tags"><span>Gestalt-terapia</span><span>Redução de danos</span><span>Ansiedade</span></div>
+          <div class="pro-bio">"Acompanho quem quer repensar a relação com o uso — no seu tempo, sem julgamento."</div>
+          <div class="pro-meta"><div>💻 Online e presencial</div><div>📍 São Paulo/SP</div><div>💰 a partir de R$ 150/sessão</div></div>
+          <button class="pro-cta">Falar com a profissional</button>
+        </div>
+        <div class="pro-ex">perfil ilustrativo</div>
+      </div>
+    </div>
   </div>
 
   <div class="why">
-    <div class="why-c"><b>🎯 Público certo</b><small>Pessoas engajadas em autoconhecimento e redução de danos — que muitas vezes já querem apoio profissional.</small></div>
-    <div class="why-c"><b>📣 Alcance real</b><small>Divulgação nos nossos canais, incluindo o Instagram @dichavandoard (143 mil seguidores).</small></div>
-    <div class="why-c"><b>🩺 Seu perfil profissional</b><small>Mini-currículo, abordagem, formação, valor médio de sessão e contato — tudo num perfil verificado.</small></div>
-    <div class="why-c"><b>💚 Causa alinhada</b><small>Redução de danos, ética e respaldo em política pública de saúde. Você entra numa rede séria.</small></div>
+    <div class="why-c"><span class="i">🎯</span><b>Público certo</b><small>Pessoas engajadas em autoconhecimento e redução de danos — que muitas vezes já querem apoio profissional.</small></div>
+    <div class="why-c"><span class="i">📣</span><b>Alcance real</b><small>Divulgação nos nossos canais, incluindo o Instagram @dichavandoard (143 mil seguidores).</small></div>
+    <div class="why-c"><span class="i">🩺</span><b>Seu perfil profissional</b><small>Mini-currículo, abordagem, formação, valor médio de sessão e contato — tudo verificado.</small></div>
+    <div class="why-c"><span class="i">💚</span><b>Causa alinhada</b><small>Redução de danos, ética e respaldo em política pública de saúde. Você entra numa rede séria.</small></div>
   </div>
 
-  <h2>Dois jeitos de ser parceiro</h2>
-  <div class="sub">Escolha na hora de contratar. Sem fidelidade — você cancela quando quiser.</div>
+  <h2 class="sec">Dois jeitos de ser parceiro</h2>
+  <div class="sub">Escolha na hora de contratar. Sem fidelidade — cancele quando quiser.</div>
   <div class="plans">
     <div class="plan">
       <div class="plan-n">Parceiro</div>
@@ -89,7 +148,7 @@ footer a{color:#8FE3A6;text-decoration:none}
     <div class="plan best">
       <div class="plan-badge">★ mais completo</div>
       <div class="plan-n">Parceiro Destaque</div>
-      <div class="plan-p best-p">R$ 249<small>/mês</small></div>
+      <div class="plan-p">R$ 249<small>/mês</small></div>
       <ul>
         <li>Tudo do plano Parceiro, e mais:</li>
         <li><b>Destaque</b> e prioridade no diretório</li>
@@ -100,7 +159,7 @@ footer a{color:#8FE3A6;text-decoration:none}
   </div>
   <div class="note">Valores de lançamento, sujeitos a ajuste. Plano anual com desconto disponível. A cobrança começa só quando a área de profissionais for ativada.</div>
 
-  <div class="form" id="form-box">
+  <div class="form" id="lista">
     <h3>Entre na lista de espera</h3>
     <p class="fd">Estamos abrindo as vagas de profissionais parceiros aos poucos. Deixe seus dados e avisamos <b>você primeiro</b> quando abrir — sem compromisso.</p>
     <form id="wl-form" onsubmit="return enviar(event)">
@@ -129,7 +188,7 @@ footer a{color:#8FE3A6;text-decoration:none}
     <div class="ok" id="wl-ok">
       <div class="em">🌱</div>
       <h3>Recebemos! Você está na lista.</h3>
-      <p>Assim que as vagas de profissionais parceiros abrirem, a gente te chama primeiro. Obrigado por querer caminhar junto. 💚</p>
+      <p>Assim que as vagas abrirem, a gente te chama primeiro. Obrigado por querer caminhar junto. 💚</p>
     </div>
   </div>
 
@@ -141,37 +200,25 @@ footer a{color:#8FE3A6;text-decoration:none}
 <script>
 var SB=null;
 try{ SB = supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
-function enviar(ev){
-  ev.preventDefault();
-  var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
-  err.style.display='none';
-  var d={
-    nome:val('f-nome'), registro:val('f-reg'), especialidade:val('f-esp'),
-    cidade:val('f-cidade'), atendimento:val('f-atend'), email:val('f-email'),
-    whatsapp:val('f-wpp'), plano:val('f-plano'), mensagem:val('f-msg')
-  };
-  btn.disabled=true; btn.textContent='Enviando…';
-  finalizar(d);
-  return false;
-}
 function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function sucesso(){document.getElementById('wl-form').style.display='none';document.getElementById('wl-ok').style.display='block';}
 function mailtoFallback(d){
   var corpo='Nome: '+d.nome+'%0ARegistro: '+d.registro+'%0AEspecialidade: '+d.especialidade+'%0ACidade: '+d.cidade+'%0AAtendimento: '+d.atendimento+'%0AE-mail: '+d.email+'%0AWhatsApp: '+d.whatsapp+'%0APlano: '+d.plano+'%0AMensagem: '+encodeURIComponent(d.mensagem);
   window.location.href='mailto:contato@dichava.app?subject='+encodeURIComponent('Waitlist profissional — '+d.nome)+'&body='+corpo;
 }
+function enviar(ev){
+  ev.preventDefault();
+  var btn=document.getElementById('wl-btn');
+  var d={nome:val('f-nome'),registro:val('f-reg'),especialidade:val('f-esp'),cidade:val('f-cidade'),atendimento:val('f-atend'),email:val('f-email'),whatsapp:val('f-wpp'),plano:val('f-plano'),mensagem:val('f-msg')};
+  btn.disabled=true; btn.textContent='Enviando…';
+  finalizar(d);
+  return false;
+}
 async function finalizar(d){
   var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
-  if(SB){
-    try{
-      var r=await SB.from('pro_waitlist').insert([d]);
-      if(!r.error){ sucesso(); return; }
-    }catch(e){}
-  }
-  // fallback: abre e-mail pré-preenchido se o Supabase não estiver pronto
+  if(SB){ try{ var r=await SB.from('pro_waitlist').insert([d]); if(!r.error){ sucesso(); return; } }catch(e){} }
   btn.disabled=false; btn.textContent='Quero ser avisado(a) 💚';
-  err.textContent='Vamos te redirecionar pro e-mail pra concluir o cadastro…';
-  err.style.display='block';
+  err.textContent='Vamos te redirecionar pro e-mail pra concluir o cadastro…'; err.style.display='block';
   setTimeout(function(){ mailtoFallback(d); }, 900);
 }
 </script>
