@@ -4109,7 +4109,7 @@ function semISO(iso){const d=new Date(iso+'T12:00:00');const dw=d.getDay();const
 const shk=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')};
 const prmp=(g)=>{const a=PROMPTS[g]||PROMPTS.rd;return a[(new Date().getDate()-1)%a.length]};
 const dica=(g)=>{const a=DICAS[g]||DICAS.rd;return a[(new Date().getDate()-1)%a.length]};
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2800)}
+function toast(m,ms){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('on'),ms||2800)}
 function blurAll(){document.querySelectorAll('input,textarea,select').forEach(e=>e.blur())}
 
 /* ══ VIEWS ══ */
@@ -7643,10 +7643,12 @@ async function assinarPlano(){
   const btn=document.getElementById('plns-cta');const orig=btn?btn.textContent:'';
   try{
     if(btn){btn.disabled=true;btn.textContent='Gerando pagamento seguro…';}
+    if(!_SB){throw new Error('sem conexão com o servidor');}
     const{data,error}=await _SB.functions.invoke('pagamento-criar',{body:{user_id:U.id,email:U.email||'',nome:U.nome||'',plano:_planoSel}});
-    if(error||!data||!data.pay_url)throw(error||new Error('sem link'));
+    if(error)throw new Error('função: '+(error.message||error.name||JSON.stringify(error)).slice(0,120));
+    if(!data||!data.pay_url)throw new Error('resposta: '+JSON.stringify(data||{}).slice(0,160));
     window.location.href=data.pay_url;   // vai pro checkout do PagBank
-  }catch(e){toast('Não consegui abrir o pagamento agora. Tente de novo em instantes.');if(btn){btn.disabled=false;btn.textContent=orig;}}
+  }catch(e){toast('⚠️ '+((e&&e.message)||e),6500);if(btn){btn.disabled=false;btn.textContent=orig;}}
 }
 // Volta do checkout (?pago=1): confere o premium por alguns segundos (o webhook pode demorar)
 window.addEventListener('load',function(){
