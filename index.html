@@ -4056,7 +4056,7 @@ function blurAll(){document.querySelectorAll('input,textarea,select').forEach(e=
 
 /* ══ VIEWS ══ */
 let _toolFrom='vapp';
-function showV(id){if(id==='vresp'||id==='vgrd'){const cur=document.querySelector('.V.on');const cid=cur&&cur.id;if(cid&&cid!=='vresp'&&cid!=='vgrd')_toolFrom=cid;}document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));document.getElementById(id).classList.add('on');if(id==='vresp')initResp();if(id==='vgrd')initGrd();}
+function showV(id){if(id!=='va'&&id!=='vo'&&(typeof U==='undefined'||!U))id='va';/* sem login só vê auth/onboarding */if(id==='vresp'||id==='vgrd'){const cur=document.querySelector('.V.on');const cid=cur&&cur.id;if(cid&&cid!=='vresp'&&cid!=='vgrd')_toolFrom=cid;}document.querySelectorAll('.V').forEach(v=>v.classList.remove('on'));document.getElementById(id).classList.add('on');if(id==='vresp')initResp();if(id==='vgrd')initGrd();}
 function voltarTool(){showV(_toolFrom||'vapp');}
 
 /* ══ PAGES ══ */
@@ -7416,8 +7416,10 @@ window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{rend
       // 1) modal (bottom sheet) aberto? fecha o de cima
       var mods=document.querySelectorAll('.ov.on');
       if(mods.length){try{_closeMod(mods[mods.length-1].id);}catch(_){}return;}
-      // 2) tela sobreposta (pausa, crise, respiração, cartas, artigos…)? volta pro app
+      // 1.5) login/onboarding: NUNCA sai nem expõe o app (corrige swipe do trackpad)
       var cur=document.querySelector('.V.on');var id=cur&&cur.id;
+      if(id==='va'||id==='vo'||typeof U==='undefined'||!U){return;}
+      // 2) tela sobreposta (pausa, crise, respiração, cartas, artigos…)? volta pro app
       if(id&&id!=='vapp'){try{_showV('vapp');}catch(_){}return;}
       // 3) dentro do app, fora da Início? volta pra Início
       var pg=curPageId();
