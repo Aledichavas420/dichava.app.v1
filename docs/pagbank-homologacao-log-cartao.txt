@@ -1,0 +1,87 @@
+====================================================================
+HOMOLOGAÇÃO PagBank — Chamado 1414668509
+Integração: dichava.app  |  Serviço: Checkout PagBank + API de Notificação
+Ambiente: SANDBOX  |  Meio de pagamento: CARTÃO DE CRÉDITO
+====================================================================
+
+Fluxo:
+1) App cria um Checkout PagBank (POST /checkouts) e redireciona o cliente
+   para a página de pagamento.
+2) Após o pagamento, nosso servidor CONFIRMA o pedido consultando
+   GET /orders/{id} (log real abaixo) e libera o plano Premium.
+
+--------------------------------------------------------------------
+REQUEST
+--------------------------------------------------------------------
+GET https://sandbox.api.pagseguro.com/orders/ORDE_75868125-3EB0-40C5-BA19-3B707577CAD7
+Headers:
+  Authorization: Bearer <PAGBANK_TOKEN_SANDBOX>
+  accept: application/json
+
+--------------------------------------------------------------------
+RESPONSE  (status-code: 200)
+--------------------------------------------------------------------
+{
+  "id": "ORDE_75868125-3EB0-40C5-BA19-3B707577CAD7",
+  "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|vita",
+  "created_at": "2026-07-16T08:47:57.443-03:00",
+  "customer": {
+    "name": "ALEXANDRE",
+    "email": "alex.mnteir@gmail.com",
+    "tax_id": "47420626049",
+    "phones": [
+      { "type": "MOBILE", "country": "55", "area": "27", "number": "998451796" }
+    ]
+  },
+  "items": [
+    { "reference_id": "vita", "name": "dichava premium — Vitalício", "quantity": 1, "unit_amount": 18990 }
+  ],
+  "charges": [
+    {
+      "id": "CHAR_F4D1BECC-1224-4A2B-89D7-0ED626586D68",
+      "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|vita",
+      "status": "PAID",
+      "created_at": "2026-07-16T08:47:57.592-03:00",
+      "paid_at": "2026-07-16T08:47:58.000-03:00",
+      "amount": {
+        "value": 21375,
+        "currency": "BRL",
+        "summary": { "total": 21375, "paid": 21375, "refunded": 0, "incremented": 0 },
+        "fees": { "buyer": { "interest": { "total": 2385, "installments": 6 } } }
+      },
+      "payment_response": {
+        "code": "20000",
+        "message": "SUCESSO",
+        "reference": "032416400102",
+        "raw_data": { "authorization_code": "145803", "nsu": "032416400102", "reason_code": "00" }
+      },
+      "payment_method": {
+        "type": "CREDIT_CARD",
+        "installments": 6,
+        "capture": true,
+        "card": {
+          "brand": "visa",
+          "first_digits": "453962",
+          "last_digits": "2097",
+          "exp_month": "12",
+          "exp_year": "2030",
+          "holder": { "name": "ALEXANDRE", "tax_id": "47420626049" },
+          "country": "BRA"
+        },
+        "soft_descriptor": "Alexandremonteiro"
+      }
+    }
+  ],
+  "notification_urls": [
+    "https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"
+  ],
+  "links": [
+    { "rel": "SELF", "href": "https://sandbox.api.pagseguro.com/orders/ORDE_75868125-3EB0-40C5-BA19-3B707577CAD7", "media": "application/json", "type": "GET" },
+    { "rel": "PAY",  "href": "https://sandbox.api.pagseguro.com/orders/ORDE_75868125-3EB0-40C5-BA19-3B707577CAD7/pay", "media": "application/json", "type": "POST" }
+  ]
+}
+
+====================================================================
+Observação: os meios de pagamento habilitados no checkout são
+CARTÃO DE CRÉDITO, PIX e BOLETO. Log acima evidencia CARTÃO (PAID).
+====================================================================
