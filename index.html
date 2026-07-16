@@ -1602,6 +1602,35 @@ a{color:inherit;text-decoration:none}
 .hi-del:active{color:var(--er);opacity:1}
 @keyframes confetti{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(110vh) rotate(720deg)}}
 .cfp{position:absolute;top:-20px;width:9px;height:9px;z-index:900;pointer-events:none;animation:confetti 1.6s ease-in forwards}
+/* ── Tela de boas-vindas ao Premium ── */
+#prem-welcome{position:fixed;inset:0;z-index:2000;display:none;overflow:hidden;background:linear-gradient(165deg,#2a1a4d 0%,#3d2063 45%,#1c1533 100%)}
+#prem-welcome.on{display:block;animation:pwfade .4s ease}
+@keyframes pwfade{from{opacity:0}to{opacity:1}}
+.pw-aur{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.pw-aur::before,.pw-aur::after{content:'';position:absolute;width:460px;height:460px;border-radius:50%}
+.pw-aur::before{background:radial-gradient(circle,rgba(255,197,49,.28),transparent 66%);top:-160px;right:-120px;animation:pwaur1 12s ease-in-out infinite}
+.pw-aur::after{background:radial-gradient(circle,rgba(179,135,242,.4),transparent 66%);bottom:-180px;left:-140px;animation:pwaur2 15s ease-in-out infinite}
+@keyframes pwaur1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,60px) scale(1.15)}}
+@keyframes pwaur2{0%,100%{transform:translate(0,0) scale(1.1)}50%{transform:translate(60px,-50px) scale(1)}}
+.pw-scroll{position:relative;z-index:1;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(38px + var(--st,0px)) 24px calc(30px + var(--sb,0px));display:flex;flex-direction:column;align-items:center;text-align:center}
+.pw-hero{position:relative}
+.pw-crown{font-size:40px;animation:pwcrown 2.4s ease-in-out infinite;filter:drop-shadow(0 6px 14px rgba(255,197,49,.5))}
+@keyframes pwcrown{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(7deg) translateY(-6px)}}
+.pw-mascot{width:118px;height:118px;object-fit:contain;margin:6px auto 0;display:block;filter:drop-shadow(0 10px 26px rgba(0,0,0,.4));animation:pwpop .6s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pwpop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.pw-kick{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#E5C877;margin-top:12px}
+.pw-title{font-family:'DM Sans',sans-serif;font-size:34px;font-weight:800;color:#fff;line-height:1.05;letter-spacing:-.5px}
+.pw-title span{color:#E5C877}
+.pw-sub{font-size:14px;color:rgba(255,255,255,.82);line-height:1.55;max-width:340px;margin:14px auto 0}
+.pw-feats-t{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:#fff;margin:30px 0 14px}
+.pw-feats{width:100%;max-width:400px;display:flex;flex-direction:column;gap:11px}
+.pw-feat{display:flex;align-items:center;gap:13px;text-align:left;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:13px 15px;animation:pwslide .5s ease both;animation-delay:calc(.25s + var(--i)*.08s)}
+@keyframes pwslide{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+.pw-fic{flex:0 0 44px;width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;background:color-mix(in srgb,var(--c) 30%,transparent)}
+.pw-feat b{display:block;font-size:14.5px;color:#fff;font-family:'DM Sans',sans-serif}
+.pw-feat small{font-size:12px;color:rgba(255,255,255,.72);line-height:1.4}
+.pw-cta{margin:26px 0 6px;background:linear-gradient(135deg,#F2B705,#EA8B0C);color:#3a2410;border:none;border-radius:30px;padding:16px 34px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:16.5px;cursor:pointer;box-shadow:0 12px 28px rgba(234,139,12,.4);animation:pwslide .5s ease both;animation-delay:.9s}
+.pw-cta:active{transform:scale(.97)}
 
 
 /* ── v6.1: DARK MODE COMPLETO ── */
@@ -3381,6 +3410,31 @@ a{color:inherit;text-decoration:none}
     <button class="btn bout bfull" onclick="cancelarPremiumDemo()" style="margin-top:14px">Cancelar assinatura (teste)</button>
   </div>
 </div></div></div>
+
+<!-- TELA DE BOAS-VINDAS AO PREMIUM -->
+<div id="prem-welcome">
+  <div class="pw-aur"></div>
+  <div class="pw-scroll">
+    <div class="pw-hero">
+      <div class="pw-crown">👑</div>
+      <img class="pw-mascot" id="pw-mascot" alt="">
+      <div class="pw-kick">Bem-vindo(a) ao</div>
+      <div class="pw-title">dichava <span>premium</span></div>
+      <div class="pw-sub" id="pw-sub">Seu acesso está liberado. Obrigado por apoiar o dichava — isso mantém a redução de danos viva pra quem precisa. 💚</div>
+    </div>
+    <div class="pw-feats-t">Tudo isso é seu agora 🎉</div>
+    <div class="pw-feats">
+      <div class="pw-feat" style="--c:#7C3AED;--i:0"><span class="pw-fic">📊</span><div><b>Insights avançados</b><small>Padrões, gatilhos e horários do seu uso em gráficos</small></div></div>
+      <div class="pw-feat" style="--c:#12B5A3;--i:1"><span class="pw-fic">💰</span><div><b>Finanças</b><small>Seus gastos e a economia de cada resistência</small></div></div>
+      <div class="pw-feat" style="--c:#2E92E6;--i:2"><span class="pw-fic">📄</span><div><b>Relatórios em PDF</b><small>Seu raio-x pra guardar ou levar ao profissional</small></div></div>
+      <div class="pw-feat" style="--c:#4CAF5A;--i:3"><span class="pw-fic">🌱</span><div><b>Pausa de Tolerância</b><small>O t-break guiado, dia a dia, com sua análise no fim</small></div></div>
+      <div class="pw-feat" style="--c:#E0509E;--i:4"><span class="pw-fic">✉️</span><div><b>Cartas pra mim</b><small>Escreva pro seu eu do futuro</small></div></div>
+      <div class="pw-feat" style="--c:#F2B705;--i:5"><span class="pw-fic">🎧</span><div><b>Sons e jogos extras</b><small>Ambientes, frequências e binaurais pra relaxar</small></div></div>
+      <div class="pw-feat" style="--c:#00897B;--i:6"><span class="pw-fic">☁️</span><div><b>Backup na nuvem</b><small>Seus dados salvos e sincronizados entre aparelhos</small></div></div>
+    </div>
+    <button class="pw-cta" onclick="fecharPremWin()">Começar a explorar →</button>
+  </div>
+</div>
 
 <!-- ESQUECI A SENHA (confirma e-mail antes de enviar o link) -->
 <div class="ov" id="mesqueci" onclick="if(event.target===this)closeMod('mesqueci')"><div class="sheet"><div class="sp">
@@ -7514,15 +7568,25 @@ async function carregarPlano(){
       _premServer=ativo;ls('dr_premsrv_'+uid(),ativo?1:0);
       _premExpira=data?(data.plano_expira||null):null;_premTipo=data?(data.plano_tipo||null):null;
       try{ls('dr_premexp_'+uid(),_premExpira||'');ls('dr_premtipo_'+uid(),_premTipo||'');}catch(e){}
-      if(ativo&&!antes){   // acabou de virar premium (ex.: pagamento confirmado) → comemora
-        try{confete();}catch(e){}try{sfx('complete');}catch(e){}
-        toast('✨ Premium ativado! Obrigado por apoiar o dichava 💚');
-      }
+      if(ativo&&!ls('dr_prembemvindo_'+uid())){ls('dr_prembemvindo_'+uid(),1);try{abrirPremWin();}catch(e){}}
+      if(!ativo){try{ls('dr_prembemvindo_'+uid(),0);}catch(e){}}  // reseta p/ celebrar de novo se reassinar
     }
   }catch(e){}
   try{renderPremUI();reRenderGated();}catch(e){}
 }
 function abrirPremium(){renderPremMod();openMod('mprem');const m=document.getElementById('prem-mascot');if(m&&!m.getAttribute('src')){try{if(typeof brotoDataURI==='function')m.src=brotoDataURI();}catch(e){}}}
+// ── Tela de boas-vindas ao Premium ──
+function planoNomeAtual(){const exp=_premExpira?new Date(_premExpira):null;const isVita=(_premTipo==='vita')||(exp&&exp.getFullYear()>=2099);const N={mensal:'Mensal',anual:'Anual',vita:'Vitalício'};return isVita?'Vitalício':(N[_premTipo]||'Premium');}
+function pwConfete(){const host=document.getElementById('prem-welcome');if(!host)return;const cores=['#F2B705','#E5C877','#B387F2','#7C3AED','#8FE3A6','#ffffff'];for(let i=0;i<42;i++){const c=document.createElement('div');c.className='cfp';c.style.left=(3+Math.random()*94)+'%';c.style.background=cores[i%cores.length];c.style.borderRadius=Math.random()>.5?'50%':'2px';c.style.animationDelay=(Math.random()*.6)+'s';c.style.animationDuration=(1.7+Math.random()*1.3)+'s';host.appendChild(c);setTimeout(()=>c.remove(),3400);}}
+function abrirPremWin(){
+  const el=document.getElementById('prem-welcome');if(!el)return;
+  try{const sub=document.getElementById('pw-sub');if(sub)sub.innerHTML='Seu plano <b style="color:#E5C877">'+planoNomeAtual()+'</b> está ativo. Obrigado por apoiar o dichava — isso mantém a redução de danos viva pra quem precisa. 💚';}catch(e){}
+  try{const mc=document.getElementById('pw-mascot');if(mc&&typeof brotoDataURI==='function')mc.src=brotoDataURI();}catch(e){}
+  el.classList.add('on');document.body.style.overflow='hidden';
+  try{sfx('complete');vib([20,40,20,40,60]);}catch(e){}
+  pwConfete();setTimeout(pwConfete,600);setTimeout(pwConfete,1200);
+}
+function fecharPremWin(){const el=document.getElementById('prem-welcome');if(el)el.classList.remove('on');document.body.style.overflow='';try{vib(10);}catch(e){}try{renderPremUI();reRenderGated();}catch(e){}}
 function renderPremHook(){
   const el=document.getElementById('prem-hook');if(!el)return;
   const regs=(typeof gR==='function'?gR():[]);
