@@ -56,10 +56,12 @@ Deno.serve(async (req) => {
       body: JSON.stringify(body),
     });
     const data = await r.json();
-    if (!r.ok) return json({ error: "pagbank", detail: data }, 400);
+    console.log("PagBank base:", PAGBANK_BASE, "status:", r.status, "resp:", JSON.stringify(data));
+    if (!r.ok) return json({ error: "pagbank", status: r.status, detail: data }, 400);
 
     const link = (data.links || []).find((l: any) =>
       String(l.rel || "").toUpperCase() === "PAY");
+    if (!link) console.log("Sem link PAY. links:", JSON.stringify(data.links || []));
     return json({ pay_url: link?.href || null, checkout_id: data.id });
   } catch (e) {
     return json({ error: String(e) }, 500);
