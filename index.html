@@ -7569,6 +7569,17 @@ async function carregarPlano(){
     }
   }catch(e){}
   try{renderPremUI();reRenderGated();}catch(e){}
+  try{checkPremWelcome();}catch(e){}
+}
+// mostra a tela de boas-vindas ao premium UMA ÚNICA VEZ (quando a pessoa vira premium)
+function checkPremWelcome(){
+  if(!isPremium())return;
+  var k='dr_premwelcome_'+uid();
+  try{if(localStorage.getItem(k))return;}catch(e){}
+  var cur=document.querySelector('.V.on');
+  if(!cur||cur.id!=='vapp')return;   // só quando o app já está aberto (não na auth/onboarding)
+  try{localStorage.setItem(k,'1');}catch(e){}
+  try{abrirPremWin();}catch(e){}
 }
 function abrirPremium(){renderPremMod();openMod('mprem');const m=document.getElementById('prem-mascot');if(m&&!m.getAttribute('src')){try{if(typeof brotoDataURI==='function')m.src=brotoDataURI();}catch(e){}}}
 // ── Tela de boas-vindas ao Premium ──
@@ -7656,7 +7667,7 @@ window.addEventListener('load',function(){
   try{history.replaceState(null,'',location.pathname);}catch(e){}
   toast('⏳ Confirmando seu pagamento…');
   var n=0,iv=setInterval(async function(){n++;try{await carregarPlano();}catch(e){}
-    if(isPremium()){clearInterval(iv);try{abrirPremWin();}catch(e){}}   // comemora só na volta do pagamento
+    if(isPremium()){clearInterval(iv);try{checkPremWelcome();}catch(e){}}   // comemora uma vez (respeita o flag)
     else if(n>=24){clearInterval(iv);toast('Se você já pagou, o acesso libera em até 1–2 min. Reabra o app. Dúvidas: contato@dichava.app');}
   },2500);
 });
