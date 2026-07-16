@@ -1,0 +1,114 @@
+====================================================================
+HOMOLOGAÇÃO PagBank — Chamado 1414668509
+Integração: dichava.app
+Serviço: Checkout PagBank + API de Notificação
+Ambiente: SANDBOX
+Meios de pagamento evidenciados: CARTÃO DE CRÉDITO, BOLETO e PIX
+====================================================================
+
+Fluxo da integração:
+1) O app cria um Checkout PagBank e o cliente paga na página hospedada
+   (cartão, Pix ou boleto).
+2) Nosso servidor CONFIRMA o pedido consultando GET /orders/{id}
+   (logs reais abaixo) e libera o plano Premium via notification_url.
+
+====================================================================
+1) CARTÃO DE CRÉDITO  —  status: PAID
+====================================================================
+REQUEST
+GET https://sandbox.api.pagseguro.com/orders/ORDE_10A9F2E7-032F-4F4D-97AA-44FE3F1A00BA
+Headers:
+  Authorization: Bearer <PAGBANK_TOKEN_SANDBOX>
+  accept: application/json
+
+RESPONSE (status-code: 200)
+{
+  "id": "ORDE_10A9F2E7-032F-4F4D-97AA-44FE3F1A00BA",
+  "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal",
+  "created_at": "2026-07-16T19:20:39.933-03:00",
+  "customer": {
+    "name": "ALEXANDRE", "email": "alex.mnteir@gmail.com", "tax_id": "47420626049",
+    "phones": [{ "type": "MOBILE", "country": "55", "area": "27", "number": "998451796" }]
+  },
+  "items": [{ "reference_id": "mensal", "name": "dichava premium — Mensal", "quantity": 1, "unit_amount": 1290 }],
+  "charges": [{
+    "id": "CHAR_FACE4728-F44C-4C7C-AA7A-76094862B9A7",
+    "status": "PAID",
+    "paid_at": "2026-07-16T19:20:42.000-03:00",
+    "amount": { "value": 1290, "currency": "BRL", "summary": { "total": 1290, "paid": 1290, "refunded": 0 } },
+    "payment_response": { "code": "20000", "message": "SUCESSO", "raw_data": { "authorization_code": "145803", "nsu": "032416400102", "reason_code": "00" } },
+    "payment_method": {
+      "type": "CREDIT_CARD", "installments": 1, "capture": true,
+      "card": { "brand": "visa", "first_digits": "453962", "last_digits": "2097", "exp_month": "12", "exp_year": "2030", "holder": { "name": "ALEXANDRE" }, "country": "BRA" }
+    }
+  }],
+  "notification_urls": ["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]
+}
+
+====================================================================
+2) BOLETO  —  status: PAID
+====================================================================
+REQUEST
+GET https://sandbox.api.pagseguro.com/orders/ORDE_02610658-960A-4461-8D12-27B34A8F9E33
+Headers:
+  Authorization: Bearer <PAGBANK_TOKEN_SANDBOX>
+  accept: application/json
+
+RESPONSE (status-code: 200)
+{
+  "id": "ORDE_02610658-960A-4461-8D12-27B34A8F9E33",
+  "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal",
+  "created_at": "2026-07-16T19:26:44.685-03:00",
+  "items": [{ "reference_id": "mensal", "name": "dichava premium — Mensal", "quantity": 1, "unit_amount": 1290 }],
+  "charges": [{
+    "id": "CHAR_0D97D7AA-30F6-4AE6-8096-F5DDB6DCBC18",
+    "status": "PAID",
+    "amount": { "value": 1390, "currency": "BRL", "summary": { "total": 1390, "paid": 1390, "refunded": 0 } },
+    "payment_response": { "code": "20000", "message": "SUCESSO" },
+    "payment_method": {
+      "type": "BOLETO",
+      "boleto": {
+        "id": "DAF36E6C-C278-46FF-A691-E9E4EEF3AE47",
+        "barcode": "03399853012970000024227020901016278150000015630",
+        "formatted_barcode": "03399.85301 29700.000242 27020.901016 2 78150000015630",
+        "due_date": "2026-07-19"
+      }
+    }
+  }],
+  "notification_urls": ["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]
+}
+
+====================================================================
+3) PIX  —  status: WAITING (QR Code gerado; confirma via webhook ao pagar)
+====================================================================
+REQUEST
+GET https://sandbox.api.pagseguro.com/orders/ORDE_2C775A64-75F6-4E58-8461-014F6F1D13A9
+Headers:
+  Authorization: Bearer <PAGBANK_TOKEN_SANDBOX>
+  accept: application/json
+
+RESPONSE (status-code: 200)
+{
+  "id": "ORDE_2C775A64-75F6-4E58-8461-014F6F1D13A9",
+  "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|anual",
+  "created_at": "2026-07-16T19:24:34.259-03:00",
+  "items": [{ "reference_id": "anual", "name": "dichava premium — Anual", "quantity": 1, "unit_amount": 9990 }],
+  "charges": [{
+    "id": "CHAR_3CC42A22-3A5D-4041-8F73-18A255380496",
+    "status": "WAITING",
+    "amount": { "value": 9990, "currency": "BRL", "summary": { "total": 9990, "paid": 0, "refunded": 0 } },
+    "payment_response": { "code": "20000", "message": "SUCESSO" },
+    "payment_method": { "type": "PIX", "pix": { "expiration_date": "2026-07-17T22:24:34.181324036Z" } },
+    "qr_code": {
+      "id": "QRCO_1C59A65B-E91A-4E6C-A326-FFD75AA4AB79",
+      "text": "00020101021226850014br.gov.bcb.pix2563api-h.pagseguro.com/pix/v2/1C59A65B-E91A-4E6C-A326-FFD75AA4AB795204573353039865802BR5922ALEXANDRE MONTEIRO DE 6010SAO MATEUS62070503***6304EFAA"
+    }
+  }],
+  "notification_urls": ["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]
+}
+
+====================================================================
+Resumo: os 3 meios de pagamento habilitados no Checkout foram testados
+em Sandbox — cartão de crédito (PAID), boleto (PAID) e Pix (QR gerado).
+Todos com response 200 e a URL de notificação da nossa integração.
+====================================================================
