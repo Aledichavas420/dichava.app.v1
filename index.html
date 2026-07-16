@@ -7501,17 +7501,19 @@ function pushLater(){ls('dr_pushask_'+uid(),true);closeMod('mpush');}
 /* ══ DICHAVA PREMIUM ══ */
 // _premServer = verdade do servidor (Supabase, tabela perfis). Fonte segura.
 // dr_prem_ = simulação LOCAL de teste (some quando o pagamento real entrar).
-let _premServer=false;
+let _premServer=false,_premExpira=null,_premTipo=null;
 const isPremium=()=>_premServer||!!ls('dr_prem_'+uid());
 // lê o plano do servidor no login e re-renderiza os gates
 async function carregarPlano(){
   const antes=!!ls('dr_premsrv_'+uid())||_premServer;   // estado premium conhecido
-  try{_premServer=!!ls('dr_premsrv_'+uid());}catch(e){}   // cache (funciona offline)
+  try{_premServer=!!ls('dr_premsrv_'+uid());_premExpira=ls('dr_premexp_'+uid())||null;_premTipo=ls('dr_premtipo_'+uid())||null;}catch(e){}   // cache (funciona offline)
   try{
     if(typeof _SB!=='undefined'&&_SB&&U&&U.id&&U.id!=='demo'){
-      const{data}=await _SB.from('perfis').select('plano,plano_expira').eq('user_id',U.id).maybeSingle();
+      const{data}=await _SB.from('perfis').select('plano,plano_expira,plano_tipo').eq('user_id',U.id).maybeSingle();
       const ativo=!!(data&&data.plano==='premium'&&(!data.plano_expira||new Date(data.plano_expira)>new Date()));
       _premServer=ativo;ls('dr_premsrv_'+uid(),ativo?1:0);
+      _premExpira=data?(data.plano_expira||null):null;_premTipo=data?(data.plano_tipo||null):null;
+      try{ls('dr_premexp_'+uid(),_premExpira||'');ls('dr_premtipo_'+uid(),_premTipo||'');}catch(e){}
       if(ativo&&!antes){   // acabou de virar premium (ex.: pagamento confirmado) → comemora
         try{confete();}catch(e){}try{sfx('complete');}catch(e){}
         toast('✨ Premium ativado! Obrigado por apoiar o dichava 💚');
@@ -7543,12 +7545,15 @@ function renderPremMod(){
   if(a)a.style.display=on?'':'none';
   if(!on){try{renderPremHook();}catch(e){}}
   if(on){
-    const sinceISO=ls('dr_prem_since_'+uid())||new Date().toISOString();
-    const since=new Date(sinceISO),renew=new Date(since);renew.setDate(renew.getDate()+30);
     const fmt=d=>{try{return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return isoLocal(d)}};
     const nCartas=(typeof gCt==='function'?gCt().length:0),nCompras=(typeof gCompras==='function'?gCompras().length:0),nReg=(typeof gR==='function'?gR().length:0);
+    // plano real (do servidor). Vitalício = data bem no futuro (2099) ou tipo 'vita'.
+    const exp=_premExpira?new Date(_premExpira):null;
+    const isVita=(_premTipo==='vita')||(exp&&exp.getFullYear()>=2099);
+    const NOMES={mensal:'Mensal · R$ 12,90',anual:'Anual · R$ 99,90',vita:'Vitalício'};
+    const planoNome=isVita?'Vitalício 👑':(NOMES[_premTipo]||'Premium');
     const info=document.getElementById('prem-info');
-    if(info)info.innerHTML=`<div class="preminfo"><div class="pinfr"><span>Membro desde</span><b>${fmt(since)}</b></div><div class="pinfr"><span>Próxima renovação</span><b>${fmt(renew)}</b></div><div class="pinfr"><span>Plano</span><b>Mensal · R$ 12,90</b></div></div>`
+    if(info)info.innerHTML=`<div class="preminfo"><div class="pinfr"><span>Plano</span><b>${planoNome}</b></div><div class="pinfr"><span>${isVita?'Acesso':'Válido até'}</span><b>${isVita?'Pra sempre ✨':(exp?fmt(exp):'—')}</b></div></div>`
       +`<div class="premsec-t">Recursos liberados pra você 👑</div><div class="premfeats"><div class="pf">📊 Insights avançados</div><div class="pf">💰 Finanças</div><div class="pf">✉️ Cartas pra mim</div><div class="pf">🧘 Sons extras</div><div class="pf">🎮 Jogos extras</div><div class="pf">☁️ Backup na nuvem</div></div>`
       +`<div class="premsec-t">Seu uso até agora</div><div class="premuse"><div class="pu"><b>${nReg}</b><span>registros</span></div><div class="pu"><b>${nCartas}</b><span>cartas</span></div><div class="pu"><b>${nCompras}</b><span>compras</span></div></div>`;
   }

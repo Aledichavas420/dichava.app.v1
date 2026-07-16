@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
       expira = new Date(base.getTime() + dias * 864e5).toISOString();
     }
 
-    await sb.from("perfis").upsert({ user_id, plano: "premium", plano_expira: expira }, { onConflict: "user_id" });
+    await sb.from("perfis").upsert({ user_id, plano: "premium", plano_tipo: plano, plano_expira: expira }, { onConflict: "user_id" });
     await sb.from("pagamentos").insert({ user_id, plano, order_id: orderId || null, status: "PAID" });
 
     return new Response("ok");
