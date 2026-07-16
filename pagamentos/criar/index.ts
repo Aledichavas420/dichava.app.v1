@@ -57,7 +57,8 @@ Deno.serve(async (req) => {
     });
     const data = await r.json();
     console.log("PagBank base:", PAGBANK_BASE, "status:", r.status, "resp:", JSON.stringify(data));
-    if (!r.ok) return json({ error: "pagbank", status: r.status, detail: data }, 400);
+    // devolve 200 mesmo em erro, com o detalhe, pra o app mostrar o motivo na tela
+    if (!r.ok) return json({ ok: false, pagbank_status: r.status, erro: (data?.error_messages || data?.message || data) });
 
     const link = (data.links || []).find((l: any) =>
       String(l.rel || "").toUpperCase() === "PAY");
