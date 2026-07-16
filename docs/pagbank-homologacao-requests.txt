@@ -1,0 +1,85 @@
+====================================================================
+HOMOLOGAÇÃO PagBank — dichava.app
+Serviços integrados: Checkout PagBank + API de Notificação
+====================================================================
+
+--------------------------------------------------------------------
+1) CRIAÇÃO DO CHECKOUT
+--------------------------------------------------------------------
+
+REQUEST
+POST https://api.pagseguro.com/checkouts
+Headers:
+  Authorization: Bearer <PAGBANK_TOKEN>
+  Content-Type: application/json
+  accept: application/json
+
+Body:
+{
+  "reference_id": "9f3c1a2b-user-id|anual",
+  "customer_modifiable": true,
+  "customer": {
+    "name": "Fulano de Tal",
+    "email": "cliente@email.com"
+  },
+  "items": [
+    {
+      "reference_id": "anual",
+      "name": "dichava premium — Anual",
+      "quantity": 1,
+      "unit_amount": 9990
+    }
+  ],
+  "payment_methods": [
+    { "type": "CREDIT_CARD" },
+    { "type": "PIX" },
+    { "type": "BOLETO" }
+  ],
+  "redirect_url": "https://dichava.app/?pago=1",
+  "notification_urls": [
+    "https://<projeto>.supabase.co/functions/v1/pagamento-webhook"
+  ]
+}
+
+RESPONSE (esperado 201)
+{
+  "id": "CHEC_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+  "reference_id": "9f3c1a2b-user-id|anual",
+  "status": "ACTIVE",
+  "created_at": "2026-07-16T13:40:00.000-03:00",
+  "links": [
+    { "rel": "PAY", "href": "https://pagseguro.com/checkout/...", "media": "text/html", "type": "GET" }
+  ]
+}
+
+O app redireciona o cliente para o link "rel": "PAY".
+
+--------------------------------------------------------------------
+2) NOTIFICAÇÃO (webhook) — confirmação do pagamento
+--------------------------------------------------------------------
+
+O PagBank envia POST para a notification_url quando a transação muda de estado.
+Nosso servidor RECONSULTA o pedido para confirmar antes de liberar o premium:
+
+REQUEST (nosso servidor -> PagBank)
+GET https://api.pagseguro.com/orders/<ORDER_ID>
+Headers:
+  Authorization: Bearer <PAGBANK_TOKEN>
+  accept: application/json
+
+RESPONSE
+{
+  "id": "ORDE_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+  "reference_id": "9f3c1a2b-user-id|anual",
+  "charges": [
+    {
+      "id": "CHAR_XXXX",
+      "status": "PAID",
+      "amount": { "value": 9990, "currency": "BRL" }
+    }
+  ]
+}
+
+Quando charges[].status == "PAID", liberamos o plano Premium do usuário.
+
+====================================================================
