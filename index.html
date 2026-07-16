@@ -7566,8 +7566,6 @@ async function carregarPlano(){
       _premServer=ativo;ls('dr_premsrv_'+uid(),ativo?1:0);
       _premExpira=data?(data.plano_expira||null):null;_premTipo=data?(data.plano_tipo||null):null;
       try{ls('dr_premexp_'+uid(),_premExpira||'');ls('dr_premtipo_'+uid(),_premTipo||'');}catch(e){}
-      if(ativo&&!ls('dr_prembemvindo_'+uid())){ls('dr_prembemvindo_'+uid(),1);try{abrirPremWin();}catch(e){}}
-      if(!ativo){try{ls('dr_prembemvindo_'+uid(),0);}catch(e){}}  // reseta p/ celebrar de novo se reassinar
     }
   }catch(e){}
   try{renderPremUI();reRenderGated();}catch(e){}
@@ -7655,8 +7653,8 @@ window.addEventListener('load',function(){
   if(!/[?&]pago=1/.test(location.search))return;
   try{history.replaceState(null,'',location.pathname);}catch(e){}
   toast('⏳ Confirmando seu pagamento…');
-  var n=0,iv=setInterval(async function(){n++;try{await carregarPlano();}catch(e){}   // carregarPlano comemora ao virar premium
-    if(isPremium()){clearInterval(iv);}
+  var n=0,iv=setInterval(async function(){n++;try{await carregarPlano();}catch(e){}
+    if(isPremium()){clearInterval(iv);try{abrirPremWin();}catch(e){}}   // comemora só na volta do pagamento
     else if(n>=24){clearInterval(iv);toast('Se você já pagou, o acesso libera em até 1–2 min. Reabra o app. Dúvidas: contato@dichava.app');}
   },2500);
 });
