@@ -46,6 +46,7 @@ Deno.serve(async (req) => {
     };
     if (WEBHOOK_URL) body.notification_urls = [WEBHOOK_URL];
 
+    console.log("HOMOLOG_REQUEST:", JSON.stringify(body));
     const r = await fetch(`${PAGBANK_BASE}/checkouts`, {
       method: "POST",
       headers: {
@@ -56,6 +57,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify(body),
     });
     const data = await r.json();
+    console.log("HOMOLOG_RESPONSE:", r.status, JSON.stringify(data));
     console.log("PagBank base:", PAGBANK_BASE, "status:", r.status, "resp:", JSON.stringify(data));
     // devolve 200 mesmo em erro, com o detalhe, pra o app mostrar o motivo na tela
     if (!r.ok) return json({ ok: false, pagbank_status: r.status, erro: (data?.error_messages || data?.message || data) });
