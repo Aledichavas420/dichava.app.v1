@@ -1,0 +1,39 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dichava.app — em breve</title>
+<meta name=theme-color content="#0e150f">
+<meta name=robots content="noindex">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{min-height:100vh;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#EAF3EC;
+background:radial-gradient(120% 70% at 50% -10%,#1c3a25 0%,transparent 55%),linear-gradient(180deg,#0e150f,#0c1710);
+display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 22px;overflow:hidden;position:relative}
+.stars{position:absolute;inset:0;pointer-events:none}
+.st{position:absolute;background:#fff;border-radius:50%;opacity:.5;animation:tw 3s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.2}50%{opacity:.7}}
+.moon{width:96px;height:96px;margin-bottom:20px;filter:drop-shadow(0 0 34px rgba(255,221,120,.55));animation:fl 5s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+h1{font-size:30px;font-weight:800;letter-spacing:-.5px}
+h1 b{color:#7BD98A}
+.kick{margin-top:14px;display:inline-block;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#7BD98A;background:rgba(123,217,138,.1);border:1px solid rgba(123,217,138,.3);padding:7px 16px;border-radius:30px}
+p{margin-top:18px;max-width:420px;color:#A9BCAC;font-size:15.5px;line-height:1.6}
+.ig{margin-top:26px;display:inline-flex;align-items:center;gap:8px;color:#EAF3EC;text-decoration:none;font-weight:700;font-size:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);padding:11px 20px;border-radius:30px}
+.eq{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:11px;color:#3a4a3d;cursor:pointer;background:none;border:none;font-family:inherit}
+</style></head><body>
+<div class="stars" id="stars"></div>
+<svg class="moon" viewBox="0 0 80 80"><defs><radialGradient id="m" cx="38%" cy="34%" r="70%"><stop offset="0" stop-color="#FFF9E6"/><stop offset="55%" stop-color="#FFE79B"/><stop offset="100%" stop-color="#F5C44A"/></radialGradient></defs><circle cx="40" cy="40" r="26" fill="url(#m)"/><circle cx="31" cy="33" r="4.5" fill="#F0BE55" opacity=".5"/><circle cx="48" cy="45" r="6" fill="#F0BE55" opacity=".4"/><circle cx="44" cy="29" r="3" fill="#F0BE55" opacity=".45"/></svg>
+<div class="kick">em breve</div>
+<h1 style="margin-top:16px">dichava<b>.app</b></h1>
+<p>Estamos dando os últimos retoques com muito cuidado. <b>Redução de danos, sem julgamento</b> — chega já já. 💚</p>
+<a class="ig" href="https://instagram.com/dichavandoard" target="_blank" rel="noopener">📸 @dichavandoard</a>
+<button class="eq" onclick="eq()">·</button>
+<script>
+var s=document.getElementById('stars'),h='';
+for(var i=0;i<40;i++){var z=(Math.random()*2+1).toFixed(1);h+='<span class="st" style="width:'+z+'px;height:'+z+'px;left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(Math.random()*3).toFixed(1)+'s"></span>';}
+s.innerHTML=h;
+function eq(){var k=prompt('Chave de acesso da equipe:');if(k){localStorage.setItem('dr_acesso','1');location.href='/?acesso='+encodeURIComponent(k);}}
+</script>
+</body></html>

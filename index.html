@@ -2,6 +2,12 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script>/* PORTÃO "EM BREVE": redireciona o público pra breve.html. Você entra com ?acesso=chave */
+(function(){var MANUTENCAO=true;if(!MANUTENCAO)return;try{
+  var q=new URLSearchParams(location.search);
+  if(q.get('acesso')==='dichava-equipe-2026'){localStorage.setItem('dr_acesso','1');history.replaceState(null,'',location.pathname);return;}
+  if(localStorage.getItem('dr_acesso')==='1')return;
+}catch(e){}location.replace('/breve.html');})();</script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://cloudflareinsights.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="apple-mobile-web-app-capable" content="yes">
