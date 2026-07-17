@@ -2,129 +2,43 @@
 HOMOLOGAÇÃO PagBank — Chamado 1414668509
 Integração: dichava.app  |  Serviço: Checkout PagBank + API de Notificação
 Ambiente: SANDBOX
-REQUESTS enviados à API (POST /checkouts) — complementa os responses já enviados
+REQUESTS REAIS (log do servidor) enviados à API — POST /checkouts
 ====================================================================
 
-Observação sobre o fluxo:
-Nossa integração usa o CHECKOUT PagBank (página de pagamento hospedada).
-O request que ENVIAMOS é o POST /checkouts (abaixo). O cliente escolhe e
-preenche o meio de pagamento (cartão, Pix ou boleto) NA PÁGINA HOSPEDADA
-do PagBank. Depois, confirmamos o pedido via GET /orders/{id} (responses já
-enviados) e liberamos o Premium pela URL de notificação.
+Fluxo: nossa integração usa o CHECKOUT PagBank (página hospedada).
+O request que ENVIAMOS é o POST /checkouts (abaixo, extraído do log real da
+nossa função). O cliente preenche o meio de pagamento (cartão, Pix ou boleto)
+NA PÁGINA HOSPEDADA do PagBank. Depois confirmamos o pedido via GET /orders/{id}
+(responses já enviados) e liberamos o Premium pela URL de notificação.
 
---------------------------------------------------------------------
-REQUEST 1 — plano MENSAL (deu origem ao pedido pago via CARTÃO)
-reference_id: c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal
---------------------------------------------------------------------
+Endpoint de todos os requests:
 POST https://sandbox.api.pagseguro.com/checkouts
 Headers:
   Authorization: Bearer <PAGBANK_TOKEN_SANDBOX>
   Content-Type: application/json
   accept: application/json
 
-Body:
-{
-  "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal",
-  "customer_modifiable": true,
-  "customer": {
-    "name": "ALEXANDRE",
-    "email": "alex.mnteir@gmail.com"
-  },
-  "items": [
-    {
-      "reference_id": "mensal",
-      "name": "dichava premium — Mensal",
-      "quantity": 1,
-      "unit_amount": 1290
-    }
-  ],
-  "payment_methods": [
-    { "type": "CREDIT_CARD" },
-    { "type": "PIX" },
-    { "type": "BOLETO" }
-  ],
-  "redirect_url": "https://dichava.app/?pago=1",
-  "notification_urls": [
-    "https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"
-  ]
-}
+--------------------------------------------------------------------
+REQUEST 1 — plano MENSAL
+(execution_id: ccccac62-7167-4fe4-a40e-8c2ce297d58e)
+--------------------------------------------------------------------
+{"reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal","customer_modifiable":true,"customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"items":[{"reference_id":"mensal","name":"dichava premium — Mensal","quantity":1,"unit_amount":1290}],"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]}
 
 --------------------------------------------------------------------
-REQUEST 2 — plano MENSAL (deu origem ao pedido pago via BOLETO)
-reference_id: c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal
+REQUEST 2 — plano ANUAL
+(execution_id: 8aa9445b-8b88-44b6-a632-21d3950f477e)
 --------------------------------------------------------------------
-POST https://sandbox.api.pagseguro.com/checkouts
-Headers:
-  Authorization: Bearer <PAGBANK_TOKEN_SANDBOX>
-  Content-Type: application/json
-  accept: application/json
-
-Body:
-{
-  "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal",
-  "customer_modifiable": true,
-  "customer": {
-    "name": "ALEXANDRE",
-    "email": "alex.mnteir@gmail.com"
-  },
-  "items": [
-    {
-      "reference_id": "mensal",
-      "name": "dichava premium — Mensal",
-      "quantity": 1,
-      "unit_amount": 1290
-    }
-  ],
-  "payment_methods": [
-    { "type": "CREDIT_CARD" },
-    { "type": "PIX" },
-    { "type": "BOLETO" }
-  ],
-  "redirect_url": "https://dichava.app/?pago=1",
-  "notification_urls": [
-    "https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"
-  ]
-}
+{"reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|anual","customer_modifiable":true,"customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"items":[{"reference_id":"anual","name":"dichava premium — Anual","quantity":1,"unit_amount":9990}],"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]}
 
 --------------------------------------------------------------------
-REQUEST 3 — plano ANUAL (deu origem ao pedido via PIX)
-reference_id: c289a732-d9d7-46d7-abfa-be64b5852ae2|anual
+REQUEST 3 — plano MENSAL
+(execution_id: 4fc4890f-0155-460e-b9a8-b81749cdeb1b)
 --------------------------------------------------------------------
-POST https://sandbox.api.pagseguro.com/checkouts
-Headers:
-  Authorization: Bearer <PAGBANK_TOKEN_SANDBOX>
-  Content-Type: application/json
-  accept: application/json
-
-Body:
-{
-  "reference_id": "c289a732-d9d7-46d7-abfa-be64b5852ae2|anual",
-  "customer_modifiable": true,
-  "customer": {
-    "name": "ALEXANDRE",
-    "email": "alex.mnteir@gmail.com"
-  },
-  "items": [
-    {
-      "reference_id": "anual",
-      "name": "dichava premium — Anual",
-      "quantity": 1,
-      "unit_amount": 9990
-    }
-  ],
-  "payment_methods": [
-    { "type": "CREDIT_CARD" },
-    { "type": "PIX" },
-    { "type": "BOLETO" }
-  ],
-  "redirect_url": "https://dichava.app/?pago=1",
-  "notification_urls": [
-    "https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"
-  ]
-}
+{"reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal","customer_modifiable":true,"customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"items":[{"reference_id":"mensal","name":"dichava premium — Mensal","quantity":1,"unit_amount":1290}],"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]}
 
 ====================================================================
-Resumo: 3 requests POST /checkouts (mensal cartão, mensal boleto, anual pix),
-casando com os responses/pedidos GET /orders já enviados. O preenchimento
-do meio de pagamento ocorre na página hospedada do Checkout PagBank.
+Estes são os requests reais registrados no log do nosso servidor (Supabase
+Edge Function "pagamento-criar"). Os meios de pagamento habilitados são
+CARTÃO DE CRÉDITO, PIX e BOLETO — preenchidos na página hospedada do Checkout.
+Casam com os responses/pedidos (GET /orders) já enviados.
 ====================================================================
