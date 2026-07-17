@@ -359,6 +359,11 @@ a{color:inherit;text-decoration:none}
 .atabs{display:flex;border-bottom:2px solid var(--cinm);margin-bottom:20px}
 .atab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:700;color:var(--txs);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all .2s}
 .atab.on{color:var(--ve);border-bottom-color:var(--v)}
+.acct-sel{display:flex;gap:8px;margin-bottom:16px}
+.acct-opt{flex:1;padding:11px 8px;border-radius:13px;border:1.5px solid var(--cinm);background:var(--cin,#F5F5F0);font-size:13.5px;font-weight:700;color:var(--txs);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .18s}
+.acct-opt span{font-size:16px}
+.acct-opt.on{border-color:var(--v);background:var(--vf);color:var(--ve)}
+.acct-pronote{background:var(--roxof);color:var(--roxo);border-radius:12px;padding:11px 13px;font-size:12.5px;line-height:1.55;margin:2px 0 12px}
 
 /* ONBOARD */
 #vo{background:linear-gradient(170deg,#F3F6EF,#EAF1E6 60%,#E6F0E8);position:relative;overflow:hidden}
@@ -2151,10 +2156,16 @@ a{color:inherit;text-decoration:none}
     <button class="btn bdk bfull" id="btn-login" onclick="doLogin()">Entrar</button>
   </div>
   <div id="asignup" style="display:none">
+    <div class="acct-sel">
+      <button type="button" class="acct-opt on" id="acct-user" onclick="setAcct('user')"><span>🌱</span> Pra mim</button>
+      <button type="button" class="acct-opt" id="acct-pro" onclick="setAcct('pro')"><span>🩺</span> Sou profissional</button>
+    </div>
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
     <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="su-pwe">Senha muito fraca.</div></div>
     <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="su-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw2',this)"></button></div><div class="em" id="su-pw2e">As senhas não conferem.</div></div>
+    <div class="fld" id="pro-reg-fld" style="display:none"><div class="lbl">Registro profissional (CRP / CRM / CRESS…)</div><input class="inp" id="su-reg" type="text" placeholder="ex: CRP 16/7696" autocomplete="off"><div class="em" id="su-rege">Informe seu registro.</div></div>
+    <div class="acct-pronote" id="acct-pronote" style="display:none">🩺 Após criar a conta, você completa seu perfil e ele passa por uma <b>aprovação</b> antes de aparecer na rede. Você também ganha o <b>Painel da Clínica</b>.</div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
   </div>
   <button class="aw-back" onclick="mostrarWelcome()">← voltar</button>
@@ -4077,7 +4088,7 @@ if(_SB&&_SB.auth&&_SB.auth.onAuthStateChange){try{_SB.auth.onAuthStateChange((ev
 
 let U=null,_eReg=null,_eFiss=null,_eCmp=null;
 let _acct='user';
-function setAcct(t){_acct=t;document.getElementById('acct-user')?.classList.toggle('on',t==='user');document.getElementById('acct-pro')?.classList.toggle('on',t==='pro');const pf=document.getElementById('pro-reg-fld');if(pf)pf.style.display=t==='pro'?'block':'none';}
+function setAcct(t){_acct=t;document.getElementById('acct-user')?.classList.toggle('on',t==='user');document.getElementById('acct-pro')?.classList.toggle('on',t==='pro');const pf=document.getElementById('pro-reg-fld');if(pf)pf.style.display=t==='pro'?'block':'none';const nt=document.getElementById('acct-pronote');if(nt)nt.style.display=t==='pro'?'block':'none';try{vib(6);}catch(e){}}
 let _calDt=new Date(),_calSel=null;
 let _obP=0,_obG=null,_obSubs=[],_obPerfil={},_obNome='',_obMetas=[],_obEdit=false,_passos=null,_obFin={ativo:false,mensal:'',reduzir:0};
 function passosAtivos(){return _obEdit?PASSOS.filter(p=>!['intro','nome','conta'].includes(p.tp)):PASSOS;}
