@@ -2013,6 +2013,13 @@ a{color:inherit;text-decoration:none}
 .pro-tab.on{color:#fff;border-bottom-color:var(--v)}
 .pro-panel{display:none;flex:1;overflow-y:auto;padding:20px 18px}
 .pro-panel.on{display:block}
+.pro-clinica-btn{width:100%;display:flex;align-items:center;gap:13px;padding:15px 16px;margin-bottom:16px;border-radius:16px;background:linear-gradient(135deg,var(--v),var(--sa,#00897B));color:#fff;box-shadow:0 6px 20px rgba(76,175,90,.3);text-align:left}
+.pro-clinica-btn:active{transform:scale(.985)}
+.pro-clinica-btn .pcl-ic{font-size:26px;flex-shrink:0}
+.pro-clinica-btn .pcl-tx{flex:1;line-height:1.3}
+.pro-clinica-btn .pcl-tx b{display:block;font-size:16px;font-weight:800}
+.pro-clinica-btn .pcl-tx span{font-size:12.5px;opacity:.92}
+.pro-clinica-btn .pcl-ar{font-size:24px;opacity:.9;font-weight:400}
 .pro-card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
 #shell.dkm .pro-card{background:#1e2e1f}
 .pro-card-tit{font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
@@ -2231,9 +2238,9 @@ a{color:inherit;text-decoration:none}
       <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
       <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
     </div>
-    <div class="qac" style="background:#EAF2FF;--acc:#2B6CB0;display:none" onclick="abrirProfs()">
+    <div class="qac" style="background:#EAF2FF;--acc:#2B6CB0" onclick="abrirProfs()">
       <div class="qaic">🩺</div>
-      <div class="qat" style="color:#2B6CB0">Fale com um profissional</div>
+      <div class="qat" style="color:#2B6CB0">Profissionais disponíveis</div>
       <div class="qad" style="color:#4A82C0">Rede de psi e psiquiatras</div>
     </div>
     <div class="qac-wide" onclick="goPg('p-jogos')">
@@ -2631,7 +2638,7 @@ a{color:inherit;text-decoration:none}
   <button class="crc" onclick="abrirPlanoCrise()"><div class="crci" data-icon="cfg-plano"></div><div><div class="crcn">Meu plano de segurança</div><div class="crcd">O que você mesmo(a) preparou para esse momento</div></div></button>
   <a class="crc" href="tel:192" style="text-decoration:none"><div class="crci" data-icon="crise-ambulancia"></div><div><div class="crcn">SAMU — 192</div><div class="crcd">Emergência médica, overdose</div></div></a>
   <a class="crc" href="tel:188" style="text-decoration:none"><div class="crci" data-icon="crise-cvv"></div><div><div class="crcn">CVV — 188</div><div class="crcd">Apoio emocional 24h, de graça</div></div></a>
-  <button class="crc prof" style="display:none" onclick="abrirProfs()"><div class="crci">🩺</div><div><div class="crcn">Fale com um profissional</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
+  <button class="crc prof" onclick="abrirProfs()"><div class="crci">🩺</div><div><div class="crcn">Profissionais disponíveis</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
   <button class="crc" onclick="showV('vapp');setTimeout(()=>openMod('mreg'),50)"><div class="crci">📓</div><div><div class="crcn">Registrar como estou</div><div class="crcd">Documentar esse momento</div></div></button>
   <div style="margin:13px 18px 0;background:rgba(255,255,255,.1);border-radius:15px;padding:15px">
     <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">⚡ Se alguém está mal</div>
@@ -2895,6 +2902,11 @@ a{color:inherit;text-decoration:none}
 
   <!-- PERFIL -->
   <div class="pro-panel on" id="pd-perfil">
+    <button class="pro-clinica-btn" onclick="abrirClinica()">
+      <div class="pcl-ic">🩺</div>
+      <div class="pcl-tx"><b>Painel da Clínica</b><span>Agenda, pacientes, prontuários e caixa</span></div>
+      <div class="pcl-ar">›</div>
+    </button>
     <div id="pd-perfil-content"></div>
   </div>
 
@@ -6012,6 +6024,7 @@ async function entrarPro(){
   document.querySelectorAll('.pro-tab').forEach((b,i)=>{b.classList.toggle('on',i===0);});
   document.querySelectorAll('.pro-panel').forEach((p,i)=>{p.classList.toggle('on',i===0);});
 }
+function abrirClinica(){try{vib(12);}catch(e){}window.location.href='/clinica/';}
 function abrirEdicaoPerfil(){
   // Pre-fill form with existing data and show form
   if(_SB) _SB.from('profissionais').select('*').eq('id',U.id).maybeSingle().then(({data:prof})=>{
