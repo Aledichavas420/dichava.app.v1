@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1B2A1C">
+<title>dichava.app — Painel da Clínica</title>
+<meta name="description" content="Gestão de clínica: agenda, prontuários e caixa integrados.">
+<link rel="apple-touch-icon" href="../icon-192.png">
+<script>/* PORTÃO "EM BREVE": redireciona o público pra breve.html. Entra com ?acesso=chave */
+(function(){var MANUTENCAO=true;if(!MANUTENCAO)return;try{
+  var q=new URLSearchParams(location.search);
+  if(q.get('acesso')==='dichava-equipe-2026'){localStorage.setItem('dr_acesso','1');history.replaceState(null,'',location.pathname);return;}
+  if(localStorage.getItem('dr_acesso')==='1')return;
+}catch(e){}location.replace('/breve.html');})();</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* ============ TOKENS (tema claro/escuro, herdado do app) ============ */
+:root{
+  --v:#4CAF5A; --ve:#2E7D32; --vc:#A5D6A7; --vf:#E8F5E9;
+  --am:#FFD600; --ams:#FFF9C4;
+  --dk:#1B2A1C; --dk2:#2a3d2b;
+  --cin:#F5F5F0; --cinm:#E4E4DF;
+  --tx:#1B2A1C; --txs:#5D7060; --txm:#9E9E9E;
+  --sa:#00897B; --saf:#E0F2F1;
+  --er:#C62828; --erf:#FFEBEE;
+  --roxo:#7C3AED; --roxof:#F5F3FF;
+  --lrj:#EA580C; --lrjf:#FFF7ED;
+  --bg:#EDEFE9; --card:#FFFFFF; --line:#E4E4DF;
+  --r:14px; --rlg:20px;
+  --sh:0 2px 16px rgba(0,0,0,.07); --sh2:0 8px 32px rgba(0,0,0,.14);
+  --sb:env(safe-area-inset-bottom,0px); --st:env(safe-area-inset-top,0px);
+}
+:root[data-theme="dark"]{
+  --cin:#212A21; --cinm:#32402F;
+  --tx:#E9EFE7; --txs:#ADBDA9; --txm:#7C8C78;
+  --vf:#1D3320; --vc:#3E6B44; --ams:#3B3413;
+  --erf:#3B1E1E; --roxof:#2A2142; --lrjf:#3B2A18; --saf:#12332E;
+  --bg:#141A14; --card:#1E271E; --line:#32402F;
+  --sh:0 2px 16px rgba(0,0,0,.35); --sh2:0 8px 32px rgba(0,0,0,.5);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --cin:#212A21; --cinm:#32402F;
+    --tx:#E9EFE7; --txs:#ADBDA9; --txm:#7C8C78;
+    --vf:#1D3320; --vc:#3E6B44; --ams:#3B3413;
+    --erf:#3B1E1E; --roxof:#2A2142; --lrjf:#3B2A18; --saf:#12332E;
+    --bg:#141A14; --card:#1E271E; --line:#32402F;
+    --sh:0 2px 16px rgba(0,0,0,.35); --sh2:0 8px 32px rgba(0,0,0,.5);
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'DM Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg); color:var(--tx);
+  font-size:15px; line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px}
+
+/* ============ LAYOUT ============ */
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:230px;flex-shrink:0;background:var(--dk);color:#E9EFE7;
+  display:flex;flex-direction:column;padding:18px 12px;gap:4px;
+  position:sticky;top:0;height:100vh;padding-top:calc(18px + var(--st));
+}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px}
+.brand .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--v),var(--sa));display:grid;place-items:center;font-weight:800;color:#fff;font-size:18px}
+.brand b{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.brand small{display:block;font-size:11px;color:#8ca08e;font-weight:500}
+.nav-item{
+  display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;
+  color:#c3d4c4;font-weight:600;font-size:14.5px;transition:.15s;position:relative;
+}
+.nav-item .ic{width:20px;text-align:center;font-size:17px}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-item.on{background:var(--v);color:#fff}
+.nav-item .badge{margin-left:auto;background:var(--am);color:#1B2A1C;font-size:11px;font-weight:800;padding:1px 7px;border-radius:20px}
+.nav-item.on .badge{background:#fff;color:var(--ve)}
+.side-foot{margin-top:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+.side-foot .who{font-size:12.5px;color:#8ca08e;padding:0 4px}
+.side-foot .who b{color:#E9EFE7;font-weight:600;font-size:13.5px;display:block}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{
+  display:flex;align-items:center;gap:14px;padding:16px 26px;
+  padding-top:calc(16px + var(--st));position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar h1{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.topbar .sub{font-size:12.5px;color:var(--txs);font-weight:500}
+.topbar .grow{flex:1}
+.icon-btn{width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-size:17px;box-shadow:var(--sh)}
+.icon-btn:hover{background:var(--cin)}
+.content{padding:22px 26px 90px;max-width:1200px;width:100%}
+
+/* ============ COMPONENTES ============ */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:12px;background:var(--v);color:#fff;font-weight:700;font-size:14px;transition:.15s;box-shadow:0 2px 10px rgba(76,175,90,.3)}
+.btn:hover{background:var(--ve)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:var(--card);color:var(--tx);border:1px solid var(--line);box-shadow:var(--sh)}
+.btn.ghost:hover{background:var(--cin)}
+.btn.sm{padding:7px 12px;font-size:13px}
+.btn.danger{background:var(--er);box-shadow:none}
+.btn.danger:hover{filter:brightness(.9)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;background:var(--cin);color:var(--txs)}
+.chip.v{background:var(--vf);color:var(--ve)} .chip.a{background:var(--ams);color:var(--lrj)}
+.chip.s{background:var(--saf);color:var(--sa)} .chip.e{background:var(--erf);color:var(--er)}
+.chip.r{background:var(--roxof);color:var(--roxo)} .chip.g{background:var(--cin);color:var(--txm)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rlg);box-shadow:var(--sh)}
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.kpi{padding:18px 20px;position:relative;overflow:hidden}
+.kpi .lbl{font-size:12.5px;color:var(--txs);font-weight:600;display:flex;align-items:center;gap:7px}
+.kpi .val{font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:6px}
+.kpi .dl{font-size:12px;color:var(--txm);font-weight:600;margin-top:2px}
+.kpi .ic-bg{position:absolute;right:-6px;top:-6px;font-size:60px;opacity:.07}
+
+.sec-title{font-size:15px;font-weight:800;margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+.sec-title .grow{flex:1}
+
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;color:var(--txs);font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:12px 14px;border-bottom:1px solid var(--line)}
+td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:.1s}
+tbody tr:hover{background:var(--cin)}
+.tbl-wrap{overflow-x:auto;border-radius:var(--rlg)}
+.mono{font-variant-numeric:tabular-nums}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--vf);color:var(--ve);display:grid;place-items:center;font-weight:800;font-size:14px;flex-shrink:0}
+.cell-user{display:flex;align-items:center;gap:10px}
+.cell-user small{display:block;color:var(--txs);font-size:12px;font-weight:500}
+
+.empty{text-align:center;padding:44px 20px;color:var(--txs)}
+.empty .big{font-size:44px;opacity:.5;margin-bottom:8px}
+.empty b{color:var(--tx);display:block;margin-bottom:4px;font-size:16px}
+
+/* forms */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--txs)}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);
+  background:var(--bg);transition:.15s;
+}
+:root[data-theme="dark"] .field input,:root[data-theme="dark"] .field select,:root[data-theme="dark"] .field textarea{background:var(--cin)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--v);background:var(--card)}
+.field textarea{resize:vertical;min-height:80px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto}
+.overlay.on{display:flex}
+.modal{background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh2);width:100%;max-width:560px;margin:auto;animation:pop .2s}
+.modal.wide{max-width:820px}
+@keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.modal-head{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.modal-head h3{font-size:17px;font-weight:800;flex:1}
+.modal-body{padding:20px 22px;max-height:70vh;overflow-y:auto}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end}
+
+/* toast */
+.toast{position:fixed;bottom:calc(20px + var(--sb));left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--dk);color:#fff;padding:13px 20px;border-radius:14px;font-weight:600;font-size:14px;
+  box-shadow:var(--sh2);z-index:200;opacity:0;transition:.25s;pointer-events:none;display:flex;align-items:center;gap:9px}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* segmented */
+.seg{display:inline-flex;background:var(--cin);border-radius:12px;padding:4px;gap:2px}
+.seg button{padding:7px 15px;border-radius:9px;font-weight:700;font-size:13.5px;color:var(--txs)}
+.seg button.on{background:var(--card);color:var(--tx);box-shadow:var(--sh)}
+
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.search{flex:1;min-width:180px;position:relative}
+.search input{width:100%;padding:11px 13px 11px 38px;border-radius:12px;border:1.5px solid var(--line);background:var(--card)}
+.search input:focus{outline:none;border-color:var(--v)}
+.search .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--txm)}
+
+/* agenda */
+.cal{display:grid;grid-template-columns:70px 1fr;gap:0}
+.cal-slot{border-bottom:1px solid var(--line);min-height:56px;position:relative}
+.cal-time{font-size:12px;color:var(--txm);font-weight:600;padding:6px 10px;text-align:right;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+.appt{margin:4px 8px;padding:8px 11px;border-radius:11px;background:var(--vf);border-left:3px solid var(--v);cursor:pointer;transition:.12s}
+.appt:hover{transform:translateX(2px)}
+.appt b{font-size:13.5px;font-weight:700;display:block}
+.appt small{font-size:12px;color:var(--txs)}
+.appt.st-confirmado{background:var(--saf);border-color:var(--sa)}
+.appt.st-atendido{background:var(--cin);border-color:var(--txm);opacity:.75}
+.appt.st-faltou{background:var(--erf);border-color:var(--er)}
+.appt.st-cancelado{background:var(--erf);border-color:var(--er);opacity:.5;text-decoration:line-through}
+
+.daynav{display:flex;align-items:center;gap:8px}
+.daynav b{font-size:15px;font-weight:800;min-width:210px;text-align:center;text-transform:capitalize}
+
+/* prontuario timeline */
+.tl{position:relative;padding-left:26px}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl-item{position:relative;margin-bottom:18px}
+.tl-item::before{content:'';position:absolute;left:-22px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--v);border:2px solid var(--card)}
+.tl-item .dt{font-size:12px;color:var(--txs);font-weight:700;margin-bottom:6px}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.info-grid .il{font-size:12px;color:var(--txs);font-weight:600}
+.info-grid .iv{font-size:14.5px;font-weight:600;margin-top:2px}
+
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+
+/* mobile bottom nav */
+.mobnav{display:none}
+@media (max-width:860px){
+  .sidebar{display:none}
+  .content{padding:16px 14px 96px}
+  .topbar{padding:14px 16px;padding-top:calc(14px + var(--st))}
+  .topbar h1{font-size:18px}
+  .row2,.row3{grid-template-columns:1fr}
+  .info-grid{grid-template-columns:1fr}
+  .mobnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);
+    padding:8px 6px calc(8px + var(--sb));z-index:50;justify-content:space-around}
+  .mobnav a{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--txs);font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:10px;flex:1}
+  .mobnav a .ic{font-size:20px}
+  .mobnav a.on{color:var(--v)}
+  .daynav b{min-width:120px;font-size:13px}
+  .kpi .val{font-size:24px}
+}
+.hide{display:none!important}
+
+/* ============ LOGIN / GATE ============ */
+#gate{position:fixed;inset:0;z-index:400;background:linear-gradient(160deg,var(--dk),#132013);display:none;align-items:center;justify-content:center;padding:24px;padding-top:calc(24px + var(--st))}
+#gate.on{display:flex}
+.gate-card{width:100%;max-width:400px;background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh2);padding:30px 26px;animation:pop .25s}
+.gate-logo{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,var(--v),var(--sa));display:grid;place-items:center;font-weight:800;color:#fff;font-size:26px;margin:0 auto 14px}
+.gate-card h2{text-align:center;font-size:21px;font-weight:800;letter-spacing:-.4px}
+.gate-card .gsub{text-align:center;color:var(--txs);font-size:13.5px;margin:6px 0 20px}
+.gate-err{background:var(--erf);color:var(--er);border-radius:11px;padding:10px 13px;font-size:13px;font-weight:600;margin-bottom:12px;display:none}
+.gate-err.on{display:block}
+.gate-note{text-align:center;font-size:12.5px;color:var(--txs);margin-top:16px;line-height:1.6}
+.gate-note a{color:var(--v);font-weight:700}
+#gate .btn{width:100%;justify-content:center;padding:13px;font-size:15px;margin-top:4px}
+.gate-info{background:var(--vf);color:var(--ve);border-radius:12px;padding:13px 15px;font-size:13px;font-weight:600;line-height:1.55;text-align:center}
+
+/* ============ TUTORIAL ============ */
+#tut{position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:24px}
+#tut.on{display:flex}
+.tut-card{width:100%;max-width:440px;background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh2);overflow:hidden;animation:pop .25s}
+.tut-hero{background:linear-gradient(135deg,var(--v),var(--sa));padding:30px 24px;text-align:center;color:#fff}
+.tut-hero .ti{font-size:46px;line-height:1}
+.tut-body{padding:22px 24px}
+.tut-body h3{font-size:19px;font-weight:800;margin-bottom:8px}
+.tut-body p{color:var(--txs);font-size:14px;line-height:1.6}
+.tut-dots{display:flex;gap:6px;justify-content:center;margin:18px 0 4px}
+.tut-dots i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.2s}
+.tut-dots i.on{background:var(--v);width:20px;border-radius:20px}
+.tut-foot{display:flex;gap:10px;padding:0 24px 22px}
+.tut-foot .btn{flex:1;justify-content:center}
+</style>
+</head>
+<body>
+<!-- LOGIN GATE (mesmo login do app) -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">d</div>
+    <h2>Painel da Clínica</h2>
+    <div class="gsub">Área exclusiva para profissionais do dichava.app</div>
+    <div class="gate-err" id="gate-err"></div>
+    <div id="gate-login">
+      <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
+      <div class="field"><label>Senha</label><input id="g-pw" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+      <button class="btn" id="g-btn" onclick="gateLogin()">Entrar</button>
+      <div class="gate-note">Use a mesma conta <b>profissional</b> do app dichava.<br>Ainda não tem conta pro? <a href="../#pro" >Crie no app →</a></div>
+    </div>
+    <div id="gate-notpro" class="hide">
+      <div class="gate-info">Esta área é exclusiva para contas <b>profissionais</b>. Sua conta atual é de usuário comum.</div>
+      <button class="btn ghost" style="width:100%;justify-content:center;margin-top:14px" onclick="gateLogout()">Sair e entrar com outra conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- TUTORIAL primeiro acesso -->
+<div id="tut">
+  <div class="tut-card">
+    <div class="tut-hero"><div class="ti" id="tut-ic">🩺</div></div>
+    <div class="tut-body">
+      <h3 id="tut-t">Bem-vindo(a) ao seu Painel</h3>
+      <p id="tut-x">Organize sua prática clínica num só lugar — agenda, pacientes, prontuários e caixa, tudo integrado.</p>
+      <div class="tut-dots" id="tut-dots"></div>
+    </div>
+    <div class="tut-foot">
+      <button class="btn ghost" id="tut-skip" onclick="tutFim()">Pular</button>
+      <button class="btn" id="tut-next" onclick="tutNext()">Próximo</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">d</div>
+      <div><b>dichava</b><small>Painel da clínica</small></div>
+    </div>
+    <a class="nav-item" data-nav="dash"><span class="ic">◧</span> Visão geral</a>
+    <a class="nav-item" data-nav="agenda"><span class="ic">◷</span> Agenda <span class="badge" id="badge-agenda"></span></a>
+    <a class="nav-item" data-nav="pacientes"><span class="ic">☺</span> Pacientes</a>
+    <a class="nav-item" data-nav="prontuarios"><span class="ic">▤</span> Prontuários</a>
+    <a class="nav-item" data-nav="caixa"><span class="ic">$</span> Caixa</a>
+    <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
+    <div class="side-foot">
+      <div class="who"><b id="side-prof">Profissional</b><span id="side-clin">Minha Clínica</span></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="pg-title">Visão geral</h1>
+        <div class="sub" id="pg-sub"></div>
+      </div>
+      <div class="grow"></div>
+      <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
+      <button class="btn" id="quick-add">＋ Novo</button>
+    </div>
+    <div class="content" id="view"></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav class="mobnav">
+  <a data-nav="dash"><span class="ic">◧</span>Início</a>
+  <a data-nav="agenda"><span class="ic">◷</span>Agenda</a>
+  <a data-nav="pacientes"><span class="ic">☺</span>Pacientes</a>
+  <a data-nav="prontuarios"><span class="ic">▤</span>Prontuário</a>
+  <a data-nav="caixa"><span class="ic">$</span>Caixa</a>
+</nav>
+
+<div class="overlay" id="overlay"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================================================================
+   dichava.app — Painel da Clínica
+   SPA autocontido. Dados no localStorage (por dispositivo).
+   Integração: Agenda → Prontuário → Caixa se alimentam.
+================================================================== */
+'use strict';
+
+/* -------- utilidades -------- */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl = n=>(n<0?'-':'')+'R$ '+Math.abs(+n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const todayISO = ()=>new Date().toISOString().slice(0,10);
+const now = ()=>Date.now();
+function fmtDate(iso){ if(!iso) return '—'; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+function fmtDateLong(iso){ const dt=new Date(iso+'T12:00'); return dt.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); }
+function idade(iso){ if(!iso) return null; const b=new Date(iso), n=new Date(); let a=n.getFullYear()-b.getFullYear(); const mo=n.getMonth()-b.getMonth(); if(mo<0||(mo===0&&n.getDate()<b.getDate()))a--; return a; }
+function initials(nome){ return (nome||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase(); }
+function addDaysISO(iso,n){ const d=new Date(iso+'T12:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+
+/* -------- persistência (chave por profissional) -------- */
+let KEY='dichava_clinica_v1';
+let DB;
+let AUTH=null;  // {id,nome,email,reg} do profissional logado
+function load(){
+  try{ DB=JSON.parse(localStorage.getItem(KEY)); }catch(e){ DB=null; }
+  if(!DB||!DB.pacientes){ DB=seed(); save(); }
+  DB.pacientes ||= []; DB.agendamentos ||= []; DB.prontuarios ||= []; DB.financeiro ||= [];
+  DB.config ||= {clinica:'Minha Clínica',profissional:'Dr(a). Você',especialidade:''};
+}
+function save(){ localStorage.setItem(KEY,JSON.stringify(DB)); }
+
+/* -------- dados de exemplo -------- */
+function seed(){
+  const p1=uid(),p2=uid(),p3=uid();
+  const t=todayISO();
+  return {
+    config:{clinica:'Clínica dichava',profissional:'Dra. Marina Alves',especialidade:'Psicologia'},
+    pacientes:[
+      {id:p1,nome:'Ana Beatriz Souza',nascimento:'1994-03-12',telefone:'(11) 98888-1010',email:'ana.souza@email.com',cpf:'',endereco:'',tags:['ativo'],obs:'Acompanhamento semanal.',criadoEm:now()},
+      {id:p2,nome:'Carlos Mendes',nascimento:'1988-11-02',telefone:'(11) 97777-2020',email:'carlos.m@email.com',cpf:'',endereco:'',tags:['ativo'],obs:'',criadoEm:now()},
+      {id:p3,nome:'Júlia Ferreira',nascimento:'2000-06-25',telefone:'(21) 96666-3030',email:'',cpf:'',endereco:'',tags:['novo'],obs:'Primeira consulta.',criadoEm:now()},
+    ],
+    agendamentos:[
+      {id:uid(),pacienteId:p1,data:t,hora:'09:00',duracao:50,tipo:'Consulta',status:'confirmado',valor:180,formaPagamento:'pix',pago:false,obs:'',criadoEm:now()},
+      {id:uid(),pacienteId:p2,data:t,hora:'11:00',duracao:50,tipo:'Retorno',status:'agendado',valor:180,formaPagamento:'',pago:false,obs:'',criadoEm:now()},
+      {id:uid(),pacienteId:p3,data:t,hora:'15:00',duracao:50,tipo:'Avaliação',status:'agendado',valor:220,formaPagamento:'',pago:false,obs:'Primeira sessão.',criadoEm:now()},
+      {id:uid(),pacienteId:p1,data:addDaysISO(t,-7),hora:'09:00',duracao:50,tipo:'Consulta',status:'atendido',valor:180,formaPagamento:'pix',pago:true,obs:'',criadoEm:now()},
+    ],
+    prontuarios:[
+      {id:uid(),pacienteId:p1,agendamentoId:null,data:addDaysISO(t,-7),tipo:'evolucao',queixa:'Ansiedade em contextos sociais.',conduta:'Manter técnica de respiração; tarefa de exposição gradual.',texto:'Paciente relatou melhora na semana. Trabalhamos gatilhos no ambiente de trabalho.',criadoEm:now()},
+    ],
+    financeiro:[
+      {id:uid(),tipo:'entrada',categoria:'Consulta',descricao:'Consulta — Ana Beatriz Souza',valor:180,data:addDaysISO(t,-7),formaPagamento:'pix',pacienteId:p1,agendamentoId:null,criadoEm:now()},
+      {id:uid(),tipo:'saida',categoria:'Aluguel',descricao:'Aluguel da sala',valor:900,data:addDaysISO(t,-5),formaPagamento:'transferencia',pacienteId:null,agendamentoId:null,criadoEm:now()},
+    ],
+  };
+}
+
+/* -------- lookups -------- */
+const pac = id=>DB.pacientes.find(p=>p.id===id);
+const pacNome = id=>pac(id)?.nome||'—';
+const STATUS = {agendado:{l:'Agendado',c:'g'},confirmado:{l:'Confirmado',c:'s'},atendido:{l:'Atendido',c:'v'},faltou:{l:'Faltou',c:'a'},cancelado:{l:'Cancelado',c:'e'}};
+const PAG = {pix:'Pix',dinheiro:'Dinheiro',cartao:'Cartão',transferencia:'Transferência',convenio:'Convênio','':'—'};
+
+/* =============== ESTADO DE NAVEGAÇÃO =============== */
+let route='dash';
+let agendaDay=todayISO();
+let filtroPaciente='';
+let prontSelPaciente=null;
+
+function go(r){
+  route=r;
+  $$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===r));
+  render();
+  $('.content').scrollTo?.(0,0); window.scrollTo(0,0);
+}
+
+/* =============== RENDER PRINCIPAL =============== */
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],config:['Configurações','']};
+function render(){
+  const [t,s]=TITLES[route]||['',''];
+  $('#pg-title').textContent=t; $('#pg-sub').textContent=s;
+  const v=$('#view');
+  if(route==='dash') v.innerHTML=viewDash();
+  else if(route==='agenda') v.innerHTML=viewAgenda();
+  else if(route==='pacientes') v.innerHTML=viewPacientes();
+  else if(route==='prontuarios') v.innerHTML=viewProntuarios();
+  else if(route==='caixa') v.innerHTML=viewCaixa();
+  else if(route==='config') v.innerHTML=viewConfig();
+  updateBadges();
+}
+function updateBadges(){
+  const hoje=DB.agendamentos.filter(a=>a.data===todayISO()&&a.status!=='cancelado').length;
+  const b=$('#badge-agenda'); b.textContent=hoje||''; b.style.display=hoje?'':'none';
+}
+
+/* =============== VISÃO GERAL =============== */
+function viewDash(){
+  const t=todayISO();
+  const hoje=DB.agendamentos.filter(a=>a.data===t&&a.status!=='cancelado').sort((a,b)=>a.hora.localeCompare(b.hora));
+  const mes=t.slice(0,7);
+  const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&f.data.startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
+  const saidasMes=DB.financeiro.filter(f=>f.tipo==='saida'&&f.data.startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
+  const aReceber=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago).reduce((s,a)=>s+ +a.valor,0);
+  const ativos=DB.pacientes.length;
+
+  let kpis=`<div class="grid kpis">
+    <div class="card kpi"><div class="ic-bg">◷</div><div class="lbl">Consultas hoje</div><div class="val">${hoje.length}</div><div class="dl">${hoje.filter(a=>a.status==='atendido').length} atendida(s)</div></div>
+    <div class="card kpi"><div class="ic-bg">$</div><div class="lbl">Faturamento do mês</div><div class="val" style="color:var(--ve)">${brl(entradasMes)}</div><div class="dl">Saídas: ${brl(saidasMes)}</div></div>
+    <div class="card kpi"><div class="ic-bg">≈</div><div class="lbl">Saldo do mês</div><div class="val" style="color:${entradasMes-saidasMes>=0?'var(--ve)':'var(--er)'}">${brl(entradasMes-saidasMes)}</div><div class="dl">Entradas − saídas</div></div>
+    <div class="card kpi"><div class="ic-bg">☺</div><div class="lbl">Pacientes</div><div class="val">${ativos}</div><div class="dl">A receber: ${brl(aReceber)}</div></div>
+  </div>`;
+
+  let ag = hoje.length ? `<div class="card"><div class="tbl-wrap"><table>
+    <thead><tr><th>Hora</th><th>Paciente</th><th>Tipo</th><th>Status</th><th></th></tr></thead><tbody>
+    ${hoje.map(a=>{const st=STATUS[a.status];return `<tr onclick="openAgendamento('${a.id}')" style="cursor:pointer">
+      <td class="mono"><b>${a.hora}</b></td>
+      <td><div class="cell-user"><div class="avatar">${initials(pacNome(a.pacienteId))}</div><div>${esc(pacNome(a.pacienteId))}</div></div></td>
+      <td>${esc(a.tipo)}</td>
+      <td><span class="chip ${st.c}">${st.l}</span></td>
+      <td style="text-align:right"><span class="chip g">${brl(a.valor)}</span></td>
+    </tr>`}).join('')}
+    </tbody></table></div></div>`
+    : `<div class="card empty"><div class="big">◷</div><b>Sem consultas hoje</b>Aproveite para organizar prontuários ou o caixa.</div>`;
+
+  // próximos dias
+  const prox=DB.agendamentos.filter(a=>a.data>t&&a.status!=='cancelado').sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora)).slice(0,5);
+  let proxHtml = prox.length? `<div class="card"><div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Hora</th><th>Paciente</th><th>Tipo</th></tr></thead><tbody>
+    ${prox.map(a=>`<tr onclick="openAgendamento('${a.id}')" style="cursor:pointer"><td>${fmtDate(a.data)}</td><td class="mono">${a.hora}</td><td>${esc(pacNome(a.pacienteId))}</td><td>${esc(a.tipo)}</td></tr>`).join('')}
+    </tbody></table></div></div>` : `<div class="card empty"><b>Nada agendado à frente</b>Use o botão “Novo” para marcar.</div>`;
+
+  return kpis
+    + `<div class="sec-title">Agenda de hoje <span class="grow"></span><button class="btn sm ghost" onclick="go('agenda')">Ver agenda →</button></div>`+ag
+    + `<div class="sec-title">Próximas consultas</div>`+proxHtml;
+}
+
+/* =============== AGENDA =============== */
+const HORAS=[];for(let h=7;h<=20;h++){HORAS.push(String(h).padStart(2,'0')+':00');}
+function viewAgenda(){
+  const dia=DB.agendamentos.filter(a=>a.data===agendaDay).sort((a,b)=>a.hora.localeCompare(b.hora));
+  const isHoje=agendaDay===todayISO();
+  let slots=HORAS.map(h=>{
+    const appts=dia.filter(a=>a.hora>=h&&a.hora<String(+h.slice(0,2)+1).padStart(2,'0')+':00');
+    return `<div class="cal-time">${h}</div><div class="cal-slot">${appts.map(a=>{
+      const st=STATUS[a.status];
+      return `<div class="appt st-${a.status}" onclick="openAgendamento('${a.id}')">
+        <b>${a.hora} · ${esc(pacNome(a.pacienteId))}</b>
+        <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}</small>
+      </div>`;}).join('')}</div>`;
+  }).join('');
+
+  return `<div class="toolbar">
+      <div class="daynav">
+        <button class="icon-btn" onclick="shiftDay(-1)">‹</button>
+        <b>${isHoje?'Hoje, ':''}${fmtDateLong(agendaDay)}</b>
+        <button class="icon-btn" onclick="shiftDay(1)">›</button>
+      </div>
+      <button class="btn sm ghost" onclick="agendaDay=todayISO();render()">Hoje</button>
+      <input type="date" value="${agendaDay}" onchange="agendaDay=this.value;render()" style="padding:9px 12px;border-radius:11px;border:1.5px solid var(--line);background:var(--card)">
+      <div class="grow"></div>
+      <button class="btn" onclick="formAgendamento(null,'${agendaDay}')">＋ Agendamento</button>
+    </div>
+    ${dia.length?'':'<div class="card empty" style="margin-bottom:14px"><div class="big">◷</div><b>Dia livre</b>Nenhuma consulta marcada para esta data.</div>'}
+    <div class="card"><div class="cal">${slots}</div></div>`;
+}
+function shiftDay(n){ agendaDay=addDaysISO(agendaDay,n); render(); }
+
+/* =============== PACIENTES =============== */
+function viewPacientes(){
+  const q=filtroPaciente.toLowerCase();
+  const list=DB.pacientes.filter(p=>!q||p.nome.toLowerCase().includes(q)||(p.telefone||'').includes(q)||(p.email||'').toLowerCase().includes(q))
+    .sort((a,b)=>a.nome.localeCompare(b.nome));
+  let rows=list.map(p=>{
+    const ultima=DB.agendamentos.filter(a=>a.pacienteId===p.id&&a.status==='atendido').sort((a,b)=>b.data.localeCompare(a.data))[0];
+    const prox=DB.agendamentos.filter(a=>a.pacienteId===p.id&&a.data>=todayISO()&&a.status!=='cancelado').sort((a,b)=>a.data.localeCompare(b.data))[0];
+    const a=idade(p.nascimento);
+    return `<tr onclick="openPaciente('${p.id}')" style="cursor:pointer">
+      <td><div class="cell-user"><div class="avatar">${initials(p.nome)}</div><div><b>${esc(p.nome)}</b><small>${a!=null?a+' anos · ':''}${esc(p.telefone||'sem telefone')}</small></div></div></td>
+      <td>${ultima?fmtDate(ultima.data):'—'}</td>
+      <td>${prox?`<span class="chip s">${fmtDate(prox.data)} ${prox.hora}</span>`:'<span class="chip g">—</span>'}</td>
+      <td style="text-align:right">${(p.tags||[]).map(t=>`<span class="chip v">${esc(t)}</span>`).join(' ')}</td>
+    </tr>`;
+  }).join('');
+
+  return `<div class="toolbar">
+      <div class="search"><span class="si">⌕</span><input placeholder="Buscar paciente..." value="${esc(filtroPaciente)}" oninput="filtroPaciente=this.value;debouncedPac()"></div>
+      <button class="btn" onclick="formPaciente()">＋ Paciente</button>
+    </div>
+    ${list.length?`<div class="card"><div class="tbl-wrap"><table>
+      <thead><tr><th>Paciente</th><th>Última consulta</th><th>Próxima</th><th style="text-align:right">Tags</th></tr></thead>
+      <tbody>${rows}</tbody></table></div></div>`
+    :`<div class="card empty"><div class="big">☺</div><b>${filtroPaciente?'Nenhum resultado':'Sem pacientes ainda'}</b>${filtroPaciente?'Tente outro termo.':'Cadastre o primeiro paciente.'}</div>`}`;
+}
+let _pacT; function debouncedPac(){ clearTimeout(_pacT); _pacT=setTimeout(()=>{ if(route==='pacientes') render(); },200); }
+
+/* =============== PRONTUÁRIOS =============== */
+function viewProntuarios(){
+  // lista de pacientes com contagem de registros; seleção abre a linha do tempo
+  if(prontSelPaciente && pac(prontSelPaciente)) return viewProntuarioPaciente(prontSelPaciente);
+  const list=DB.pacientes.map(p=>({p,n:DB.prontuarios.filter(r=>r.pacienteId===p.id).length}))
+    .sort((a,b)=>a.p.nome.localeCompare(b.p.nome));
+  return `<div class="toolbar"><div class="sub" style="color:var(--txs);font-weight:600">Selecione um paciente para ver e escrever registros clínicos.</div></div>
+    ${list.length?`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+      ${list.map(({p,n})=>`<div class="card" style="padding:16px;cursor:pointer" onclick="prontSelPaciente='${p.id}';render()">
+        <div class="cell-user"><div class="avatar">${initials(p.nome)}</div><div><b>${esc(p.nome)}</b><small>${n} registro(s)</small></div></div>
+      </div>`).join('')}
+    </div>`:`<div class="card empty"><div class="big">▤</div><b>Sem pacientes</b>Cadastre em “Pacientes” primeiro.</div>`}`;
+}
+function viewProntuarioPaciente(pid){
+  const p=pac(pid);
+  const regs=DB.prontuarios.filter(r=>r.pacienteId===pid).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
+  const TIPO={anamnese:'Anamnese',evolucao:'Evolução',nota:'Nota',avaliacao:'Avaliação'};
+  return `<div class="toolbar">
+      <button class="btn sm ghost" onclick="prontSelPaciente=null;render()">‹ Voltar</button>
+      <div class="cell-user" style="margin-left:6px"><div class="avatar">${initials(p.nome)}</div><div><b>${esc(p.nome)}</b><small>${idade(p.nascimento)!=null?idade(p.nascimento)+' anos':''}</small></div></div>
+      <div class="grow"></div>
+      <button class="btn" onclick="formProntuario('${pid}')">＋ Registro</button>
+    </div>
+    ${regs.length?`<div class="card" style="padding:22px"><div class="tl">
+      ${regs.map(r=>`<div class="tl-item">
+        <div class="dt">${fmtDate(r.data)} · <span class="chip r">${TIPO[r.tipo]||r.tipo}</span></div>
+        ${r.queixa?`<div style="margin-bottom:4px"><b style="font-size:13px;color:var(--txs)">Queixa/Foco:</b> ${esc(r.queixa)}</div>`:''}
+        ${r.texto?`<div style="margin-bottom:4px">${esc(r.texto)}</div>`:''}
+        ${r.conduta?`<div style="background:var(--vf);border-radius:10px;padding:8px 11px;margin-top:6px;font-size:13.5px"><b style="color:var(--ve)">Conduta:</b> ${esc(r.conduta)}</div>`:''}
+        <div style="margin-top:6px"><button class="btn sm ghost" onclick="formProntuario('${pid}','${r.id}')">Editar</button></div>
+      </div>`).join('')}
+    </div></div>`:`<div class="card empty"><div class="big">▤</div><b>Nenhum registro</b>Comece o histórico clínico deste paciente.</div>`}`;
+}
+
+/* =============== CAIXA =============== */
+let caixaMes=todayISO().slice(0,7);
+function viewCaixa(){
+  const movs=DB.financeiro.filter(f=>f.data.startsWith(caixaMes)).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
+  const entradas=movs.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+ +f.valor,0);
+  const saidas=movs.filter(f=>f.tipo==='saida').reduce((s,f)=>s+ +f.valor,0);
+  const aReceber=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago).reduce((s,a)=>s+ +a.valor,0);
+  // por forma de pagamento (entradas)
+  const porForma={};
+  movs.filter(f=>f.tipo==='entrada').forEach(f=>{porForma[f.formaPagamento||'']=(porForma[f.formaPagamento||'']||0)+ +f.valor;});
+
+  const [y,m]=caixaMes.split('-');
+  const label=new Date(y,m-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+
+  let kpis=`<div class="grid kpis" style="margin-bottom:6px">
+    <div class="card kpi"><div class="ic-bg">↓</div><div class="lbl">Entradas</div><div class="val" style="color:var(--ve)">${brl(entradas)}</div></div>
+    <div class="card kpi"><div class="ic-bg">↑</div><div class="lbl">Saídas</div><div class="val" style="color:var(--er)">${brl(saidas)}</div></div>
+    <div class="card kpi"><div class="ic-bg">≈</div><div class="lbl">Saldo</div><div class="val" style="color:${entradas-saidas>=0?'var(--ve)':'var(--er)'}">${brl(entradas-saidas)}</div></div>
+    <div class="card kpi"><div class="ic-bg">⧗</div><div class="lbl">A receber</div><div class="val" style="color:var(--lrj)">${brl(aReceber)}</div><div class="dl">Atendidos não pagos</div></div>
+  </div>`;
+
+  let formas=Object.keys(porForma).length?`<div class="pill-row" style="margin:10px 2px 0">
+    ${Object.entries(porForma).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="chip v">${PAG[k]||k}: ${brl(v)}</span>`).join('')}
+  </div>`:'';
+
+  let rows=movs.map(f=>`<tr>
+    <td class="mono">${fmtDate(f.data)}</td>
+    <td>${f.tipo==='entrada'?'<span class="chip v">Entrada</span>':'<span class="chip e">Saída</span>'}</td>
+    <td><b>${esc(f.descricao||f.categoria)}</b>${f.categoria&&f.descricao?`<br><small style="color:var(--txs)">${esc(f.categoria)}</small>`:''}</td>
+    <td>${PAG[f.formaPagamento]||f.formaPagamento||'—'}</td>
+    <td class="mono" style="text-align:right;font-weight:800;color:${f.tipo==='entrada'?'var(--ve)':'var(--er)'}">${f.tipo==='entrada'?'+':'−'}${brl(f.valor).replace('R$ ','')}</td>
+    <td style="text-align:right"><button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;border:none;background:transparent" onclick="delFinanceiro('${f.id}')" title="Excluir">🗑</button></td>
+  </tr>`).join('');
+
+  return `<div class="toolbar">
+      <div class="daynav">
+        <button class="icon-btn" onclick="shiftMes(-1)">‹</button>
+        <b style="min-width:150px">${label}</b>
+        <button class="icon-btn" onclick="shiftMes(1)">›</button>
+      </div>
+      <div class="grow"></div>
+      <button class="btn ghost sm" onclick="formFinanceiro('saida')">＋ Saída</button>
+      <button class="btn" onclick="formFinanceiro('entrada')">＋ Entrada</button>
+    </div>
+    ${kpis}${formas}
+    <div class="sec-title">Movimentações</div>
+    ${movs.length?`<div class="card"><div class="tbl-wrap"><table>
+      <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Forma</th><th style="text-align:right">Valor</th><th></th></tr></thead>
+      <tbody>${rows}</tbody></table></div></div>`
+    :`<div class="card empty"><div class="big">$</div><b>Sem movimentações neste mês</b>Consultas atendidas e marcadas como pagas entram aqui automaticamente.</div>`}`;
+}
+function shiftMes(n){ const [y,m]=caixaMes.split('-').map(Number); const d=new Date(y,m-1+n,1); caixaMes=d.toISOString().slice(0,7); render(); }
+
+/* =============== CONFIG =============== */
+function viewConfig(){
+  const c=DB.config;
+  return `<div class="card" style="padding:22px;max-width:560px">
+    <div class="sec-title" style="margin-top:0">Dados da clínica</div>
+    <div class="field"><label>Nome da clínica</label><input id="cf-clin" value="${esc(c.clinica)}"></div>
+    <div class="field"><label>Profissional responsável</label><input id="cf-prof" value="${esc(c.profissional)}"></div>
+    <div class="field"><label>Especialidade</label><input id="cf-esp" value="${esc(c.especialidade||'')}"></div>
+    <button class="btn" onclick="salvarConfig()">Salvar</button>
+  </div>
+  <div class="card" style="padding:22px;max-width:560px;margin-top:16px">
+    <div class="sec-title" style="margin-top:0">Dados</div>
+    <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Os dados ficam salvos <b>neste dispositivo</b> (localStorage). Exporte para backup ou transferência.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="exportar()">↓ Exportar (JSON)</button>
+      <button class="btn ghost sm" onclick="$('#imp-file').click()">↑ Importar</button>
+      <input id="imp-file" type="file" accept="application/json" class="hide" onchange="importar(this.files[0])">
+      <button class="btn danger sm" onclick="resetar()">Apagar tudo</button>
+    </div>
+  </div>
+  <div class="card" style="padding:22px;max-width:560px;margin-top:16px">
+    <div class="sec-title" style="margin-top:0">Conta</div>
+    <div class="info-grid" style="margin-bottom:14px">
+      <div><div class="il">Profissional</div><div class="iv">${esc(AUTH?AUTH.nome:'—')}</div></div>
+      <div><div class="il">E-mail</div><div class="iv">${esc(AUTH?AUTH.email:'—')}</div></div>
+      ${AUTH&&AUTH.reg?`<div><div class="il">Registro</div><div class="iv">${esc(AUTH.reg)}</div></div>`:''}
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="tutStart()">↻ Rever tutorial</button>
+      <button class="btn danger ghost sm" onclick="gateLogout()">Sair da conta</button>
+    </div>
+  </div>`;
+}
+function salvarConfig(){
+  DB.config.clinica=$('#cf-clin').value.trim()||'Minha Clínica';
+  DB.config.profissional=$('#cf-prof').value.trim()||'Profissional';
+  DB.config.especialidade=$('#cf-esp').value.trim();
+  save(); syncHeader(); toast('Configurações salvas'); render();
+}
+function syncHeader(){ $('#side-prof').textContent=DB.config.profissional; $('#side-clin').textContent=DB.config.clinica; }
+
+/* =============== MODAIS / FORMS =============== */
+function openModal(html){ $('#overlay').innerHTML=html; $('#overlay').classList.add('on'); }
+function closeModal(){ $('#overlay').classList.remove('on'); $('#overlay').innerHTML=''; }
+$('#overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeModal(); });
+
+/* -- Paciente -- */
+function formPaciente(id){
+  const p=id?pac(id):{nome:'',nascimento:'',telefone:'',email:'',cpf:'',endereco:'',obs:'',tags:[]};
+  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} paciente</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Nome completo *</label><input id="f-nome" value="${esc(p.nome)}" placeholder="Nome do paciente"></div>
+      <div class="row2">
+        <div class="field"><label>Nascimento</label><input id="f-nasc" type="date" value="${p.nascimento||''}"></div>
+        <div class="field"><label>Telefone</label><input id="f-tel" value="${esc(p.telefone)}" placeholder="(00) 00000-0000"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>E-mail</label><input id="f-email" value="${esc(p.email)}" placeholder="email@exemplo.com"></div>
+        <div class="field"><label>CPF</label><input id="f-cpf" value="${esc(p.cpf||'')}"></div>
+      </div>
+      <div class="field"><label>Endereço</label><input id="f-end" value="${esc(p.endereco||'')}"></div>
+      <div class="field"><label>Tags (separadas por vírgula)</label><input id="f-tags" value="${esc((p.tags||[]).join(', '))}" placeholder="ativo, retorno..."></div>
+      <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas gerais">${esc(p.obs||'')}</textarea></div>
+    </div>
+    <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delPaciente('${id}')">Excluir</button>`:''}
+      <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn" onclick="savePaciente('${id||''}')">Salvar</button></div>
+  </div>`);
+  setTimeout(()=>$('#f-nome')?.focus(),50);
+}
+function savePaciente(id){
+  const nome=$('#f-nome').value.trim();
+  if(!nome){ toast('Informe o nome',1); return; }
+  const data={nome,nascimento:$('#f-nasc').value,telefone:$('#f-tel').value.trim(),email:$('#f-email').value.trim(),
+    cpf:$('#f-cpf').value.trim(),endereco:$('#f-end').value.trim(),obs:$('#f-obs').value.trim(),
+    tags:$('#f-tags').value.split(',').map(s=>s.trim()).filter(Boolean)};
+  if(id){ Object.assign(pac(id),data); } else { DB.pacientes.push({id:uid(),...data,criadoEm:now()}); }
+  save(); closeModal(); toast('Paciente salvo'); render();
+}
+function delPaciente(id){
+  if(!confirm('Excluir este paciente? Agendamentos e prontuários dele NÃO serão apagados, mas ficarão sem vínculo.')) return;
+  DB.pacientes=DB.pacientes.filter(p=>p.id!==id); save(); closeModal(); if(prontSelPaciente===id)prontSelPaciente=null; toast('Paciente excluído'); render();
+}
+function openPaciente(id){
+  const p=pac(id);
+  const ags=DB.agendamentos.filter(a=>a.pacienteId===id).sort((a,b)=>(b.data+b.hora).localeCompare(a.data+a.hora));
+  const regs=DB.prontuarios.filter(r=>r.pacienteId===id).length;
+  const a=idade(p.nascimento);
+  openModal(`<div class="modal wide"><div class="modal-head">
+      <div class="avatar" style="width:42px;height:42px;font-size:16px">${initials(p.nome)}</div>
+      <div style="flex:1"><h3 style="margin:0">${esc(p.nome)}</h3><div class="sub" style="color:var(--txs);font-size:12.5px">${a!=null?a+' anos · ':''}${esc(p.telefone||'sem telefone')}</div></div>
+      <button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="info-grid" style="margin-bottom:16px">
+        <div><div class="il">E-mail</div><div class="iv">${esc(p.email||'—')}</div></div>
+        <div><div class="il">Nascimento</div><div class="iv">${fmtDate(p.nascimento)}</div></div>
+        <div><div class="il">CPF</div><div class="iv">${esc(p.cpf||'—')}</div></div>
+        <div><div class="il">Endereço</div><div class="iv">${esc(p.endereco||'—')}</div></div>
+      </div>
+      ${p.obs?`<div style="background:var(--cin);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b>Obs:</b> ${esc(p.obs)}</div>`:''}
+      <div class="pill-row" style="margin-bottom:16px">${(p.tags||[]).map(t=>`<span class="chip v">${esc(t)}</span>`).join('')}</div>
+      <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="btn sm" onclick="closeModal();formAgendamento(null,todayISO(),'${id}')">＋ Agendar</button>
+        <button class="btn sm ghost" onclick="closeModal();formProntuario('${id}')">＋ Registro clínico</button>
+        <button class="btn sm ghost" onclick="closeModal();prontSelPaciente='${id}';go('prontuarios')">Ver prontuário (${regs})</button>
+        <button class="btn sm ghost" onclick="closeModal();formPaciente('${id}')">Editar dados</button>
+      </div>
+      <div class="sec-title" style="margin:0 0 10px">Histórico de consultas</div>
+      ${ags.length?`<div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Hora</th><th>Tipo</th><th>Status</th><th style="text-align:right">Valor</th></tr></thead>
+        <tbody>${ags.map(x=>{const st=STATUS[x.status];return `<tr onclick="closeModal();openAgendamento('${x.id}')" style="cursor:pointer"><td>${fmtDate(x.data)}</td><td class="mono">${x.hora}</td><td>${esc(x.tipo)}</td><td><span class="chip ${st.c}">${st.l}</span></td><td class="mono" style="text-align:right">${brl(x.valor)}</td></tr>`}).join('')}</tbody></table></div>`
+      :'<p style="color:var(--txs);font-size:13.5px">Nenhuma consulta ainda.</p>'}
+    </div></div>`);
+}
+
+/* -- Agendamento -- */
+function formAgendamento(id,dataDefault,pacDefault){
+  const a=id?DB.agendamentos.find(x=>x.id===id):{pacienteId:pacDefault||'',data:dataDefault||todayISO(),hora:'09:00',duracao:50,tipo:'Consulta',status:'agendado',valor:180,formaPagamento:'',pago:false,obs:''};
+  const opts=DB.pacientes.sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<option value="${p.id}" ${p.id===a.pacienteId?'selected':''}>${esc(p.nome)}</option>`).join('');
+  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} agendamento</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Paciente *</label><select id="f-pac"><option value="">— selecione —</option>${opts}</select>
+        <button class="btn sm ghost" style="margin-top:8px" onclick="closeModal();formPaciente()">＋ Cadastrar novo paciente</button></div>
+      <div class="row3">
+        <div class="field"><label>Data</label><input id="f-data" type="date" value="${a.data}"></div>
+        <div class="field"><label>Hora</label><input id="f-hora" type="time" value="${a.hora}"></div>
+        <div class="field"><label>Duração (min)</label><input id="f-dur" type="number" value="${a.duracao}"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Tipo</label><select id="f-tipo">${['Consulta','Retorno','Avaliação','Primeira sessão','Online'].map(t=>`<option ${t===a.tipo?'selected':''}>${t}</option>`).join('')}</select></div>
+        <div class="field"><label>Status</label><select id="f-status">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===a.status?'selected':''}>${v.l}</option>`).join('')}</select></div>
+      </div>
+      <div class="row3">
+        <div class="field"><label>Valor (R$)</label><input id="f-valor" type="number" step="0.01" value="${a.valor}"></div>
+        <div class="field"><label>Forma pagto</label><select id="f-forma">${Object.entries(PAG).map(([k,v])=>`<option value="${k}" ${k===a.formaPagamento?'selected':''}>${v}</option>`).join('')}</select></div>
+        <div class="field"><label>Pago?</label><select id="f-pago"><option value="0" ${!a.pago?'selected':''}>Não</option><option value="1" ${a.pago?'selected':''}>Sim</option></select></div>
+      </div>
+      <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas do agendamento">${esc(a.obs||'')}</textarea></div>
+      <p style="font-size:12.5px;color:var(--txs)">💡 Ao marcar <b>Atendido</b> + <b>Pago = Sim</b>, uma entrada é lançada no caixa automaticamente.</p>
+    </div>
+    <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delAgendamento('${id}')">Excluir</button>`:''}
+      <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn" onclick="saveAgendamento('${id||''}')">Salvar</button></div>
+  </div>`);
+}
+function saveAgendamento(id){
+  const pacId=$('#f-pac').value;
+  if(!pacId){ toast('Selecione o paciente',1); return; }
+  const data={pacienteId:pacId,data:$('#f-data').value,hora:$('#f-hora').value,duracao:+$('#f-dur').value||50,
+    tipo:$('#f-tipo').value,status:$('#f-status').value,valor:+$('#f-valor').value||0,
+    formaPagamento:$('#f-forma').value,pago:$('#f-pago').value==='1',obs:$('#f-obs').value.trim()};
+  let ag;
+  if(id){ ag=DB.agendamentos.find(x=>x.id===id); Object.assign(ag,data); }
+  else { ag={id:uid(),...data,criadoEm:now()}; DB.agendamentos.push(ag); }
+  sincronizarCaixa(ag);
+  save(); closeModal(); toast('Agendamento salvo'); render();
+}
+function delAgendamento(id){
+  if(!confirm('Excluir este agendamento?')) return;
+  DB.agendamentos=DB.agendamentos.filter(a=>a.id!==id);
+  DB.financeiro=DB.financeiro.filter(f=>f.agendamentoId!==id); // remove entrada vinculada
+  save(); closeModal(); toast('Agendamento excluído'); render();
+}
+function openAgendamento(id){ formAgendamento(id); }
+
+/* Integração agenda → caixa */
+function sincronizarCaixa(ag){
+  const existente=DB.financeiro.find(f=>f.agendamentoId===ag.id);
+  const deveLancar = ag.status==='atendido' && ag.pago && +ag.valor>0;
+  if(deveLancar && !existente){
+    DB.financeiro.push({id:uid(),tipo:'entrada',categoria:ag.tipo||'Consulta',
+      descricao:`${ag.tipo||'Consulta'} — ${pacNome(ag.pacienteId)}`,valor:+ag.valor,data:ag.data,
+      formaPagamento:ag.formaPagamento||'',pacienteId:ag.pacienteId,agendamentoId:ag.id,criadoEm:now()});
+  } else if(existente){
+    if(!deveLancar){ DB.financeiro=DB.financeiro.filter(f=>f!==existente); }
+    else { existente.valor=+ag.valor; existente.data=ag.data; existente.formaPagamento=ag.formaPagamento||''; existente.descricao=`${ag.tipo||'Consulta'} — ${pacNome(ag.pacienteId)}`; }
+  }
+}
+
+/* -- Prontuário -- */
+function formProntuario(pid,rid){
+  const r=rid?DB.prontuarios.find(x=>x.id===rid):{pacienteId:pid,data:todayISO(),tipo:'evolucao',queixa:'',conduta:'',texto:''};
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${rid?'Editar':'Novo'} registro — ${esc(pacNome(pid))}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="field"><label>Data</label><input id="f-data" type="date" value="${r.data}"></div>
+        <div class="field"><label>Tipo</label><select id="f-tipo">${[['anamnese','Anamnese'],['avaliacao','Avaliação'],['evolucao','Evolução'],['nota','Nota']].map(([k,v])=>`<option value="${k}" ${k===r.tipo?'selected':''}>${v}</option>`).join('')}</select></div>
+      </div>
+      <div class="field"><label>Queixa / Foco da sessão</label><input id="f-queixa" value="${esc(r.queixa||'')}" placeholder="Motivo / tema central"></div>
+      <div class="field"><label>Registro clínico</label><textarea id="f-texto" style="min-height:140px" placeholder="Evolução, observações, conteúdo da sessão...">${esc(r.texto||'')}</textarea></div>
+      <div class="field"><label>Conduta / Plano</label><textarea id="f-conduta" placeholder="Encaminhamentos, tarefas, próximos passos">${esc(r.conduta||'')}</textarea></div>
+    </div>
+    <div class="modal-foot">${rid?`<button class="btn danger ghost" style="margin-right:auto" onclick="delProntuario('${rid}')">Excluir</button>`:''}
+      <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn" onclick="saveProntuario('${pid}','${rid||''}')">Salvar</button></div>
+  </div>`);
+}
+function saveProntuario(pid,rid){
+  const data={pacienteId:pid,data:$('#f-data').value,tipo:$('#f-tipo').value,queixa:$('#f-queixa').value.trim(),
+    texto:$('#f-texto').value.trim(),conduta:$('#f-conduta').value.trim()};
+  if(!data.texto && !data.queixa){ toast('Escreva ao menos a queixa ou o registro',1); return; }
+  if(rid){ Object.assign(DB.prontuarios.find(x=>x.id===rid),data); }
+  else { DB.prontuarios.push({id:uid(),...data,agendamentoId:null,criadoEm:now()}); prontSelPaciente=pid; }
+  save(); closeModal(); toast('Registro salvo'); render();
+}
+function delProntuario(rid){
+  if(!confirm('Excluir este registro clínico?')) return;
+  DB.prontuarios=DB.prontuarios.filter(r=>r.id!==rid); save(); closeModal(); toast('Registro excluído'); render();
+}
+
+/* -- Financeiro manual -- */
+function formFinanceiro(tipo){
+  const cats = tipo==='entrada'?['Consulta','Avaliação','Pacote','Convênio','Outros']:['Aluguel','Materiais','Impostos','Marketing','Sistema','Contador','Outros'];
+  const opts=DB.pacientes.sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join('');
+  openModal(`<div class="modal"><div class="modal-head"><h3>Nova ${tipo==='entrada'?'entrada':'saída'}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="field"><label>Valor (R$) *</label><input id="f-valor" type="number" step="0.01" placeholder="0,00"></div>
+        <div class="field"><label>Data</label><input id="f-data" type="date" value="${todayISO()}"></div>
+      </div>
+      <div class="field"><label>Categoria</label><select id="f-cat">${cats.map(c=>`<option>${c}</option>`).join('')}</select></div>
+      <div class="field"><label>Descrição</label><input id="f-desc" placeholder="Descrição do lançamento"></div>
+      <div class="row2">
+        <div class="field"><label>Forma de pagamento</label><select id="f-forma">${Object.entries(PAG).filter(([k])=>k).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+        ${tipo==='entrada'?`<div class="field"><label>Paciente (opcional)</label><select id="f-pac"><option value="">—</option>${opts}</select></div>`:''}
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn" onclick="saveFinanceiro('${tipo}')">Lançar</button></div>
+  </div>`);
+  setTimeout(()=>$('#f-valor')?.focus(),50);
+}
+function saveFinanceiro(tipo){
+  const valor=+$('#f-valor').value;
+  if(!valor||valor<=0){ toast('Informe um valor válido',1); return; }
+  const cat=$('#f-cat').value;
+  DB.financeiro.push({id:uid(),tipo,categoria:cat,descricao:$('#f-desc').value.trim()||cat,valor,
+    data:$('#f-data').value,formaPagamento:$('#f-forma').value,pacienteId:tipo==='entrada'?($('#f-pac')?.value||null):null,
+    agendamentoId:null,criadoEm:now()});
+  // ajusta o mês exibido para o lançamento
+  caixaMes=$('#f-data').value.slice(0,7);
+  save(); closeModal(); toast('Lançamento registrado'); render();
+}
+function delFinanceiro(id){
+  const f=DB.financeiro.find(x=>x.id===id);
+  if(f&&f.agendamentoId){ if(!confirm('Esta entrada veio de um agendamento atendido/pago. Excluir mesmo assim? (marque o agendamento como não pago para removê-la de forma definitiva)')) return; }
+  else if(!confirm('Excluir este lançamento?')) return;
+  DB.financeiro=DB.financeiro.filter(x=>x.id!==id); save(); toast('Lançamento excluído'); render();
+}
+
+/* =============== EXPORT/IMPORT/RESET =============== */
+function exportar(){
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='dichava-clinica-'+todayISO()+'.json'; a.click(); URL.revokeObjectURL(a.href);
+  toast('Backup exportado');
+}
+function importar(file){
+  if(!file) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.pacientes) throw 0; DB=d; save(); syncHeader(); toast('Dados importados'); render(); }catch(e){ toast('Arquivo inválido',1); } };
+  r.readAsText(file);
+}
+function resetar(){
+  if(!confirm('Apagar TODOS os dados da clínica neste dispositivo? Esta ação não pode ser desfeita.')) return;
+  if(!confirm('Tem certeza mesmo? Considere exportar um backup antes.')) return;
+  localStorage.removeItem(KEY); DB=seed(); save(); syncHeader(); toast('Dados reiniciados'); go('dash');
+}
+
+/* =============== TOAST / TEMA =============== */
+let _tT;
+function toast(msg,err){ const t=$('#toast'); t.textContent=msg; t.style.background=err?'var(--er)':'var(--dk)'; t.classList.add('on'); clearTimeout(_tT); _tT=setTimeout(()=>t.classList.remove('on'),2200); }
+function initTheme(){
+  const saved=localStorage.getItem('dichava_clinica_theme');
+  if(saved) document.documentElement.setAttribute('data-theme',saved);
+}
+$('#theme-btn').addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const isDark = cur==='dark' || (!cur && matchMedia('(prefers-color-scheme:dark)').matches);
+  const next=isDark?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('dichava_clinica_theme',next);
+});
+
+/* =============== AUTENTICAÇÃO (mesmo login do app) =============== */
+const _SB = (typeof supabase!=='undefined')
+  ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4')
+  : null;
+
+function gateErr(msg){ const e=$('#gate-err'); if(!e)return; if(msg){e.textContent=msg;e.classList.add('on');}else{e.classList.remove('on');} }
+function showGate(mode){ // 'login' | 'notpro'
+  $('#gate').classList.add('on');
+  $('#gate-login').classList.toggle('hide',mode==='notpro');
+  $('#gate-notpro').classList.toggle('hide',mode!=='notpro');
+}
+function hideGate(){ $('#gate').classList.remove('on'); }
+
+function metaFrom(user){
+  const m=(user&&user.user_metadata)||{};
+  return {id:user.id,nome:m.nome||user.email||'Profissional',email:user.email||'',tipo:m.tipo||'user',reg:m.reg||''};
+}
+
+async function bootAuth(){
+  // sem Supabase (offline) → deixa entrar em modo local pra não travar
+  if(!_SB){ AUTH={id:'local',nome:'Profissional',email:'',tipo:'pro',reg:''}; return iniciarApp(); }
+  try{
+    const{data}=await _SB.auth.getSession();
+    const sess=data&&data.session;
+    if(!sess||!sess.user){ showGate('login'); return; }
+    const u=metaFrom(sess.user);
+    if(u.tipo!=='pro'){ showGate('notpro'); return; }
+    AUTH=u; hideGate(); iniciarApp();
+  }catch(e){ showGate('login'); }
+}
+
+async function gateLogin(){
+  gateErr('');
+  const email=$('#g-email').value.trim(), pw=$('#g-pw').value;
+  if(!email||!pw){ gateErr('Preencha e-mail e senha.'); return; }
+  if(!_SB){ gateErr('Sem conexão com o servidor.'); return; }
+  const btn=$('#g-btn'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Entrando…';
+  try{
+    const{data,error}=await _SB.auth.signInWithPassword({email,password:pw});
+    if(error){ gateErr(/Invalid/.test(error.message)?'E-mail ou senha incorretos.':error.message); return; }
+    const u=metaFrom(data.user);
+    if(u.tipo!=='pro'){ showGate('notpro'); return; }
+    AUTH=u; hideGate(); iniciarApp();
+  }catch(e){ gateErr('Não consegui entrar agora. Tente de novo.'); }
+  finally{ btn.disabled=false; btn.textContent=orig; }
+}
+async function gateLogout(){
+  try{ if(_SB) await _SB.auth.signOut(); }catch(e){}
+  AUTH=null; location.reload();
+}
+
+/* =============== INÍCIO DO APP (após login) =============== */
+let _appReady=false;
+function iniciarApp(){
+  if(_appReady) return;
+  _appReady=true;
+  KEY='dichava_clinica_v1_'+(AUTH?AUTH.id:'local');
+  $$('[data-nav]').forEach(a=>a.addEventListener('click',()=>go(a.dataset.nav)));
+  $('#quick-add').addEventListener('click',()=>{
+    if(route==='pacientes') formPaciente();
+    else if(route==='prontuarios') { if(prontSelPaciente) formProntuario(prontSelPaciente); else toast('Selecione um paciente primeiro',1); }
+    else if(route==='caixa') formFinanceiro('entrada');
+    else formAgendamento(null,route==='agenda'?agendaDay:todayISO());
+  });
+  initTheme();
+  load();
+  // pré-preenche os dados do profissional na primeira vez
+  if(AUTH && DB && DB.config && (!DB.config._prefilled)){
+    if(AUTH.nome && (!DB.config.profissional || /^Dr|^Profissional|Você/.test(DB.config.profissional))) DB.config.profissional=AUTH.nome;
+    DB.config._prefilled=true; save();
+  }
+  syncHeader();
+  go('dash');
+  // tutorial no primeiro acesso deste profissional
+  if(!localStorage.getItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'))) setTimeout(tutStart,400);
+}
+
+/* =============== TUTORIAL =============== */
+const TUT=[
+  {ic:'🩺',t:'Bem-vindo(a) ao seu Painel',x:'Um espaço só seu pra organizar a prática clínica — agenda, pacientes, prontuários e caixa, tudo integrado e no mesmo lugar.'},
+  {ic:'◷',t:'Agenda inteligente',x:'Marque consultas por horário, veja o dia inteiro e navegue entre datas. O que está marcado pra hoje aparece na Visão geral automaticamente.'},
+  {ic:'☺',t:'Pacientes & Prontuários',x:'Cadastre seus pacientes e escreva registros clínicos (anamnese, evolução, condutas) numa linha do tempo organizada por pessoa.'},
+  {ic:'$',t:'Caixa automático',x:'Ao marcar uma consulta como Atendida + Paga, uma entrada é lançada no caixa sozinha. Veja faturamento, saldo e o que ainda tem a receber.'},
+  {ic:'🔒',t:'Seus dados, seu controle',x:'Tudo fica salvo neste dispositivo, ligado à sua conta. Em Configurações você exporta um backup quando quiser. Vamos começar? 💚'},
+];
+let _tutI=0;
+function tutStart(){ _tutI=0; renderTut(); $('#tut').classList.add('on'); }
+function renderTut(){
+  const s=TUT[_tutI];
+  $('#tut-ic').textContent=s.ic; $('#tut-t').textContent=s.t; $('#tut-x').textContent=s.x;
+  $('#tut-dots').innerHTML=TUT.map((_,i)=>`<i class="${i===_tutI?'on':''}"></i>`).join('');
+  $('#tut-next').textContent=_tutI===TUT.length-1?'Começar 🚀':'Próximo';
+  $('#tut-skip').style.display=_tutI===TUT.length-1?'none':'';
+}
+function tutNext(){ if(_tutI<TUT.length-1){_tutI++;renderTut();} else tutFim(); }
+function tutFim(){ $('#tut').classList.remove('on'); try{localStorage.setItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'),'1');}catch(e){} }
+
+/* =============== BOOT =============== */
+$('#g-pw')&&$('#g-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateLogin(); });
+bootAuth();
+</script>
+</body>
+</html>
