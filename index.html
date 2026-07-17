@@ -2020,6 +2020,24 @@ a{color:inherit;text-decoration:none}
 .pro-clinica-btn .pcl-tx b{display:block;font-size:16px;font-weight:800}
 .pro-clinica-btn .pcl-tx span{font-size:12.5px;opacity:.92}
 .pro-clinica-btn .pcl-ar{font-size:24px;opacity:.9;font-weight:400}
+.admin-badge{background:var(--er);color:#fff;font-size:11px;font-weight:800;padding:1px 7px;border-radius:20px;margin-left:4px}
+.admin-badge:empty{display:none}
+.adm-tabs{display:flex;gap:0;background:var(--card);border-bottom:1px solid var(--line)}
+.adm-tab{flex:1;padding:13px 0;font-size:13.5px;font-weight:700;color:var(--txm);background:none;border:none;border-bottom:2px solid transparent}
+.adm-tab.on{color:var(--tx);border-bottom-color:var(--v)}
+.adm-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:var(--sh,0 2px 12px rgba(0,0,0,.05))}
+.adm-card .ac-h{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+.adm-card .ac-av{width:40px;height:40px;border-radius:50%;background:var(--roxof);color:var(--roxo);display:grid;place-items:center;font-weight:800;flex-shrink:0}
+.adm-card .ac-n{font-size:15px;font-weight:800;line-height:1.2}
+.adm-card .ac-r{font-size:12.5px;color:var(--txm)}
+.adm-card .ac-row{font-size:13px;color:var(--txs);margin:3px 0;line-height:1.5}
+.adm-card .ac-row b{color:var(--tx)}
+.adm-card .ac-bio{font-size:13.5px;color:var(--tx);background:var(--cin);border-radius:10px;padding:9px 11px;margin:8px 0;line-height:1.5}
+.adm-acts{display:flex;gap:8px;margin-top:10px}
+.adm-acts button{flex:1;padding:10px;border-radius:11px;font-weight:800;font-size:13.5px}
+.adm-ap{background:var(--v);color:#fff}
+.adm-rj{background:var(--erf);color:var(--er)}
+.adm-empty{text-align:center;color:var(--txm);padding:50px 20px;font-size:14px}
 .pro-card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
 #shell.dkm .pro-card{background:#1e2e1f}
 .pro-card-tit{font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
@@ -2535,6 +2553,10 @@ a{color:inherit;text-decoration:none}
 <div class="cfgh"><div class="cfgt">Configurações</div><div class="cfgs">Sua conta e preferências</div></div>
 <div class="sc scpad">
   <div class="pfc"><div class="pfav" id="pfav">?</div><div><div class="pfn" id="pfn">—</div><div class="pfe" id="pfe">—</div><div class="pfm" id="pfm">—</div><div class="probadge" id="pf-badge" style="display:none">🩺 Profissional verificado</div></div></div>
+  <!-- ADMIN (só dono) -->
+  <div class="cfgsec" id="admin-sec" style="margin:0 18px 11px;display:none">
+    <div class="cfgi" onclick="abrirAdmin()"><div class="cfgic">🛡️</div><div class="cfgb"><div class="cfgn">Admin · Profissionais <span class="admin-badge" id="admin-pend"></span></div><div class="cfgd">Aprovar ou reprovar cadastros da rede</div></div><div class="cfgar">›</div></div>
+  </div>
   <!-- DICHAVA PREMIUM -->
   <div class="prembanner" id="prem-banner" onclick="abrirPremium()"><span class="pbic">✨</span><div><div class="pbt">Seja dichava premium</div><div class="pbd">Relatórios, temas, backup e mais</div></div><span class="pbar">›</span></div>
   <div class="cfgsec" style="margin:0 18px 11px">
@@ -2854,8 +2876,21 @@ a{color:inherit;text-decoration:none}
   </div>
   <div class="sc" style="flex:1;overflow-y:auto">
     <div class="pf-list" id="pf-list"></div>
-    <div class="pf-disc">Profissionais fictícios, para demonstração. Esta lista não constitui indicação ou recomendação médica. Em emergências, ligue para o SAMU (192). Apoio emocional 24h: CVV (188).</div>
+    <div class="pf-disc">Esta lista não constitui indicação ou recomendação médica. Cada profissional é responsável por seus dados e atendimento. Em emergências, ligue para o SAMU (192). Apoio emocional 24h: CVV (188).</div>
     <div style="height:24px"></div>
+  </div>
+</div>
+
+<!-- ADMIN: aprovação de profissionais -->
+<div class="V" id="vadmin">
+  <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="showV('vapp');goPg('p-cfg')">←</button><div class="ptb-tit">🛡️ Admin · Profissionais</div></div>
+  <div class="adm-tabs">
+    <button class="adm-tab on" data-s="pendente" onclick="admTab('pendente',this)">Pendentes</button>
+    <button class="adm-tab" data-s="aprovado" onclick="admTab('aprovado',this)">Aprovados</button>
+    <button class="adm-tab" data-s="rejeitado" onclick="admTab('rejeitado',this)">Reprovados</button>
+  </div>
+  <div class="sc" style="flex:1;overflow-y:auto;padding:16px 16px 30px">
+    <div id="adm-list"></div>
   </div>
 </div>
 
@@ -5822,6 +5857,56 @@ function renderCfg(){
   document.getElementById('pf-badge').style.display=isPro?'inline-flex':'none';
   document.getElementById('pro-area').style.display=isPro?'block':'none';
   if(isPro)document.getElementById('pro-reg-show').textContent=U?.reg||'Registro não informado';
+  // admin (só dono)
+  const admOn=ehAdmin();
+  const asec=document.getElementById('admin-sec');if(asec)asec.style.display=admOn?'block':'none';
+  if(admOn)atualizarBadgeAdmin();
+}
+/* ══ ADMIN — aprovação de profissionais ══ */
+const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
+function ehAdmin(){return !!(U&&U.email&&ADMIN_EMAILS.includes((U.email||'').toLowerCase().trim()));}
+let _admStatus='pendente';
+async function atualizarBadgeAdmin(){
+  if(!_SB)return;
+  try{const{data}=await _SB.from('profissionais').select('id').eq('status','pendente');
+    const n=(data||[]).length;const b=document.getElementById('admin-pend');if(b)b.textContent=n||'';}catch(e){}
+}
+function abrirAdmin(){if(!ehAdmin()){toast('Acesso restrito.');return;}_admStatus='pendente';document.querySelectorAll('.adm-tab').forEach(t=>t.classList.toggle('on',t.dataset.s==='pendente'));showV('vadmin');renderAdmin();}
+function admTab(s,btn){_admStatus=s;document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');renderAdmin();}
+async function renderAdmin(){
+  const c=document.getElementById('adm-list');
+  c.innerHTML='<div class="adm-empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
+  if(!_SB){c.innerHTML='<div class="adm-empty">Sem conexão com o servidor.</div>';return;}
+  let profs=[];
+  try{const{data,error}=await _SB.from('profissionais').select('*').eq('status',_admStatus).order('criado_em',{ascending:false});if(error)throw error;profs=data||[];}
+  catch(e){c.innerHTML='<div class="adm-empty">Erro ao carregar: '+esc(e.message||'')+'</div>';return;}
+  if(!profs.length){c.innerHTML='<div class="adm-empty">Nenhum profissional '+({pendente:'pendente',aprovado:'aprovado',rejeitado:'reprovado'}[_admStatus])+'.</div>';return;}
+  const modLabel=m=>{const s=m||'';return s.includes('online')&&s.includes('presencial')?'💻📍 Online e presencial':s.includes('online')?'💻 Online':s.includes('presencial')?'📍 Presencial':'—';};
+  c.innerHTML=profs.map(p=>{
+    const acts=_admStatus==='aprovado'
+      ? `<button class="adm-rj" onclick="admSet('${p.id}','rejeitado')">Reprovar</button>`
+      : _admStatus==='rejeitado'
+      ? `<button class="adm-ap" onclick="admSet('${p.id}','aprovado')">Aprovar</button>`
+      : `<button class="adm-ap" onclick="admSet('${p.id}','aprovado')">✓ Aprovar</button><button class="adm-rj" onclick="admSet('${p.id}','rejeitado')">Reprovar</button>`;
+    return `<div class="adm-card">
+      <div class="ac-h"><div class="ac-av">${ini(p.nome||'?')}</div><div><div class="ac-n">${esc(p.nome||'—')}</div><div class="ac-r">${esc(p.tipo_prof||'')} · ${esc(p.reg||'sem registro')}</div></div></div>
+      ${p.bio?`<div class="ac-bio">${esc(p.bio)}</div>`:''}
+      ${p.especialidades?`<div class="ac-row"><b>Especialidades:</b> ${esc(p.especialidades)}</div>`:''}
+      <div class="ac-row"><b>Modalidade:</b> ${modLabel(p.modalidade)}${p.cidade?` · ${esc(p.cidade)}`:''}</div>
+      ${(p.valor||p.duracao||p.disponibilidade)?`<div class="ac-row">${p.valor?`<b>Valor:</b> ${esc(p.valor)} `:''}${p.duracao?`· ${esc(p.duracao)} `:''}${p.disponibilidade?`· ${esc(p.disponibilidade)}`:''}</div>`:''}
+      <div class="ac-row"><b>Contato:</b> ${esc(p.email||'—')}</div>
+      <div class="adm-acts">${acts}</div>
+    </div>`;
+  }).join('');
+}
+async function admSet(id,status){
+  if(status==='rejeitado'&&!confirm('Reprovar este profissional? Ele deixará de aparecer para os usuários.'))return;
+  try{
+    const{error}=await _SB.from('profissionais').update({status}).eq('id',id);
+    if(error)throw error;
+    toast(status==='aprovado'?'✓ Profissional aprovado':'Profissional reprovado');
+    renderAdmin();atualizarBadgeAdmin();
+  }catch(e){toast('Erro: '+(e.message||''));}
 }
 function salvCfg(){blurAll();sC({notif:document.getElementById('tog-n').checked,dicas:document.getElementById('tog-d').checked,ck:document.getElementById('tog-ck').checked,limD:parseInt(document.getElementById('lim-d').value)||4,limS:parseInt(document.getElementById('lim-s').value)||15,dark:document.getElementById('tog-dark').checked,discreto:document.getElementById('tog-disc').checked});}
 
