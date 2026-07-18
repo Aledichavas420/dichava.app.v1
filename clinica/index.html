@@ -1148,12 +1148,14 @@ async function criarClinica(){
   const nome=($('#cl-nome').value||'').trim(); if(!nome){ toast('Dê um nome à clínica',1); return; }
   const btn=$('#cl-criar'); btn.disabled=true; btn.textContent='Criando…';
   try{
+    // gera o id no cliente pra NÃO depender de ler de volta (RLS só libera leitura depois de virar membro)
+    const cid=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():('cl-'+Date.now()+'-'+Math.random().toString(16).slice(2));
     const codigo=genCodigo();
-    const {data:c,error} = await _SB.from('clinicas').insert({nome,dono_id:AUTH.id,codigo,dados:emptyDB()}).select().maybeSingle();
+    const {error} = await _SB.from('clinicas').insert({id:cid,nome,dono_id:AUTH.id,codigo,dados:emptyDB()});
     if(error) throw error;
-    const {error:e2}=await _SB.from('clinica_membros').insert({clinica_id:c.id,user_id:AUTH.id,nome:AUTH.nome,papel:'dono'});
+    const {error:e2}=await _SB.from('clinica_membros').insert({clinica_id:cid,user_id:AUTH.id,nome:AUTH.nome,papel:'dono'});
     if(e2) throw e2;
-    await carregarClinica(c.id,'dono');
+    await carregarClinica(cid,'dono');
   }catch(e){ toast('Erro: '+((e&&e.message)||e),1); btn.disabled=false; btn.textContent='Criar clínica'; }
 }
 async function entrarClinica(){
