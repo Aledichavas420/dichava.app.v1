@@ -6277,6 +6277,7 @@ function abrirChat(conv,asPro,otherNome,otherTel,from,otherInfo,prefill){
   const tel=(otherTel||'').replace(/[^0-9]/g,'');
   if(w){ if(tel.length>=10){w.style.display='';}else{w.style.display='none';} }
   document.getElementById('chat-scroll').innerHTML='<div class="chat-empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
+  try{chatKbReset();}catch(e){}
   showV('vchat');
   carregarMsgs(true);
   marcarLida(conv,!!asPro);
@@ -6308,7 +6309,7 @@ async function contarNaoLidasUser(){
     const b=document.getElementById('pf-convs-badge'); if(b){b.textContent=n||'';b.style.display=n?'':'none';}
   }catch(e){}
 }
-function voltarChat(){ clearInterval(_chat.poll); if(_chat.asPro){entrarPro();} else {showV('vprofs');try{pfTab(_pfLastTab||'buscar');}catch(e){}} }
+function voltarChat(){ clearInterval(_chat.poll); try{chatKbReset();}catch(e){} if(_chat.asPro){entrarPro();} else {showV('vprofs');try{pfTab(_pfLastTab||'buscar');}catch(e){}} }
 async function carregarMsgs(scroll){
   if(!_SB||!_chat.conv)return;
   try{
@@ -6352,6 +6353,25 @@ function chatWhatsApp(){
   const num=tel.length<=11?('55'+tel):tel;
   window.open('https://wa.me/'+num,'_blank');
 }
+// ── teclado no chat: ajusta SÓ o #vchat pra a barra não ficar atrás do teclado (iOS) ──
+function chatKbReset(){ const el=document.getElementById('vchat'); if(el){el.style.top='';el.style.height='';el.style.bottom='';} }
+function chatKbAdjust(){
+  const el=document.getElementById('vchat'); if(!el)return;
+  const vv=window.visualViewport;
+  if(!vv || !el.classList.contains('on')){ chatKbReset(); return; }
+  // encaixa o container na área realmente visível (acima do teclado)
+  el.style.top=vv.offsetTop+'px';
+  el.style.bottom='auto';
+  el.style.height=vv.height+'px';
+  const sc=document.getElementById('chat-scroll'); if(sc) sc.scrollTop=sc.scrollHeight;
+}
+(function(){
+  if(!window.visualViewport)return;
+  window.visualViewport.addEventListener('resize',()=>{ if(document.getElementById('vchat')?.classList.contains('on')) chatKbAdjust(); });
+  window.visualViewport.addEventListener('scroll',()=>{ if(document.getElementById('vchat')?.classList.contains('on')) chatKbAdjust(); });
+  document.addEventListener('focusin',e=>{ if(e.target&&e.target.id==='chat-input') setTimeout(chatKbAdjust,60); });
+  document.addEventListener('focusout',e=>{ if(e.target&&e.target.id==='chat-input') setTimeout(chatKbReset,60); });
+})();
 // lista de conversas do profissional (aba Mensagens)
 async function renderConversasPro(){
   const box=document.getElementById('pd-msgs'); if(!box)return;
