@@ -345,6 +345,7 @@ tbody tr:hover{background:var(--cin)}
     <a class="nav-item" data-nav="pacientes"><span class="ic">☺</span> Pacientes</a>
     <a class="nav-item" data-nav="prontuarios"><span class="ic">▤</span> Prontuários</a>
     <a class="nav-item" data-nav="caixa"><span class="ic">$</span> Caixa</a>
+    <a class="nav-item" data-nav="documentos"><span class="ic">▦</span> Documentos</a>
     <a class="nav-item" data-nav="equipe"><span class="ic">👥</span> Equipe</a>
     <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
     <div class="side-foot">
@@ -408,10 +409,10 @@ let DB;
 let AUTH=null;     // {id,nome,email,reg} do profissional logado
 let CLINICA=null;  // {id,nome,codigo,papel,dono_id} — clínica ativa
 let MEMBROS=[];    // membros da clínica
-function emptyDB(){ return {config:{clinica:'Minha Clínica',profissional:'',especialidade:''},pacientes:[],agendamentos:[],prontuarios:[],financeiro:[]}; }
+function emptyDB(){ return {config:{clinica:'Minha Clínica',profissional:'',especialidade:''},pacientes:[],agendamentos:[],prontuarios:[],financeiro:[],documentos:[]}; }
 function normalizeDB(d){
   DB = (d && typeof d==='object') ? d : {};
-  DB.pacientes ||= []; DB.agendamentos ||= []; DB.prontuarios ||= []; DB.financeiro ||= [];
+  DB.pacientes ||= []; DB.agendamentos ||= []; DB.prontuarios ||= []; DB.financeiro ||= []; DB.documentos ||= [];
   DB.config ||= {clinica:'Minha Clínica',profissional:'',especialidade:''};
   if(CLINICA && CLINICA.nome) DB.config.clinica=CLINICA.nome;
 }
@@ -486,7 +487,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
 function render(){
   const [t,s]=TITLES[route]||['',''];
   $('#pg-title').textContent=t; $('#pg-sub').textContent=s;
@@ -496,6 +497,7 @@ function render(){
   else if(route==='pacientes') v.innerHTML=viewPacientes();
   else if(route==='prontuarios') v.innerHTML=viewProntuarios();
   else if(route==='caixa') v.innerHTML=viewCaixa();
+  else if(route==='documentos') v.innerHTML=viewDocumentos();
   else if(route==='equipe') v.innerHTML=viewEquipe();
   else if(route==='config') v.innerHTML=viewConfig();
   updateBadges();
@@ -773,6 +775,96 @@ function salvarConfig(){
   save(); syncHeader(); toast('Configurações salvas'); render();
 }
 function syncHeader(){ $('#side-prof').textContent=(AUTH&&AUTH.nome)||DB.config.profissional||'Profissional'; $('#side-clin').textContent=(CLINICA&&CLINICA.nome)||DB.config.clinica||'Minha Clínica'; }
+
+/* =============== DOCUMENTOS (recibos, declarações, pareceres...) =============== */
+const DOC_TIPOS=[
+  {k:'recibo',ic:'🧾',nome:'Recibo de pagamento',desc:'Comprovante de valor recebido'},
+  {k:'declaracao',ic:'📋',nome:'Declaração de comparecimento',desc:'Comprova presença no atendimento'},
+  {k:'atestado',ic:'🩺',nome:'Atestado',desc:'Afastamento / repouso'},
+  {k:'parecer',ic:'📝',nome:'Parecer / Relatório',desc:'Documento técnico descritivo'},
+  {k:'encaminhamento',ic:'➡️',nome:'Encaminhamento',desc:'Encaminha a outro profissional/serviço'},
+];
+function viewDocumentos(){
+  const docs=(DB.documentos||[]).slice().sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
+  return `<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr));margin-bottom:20px">
+    ${DOC_TIPOS.map(t=>`<div class="card" style="padding:16px;cursor:pointer" onclick="formDocumento('${t.k}')">
+      <div style="font-size:26px">${t.ic}</div><div style="font-weight:800;margin-top:6px">${t.nome}</div><div style="font-size:12.5px;color:var(--txs)">${t.desc}</div>
+    </div>`).join('')}
+  </div>
+  <div class="sec-title">Documentos emitidos</div>
+  ${docs.length?`<div class="card"><div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Paciente</th><th></th></tr></thead><tbody>
+    ${docs.map(d=>{const t=DOC_TIPOS.find(x=>x.k===d.tipo)||{nome:d.tipo,ic:'📄'};return `<tr>
+      <td class="mono">${fmtDate(d.data)}</td><td>${t.ic} ${t.nome}</td><td>${esc(d.pacienteNome||'—')}</td>
+      <td style="text-align:right"><button class="btn sm ghost" onclick="imprimirDocumento('${d.id}')">Imprimir</button> <button class="btn sm ghost" onclick="formDocumento('${d.tipo}','${d.id}')">Editar</button> <button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;background:transparent" onclick="delDocumento('${d.id}')" title="Excluir">🗑</button></td>
+    </tr>`}).join('')}
+  </tbody></table></div></div>`:`<div class="card empty"><div class="big">▦</div><b>Nenhum documento ainda</b>Escolha um tipo acima para emitir.</div>`}
+  <p style="font-size:12px;color:var(--txm);margin:12px 2px 0">⚖️ Modelos padronizados de apoio. Confira a adequação às normas do seu conselho antes de assinar e emitir. O CID só deve constar com autorização do paciente.</p>`;
+}
+function formDocumento(tipo,id){
+  const d=id?DB.documentos.find(x=>x.id===id):{tipo,data:todayISO()};
+  const t=DOC_TIPOS.find(x=>x.k===tipo)||{nome:'Documento'};
+  const opts=DB.pacientes.slice().sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<option value="${p.id}" ${p.id===d.pacienteId?'selected':''}>${esc(p.nome)}</option>`).join('');
+  let campos='';
+  if(tipo==='recibo') campos=`<div class="row2"><div class="field"><label>Valor (R$)</label><input id="d-valor" type="number" step="0.01" value="${esc(d.valor||'')}"></div><div class="field"><label>Referente a</label><input id="d-ref" value="${esc(d.ref||'sessão de atendimento')}"></div></div>`;
+  else if(tipo==='declaracao') campos=`<div class="row2"><div class="field"><label>Das (hora)</label><input id="d-hi" type="time" value="${esc(d.hi||'09:00')}"></div><div class="field"><label>Às (hora)</label><input id="d-hf" type="time" value="${esc(d.hf||'10:00')}"></div></div>`;
+  else if(tipo==='atestado') campos=`<div class="row2"><div class="field"><label>Dias de afastamento</label><input id="d-dias" type="number" value="${esc(d.dias||'1')}"></div><div class="field"><label>CID (opcional)</label><input id="d-cid" value="${esc(d.cid||'')}" placeholder="vazio = sigilo"></div></div><div class="field"><label>Observação (opcional)</label><textarea id="d-obs">${esc(d.obs||'')}</textarea></div>`;
+  else if(tipo==='parecer') campos=`<div class="field"><label>Título</label><input id="d-titulo" value="${esc(d.titulo||'Parecer técnico')}"></div><div class="field"><label>Conteúdo</label><textarea id="d-texto" style="min-height:160px" placeholder="Descreva o parecer/relatório...">${esc(d.texto||'')}</textarea></div>`;
+  else if(tipo==='encaminhamento') campos=`<div class="field"><label>Encaminhar para</label><input id="d-para" value="${esc(d.para||'')}" placeholder="Ex.: Psiquiatria, CAPS, Nutrição"></div><div class="field"><label>Motivo</label><textarea id="d-motivo">${esc(d.motivo||'')}</textarea></div>`;
+  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} — ${t.nome}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="row2"><div class="field"><label>Paciente</label><select id="d-pac"><option value="">— selecione —</option>${opts}</select></div><div class="field"><label>Data</label><input id="d-data" type="date" value="${d.data||todayISO()}"></div></div>
+      ${campos}
+      <p style="font-size:12px;color:var(--txs);background:var(--cin);border-radius:10px;padding:9px 11px">O cabeçalho e a assinatura usam o nome e o registro do profissional. Confira a adequação ao seu conselho.</p>
+    </div>
+    <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delDocumento('${id}')">Excluir</button>`:''}<button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="salvarDocumento('${tipo}','${id||''}')">Salvar e gerar</button></div>
+  </div>`);
+}
+function salvarDocumento(tipo,id){
+  const gv=x=>{const el=$('#'+x);return el?el.value.trim():'';};
+  const pacId=gv('d-pac'); const pacienteNome=pacId?pacNome(pacId):'';
+  const dados={tipo,data:$('#d-data').value,pacienteId:pacId,pacienteNome,
+    valor:gv('d-valor'),ref:gv('d-ref'),hi:gv('d-hi'),hf:gv('d-hf'),dias:gv('d-dias'),cid:gv('d-cid'),obs:gv('d-obs'),
+    titulo:gv('d-titulo'),texto:gv('d-texto'),para:gv('d-para'),motivo:gv('d-motivo')};
+  if(id){ Object.assign(DB.documentos.find(x=>x.id===id),dados); }
+  else { dados.id=uid(); dados.criadoEm=now(); DB.documentos.push(dados); id=dados.id; }
+  save(); closeModal(); toast('Documento salvo'); render(); imprimirDocumento(id);
+}
+function delDocumento(id){ if(!confirm('Excluir este documento?'))return; DB.documentos=(DB.documentos||[]).filter(d=>d.id!==id); save(); try{closeModal();}catch(e){} toast('Documento excluído'); render(); }
+function docCorpo(d){
+  const pac=d.pacienteNome||'____________________', dataF=fmtDate(d.data);
+  if(d.tipo==='recibo') return `<p>Recebi de <b>${esc(pac)}</b> a importância de <b>R$ ${esc(d.valor||'________')}</b>, referente a <b>${esc(d.ref||'atendimento')}</b>.</p><p>Para clareza, firmo o presente recibo.</p>`;
+  if(d.tipo==='declaracao') return `<p>Declaro, para os devidos fins, que <b>${esc(pac)}</b> compareceu a atendimento em <b>${dataF}</b>${(d.hi&&d.hf)?`, no período das <b>${esc(d.hi)}</b> às <b>${esc(d.hf)}</b>`:''}.</p>`;
+  if(d.tipo==='atestado') return `<p>Atesto, para os devidos fins, que <b>${esc(pac)}</b> necessita de afastamento de suas atividades por <b>${esc(d.dias||'__')} dia(s)</b>, a partir de <b>${dataF}</b>.</p>${d.cid?`<p>CID: <b>${esc(d.cid)}</b> (informado mediante autorização do paciente).</p>`:''}${d.obs?`<p>${esc(d.obs)}</p>`:''}`;
+  if(d.tipo==='parecer') return `<p style="text-align:center"><b>${esc(d.titulo||'Parecer técnico')}</b></p><p><b>Paciente:</b> ${esc(pac)}</p><p style="white-space:pre-wrap">${esc(d.texto||'')}</p>`;
+  if(d.tipo==='encaminhamento') return `<p>Encaminho <b>${esc(pac)}</b> para <b>${esc(d.para||'____________________')}</b>.</p>${d.motivo?`<p><b>Motivo:</b> ${esc(d.motivo)}</p>`:''}`;
+  return '';
+}
+function imprimirDocumento(id){
+  const d=(DB.documentos||[]).find(x=>x.id===id); if(!d)return;
+  const t=DOC_TIPOS.find(x=>x.k===d.tipo)||{nome:'Documento'};
+  const cli=(CLINICA&&CLINICA.nome)||DB.config.clinica||'';
+  const prof=(AUTH&&AUTH.nome)||DB.config.profissional||'____________________';
+  const reg=(AUTH&&AUTH.reg)||'';
+  const html=`<html><head><meta charset="utf-8"><title>${t.nome} — ${esc(d.pacienteNome||'')}</title>
+    <style>body{font-family:Georgia,'Times New Roman',serif;color:#1a1a1a;max-width:720px;margin:30px auto;padding:0 30px;line-height:1.7}
+    .hd{text-align:center;border-bottom:2px solid #333;padding-bottom:10px;margin-bottom:26px}
+    .hd b{font-size:18px} .hd small{color:#555;font-size:13px;display:block}
+    h1{font-size:17px;text-align:center;margin:0 0 22px;text-transform:uppercase;letter-spacing:1px}
+    p{margin:0 0 12px;text-align:justify}
+    .sig{margin-top:64px;text-align:center} .sig .line{border-top:1px solid #333;width:280px;margin:0 auto 4px}
+    .foot{margin-top:40px;font-size:11px;color:#888;border-top:1px solid #eee;padding-top:8px}
+    @media print{body{margin:0}}</style></head>
+    <body>
+    <div class="hd"><b>${esc(cli||prof)}</b><small>${esc(prof)}${reg?' · '+esc(reg):''}</small></div>
+    <h1>${t.nome}</h1>
+    ${docCorpo(d)}
+    <p style="text-align:right;margin-top:26px">${fmtDate(d.data)}.</p>
+    <div class="sig"><div class="line"></div><b>${esc(prof)}</b><br><small>${reg?esc(reg):'Registro profissional'}</small></div>
+    <div class="foot">Documento gerado pelo dichava.app (ferramenta de apoio). A adequação às normas do conselho profissional e a validade da assinatura são de responsabilidade do profissional emissor.</div>
+    </body></html>`;
+  const w=window.open('','_blank'); if(!w){toast('Permita pop-ups para gerar o documento',1);return;}
+  w.document.write(html); w.document.close(); setTimeout(()=>{try{w.print();}catch(e){}},400);
+}
 
 /* =============== EQUIPE (clínica compartilhada) =============== */
 function viewEquipe(){
@@ -1164,6 +1256,7 @@ async function iniciarApp(){
     else if(route==='prontuarios') { if(prontSelPaciente) formProntuario(prontSelPaciente); else toast('Selecione um paciente primeiro',1); }
     else if(route==='caixa') formFinanceiro('entrada');
     else if(route==='equipe') { /* sem quick-add */ }
+    else if(route==='documentos') { formDocumento('recibo'); }
     else formAgendamento(null,route==='agenda'?agendaDay:todayISO());
   });
   initTheme();

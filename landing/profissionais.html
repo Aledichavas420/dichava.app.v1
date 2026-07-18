@@ -80,6 +80,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#4CAF5A;backgr
 .err{color:#C0392B;font-size:13px;margin-top:10px;display:none}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:#7d8f80;text-align:center}
 footer a{color:#2E7D32;text-decoration:none}
+.carousel{max-width:340px;margin:0 auto}
+.car-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;border-radius:24px}
+.car-track::-webkit-scrollbar{display:none}
+.car-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;justify-content:center;padding:2px}
+.car-slide .phone{max-width:320px;width:100%}
+.dots{display:flex;gap:7px;justify-content:center;margin-top:14px}
+.dots i{width:8px;height:8px;border-radius:50%;background:#cfe0d2;transition:.2s;cursor:pointer}
+.dots i.on{background:#2E7D32;width:22px;border-radius:20px}
 @media(max-width:640px){.preview{grid-template-columns:1fr;padding:22px}.why,.plans,.row{grid-template-columns:1fr}h1{font-size:30px}.preview-tx{order:2}}
 </style></head><body>
 <div class="wrap">
@@ -126,20 +134,69 @@ footer a{color:#2E7D32;text-decoration:none}
   <!-- PAINEL DA CLÍNICA -->
   <div class="preview" style="margin-top:26px">
     <div>
-      <div class="phone" style="max-width:340px">
-        <div class="ph-hd">🩺 Painel da Clínica</div>
-        <div style="padding:12px;display:grid;gap:9px">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div style="background:#F0F7F1;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#5D7060;font-weight:700">Consultas hoje</div><div style="font-size:22px;font-weight:800;color:#1B2A1C">4</div></div>
-            <div style="background:#F0F7F1;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#5D7060;font-weight:700">Faturamento/mês</div><div style="font-size:22px;font-weight:800;color:#2E7D32">R$ 3.240</div></div>
-          </div>
-          <div style="background:#fff;border:1px solid #E4E4DF;border-radius:12px;padding:10px 12px">
-            <div style="font-size:11px;color:#5D7060;font-weight:700;margin-bottom:6px">AGENDA DE HOJE</div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #F0F0EC"><b style="font-size:13px">09:00</b><span style="font-size:13px;color:#2b3b2d">Ana Beatriz</span><span style="margin-left:auto;background:#E0F2F1;color:#00897B;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Confirmado</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0"><b style="font-size:13px">11:00</b><span style="font-size:13px;color:#2b3b2d">Carlos Mendes</span><span style="margin-left:auto;background:#F5F5F0;color:#9E9E9E;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Agendado</span></div>
-          </div>
+      <div class="carousel">
+        <div class="car-track" id="carTrack">
+          <!-- 1: Visão geral -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd">🩺 Visão geral</div>
+            <div style="padding:12px;display:grid;gap:9px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:#F0F7F1;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#5D7060;font-weight:700">Consultas hoje</div><div style="font-size:22px;font-weight:800;color:#1B2A1C">4</div></div>
+                <div style="background:#F0F7F1;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#5D7060;font-weight:700">Faturamento/mês</div><div style="font-size:22px;font-weight:800;color:#2E7D32">R$ 3.240</div></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E4E4DF;border-radius:12px;padding:10px 12px">
+                <div style="font-size:11px;color:#5D7060;font-weight:700;margin-bottom:6px">AGENDA DE HOJE</div>
+                <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #F0F0EC"><b style="font-size:13px">09:00</b><span style="font-size:13px;color:#2b3b2d">Ana Beatriz</span><span style="margin-left:auto;background:#E0F2F1;color:#00897B;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Confirmado</span></div>
+                <div style="display:flex;align-items:center;gap:9px;padding:6px 0"><b style="font-size:13px">11:00</b><span style="font-size:13px;color:#2b3b2d">Carlos Mendes</span><span style="margin-left:auto;background:#F5F5F0;color:#9E9E9E;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Agendado</span></div>
+              </div>
+              <div style="background:#FFF9C4;border-radius:12px;padding:9px 12px;font-size:12px;color:#8a6d00;font-weight:600">🎂 Aniversariantes: Júlia (20/07)</div>
+            </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
+          <!-- 2: Agenda -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd">◷ Agenda · Ter, 22/07</div>
+            <div style="padding:12px;display:grid;gap:0">
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">08:00</span><span style="flex:1"></span></div>
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">09:00</span><div style="flex:1;background:#E0F2F1;border-left:3px solid #00897B;border-radius:8px;padding:6px 9px"><b style="font-size:12.5px">Ana Beatriz</b><div style="font-size:11px;color:#5D7060">Consulta · Confirmado</div></div></div>
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">11:00</span><div style="flex:1;background:#E8F5E9;border-left:3px solid #4CAF5A;border-radius:8px;padding:6px 9px"><b style="font-size:12.5px">Carlos Mendes</b><div style="font-size:11px;color:#5D7060">Retorno · Agendado</div></div></div>
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">15:00</span><div style="flex:1;background:#F3E9FF;border-left:3px solid #7C3AED;border-radius:8px;padding:6px 9px"><b style="font-size:12.5px">Júlia Ferreira</b><div style="font-size:11px;color:#5D7060">Avaliação · 👤 Dra. Marina</div></div></div>
+            </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
+          <!-- 3: Prontuário -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd">▤ Prontuário · Ana B.</div>
+            <div style="padding:12px;display:grid;gap:8px">
+              <div style="font-size:11px;color:#7C3AED;font-weight:800">10/07 · EVOLUÇÃO · Sessão 3</div>
+              <div style="background:#fff;border:1px solid #E4E4DF;border-radius:10px;padding:9px 11px;font-size:12px;color:#2b3b2d">
+                <b style="color:#5D7060">Queixa:</b> ansiedade social<br>
+                <b style="color:#5D7060">Objetivos:</b> exposição gradual<br>
+                <b style="color:#5D7060">Intervenções:</b> reestruturação cognitiva
+              </div>
+              <div style="background:#E8F5E9;border-radius:10px;padding:8px 11px;font-size:12px;color:#2E7D32"><b>Plano:</b> tarefa de exposição + respiração</div>
+              <div style="background:#FFF3CD;border-radius:10px;padding:8px 11px;font-size:12px;color:#8a6d00"><b>Atenção:</b> monitorar sono</div>
+            </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
+          <!-- 4: Caixa -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd">$ Caixa · Julho</div>
+            <div style="padding:12px;display:grid;gap:9px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:#E8F5E9;border-radius:12px;padding:9px 11px"><div style="font-size:10.5px;color:#2E7D32;font-weight:700">Entradas</div><div style="font-size:18px;font-weight:800;color:#2E7D32">R$ 3.240</div></div>
+                <div style="background:#FFEBEE;border-radius:12px;padding:9px 11px"><div style="font-size:10.5px;color:#C62828;font-weight:700">Saídas</div><div style="font-size:18px;font-weight:800;color:#C62828">R$ 900</div></div>
+              </div>
+              <div style="background:#F0F7F1;border-radius:12px;padding:9px 12px"><div style="font-size:10.5px;color:#5D7060;font-weight:700">Saldo do mês</div><div style="font-size:20px;font-weight:800;color:#1B2A1C">R$ 2.340</div></div>
+              <div style="background:#fff;border:1px solid #E4E4DF;border-radius:12px;padding:9px 11px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="color:#2b3b2d">Consulta — Ana B.</span><b style="color:#2E7D32">+180,00</b></div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0;border-top:1px solid #F0F0EC"><span style="color:#2b3b2d">Aluguel da sala</span><b style="color:#C62828">−900,00</b></div>
+              </div>
+            </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
         </div>
-        <div class="pro-ex">painel ilustrativo</div>
+        <div class="dots" id="carDots"></div>
       </div>
     </div>
     <div class="preview-tx">
@@ -278,5 +335,14 @@ async function finalizar(d){
   err.textContent='Vamos te redirecionar pro e-mail pra concluir o cadastro…'; err.style.display='block';
   setTimeout(function(){ mailtoFallback(d); }, 900);
 }
+// carrossel do painel
+(function(){
+  var track=document.getElementById('carTrack'), dotsEl=document.getElementById('carDots');
+  if(!track||!dotsEl)return;
+  var n=track.children.length;
+  for(var i=0;i<n;i++){ (function(idx){ var d=document.createElement('i'); if(idx===0)d.className='on'; d.onclick=function(){ track.scrollTo({left:track.clientWidth*idx,behavior:'smooth'}); }; dotsEl.appendChild(d); })(i); }
+  var dots=dotsEl.children;
+  track.addEventListener('scroll',function(){ var idx=Math.round(track.scrollLeft/track.clientWidth); for(var i=0;i<dots.length;i++) dots[i].className=(i===idx?'on':''); },{passive:true});
+})();
 </script>
 </body></html>
