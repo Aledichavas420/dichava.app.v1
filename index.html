@@ -5889,7 +5889,7 @@ async function renderAdmin(){
   c.innerHTML='<div class="adm-empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
   if(!_SB){c.innerHTML='<div class="adm-empty">Sem conexão com o servidor.</div>';return;}
   let profs=[];
-  try{const{data,error}=await _SB.from('profissionais').select('*').eq('status',_admStatus).order('criado_em',{ascending:false});if(error)throw error;profs=data||[];}
+  try{const{data,error}=await _SB.from('profissionais').select('*').eq('status',_admStatus);if(error)throw error;profs=(data||[]).sort((a,b)=>String(b.criado_em||b.created_at||'').localeCompare(String(a.criado_em||a.created_at||'')));}
   catch(e){c.innerHTML='<div class="adm-empty">Erro ao carregar: '+esc(e.message||'')+'</div>';return;}
   if(!profs.length){c.innerHTML='<div class="adm-empty">Nenhum profissional '+({pendente:'pendente',aprovado:'aprovado',rejeitado:'reprovado'}[_admStatus])+'.</div>';return;}
   const modLabel=m=>{const s=m||'';return s.includes('online')&&s.includes('presencial')?'💻📍 Online e presencial':s.includes('online')?'💻 Online':s.includes('presencial')?'📍 Presencial':'—';};
