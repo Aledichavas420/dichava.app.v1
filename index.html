@@ -6071,9 +6071,16 @@ async function salvarPerfilPro(){
   if(!ok)return;
   const btn=document.getElementById('pp-btn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
   const payload={id:U.id,nome:U.nome,email:U.email,reg:U.reg||'',tipo_prof:tipo,bio,especialidades:document.getElementById('pp-esp').value.trim(),modalidade:mod,cidade:document.getElementById('pp-cidade').value.trim(),valor:document.getElementById('pp-valor').value.trim(),duracao:document.getElementById('pp-dur').value.trim(),disponibilidade:document.getElementById('pp-disp').value.trim(),status:'pendente'};
-  const{error}=await _SB.from('profissionais').upsert(payload).catch(e=>({error:e}));
+  let error=null;
+  try{
+    if(!_SB)throw new Error('sem conexão com o servidor');
+    const q=_SB.from('profissionais').upsert(payload);
+    const res=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('tempo esgotado — verifique sua conexão')),12000))]);
+    error=res&&res.error;
+  }catch(e){error=e;}
   btn.disabled=false;btn.textContent='Enviar perfil para aprovação';
-  if(error){toast('Erro ao salvar: '+error.message);return;}
+  if(error){toast('⚠️ '+((error&&error.message)||'não consegui salvar')+' — se persistir, a tabela de profissionais pode não estar configurada.',6000);return;}
+  toast('✓ Perfil enviado para aprovação!');
   showV('vpro-aguarda');
 }
 async function rotearPro(){
