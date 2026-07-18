@@ -2973,6 +2973,7 @@ a{color:inherit;text-decoration:none}
       <div class="pro-field"><div class="lbl">E-mail</div><div class="val" id="pd-cfg-email">—</div></div>
       <div class="pro-field"><div class="lbl">Registro profissional</div><div class="val" id="pd-cfg-reg">—</div></div>
     </div>
+    <div class="cfgsec" style="margin:12px 0"><div class="cfgi" onclick="abrir2FAConfig()"><div class="cfgic">🔐</div><div class="cfgb"><div class="cfgn">Verificação em 2 etapas (2FA)</div><div class="cfgd" id="pd-2fa-status">Camada extra de segurança no login</div></div><div class="cfgar">›</div></div></div>
     <button class="btn bout bfull" style="margin-top:8px" onclick="logout()">🚪 Sair da conta</button>
     <div style="height:30px"></div>
   </div>
@@ -3506,6 +3507,12 @@ a{color:inherit;text-decoration:none}
   <div class="mb c" style="margin-bottom:14px">Confirme o e-mail da sua conta. Vamos enviar um link para você criar uma nova senha.</div>
   <div class="fld"><div class="lbl">E-mail da conta</div><input class="inp" id="esq-email" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="esq-e">E-mail inválido.</div></div>
   <button class="btn bv bfull" onclick="enviarResetSenha()" style="margin-top:4px">Enviar link 💚</button>
+</div></div></div>
+
+<!-- 2FA (verificação em 2 etapas) -->
+<div class="ov" id="m2fa" onclick="if(event.target===this)closeMod('m2fa')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div id="m2fa-body"></div>
 </div></div></div>
 
 <!-- INFO: Atividade semanal -->
@@ -4049,6 +4056,85 @@ const _SB = (typeof supabase !== 'undefined')
   : null;
 /* ── mostrar/ocultar senha ── */
 function togPw(id,btn){const el=document.getElementById(id);if(!el)return;const hid=el.type==='password';el.type=hid?'text':'password';btn.innerHTML=icon(hid?'pw-eyeoff':'pw-eye');}
+/* ══ 2FA — verificação em 2 etapas (Supabase MFA/TOTP) ══ */
+let _2faFactor=null,_2faChallenge=null,_2faAfter=null;
+async function abrir2FAConfig(){
+  if(!_SB){toast('Sem conexão com o servidor');return;}
+  openMod('m2fa');
+  const b=document.getElementById('m2fa-body');
+  b.innerHTML='<div style="text-align:center;padding:24px"><span class="spin"></span></div>';
+  try{
+    const{data,error}=await _SB.auth.mfa.listFactors();
+    if(error)throw error;
+    const ativo=((data&&data.totp)||[]).find(f=>f.status==='verified');
+    if(ativo){
+      b.innerHTML='<div style="font-size:30px;text-align:center">🔐</div><div class="mt c">Verificação em 2 etapas</div><div class="mb c" style="margin-bottom:14px">Está <b>ativada</b>. A cada novo login pediremos um código do seu app autenticador.</div><button class="btn bout bfull" onclick="desativar2FA(\''+ativo.id+'\')">Desativar 2FA</button>';
+    } else {
+      b.innerHTML='<div style="font-size:30px;text-align:center">🔐</div><div class="mt c">Ativar 2FA</div><div class="mb c" style="margin-bottom:14px">Adicione uma camada extra de segurança usando um app autenticador (Google Authenticator, Authy, etc.).</div><button class="btn bv bfull" onclick="iniciar2FA()">Começar</button>';
+    }
+  }catch(e){ b.innerHTML='<div class="mb c">Não consegui carregar. Verifique se o 2FA (MFA) está habilitado no projeto. '+((e&&e.message)||'')+'</div>'; }
+}
+async function iniciar2FA(){
+  const b=document.getElementById('m2fa-body'); b.innerHTML='<div style="text-align:center;padding:24px"><span class="spin"></span></div>';
+  try{
+    try{const{data:lf}=await _SB.auth.mfa.listFactors();await Promise.all(((lf&&lf.all)||[]).filter(f=>f.status==='unverified').map(f=>_SB.auth.mfa.unenroll({factorId:f.id})));}catch(_){}
+    const{data,error}=await _SB.auth.mfa.enroll({factorType:'totp'});
+    if(error)throw error;
+    _2faFactor=data.id;
+    b.innerHTML='<div class="mt c">Escaneie o QR Code</div><div class="mb c" style="margin-bottom:10px">Abra seu app autenticador e escaneie:</div>'
+      +'<div style="text-align:center;margin-bottom:10px"><img src="'+data.totp.qr_code+'" alt="QR" style="width:180px;height:180px;background:#fff;border-radius:12px;padding:6px"></div>'
+      +'<div class="mb c" style="font-size:11.5px;margin-bottom:10px">Ou digite a chave: <b style="word-break:break-all">'+data.totp.secret+'</b></div>'
+      +'<div class="fld"><div class="lbl">Código de 6 dígitos</div><input class="inp" id="m2fa-code" inputmode="numeric" maxlength="6" placeholder="000000" style="text-align:center;letter-spacing:4px;font-size:19px"><div class="em" id="m2fa-e">Código incorreto.</div></div>'
+      +'<button class="btn bv bfull" onclick="confirmar2FA()">Ativar</button>';
+    setTimeout(()=>{try{document.getElementById('m2fa-code').focus();}catch(_){}},200);
+  }catch(e){ b.innerHTML='<div class="mb c">Erro: '+((e&&e.message)||e)+'<br><br>Verifique se o <b>MFA (TOTP)</b> está habilitado em Authentication do Supabase.</div>'; }
+}
+async function confirmar2FA(){
+  const el=document.getElementById('m2fa-code'),er=document.getElementById('m2fa-e');
+  const code=(el.value||'').trim(); if(code.length<6){er.classList.add('on');return;}
+  try{
+    const{data:ch,error:e1}=await _SB.auth.mfa.challenge({factorId:_2faFactor}); if(e1)throw e1;
+    const{error:e2}=await _SB.auth.mfa.verify({factorId:_2faFactor,challengeId:ch.id,code}); if(e2)throw e2;
+    closeMod('m2fa'); toast('🔐 2FA ativada com sucesso!');
+  }catch(e){ er.textContent='Código incorreto. Tente de novo.'; er.classList.add('on'); }
+}
+async function desativar2FA(fid){
+  if(!confirm('Desativar a verificação em 2 etapas?'))return;
+  try{ await _SB.auth.mfa.unenroll({factorId:fid}); closeMod('m2fa'); toast('2FA desativada'); }
+  catch(e){ toast('Erro ao desativar'); }
+}
+// LOGIN: se a conta tem 2FA, abre o desafio; roda `after()` só após verificar. Retorna true se pode seguir direto.
+async function checar2FALogin(after){
+  try{
+    const{data}=await _SB.auth.mfa.getAuthenticatorAssuranceLevel();
+    if(data && data.nextLevel==='aal2' && data.currentLevel!=='aal2'){
+      const{data:lf}=await _SB.auth.mfa.listFactors();
+      const totp=((lf&&lf.totp)||[]).find(f=>f.status==='verified');
+      if(totp){ _2faFactor=totp.id; _2faAfter=after; abrir2FALoginPrompt(); return false; }
+    }
+  }catch(e){}
+  return true;
+}
+async function abrir2FALoginPrompt(){
+  openMod('m2fa');
+  const b=document.getElementById('m2fa-body'); b.innerHTML='<div style="text-align:center;padding:24px"><span class="spin"></span></div>';
+  try{
+    const{data:ch,error}=await _SB.auth.mfa.challenge({factorId:_2faFactor}); if(error)throw error;
+    _2faChallenge=ch.id;
+    b.innerHTML='<div style="font-size:30px;text-align:center">🔐</div><div class="mt c">Verificação em 2 etapas</div><div class="mb c" style="margin-bottom:12px">Digite o código de 6 dígitos do seu app autenticador.</div>'
+      +'<div class="fld"><input class="inp" id="m2fa-code" inputmode="numeric" maxlength="6" placeholder="000000" style="text-align:center;letter-spacing:5px;font-size:21px"><div class="em" id="m2fa-e">Código incorreto.</div></div>'
+      +'<button class="btn bv bfull" onclick="verificar2FALogin()">Entrar</button>';
+    setTimeout(()=>{try{document.getElementById('m2fa-code').focus();}catch(_){}},200);
+  }catch(e){ b.innerHTML='<div class="mb c">Erro ao iniciar verificação. Feche e entre de novo.</div>'; }
+}
+async function verificar2FALogin(){
+  const el=document.getElementById('m2fa-code'),er=document.getElementById('m2fa-e');
+  const code=(el.value||'').trim(); if(code.length<6){er.classList.add('on');return;}
+  try{
+    const{error}=await _SB.auth.mfa.verify({factorId:_2faFactor,challengeId:_2faChallenge,code}); if(error)throw error;
+    closeMod('m2fa'); const after=_2faAfter; _2faAfter=null; if(typeof after==='function') after();
+  }catch(e){ er.textContent='Código incorreto. Tente de novo.'; er.classList.add('on'); }
+}
 /* ── esqueci a senha (envia link por e-mail) ── */
 function esqueciSenha(){
   const inp=document.getElementById('esq-email');if(inp)inp.value='';
@@ -4450,7 +4536,9 @@ async function doLogin(){
   if(error){const naoConf=/confirm/i.test(error.message||'');document.getElementById('li-pw').classList.add('err');document.getElementById('li-pwe').classList.add('on');document.getElementById('li-pwe').textContent=naoConf?'Confirme seu e-mail antes de entrar (veja o link que enviamos, e o spam).':'E-mail ou senha incorretos.';shk(document.getElementById('li-pw'));btn.disabled=false;btn.textContent='Entrar';return;}
   const sbU=data.user;const m=sbU.user_metadata||{};
   U={id:sbU.id,nome:m.nome||sbU.email.split('@')[0],email:sbU.email,tipo:m.tipo||'user',reg:m.reg||null};
-  ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';posLogin();
+  ls('dr_session',U);btn.disabled=false;btn.textContent='Entrar';
+  const pode=await checar2FALogin(()=>posLogin());   // se tiver 2FA, abre o desafio antes
+  if(pode) posLogin();
 }
 async function doSignup(){
   blurAll();
