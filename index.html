@@ -4471,11 +4471,7 @@ async function posLogin(){
   const t=ls('dr_termo_'+U.id);
   if(!t){
     showV('vapp');
-    // show correct consent content
-    const isPro=U?.tipo==='pro';
-    document.getElementById('termo-user-content').style.display=isPro?'none':'block';
-    document.getElementById('termo-pro-content').style.display=isPro?'block':'none';
-    openMod('mtermo');
+    abrirTermoConsentimento();
   } else {
     if(U.tipo==='pro'){await rotearPro();return;}
     const o=gO();
@@ -4500,6 +4496,14 @@ function checaIdade(){
   const a=idadeAnos(dob);
   if(dob&&a!==null&&a<18){e.textContent='É necessário ter 18 anos ou mais para usar o app.';e.classList.add('on');document.getElementById('termo-dob').classList.add('err');return false;}
   e.classList.remove('on');document.getElementById('termo-dob').classList.remove('err');return true;
+}
+// abre o termo de consentimento SEMPRE com a versão certa (usuário vs profissional)
+function abrirTermoConsentimento(){
+  const isPro=U?.tipo==='pro';
+  const uc=document.getElementById('termo-user-content'),pc=document.getElementById('termo-pro-content');
+  if(uc)uc.style.display=isPro?'none':'block';
+  if(pc)pc.style.display=isPro?'block':'none';
+  openMod('mtermo');
 }
 async function aceitarTermo(){
   const isPro=U?.tipo==='pro';
@@ -8213,7 +8217,7 @@ setTimeout(function(){
   }
   if(U){
     const t=ls('dr_termo_'+U.id);
-    if(!t){showV('vapp');document.getElementById('bnav').classList.remove('on');openMod('mtermo');}
+    if(!t){showV('vapp');document.getElementById('bnav').classList.remove('on');abrirTermoConsentimento();}
     else{if(U.tipo==='pro'){rotearPro();return;}const o=gO();if(!o)startOb();else entrar();}
     applyTheme();
     maybeLock();
