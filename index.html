@@ -6022,7 +6022,7 @@ async function renderProfs(){
   const c=document.getElementById('pf-list');
   c.innerHTML='<div style="text-align:center;padding:40px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
   let profs=[];
-  if(_SB){const{data}=await _SB.from('profissionais').select('*').eq('status','aprovado').catch(()=>({data:[]}));profs=data||[];}
+  if(_SB){try{const q=_SB.from('profissionais').select('*').eq('status','aprovado');const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);profs=data||[];}catch(e){profs=[];}}
   const q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
   const list=profs.filter(p=>{
     if(_pfFilt.mod&&!(p.modalidade||'').includes(_pfFilt.mod))return false;
