@@ -297,7 +297,7 @@ tbody tr:hover{background:var(--cin)}
 <!-- TUTORIAL primeiro acesso -->
 <div id="tut">
   <div class="tut-card">
-    <div class="tut-hero"><div class="ti" id="tut-ic">🩺</div></div>
+    <div class="tut-hero"><div class="ti" id="tut-ic"></div></div>
     <div class="tut-body">
       <h3 id="tut-t">Bem-vindo(a) ao seu Painel</h3>
       <p id="tut-x">Organize sua prática clínica num só lugar — agenda, pacientes, prontuários e caixa, tudo integrado.</p>
@@ -313,7 +313,7 @@ tbody tr:hover{background:var(--cin)}
 <!-- CRIAR / ENTRAR EM CLÍNICA -->
 <div id="clinicgate">
   <div class="gate-card">
-    <div class="gate-logo">🏥</div>
+    <div class="gate-logo">C</div>
     <h2>Sua clínica</h2>
     <div class="gsub">Crie uma clínica ou entre na de um colega com o código.</div>
     <div class="cl-tabs">
@@ -346,7 +346,7 @@ tbody tr:hover{background:var(--cin)}
     <a class="nav-item" data-nav="prontuarios"><span class="ic">▤</span> Prontuários</a>
     <a class="nav-item" data-nav="caixa"><span class="ic">$</span> Caixa</a>
     <a class="nav-item" data-nav="documentos"><span class="ic">▦</span> Documentos</a>
-    <a class="nav-item" data-nav="equipe"><span class="ic">👥</span> Equipe</a>
+    <a class="nav-item" data-nav="equipe"><span class="ic">⧉</span> Equipe</a>
     <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
     <div class="side-foot">
       <div class="who"><b id="side-prof">Profissional</b><span id="side-clin">Minha Clínica</span></div>
@@ -375,7 +375,7 @@ tbody tr:hover{background:var(--cin)}
   <a data-nav="agenda"><span class="ic">◷</span>Agenda</a>
   <a data-nav="pacientes"><span class="ic">☺</span>Pacientes</a>
   <a data-nav="caixa"><span class="ic">$</span>Caixa</a>
-  <a data-nav="equipe"><span class="ic">👥</span>Equipe</a>
+  <a data-nav="equipe"><span class="ic">⧉</span>Equipe</a>
 </nav>
 
 <div class="overlay" id="overlay"></div>
@@ -548,12 +548,12 @@ function viewDash(){
     .sort((a,b)=>a.nascimento.slice(8,10).localeCompare(b.nascimento.slice(8,10)));
   const hojeDD=t.slice(8,10);
   let anivHtml = aniv.length ? `<div class="card" style="padding:14px 16px"><div style="display:flex;flex-wrap:wrap;gap:8px">
-    ${aniv.map(p=>{const dd=p.nascimento.slice(8,10);const isHoje=dd===hojeDD;return `<button class="chip ${isHoje?'a':'v'}" style="cursor:pointer;padding:6px 12px" onclick="openPaciente('${p.id}')">${isHoje?'🎂 ':'🎈 '}${esc(p.nome.split(' ')[0])} · ${dd}/${mm}</button>`}).join('')}
+    ${aniv.map(p=>{const dd=p.nascimento.slice(8,10);const isHoje=dd===hojeDD;return `<button class="chip ${isHoje?'a':'v'}" style="cursor:pointer;padding:6px 12px" onclick="openPaciente('${p.id}')">${isHoje?'':''}${esc(p.nome.split(' ')[0])} · ${dd}/${mm}</button>`}).join('')}
   </div></div>` : '';
 
   return kpis
     + `<div class="sec-title">Agenda de hoje <span class="grow"></span><button class="btn sm ghost" onclick="go('agenda')">Ver agenda →</button></div>`+ag
-    + (aniv.length?`<div class="sec-title">🎂 Aniversariantes do mês <span class="grow"></span><span style="font-size:12px;color:var(--txm);font-weight:600">${aniv.length}</span></div>`+anivHtml:'')
+    + (aniv.length?`<div class="sec-title">Aniversariantes do mês <span class="grow"></span><span style="font-size:12px;color:var(--txm);font-weight:600">${aniv.length}</span></div>`+anivHtml:'')
     + `<div class="sec-title">Próximas consultas</div>`+proxHtml;
 }
 
@@ -568,7 +568,7 @@ function viewAgenda(){
       const st=STATUS[a.status];
       return `<div class="appt st-${a.status}" onclick="openAgendamento('${a.id}')">
         <b>${a.hora} · ${esc(pacNome(a.pacienteId))}</b>
-        <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}${(MEMBROS.length>1&&a.profNome)?' · 👤 '+esc(a.profNome):''}</small>
+        <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}${(MEMBROS.length>1&&a.profNome)?' · '+esc(a.profNome):''}</small>
       </div>`;}).join('')}</div>`;
   }).join('');
 
@@ -654,7 +654,7 @@ function viewProntuarioPaciente(pid){
         <div style="margin-top:6px"><button class="btn sm ghost" onclick="formProntuario('${pid}','${r.id}')">Editar</button></div>
       </div>`).join('')}
     </div></div>
-    <p style="font-size:12px;color:var(--txm);margin:12px 2px 0">⚖️ Registros de apoio — não substituem o prontuário oficial do seu conselho. Guarde sua cópia com "Exportar".</p>`:`<div class="card empty"><div class="big">▤</div><b>Nenhum registro</b>Comece o histórico clínico deste paciente.</div>`}`;
+    <p style="font-size:12px;color:var(--txm);margin:12px 2px 0">Registros de apoio — não substituem o prontuário oficial do seu conselho. Guarde sua cópia com "Exportar".</p>`:`<div class="card empty"><div class="big">▤</div><b>Nenhum registro</b>Comece o histórico clínico deste paciente.</div>`}`;
 }
 // exporta o prontuário do paciente em página imprimível (salvar como PDF)
 function exportarProntuario(pid){
@@ -778,27 +778,27 @@ function syncHeader(){ $('#side-prof').textContent=(AUTH&&AUTH.nome)||DB.config.
 
 /* =============== DOCUMENTOS (recibos, declarações, pareceres...) =============== */
 const DOC_TIPOS=[
-  {k:'recibo',ic:'🧾',nome:'Recibo de pagamento',desc:'Comprovante de valor recebido'},
-  {k:'declaracao',ic:'📋',nome:'Declaração de comparecimento',desc:'Comprova presença no atendimento'},
-  {k:'atestado',ic:'🩺',nome:'Atestado',desc:'Afastamento / repouso'},
-  {k:'parecer',ic:'📝',nome:'Parecer / Relatório',desc:'Documento técnico descritivo'},
-  {k:'encaminhamento',ic:'➡️',nome:'Encaminhamento',desc:'Encaminha a outro profissional/serviço'},
+  {k:'recibo',nome:'Recibo de pagamento',desc:'Comprovante de valor recebido'},
+  {k:'declaracao',nome:'Declaração de comparecimento',desc:'Comprova presença no atendimento'},
+  {k:'atestado',nome:'Atestado',desc:'Afastamento / repouso'},
+  {k:'parecer',nome:'Parecer / Relatório',desc:'Documento técnico descritivo'},
+  {k:'encaminhamento',nome:'Encaminhamento',desc:'Encaminha a outro profissional/serviço'},
 ];
 function viewDocumentos(){
   const docs=(DB.documentos||[]).slice().sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
   return `<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr));margin-bottom:20px">
-    ${DOC_TIPOS.map(t=>`<div class="card" style="padding:16px;cursor:pointer" onclick="formDocumento('${t.k}')">
-      <div style="font-size:26px">${t.ic}</div><div style="font-weight:800;margin-top:6px">${t.nome}</div><div style="font-size:12.5px;color:var(--txs)">${t.desc}</div>
+    ${DOC_TIPOS.map(t=>`<div class="card" style="padding:16px;cursor:pointer;border-left:3px solid var(--v)" onclick="formDocumento('${t.k}')">
+      <div style="font-weight:800">${t.nome}</div><div style="font-size:12.5px;color:var(--txs);margin-top:2px">${t.desc}</div>
     </div>`).join('')}
   </div>
   <div class="sec-title">Documentos emitidos</div>
   ${docs.length?`<div class="card"><div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Paciente</th><th></th></tr></thead><tbody>
-    ${docs.map(d=>{const t=DOC_TIPOS.find(x=>x.k===d.tipo)||{nome:d.tipo,ic:'📄'};return `<tr>
-      <td class="mono">${fmtDate(d.data)}</td><td>${t.ic} ${t.nome}</td><td>${esc(d.pacienteNome||'—')}</td>
+    ${docs.map(d=>{const t=DOC_TIPOS.find(x=>x.k===d.tipo)||{nome:d.tipo};return `<tr>
+      <td class="mono">${fmtDate(d.data)}</td><td>${t.nome}</td><td>${esc(d.pacienteNome||'—')}</td>
       <td style="text-align:right"><button class="btn sm ghost" onclick="imprimirDocumento('${d.id}')">Imprimir</button> <button class="btn sm ghost" onclick="formDocumento('${d.tipo}','${d.id}')">Editar</button> <button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;background:transparent" onclick="delDocumento('${d.id}')" title="Excluir">🗑</button></td>
     </tr>`}).join('')}
   </tbody></table></div></div>`:`<div class="card empty"><div class="big">▦</div><b>Nenhum documento ainda</b>Escolha um tipo acima para emitir.</div>`}
-  <p style="font-size:12px;color:var(--txm);margin:12px 2px 0">⚖️ Modelos padronizados de apoio. Confira a adequação às normas do seu conselho antes de assinar e emitir. O CID só deve constar com autorização do paciente.</p>`;
+  <p style="font-size:12px;color:var(--txm);margin:12px 2px 0">Modelos padronizados de apoio. Confira a adequação às normas do seu conselho antes de assinar e emitir. O CID só deve constar com autorização do paciente.</p>`;
 }
 function formDocumento(tipo,id){
   const d=id?DB.documentos.find(x=>x.id===id):{tipo,data:todayISO()};
@@ -869,7 +869,7 @@ function imprimirDocumento(id){
 /* =============== EQUIPE (clínica compartilhada) =============== */
 function viewEquipe(){
   if(!CLINICA){
-    return `<div class="card empty"><div class="big">🏥</div><b>Modo local</b>Este painel está funcionando só neste aparelho. Para compartilhar com uma equipe, configure a clínica no servidor.</div>`;
+    return `<div class="card empty"><div class="big">◱</div><b>Modo local</b>Este painel está funcionando só neste aparelho. Para compartilhar com uma equipe, configure a clínica no servidor.</div>`;
   }
   const ehDono=CLINICA.papel==='dono';
   const membros=MEMBROS.slice().sort((a,b)=>(a.papel==='dono'?-1:1)-(b.papel==='dono'?-1:1)||String(a.nome||'').localeCompare(String(b.nome||'')));
@@ -936,7 +936,7 @@ function formPaciente(id){
         <div class="field"><label>CPF</label><input id="f-cpf" value="${esc(p.cpf||'')}"></div>
       </div>
       <div class="field"><label>Endereço</label><input id="f-end" value="${esc(p.endereco||'')}"></div>
-      <div class="sec-title" style="font-size:13px;margin:8px 0 6px">🚑 Contato de emergência</div>
+      <div class="sec-title" style="font-size:13px;margin:8px 0 6px">Contato de emergência</div>
       <div class="row3">
         <div class="field"><label>Nome</label><input id="f-emnome" value="${esc(p.emergNome||'')}" placeholder="Quem avisar"></div>
         <div class="field"><label>Telefone</label><input id="f-emtel" value="${esc(p.emergTel||'')}" placeholder="(00) 00000-0000"></div>
@@ -981,7 +981,7 @@ function openPaciente(id){
         <div><div class="il">CPF</div><div class="iv">${esc(p.cpf||'—')}</div></div>
         <div><div class="il">Endereço</div><div class="iv">${esc(p.endereco||'—')}</div></div>
       </div>
-      ${p.emergNome||p.emergTel?`<div style="background:var(--erf);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b style="color:var(--er)">🚑 Emergência:</b> ${esc(p.emergNome||'—')}${p.emergParen?' ('+esc(p.emergParen)+')':''}${p.emergTel?' · <a href="tel:'+esc(p.emergTel.replace(/[^0-9+]/g,''))+'" style="color:var(--er);font-weight:700">'+esc(p.emergTel)+'</a>':''}</div>`:''}
+      ${p.emergNome||p.emergTel?`<div style="background:var(--erf);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b style="color:var(--er)">Emergência:</b> ${esc(p.emergNome||'—')}${p.emergParen?' ('+esc(p.emergParen)+')':''}${p.emergTel?' · <a href="tel:'+esc(p.emergTel.replace(/[^0-9+]/g,''))+'" style="color:var(--er);font-weight:700">'+esc(p.emergTel)+'</a>':''}</div>`:''}
       ${p.obs?`<div style="background:var(--cin);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b>Obs:</b> ${esc(p.obs)}</div>`:''}
       <div class="pill-row" style="margin-bottom:16px">${(p.tags||[]).map(t=>`<span class="chip v">${esc(t)}</span>`).join('')}</div>
       <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
@@ -1095,7 +1095,7 @@ function formProntuario(pid,rid){
         <div class="field"><label>Pontos de atenção</label><textarea id="f-pontos" placeholder="Riscos, alertas, sinais a acompanhar">${esc(r.pontos||'')}</textarea></div>
         <div class="field"><label>Plano para próxima sessão</label><textarea id="f-plano" placeholder="Encaminhamentos, tarefas, próximos passos">${esc(r.plano||r.conduta||'')}</textarea></div>
       </div>
-      <p style="font-size:12px;color:var(--txs);background:var(--cin);border-radius:10px;padding:10px 12px;margin-top:4px">⚖️ Ferramenta de apoio à organização clínica. <b>Não substitui</b> o prontuário oficial exigido pelo seu conselho, nem é um registro certificado. Mantenha sua cópia oficial (use <b>Exportar</b> no prontuário).</p>
+      <p style="font-size:12px;color:var(--txs);background:var(--cin);border-radius:10px;padding:10px 12px;margin-top:4px">Ferramenta de apoio à organização clínica. <b>Não substitui</b> o prontuário oficial exigido pelo seu conselho, nem é um registro certificado. Mantenha sua cópia oficial (use <b>Exportar</b> no prontuário).</p>
     </div>
     <div class="modal-foot">${rid?`<button class="btn danger ghost" style="margin-right:auto" onclick="delProntuario('${rid}')">Excluir</button>`:''}
       <button class="btn ghost" onclick="closeModal()">Cancelar</button>
@@ -1343,11 +1343,11 @@ function clTab(t){
 
 /* =============== TUTORIAL =============== */
 const TUT=[
-  {ic:'🩺',t:'Bem-vindo(a) ao seu Painel',x:'Um espaço só seu pra organizar a prática clínica — agenda, pacientes, prontuários e caixa, tudo integrado e no mesmo lugar.'},
+  {ic:'◧',t:'Bem-vindo(a) ao seu Painel',x:'Um espaço só seu pra organizar a prática clínica — agenda, pacientes, prontuários e caixa, tudo integrado e no mesmo lugar.'},
   {ic:'◷',t:'Agenda inteligente',x:'Marque consultas por horário, veja o dia inteiro e navegue entre datas. O que está marcado pra hoje aparece na Visão geral automaticamente.'},
   {ic:'☺',t:'Pacientes & Prontuários',x:'Cadastre seus pacientes e escreva registros clínicos (anamnese, evolução, condutas) numa linha do tempo organizada por pessoa.'},
   {ic:'$',t:'Caixa automático',x:'Ao marcar uma consulta como Atendida + Paga, uma entrada é lançada no caixa sozinha. Veja faturamento, saldo e o que ainda tem a receber.'},
-  {ic:'🔒',t:'Seus dados, seu controle',x:'Tudo fica salvo neste dispositivo, ligado à sua conta. Em Configurações você exporta um backup quando quiser. Vamos começar? 💚'},
+  {ic:'▣',t:'Seus dados, seu controle',x:'Tudo fica salvo com segurança, ligado à sua conta e à sua clínica. Em Configurações você exporta um backup quando quiser. Vamos começar?'},
 ];
 let _tutI=0;
 function tutStart(){ _tutI=0; renderTut(); $('#tut').classList.add('on'); }
