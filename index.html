@@ -2081,6 +2081,9 @@ a{color:inherit;text-decoration:none}
 .conv-item .av{width:44px;height:44px;border-radius:50%;background:var(--roxof);color:var(--roxo);display:grid;place-items:center;font-weight:800;flex-shrink:0}
 .conv-item .cn{font-weight:700;font-size:14.5px}
 .conv-item .cl{font-size:12.5px;color:var(--txs);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.conv-item.nova .cl{color:var(--tx);font-weight:600}
+.conv-dot{width:10px;height:10px;border-radius:50%;background:var(--er);flex-shrink:0;margin-left:6px}
+.tabbadge{display:inline-block;background:var(--er);color:#fff;font-size:11px;font-weight:800;min-width:18px;text-align:center;padding:1px 5px;border-radius:20px;vertical-align:middle}
 .msg-empty{text-align:center;padding:50px 20px;color:var(--txm)}
 .msg-empty-ic{font-size:44px;margin-bottom:12px}
 .msg-empty-t{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:6px}
@@ -2907,7 +2910,7 @@ a{color:inherit;text-decoration:none}
   <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="fecharProfs()">←</button><div class="ptb-tit">Fale com um profissional</div></div>
   <div class="pf-tabs">
     <button class="pf-tab on" id="pf-tab-buscar" onclick="pfTab('buscar')">Profissionais</button>
-    <button class="pf-tab" id="pf-tab-convs" onclick="pfTab('convs')">Minhas conversas</button>
+    <button class="pf-tab" id="pf-tab-convs" onclick="pfTab('convs')">Minhas conversas <span class="tabbadge" id="pf-convs-badge" style="display:none"></span></button>
   </div>
   <div class="pf-search" id="pf-searchbox">
     <input class="pf-inp" id="pf-q" placeholder="🔍 Buscar por nome, especialidade ou cidade" oninput="renderProfs()">
@@ -2993,7 +2996,7 @@ a{color:inherit;text-decoration:none}
     <div class="pro-hreg" id="pd-reg">—</div>
     <div class="pro-tabs">
       <button class="pro-tab on" onclick="proTab('perfil',this)">Meu perfil</button>
-      <button class="pro-tab" onclick="proTab('msgs',this)">Mensagens</button>
+      <button class="pro-tab" onclick="proTab('msgs',this)">Mensagens <span class="tabbadge" id="pd-msgs-badge" style="display:none"></span></button>
       <button class="pro-tab" onclick="proTab('cfg',this)">Conta</button>
     </div>
   </div>
@@ -6157,7 +6160,7 @@ const PROFS=[
    tags:['Redução de danos','Saúde geral','Testagem'],disp:'Ter e Qui · manhã'},
 ];
 let _pfFilt={mod:'',cat:''};
-function abrirProfs(){_pfFilt={mod:'',cat:''};document.getElementById('pf-q').value='';document.querySelectorAll('.pf-chip').forEach(c=>c.classList.toggle('on',c.dataset.v===''));showV('vprofs');try{pfTab('buscar');}catch(e){renderProfs();}}
+function abrirProfs(){_pfFilt={mod:'',cat:''};document.getElementById('pf-q').value='';document.querySelectorAll('.pf-chip').forEach(c=>c.classList.toggle('on',c.dataset.v===''));showV('vprofs');try{pfTab('buscar');}catch(e){renderProfs();}try{contarNaoLidasUser();}catch(e){}}
 function fecharProfs(){if(U?.tipo==='pro')entrarPro();else showV('vapp');}
 
 /* ══ PERFIL PROFISSIONAL ══ */
@@ -6263,7 +6266,34 @@ function abrirChat(conv,asPro,otherNome,otherTel,from,otherInfo,prefill){
   document.getElementById('chat-scroll').innerHTML='<div class="chat-empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
   showV('vchat');
   carregarMsgs(true);
+  marcarLida(conv,!!asPro);
   clearInterval(_chat.poll); _chat.poll=setInterval(()=>carregarMsgs(false),4000);
+}
+// marca a conversa como lida por mim (usa a coluna do meu lado)
+async function marcarLida(conv,asPro){
+  if(!_SB||!conv)return;
+  const col=asPro?'prof_lida_em':'user_lida_em';
+  try{ const upd={}; upd[col]=new Date().toISOString(); await _SB.from('conversas').update(upd).eq('id',conv.id); }catch(e){}
+}
+function convNaoLida(c,asPro){
+  const minha=asPro?c.prof_lida_em:c.user_lida_em;
+  if(!c.atualizado_em)return false;
+  if(!minha)return !!c.ultima_msg;
+  return new Date(c.atualizado_em)>new Date(minha);
+}
+async function contarNaoLidasPro(){
+  if(!_SB||typeof U==='undefined'||!U)return;
+  try{const{data}=await _SB.from('conversas').select('atualizado_em,prof_lida_em,ultima_msg').eq('prof_id',U.id);
+    const n=(data||[]).filter(c=>convNaoLida(c,true)).length;
+    const b=document.getElementById('pd-msgs-badge'); if(b){b.textContent=n||'';b.style.display=n?'':'none';}
+  }catch(e){}
+}
+async function contarNaoLidasUser(){
+  if(!_SB||typeof U==='undefined'||!U)return;
+  try{const{data}=await _SB.from('conversas').select('atualizado_em,user_lida_em,ultima_msg').eq('user_id',U.id);
+    const n=(data||[]).filter(c=>convNaoLida(c,false)).length;
+    const b=document.getElementById('pf-convs-badge'); if(b){b.textContent=n||'';b.style.display=n?'':'none';}
+  }catch(e){}
 }
 function voltarChat(){ clearInterval(_chat.poll); if(_chat.asPro){entrarPro();} else {showV('vprofs');try{pfTab(_pfLastTab||'buscar');}catch(e){}} }
 async function carregarMsgs(scroll){
@@ -6296,8 +6326,10 @@ async function enviarMsg(){
   if(!txt||!_chat.conv||!_SB)return;
   el.value=''; el.style.height='auto';
   try{
+    const agora=new Date().toISOString();
     await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:txt});
-    await _SB.from('conversas').update({ultima_msg:txt.slice(0,120),atualizado_em:new Date().toISOString()}).eq('id',_chat.conv.id);
+    const upd={ultima_msg:txt.slice(0,120),atualizado_em:agora}; upd[_chat.asPro?'prof_lida_em':'user_lida_em']=agora;
+    await _SB.from('conversas').update(upd).eq('id',_chat.conv.id);
     carregarMsgs(true);
   }catch(e){ toast('⚠️ não enviou: '+((e&&e.message)||''),4000); el.value=txt; }
 }
@@ -6315,11 +6347,14 @@ async function renderConversasPro(){
   try{
     const{data}=await _SB.from('conversas').select('*').eq('prof_id',U.id).order('atualizado_em',{ascending:false});
     const convs=data||[];
-    if(!convs.length){ box.innerHTML='<div class="msg-empty"><div class="msg-empty-ic">💬</div><div class="msg-empty-t">Nenhuma mensagem ainda</div><div class="msg-empty-s">Quando um usuário solicitar contato, a conversa aparecerá aqui.</div></div>'; return; }
-    box.innerHTML=convs.map(c=>`<div class="conv-item" onclick='abrirChatPro(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+    if(!convs.length){ box.innerHTML='<div class="msg-empty"><div class="msg-empty-ic">💬</div><div class="msg-empty-t">Nenhuma mensagem ainda</div><div class="msg-empty-s">Quando um usuário solicitar contato, a conversa aparecerá aqui.</div></div>'; const b=document.getElementById('pd-msgs-badge');if(b)b.style.display='none'; return; }
+    let nu=0;
+    box.innerHTML=convs.map(c=>{const nova=convNaoLida(c,true);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatPro(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
       <div class="av">${ini2(c.user_nome||'?')}</div>
       <div style="flex:1;min-width:0"><div class="cn">${esc(c.user_nome||'Usuário')}</div><div class="cl">${esc(c.ultima_msg||'Nova conversa')}</div></div>
-    </div>`).join('');
+      ${nova?'<span class="conv-dot"></span>':''}
+    </div>`}).join('');
+    const b=document.getElementById('pd-msgs-badge'); if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}
   }catch(e){ box.innerHTML='<div class="msg-empty"><div class="msg-empty-s">Não consegui carregar as conversas.</div></div>'; }
 }
 function abrirChatPro(c){ abrirChat(c,true,c.user_nome||'Usuário','','vpro-dash'); }
@@ -6342,11 +6377,14 @@ async function renderMinhasConversas(){
   try{
     const{data}=await _SB.from('conversas').select('*').eq('user_id',U.id).order('atualizado_em',{ascending:false});
     const convs=data||[];
-    if(!convs.length){box.innerHTML='<div class="chat-empty" style="padding:44px 20px">Você ainda não tem conversas.<br>Toque em um profissional e em <b>"Solicitar contato"</b>.</div>';return;}
-    box.innerHTML=convs.map(c=>`<div class="conv-item" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+    if(!convs.length){box.innerHTML='<div class="chat-empty" style="padding:44px 20px">Você ainda não tem conversas.<br>Toque em um profissional e em <b>"Solicitar contato"</b>.</div>';const b=document.getElementById('pf-convs-badge');if(b)b.style.display='none';return;}
+    let nu=0;
+    box.innerHTML=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
       <div class="av">${ini2(c.prof_nome||'?')}</div>
       <div style="flex:1;min-width:0"><div class="cn">${esc(c.prof_nome||'Profissional')}</div><div class="cl">${esc(c.ultima_msg||'Nova conversa')}</div></div>
-    </div>`).join('');
+      ${nova?'<span class="conv-dot"></span>':''}
+    </div>`}).join('');
+    const b=document.getElementById('pf-convs-badge'); if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}
   }catch(e){box.innerHTML='<div class="chat-empty" style="padding:40px 20px">Não consegui carregar as conversas.</div>';}
 }
 async function abrirChatUser(c){
@@ -6440,6 +6478,7 @@ async function entrarPro(){
   // reset to first tab
   document.querySelectorAll('.pro-tab').forEach((b,i)=>{b.classList.toggle('on',i===0);});
   document.querySelectorAll('.pro-panel').forEach((p,i)=>{p.classList.toggle('on',i===0);});
+  try{contarNaoLidasPro();}catch(e){}
 }
 function abrirClinica(){try{vib(12);}catch(e){}window.location.href='/clinica/';}
 function abrirEdicaoPerfil(){

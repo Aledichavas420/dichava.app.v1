@@ -15,9 +15,14 @@ create table if not exists public.conversas (
   prof_nome text,
   ultima_msg text,
   atualizado_em timestamptz default now(),
+  user_lida_em timestamptz,
+  prof_lida_em timestamptz,
   criado_em timestamptz default now(),
   unique (user_id, prof_id)
 );
+-- se a tabela já existia, garante as colunas de "lida" (badge de não lidas)
+alter table public.conversas add column if not exists user_lida_em timestamptz;
+alter table public.conversas add column if not exists prof_lida_em timestamptz;
 
 -- 2) MENSAGENS
 create table if not exists public.mensagens (
