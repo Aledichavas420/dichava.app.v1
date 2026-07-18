@@ -540,8 +540,18 @@ function viewDash(){
     ${prox.map(a=>`<tr onclick="openAgendamento('${a.id}')" style="cursor:pointer"><td>${fmtDate(a.data)}</td><td class="mono">${a.hora}</td><td>${esc(pacNome(a.pacienteId))}</td><td>${esc(a.tipo)}</td></tr>`).join('')}
     </tbody></table></div></div>` : `<div class="card empty"><b>Nada agendado à frente</b>Use o botão “Novo” para marcar.</div>`;
 
+  // aniversariantes do mês
+  const mm=t.slice(5,7);
+  const aniv=DB.pacientes.filter(p=>p.nascimento&&p.nascimento.slice(5,7)===mm)
+    .sort((a,b)=>a.nascimento.slice(8,10).localeCompare(b.nascimento.slice(8,10)));
+  const hojeDD=t.slice(8,10);
+  let anivHtml = aniv.length ? `<div class="card" style="padding:14px 16px"><div style="display:flex;flex-wrap:wrap;gap:8px">
+    ${aniv.map(p=>{const dd=p.nascimento.slice(8,10);const isHoje=dd===hojeDD;return `<button class="chip ${isHoje?'a':'v'}" style="cursor:pointer;padding:6px 12px" onclick="openPaciente('${p.id}')">${isHoje?'🎂 ':'🎈 '}${esc(p.nome.split(' ')[0])} · ${dd}/${mm}</button>`}).join('')}
+  </div></div>` : '';
+
   return kpis
     + `<div class="sec-title">Agenda de hoje <span class="grow"></span><button class="btn sm ghost" onclick="go('agenda')">Ver agenda →</button></div>`+ag
+    + (aniv.length?`<div class="sec-title">🎂 Aniversariantes do mês <span class="grow"></span><span style="font-size:12px;color:var(--txm);font-weight:600">${aniv.length}</span></div>`+anivHtml:'')
     + `<div class="sec-title">Próximas consultas</div>`+proxHtml;
 }
 
@@ -620,22 +630,54 @@ function viewProntuarios(){
 function viewProntuarioPaciente(pid){
   const p=pac(pid);
   const regs=DB.prontuarios.filter(r=>r.pacienteId===pid).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
-  const TIPO={anamnese:'Anamnese',evolucao:'Evolução',nota:'Nota',avaliacao:'Avaliação'};
+  const TIPO={anamnese:'Anamnese',evolucao:'Evolução',consulta:'Consulta',conduta:'Conduta / Prescrição',nota:'Nota',avaliacao:'Avaliação'};
+  const bloco=(rot,val,cor)=>val?`<div style="background:${cor||'var(--cin)'};border-radius:10px;padding:8px 11px;margin-top:6px;font-size:13.5px"><b style="color:var(--txs)">${rot}:</b> ${esc(val)}</div>`:'';
   return `<div class="toolbar">
       <button class="btn sm ghost" onclick="prontSelPaciente=null;render()">‹ Voltar</button>
       <div class="cell-user" style="margin-left:6px"><div class="avatar">${initials(p.nome)}</div><div><b>${esc(p.nome)}</b><small>${idade(p.nascimento)!=null?idade(p.nascimento)+' anos':''}</small></div></div>
       <div class="grow"></div>
+      <button class="btn sm ghost" onclick="exportarProntuario('${pid}')">↓ Exportar</button>
       <button class="btn" onclick="formProntuario('${pid}')">＋ Registro</button>
     </div>
     ${regs.length?`<div class="card" style="padding:22px"><div class="tl">
       ${regs.map(r=>`<div class="tl-item">
-        <div class="dt">${fmtDate(r.data)} · <span class="chip r">${TIPO[r.tipo]||r.tipo}</span></div>
+        <div class="dt">${fmtDate(r.data)} · <span class="chip r">${TIPO[r.tipo]||r.tipo}</span>${r.sessao?` · <span class="chip g">Sessão ${esc(r.sessao)}</span>`:''}</div>
         ${r.queixa?`<div style="margin-bottom:4px"><b style="font-size:13px;color:var(--txs)">Queixa/Foco:</b> ${esc(r.queixa)}</div>`:''}
-        ${r.texto?`<div style="margin-bottom:4px">${esc(r.texto)}</div>`:''}
-        ${r.conduta?`<div style="background:var(--vf);border-radius:10px;padding:8px 11px;margin-top:6px;font-size:13.5px"><b style="color:var(--ve)">Conduta:</b> ${esc(r.conduta)}</div>`:''}
+        ${bloco('Objetivos trabalhados',r.objetivos)}
+        ${r.texto?`<div style="margin-top:6px">${esc(r.texto)}</div>`:''}
+        ${bloco('Intervenções / Condutas',r.intervencoes)}
+        ${bloco('Recursos usados',r.recursos)}
+        ${bloco('Pontos de atenção',r.pontos,'var(--ams)')}
+        ${bloco('Plano p/ próxima sessão',(r.plano||r.conduta),'var(--vf)')}
         <div style="margin-top:6px"><button class="btn sm ghost" onclick="formProntuario('${pid}','${r.id}')">Editar</button></div>
       </div>`).join('')}
-    </div></div>`:`<div class="card empty"><div class="big">▤</div><b>Nenhum registro</b>Comece o histórico clínico deste paciente.</div>`}`;
+    </div></div>
+    <p style="font-size:12px;color:var(--txm);margin:12px 2px 0">⚖️ Registros de apoio — não substituem o prontuário oficial do seu conselho. Guarde sua cópia com "Exportar".</p>`:`<div class="card empty"><div class="big">▤</div><b>Nenhum registro</b>Comece o histórico clínico deste paciente.</div>`}`;
+}
+// exporta o prontuário do paciente em página imprimível (salvar como PDF)
+function exportarProntuario(pid){
+  const p=pac(pid); if(!p)return;
+  const regs=DB.prontuarios.filter(r=>r.pacienteId===pid).sort((a,b)=>a.data.localeCompare(b.data)||a.criadoEm-b.criadoEm);
+  const TIPO={anamnese:'Anamnese',evolucao:'Evolução',consulta:'Consulta',conduta:'Conduta / Prescrição',nota:'Nota',avaliacao:'Avaliação'};
+  const linha=(rot,val)=>val?`<p style="margin:4px 0"><b>${rot}:</b> ${esc(val).replace(/\n/g,'<br>')}</p>`:'';
+  const cli=(CLINICA&&CLINICA.nome)||DB.config.clinica||'';
+  const prof=(AUTH&&AUTH.nome)||DB.config.profissional||'';
+  const html=`<html><head><meta charset="utf-8"><title>Prontuário — ${esc(p.nome)}</title>
+    <style>body{font-family:system-ui,Segoe UI,sans-serif;color:#1B2A1C;max-width:760px;margin:20px auto;padding:0 20px;line-height:1.5}
+    h1{font-size:20px;margin:0 0 2px} .meta{color:#5D7060;font-size:13px;margin-bottom:16px}
+    .reg{border:1px solid #E4E4DF;border-radius:12px;padding:14px 16px;margin-bottom:12px;page-break-inside:avoid}
+    .reg h3{margin:0 0 6px;font-size:15px} .tag{background:#F0F0EC;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700}
+    .disc{color:#9E9E9E;font-size:11px;margin-top:20px;border-top:1px solid #eee;padding-top:10px}</style></head>
+    <body>
+    <h1>Prontuário — ${esc(p.nome)}</h1>
+    <div class="meta">${cli?esc(cli)+' · ':''}${prof?'Prof.: '+esc(prof)+' · ':''}${idade(p.nascimento)!=null?idade(p.nascimento)+' anos · ':''}${esc(p.telefone||'')}${p.emergNome?' · Emergência: '+esc(p.emergNome)+' '+esc(p.emergTel||''):''}</div>
+    ${regs.length?regs.map(r=>`<div class="reg"><h3>${fmtDate(r.data)} <span class="tag">${TIPO[r.tipo]||r.tipo}</span>${r.sessao?' <span class="tag">Sessão '+esc(r.sessao)+'</span>':''}</h3>
+      ${linha('Queixa/Foco',r.queixa)}${linha('Objetivos trabalhados',r.objetivos)}${linha('Evolução',r.texto)}${linha('Intervenções/Condutas',r.intervencoes)}${linha('Recursos usados',r.recursos)}${linha('Pontos de atenção',r.pontos)}${linha('Plano p/ próxima sessão',r.plano||r.conduta)}</div>`).join(''):'<p>Sem registros.</p>'}
+    <div class="disc">Documento gerado pelo dichava.app como ferramenta de apoio. Não substitui o prontuário oficial exigido pelo conselho profissional. Gerado em ${fmtDate(todayISO())}.</div>
+    </body></html>`;
+  const w=window.open('','_blank');
+  if(!w){ toast('Permita pop-ups para exportar',1); return; }
+  w.document.write(html); w.document.close(); setTimeout(()=>{try{w.print();}catch(e){}},400);
 }
 
 /* =============== CAIXA =============== */
@@ -802,8 +844,14 @@ function formPaciente(id){
         <div class="field"><label>CPF</label><input id="f-cpf" value="${esc(p.cpf||'')}"></div>
       </div>
       <div class="field"><label>Endereço</label><input id="f-end" value="${esc(p.endereco||'')}"></div>
+      <div class="sec-title" style="font-size:13px;margin:8px 0 6px">🚑 Contato de emergência</div>
+      <div class="row3">
+        <div class="field"><label>Nome</label><input id="f-emnome" value="${esc(p.emergNome||'')}" placeholder="Quem avisar"></div>
+        <div class="field"><label>Telefone</label><input id="f-emtel" value="${esc(p.emergTel||'')}" placeholder="(00) 00000-0000"></div>
+        <div class="field"><label>Parentesco/vínculo</label><input id="f-empar" value="${esc(p.emergParen||'')}" placeholder="Ex.: mãe, cônjuge"></div>
+      </div>
       <div class="field"><label>Tags (separadas por vírgula)</label><input id="f-tags" value="${esc((p.tags||[]).join(', '))}" placeholder="ativo, retorno..."></div>
-      <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas gerais">${esc(p.obs||'')}</textarea></div>
+      <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas gerais (alergias, condições, etc.)">${esc(p.obs||'')}</textarea></div>
     </div>
     <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delPaciente('${id}')">Excluir</button>`:''}
       <button class="btn ghost" onclick="closeModal()">Cancelar</button>
@@ -816,6 +864,7 @@ function savePaciente(id){
   if(!nome){ toast('Informe o nome',1); return; }
   const data={nome,nascimento:$('#f-nasc').value,telefone:$('#f-tel').value.trim(),email:$('#f-email').value.trim(),
     cpf:$('#f-cpf').value.trim(),endereco:$('#f-end').value.trim(),obs:$('#f-obs').value.trim(),
+    emergNome:$('#f-emnome').value.trim(),emergTel:$('#f-emtel').value.trim(),emergParen:$('#f-empar').value.trim(),
     tags:$('#f-tags').value.split(',').map(s=>s.trim()).filter(Boolean)};
   if(id){ Object.assign(pac(id),data); } else { DB.pacientes.push({id:uid(),...data,criadoEm:now()}); }
   save(); closeModal(); toast('Paciente salvo'); render();
@@ -840,6 +889,7 @@ function openPaciente(id){
         <div><div class="il">CPF</div><div class="iv">${esc(p.cpf||'—')}</div></div>
         <div><div class="il">Endereço</div><div class="iv">${esc(p.endereco||'—')}</div></div>
       </div>
+      ${p.emergNome||p.emergTel?`<div style="background:var(--erf);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b style="color:var(--er)">🚑 Emergência:</b> ${esc(p.emergNome||'—')}${p.emergParen?' ('+esc(p.emergParen)+')':''}${p.emergTel?' · <a href="tel:'+esc(p.emergTel.replace(/[^0-9+]/g,''))+'" style="color:var(--er);font-weight:700">'+esc(p.emergTel)+'</a>':''}</div>`:''}
       ${p.obs?`<div style="background:var(--cin);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b>Obs:</b> ${esc(p.obs)}</div>`:''}
       <div class="pill-row" style="margin-bottom:16px">${(p.tags||[]).map(t=>`<span class="chip v">${esc(t)}</span>`).join('')}</div>
       <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
@@ -922,17 +972,28 @@ function sincronizarCaixa(ag){
 }
 
 /* -- Prontuário -- */
+const PRONT_TIPOS=[['anamnese','Anamnese'],['avaliacao','Avaliação'],['evolucao','Evolução'],['consulta','Consulta'],['conduta','Conduta / Prescrição'],['nota','Nota']];
 function formProntuario(pid,rid){
-  const r=rid?DB.prontuarios.find(x=>x.id===rid):{pacienteId:pid,data:todayISO(),tipo:'evolucao',queixa:'',conduta:'',texto:''};
+  const r=rid?DB.prontuarios.find(x=>x.id===rid):{pacienteId:pid,data:todayISO(),tipo:'evolucao'};
   openModal(`<div class="modal wide"><div class="modal-head"><h3>${rid?'Editar':'Novo'} registro — ${esc(pacNome(pid))}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="row2">
+      <div class="row3">
         <div class="field"><label>Data</label><input id="f-data" type="date" value="${r.data}"></div>
-        <div class="field"><label>Tipo</label><select id="f-tipo">${[['anamnese','Anamnese'],['avaliacao','Avaliação'],['evolucao','Evolução'],['nota','Nota']].map(([k,v])=>`<option value="${k}" ${k===r.tipo?'selected':''}>${v}</option>`).join('')}</select></div>
+        <div class="field"><label>Tipo</label><select id="f-tipo">${PRONT_TIPOS.map(([k,v])=>`<option value="${k}" ${k===r.tipo?'selected':''}>${v}</option>`).join('')}</select></div>
+        <div class="field"><label>Nº da sessão</label><input id="f-sessao" type="number" min="0" value="${esc(r.sessao||'')}" placeholder="Ex.: 4"></div>
       </div>
-      <div class="field"><label>Queixa / Foco da sessão</label><input id="f-queixa" value="${esc(r.queixa||'')}" placeholder="Motivo / tema central"></div>
-      <div class="field"><label>Registro clínico</label><textarea id="f-texto" style="min-height:140px" placeholder="Evolução, observações, conteúdo da sessão...">${esc(r.texto||'')}</textarea></div>
-      <div class="field"><label>Conduta / Plano</label><textarea id="f-conduta" placeholder="Encaminhamentos, tarefas, próximos passos">${esc(r.conduta||'')}</textarea></div>
+      <div class="field"><label>Queixa do dia / Foco</label><input id="f-queixa" value="${esc(r.queixa||'')}" placeholder="Motivo, tema central ou queixa principal"></div>
+      <div class="field"><label>Objetivos trabalhados</label><textarea id="f-objetivos" placeholder="O que se buscou nesta sessão/atendimento">${esc(r.objetivos||'')}</textarea></div>
+      <div class="field"><label>Registro clínico / Evolução</label><textarea id="f-texto" style="min-height:130px" placeholder="Evolução, observações, conteúdo do atendimento...">${esc(r.texto||'')}</textarea></div>
+      <div class="row2">
+        <div class="field"><label>Intervenções / Condutas realizadas</label><textarea id="f-intervencoes" placeholder="Técnicas, procedimentos, condutas aplicadas">${esc(r.intervencoes||'')}</textarea></div>
+        <div class="field"><label>Recursos usados</label><textarea id="f-recursos" placeholder="Materiais, escalas, exames, instrumentos">${esc(r.recursos||'')}</textarea></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Pontos de atenção</label><textarea id="f-pontos" placeholder="Riscos, alertas, sinais a acompanhar">${esc(r.pontos||'')}</textarea></div>
+        <div class="field"><label>Plano para próxima sessão</label><textarea id="f-plano" placeholder="Encaminhamentos, tarefas, próximos passos">${esc(r.plano||r.conduta||'')}</textarea></div>
+      </div>
+      <p style="font-size:12px;color:var(--txs);background:var(--cin);border-radius:10px;padding:10px 12px;margin-top:4px">⚖️ Ferramenta de apoio à organização clínica. <b>Não substitui</b> o prontuário oficial exigido pelo seu conselho, nem é um registro certificado. Mantenha sua cópia oficial (use <b>Exportar</b> no prontuário).</p>
     </div>
     <div class="modal-foot">${rid?`<button class="btn danger ghost" style="margin-right:auto" onclick="delProntuario('${rid}')">Excluir</button>`:''}
       <button class="btn ghost" onclick="closeModal()">Cancelar</button>
@@ -940,9 +1001,11 @@ function formProntuario(pid,rid){
   </div>`);
 }
 function saveProntuario(pid,rid){
-  const data={pacienteId:pid,data:$('#f-data').value,tipo:$('#f-tipo').value,queixa:$('#f-queixa').value.trim(),
-    texto:$('#f-texto').value.trim(),conduta:$('#f-conduta').value.trim()};
-  if(!data.texto && !data.queixa){ toast('Escreva ao menos a queixa ou o registro',1); return; }
+  const g=id=>{const el=$('#'+id);return el?el.value.trim():'';};
+  const data={pacienteId:pid,data:$('#f-data').value,tipo:$('#f-tipo').value,sessao:g('f-sessao'),
+    queixa:g('f-queixa'),objetivos:g('f-objetivos'),texto:g('f-texto'),intervencoes:g('f-intervencoes'),
+    recursos:g('f-recursos'),pontos:g('f-pontos'),plano:g('f-plano'),conduta:g('f-plano')};
+  if(!data.texto && !data.queixa && !data.objetivos){ toast('Escreva ao menos a queixa, objetivos ou o registro',1); return; }
   if(rid){ Object.assign(DB.prontuarios.find(x=>x.id===rid),data); }
   else { DB.prontuarios.push({id:uid(),...data,agendamentoId:null,criadoEm:now()}); prontSelPaciente=pid; }
   save(); closeModal(); toast('Registro salvo'); render();
