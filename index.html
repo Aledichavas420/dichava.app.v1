@@ -2051,10 +2051,15 @@ a{color:inherit;text-decoration:none}
 .pro-field .val{font-size:14px;color:var(--tx);line-height:1.5}
 .pro-edit-btn{background:var(--vf);color:var(--ve);border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:4px}
 .chat-wpp{background:#25D366;color:#fff;font-weight:700;font-size:12.5px;padding:6px 12px;border-radius:20px;border:none}
-.chat-scroll{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:8px}
-.chat-day{align-self:center;background:var(--cinm);color:var(--txs);font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;margin:4px 0}
-.msg-b{max-width:78%;padding:9px 13px;border-radius:16px;font-size:14px;line-height:1.4;word-wrap:break-word;box-shadow:var(--sh)}
-.msg-b .t{font-size:10.5px;opacity:.6;margin-top:3px;text-align:right}
+.chat-scroll{flex:1;overflow-y:auto;padding:18px 16px 26px;display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg,var(--vf) 0%,var(--cin) 22%)}
+:root[data-theme="dark"] .chat-scroll,.dk .chat-scroll{background:linear-gradient(180deg,rgba(76,175,90,.08),var(--cin) 22%)}
+.chat-intro{align-self:center;max-width:88%;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:6px 0 10px;box-shadow:var(--sh)}
+.chat-intro .ci-av{width:46px;height:46px;border-radius:50%;background:var(--roxof);color:var(--roxo);display:grid;place-items:center;font-weight:800;font-size:17px;margin:0 auto 8px}
+.chat-intro b{display:block;font-size:15px;color:var(--tx)}
+.chat-intro small{font-size:12.5px;color:var(--txs);line-height:1.5;display:block;margin-top:4px}
+.chat-day{align-self:center;background:color-mix(in srgb,var(--dk) 12%,transparent);color:var(--txs);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin:6px 0}
+.msg-b{max-width:76%;padding:10px 14px;border-radius:18px;font-size:14.5px;line-height:1.45;word-wrap:break-word;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.msg-b .t{font-size:10px;opacity:.6;margin-top:4px;text-align:right}
 .msg-mine{align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px}
 .msg-them{align-self:flex-start;background:var(--card);color:var(--tx);border-bottom-left-radius:5px}
 .chat-bar{display:flex;gap:8px;align-items:flex-end;padding:10px 12px calc(10px + var(--sb));background:var(--card);border-top:1px solid var(--line)}
@@ -2934,7 +2939,7 @@ a{color:inherit;text-decoration:none}
 <div class="V" id="vproperfil">
   <div class="ptb" style="background:var(--dk)"><div class="ptb-tit">Complete seu perfil profissional</div></div>
   <div class="sc" style="flex:1;overflow-y:auto;padding:20px 18px">
-    <div style="background:var(--roxof);border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--roxo);line-height:1.6">🩺 <strong>Seu perfil será revisado manualmente</strong> antes de aparecer na rede. Você receberá confirmação em até 48h úteis.</div>
+    <div id="pp-aviso" style="background:var(--roxof);border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--roxo);line-height:1.6">🩺 <strong>Seu perfil será revisado manualmente</strong> antes de aparecer na rede. Você receberá confirmação em até 48h úteis.</div>
     <div class="fld"><div class="lbl">Tipo de profissional *</div><select class="inp" id="pp-tipo"><option value="">Selecione...</option><option value="Psicóloga(o)">Psicóloga(o)</option><option value="Psiquiatra">Psiquiatra</option><option value="Médica(o)">Médica(o)</option><option value="Enfermeira(o)">Enfermeira(o)</option><option value="Nutricionista">Nutricionista</option><option value="Fisioterapeuta">Fisioterapeuta</option><option value="Terapeuta ocupacional">Terapeuta ocupacional</option><option value="Terapeuta">Terapeuta</option><option value="Redutora(or) de danos">Redutora(or) de danos</option><option value="Assistente social">Assistente social</option><option value="Outro profissional da saúde">Outro profissional da saúde</option></select><div class="em" id="pp-tipoe"></div></div>
     <div class="fld"><div class="lbl">Bio profissional * <span style="color:var(--txm);font-weight:400">(como você trabalha com uso de substâncias)</span></div><textarea class="ft" id="pp-bio" rows="4" placeholder="Ex.: Atendo pessoas que usam substâncias sem impor abstinência…"></textarea><div class="em" id="pp-bioe"></div></div>
     <div class="fld"><div class="lbl">Especialidades <span style="color:var(--txm);font-weight:400">(separadas por vírgula)</span></div><input class="inp" id="pp-esp" type="text" placeholder="Ex.: Redução de danos, Ansiedade, Uso de álcool"></div>
@@ -6175,7 +6180,7 @@ async function renderProfs(){
 }
 /* ══ CHAT usuário ↔ profissional ══ */
 let _profsById={};
-let _chat={conv:null,otherNome:'',otherTel:'',asPro:false,from:'vprofs',poll:null,lastN:0};
+let _chat={conv:null,otherNome:'',otherInfo:'',otherTel:'',asPro:false,from:'vprofs',prefill:'',poll:null,lastN:0};
 function ini2(n){return (n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
 async function contatarProf(id){
   try{vib(12);}catch(e){}
@@ -6192,11 +6197,12 @@ async function contatarProf(id){
       const{data:nc,error}=await _SB.from('conversas').insert({id:cid,user_id:U.id,prof_id:id,user_nome:U.nome||'',prof_nome:p.nome||''}).select().maybeSingle();
       if(error)throw error; conv=nc||{id:cid,user_id:U.id,prof_id:id,prof_nome:p.nome||''};
     }
-    abrirChat(conv,false,p.nome||conv.prof_nome||'Profissional',p.telefone||'','vprofs');
+    const prefill='Olá! Vi seu perfil no dichava.app e gostaria de conversar sobre seus atendimentos. Você tem disponibilidade?';
+    abrirChat(conv,false,p.nome||conv.prof_nome||'Profissional',p.telefone||'','vprofs',p.tipo_prof||'',prefill);
   }catch(e){toast('⚠️ '+((e&&e.message)||'não consegui abrir a conversa'),5000);}
 }
-function abrirChat(conv,asPro,otherNome,otherTel,from){
-  _chat={conv,otherNome,otherTel:otherTel||'',asPro:!!asPro,from:from||(asPro?'vpro-dash':'vprofs'),poll:null,lastN:0};
+function abrirChat(conv,asPro,otherNome,otherTel,from,otherInfo,prefill){
+  _chat={conv,otherNome,otherInfo:otherInfo||'',otherTel:otherTel||'',asPro:!!asPro,from:from||(asPro?'vpro-dash':'vprofs'),prefill:prefill||'',poll:null,lastN:0};
   document.getElementById('chat-nome').textContent=otherNome||'Conversa';
   const w=document.getElementById('chat-wpp');
   const tel=(otherTel||'').replace(/[^0-9]/g,'');
@@ -6215,7 +6221,11 @@ async function carregarMsgs(scroll){
     if(msgs.length===_chat.lastN && !scroll)return;   // nada novo
     _chat.lastN=msgs.length;
     const sc=document.getElementById('chat-scroll');
-    if(!msgs.length){ sc.innerHTML='<div class="chat-empty">Comece a conversa 💬<br>Diga um oi e o que você procura.</div>'; return; }
+    if(!msgs.length){
+      sc.innerHTML='<div class="chat-intro"><div class="ci-av">'+ini2(_chat.otherNome)+'</div><b>'+esc(_chat.otherNome||'Conversa')+'</b><small>'+esc(_chat.otherInfo||(_chat.asPro?'Usuário do app':'Profissional parceiro'))+'<br>'+(_chat.asPro?'Responda com atenção e acolhimento.':'Envie uma mensagem para iniciar o contato.')+'</small></div>';
+      if(!_chat.asPro && _chat.prefill){ const inp=document.getElementById('chat-input'); if(inp && !inp.value){ inp.value=_chat.prefill; try{chatAutoGrow(inp);}catch(e){} } _chat.prefill=''; }
+      return;
+    }
     let lastDay='';
     sc.innerHTML=msgs.map(m=>{
       const dt=new Date(m.criado_em); const dia=dt.toLocaleDateString('pt-BR'); let head='';
@@ -6280,6 +6290,8 @@ async function salvarPerfilPro(){
   chk('pp-bio','pp-bioe',bio&&bio.length>=20,'Escreva pelo menos 20 caracteres.');
   chk('pp-mod','pp-mode',mod,'Selecione a modalidade.');
   if(!ok)return;
+  const editando=(document.getElementById('pp-btn').textContent||'').indexOf('alteraç')>=0;
+  if(editando && !confirm('Ao salvar, seu perfil volta para análise e fica temporariamente indisponível na rede até a nova aprovação. Deseja continuar?'))return;
   const btn=document.getElementById('pp-btn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
   const payload={id:U.id,nome:U.nome,email:U.email,reg:U.reg||'',tipo_prof:tipo,bio,especialidades:document.getElementById('pp-esp').value.trim(),modalidade:mod,cidade:document.getElementById('pp-cidade').value.trim(),valor:document.getElementById('pp-valor').value.trim(),duracao:document.getElementById('pp-dur').value.trim(),disponibilidade:document.getElementById('pp-disp').value.trim(),telefone:(document.getElementById('pp-tel')?.value||'').trim(),status:'pendente'};
   let error=null;
@@ -6360,6 +6372,7 @@ function abrirEdicaoPerfil(){
     document.getElementById('pp-disp').value=prof.disponibilidade||'';
     {const tel=document.getElementById('pp-tel');if(tel)tel.value=prof.telefone||'';}
     document.getElementById('pp-btn').textContent='Salvar alterações';
+    {const av=document.getElementById('pp-aviso');if(av)av.innerHTML='⚠️ <strong>Atenção:</strong> ao salvar qualquer alteração, seu perfil volta para <strong>análise</strong> e fica <strong>temporariamente indisponível</strong> na rede até a nova aprovação da equipe (até 48h úteis).';}
     showV('vproperfil');
   });
 }
