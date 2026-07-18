@@ -52,7 +52,7 @@ h2.sec{font-size:26px;font-weight:800;text-align:center;margin:52px 0 6px;letter
 .why-c .i{font-size:24px}
 .why-c b{display:block;font-size:15.5px;margin:6px 0 3px}
 .why-c small{font-size:13.5px;color:var(--txs)}
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
 .plan{position:relative;background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:24px 20px;box-shadow:0 8px 22px rgba(30,60,35,.05)}
 .plan.best{border-color:var(--am);box-shadow:0 16px 40px rgba(242,183,5,.14)}
 .plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(120deg,#F2B705,#EA8B0C);color:#fff;font-weight:800;font-size:11.5px;padding:5px 15px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 12px rgba(234,139,12,.35)}
@@ -164,8 +164,8 @@ footer a{color:#2E7D32;text-decoration:none}
     <div class="why-c"><span class="i">💚</span><b>Causa alinhada</b><small>Redução de danos, ética e respaldo em política pública de saúde. Você entra numa rede séria.</small></div>
   </div>
 
-  <h2 class="sec">Dois jeitos de ser parceiro</h2>
-  <div class="sub">Escolha na hora de contratar. Sem fidelidade — cancele quando quiser.</div>
+  <h2 class="sec">Planos pra você ou sua clínica</h2>
+  <div class="sub">Escolha na hora de contratar. Sem fidelidade — cancele quando quiser. <b>Todos incluem o Painel da Clínica.</b></div>
   <div class="plans">
     <div class="plan">
       <div class="plan-n">Parceiro</div>
@@ -175,6 +175,7 @@ footer a{color:#2E7D32;text-decoration:none}
         <li>Mini-currículo, abordagem e formação</li>
         <li>Valor médio de sessão e contato</li>
         <li>Selo de profissional parceiro</li>
+        <li>🩺 <b>Painel da Clínica</b>: agenda, pacientes, prontuários e caixa</li>
         <li class="off">Divulgação ativa nos nossos canais</li>
         <li class="off">Códigos premium pra seus pacientes</li>
       </ul>
@@ -188,6 +189,20 @@ footer a{color:#2E7D32;text-decoration:none}
         <li><b>Destaque</b> e prioridade no diretório</li>
         <li><b>Divulgação ativa</b> na landing e no Instagram (@dichavandoard)</li>
         <li><b>10 códigos premium</b> pra presentear seus pacientes</li>
+        <li>🩺 Painel da Clínica completo</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <div class="plan-n">Clínica</div>
+      <div class="plan-p">R$ 490<small>/mês</small></div>
+      <ul>
+        <li>Pra <b>coletivos e clínicas</b> (até 5 profissionais)</li>
+        <li>Tudo do Parceiro Destaque pra <b>cada profissional</b></li>
+        <li>🏥 <b>Painel da Clínica compartilhado</b>: agenda e caixa da equipe</li>
+        <li>Página da <b>clínica</b> no diretório do app</li>
+        <li>Divulgação da clínica na landing e no Instagram</li>
+        <li><b>25 códigos premium</b> pra pacientes da equipe</li>
+        <li class="off">Profissional extra: + R$ 79/mês cada</li>
       </ul>
     </div>
   </div>
@@ -212,7 +227,7 @@ footer a{color:#2E7D32;text-decoration:none}
         <div><label>WhatsApp <span class="req">*</span></label><input id="f-wpp" required maxlength="20" placeholder="(00) 00000-0000"></div>
       </div>
       <label>Plano de interesse</label>
-      <select id="f-plano"><option>Ainda estou decidindo</option><option>Parceiro (R$ 149/mês)</option><option>Parceiro Destaque (R$ 249/mês)</option></select>
+      <select id="f-plano"><option>Ainda estou decidindo</option><option>Parceiro (R$ 149/mês)</option><option>Parceiro Destaque (R$ 249/mês)</option><option>Clínica / coletivo (R$ 490/mês)</option></select>
       <label>Algo que queira contar? (opcional)</label>
       <textarea id="f-msg" rows="3" maxlength="400" placeholder="Sua abordagem, dúvidas, expectativas…"></textarea>
       <button class="btn" id="wl-btn" type="submit">Quero ser avisado(a) 💚</button>
