@@ -1,0 +1,65 @@
+====================================================================
+HOMOLOGAÇÃO PagBank — Chamado 1414668509
+Integração: dichava.app
+Solução adotada: API CHECKOUT (POST /checkouts) — checkout hospedado
+Ambiente: SANDBOX
+====================================================================
+
+ARQUITETURA
+- Processamento do pagamento: API CHECKOUT (POST /checkouts). É ela que gera
+  o LINK DE PAGAMENTO (links[].rel = "PAY"), onde o cliente paga com
+  CARTÃO DE CRÉDITO, PIX ou BOLETO (payment_methods abaixo).
+- Confirmação: API ORDER apenas para CONSULTA (GET /orders/{id}), usada só
+  para confirmar o pagamento e liberar o acesso. NÃO criamos pedidos via
+  POST /orders.
+
+Abaixo, os REQUESTS e RESPONSES reais (log do servidor) da criação do
+checkout em Sandbox — status 201, com o link de pagamento gerado.
+
+Endpoint de todos os requests:
+POST https://sandbox.api.pagseguro.com/checkouts
+Headers: Authorization: Bearer <TOKEN_SANDBOX> | Content-Type: application/json | accept: application/json
+
+====================================================================
+1) PLANO MENSAL
+====================================================================
+REQUEST
+{"reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal","customer_modifiable":true,"customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"items":[{"reference_id":"mensal","name":"dichava premium — Mensal","quantity":1,"unit_amount":1290}],"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]}
+
+RESPONSE (HTTP 201)
+{"id":"CHEC_A8075DBB-8496-4878-A298-2C87C75FA2F9","reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal","created_at":"2026-07-16T19:19:39-03:00","status":"ACTIVE","customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"customer_modifiable":true,"items":[{"reference_id":"mensal","name":"dichava premium — Mensal","quantity":1,"unit_amount":1290}],"additional_amount":0,"discount_amount":0,"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"],"payment_notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"],"links":[{"rel":"SELF","href":"https://sandbox.api.pagseguro.com/checkouts/CHEC_A8075DBB-8496-4878-A298-2C87C75FA2F9","method":"GET"},{"rel":"PAY","href":"https://pagamento.sandbox.pagbank.com.br/pagamento?code=a8075dbb-8496-4878-a298-2c87c75fa2f9","method":"GET"},{"rel":"INACTIVATE","href":"https://sandbox.api.pagseguro.com/checkouts/CHEC_A8075DBB-8496-4878-A298-2C87C75FA2F9/inactivate","method":"POST"}],"origin":"CHECKOUT_WEB"}
+
+>>> LINK DE PAGAMENTO GERADO (rel PAY):
+    https://pagamento.sandbox.pagbank.com.br/pagamento?code=a8075dbb-8496-4878-a298-2c87c75fa2f9
+
+====================================================================
+2) PLANO ANUAL
+====================================================================
+REQUEST
+{"reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|anual","customer_modifiable":true,"customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"items":[{"reference_id":"anual","name":"dichava premium — Anual","quantity":1,"unit_amount":9990}],"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]}
+
+RESPONSE (HTTP 201)
+{"id":"CHEC_8017996C-0227-414B-B989-25F975F7DA52","reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|anual","created_at":"2026-07-16T19:23:11-03:00","status":"ACTIVE","customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"customer_modifiable":true,"items":[{"reference_id":"anual","name":"dichava premium — Anual","quantity":1,"unit_amount":9990}],"additional_amount":0,"discount_amount":0,"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"],"payment_notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"],"links":[{"rel":"SELF","href":"https://sandbox.api.pagseguro.com/checkouts/CHEC_8017996C-0227-414B-B989-25F975F7DA52","method":"GET"},{"rel":"PAY","href":"https://pagamento.sandbox.pagbank.com.br/pagamento?code=8017996c-0227-414b-b989-25f975f7da52","method":"GET"},{"rel":"INACTIVATE","href":"https://sandbox.api.pagseguro.com/checkouts/CHEC_8017996C-0227-414B-B989-25F975F7DA52/inactivate","method":"POST"}],"origin":"CHECKOUT_WEB"}
+
+>>> LINK DE PAGAMENTO GERADO (rel PAY):
+    https://pagamento.sandbox.pagbank.com.br/pagamento?code=8017996c-0227-414b-b989-25f975f7da52
+
+====================================================================
+3) PLANO MENSAL (2ª criação)
+====================================================================
+REQUEST
+{"reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal","customer_modifiable":true,"customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"items":[{"reference_id":"mensal","name":"dichava premium — Mensal","quantity":1,"unit_amount":1290}],"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"]}
+
+RESPONSE (HTTP 201)
+{"id":"CHEC_7179A24A-0C28-4BDF-8D93-ACE8FF9F1BC7","reference_id":"c289a732-d9d7-46d7-abfa-be64b5852ae2|mensal","created_at":"2026-07-16T19:26:16-03:00","status":"ACTIVE","customer":{"name":"Alexandre","email":"alex.mnteir@gmail.com"},"customer_modifiable":true,"items":[{"reference_id":"mensal","name":"dichava premium — Mensal","quantity":1,"unit_amount":1290}],"additional_amount":0,"discount_amount":0,"payment_methods":[{"type":"CREDIT_CARD"},{"type":"PIX"},{"type":"BOLETO"}],"redirect_url":"https://dichava.app/?pago=1","notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"],"payment_notification_urls":["https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/pagamento-webhook"],"links":[{"rel":"SELF","href":"https://sandbox.api.pagseguro.com/checkouts/CHEC_7179A24A-0C28-4BDF-8D93-ACE8FF9F1BC7","method":"GET"},{"rel":"PAY","href":"https://pagamento.sandbox.pagbank.com.br/pagamento?code=7179a24a-0c28-4bdf-8d93-ace8ff9f1bc7","method":"GET"},{"rel":"INACTIVATE","href":"https://sandbox.api.pagseguro.com/checkouts/CHEC_7179A24A-0C28-4BDF-8D93-ACE8FF9F1BC7/inactivate","method":"POST"}],"origin":"CHECKOUT_WEB"}
+
+>>> LINK DE PAGAMENTO GERADO (rel PAY):
+    https://pagamento.sandbox.pagbank.com.br/pagamento?code=7179a24a-0c28-4bdf-8d93-ace8ff9f1bc7
+
+====================================================================
+RESUMO
+- 3 criações de checkout em Sandbox (POST /checkouts), todas HTTP 201 / status ACTIVE.
+- Cada checkout habilita os 3 meios de pagamento: CREDIT_CARD, PIX e BOLETO.
+- Cada response traz o LINK DE PAGAMENTO em links[].rel = "PAY".
+- notification_urls apontam para nossa função de confirmação.
+====================================================================
