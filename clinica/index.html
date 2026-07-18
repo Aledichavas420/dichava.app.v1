@@ -943,6 +943,16 @@ function saveAgendamento(id){
   const data={pacienteId:pacId,data:$('#f-data').value,hora:$('#f-hora').value,duracao:+$('#f-dur').value||50,
     tipo:$('#f-tipo').value,status:$('#f-status').value,valor:+$('#f-valor').value||0,profId,profNome,
     formaPagamento:$('#f-forma').value,pago:$('#f-pago').value==='1',obs:$('#f-obs').value.trim()};
+  // aviso de conflito de horário (mesmo profissional, sobreposição no mesmo dia)
+  const hm=s=>{const[h,m]=String(s||'0:0').split(':').map(Number);return (h||0)*60+(m||0);};
+  const ini=hm(data.hora), fim=ini+(data.duracao||50);
+  const conflito=DB.agendamentos.find(x=>x.id!==id && x.data===data.data && x.status!=='cancelado'
+    && (!data.profId || !x.profId || x.profId===data.profId)
+    && hm(x.hora) < fim && (hm(x.hora)+(+x.duracao||50)) > ini);
+  if(conflito){
+    const quem=pacNome(conflito.pacienteId);
+    if(!confirm('⚠️ Já existe '+quem+' agendado(a) às '+conflito.hora+' neste dia'+(conflito.profNome&&MEMBROS.length>1?' com '+conflito.profNome:'')+'.\n\nMarcar mesmo assim?')) return;
+  }
   let ag;
   if(id){ ag=DB.agendamentos.find(x=>x.id===id); Object.assign(ag,data); }
   else { ag={id:uid(),...data,criadoEm:now()}; DB.agendamentos.push(ag); }
