@@ -5978,8 +5978,11 @@ function fecharProfs(){if(U?.tipo==='pro')entrarPro();else showV('vapp');}
 /* ══ PERFIL PROFISSIONAL ══ */
 async function checkProStatus(){
   if(!_SB||U.id==='demo')return null;
-  const{data}=await _SB.from('profissionais').select('status').eq('id',U.id).maybeSingle().catch(()=>({data:null}));
-  return data?.status||null;
+  try{
+    const q=_SB.from('profissionais').select('status').eq('id',U.id).maybeSingle();
+    const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))]);
+    return data?.status||null;
+  }catch(e){return null;}
 }
 async function salvarPerfilPro(){
   const tipo=document.getElementById('pp-tipo').value.trim();
@@ -6050,8 +6053,11 @@ function contatarProf(id){
 /* ══ PERFIL PROFISSIONAL ══ */
 async function checkProStatus(){
   if(!_SB||U.id==='demo')return null;
-  const{data}=await _SB.from('profissionais').select('status').eq('id',U.id).maybeSingle().catch(()=>({data:null}));
-  return data?.status||null;
+  try{
+    const q=_SB.from('profissionais').select('status').eq('id',U.id).maybeSingle();
+    const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))]);
+    return data?.status||null;
+  }catch(e){return null;}
 }
 async function salvarPerfilPro(){
   const tipo=document.getElementById('pp-tipo').value.trim();
@@ -6084,9 +6090,9 @@ function proTab(id,btn){
   document.getElementById('pd-'+id).classList.add('on');
 }
 async function entrarPro(){
-  // fetch professional profile
+  // fetch professional profile (com timeout p/ nunca travar o boot)
   let prof=null;
-  if(_SB){const{data}=await _SB.from('profissionais').select('*').eq('id',U.id).maybeSingle().catch(()=>({data:null}));prof=data;}
+  if(_SB){try{const q=_SB.from('profissionais').select('*').eq('id',U.id).maybeSingle();const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))]);prof=data;}catch(e){prof=null;}}
   // fill header
   document.getElementById('pd-nome').textContent=U.nome||'—';
   document.getElementById('pd-reg').textContent=U.reg||'';
@@ -8171,8 +8177,20 @@ function agNotif(){
 // Precisamos do canvas no HTML de reflexões
 /* ══ INIT ══ */
 document.addEventListener('touchstart',function(e){if(!e.target.closest('input,textarea,select'))blurAll();},{passive:true});
+// rede de segurança: se o boot travar/falhar e nenhuma tela aparecer, mostra algo (nunca tela branca)
+window.addEventListener('unhandledrejection',function(ev){try{console.error('rejeição não tratada:',ev.reason);}catch(e){}});
+setTimeout(function(){
+  try{
+    if(document.querySelector('.V.on'))return;           // já tem tela visível → ok
+    if(typeof U!=='undefined'&&U){
+      if(U.tipo==='pro'){showV('vproperfil');}
+      else{showV('vapp');}
+    }else{showV('va');}
+  }catch(e){try{showV('va');}catch(_){}}
+},7000);
 (async function init(){
-  const {data:{session}} = _SB ? await _SB.auth.getSession().catch(()=>({data:{session:null}})) : {data:{session:null}};
+  let session=null;
+  if(_SB){try{const gs=_SB.auth.getSession();const r=await Promise.race([gs,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),6000))]);session=r?.data?.session||null;}catch(e){session=null;}}
   if(session?.user){
     const sbU=session.user;const m=sbU.user_metadata||{};
     U={id:sbU.id,nome:m.nome||sbU.email.split('@')[0],email:sbU.email,tipo:m.tipo||'user',reg:m.reg||null};
