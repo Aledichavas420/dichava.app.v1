@@ -233,8 +233,19 @@ tbody tr:hover{background:var(--cin)}
 .hide{display:none!important}
 
 /* ============ LOGIN / GATE ============ */
-#gate{position:fixed;inset:0;z-index:400;background:linear-gradient(160deg,var(--dk),#132013);display:none;align-items:center;justify-content:center;padding:24px;padding-top:calc(24px + var(--st))}
-#gate.on{display:flex}
+#gate,#clinicgate{position:fixed;inset:0;z-index:400;background:linear-gradient(160deg,var(--dk),#132013);display:none;align-items:center;justify-content:center;padding:24px;padding-top:calc(24px + var(--st))}
+#gate.on,#clinicgate.on{display:flex}
+.cl-tabs{display:flex;gap:6px;background:var(--cin);border-radius:12px;padding:4px;margin:4px 0 16px}
+.cl-tab{flex:1;padding:9px;border-radius:9px;font-weight:700;font-size:13.5px;color:var(--txs);background:none}
+.cl-tab.on{background:var(--card);color:var(--tx);box-shadow:var(--sh)}
+#save-dot{font-size:12px;color:var(--txs);font-weight:600;min-width:60px;text-align:right}
+.eq-code{display:flex;align-items:center;gap:10px;background:var(--vf);border:1.5px dashed var(--v);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.eq-code b{font-size:24px;font-weight:800;letter-spacing:3px;color:var(--ve);font-variant-numeric:tabular-nums}
+.eq-code .cp{margin-left:auto}
+.eq-mem{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.eq-mem:last-child{border-bottom:none}
+.eq-mem .papel{margin-left:auto;font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:20px;background:var(--ams);color:var(--lrj)}
+.eq-mem .papel.dono{background:var(--vf);color:var(--ve)}
 .gate-card{width:100%;max-width:400px;background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh2);padding:30px 26px;animation:pop .25s}
 .gate-logo{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,var(--v),var(--sa));display:grid;place-items:center;font-weight:800;color:#fff;font-size:26px;margin:0 auto 14px}
 .gate-card h2{text-align:center;font-size:21px;font-weight:800;letter-spacing:-.4px}
@@ -299,6 +310,29 @@ tbody tr:hover{background:var(--cin)}
   </div>
 </div>
 
+<!-- CRIAR / ENTRAR EM CLÍNICA -->
+<div id="clinicgate">
+  <div class="gate-card">
+    <div class="gate-logo">🏥</div>
+    <h2>Sua clínica</h2>
+    <div class="gsub">Crie uma clínica ou entre na de um colega com o código.</div>
+    <div class="cl-tabs">
+      <button class="cl-tab on" id="cl-tab-criar" onclick="clTab('criar')">Criar clínica</button>
+      <button class="cl-tab" id="cl-tab-entrar" onclick="clTab('entrar')">Entrar com código</button>
+    </div>
+    <div id="cl-pane-criar">
+      <div class="field"><label>Nome da clínica ou do seu consultório</label><input id="cl-nome" placeholder="Ex.: Clínica Bem-Estar / Consultório Alex"></div>
+      <button class="btn" id="cl-criar" style="width:100%;justify-content:center;padding:13px" onclick="criarClinica()">Criar clínica</button>
+      <div class="gate-note">Você vira o(a) <b>responsável</b> e recebe um código pra convidar sua equipe.</div>
+    </div>
+    <div id="cl-pane-entrar" style="display:none">
+      <div class="field"><label>Código da clínica</label><input id="cl-codigo" placeholder="Ex.: 7KQ2M9" maxlength="8" style="text-transform:uppercase;letter-spacing:2px;font-weight:700"></div>
+      <button class="btn" id="cl-entrar" style="width:100%;justify-content:center;padding:13px" onclick="entrarClinica()">Entrar na clínica</button>
+      <div class="gate-note">Peça o código pra quem administra a clínica.</div>
+    </div>
+  </div>
+</div>
+
 <div class="app">
   <!-- SIDEBAR -->
   <aside class="sidebar">
@@ -311,6 +345,7 @@ tbody tr:hover{background:var(--cin)}
     <a class="nav-item" data-nav="pacientes"><span class="ic">☺</span> Pacientes</a>
     <a class="nav-item" data-nav="prontuarios"><span class="ic">▤</span> Prontuários</a>
     <a class="nav-item" data-nav="caixa"><span class="ic">$</span> Caixa</a>
+    <a class="nav-item" data-nav="equipe"><span class="ic">👥</span> Equipe</a>
     <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
     <div class="side-foot">
       <div class="who"><b id="side-prof">Profissional</b><span id="side-clin">Minha Clínica</span></div>
@@ -325,6 +360,7 @@ tbody tr:hover{background:var(--cin)}
         <div class="sub" id="pg-sub"></div>
       </div>
       <div class="grow"></div>
+      <span id="save-dot"></span>
       <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
       <button class="btn" id="quick-add">＋ Novo</button>
     </div>
@@ -337,8 +373,8 @@ tbody tr:hover{background:var(--cin)}
   <a data-nav="dash"><span class="ic">◧</span>Início</a>
   <a data-nav="agenda"><span class="ic">◷</span>Agenda</a>
   <a data-nav="pacientes"><span class="ic">☺</span>Pacientes</a>
-  <a data-nav="prontuarios"><span class="ic">▤</span>Prontuário</a>
   <a data-nav="caixa"><span class="ic">$</span>Caixa</a>
+  <a data-nav="equipe"><span class="ic">👥</span>Equipe</a>
 </nav>
 
 <div class="overlay" id="overlay"></div>
@@ -366,17 +402,42 @@ function idade(iso){ if(!iso) return null; const b=new Date(iso), n=new Date(); 
 function initials(nome){ return (nome||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase(); }
 function addDaysISO(iso,n){ const d=new Date(iso+'T12:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
 
-/* -------- persistência (chave por profissional) -------- */
+/* -------- persistência (clínica compartilhada via Supabase) -------- */
 let KEY='dichava_clinica_v1';
 let DB;
-let AUTH=null;  // {id,nome,email,reg} do profissional logado
-function load(){
-  try{ DB=JSON.parse(localStorage.getItem(KEY)); }catch(e){ DB=null; }
-  if(!DB||!DB.pacientes){ DB=seed(); save(); }
+let AUTH=null;     // {id,nome,email,reg} do profissional logado
+let CLINICA=null;  // {id,nome,codigo,papel,dono_id} — clínica ativa
+let MEMBROS=[];    // membros da clínica
+function emptyDB(){ return {config:{clinica:'Minha Clínica',profissional:'',especialidade:''},pacientes:[],agendamentos:[],prontuarios:[],financeiro:[]}; }
+function normalizeDB(d){
+  DB = (d && typeof d==='object') ? d : {};
   DB.pacientes ||= []; DB.agendamentos ||= []; DB.prontuarios ||= []; DB.financeiro ||= [];
-  DB.config ||= {clinica:'Minha Clínica',profissional:'Dr(a). Você',especialidade:''};
+  DB.config ||= {clinica:'Minha Clínica',profissional:'',especialidade:''};
+  if(CLINICA && CLINICA.nome) DB.config.clinica=CLINICA.nome;
 }
-function save(){ localStorage.setItem(KEY,JSON.stringify(DB)); }
+function load(){ // fallback offline / modo solo local
+  try{ DB=JSON.parse(localStorage.getItem(KEY)); }catch(e){ DB=null; }
+  if(!DB || !DB.pacientes){ DB=emptyDB(); }
+  normalizeDB(DB);
+}
+let _saveT=null;
+function save(){
+  if(CLINICA && _SB){
+    try{ localStorage.setItem('clinica_cache_'+CLINICA.id, JSON.stringify(DB)); }catch(e){}
+    const dot=$('#save-dot'); if(dot) dot.textContent='salvando…';
+    clearTimeout(_saveT); _saveT=setTimeout(salvarNuvem, 700);
+  } else {
+    try{ localStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){}
+  }
+}
+async function salvarNuvem(){
+  if(!CLINICA || !_SB) return;
+  try{
+    const{error}=await _SB.from('clinicas').update({dados:DB, atualizado_em:new Date().toISOString()}).eq('id',CLINICA.id);
+    if(error) throw error;
+    const dot=$('#save-dot'); if(dot){ dot.textContent='✓ salvo'; clearTimeout(dot._t); dot._t=setTimeout(()=>{dot.textContent='';},1600); }
+  }catch(e){ const dot=$('#save-dot'); if(dot) dot.textContent='⚠ sem conexão'; }
+}
 
 /* -------- dados de exemplo -------- */
 function seed(){
@@ -425,7 +486,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
 function render(){
   const [t,s]=TITLES[route]||['',''];
   $('#pg-title').textContent=t; $('#pg-sub').textContent=s;
@@ -435,6 +496,7 @@ function render(){
   else if(route==='pacientes') v.innerHTML=viewPacientes();
   else if(route==='prontuarios') v.innerHTML=viewProntuarios();
   else if(route==='caixa') v.innerHTML=viewCaixa();
+  else if(route==='equipe') v.innerHTML=viewEquipe();
   else if(route==='config') v.innerHTML=viewConfig();
   updateBadges();
 }
@@ -494,7 +556,7 @@ function viewAgenda(){
       const st=STATUS[a.status];
       return `<div class="appt st-${a.status}" onclick="openAgendamento('${a.id}')">
         <b>${a.hora} · ${esc(pacNome(a.pacienteId))}</b>
-        <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}</small>
+        <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}${(MEMBROS.length>1&&a.profNome)?' · 👤 '+esc(a.profNome):''}</small>
       </div>`;}).join('')}</div>`;
   }).join('');
 
@@ -668,7 +730,57 @@ function salvarConfig(){
   DB.config.especialidade=$('#cf-esp').value.trim();
   save(); syncHeader(); toast('Configurações salvas'); render();
 }
-function syncHeader(){ $('#side-prof').textContent=DB.config.profissional; $('#side-clin').textContent=DB.config.clinica; }
+function syncHeader(){ $('#side-prof').textContent=(AUTH&&AUTH.nome)||DB.config.profissional||'Profissional'; $('#side-clin').textContent=(CLINICA&&CLINICA.nome)||DB.config.clinica||'Minha Clínica'; }
+
+/* =============== EQUIPE (clínica compartilhada) =============== */
+function viewEquipe(){
+  if(!CLINICA){
+    return `<div class="card empty"><div class="big">🏥</div><b>Modo local</b>Este painel está funcionando só neste aparelho. Para compartilhar com uma equipe, configure a clínica no servidor.</div>`;
+  }
+  const ehDono=CLINICA.papel==='dono';
+  const membros=MEMBROS.slice().sort((a,b)=>(a.papel==='dono'?-1:1)-(b.papel==='dono'?-1:1)||String(a.nome||'').localeCompare(String(b.nome||'')));
+  return `
+  <div class="card" style="padding:20px;max-width:620px">
+    <div class="sec-title" style="margin-top:0">Convide sua equipe</div>
+    <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Compartilhe este código com outros profissionais. Quem entrar com ele passa a ver a <b>mesma agenda, pacientes e caixa</b>.</p>
+    <div class="eq-code"><span style="font-size:12px;color:var(--txs);font-weight:700">CÓDIGO</span> <b id="eq-code-v">${esc(CLINICA.codigo)}</b><button class="btn sm ghost cp" onclick="copiarCodigo()">Copiar</button></div>
+  </div>
+  <div class="card" style="padding:20px;max-width:620px;margin-top:16px">
+    <div class="sec-title" style="margin-top:0">Profissionais (${membros.length})</div>
+    ${membros.map(m=>`<div class="eq-mem">
+      <div class="avatar">${initials(m.nome||'?')}</div>
+      <div><b>${esc(m.nome||'Profissional')}</b>${m.user_id===AUTH.id?' <span style="color:var(--txm);font-size:12px">(você)</span>':''}</div>
+      <span class="papel ${m.papel==='dono'?'dono':''}">${m.papel==='dono'?'Responsável':'Membro'}</span>
+      ${(ehDono && m.user_id!==AUTH.id)?`<button class="btn sm danger" style="margin-left:10px" onclick="removerMembro('${m.user_id}')">Remover</button>`:''}
+    </div>`).join('')}
+  </div>
+  <div class="card" style="padding:20px;max-width:620px;margin-top:16px">
+    <div class="sec-title" style="margin-top:0">Esta clínica</div>
+    <div class="field"><label>Nome da clínica</label><input id="eq-nome" value="${esc(CLINICA.nome)}" ${ehDono?'':'disabled'}></div>
+    ${ehDono?`<button class="btn sm" onclick="renomearClinica()">Salvar nome</button>`:'<p style="color:var(--txm);font-size:13px">Só o responsável pode renomear a clínica.</p>'}
+    <div style="height:14px"></div>
+    <button class="btn danger ghost sm" onclick="sairClinica()">${ehDono?'Sair (e transferir depois)':'Sair desta clínica'}</button>
+  </div>`;
+}
+function copiarCodigo(){ try{ navigator.clipboard.writeText(CLINICA.codigo); toast('Código copiado'); }catch(e){ toast(CLINICA.codigo); } }
+async function renomearClinica(){
+  const nome=($('#eq-nome').value||'').trim(); if(!nome){toast('Informe um nome',1);return;}
+  try{ const{error}=await _SB.from('clinicas').update({nome}).eq('id',CLINICA.id); if(error)throw error;
+    CLINICA.nome=nome; DB.config.clinica=nome; save(); syncHeader(); toast('Nome atualizado'); }
+  catch(e){ toast('Erro ao renomear',1); }
+}
+async function removerMembro(uid){
+  if(!confirm('Remover este profissional da clínica?'))return;
+  try{ const{error}=await _SB.from('clinica_membros').delete().eq('clinica_id',CLINICA.id).eq('user_id',uid); if(error)throw error;
+    MEMBROS=MEMBROS.filter(m=>m.user_id!==uid); render(); toast('Profissional removido'); }
+  catch(e){ toast('Erro ao remover',1); }
+}
+async function sairClinica(){
+  if(!confirm('Sair desta clínica? Você deixa de ver os dados dela neste aparelho.'))return;
+  try{ await _SB.from('clinica_membros').delete().eq('clinica_id',CLINICA.id).eq('user_id',AUTH.id);
+    CLINICA=null; MEMBROS=[]; _appReady=false; location.reload(); }
+  catch(e){ toast('Erro ao sair',1); }
+}
 
 /* =============== MODAIS / FORMS =============== */
 function openModal(html){ $('#overlay').innerHTML=html; $('#overlay').classList.add('on'); }
@@ -760,6 +872,7 @@ function formAgendamento(id,dataDefault,pacDefault){
         <div class="field"><label>Tipo</label><select id="f-tipo">${['Consulta','Retorno','Avaliação','Primeira sessão','Online'].map(t=>`<option ${t===a.tipo?'selected':''}>${t}</option>`).join('')}</select></div>
         <div class="field"><label>Status</label><select id="f-status">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===a.status?'selected':''}>${v.l}</option>`).join('')}</select></div>
       </div>
+      ${(MEMBROS&&MEMBROS.length>1)?`<div class="field"><label>Profissional</label><select id="f-prof">${MEMBROS.map(m=>`<option value="${m.user_id}" ${((a.profId||AUTH&&AUTH.id)===m.user_id)?'selected':''}>${esc(m.nome||'Profissional')}</option>`).join('')}</select></div>`:''}
       <div class="row3">
         <div class="field"><label>Valor (R$)</label><input id="f-valor" type="number" step="0.01" value="${a.valor}"></div>
         <div class="field"><label>Forma pagto</label><select id="f-forma">${Object.entries(PAG).map(([k,v])=>`<option value="${k}" ${k===a.formaPagamento?'selected':''}>${v}</option>`).join('')}</select></div>
@@ -776,8 +889,9 @@ function formAgendamento(id,dataDefault,pacDefault){
 function saveAgendamento(id){
   const pacId=$('#f-pac').value;
   if(!pacId){ toast('Selecione o paciente',1); return; }
+  const profSel=$('#f-prof');const profId=profSel?profSel.value:(AUTH&&AUTH.id||'');const profNome=profId&&MEMBROS.length?(MEMBROS.find(m=>m.user_id===profId)||{}).nome||'':((AUTH&&AUTH.nome)||'');
   const data={pacienteId:pacId,data:$('#f-data').value,hora:$('#f-hora').value,duracao:+$('#f-dur').value||50,
-    tipo:$('#f-tipo').value,status:$('#f-status').value,valor:+$('#f-valor').value||0,
+    tipo:$('#f-tipo').value,status:$('#f-status').value,valor:+$('#f-valor').value||0,profId,profNome,
     formaPagamento:$('#f-forma').value,pago:$('#f-pago').value==='1',obs:$('#f-obs').value.trim()};
   let ag;
   if(id){ ag=DB.agendamentos.find(x=>x.id===id); Object.assign(ag,data); }
@@ -894,7 +1008,9 @@ function importar(file){
 function resetar(){
   if(!confirm('Apagar TODOS os dados da clínica neste dispositivo? Esta ação não pode ser desfeita.')) return;
   if(!confirm('Tem certeza mesmo? Considere exportar um backup antes.')) return;
-  localStorage.removeItem(KEY); DB=seed(); save(); syncHeader(); toast('Dados reiniciados'); go('dash');
+  if(CLINICA){ DB=emptyDB(); DB.config.clinica=CLINICA.nome; save(); }
+  else { localStorage.removeItem(KEY); DB=emptyDB(); save(); }
+  syncHeader(); toast('Dados reiniciados'); go('dash');
 }
 
 /* =============== TOAST / TEMA =============== */
@@ -965,7 +1081,7 @@ async function gateLogout(){
 
 /* =============== INÍCIO DO APP (após login) =============== */
 let _appReady=false;
-function iniciarApp(){
+async function iniciarApp(){
   if(_appReady) return;
   _appReady=true;
   KEY='dichava_clinica_v1_'+(AUTH?AUTH.id:'local');
@@ -974,19 +1090,87 @@ function iniciarApp(){
     if(route==='pacientes') formPaciente();
     else if(route==='prontuarios') { if(prontSelPaciente) formProntuario(prontSelPaciente); else toast('Selecione um paciente primeiro',1); }
     else if(route==='caixa') formFinanceiro('entrada');
+    else if(route==='equipe') { /* sem quick-add */ }
     else formAgendamento(null,route==='agenda'?agendaDay:todayISO());
   });
   initTheme();
-  load();
-  // pré-preenche os dados do profissional na primeira vez
+  await bootClinica();
+}
+// descobre a clínica do profissional (ou pede pra criar/entrar)
+async function bootClinica(){
+  if(!_SB){ load(); startApp(); return; }
+  try{
+    const {data:mem,error} = await _SB.from('clinica_membros').select('clinica_id,papel').eq('user_id',AUTH.id);
+    if(error) throw error;
+    if(!mem || !mem.length){ mostrarClinicOnboarding(); return; }
+    await carregarClinica(mem[0].clinica_id, mem[0].papel);
+  }catch(e){
+    // tabelas ainda não configuradas → modo local pra não travar
+    load(); startApp();
+  }
+}
+async function carregarClinica(cid,papel){
+  try{
+    const {data:c} = await _SB.from('clinicas').select('*').eq('id',cid).maybeSingle();
+    if(!c){ mostrarClinicOnboarding(); return; }
+    CLINICA={id:c.id,nome:c.nome,codigo:c.codigo,papel:papel||'membro',dono_id:c.dono_id};
+    normalizeDB(c.dados);
+    const {data:membros}= await _SB.from('clinica_membros').select('*').eq('clinica_id',cid);
+    MEMBROS=membros||[];
+    hideClinicOnboarding();
+    startApp();
+  }catch(e){ toast('Erro ao carregar a clínica',1); mostrarClinicOnboarding(); }
+}
+async function refreshClinica(){
+  if(!CLINICA || !_SB) return;
+  try{
+    const {data:c}=await _SB.from('clinicas').select('dados').eq('id',CLINICA.id).maybeSingle();
+    if(c){ normalizeDB(c.dados); if(route) render(); }
+  }catch(e){}
+}
+function startApp(){
   if(AUTH && DB && DB.config && (!DB.config._prefilled)){
-    if(AUTH.nome && (!DB.config.profissional || /^Dr|^Profissional|Você/.test(DB.config.profissional))) DB.config.profissional=AUTH.nome;
+    if(AUTH.nome && !DB.config.profissional) DB.config.profissional=AUTH.nome;
     DB.config._prefilled=true; save();
   }
   syncHeader();
   go('dash');
-  // tutorial no primeiro acesso deste profissional
   if(!localStorage.getItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'))) setTimeout(tutStart,400);
+}
+// puxa alterações da equipe ao voltar pra aba
+window.addEventListener('focus', ()=>{ if(CLINICA) refreshClinica(); });
+
+/* =============== CRIAR / ENTRAR EM CLÍNICA =============== */
+function mostrarClinicOnboarding(){ const g=$('#clinicgate'); if(g) g.classList.add('on'); }
+function hideClinicOnboarding(){ const g=$('#clinicgate'); if(g) g.classList.remove('on'); }
+function genCodigo(){ const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<6;i++) s+=a[Math.floor(Math.random()*a.length)]; return s; }
+async function criarClinica(){
+  const nome=($('#cl-nome').value||'').trim(); if(!nome){ toast('Dê um nome à clínica',1); return; }
+  const btn=$('#cl-criar'); btn.disabled=true; btn.textContent='Criando…';
+  try{
+    const codigo=genCodigo();
+    const {data:c,error} = await _SB.from('clinicas').insert({nome,dono_id:AUTH.id,codigo,dados:emptyDB()}).select().maybeSingle();
+    if(error) throw error;
+    const {error:e2}=await _SB.from('clinica_membros').insert({clinica_id:c.id,user_id:AUTH.id,nome:AUTH.nome,papel:'dono'});
+    if(e2) throw e2;
+    await carregarClinica(c.id,'dono');
+  }catch(e){ toast('Erro: '+((e&&e.message)||e),1); btn.disabled=false; btn.textContent='Criar clínica'; }
+}
+async function entrarClinica(){
+  const codigo=($('#cl-codigo').value||'').trim().toUpperCase(); if(codigo.length<4){ toast('Código inválido',1); return; }
+  const btn=$('#cl-entrar'); btn.disabled=true; btn.textContent='Entrando…';
+  try{
+    const {data:cid,error} = await _SB.rpc('entrar_clinica',{p_codigo:codigo,p_nome:AUTH.nome});
+    if(error) throw error;
+    if(!cid) throw new Error('código não encontrado');
+    await carregarClinica(cid,'membro');
+  }catch(e){ toast('Erro: '+((e&&e.message)||'código não encontrado'),1); btn.disabled=false; btn.textContent='Entrar na clínica'; }
+}
+function clTab(t){
+  $('#cl-tab-criar').classList.toggle('on',t==='criar');
+  $('#cl-tab-entrar').classList.toggle('on',t==='entrar');
+  $('#cl-pane-criar').style.display=t==='criar'?'block':'none';
+  $('#cl-pane-entrar').style.display=t==='entrar'?'block':'none';
 }
 
 /* =============== TUTORIAL =============== */
