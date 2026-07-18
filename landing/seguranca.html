@@ -1,0 +1,67 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1"><title>Segurança e Privacidade — dichava.app</title><meta name=robots content="index,follow"><style>
+body{margin:0;background:#F4F7F2;color:#3d4a3f;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.65}
+.wrap{max-width:720px;margin:0 auto;padding:28px 22px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.logo{font-weight:800;font-size:20px;color:#2E7D32}.logo span{color:#1B2A1C}
+.back{font-size:14px;color:#2E7D32;text-decoration:none;font-weight:600}
+h2{font-size:26px;color:#1B2A1C;margin:6px 0 2px}
+.doc-upd{font-size:13px;color:#8CA08F;margin-bottom:22px}
+h3{font-size:17px;color:#1B2A1C;margin:24px 0 8px}
+p{margin:0 0 11px}b,strong{color:#1B2A1C}
+a{color:#2E7D32}
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:8px 0 10px}
+.badge{background:#fff;border:1px solid #e5e9e5;border-radius:16px;padding:16px 18px}
+.badge .i{font-size:22px}
+.badge b{display:block;margin:6px 0 3px;color:#1B2A1C;font-size:15px}
+.badge small{color:#5d7060;font-size:13px}
+.ok{color:#2E7D32;font-weight:700}
+.note{background:#FFF9E6;border:1px solid #F2D98A;border-radius:12px;padding:13px 15px;font-size:13.5px;margin:14px 0}
+ul{margin:0 0 12px;padding-left:20px}li{margin:5px 0}
+footer{margin-top:34px;padding-top:16px;border-top:1px solid #e5e9e5;font-size:13px;color:#9aa89c}
+footer a{color:#2E7D32;text-decoration:none}
+</style></head><body><div class=wrap>
+<div class=top><a class=logo href="/">dichava<span>.app</span></a><a class=back href="/landing/">← voltar</a></div>
+<h2>Segurança e Privacidade</h2>
+<div class="doc-upd">dichava.app · atualizado em jul/2026 · em conformidade com a LGPD (Lei nº 13.709/2018)</div>
+<p>Levamos a sério a proteção dos seus dados — e, no caso dos profissionais, dos dados dos pacientes. Aqui está, com transparência, o que fazemos hoje.</p>
+
+<div class="badges">
+  <div class="badge"><div class="i">🔒</div><b>Conexão criptografada</b><small>Todo o tráfego usa <b>HTTPS/TLS</b>. Seus dados viajam cifrados entre o app e o servidor.</small></div>
+  <div class="badge"><div class="i">🗄️</div><b>Criptografia em repouso</b><small>Os dados são armazenados com <b>criptografia em disco (AES-256)</b> no provedor (Supabase/AWS).</small></div>
+  <div class="badge"><div class="i">🧱</div><b>Isolamento por conta</b><small><b>Row-Level Security</b>: cada pessoa e cada clínica só acessa os próprios dados.</small></div>
+  <div class="badge"><div class="i">📤</div><b>Seus dados são seus</b><small>Você pode <b>exportar</b> (backup e PDF) e <b>apagar</b> seus dados quando quiser.</small></div>
+  <div class="badge"><div class="i">⚖️</div><b>Conforme a LGPD</b><small>Base legal no <b>consentimento</b>, direitos do titular garantidos e cláusula de operador para profissionais.</small></div>
+  <div class="badge"><div class="i">🔑</div><b>Autenticação</b><small>Acesso por e-mail e senha (mínimo 8 caracteres) e verificação de e-mail. <b>2FA</b> disponível para profissionais.</small></div>
+</div>
+
+<h3>1. Dados em trânsito</h3>
+<p>Toda a comunicação é feita por <b>HTTPS/TLS</b>. Não trafegamos dados em texto aberto.</p>
+
+<h3>2. Dados em repouso</h3>
+<p>O armazenamento fica no <b>Supabase</b> (infraestrutura na AWS), com <b>criptografia de disco</b> por padrão. O acesso é restrito por regras de segurança por linha (RLS), de modo que cada usuário e cada clínica só enxerga o que é seu.</p>
+
+<h3>3. O que é honesto dizer — e o que não é</h3>
+<p>Somos transparentes: hoje <b>não</b> usamos criptografia ponta-a-ponta (aquela em que <b>nem nós</b> conseguiríamos ler). Portanto, <b>não</b> prometemos "dados que ninguém mais acessa". O que garantimos é: conexão segura, criptografia em repouso, isolamento por conta, e que <b>seus dados são seus</b> (exportáveis e apagáveis). É um caminho que estamos evoluindo.</p>
+
+<h3>4. Dados clínicos e profissionais</h3>
+<p>Quando um profissional usa o Painel da Clínica, <b>ele é o Controlador</b> dos dados dos pacientes e o <b>dichava.app é Operador</b> (trata por conta e ordem do profissional). As regras estão no <a href="/landing/profissional-lgpd.html">Termo de Operador (LGPD)</a>. A ferramenta é de <b>apoio</b> e <b>não substitui</b> o prontuário oficial exigido pelos conselhos, nem é certificada SBIS-CFM.</p>
+
+<h3>5. Retenção e exclusão</h3>
+<ul>
+  <li>Mantemos os dados <b>enquanto a conta existir</b>.</li>
+  <li>Você pode <b>exportar</b> um backup a qualquer momento (Configurações → Exportar; e, no prontuário, "Exportar" em PDF).</li>
+  <li>Você pode <b>apagar</b> seus dados a qualquer momento; ao fazê-lo, eles são removidos do servidor.</li>
+  <li>O profissional é responsável por manter a <b>cópia oficial</b> do prontuário pelo prazo exigido pelo seu conselho (ex.: 20 anos na medicina).</li>
+</ul>
+
+<h3>6. Seus direitos (LGPD)</h3>
+<p>Você pode <b>acessar, corrigir, exportar, apagar</b> seus dados e <b>revogar o consentimento</b> a qualquer momento. Basta usar o app ou escrever para <b>contato@dichava.app</b>.</p>
+
+<div class="note">⚠️ Nenhum sistema é 100% infalível. Ajude a proteger sua conta: use uma senha forte e única, ative o <b>2FA</b> se você é profissional, e mantenha seu aparelho seguro (o app também oferece <b>PIN de bloqueio</b> e <b>Modo discreto</b>).</div>
+
+<h3>7. Contato do encarregado</h3>
+<p>Dúvidas ou solicitações sobre dados: <b>contato@dichava.app</b>.</p>
+
+<footer>dichava.app · redução de danos, sem julgamento · <a href="mailto:contato@dichava.app">contato@dichava.app</a><br>
+<a href="/landing/termos.html">Termos de Uso</a> · <a href="/landing/privacidade.html">Privacidade</a> · <a href="/landing/seguranca.html">Segurança</a> · <a href="/landing/profissional-lgpd.html">Termo de Operador</a> · <a href="/landing/assinatura.html">Assinatura</a></footer>
+</div></body></html>
