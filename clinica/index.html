@@ -691,13 +691,13 @@ function exportarProntuario(pid){
 /* =============== ESCALAS CLÍNICAS VALIDADAS =============== */
 const LIK4=[['Nenhuma vez',0],['Vários dias',1],['Mais da metade dos dias',2],['Quase todos os dias',3]];
 const ESCALAS={
-  phq9:{nome:'PHQ-9',sub:'Sintomas depressivos — últimas 2 semanas',ops:LIK4,
+  phq9:{nome:'PHQ-9',sub:'Sintomas depressivos — últimas 2 semanas',ops:LIK4,ref:'PHQ-9 (Kroenke, Spitzer & Williams, 2001). Instrumento de rastreio de depressão, de uso livre. Validado no Brasil (Santos et al., 2013). Apoio à avaliação — não é diagnóstico.',
     itens:['Pouco interesse ou prazer em fazer as coisas','Sentir-se para baixo, deprimido(a) ou sem esperança','Dificuldade para dormir, ou dormir demais','Sentir-se cansado(a) ou com pouca energia','Falta de apetite ou comer demais','Sentir-se mal consigo mesmo(a), um fracasso ou que decepcionou a si/família','Dificuldade de concentração (ler, ver TV)','Lentidão ou inquietação percebida por outros','Pensamentos de que seria melhor estar morto(a) ou de se ferir'],
     faixas:[[0,4,'Mínima'],[5,9,'Leve'],[10,14,'Moderada'],[15,19,'Moderadamente grave'],[20,27,'Grave']]},
-  gad7:{nome:'GAD-7',sub:'Sintomas de ansiedade — últimas 2 semanas',ops:LIK4,
+  gad7:{nome:'GAD-7',sub:'Sintomas de ansiedade — últimas 2 semanas',ops:LIK4,ref:'GAD-7 (Spitzer et al., 2006). Rastreio de transtorno de ansiedade generalizada, de uso livre. Validado no Brasil (Moreno et al., 2016). Apoio à avaliação — não é diagnóstico.',
     itens:['Sentir-se nervoso(a), ansioso(a) ou no limite','Não conseguir parar ou controlar as preocupações','Preocupar-se demais com coisas diferentes','Dificuldade para relaxar','Ficar tão inquieto(a) que é difícil ficar parado(a)','Ficar facilmente incomodado(a) ou irritado(a)','Sentir medo como se algo terrível fosse acontecer'],
     faixas:[[0,4,'Mínima'],[5,9,'Leve'],[10,14,'Moderada'],[15,21,'Grave']]},
-  audit:{nome:'AUDIT',sub:'Uso de álcool',peritem:true,
+  audit:{nome:'AUDIT',sub:'Uso de álcool',peritem:true,ref:'AUDIT (Saunders et al., 1993 — OMS). Recomendado pela OMS e pelo Ministério da Saúde (Política de Atenção a Álcool e Outras Drogas) para rastreio do uso de álcool. Domínio público.',
     itens:[
       {q:'Com que frequência você toma bebidas alcoólicas?',ops:[['Nunca',0],['Mensalmente ou menos',1],['2 a 4 vezes/mês',2],['2 a 3 vezes/semana',3],['4+ vezes/semana',4]]},
       {q:'Quantas doses toma num dia normal em que bebe?',ops:[['1 ou 2',0],['3 ou 4',1],['5 ou 6',2],['7 a 9',3],['10+',4]]},
@@ -711,7 +711,7 @@ const ESCALAS={
       {q:'Algum familiar, amigo ou profissional já se preocupou ou sugeriu que você bebesse menos?',ops:[['Não',0],['Sim, mas não no último ano',2],['Sim, no último ano',4]]}
     ],
     faixas:[[0,7,'Baixo risco'],[8,15,'Uso de risco'],[16,19,'Uso nocivo'],[20,40,'Provável dependência']]},
-  dast10:{nome:'DAST-10',sub:'Uso de drogas (exceto álcool) — últimos 12 meses',simnao:true,
+  dast10:{nome:'DAST-10',sub:'Uso de drogas (exceto álcool) — últimos 12 meses',simnao:true,ref:'DAST-10 (Skinner, 1982). Rastreio de problemas relacionados ao uso de drogas, amplamente utilizado. Item 3 tem pontuação invertida. Apoio à avaliação — não é diagnóstico.',
     itens:[
       {q:'Usou drogas além das indicadas por razões médicas?'},
       {q:'Abusa de mais de uma droga ao mesmo tempo?'},
@@ -762,30 +762,33 @@ function escolherEscala(pid){
     <div class="modal-body"><div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
       ${Object.keys(ESCALAS).map(k=>`<div class="card" style="padding:14px;cursor:pointer;border-left:3px solid var(--v)" onclick="formEscala('${pid}','${k}')"><b>${ESCALAS[k].nome}</b><div style="font-size:12px;color:var(--txs);margin-top:3px">${ESCALAS[k].sub}</div></div>`).join('')}
     </div>
-    <p style="font-size:12px;color:var(--txm);margin-top:12px">Instrumentos de rastreio de apoio à avaliação clínica. Não substituem o diagnóstico do profissional.</p></div></div>`);
+    <div style="font-size:11.5px;color:var(--txs);background:var(--cin);border-radius:10px;padding:10px 12px;margin-top:14px;line-height:1.6">
+      <b>Validade e posicionamento.</b> São instrumentos de <b>rastreio (screening)</b> de uso livre / domínio público, amplamente validados e usados em saúde pública. <b>OMS</b> e <b>Ministério da Saúde</b> recomendam AUDIT/ASSIST na atenção a álcool e outras drogas. Não são testes psicológicos restritos (SATEPSI/CFP) nem substituem a avaliação: o <b>diagnóstico e a conduta são responsabilidade do profissional</b> (CFP/CFM). Servem para apoiar a decisão clínica e acompanhar a evolução.
+    </div></div></div>`);
 }
-function escItens(esc){const E=ESCALAS[esc];return E.itens.map(it=>{ if(E.simnao)return {q:it.q,ops:[['Não',it.rev?1:0],['Sim',it.rev?0:1]]}; if(E.peritem)return {q:it.q,ops:it.ops}; return {q:it,ops:E.ops}; });}
-function formEscala(pid,esc){
-  const E=ESCALAS[esc],itens=escItens(esc);
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>${E.nome}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+function escItens(ek){const E=ESCALAS[ek];return E.itens.map(it=>{ if(E.simnao)return {q:it.q,ops:[['Não',it.rev?1:0],['Sim',it.rev?0:1]]}; if(E.peritem)return {q:it.q,ops:it.ops}; return {q:it,ops:E.ops}; });}
+function formEscala(pid,ek){
+  const E=ESCALAS[ek],itens=escItens(ek);
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${esc(E.nome)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div style="font-size:12.5px;color:var(--txs);margin-bottom:12px">${E.sub} · <b>${esc(pacNome(pid))}</b></div>
+      <div style="font-size:12.5px;color:var(--txs);margin-bottom:6px">${esc(E.sub)} · <b>${esc(pacNome(pid))}</b></div>
+      ${E.ref?`<div style="font-size:11.5px;color:var(--txm);background:var(--cin);border-radius:10px;padding:9px 11px;margin-bottom:12px">${esc(E.ref)}</div>`:''}
       <form id="esc-form">
       ${itens.map((it,i)=>`<div class="field" style="margin-bottom:14px"><label>${i+1}. ${esc(it.q)}</label>
         <div class="esc-ops">${it.ops.map(o=>`<label class="esc-op"><input type="radio" name="q${i}" value="${o[1]}"> ${esc(o[0])}</label>`).join('')}</div></div>`).join('')}
       </form>
       <div class="field"><label>Data</label><input id="esc-data" type="date" value="${todayISO()}"></div>
     </div>
-    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="salvarEscala('${pid}','${esc}')">Calcular e salvar</button></div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="salvarEscala('${pid}','${ek}')">Calcular e salvar</button></div>
   </div>`);
 }
-function salvarEscala(pid,esc){
-  const E=ESCALAS[esc],itens=escItens(esc);let score=0,faltou=false;const respostas=[];
+function salvarEscala(pid,ek){
+  const E=ESCALAS[ek],itens=escItens(ek);let score=0,faltou=false;const respostas=[];
   for(let i=0;i<itens.length;i++){const sel=document.querySelector('#esc-form input[name="q'+i+'"]:checked');if(!sel){faltou=true;break;}const v=+sel.value;score+=v;respostas.push(v);}
   if(faltou){toast('Responda todas as perguntas',1);return;}
-  const av={id:uid(),pacienteId:pid,escala:esc,score,respostas,data:$('#esc-data').value||todayISO(),criadoEm:now()};
+  const av={id:uid(),pacienteId:pid,escala:ek,score,respostas,data:$('#esc-data').value||todayISO(),criadoEm:now()};
   DB.avaliacoes.push(av);save();closeModal();render();
-  setTimeout(()=>toast(E.nome+': '+score+'/'+escMax(esc)+' — '+escFaixa(esc,score)),100);
+  setTimeout(()=>toast(E.nome+': '+score+'/'+escMax(ek)+' — '+escFaixa(ek,score)),100);
 }
 function verEscala(id){
   const av=(DB.avaliacoes||[]).find(a=>a.id===id);if(!av)return;const E=ESCALAS[av.escala];
@@ -793,6 +796,7 @@ function verEscala(id){
     <div class="modal-body">
       <div style="text-align:center;margin-bottom:14px"><div style="font-size:34px;font-weight:800;color:${escColor(av.escala,av.score)}">${av.score}<span style="font-size:15px;color:var(--txm)">/${escMax(av.escala)}</span></div><div style="font-weight:700;color:${escColor(av.escala,av.score)}">${escFaixa(av.escala,av.score)}</div></div>
       <p style="font-size:12px;color:var(--txs)">Paciente: <b>${esc(pacNome(av.pacienteId))}</b></p>
+      ${E&&E.ref?`<div style="font-size:11px;color:var(--txm);background:var(--cin);border-radius:10px;padding:9px 11px;margin-top:10px">${esc(E.ref)}</div>`:''}
     </div>
     <div class="modal-foot"><button class="btn danger ghost" style="margin-right:auto" onclick="delEscala('${id}')">Excluir</button><button class="btn" onclick="closeModal()">Fechar</button></div>
   </div>`);
