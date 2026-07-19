@@ -680,7 +680,7 @@ function exportarProntuario(pid){
     <div class="meta">${cli?esc(cli)+' · ':''}${prof?'Prof.: '+esc(prof)+' · ':''}${idade(p.nascimento)!=null?idade(p.nascimento)+' anos · ':''}${esc(p.telefone||'')}${p.emergNome?' · Emergência: '+esc(p.emergNome)+' '+esc(p.emergTel||''):''}</div>
     ${regs.length?regs.map(r=>`<div class="reg"><h3>${fmtDate(r.data)} <span class="tag">${TIPO[r.tipo]||r.tipo}</span>${r.sessao?' <span class="tag">Sessão '+esc(r.sessao)+'</span>':''}</h3>
       ${linha('Queixa/Foco',r.queixa)}${linha('Objetivos trabalhados',r.objetivos)}${linha('Evolução',r.texto)}${linha('Intervenções/Condutas',r.intervencoes)}${linha('Recursos usados',r.recursos)}${linha('Pontos de atenção',r.pontos)}${linha('Plano p/ próxima sessão',r.plano||r.conduta)}</div>`).join(''):'<p>Sem registros.</p>'}
-    ${(function(){const avs=(DB.avaliacoes||[]).filter(a=>a.pacienteId===pid).sort((a,b)=>a.data.localeCompare(b.data));if(!avs.length)return '';return '<h2 style="font-size:16px;margin:22px 0 8px">Escalas aplicadas</h2><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="text-align:left;color:#5D7060"><th style="padding:4px 8px;border-bottom:1px solid #ddd">Data</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escala</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escore</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Interpretação</th></tr>'+avs.map(a=>'<tr><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+fmtDate(a.data)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+(ESCALAS[a.escala]?ESCALAS[a.escala].nome:a.escala)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0"><b>'+a.score+'/'+escMax(a.escala)+'</b></td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+escFaixa(a.escala,a.score)+'</td></tr>').join('')+'</table>';})()}
+    ${(function(){const avs=(DB.avaliacoes||[]).filter(a=>a.pacienteId===pid).sort((a,b)=>a.data.localeCompare(b.data));if(!avs.length)return '';return '<h2 style="font-size:16px;margin:22px 0 8px">Escalas aplicadas</h2><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="text-align:left;color:#5D7060"><th style="padding:4px 8px;border-bottom:1px solid #ddd">Data</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escala</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escore</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Interpretação</th></tr>'+avs.map(a=>'<tr><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+fmtDate(a.data)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+(ESCALAS[a.escala]?ESCALAS[a.escala].nome:a.escala)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0"><b>'+a.score+'/'+escMax(a.escala)+'</b></td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+escInterpret(a).rotulo+'</td></tr>').join('')+'</table>';})()}
     <div class="disc">Documento gerado pelo dichava.app como ferramenta de apoio. Não substitui o prontuário oficial exigido pelo conselho profissional. Gerado em ${fmtDate(todayISO())}.</div>
     </body></html>`;
   const w=window.open('','_blank');
@@ -724,9 +724,26 @@ const ESCALAS={
       {q:'Já sentiu sintomas de abstinência ao parar?'},
       {q:'Teve problemas de saúde pelo uso (memória, convulsões, hepatite, sangramento)?'}
     ],
-    faixas:[[0,0,'Nenhum problema'],[1,2,'Baixo'],[3,5,'Moderado'],[6,8,'Substancial'],[9,10,'Grave']]}
+    faixas:[[0,0,'Nenhum problema'],[1,2,'Baixo'],[3,5,'Moderado'],[6,8,'Substancial'],[9,10,'Grave']]},
+  assist:{nome:'ASSIST (OMS)',sub:'Envolvimento com substância — últimos 3 meses',peritem:true,assist:true,
+    ref:'ASSIST v3.0 (OMS/WHO, Humeniuk et al., 2010). Rastreio de envolvimento com álcool, tabaco e outras substâncias, recomendado pela OMS e pelo Ministério da Saúde na atenção a álcool e outras drogas. Aplique por substância. Apoio à avaliação — não é diagnóstico.',
+    subs:['Tabaco','Álcool','Cannabis','Cocaína/crack','Estimulantes (anfetaminas)','Inalantes','Sedativos/hipnóticos','Alucinógenos','Opioides','Outra'],
+    itens:[
+      {q:'Q2. Com que frequência usou nos últimos 3 meses?',ops:[['Nunca',0],['1 ou 2 vezes',2],['Mensalmente',3],['Semanalmente',4],['Diariamente/quase',6]]},
+      {q:'Q3. Com que frequência teve forte desejo/urgência de usar?',ops:[['Nunca',0],['1 ou 2 vezes',3],['Mensalmente',4],['Semanalmente',5],['Diariamente/quase',6]]},
+      {q:'Q4. Com que frequência o uso causou problemas (saúde, social, legal, financeiro)?',ops:[['Nunca',0],['1 ou 2 vezes',4],['Mensalmente',5],['Semanalmente',6],['Diariamente/quase',7]]},
+      {q:'Q5. Com que frequência deixou de fazer o que era esperado por causa do uso?',ops:[['Nunca',0],['1 ou 2 vezes',5],['Mensalmente',6],['Semanalmente',7],['Diariamente/quase',8]]},
+      {q:'Q6. Alguém já demonstrou preocupação com seu uso?',ops:[['Não, nunca',0],['Sim, nos últimos 3 meses',6],['Sim, mas não nos últimos 3 meses',3]]},
+      {q:'Q7. Já tentou reduzir/parar o uso sem conseguir?',ops:[['Não, nunca',0],['Sim, nos últimos 3 meses',6],['Sim, mas não nos últimos 3 meses',3]]}
+    ]}
 };
-function escFaixa(esc,score){const f=ESCALAS[esc].faixas.find(([a,b])=>score>=a&&score<=b);return f?f[2]:'—';}
+function escFaixa(esc,score){const E=ESCALAS[esc];if(!E.faixas)return '—';const f=E.faixas.find(([a,b])=>score>=a&&score<=b);return f?f[2]:'—';}
+// interpretação centralizada (ASSIST depende da substância)
+function assistRisco(subs,score){const alc=String(subs||'').toLowerCase().indexOf('lcool')>=0;const lo=alc?10:3;return score<=lo?'Baixo risco':(score<=26?'Risco moderado':'Alto risco');}
+function escInterpret(av){
+  if(av.escala==='assist'){const rot=assistRisco(av.subs,av.score);const cor=rot==='Baixo risco'?'#2E7D32':(rot==='Risco moderado'?'#EA8B0C':'#C62828');return {rotulo:rot+(av.subs?' · '+av.subs:''),cor};}
+  return {rotulo:escFaixa(av.escala,av.score),cor:escColor(av.escala,av.score)};
+}
 function escMax(esc){const E=ESCALAS[esc];if(E.simnao)return E.itens.length;if(E.peritem)return E.itens.reduce((s,it)=>s+Math.max.apply(null,it.ops.map(o=>o[1])),0);return E.itens.length*Math.max.apply(null,E.ops.map(o=>o[1]));}
 function escColor(esc,score){const max=escMax(esc),r=score/max;return r<0.25?'#2E7D32':r<0.5?'#EA8B0C':r<0.75?'#E8590C':'#C62828';}
 // seção de escalas no prontuário do paciente
@@ -742,7 +759,7 @@ function escalasSecao(pid){
     cards+=`<div class="card" style="padding:14px 16px;margin-bottom:10px">
       <div style="display:flex;align-items:center;gap:10px"><div><b style="font-size:14px">${ESCALAS[k]?ESCALAS[k].nome:k}</b><div style="font-size:12px;color:var(--txs)">Último: ${fmtDate(ult.data)}</div></div>
         <span class="grow" style="flex:1"></span>
-        <div style="text-align:right"><div style="font-size:22px;font-weight:800;color:${escColor(k,ult.score)}">${ult.score}<span style="font-size:12px;color:var(--txm)">/${escMax(k)}</span></div><div style="font-size:11.5px;font-weight:700;color:${escColor(k,ult.score)}">${escFaixa(k,ult.score)}</div></div>
+        <div style="text-align:right">${(()=>{const it=escInterpret(ult);return `<div style="font-size:22px;font-weight:800;color:${it.cor}">${ult.score}<span style="font-size:12px;color:var(--txm)">/${escMax(k)}</span></div><div style="font-size:11.5px;font-weight:700;color:${it.cor}">${esc(it.rotulo)}</div>`;})()}</div>
       </div>
       ${arr.length>1?escSpark(k,arr):''}
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${arr.slice().reverse().map(a=>`<span class="chip g" style="cursor:pointer" onclick="verEscala('${a.id}')">${fmtDate(a.data)}: ${a.score}</span>`).join('')}</div>
@@ -773,6 +790,7 @@ function formEscala(pid,ek){
     <div class="modal-body">
       <div style="font-size:12.5px;color:var(--txs);margin-bottom:6px">${esc(E.sub)} · <b>${esc(pacNome(pid))}</b></div>
       ${E.ref?`<div style="font-size:11.5px;color:var(--txm);background:var(--cin);border-radius:10px;padding:9px 11px;margin-bottom:12px">${esc(E.ref)}</div>`:''}
+      ${E.assist?`<div class="field"><label>Substância avaliada</label><select id="esc-subs">${E.subs.map(s=>`<option>${esc(s)}</option>`).join('')}</select></div>`:''}
       <form id="esc-form">
       ${itens.map((it,i)=>`<div class="field" style="margin-bottom:14px"><label>${i+1}. ${esc(it.q)}</label>
         <div class="esc-ops">${it.ops.map(o=>`<label class="esc-op"><input type="radio" name="q${i}" value="${o[1]}"> ${esc(o[0])}</label>`).join('')}</div></div>`).join('')}
@@ -786,15 +804,16 @@ function salvarEscala(pid,ek){
   const E=ESCALAS[ek],itens=escItens(ek);let score=0,faltou=false;const respostas=[];
   for(let i=0;i<itens.length;i++){const sel=document.querySelector('#esc-form input[name="q'+i+'"]:checked');if(!sel){faltou=true;break;}const v=+sel.value;score+=v;respostas.push(v);}
   if(faltou){toast('Responda todas as perguntas',1);return;}
-  const av={id:uid(),pacienteId:pid,escala:ek,score,respostas,data:$('#esc-data').value||todayISO(),criadoEm:now()};
+  const subs=E.assist?($('#esc-subs')?.value||''):'';
+  const av={id:uid(),pacienteId:pid,escala:ek,score,respostas,subs,data:$('#esc-data').value||todayISO(),criadoEm:now()};
   DB.avaliacoes.push(av);save();closeModal();render();
-  setTimeout(()=>toast(E.nome+': '+score+'/'+escMax(ek)+' — '+escFaixa(ek,score)),100);
+  setTimeout(()=>toast(E.nome+(subs?' ('+subs+')':'')+': '+score+' — '+escInterpret(av).rotulo),100);
 }
 function verEscala(id){
   const av=(DB.avaliacoes||[]).find(a=>a.id===id);if(!av)return;const E=ESCALAS[av.escala];
   openModal(`<div class="modal"><div class="modal-head"><h3>${E.nome} · ${fmtDate(av.data)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div style="text-align:center;margin-bottom:14px"><div style="font-size:34px;font-weight:800;color:${escColor(av.escala,av.score)}">${av.score}<span style="font-size:15px;color:var(--txm)">/${escMax(av.escala)}</span></div><div style="font-weight:700;color:${escColor(av.escala,av.score)}">${escFaixa(av.escala,av.score)}</div></div>
+      ${(()=>{const it=escInterpret(av);return `<div style="text-align:center;margin-bottom:14px"><div style="font-size:34px;font-weight:800;color:${it.cor}">${av.score}<span style="font-size:15px;color:var(--txm)">/${escMax(av.escala)}</span></div><div style="font-weight:700;color:${it.cor}">${esc(it.rotulo)}</div></div>`;})()}
       <p style="font-size:12px;color:var(--txs)">Paciente: <b>${esc(pacNome(av.pacienteId))}</b></p>
       ${E&&E.ref?`<div style="font-size:11px;color:var(--txm);background:var(--cin);border-radius:10px;padding:9px 11px;margin-top:10px">${esc(E.ref)}</div>`:''}
     </div>
@@ -1144,10 +1163,22 @@ function formAgendamento(id,dataDefault,pacDefault){
       <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas do agendamento">${esc(a.obs||'')}</textarea></div>
       <p style="font-size:12.5px;color:var(--txs)">💡 Ao marcar <b>Atendido</b> + <b>Pago = Sim</b>, uma entrada é lançada no caixa automaticamente.</p>
     </div>
+    ${id?`<button class="btn sm ghost" style="margin-top:8px;background:#25D36618;color:#128C4B" onclick="lembrarConsulta('${id}')">📲 Enviar lembrete no WhatsApp</button>`:''}
+    </div>
     <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delAgendamento('${id}')">Excluir</button>`:''}
       <button class="btn ghost" onclick="closeModal()">Cancelar</button>
       <button class="btn" onclick="saveAgendamento('${id||''}')">Salvar</button></div>
   </div>`);
+}
+function lembrarConsulta(agId){
+  const a=DB.agendamentos.find(x=>x.id===agId); if(!a)return;
+  const p=pac(a.pacienteId); const tel=((p&&p.telefone)||'').replace(/[^0-9]/g,'');
+  if(tel.length<10){ toast('Cadastre o telefone do paciente para enviar o lembrete',1); return; }
+  const num=tel.length<=11?('55'+tel):tel;
+  const cli=(CLINICA&&CLINICA.nome)||DB.config.clinica||'';
+  const nome=p&&p.nome?p.nome.split(' ')[0]:'';
+  const msg='Olá'+(nome?', '+nome:'')+'! Passando para lembrar da sua consulta em '+fmtDate(a.data)+' às '+a.hora+(cli?' — '+cli:'')+'. Podemos confirmar sua presença?';
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
 }
 function saveAgendamento(id){
   const pacId=$('#f-pac').value;
