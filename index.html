@@ -8261,7 +8261,7 @@ window.addEventListener('appinstalled',()=>{window._deferredPrompt=null;try{rend
 /* ══════════ NOTIFICAÇÕES PUSH (Web Push + Supabase) ══════════ */
 /* ── Link do grupo de feedback (beta). Cole aqui o convite do WhatsApp quando criar. ── */
 
-const VAPID_PUB='BHsXMrwzV3w79-PocjNk3YdPLDSXGnxbDTcm1Y24GxbIXdekHedGp_qUSMb2g0OsN2BNmMCGJP0Djg2O-WPfKYo';
+const VAPID_PUB='BN_L3cK5MByNbFTBYghnja6ryWbnN99_J2JfMiQDu-hKVkPqNJBAKLnnyBDHHSxvGNfaoIBCG1fQemYrExmUDzE';
 function _b64ToU8(s){const pad='='.repeat((4-s.length%4)%4);const b=(s+pad).replace(/-/g,'+').replace(/_/g,'/');const r=atob(b);const a=new Uint8Array(r.length);for(let i=0;i<r.length;i++)a[i]=r.charCodeAt(i);return a;}
 function pushSuportado(){return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;}
 function pushInstaladoIOS(){const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);return !(isIOS&&!standalone);}
