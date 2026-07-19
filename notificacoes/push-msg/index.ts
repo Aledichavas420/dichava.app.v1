@@ -32,6 +32,7 @@ Deno.serve(async (req) => {
 
     // assinaturas push do destinatário
     const { data: subs } = await sb.from("push_subs").select("endpoint, p256dh, auth").eq("user_id", dest);
+    console.log("push-msg: destinatário", dest, "· assinaturas encontradas:", subs?.length || 0);
     if (!subs || !subs.length) return new Response("ok");
 
     const notif = JSON.stringify({
@@ -41,17 +42,20 @@ Deno.serve(async (req) => {
       tag: "chat-" + conversa_id,
     });
 
-    await Promise.all(subs.map((s: any) =>
+    const res = await Promise.all(subs.map((s: any) =>
       webpush.sendNotification(
         { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
         notif,
-      ).catch(async (err: any) => {
+      ).then(() => "ok").catch(async (err: any) => {
+        console.log("push-msg: falha no envio ·", err?.statusCode, "·", (err?.body || err?.message || "").toString().slice(0, 120));
         // assinatura expirada/inválida → remove
         if (err?.statusCode === 404 || err?.statusCode === 410) {
           try { await sb.from("push_subs").delete().eq("endpoint", s.endpoint); } catch (_) {}
         }
+        return "erro:" + (err?.statusCode || "?");
       })
     ));
+    console.log("push-msg: resultado", JSON.stringify(res));
     return new Response("ok");
   } catch (e) {
     console.error("push-msg erro:", e);
