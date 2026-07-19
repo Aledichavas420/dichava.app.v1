@@ -506,7 +506,7 @@ function render(){
   else if(route==='prontuarios') v.innerHTML=viewProntuarios();
   else if(route==='caixa') v.innerHTML=viewCaixa();
   else if(route==='documentos') v.innerHTML=viewDocumentos();
-  else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
+  else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); carregarSolicitacoes(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
   else if(route==='equipe') v.innerHTML=viewEquipe();
   else if(route==='config') v.innerHTML=viewConfig();
@@ -611,7 +611,7 @@ function solicitacoesBanner(){
 }
 async function carregarSolicitacoes(){
   if(!CLINICA||!_SB){SOLIC=[];return;}
-  try{ const{data}=await _SB.from('solicitacoes').select('*').eq('clinica_id',CLINICA.id).eq('status','nova').order('criado_em',{ascending:false}); SOLIC=data||[]; const b=document.getElementById('badge-agenda'); if(route==='agenda')render(); }catch(e){ SOLIC=[]; }
+  try{ const{data}=await _SB.from('solicitacoes').select('*').eq('clinica_id',CLINICA.id).eq('status','nova').order('criado_em',{ascending:false}); SOLIC=data||[]; if(route==='agenda'||route==='mensagens')render(); try{atualizarBadgeMsgs();updateBadgeAgenda&&updateBadgeAgenda();}catch(e){} }catch(e){ SOLIC=[]; }
 }
 async function confirmarSolic(id){
   const s=SOLIC.find(x=>x.id===id); if(!s)return;
@@ -1102,7 +1102,7 @@ function imprimirDocumento(id){
 
 /* =============== MENSAGENS (chat com pacientes) =============== */
 let PCONVS=[], _pconv=null, _ppoll=null;
-function viewMensagens(){ return '<div id="conv-list" style="max-width:640px"><div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div>'; }
+function viewMensagens(){ return '<div style="max-width:640px">'+solicitacoesBanner()+'<div class="sec-title" style="margin-top:4px">Conversas</div><div id="conv-list"><div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div></div>'; }
 async function carregarConversas(){
   const box=document.getElementById('conv-list'); if(!box||!_SB||!AUTH)return;
   try{
@@ -1113,8 +1113,8 @@ async function carregarConversas(){
     atualizarBadgeMsgs();
   }catch(e){ box.innerHTML='<div class="card empty">Não consegui carregar as conversas.</div>'; }
 }
-function atualizarBadgeMsgs(){ const b=document.getElementById('badge-msgs'); if(!b)return; const n=(PCONVS||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length; b.textContent=n||''; b.style.display=n?'':'none'; }
-async function contarMsgsPanel(){ if(!_SB||!AUTH)return; try{ const{data}=await _SB.from('conversas').select('atualizado_em,prof_lida_em').eq('prof_id',AUTH.id); const n=(data||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length; const b=document.getElementById('badge-msgs'); if(b){b.textContent=n||'';b.style.display=n?'':'none';} }catch(e){} }
+function atualizarBadgeMsgs(){ const b=document.getElementById('badge-msgs'); if(!b)return; const n=(PCONVS||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length+(SOLIC||[]).length; b.textContent=n||''; b.style.display=n?'':'none'; }
+async function contarMsgsPanel(){ if(!_SB||!AUTH)return; try{ const{data}=await _SB.from('conversas').select('atualizado_em,prof_lida_em').eq('prof_id',AUTH.id); const n=(data||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length+(SOLIC||[]).length; const b=document.getElementById('badge-msgs'); if(b){b.textContent=n||'';b.style.display=n?'':'none';} }catch(e){} }
 function abrirConversaPanel(id){
   const c=PCONVS.find(x=>x.id===id); if(!c)return; _pconv=c;
   openModal(`<div class="modal"><div class="modal-head"><div class="avatar">${initials(c.user_nome||'?')}</div><h3 style="flex:1">${esc(c.user_nome||'Paciente')}</h3><button class="icon-btn" onclick="fecharConversaPanel()">✕</button></div>
