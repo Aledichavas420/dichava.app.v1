@@ -3047,6 +3047,15 @@ a{color:inherit;text-decoration:none}
   <div class="ptb" style="background:var(--dk)"><div class="ptb-tit">Complete seu perfil profissional</div></div>
   <div class="sc" style="flex:1;overflow-y:auto;padding:20px 18px">
     <div id="pp-aviso" style="background:var(--roxof);border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--roxo);line-height:1.6">🩺 <strong>Seu perfil será revisado manualmente</strong> antes de aparecer na rede. Você receberá confirmação em até 48h úteis.</div>
+    <div class="fld"><div class="lbl">Foto de perfil <span style="color:var(--txm);font-weight:400">(opcional — aparece na sua ficha pública)</span></div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div id="pp-foto-prev" style="width:72px;height:72px;border-radius:50%;background:var(--cin);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--txm);overflow:hidden;flex-shrink:0">🩺</div>
+        <div style="flex:1">
+          <label class="btn bout" style="display:inline-block;cursor:pointer;font-size:13px;padding:9px 14px">📷 Escolher foto<input type="file" accept="image/*" id="pp-foto" onchange="ppFotoSel(this)" style="display:none"></label>
+          <button type="button" id="pp-foto-rm" onclick="ppFotoRm()" style="display:none;margin-left:8px;background:none;border:none;color:var(--txm);font-size:12px;cursor:pointer;text-decoration:underline">remover</button>
+        </div>
+      </div>
+    </div>
     <div class="fld"><div class="lbl">Tipo de profissional *</div><select class="inp" id="pp-tipo"><option value="">Selecione...</option><option value="Psicóloga(o)">Psicóloga(o)</option><option value="Psiquiatra">Psiquiatra</option><option value="Médica(o)">Médica(o)</option><option value="Enfermeira(o)">Enfermeira(o)</option><option value="Nutricionista">Nutricionista</option><option value="Fisioterapeuta">Fisioterapeuta</option><option value="Terapeuta ocupacional">Terapeuta ocupacional</option><option value="Terapeuta">Terapeuta</option><option value="Redutora(or) de danos">Redutora(or) de danos</option><option value="Assistente social">Assistente social</option><option value="Outro profissional da saúde">Outro profissional da saúde</option></select><div class="em" id="pp-tipoe"></div></div>
     <div class="fld"><div class="lbl">Bio profissional * <span style="color:var(--txm);font-weight:400">(como você trabalha com uso de substâncias)</span></div><textarea class="ft" id="pp-bio" rows="4" placeholder="Ex.: Atendo pessoas que usam substâncias sem impor abstinência…"></textarea><div class="em" id="pp-bioe"></div></div>
     <div class="fld"><div class="lbl">Especialidades <span style="color:var(--txm);font-weight:400">(separadas por vírgula)</span></div><input class="inp" id="pp-esp" type="text" placeholder="Ex.: Redução de danos, Ansiedade, Uso de álcool"></div>
@@ -3056,6 +3065,7 @@ a{color:inherit;text-decoration:none}
     <div class="fld"><div class="lbl">Duração da sessão</div><input class="inp" id="pp-dur" type="text" placeholder="Ex.: 50 min"></div>
     <div class="fld"><div class="lbl">Disponibilidade</div><input class="inp" id="pp-disp" type="text" placeholder="Ex.: Seg, Qua e Sex · tarde e noite"></div>
     <div class="fld"><div class="lbl">WhatsApp <span style="color:var(--txm);font-weight:400">(opcional — libera "continuar no WhatsApp" no chat)</span></div><input class="inp" id="pp-tel" type="tel" inputmode="tel" placeholder="Ex.: (11) 90000-0000"></div>
+    <div class="fld"><div class="lbl">Instagram ou site <span style="color:var(--txm);font-weight:400">(opcional — vira link clicável na sua ficha)</span></div><input class="inp" id="pp-link" type="text" placeholder="Ex.: @seu.instagram  ou  seusite.com.br"></div>
     <button class="btn bv bfull" id="pp-btn" onclick="salvarPerfilPro()" style="margin-top:8px">Enviar perfil para aprovação</button>
     <div style="height:30px"></div>
   </div>
@@ -6304,7 +6314,7 @@ async function renderProfs(){
     (list.length?list.map(p=>`
     <div class="pcard" onclick="abrirPerfilProf('${p.id}')" style="cursor:pointer">
       <div class="pc-head">
-        <div class="pc-av" style="background:var(--roxof)">${ini(p.nome)}</div>
+        <div class="pc-av" style="background:var(--roxof)${p.foto?';padding:0;overflow:hidden':''}">${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover">`:ini(p.nome)}</div>
         <div class="pc-id"><div class="pc-nome">${esc(p.nome)}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div></div>
         ${modtag(p.modalidade)}
       </div>
@@ -6327,10 +6337,11 @@ function abrirPerfilProf(id){
   const body=document.getElementById('profdet-body');
   body.innerHTML=`
     <div class="pd-hero">
-      <div class="pd-av">${ini(p.nome)}</div>
+      <div class="pd-av"${p.foto?' style="padding:0;overflow:hidden"':''}>${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:ini(p.nome)}</div>
       <div class="pd-nome">${esc(p.nome)}</div>
       <div class="pd-tipo">${esc(p.tipo_prof||'')}</div>
       ${p.reg?`<div class="pd-reg">${esc(p.reg)}</div>`:''}
+      ${(()=>{const lk=proLink(p.link);return lk?`<a href="${esc(lk.href)}" target="_blank" rel="noopener" class="pd-link" style="display:inline-block;margin-top:8px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:20px">🔗 ${esc(lk.label)}</a>`:'';})()}
       <div class="pd-badge">🩺 Profissional verificado</div>
     </div>
     <div class="pd-body">
@@ -6712,18 +6723,59 @@ async function salvarPerfilPro(){
   const editando=(document.getElementById('pp-btn').textContent||'').indexOf('alteraç')>=0;
   if(editando && !confirm('Ao salvar, seu perfil volta para análise e fica temporariamente indisponível na rede até a nova aprovação. Deseja continuar?'))return;
   const btn=document.getElementById('pp-btn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
-  const payload={id:U.id,nome:U.nome,email:U.email,reg:U.reg||'',tipo_prof:tipo,bio,especialidades:document.getElementById('pp-esp').value.trim(),modalidade:mod,cidade:document.getElementById('pp-cidade').value.trim(),valor:document.getElementById('pp-valor').value.trim(),duracao:document.getElementById('pp-dur').value.trim(),disponibilidade:document.getElementById('pp-disp').value.trim(),telefone:(document.getElementById('pp-tel')?.value||'').trim(),status:'pendente'};
+  const payload={id:U.id,nome:U.nome,email:U.email,reg:U.reg||'',tipo_prof:tipo,bio,especialidades:document.getElementById('pp-esp').value.trim(),modalidade:mod,cidade:document.getElementById('pp-cidade').value.trim(),valor:document.getElementById('pp-valor').value.trim(),duracao:document.getElementById('pp-dur').value.trim(),disponibilidade:document.getElementById('pp-disp').value.trim(),telefone:(document.getElementById('pp-tel')?.value||'').trim(),foto:_ppFoto||null,link:(document.getElementById('pp-link')?.value||'').trim(),status:'pendente'};
   let error=null;
   try{
     if(!_SB)throw new Error('sem conexão com o servidor');
-    const q=_SB.from('profissionais').upsert(payload);
-    const res=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('tempo esgotado — verifique sua conexão')),12000))]);
+    let q=_SB.from('profissionais').upsert(payload);
+    let res=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('tempo esgotado — verifique sua conexão')),12000))]);
+    // fallback: colunas foto/link ainda não criadas no banco
+    if(res&&res.error&&/(foto|link)/.test(res.error.message||'')){
+      const {foto,link,...base}=payload;
+      res=await _SB.from('profissionais').upsert(base);
+    }
     error=res&&res.error;
   }catch(e){error=e;}
   btn.disabled=false;btn.textContent='Enviar perfil para aprovação';
   if(error){toast('⚠️ '+((error&&error.message)||'não consegui salvar')+' — se persistir, a tabela de profissionais pode não estar configurada.',6000);return;}
   toast('✓ Perfil enviado para aprovação!');
   showV('vpro-aguarda');
+}
+// ── Foto de perfil do profissional (redimensiona no cliente p/ data URL leve) ──
+let _ppFoto=null;
+function ppFotoSel(input){
+  const f=input.files&&input.files[0];if(!f)return;
+  if(f.size>8*1024*1024){toast('Imagem muito grande (máx. 8 MB).');input.value='';return;}
+  const rd=new FileReader();
+  rd.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const max=320;let{width:w,height:h}=img;
+      if(w>h){if(w>max){h=Math.round(h*max/w);w=max;}}else{if(h>max){w=Math.round(w*max/h);h=max;}}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      _ppFoto=cv.toDataURL('image/jpeg',0.82);
+      ppFotoRender();
+    };
+    img.onerror=()=>toast('Não consegui ler a imagem.');
+    img.src=e.target.result;
+  };
+  rd.readAsDataURL(f);
+}
+function ppFotoRm(){_ppFoto=null;ppFotoRender();const i=document.getElementById('pp-foto');if(i)i.value='';}
+function ppFotoRender(){
+  const pv=document.getElementById('pp-foto-prev'),rm=document.getElementById('pp-foto-rm');if(!pv)return;
+  if(_ppFoto){pv.innerHTML=`<img src="${_ppFoto}" style="width:100%;height:100%;object-fit:cover">`;if(rm)rm.style.display='inline';}
+  else{pv.innerHTML='🩺';if(rm)rm.style.display='none';}
+}
+// ── Link Instagram/site → {href,label} clicável ──
+function proLink(v){
+  v=(v||'').trim();if(!v)return null;
+  if(v[0]==='@'){const h=v.slice(1).replace(/[^\w.]/g,'');return {href:'https://instagram.com/'+h,label:'@'+h};}
+  if(/instagram\.com/i.test(v)){const h=(v.split('instagram.com/')[1]||'').replace(/[/?#].*$/,'').replace(/[^\w.]/g,'');return {href:'https://instagram.com/'+h,label:'@'+h};}
+  let href=v;if(!/^https?:\/\//i.test(href))href='https://'+href;
+  const label=v.replace(/^https?:\/\//i,'').replace(/\/$/,'');
+  return {href,label};
 }
 async function rotearPro(){
   const st=await checkProStatus();
@@ -6754,10 +6806,13 @@ async function entrarPro(){
   if(prof){
     const tags=prof.especialidades?prof.especialidades.split(',').map(t=>`<span class="pc-tg">${esc(t.trim())}</span>`).join(''):'';
     const modLabel=prof.modalidade?.includes('online')&&prof.modalidade?.includes('presencial')?'💻📍 Online e presencial':prof.modalidade?.includes('online')?'💻 Online':'📍 Presencial';
+    const lk=proLink(prof.link);
     pc.innerHTML=`
     <div class="pro-card">
       <div class="pro-card-tit">Informações públicas</div>
+      ${prof.foto?`<div style="text-align:center;margin-bottom:10px"><img src="${prof.foto}" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--line)"></div>`:''}
       <div class="pro-field"><div class="lbl">Tipo</div><div class="val">${esc(prof.tipo_prof||'—')}</div></div>
+      ${lk?`<div class="pro-field"><div class="lbl">Instagram / site</div><div class="val"><a href="${esc(lk.href)}" target="_blank" rel="noopener" style="color:var(--v);text-decoration:none">${esc(lk.label)} ↗</a></div></div>`:''}
       <div class="pro-field"><div class="lbl">Bio</div><div class="val">${esc(prof.bio||'—')}</div></div>
       <div class="pro-field"><div class="lbl">Especialidades</div><div class="val">${tags||'—'}</div></div>
       <div class="pro-field"><div class="lbl">Modalidade</div><div class="val">${modLabel}</div></div>
@@ -6791,6 +6846,8 @@ function abrirEdicaoPerfil(){
     document.getElementById('pp-dur').value=prof.duracao||'';
     document.getElementById('pp-disp').value=prof.disponibilidade||'';
     {const tel=document.getElementById('pp-tel');if(tel)tel.value=prof.telefone||'';}
+    {const lk=document.getElementById('pp-link');if(lk)lk.value=prof.link||'';}
+    _ppFoto=prof.foto||null;ppFotoRender();
     document.getElementById('pp-btn').textContent='Salvar alterações';
     {const av=document.getElementById('pp-aviso');if(av)av.innerHTML='⚠️ <strong>Atenção:</strong> ao salvar qualquer alteração, seu perfil volta para <strong>análise</strong> e fica <strong>temporariamente indisponível</strong> na rede até a nova aprovação da equipe (até 48h úteis).';}
     showV('vproperfil');
