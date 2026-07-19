@@ -3030,6 +3030,17 @@ a{color:inherit;text-decoration:none}
   <div id="raiox-body"></div>
 </div></div></div>
 
+<!-- AVALIAR profissional (paciente → estrelas + comentário) -->
+<div class="ov" id="mavaliar" onclick="if(event.target===this)closeMod('mavaliar')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:800;margin-bottom:2px">Avaliar profissional</div>
+  <div style="font-size:13px;color:var(--txm);margin-bottom:14px">Toque nas estrelas</div>
+  <div id="av-stars" style="text-align:center;letter-spacing:6px;margin-bottom:14px"></div>
+  <textarea class="ft" id="av-coment" rows="4" placeholder="Conte como foi sua experiência (opcional)"></textarea>
+  <button class="btn bv bfull" style="margin-top:12px" onclick="salvarAvaliacao()">Enviar avaliação</button>
+  <div id="av-del"></div>
+</div></div></div>
+
 <!-- ADMIN: aprovação de profissionais -->
 <div class="V" id="vadmin">
   <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="showV('vapp');goPg('p-cfg')">←</button><div class="ptb-tit">🛡️ Admin · Profissionais</div></div>
@@ -6303,6 +6314,10 @@ async function renderProfs(){
   let profs=[];
   if(_SB){try{const q=_SB.from('profissionais').select('*').eq('status','aprovado');const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);profs=data||[];}catch(e){profs=[];}}
   profs.forEach(p=>{_profsById[p.id]=p;});
+  // médias de avaliação (1 query pra todos)
+  let avMap={};
+  if(_SB&&profs.length){try{const ids=profs.map(p=>p.id);const{data:avs}=await _SB.from('avaliacoes_prof').select('prof_id,nota').in('prof_id',ids);(avs||[]).forEach(a=>{(avMap[a.prof_id]=avMap[a.prof_id]||[]).push(a.nota);});}catch(e){}}
+  const avResumo=id=>{const arr=avMap[id];if(!arr||!arr.length)return '';const m=arr.reduce((s,n)=>s+n,0)/arr.length;return `<span style="color:#F5A623;font-weight:700;font-size:12.5px">★ ${m.toFixed(1)}</span> <span style="color:var(--txm);font-size:11.5px">(${arr.length})</span>`;};
   const q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
   const list=profs.filter(p=>{
     if(_pfFilt.mod&&!(p.modalidade||'').includes(_pfFilt.mod))return false;
@@ -6315,7 +6330,7 @@ async function renderProfs(){
     <div class="pcard" onclick="abrirPerfilProf('${p.id}')" style="cursor:pointer">
       <div class="pc-head">
         <div class="pc-av" style="background:var(--roxof)${p.foto?';padding:0;overflow:hidden':''}">${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover">`:ini(p.nome)}</div>
-        <div class="pc-id"><div class="pc-nome">${esc(p.nome)}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div></div>
+        <div class="pc-id"><div class="pc-nome">${esc(p.nome)}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div>${avResumo(p.id)?`<div style="margin-top:2px">${avResumo(p.id)}</div>`:''}</div>
         ${modtag(p.modalidade)}
       </div>
       <div class="pc-bio">${esc(p.bio||'')}</div>
@@ -6356,12 +6371,68 @@ function abrirPerfilProf(id){
         ${p.disponibilidade?`<div class="pd-mi"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></div>`:''}
       </div>
       ${temAgenda?`<div class="pd-sec">Agendar horário</div><div id="pd-slots"></div>`:''}
+      <div class="pd-sec">Avaliações</div>
+      <div id="pd-avaliacoes"><div style="text-align:center;padding:16px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div>
     </div>
     <div class="pd-acts">
       <button class="pd-contato" onclick="contatarProf('${p.id}')">💬 Conversar</button>
       ${temAgenda?`<button class="pd-agendar" onclick="verSlots('${p.id}')">📅 Agendar horário</button>`:''}
     </div>`;
   showV('vprofdet');
+  carregarAvaliacoes(p.id);
+}
+// ── Estrelas (render) ──
+function estrelas(n,tam){n=Math.round(n||0);tam=tam||15;let s='';for(let i=1;i<=5;i++)s+=`<span style="color:${i<=n?'#F5A623':'var(--cinm)'};font-size:${tam}px">★</span>`;return s;}
+// ── Avaliações do profissional (paciente → profissional) ──
+async function carregarAvaliacoes(profId){
+  const box=document.getElementById('pd-avaliacoes');if(!box)return;
+  let avs=[];
+  if(_SB){try{const{data}=await _SB.from('avaliacoes_prof').select('*').eq('prof_id',profId).order('criado_em',{ascending:false});avs=data||[];}catch(e){avs=[];}}
+  const podeAvaliar=U&&U.id&&U.id!=='demo';
+  const minha=podeAvaliar?avs.find(a=>a.user_id===U.id):null;
+  const media=avs.length?avs.reduce((s,a)=>s+a.nota,0)/avs.length:0;
+  const cabec=avs.length
+    ? `<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="font-family:'Poppins',sans-serif;font-size:30px;font-weight:800;color:var(--tx);line-height:1">${media.toFixed(1)}</div>
+        <div><div>${estrelas(media,17)}</div><div style="font-size:12.5px;color:var(--txm);margin-top:2px">${avs.length} avaliaç${avs.length===1?'ão':'ões'}</div></div>
+      </div>`
+    : `<div style="font-size:13.5px;color:var(--txm);margin-bottom:10px">Ainda sem avaliações. ${podeAvaliar?'Seja o primeiro a avaliar.':''}</div>`;
+  const lista=avs.slice(0,6).map(a=>`
+    <div style="border-top:1px solid var(--line);padding:10px 0">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;font-size:13.5px">${esc(a.user_nome||'Paciente')}</span><span>${estrelas(a.nota,12)}</span></div>
+      ${a.comentario?`<div style="font-size:13.5px;color:var(--txs);margin-top:3px;line-height:1.5">${esc(a.comentario)}</div>`:''}
+    </div>`).join('');
+  const btn=podeAvaliar?`<button class="btn bout bfull" style="margin-top:12px" onclick="abrirAvaliar('${profId}')">${minha?'✏️ Editar minha avaliação':'⭐ Avaliar profissional'}</button>`:'';
+  box.innerHTML=cabec+lista+btn;
+}
+let _avNota=0,_avProf=null;
+function renderAvStars(){const s=document.getElementById('av-stars');if(s)s.innerHTML=[1,2,3,4,5].map(i=>`<span onclick="setAvNota(${i})" style="cursor:pointer;font-size:40px;color:${i<=_avNota?'#F5A623':'var(--cinm)'}">★</span>`).join('');}
+function abrirAvaliar(profId){
+  if(!U||U.id==='demo'){toast('Entre na sua conta para avaliar.');return;}
+  _avNota=0;_avProf=profId;
+  const c=document.getElementById('av-coment');if(c)c.value='';
+  document.getElementById('av-del').innerHTML='';
+  renderAvStars();
+  openMod('mavaliar');
+  // pré-carrega minha avaliação, se existir
+  if(_SB)_SB.from('avaliacoes_prof').select('*').eq('prof_id',profId).eq('user_id',U.id).maybeSingle().then(({data})=>{
+    if(data){_avNota=data.nota;const cc=document.getElementById('av-coment');if(cc)cc.value=data.comentario||'';renderAvStars();
+      const d=document.getElementById('av-del');if(d)d.innerHTML=`<button onclick="excluirAvaliacao('${profId}')" style="width:100%;background:none;border:none;color:var(--txm);font-size:12.5px;margin-top:12px;cursor:pointer;text-decoration:underline">Excluir minha avaliação</button>`;}
+  });
+}
+function setAvNota(n){_avNota=n;renderAvStars();try{sfx('star');}catch(e){}}
+async function salvarAvaliacao(){
+  if(!_avNota){toast('Escolha de 1 a 5 estrelas.');return;}
+  if(!_SB){toast('Sem conexão.');return;}
+  const coment=(document.getElementById('av-coment')?.value||'').trim().slice(0,600);
+  const{error}=await _SB.from('avaliacoes_prof').upsert({prof_id:_avProf,user_id:U.id,user_nome:U.nome||'Paciente',nota:_avNota,comentario:coment},{onConflict:'prof_id,user_id'});
+  if(error){toast('Não consegui salvar: '+(error.message||''));return;}
+  closeMod('mavaliar');toast('✓ Avaliação enviada. Obrigado!');carregarAvaliacoes(_avProf);
+}
+async function excluirAvaliacao(profId){
+  if(!confirm('Excluir sua avaliação?'))return;
+  try{await _SB.from('avaliacoes_prof').delete().eq('prof_id',profId).eq('user_id',U.id);}catch(e){}
+  closeMod('mavaliar');toast('Avaliação removida.');carregarAvaliacoes(profId);
 }
 function gerarSlots(p){
   const cfg=p.agenda_config; if(!cfg||!cfg.dias)return [];
@@ -6808,6 +6879,7 @@ async function entrarPro(){
     const modLabel=prof.modalidade?.includes('online')&&prof.modalidade?.includes('presencial')?'💻📍 Online e presencial':prof.modalidade?.includes('online')?'💻 Online':'📍 Presencial';
     const lk=proLink(prof.link);
     pc.innerHTML=`
+    <div class="pro-card" id="pd-minhas-aval" style="text-align:center;padding:14px"><div style="color:var(--txm);font-size:13px">Carregando avaliações…</div></div>
     <div class="pro-card">
       <div class="pro-card-tit">Informações públicas</div>
       ${prof.foto?`<div style="text-align:center;margin-bottom:10px"><img src="${prof.foto}" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--line)"></div>`:''}
@@ -6831,6 +6903,22 @@ async function entrarPro(){
   document.querySelectorAll('.pro-tab').forEach((b,i)=>{b.classList.toggle('on',i===0);});
   document.querySelectorAll('.pro-panel').forEach((p,i)=>{p.classList.toggle('on',i===0);});
   try{contarNaoLidasPro();}catch(e){}
+  try{carregarMinhasAval(U.id);}catch(e){}
+}
+// Avaliações recebidas pelo profissional (visão do próprio profissional)
+async function carregarMinhasAval(profId){
+  const box=document.getElementById('pd-minhas-aval');if(!box)return;
+  let avs=[];
+  if(_SB){try{const{data}=await _SB.from('avaliacoes_prof').select('*').eq('prof_id',profId).order('criado_em',{ascending:false});avs=data||[];}catch(e){}}
+  if(!avs.length){box.innerHTML='<div class="pro-card-tit" style="margin-bottom:4px">Avaliações</div><div style="color:var(--txm);font-size:13px">Você ainda não recebeu avaliações. Elas aparecem aqui quando um paciente avalia seu atendimento.</div>';return;}
+  const media=avs.reduce((s,a)=>s+a.nota,0)/avs.length;
+  box.style.textAlign='left';
+  box.innerHTML=`<div class="pro-card-tit" style="margin-bottom:8px">Avaliações recebidas</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+      <div style="font-family:'Poppins',sans-serif;font-size:28px;font-weight:800;line-height:1">${media.toFixed(1)}</div>
+      <div><div>${estrelas(media,16)}</div><div style="font-size:12px;color:var(--txm)">${avs.length} avaliaç${avs.length===1?'ão':'ões'}</div></div>
+    </div>
+    ${avs.slice(0,5).map(a=>`<div style="border-top:1px solid var(--line);padding:8px 0"><div style="display:flex;gap:7px;align-items:center"><b style="font-size:13px">${esc(a.user_nome||'Paciente')}</b><span>${estrelas(a.nota,11)}</span></div>${a.comentario?`<div style="font-size:13px;color:var(--txs);margin-top:2px">${esc(a.comentario)}</div>`:''}</div>`).join('')}`;
 }
 function abrirClinica(){try{vib(12);}catch(e){}window.location.href='/clinica/';}
 function abrirEdicaoPerfil(){
