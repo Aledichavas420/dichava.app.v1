@@ -2120,7 +2120,8 @@ a{color:inherit;text-decoration:none}
 .pd-bio{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 17px;font-size:14.5px;line-height:1.6;box-shadow:0 2px 10px rgba(0,0,0,.03)}
 .pd-meta{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .pd-mi{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px 14px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
-.pd-mi .ic{width:38px;height:38px;flex:none;border-radius:11px;background:var(--vf);display:grid;place-items:center;font-size:18px}
+.pd-mi .ic{width:40px;height:40px;flex:none;border-radius:12px;background:var(--cin);display:grid;place-items:center;font-size:18px}
+.pd-mi .ic svg,.pd-mi .ic .appicon{width:23px;height:23px}
 .pd-mi .tx{min-width:0}
 .pd-mi .k{font-size:11px;color:var(--txs);font-weight:700;display:block;margin-bottom:1px}
 .pd-mi .v{font-size:14px;font-weight:800;line-height:1.25;word-break:break-word}
@@ -3072,6 +3073,10 @@ a{color:inherit;text-decoration:none}
           <button type="button" id="pp-foto-rm" onclick="ppFotoRm()" style="display:none;margin-left:8px;background:none;border:none;color:var(--txm);font-size:12px;cursor:pointer;text-decoration:underline">remover</button>
         </div>
       </div>
+    </div>
+    <div class="fld"><div class="lbl">Tema da capa <span style="color:var(--txm);font-weight:400">(cor do topo da sua ficha pública)</span></div>
+      <div id="pp-capa-prev" style="height:56px;border-radius:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)"></div>
+      <div id="pp-capas" style="display:flex;gap:9px;flex-wrap:wrap"></div>
     </div>
     <div class="fld"><div class="lbl">Tipo de profissional *</div><select class="inp" id="pp-tipo"><option value="">Selecione...</option><option value="Psicóloga(o)">Psicóloga(o)</option><option value="Psiquiatra">Psiquiatra</option><option value="Médica(o)">Médica(o)</option><option value="Enfermeira(o)">Enfermeira(o)</option><option value="Nutricionista">Nutricionista</option><option value="Fisioterapeuta">Fisioterapeuta</option><option value="Terapeuta ocupacional">Terapeuta ocupacional</option><option value="Terapeuta">Terapeuta</option><option value="Redutora(or) de danos">Redutora(or) de danos</option><option value="Assistente social">Assistente social</option><option value="Outro profissional da saúde">Outro profissional da saúde</option></select><div class="em" id="pp-tipoe"></div></div>
     <div class="fld"><div class="lbl">Bio profissional * <span style="color:var(--txm);font-weight:400">(como você trabalha com uso de substâncias)</span></div><textarea class="ft" id="pp-bio" rows="4" placeholder="Ex.: Atendo pessoas que usam substâncias sem impor abstinência…"></textarea><div class="em" id="pp-bioe"></div></div>
@@ -4457,6 +4462,12 @@ function setAvatares(){const v=gAvatar();['hh-av','tav','tav-j','cmpav'].forEach
 function escolherAvatar(v){ls('dr_avatar_'+uid(),v);setAvatares();const pa=document.getElementById('perfil-av');if(pa){pa.innerHTML=brotoColorSVG(v);pa.classList.add('av-broto');}document.querySelectorAll('#perfil-avpick .avpick').forEach(b=>b.classList.toggle('on',b.dataset.v===v));vib(6);toast('🎨 Avatar atualizado!');const pk=document.getElementById('perfil-avpick');if(pk)pk.style.display='none';const bt=document.getElementById('perfil-editav');if(bt)bt.textContent='✏️ Editar avatar';}
 function toggleAvPick(){const pk=document.getElementById('perfil-avpick');const bt=document.getElementById('perfil-editav');if(!pk)return;const open=pk.style.display!=='none';pk.style.display=open?'none':'grid';if(bt)bt.textContent=open?'✏️ Editar avatar':'Toque na cor que quiser';}
 const ICONS={
+  "pf-online":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-online-g" x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0" stop-color="#5FD1F6"></stop><stop offset="1" stop-color="#3E7BF0"></stop></linearGradient></defs><rect x="4" y="5" width="16" height="11" rx="2" fill="url(#pf-online-g)"></rect><rect x="5.4" y="6.4" width="13.2" height="8.2" rx="1" fill="#fff" opacity=".85"></rect><path d="M2.4 17.6h19.2l-.9 1.6a1.3 1.3 0 0 1-1.1.6H4.4a1.3 1.3 0 0 1-1.1-.6l-.9-1.6Z" fill="url(#pf-online-g)"></path></svg>`,
+  "pf-local":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-local-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FF9A7A"></stop><stop offset="1" stop-color="#F2543D"></stop></linearGradient></defs><path d="M12 2c-3.9 0-7 3-7 6.9 0 5 7 12.1 7 12.1s7-7.1 7-12.1C19 5 15.9 2 12 2Z" fill="url(#pf-local-g)"></path><circle cx="12" cy="9" r="2.6" fill="#fff"></circle></svg>`,
+  "pf-valor":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-valor-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#3FA76A"></stop></linearGradient></defs><rect x="3" y="6.5" width="18" height="11" rx="2.4" fill="url(#pf-valor-g)"></rect><circle cx="12" cy="12" r="2.7" fill="#fff" opacity=".92"></circle><circle cx="6.2" cy="12" r="1" fill="#fff" opacity=".75"></circle><circle cx="17.8" cy="12" r="1" fill="#fff" opacity=".75"></circle></svg>`,
+  "pf-duracao":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-dur-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#6FC3FF"></stop><stop offset="1" stop-color="#3E7BF0"></stop></linearGradient></defs><circle cx="12" cy="12.5" r="8.5" fill="url(#pf-dur-g)"></circle><path d="M9 3.5h6" stroke="url(#pf-dur-g)" stroke-width="2" stroke-linecap="round"></path><path d="M12 8.2v4.6l3 1.8" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+  "pf-disp":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-disp-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B692F6"></stop><stop offset="1" stop-color="#7B54D3"></stop></linearGradient></defs><rect x="4" y="5" width="16" height="15" rx="3" fill="url(#pf-disp-g)"></rect><path d="M4 9.2h16" stroke="#fff" stroke-width="1.2" opacity=".55"></path><path d="M8 3.4v3.2M16 3.4v3.2" stroke="url(#pf-disp-g)" stroke-width="2" stroke-linecap="round"></path><g fill="#fff"><circle cx="9" cy="13" r="1.1"></circle><circle cx="12" cy="13" r="1.1"></circle><circle cx="15" cy="13" r="1.1"></circle><circle cx="9" cy="16.4" r="1.1"></circle><circle cx="12" cy="16.4" r="1.1"></circle></g></svg>`,
+  "pf-agenda":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-ag-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2FA35F"></stop></linearGradient></defs><rect x="4" y="5" width="16" height="15" rx="3" fill="url(#pf-ag-g)"></rect><path d="M4 9.2h16" stroke="#fff" stroke-width="1.2" opacity=".5"></path><path d="M8 3.4v3.2M16 3.4v3.2" stroke="url(#pf-ag-g)" stroke-width="2" stroke-linecap="round"></path><path d="M8.4 14.6l2.3 2.2 4.6-4.9" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
   "pw-eye":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" fill="#0C9C8C"></path><circle cx="12" cy="12" r="3.3" fill="#fff"></circle><circle cx="12" cy="12" r="1.6" fill="#0C9C8C"></circle></svg>`,
   "pw-eyeoff":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" fill="#0C9C8C" opacity=".4"></path><circle cx="12" cy="12" r="3.3" fill="#fff" opacity=".55"></circle><path d="M4.5 4.5 19.5 19.5" stroke="#fff" stroke-width="3.4" stroke-linecap="round"></path><path d="M4.5 4.5 19.5 19.5" stroke="#0C9C8C" stroke-width="2" stroke-linecap="round"></path></svg>`,
   "cq-fire":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="cq-fire-gor" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFB264"></stop><stop offset="1" stop-color="#EA580C"></stop></linearGradient></defs><path d="M12 2.6c.6 3.2-2.6 4.2-2.6 7.2a2.6 2.6 0 0 0 5.2 0c0-1 .7-1.4.7-1.4 1.7 1.2 2.7 3.1 2.7 5.1a6 6 0 0 1-12 0c0-4.7 6-6.5 6-10.9Z" fill="url(#cq-fire-gor)"></path><path d="M12 13.2c-.3 1.6 1.1 2.1 1.1 3.5a1.5 1.5 0 0 1-3 0c0-1.3 1.6-1.9 1.9-3.5Z" fill="#FFE36B"></path></svg>`,
@@ -6356,8 +6367,9 @@ function abrirPerfilProf(id){
   const modLabel=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'💻📍 Online e presencial':(p.modalidade||'').includes('online')?'💻 Online':'📍 Presencial';
   const temAgenda=p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length;
   const body=document.getElementById('profdet-body');
+  const capa=CAPAS[p.capa]||CAPAS.verde;
   body.innerHTML=`
-    <div class="pd-hero">
+    <div class="pd-hero" style="background:${capa.grad}">
       <div class="pd-av"${p.foto?' style="padding:0;overflow:hidden"':''}>${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:ini(p.nome)}</div>
       <div class="pd-nome">${esc(p.nome)}</div>
       <div class="pd-tipo">${esc(p.tipo_prof||'')}</div>
@@ -6371,12 +6383,12 @@ function abrirPerfilProf(id){
       ${p.especialidades?`<div class="pd-sec">Especialidades</div><div class="pd-tags">${p.especialidades.split(',').map(t=>`<span class="pd-tg">${esc(t.trim())}</span>`).join('')}</div>`:''}
       <div class="pd-sec">Atendimento</div>
       <div class="pd-meta">
-        <div class="pd-mi"><span class="ic">${(p.modalidade||'').includes('presencial')&&!(p.modalidade||'').includes('online')?'📍':'💻'}</span><span class="tx"><span class="k">Modalidade</span><span class="v">${modLabel.replace(/^[^ ]+ /,'')}</span></span></div>
-        ${p.valor?`<div class="pd-mi"><span class="ic">💰</span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
-        ${p.duracao?`<div class="pd-mi"><span class="ic">⏱️</span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
-        ${p.cidade?`<div class="pd-mi"><span class="ic">📍</span><span class="tx"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></span></div>`:''}
-        ${p.disponibilidade?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic">🗓️</span><span class="tx"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></span></div>`:''}
-        ${temAgenda?`<div class="pd-mi" style="grid-column:1/-1;background:var(--vf);border-color:color-mix(in srgb,var(--v) 24%,transparent)"><span class="ic" style="background:var(--v);color:#fff">📅</span><span class="tx"><span class="k" style="color:var(--ve)">Agendamento online</span><span class="v" style="color:var(--ve)">Escolha um horário abaixo ✓</span></span></div>`:''}
+        <div class="pd-mi"><span class="ic" data-icon="${(p.modalidade||'').includes('presencial')&&!(p.modalidade||'').includes('online')?'pf-local':'pf-online'}"></span><span class="tx"><span class="k">Modalidade</span><span class="v">${modLabel.replace(/^[^ ]+ /,'')}</span></span></div>
+        ${p.valor?`<div class="pd-mi"><span class="ic" data-icon="pf-valor"></span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
+        ${p.duracao?`<div class="pd-mi"><span class="ic" data-icon="pf-duracao"></span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
+        ${p.cidade?`<div class="pd-mi"><span class="ic" data-icon="pf-local"></span><span class="tx"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></span></div>`:''}
+        ${p.disponibilidade?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic" data-icon="pf-disp"></span><span class="tx"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></span></div>`:''}
+        ${temAgenda?`<div class="pd-mi" style="grid-column:1/-1;background:var(--vf);border-color:color-mix(in srgb,var(--v) 24%,transparent)"><span class="ic" data-icon="pf-agenda" style="background:#fff"></span><span class="tx"><span class="k" style="color:var(--ve)">Agendamento online</span><span class="v" style="color:var(--ve)">Escolha um horário abaixo ✓</span></span></div>`:''}
       </div>
       ${temAgenda?`<div class="pd-sec">Agendar horário</div><div id="pd-slots"></div>`:''}
       <div class="pd-sec">Avaliações</div>
@@ -6386,9 +6398,19 @@ function abrirPerfilProf(id){
       <button class="pd-contato" onclick="contatarProf('${p.id}')">💬 Conversar</button>
       ${temAgenda?`<button class="pd-agendar" onclick="verSlots('${p.id}')">📅 Agendar horário</button>`:''}
     </div>`;
+  try{aplicarIcones(body);}catch(e){}
   showV('vprofdet');
   carregarAvaliacoes(p.id);
 }
+// ── Temas de capa da ficha do profissional ──
+const CAPAS={
+  verde:{nome:'Verde',grad:'linear-gradient(150deg,#1B3A2A 0%,#2FA35F 62%,#3FA76A 100%)',sw:'#2FA35F'},
+  oceano:{nome:'Oceano',grad:'linear-gradient(150deg,#0B2E4A 0%,#1E7FB0 60%,#37C0C9 100%)',sw:'#1E7FB0'},
+  roxo:{nome:'Roxo',grad:'linear-gradient(150deg,#2E1B48 0%,#6B4BCE 62%,#9B5DE5 100%)',sw:'#6B4BCE'},
+  porsol:{nome:'Pôr do sol',grad:'linear-gradient(150deg,#5A1E3A 0%,#E0642F 58%,#F5A623 100%)',sw:'#E0642F'},
+  rosa:{nome:'Rosa',grad:'linear-gradient(150deg,#4A1436 0%,#C93E77 60%,#F473A6 100%)',sw:'#C93E77'},
+  grafite:{nome:'Grafite',grad:'linear-gradient(150deg,#15181C 0%,#3A424C 60%,#5B6672 100%)',sw:'#3A424C'}
+};
 // ── Estrelas (render) ──
 function estrelas(n,tam){n=Math.round(n||0);tam=tam||15;let s='';for(let i=1;i<=5;i++)s+=`<span style="color:${i<=n?'#F5A623':'var(--cinm)'};font-size:${tam}px">★</span>`;return s;}
 // ── Avaliações do profissional (paciente → profissional) ──
@@ -6843,15 +6865,15 @@ async function salvarPerfilPro(){
   const editando=(document.getElementById('pp-btn').textContent||'').indexOf('alteraç')>=0;
   if(editando && !confirm('Ao salvar, seu perfil volta para análise e fica temporariamente indisponível na rede até a nova aprovação. Deseja continuar?'))return;
   const btn=document.getElementById('pp-btn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
-  const payload={id:U.id,nome:U.nome,email:U.email,reg:U.reg||'',tipo_prof:tipo,bio,especialidades:document.getElementById('pp-esp').value.trim(),modalidade:mod,cidade:document.getElementById('pp-cidade').value.trim(),valor:document.getElementById('pp-valor').value.trim(),duracao:document.getElementById('pp-dur').value.trim(),disponibilidade:document.getElementById('pp-disp').value.trim(),telefone:(document.getElementById('pp-tel')?.value||'').trim(),foto:_ppFoto||null,link:(document.getElementById('pp-link')?.value||'').trim(),status:'pendente'};
+  const payload={id:U.id,nome:U.nome,email:U.email,reg:U.reg||'',tipo_prof:tipo,bio,especialidades:document.getElementById('pp-esp').value.trim(),modalidade:mod,cidade:document.getElementById('pp-cidade').value.trim(),valor:document.getElementById('pp-valor').value.trim(),duracao:document.getElementById('pp-dur').value.trim(),disponibilidade:document.getElementById('pp-disp').value.trim(),telefone:(document.getElementById('pp-tel')?.value||'').trim(),foto:_ppFoto||null,link:(document.getElementById('pp-link')?.value||'').trim(),capa:_ppCapa||'verde',status:'pendente'};
   let error=null;
   try{
     if(!_SB)throw new Error('sem conexão com o servidor');
     let q=_SB.from('profissionais').upsert(payload);
     let res=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('tempo esgotado — verifique sua conexão')),12000))]);
-    // fallback: colunas foto/link ainda não criadas no banco
-    if(res&&res.error&&/(foto|link)/.test(res.error.message||'')){
-      const {foto,link,...base}=payload;
+    // fallback: colunas foto/link/capa ainda não criadas no banco
+    if(res&&res.error&&/(foto|link|capa)/.test(res.error.message||'')){
+      const {foto,link,capa,...base}=payload;
       res=await _SB.from('profissionais').upsert(base);
     }
     error=res&&res.error;
@@ -6883,6 +6905,16 @@ function ppFotoSel(input){
   rd.readAsDataURL(f);
 }
 function ppFotoRm(){_ppFoto=null;ppFotoRender();const i=document.getElementById('pp-foto');if(i)i.value='';}
+// ── Tema da capa (seletor no form do profissional) ──
+let _ppCapa='verde';
+function renderCapas(){
+  const box=document.getElementById('pp-capas');if(!box)return;
+  box.innerHTML=Object.keys(CAPAS).map(k=>{const c=CAPAS[k];const sel=k===_ppCapa;
+    return `<button type="button" onclick="setPpCapa('${k}')" title="${c.nome}" style="width:46px;height:46px;border-radius:12px;background:${c.grad};cursor:pointer;border:3px solid ${sel?'var(--v)':'transparent'};box-shadow:0 1px 5px rgba(0,0,0,.15);outline:${sel?'2px solid var(--v)':'none'};outline-offset:1px"></button>`;
+  }).join('');
+  const pv=document.getElementById('pp-capa-prev');if(pv)pv.style.background=(CAPAS[_ppCapa]||CAPAS.verde).grad;
+}
+function setPpCapa(k){_ppCapa=k;renderCapas();try{sfx('tap');}catch(e){}}
 function ppFotoRender(){
   const pv=document.getElementById('pp-foto-prev'),rm=document.getElementById('pp-foto-rm');if(!pv)return;
   if(_ppFoto){pv.innerHTML=`<img src="${_ppFoto}" style="width:100%;height:100%;object-fit:cover">`;if(rm)rm.style.display='inline';}
@@ -6899,7 +6931,7 @@ function proLink(v){
 }
 async function rotearPro(){
   const st=await checkProStatus();
-  if(st===null){showV('vproperfil');}
+  if(st===null){_ppCapa='verde';renderCapas();showV('vproperfil');}
   else if(st==='aprovado'){entrarPro();}
   else if(st==='rejeitado'){toast('Seu cadastro não foi aprovado. Entre em contato conosco.');showV('vpro-aguarda');}
   else{showV('vpro-aguarda');}
@@ -6985,6 +7017,7 @@ function abrirEdicaoPerfil(){
     {const tel=document.getElementById('pp-tel');if(tel)tel.value=prof.telefone||'';}
     {const lk=document.getElementById('pp-link');if(lk)lk.value=prof.link||'';}
     _ppFoto=prof.foto||null;ppFotoRender();
+    _ppCapa=(prof.capa&&CAPAS[prof.capa])?prof.capa:'verde';renderCapas();
     document.getElementById('pp-btn').textContent='Salvar alterações';
     {const av=document.getElementById('pp-aviso');if(av)av.innerHTML='⚠️ <strong>Atenção:</strong> ao salvar qualquer alteração, seu perfil volta para <strong>análise</strong> e fica <strong>temporariamente indisponível</strong> na rede até a nova aprovação da equipe (até 48h úteis).';}
     showV('vproperfil');
@@ -9033,7 +9066,7 @@ setTimeout(function(){
   try{
     if(document.querySelector('.V.on'))return;           // já tem tela visível → ok
     if(typeof U!=='undefined'&&U){
-      if(U.tipo==='pro'){showV('vproperfil');}
+      if(U.tipo==='pro'){try{renderCapas();}catch(_){}showV('vproperfil');}
       else{showV('vapp');}
     }else{showV('va');}
   }catch(e){try{showV('va');}catch(_){}}
