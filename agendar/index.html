@@ -1,0 +1,71 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Agendar consulta — dichava.app</title><meta name="theme-color" content="#1B2A1C">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--v:#4CAF5A;--ve:#2E7D32;--dk:#1B2A1C;--tx:#1B2A1C;--txs:#5D7060;--line:#E4E4DF;--bg:#F4F7F2}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;min-height:100vh}
+.wrap{max-width:460px;margin:0 auto;padding:26px 20px 60px}
+.logo{font-weight:800;font-size:20px;color:var(--ve);text-align:center;margin-bottom:6px}.logo span{color:var(--dk)}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 22px;box-shadow:0 10px 30px rgba(30,60,35,.06)}
+h1{font-size:22px;color:var(--dk);margin-bottom:4px}
+.sub{color:var(--txs);font-size:14px;margin-bottom:20px}
+label{display:block;font-size:13px;font-weight:700;color:var(--txs);margin:12px 0 5px}
+input,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit;background:#fafcfa}
+input:focus,textarea:focus{outline:none;border-color:var(--v)}
+.row{display:flex;gap:10px}.row>div{flex:1}
+.btn{width:100%;margin-top:18px;padding:14px;border:none;border-radius:14px;background:var(--v);color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.6}
+.err{color:#C62828;font-size:13px;margin-top:10px;display:none}
+.ok{text-align:center;padding:20px 0;display:none}
+.ok .ic{font-size:48px}
+.note{font-size:12px;color:#9aa89c;text-align:center;margin-top:16px}
+</style></head><body><div class=wrap>
+<div class="logo">dichava<span>.app</span></div>
+<div class="card">
+  <div id="form-box">
+    <h1 id="titulo">Agendar consulta</h1>
+    <div class="sub" id="sub">Preencha e o profissional confirma com você.</div>
+    <label>Seu nome *</label><input id="f-nome" placeholder="Nome completo">
+    <label>WhatsApp / telefone *</label><input id="f-tel" type="tel" inputmode="tel" placeholder="(00) 00000-0000">
+    <div class="row">
+      <div><label>Data preferida</label><input id="f-data" type="date"></div>
+      <div><label>Horário</label><input id="f-hora" type="time"></div>
+    </div>
+    <label>Mensagem (opcional)</label><textarea id="f-msg" rows="3" placeholder="Conte brevemente o que procura"></textarea>
+    <button class="btn" id="btn" onclick="enviar()">Solicitar agendamento</button>
+    <div class="err" id="err"></div>
+  </div>
+  <div class="ok" id="ok">
+    <div class="ic">✅</div>
+    <h1 style="margin-top:8px">Solicitação enviada!</h1>
+    <div class="sub" style="margin-top:8px" id="ok-msg">O profissional vai confirmar com você em breve pelo contato informado.</div>
+  </div>
+</div>
+<div class="note">Ao enviar, você concorda com o tratamento dos seus dados para fins de agendamento (LGPD).</div>
+</div>
+<script>
+const SB=(typeof supabase!=='undefined')?supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'):null;
+const CODIGO=(new URLSearchParams(location.search).get('c')||'').toUpperCase();
+(async function(){
+  if(!CODIGO||!SB)return;
+  try{ const{data}=await SB.rpc('clinica_nome',{p_codigo:CODIGO}); if(data){ document.getElementById('titulo').textContent='Agendar com '+data; document.getElementById('sub').textContent='Solicite um horário — '+data+' confirma com você.'; } }catch(e){}
+})();
+function val(id){return (document.getElementById(id).value||'').trim();}
+async function enviar(){
+  const err=document.getElementById('err'); err.style.display='none';
+  const nome=val('f-nome'), tel=val('f-tel');
+  if(!nome){err.textContent='Informe seu nome.';err.style.display='block';return;}
+  if(!tel){err.textContent='Informe um telefone/WhatsApp para contato.';err.style.display='block';return;}
+  if(!CODIGO){err.textContent='Link inválido (sem código da clínica).';err.style.display='block';return;}
+  if(!SB){err.textContent='Sem conexão com o servidor.';err.style.display='block';return;}
+  const btn=document.getElementById('btn'); btn.disabled=true; btn.textContent='Enviando…';
+  try{
+    const{data,error}=await SB.rpc('solicitar_agendamento',{p_codigo:CODIGO,p_nome:nome,p_tel:tel,p_data:val('f-data')||null,p_hora:val('f-hora')||null,p_msg:val('f-msg')||null});
+    if(error)throw error;
+    if(data){document.getElementById('ok-msg').textContent=data+' vai confirmar seu horário em breve pelo contato informado.';}
+    document.getElementById('form-box').style.display='none';
+    document.getElementById('ok').style.display='block';
+  }catch(e){ err.textContent='Não consegui enviar: '+((e&&e.message)||'tente de novo'); err.style.display='block'; btn.disabled=false; btn.textContent='Solicitar agendamento'; }
+}
+</script>
+</body></html>

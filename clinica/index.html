@@ -586,8 +586,43 @@ function viewAgenda(){
       <div class="grow"></div>
       <button class="btn" onclick="formAgendamento(null,'${agendaDay}')">＋ Agendamento</button>
     </div>
+    ${solicitacoesBanner()}
     ${dia.length?'':'<div class="card empty" style="margin-bottom:14px"><div class="big">◷</div><b>Dia livre</b>Nenhuma consulta marcada para esta data.</div>'}
     <div class="card"><div class="cal">${slots}</div></div>`;
+}
+let SOLIC=[];
+function solicitacoesBanner(){
+  if(!SOLIC||!SOLIC.length)return '';
+  return `<div class="card" style="padding:14px 16px;margin-bottom:14px;border-left:3px solid var(--am,#FFD600)">
+    <div style="font-weight:800;font-size:14px;margin-bottom:8px">🔔 Solicitações de agendamento (${SOLIC.length})</div>
+    ${SOLIC.map(s=>`<div style="border-top:1px solid var(--line);padding:9px 0">
+      <div style="font-weight:700">${esc(s.nome)}${s.telefone?` · <a href="tel:${esc((s.telefone||'').replace(/[^0-9+]/g,''))}" style="color:var(--v)">${esc(s.telefone)}</a>`:''}</div>
+      <div style="font-size:12.5px;color:var(--txs)">${s.data_pref?'Preferência: '+fmtDate(s.data_pref):'Sem data'}${s.hora_pref?' às '+esc(s.hora_pref):''}${s.mensagem?' · "'+esc(s.mensagem)+'"':''}</div>
+      <div style="display:flex;gap:8px;margin-top:7px"><button class="btn sm" onclick="confirmarSolic('${s.id}')">Confirmar na agenda</button><button class="btn sm ghost" onclick="recusarSolic('${s.id}')">Recusar</button></div>
+    </div>`).join('')}
+  </div>`;
+}
+async function carregarSolicitacoes(){
+  if(!CLINICA||!_SB){SOLIC=[];return;}
+  try{ const{data}=await _SB.from('solicitacoes').select('*').eq('clinica_id',CLINICA.id).eq('status','nova').order('criado_em',{ascending:false}); SOLIC=data||[]; const b=document.getElementById('badge-agenda'); if(route==='agenda')render(); }catch(e){ SOLIC=[]; }
+}
+async function confirmarSolic(id){
+  const s=SOLIC.find(x=>x.id===id); if(!s)return;
+  // acha ou cria o paciente pelo telefone/nome
+  let p=DB.pacientes.find(x=>x.telefone&&s.telefone&&x.telefone.replace(/\D/g,'')===s.telefone.replace(/\D/g,''));
+  if(!p){ p={id:uid(),nome:s.nome,telefone:s.telefone||'',tags:['novo'],criadoEm:now()}; DB.pacientes.push(p); }
+  // cria o agendamento na preferência (ou hoje 09:00)
+  const ag={id:uid(),pacienteId:p.id,data:s.data_pref||todayISO(),hora:s.hora_pref||'09:00',duracao:50,tipo:'Consulta',status:'agendado',valor:0,formaPagamento:'',pago:false,obs:s.mensagem||'',criadoEm:now()};
+  DB.agendamentos.push(ag); save();
+  try{ await _SB.from('solicitacoes').update({status:'confirmada'}).eq('id',id); }catch(e){}
+  SOLIC=SOLIC.filter(x=>x.id!==id);
+  agendaDay=ag.data; toast('Consulta criada na agenda — ajuste os detalhes se quiser'); render();
+  setTimeout(()=>openAgendamento(ag.id),200);
+}
+async function recusarSolic(id){
+  if(!confirm('Recusar esta solicitação?'))return;
+  try{ await _SB.from('solicitacoes').update({status:'recusada'}).eq('id',id); }catch(e){}
+  SOLIC=SOLIC.filter(x=>x.id!==id); toast('Solicitação recusada'); render();
 }
 function shiftDay(n){ agendaDay=addDaysISO(agendaDay,n); render(); }
 
@@ -1020,6 +1055,11 @@ function viewEquipe(){
     <div class="eq-code"><span style="font-size:12px;color:var(--txs);font-weight:700">CÓDIGO</span> <b id="eq-code-v">${esc(CLINICA.codigo)}</b><button class="btn sm ghost cp" onclick="copiarCodigo()">Copiar</button></div>
   </div>
   <div class="card" style="padding:20px;max-width:620px;margin-top:16px">
+    <div class="sec-title" style="margin-top:0">Agendamento online</div>
+    <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Compartilhe este link com seus pacientes (bio do Instagram, WhatsApp). Eles solicitam um horário e você confirma na <b>Agenda</b>.</p>
+    <div class="eq-code" style="border-style:solid"><span style="font-size:12px;color:var(--txs);font-weight:700;word-break:break-all;flex:1">dichava.app/agendar/?c=${esc(CLINICA.codigo)}</span><button class="btn sm ghost cp" onclick="copiarLinkAgenda()">Copiar</button></div>
+  </div>
+  <div class="card" style="padding:20px;max-width:620px;margin-top:16px">
     <div class="sec-title" style="margin-top:0">Profissionais (${membros.length})</div>
     ${membros.map(m=>`<div class="eq-mem">
       <div class="avatar">${initials(m.nome||'?')}</div>
@@ -1037,6 +1077,7 @@ function viewEquipe(){
   </div>`;
 }
 function copiarCodigo(){ try{ navigator.clipboard.writeText(CLINICA.codigo); toast('Código copiado'); }catch(e){ toast(CLINICA.codigo); } }
+function copiarLinkAgenda(){ const url='https://dichava.app/agendar/?c='+CLINICA.codigo; try{ navigator.clipboard.writeText(url); toast('Link copiado'); }catch(e){ toast(url); } }
 async function renomearClinica(){
   const nome=($('#eq-nome').value||'').trim(); if(!nome){toast('Informe um nome',1);return;}
   try{ const{error}=await _SB.from('clinicas').update({nome}).eq('id',CLINICA.id); if(error)throw error;
@@ -1453,10 +1494,11 @@ function startApp(){
   }
   syncHeader();
   go('dash');
+  try{carregarSolicitacoes();}catch(e){}
   if(!localStorage.getItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'))) setTimeout(tutStart,400);
 }
 // puxa alterações da equipe ao voltar pra aba
-window.addEventListener('focus', ()=>{ if(CLINICA) refreshClinica(); });
+window.addEventListener('focus', ()=>{ if(CLINICA){ refreshClinica(); try{carregarSolicitacoes();}catch(e){} } });
 
 /* =============== CRIAR / ENTRAR EM CLÍNICA =============== */
 function mostrarClinicOnboarding(){ const g=$('#clinicgate'); if(g) g.classList.add('on'); }
