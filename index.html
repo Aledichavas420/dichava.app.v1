@@ -6442,18 +6442,22 @@ async function refreshAcomp(){
 }
 async function solicitarAcomp(){
   if(!_SB||!_chat.conv)return;
-  try{ await _SB.from('conversas').update({acomp:'pendente'}).eq('id',_chat.conv.id); _chat.conv.acomp='pendente';
+  try{
+    const{error}=await _SB.from('conversas').update({acomp:'pendente'}).eq('id',_chat.conv.id);
+    if(error){ toast('⚠️ Servidor sem os campos de acompanhamento. Rode o SQL (conversas.acomp/resumo) e tente de novo. '+(error.message||''),7000); return; }
+    _chat.conv.acomp='pendente';
     const t='🔒 Pedi para acompanhar sua evolução no app. Você pode autorizar no aviso acima.';
     await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:t});
     await _SB.from('conversas').update({ultima_msg:t.slice(0,120),atualizado_em:new Date().toISOString()}).eq('id',_chat.conv.id);
-    renderChatAcomp(); carregarMsgs(true);
+    renderChatAcomp(); carregarMsgs(true); toast('Pedido enviado — o paciente vai ver o aviso para autorizar.');
   }catch(e){ toast('⚠️ '+((e&&e.message)||'erro'),5000); }
 }
 async function responderAcomp(ok){
   if(!_SB||!_chat.conv)return;
   try{
     if(ok){ const resumo=calcResumoPaciente();
-      await _SB.from('conversas').update({acomp:'ativo',resumo,resumo_em:new Date().toISOString()}).eq('id',_chat.conv.id);
+      const{error}=await _SB.from('conversas').update({acomp:'ativo',resumo,resumo_em:new Date().toISOString()}).eq('id',_chat.conv.id);
+      if(error){ toast('⚠️ Não consegui salvar. Rode o SQL de acompanhamento. '+(error.message||''),7000); return; }
       _chat.conv.acomp='ativo'; _chat.conv.resumo=resumo;
       const t='✅ Autorizei o acompanhamento da minha evolução.';
       await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:t});
