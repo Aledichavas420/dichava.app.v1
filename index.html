@@ -2023,6 +2023,7 @@ a{color:inherit;text-decoration:none}
 .pro-clinica-btn{width:100%;display:flex;align-items:center;gap:13px;padding:15px 16px;margin-bottom:16px;border-radius:16px;background:linear-gradient(135deg,var(--v),var(--sa,#00897B));color:#fff;box-shadow:0 6px 20px rgba(76,175,90,.3);text-align:left}
 .pro-clinica-btn:active{transform:scale(.985)}
 .pro-clinica-btn .pcl-ic{font-size:26px;flex-shrink:0}
+.pro-clinica-btn .pcl-ic .appicon{width:30px;height:30px;display:block}
 .pro-clinica-btn .pcl-tx{flex:1;line-height:1.3}
 .pro-clinica-btn .pcl-tx b{display:block;font-size:16px;font-weight:800}
 .pro-clinica-btn .pcl-tx span{font-size:12.5px;opacity:.92}
@@ -2079,12 +2080,17 @@ a{color:inherit;text-decoration:none}
 .chat-bar textarea:focus{outline:none;border-color:var(--v)}
 .chat-send{width:42px;height:42px;flex-shrink:0;border-radius:50%;background:var(--v);color:#fff;border:none;font-size:16px;display:grid;place-items:center}
 .chat-empty{text-align:center;color:var(--txm);font-size:13.5px;margin:auto;padding:30px}
-.conv-item{display:flex;align-items:center;gap:12px;padding:13px 6px;border-bottom:1px solid var(--line);cursor:pointer}
-.conv-item .av{width:44px;height:44px;border-radius:50%;background:var(--roxof);color:var(--roxo);display:grid;place-items:center;font-weight:800;flex-shrink:0}
-.conv-item .cn{font-weight:700;font-size:14.5px}
-.conv-item .cl{font-size:12.5px;color:var(--txs);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.conv-item{position:relative;display:flex;align-items:center;gap:13px;padding:13px 14px;margin-bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.03);transition:transform .12s,box-shadow .12s;overflow:hidden}
+.conv-item:active{transform:scale(.988)}
+.conv-item .av{position:relative;width:48px;height:48px;border-radius:50%;background:linear-gradient(140deg,#EAF7EE,#D6EFDD);color:var(--ve);display:grid;place-items:center;font-weight:800;font-size:17px;flex-shrink:0;border:1px solid color-mix(in srgb,var(--v) 18%,transparent)}
+.conv-item.nova::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--v)}
+.conv-item .cbody{flex:1;min-width:0}
+.conv-item .cn{font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;color:var(--tx);display:flex;align-items:center;gap:6px}
+.conv-item .cl{font-size:13px;color:var(--txs);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .conv-item.nova .cl{color:var(--tx);font-weight:600}
-.conv-dot{width:10px;height:10px;border-radius:50%;background:var(--er);flex-shrink:0;margin-left:6px}
+.conv-item .cchev{color:var(--cinm);font-size:20px;flex-shrink:0}
+.conv-dot{width:9px;height:9px;border-radius:50%;background:var(--v);flex-shrink:0;box-shadow:0 0 0 3px color-mix(in srgb,var(--v) 18%,transparent)}
+.conv-item .cmeta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
 .tabbadge{display:inline-block;background:var(--er);color:#fff;font-size:11px;font-weight:800;min-width:18px;text-align:center;padding:1px 5px;border-radius:20px;vertical-align:middle}
 #chat-acomp:empty{display:none}
 .acx{margin:10px 12px;padding:12px 14px;border-radius:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh);background:var(--roxof);border:1px solid color-mix(in srgb,var(--roxo) 22%,transparent)}
@@ -2152,9 +2158,11 @@ a{color:inherit;text-decoration:none}
 .rx-tag{display:inline-block;background:var(--cinm);color:var(--tx);font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin:2px 3px 2px 0}
 .msg-empty{text-align:center;padding:50px 20px;color:var(--txm)}
 .msg-empty-ic{font-size:44px;margin-bottom:12px}
+.msg-empty-ic .appicon{width:52px;height:52px;display:inline-block}
 .msg-empty-t{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:6px}
 .msg-empty-s{font-size:13px;line-height:1.6}
-.pro-badge-row{display:inline-flex;align-items:center;gap:5px;background:var(--roxof);color:var(--roxo);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:16px}
+.pro-badge-row{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.16);color:#fff;font-size:11px;font-weight:700;padding:4px 10px 4px 6px;border-radius:20px;margin-bottom:16px}
+.pro-badge-row .appicon{width:16px;height:16px;display:block}
 .pro-status-pend{background:var(--ams);color:#7a5c00;font-size:12px;font-weight:700;padding:10px 14px;border-radius:10px;margin-bottom:14px;line-height:1.5}
 
 /* ══ PRO DASHBOARD ══ */
@@ -3081,9 +3089,9 @@ a{color:inherit;text-decoration:none}
     <div id="pp-aviso" style="background:var(--roxof);border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--roxo);line-height:1.6">🩺 <strong>Seu perfil será revisado manualmente</strong> antes de aparecer na rede. Você receberá confirmação em até 48h úteis.</div>
     <div class="fld"><div class="lbl">Foto de perfil <span style="color:var(--txm);font-weight:400">(opcional — aparece na sua ficha pública)</span></div>
       <div style="display:flex;align-items:center;gap:14px">
-        <div id="pp-foto-prev" style="width:72px;height:72px;border-radius:50%;background:var(--cin);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--txm);overflow:hidden;flex-shrink:0">🩺</div>
+        <div id="pp-foto-prev" style="width:72px;height:72px;border-radius:50%;background:var(--cin);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0"><span data-icon="pf-camera" style="width:30px;height:30px;display:block;opacity:.6"></span></div>
         <div style="flex:1">
-          <label class="btn bout" style="display:inline-block;cursor:pointer;font-size:13px;padding:9px 14px">📷 Escolher foto<input type="file" accept="image/*" id="pp-foto" onchange="ppFotoSel(this)" style="display:none"></label>
+          <label class="btn bout" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:9px 14px"><span data-icon="pf-camera" style="width:17px;height:17px;display:block"></span>Escolher foto<input type="file" accept="image/*" id="pp-foto" onchange="ppFotoSel(this)" style="display:none"></label>
           <button type="button" id="pp-foto-rm" onclick="ppFotoRm()" style="display:none;margin-left:8px;background:none;border:none;color:var(--txm);font-size:12px;cursor:pointer;text-decoration:underline">remover</button>
         </div>
       </div>
@@ -3109,7 +3117,7 @@ a{color:inherit;text-decoration:none}
 
 <div class="V" id="vpro-aguarda" style="background:var(--roxof)">
   <div class="sc" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center">
-    <div style="font-size:56px;margin-bottom:20px">🩺</div>
+    <div style="margin-bottom:20px"><span data-icon="pf-clinica" style="width:60px;height:60px;display:inline-block"></span></div>
     <div style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:var(--roxo);margin-bottom:12px">Perfil em análise</div>
     <div style="font-size:14px;color:var(--roxo);opacity:.8;line-height:1.7;margin-bottom:28px">Recebemos seu cadastro. Nossa equipe revisa cada perfil manualmente para garantir a qualidade da rede.<br><br><strong>Prazo: até 48h úteis.</strong></div>
     <div style="background:#fff;border-radius:16px;padding:16px 20px;width:100%;text-align:left;margin-bottom:24px">
@@ -3121,7 +3129,7 @@ a{color:inherit;text-decoration:none}
 </div>
 <div class="V" id="vpro-dash">
   <div class="pro-header">
-    <div class="pro-badge-row">🩺 Profissional verificado</div>
+    <div class="pro-badge-row"><span data-icon="pf-verificado"></span> Profissional verificado</div>
     <div class="pro-hname" id="pd-nome">—</div>
     <div class="pro-hreg" id="pd-reg">—</div>
     <div class="pro-tabs">
@@ -3134,7 +3142,7 @@ a{color:inherit;text-decoration:none}
   <!-- PERFIL -->
   <div class="pro-panel on" id="pd-perfil">
     <button class="pro-clinica-btn" onclick="abrirClinica()">
-      <div class="pcl-ic">🩺</div>
+      <div class="pcl-ic" data-icon="pf-clinica"></div>
       <div class="pcl-tx"><b>Painel da Clínica</b><span>Agenda, pacientes, prontuários e caixa</span></div>
       <div class="pcl-ar">›</div>
     </button>
@@ -3144,7 +3152,7 @@ a{color:inherit;text-decoration:none}
   <!-- MENSAGENS -->
   <div class="pro-panel" id="pd-msgs">
     <div class="msg-empty">
-      <div class="msg-empty-ic">💬</div>
+      <div class="msg-empty-ic" data-icon="pf-chat"></div>
       <div class="msg-empty-t">Nenhuma mensagem ainda</div>
       <div class="msg-empty-s">Quando um usuário solicitar contato, a conversa aparecerá aqui.</div>
     </div>
@@ -3158,8 +3166,8 @@ a{color:inherit;text-decoration:none}
       <div class="pro-field"><div class="lbl">E-mail</div><div class="val" id="pd-cfg-email">—</div></div>
       <div class="pro-field"><div class="lbl">Registro profissional</div><div class="val" id="pd-cfg-reg">—</div></div>
     </div>
-    <div class="cfgsec" style="margin:12px 0"><div class="cfgi" onclick="abrir2FAConfig()"><div class="cfgic">🔐</div><div class="cfgb"><div class="cfgn">Verificação em 2 etapas (2FA)</div><div class="cfgd" id="pd-2fa-status">Camada extra de segurança no login</div></div><div class="cfgar">›</div></div></div>
-    <button class="btn bout bfull" style="margin-top:8px" onclick="logout()">🚪 Sair da conta</button>
+    <div class="cfgsec" style="margin:12px 0"><div class="cfgi" onclick="abrir2FAConfig()"><div class="cfgic" data-icon="pf-lock"></div><div class="cfgb"><div class="cfgn">Verificação em 2 etapas (2FA)</div><div class="cfgd" id="pd-2fa-status">Camada extra de segurança no login</div></div><div class="cfgar">›</div></div></div>
+    <button class="btn bout bfull" style="margin-top:8px" onclick="logout()">Sair da conta</button>
     <div style="height:30px"></div>
   </div>
 </div>
@@ -4481,6 +4489,10 @@ const ICONS={
   "pf-valor":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-valor-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#3FA76A"></stop></linearGradient></defs><rect x="3" y="6.5" width="18" height="11" rx="2.4" fill="url(#pf-valor-g)"></rect><circle cx="12" cy="12" r="2.7" fill="#fff" opacity=".92"></circle><circle cx="6.2" cy="12" r="1" fill="#fff" opacity=".75"></circle><circle cx="17.8" cy="12" r="1" fill="#fff" opacity=".75"></circle></svg>`,
   "pf-duracao":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-dur-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#6FC3FF"></stop><stop offset="1" stop-color="#3E7BF0"></stop></linearGradient></defs><circle cx="12" cy="12.5" r="8.5" fill="url(#pf-dur-g)"></circle><path d="M9 3.5h6" stroke="url(#pf-dur-g)" stroke-width="2" stroke-linecap="round"></path><path d="M12 8.2v4.6l3 1.8" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
   "pf-disp":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-disp-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B692F6"></stop><stop offset="1" stop-color="#7B54D3"></stop></linearGradient></defs><rect x="4" y="5" width="16" height="15" rx="3" fill="url(#pf-disp-g)"></rect><path d="M4 9.2h16" stroke="#fff" stroke-width="1.2" opacity=".55"></path><path d="M8 3.4v3.2M16 3.4v3.2" stroke="url(#pf-disp-g)" stroke-width="2" stroke-linecap="round"></path><g fill="#fff"><circle cx="9" cy="13" r="1.1"></circle><circle cx="12" cy="13" r="1.1"></circle><circle cx="15" cy="13" r="1.1"></circle><circle cx="9" cy="16.4" r="1.1"></circle><circle cx="12" cy="16.4" r="1.1"></circle></g></svg>`,
+  "pf-camera":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-cam-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2FA35F"></stop></linearGradient></defs><path d="M4 7.5h2.8l1.2-1.9h8l1.2 1.9H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" fill="url(#pf-cam-g)"></path><circle cx="12" cy="13.4" r="3.6" fill="#fff"></circle><circle cx="12" cy="13.4" r="1.9" fill="url(#pf-cam-g)"></circle></svg>`,
+  "pf-chat":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-chat-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2FA35F"></stop></linearGradient></defs><path d="M4 4.5h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9.5L5 20.2V16.5H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" fill="url(#pf-chat-g)"></path><g fill="#fff"><circle cx="8.5" cy="10.5" r="1.25"></circle><circle cx="12" cy="10.5" r="1.25"></circle><circle cx="15.5" cy="10.5" r="1.25"></circle></g></svg>`,
+  "pf-clinica":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-cli-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#5CE3CF"></stop><stop offset="1" stop-color="#0EA5A0"></stop></linearGradient></defs><rect x="5" y="4.2" width="14" height="16.6" rx="3.2" fill="url(#pf-cli-g)"></rect><rect x="9" y="2.7" width="6" height="3.4" rx="1.5" fill="#fff" opacity=".92"></rect><path d="M12 9.6v6.2M8.9 12.7h6.2" stroke="#fff" stroke-width="1.9" stroke-linecap="round"></path></svg>`,
+  "pf-lock":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-lock-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#7FB0FF"></stop><stop offset="1" stop-color="#3E7BF0"></stop></linearGradient></defs><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="url(#pf-lock-g)" stroke-width="2" stroke-linecap="round"></path><rect x="4.7" y="10" width="14.6" height="10.4" rx="3.2" fill="url(#pf-lock-g)"></rect><circle cx="12" cy="14.6" r="1.7" fill="#fff"></circle><rect x="11.15" y="15" width="1.7" height="3.2" rx=".85" fill="#fff"></rect></svg>`,
   "pf-verificado":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-vf-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4CD98A"></stop><stop offset="1" stop-color="#1E9E8A"></stop></linearGradient></defs><g fill="url(#pf-vf-g)"><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4"></rect><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4" transform="rotate(45 12 12)"></rect></g><path d="M8.5 12.2l2.3 2.3 4.7-5" stroke="#fff" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
   "pf-star":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-star-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6B"></stop><stop offset="1" stop-color="#F5A623"></stop></linearGradient></defs><path d="M12 3.2l2.5 5.1 5.6.8-4.05 3.95.96 5.58L12 16.98 6.99 18.6l.96-5.58L3.9 9.1l5.6-.8L12 3.2Z" fill="url(#pf-star-g)"></path></svg>`,
   "pf-agenda":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-ag-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2FA35F"></stop></linearGradient></defs><rect x="4" y="5" width="16" height="15" rx="3" fill="url(#pf-ag-g)"></rect><path d="M4 9.2h16" stroke="#fff" stroke-width="1.2" opacity=".5"></path><path d="M8 3.4v3.2M16 3.4v3.2" stroke="url(#pf-ag-g)" stroke-width="2" stroke-linecap="round"></path><path d="M8.4 14.6l2.3 2.2 4.6-4.9" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
@@ -6773,8 +6785,8 @@ async function renderConversasPro(){
     let nu=0;
     box.innerHTML=convs.map(c=>{const nova=convNaoLida(c,true);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatPro(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
       <div class="av">${ini2(c.user_nome||'?')}</div>
-      <div style="flex:1;min-width:0"><div class="cn">${esc(c.user_nome||'Usuário')}</div><div class="cl">${esc(c.ultima_msg||'Nova conversa')}</div></div>
-      ${nova?'<span class="conv-dot"></span>':''}
+      <div class="cbody"><div class="cn">${esc(c.user_nome||'Usuário')}</div><div class="cl">${nova?'<b style="color:var(--ve)">Nova · </b>':''}${esc(c.ultima_msg||'Iniciar conversa')}</div></div>
+      <div class="cmeta">${nova?'<span class="conv-dot"></span>':''}<span class="cchev">›</span></div>
     </div>`}).join('');
     const b=document.getElementById('pd-msgs-badge'); if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}
   }catch(e){ box.innerHTML='<div class="msg-empty"><div class="msg-empty-s">Não consegui carregar as conversas.</div></div>'; }
@@ -6801,10 +6813,10 @@ async function renderMinhasConversas(){
     const{data}=await _SB.from('conversas').select('*').eq('user_id',U.id).order('atualizado_em',{ascending:false});
     const convs=data||[];
     const convsHTML=convs.length
-      ? '<div class="pd-sec" style="margin:16px 2px 6px">Conversas</div>'+(()=>{let nu=0;const h=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+      ? '<div class="pd-sec" style="margin:16px 2px 8px">Conversas</div>'+(()=>{let nu=0;const h=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
         <div class="av">${ini2(c.prof_nome||'?')}</div>
-        <div style="flex:1;min-width:0"><div class="cn">${esc(c.prof_nome||'Profissional')}</div><div class="cl">${esc(c.ultima_msg||'Nova conversa')}</div></div>
-        ${nova?'<span class="conv-dot"></span>':''}
+        <div class="cbody"><div class="cn">${esc(c.prof_nome||'Profissional')}</div><div class="cl">${nova?'<b style="color:var(--ve)">Nova · </b>':''}${esc(c.ultima_msg||'Iniciar conversa')}</div></div>
+        <div class="cmeta">${nova?'<span class="conv-dot"></span>':''}<span class="cchev">›</span></div>
       </div>`}).join('');const b=document.getElementById('pf-convs-badge');if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}return h;})()
       : '<div class="chat-empty" style="padding:30px 20px">Você ainda não tem conversas.<br>Toque em um profissional e em <b>"Solicitar contato"</b>.</div>';
     box.innerHTML='<div id="mc-consultas"></div>'+convsHTML;
@@ -6938,7 +6950,7 @@ function setPpCapa(k){_ppCapa=k;renderCapas();try{sfx('tap');}catch(e){}}
 function ppFotoRender(){
   const pv=document.getElementById('pp-foto-prev'),rm=document.getElementById('pp-foto-rm');if(!pv)return;
   if(_ppFoto){pv.innerHTML=`<img src="${_ppFoto}" style="width:100%;height:100%;object-fit:cover">`;if(rm)rm.style.display='inline';}
-  else{pv.innerHTML='🩺';if(rm)rm.style.display='none';}
+  else{pv.innerHTML='<span data-icon="pf-camera" style="width:30px;height:30px;display:block;opacity:.6"></span>';try{aplicarIcones(pv);}catch(e){}if(rm)rm.style.display='none';}
 }
 // ── Link Instagram/site → {href,label} clicável ──
 function proLink(v){
@@ -6994,7 +7006,7 @@ async function entrarPro(){
       ${prof.duracao?`<div class="pro-field"><div class="lbl">Duração</div><div class="val">${esc(prof.duracao)}</div></div>`:''}
       ${prof.disponibilidade?`<div class="pro-field"><div class="lbl">Disponibilidade</div><div class="val">${esc(prof.disponibilidade)}</div></div>`:''}
     </div>
-    <button class="pro-edit-btn" onclick="abrirEdicaoPerfil()">✏️ Editar perfil</button>
+    <button class="pro-edit-btn" onclick="abrirEdicaoPerfil()">Editar perfil</button>
     <div style="height:30px"></div>`;
   } else {
     pc.innerHTML='<div class="pro-card"><div style="color:var(--txm);font-size:14px">Perfil não encontrado.</div></div>';

@@ -603,7 +603,7 @@ let SOLIC=[];
 function solicitacoesBanner(){
   if(!SOLIC||!SOLIC.length)return '';
   return `<div class="card" style="padding:14px 16px;margin-bottom:14px;border-left:3px solid var(--am,#FFD600)">
-    <div style="font-weight:800;font-size:14px;margin-bottom:8px">🔔 Solicitações de agendamento (${SOLIC.length})</div>
+    <div style="display:flex;align-items:center;gap:7px;font-weight:800;font-size:14px;margin-bottom:8px"><svg width="17" height="17" viewBox="0 0 24 24" style="flex:none"><path d="M12 3a5 5 0 0 0-5 5v3l-1.5 3a1 1 0 0 0 .9 1.5h11.2a1 1 0 0 0 .9-1.5L17 11V8a5 5 0 0 0-5-5Z" fill="#EA8B0C"/><path d="M10 18.5a2 2 0 0 0 4 0" fill="none" stroke="#EA8B0C" stroke-width="1.7" stroke-linecap="round"/></svg>Solicitações de agendamento (${SOLIC.length})</div>
     ${SOLIC.map(s=>`<div style="border-top:1px solid var(--line);padding:9px 0">
       <div style="font-weight:700">${esc(s.nome)}${s.telefone?` · <a href="tel:${esc((s.telefone||'').replace(/[^0-9+]/g,''))}" style="color:var(--v)">${esc(s.telefone)}</a>`:''}</div>
       <div style="font-size:12.5px;color:var(--txs)">${s.data_pref?'Preferência: '+fmtDate(s.data_pref):'Sem data'}${s.hora_pref?' às '+esc(s.hora_pref):''}${s.mensagem?' · "'+esc(s.mensagem)+'"':''}</div>
@@ -901,7 +901,7 @@ function viewCaixa(){
     <td><b>${esc(f.descricao||f.categoria)}</b>${f.categoria&&f.descricao?`<br><small style="color:var(--txs)">${esc(f.categoria)}</small>`:''}</td>
     <td>${PAG[f.formaPagamento]||f.formaPagamento||'—'}</td>
     <td class="mono" style="text-align:right;font-weight:800;color:${f.tipo==='entrada'?'var(--ve)':'var(--er)'}">${f.tipo==='entrada'?'+':'−'}${brl(f.valor).replace('R$ ','')}</td>
-    <td style="text-align:right"><button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;border:none;background:transparent" onclick="delFinanceiro('${f.id}')" title="Excluir">🗑</button></td>
+    <td style="text-align:right"><button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;border:none;background:transparent" onclick="delFinanceiro('${f.id}')" title="Excluir"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Z" fill="#9AA3AD"/><path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 8Z" fill="#C0616B"/><g stroke="#fff" stroke-width="1.2"><path d="M10 11v7M14 11v7"/></g></svg></button></td>
   </tr>`).join('');
 
   return `<div class="toolbar">
@@ -1034,7 +1034,7 @@ function viewDocumentos(){
   ${docs.length?`<div class="card"><div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Paciente</th><th></th></tr></thead><tbody>
     ${docs.map(d=>{const t=DOC_TIPOS.find(x=>x.k===d.tipo)||{nome:d.tipo};return `<tr>
       <td class="mono">${fmtDate(d.data)}</td><td>${t.nome}</td><td>${esc(d.pacienteNome||'—')}</td>
-      <td style="text-align:right"><button class="btn sm ghost" onclick="imprimirDocumento('${d.id}')">Imprimir</button> <button class="btn sm ghost" onclick="formDocumento('${d.tipo}','${d.id}')">Editar</button> <button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;background:transparent" onclick="delDocumento('${d.id}')" title="Excluir">🗑</button></td>
+      <td style="text-align:right"><button class="btn sm ghost" onclick="imprimirDocumento('${d.id}')">Imprimir</button> <button class="btn sm ghost" onclick="formDocumento('${d.tipo}','${d.id}')">Editar</button> <button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;background:transparent" onclick="delDocumento('${d.id}')" title="Excluir"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Z" fill="#9AA3AD"/><path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 8Z" fill="#C0616B"/><g stroke="#fff" stroke-width="1.2"><path d="M10 11v7M14 11v7"/></g></svg></button></td>
     </tr>`}).join('')}
   </tbody></table></div></div>`:`<div class="card empty"><div class="big">▦</div><b>Nenhum documento ainda</b>Escolha um tipo acima para emitir.</div>`}
   <p style="font-size:12px;color:var(--txm);margin:12px 2px 0">Modelos padronizados de apoio. Confira a adequação às normas do seu conselho antes de assinar e emitir. O CID só deve constar com autorização do paciente.</p>`;
@@ -1134,7 +1134,7 @@ async function carregarMsgsPanel(scroll){
   try{
     const{data}=await _SB.from('mensagens').select('*').eq('conversa_id',_pconv.id).order('criado_em',{ascending:true});
     const msgs=data||[]; const sc=document.getElementById('pchat-scroll'); if(!sc)return;
-    sc.innerHTML=msgs.map(m=>{const mine=m.de_id===AUTH.id;const hora=new Date(m.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});return `<div style="max-width:78%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${hora}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px">Sem mensagens ainda. Diga um oi 👋</div>';
+    sc.innerHTML=msgs.map(m=>{const mine=m.de_id===AUTH.id;const hora=new Date(m.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});return `<div style="max-width:78%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${hora}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px">Sem mensagens ainda. Diga um oi <svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><path d="M13 3.5a1.4 1.4 0 0 1 2.7.5v6l1.2-3.3a1.4 1.4 0 0 1 2.6 1l-1.6 5.2A6.5 6.5 0 0 1 5.6 12l-1.5-3a1.4 1.4 0 0 1 2.4-1.4l1 1.6-2-4.2a1.4 1.4 0 0 1 2.5-1.2l1.4 3-.9-4.3A1.4 1.4 0 0 1 11 1.9l1 4.6V3.5Z" fill="#F4B740"/></svg></div>';
     sc.scrollTop=sc.scrollHeight;
   }catch(e){}
 }
@@ -1333,9 +1333,9 @@ function formAgendamento(id,dataDefault,pacDefault){
         <div class="field"><label>Pago?</label><select id="f-pago"><option value="0" ${!a.pago?'selected':''}>Não</option><option value="1" ${a.pago?'selected':''}>Sim</option></select></div>
       </div>
       <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas do agendamento">${esc(a.obs||'')}</textarea></div>
-      <p style="font-size:12.5px;color:var(--txs)">💡 Ao marcar <b>Atendido</b> + <b>Pago = Sim</b>, uma entrada é lançada no caixa automaticamente.</p>
+      <p style="display:flex;gap:6px;align-items:flex-start;font-size:12.5px;color:var(--txs)"><svg width="15" height="15" viewBox="0 0 24 24" style="flex:none;margin-top:1px"><path d="M12 3a6 6 0 0 0-3.5 10.9c.5.4.8.9.9 1.5l.2 1.1h4.8l.2-1.1c.1-.6.4-1.1.9-1.5A6 6 0 0 0 12 3Z" fill="#EAB308"/><rect x="9.5" y="18" width="5" height="2.4" rx="1.2" fill="#B8860B"/></svg><span>Ao marcar <b>Atendido</b> + <b>Pago = Sim</b>, uma entrada é lançada no caixa automaticamente.</span></p>
     </div>
-    ${id?`<button class="btn sm ghost" style="margin-top:8px;background:#25D36618;color:#128C4B" onclick="lembrarConsulta('${id}')">📲 Enviar lembrete no WhatsApp</button>`:''}
+    ${id?`<button class="btn sm ghost" style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:#25D36618;color:#128C4B" onclick="lembrarConsulta('${id}')"><svg width="15" height="15" viewBox="0 0 24 24" style="flex:none"><path d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L3.5 20.5l4.4-1.2A8.4 8.4 0 1 0 12 3.5Z" fill="#25D366"/><path d="M8.5 8.2c.2-.5.4-.5.7-.5h.5c.2 0 .4 0 .6.4l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.1-.2.3-.1.5.3.6 1.3 1.7 2.3 2.1.2.1.4.1.5-.1l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .5-.2 1.2-.9 1.5-.6.3-1.6.3-3.4-.6-2-1-3.3-3-3.5-3.4-.2-.3-.9-1.4-.9-2.5 0-.9.4-1.3.6-1.4Z" fill="#fff"/></svg>Enviar lembrete no WhatsApp</button>`:''}
     </div>
     <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delAgendamento('${id}')">Excluir</button>`:''}
       <button class="btn ghost" onclick="closeModal()">Cancelar</button>
@@ -1685,7 +1685,7 @@ function renderTut(){
   const s=TUT[_tutI];
   $('#tut-ic').textContent=s.ic; $('#tut-t').textContent=s.t; $('#tut-x').textContent=s.x;
   $('#tut-dots').innerHTML=TUT.map((_,i)=>`<i class="${i===_tutI?'on':''}"></i>`).join('');
-  $('#tut-next').textContent=_tutI===TUT.length-1?'Começar 🚀':'Próximo';
+  $('#tut-next').textContent=_tutI===TUT.length-1?'Começar':'Próximo';
   $('#tut-skip').style.display=_tutI===TUT.length-1?'none':'';
 }
 function tutNext(){ if(_tutI<TUT.length-1){_tutI++;renderTut();} else tutFim(); }
