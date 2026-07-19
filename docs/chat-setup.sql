@@ -23,6 +23,10 @@ create table if not exists public.conversas (
 -- se a tabela já existia, garante as colunas de "lida" (badge de não lidas)
 alter table public.conversas add column if not exists user_lida_em timestamptz;
 alter table public.conversas add column if not exists prof_lida_em timestamptz;
+-- RAIO-X: acompanhamento consentido + resumo compartilhado (o paciente calcula e compartilha só o resumo)
+alter table public.conversas add column if not exists acomp text;            -- null | 'pendente' | 'ativo' | 'revogado'
+alter table public.conversas add column if not exists resumo jsonb;          -- resumo agregado, escrito pelo paciente
+alter table public.conversas add column if not exists resumo_em timestamptz;
 
 -- 2) MENSAGENS
 create table if not exists public.mensagens (

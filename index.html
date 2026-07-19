@@ -2085,6 +2085,20 @@ a{color:inherit;text-decoration:none}
 .conv-item.nova .cl{color:var(--tx);font-weight:600}
 .conv-dot{width:10px;height:10px;border-radius:50%;background:var(--er);flex-shrink:0;margin-left:6px}
 .tabbadge{display:inline-block;background:var(--er);color:#fff;font-size:11px;font-weight:800;min-width:18px;text-align:center;padding:1px 5px;border-radius:20px;vertical-align:middle}
+#chat-acomp:empty{display:none}
+.acomp-bar{padding:11px 14px;font-size:13px;line-height:1.5;display:flex;flex-direction:column;gap:8px}
+.acomp-bar.pend{background:var(--roxof);color:var(--roxo)}
+.acomp-bar.ativo{background:var(--vf);color:var(--ve)}
+.acomp-bar .arow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.acomp-bar button{border:none;border-radius:20px;font-weight:800;font-size:12.5px;padding:7px 14px;cursor:pointer}
+.acomp-ok{background:var(--v);color:#fff}
+.acomp-no{background:transparent;color:var(--roxo);text-decoration:underline}
+.acomp-vx{background:var(--ve);color:#fff}
+.rx-kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
+.rx-k{background:var(--cin);border-radius:13px;padding:11px 13px}
+.rx-k b{font-size:22px;font-weight:800;display:block;line-height:1.1}
+.rx-k span{font-size:11.5px;color:var(--txs);font-weight:600}
+.rx-tag{display:inline-block;background:var(--cinm);color:var(--tx);font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin:2px 3px 2px 0}
 .msg-empty{text-align:center;padding:50px 20px;color:var(--txm)}
 .msg-empty-ic{font-size:44px;margin-bottom:12px}
 .msg-empty-t{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:6px}
@@ -2952,12 +2966,19 @@ a{color:inherit;text-decoration:none}
 <!-- CHAT (usuário ↔ profissional) -->
 <div class="V" id="vchat" style="background:var(--cin)">
   <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="voltarChat()">←</button><div class="ptb-tit" id="chat-nome" style="flex:1">Conversa</div><button class="chat-wpp" id="chat-wpp" style="display:none" onclick="chatWhatsApp()">WhatsApp</button></div>
+  <div id="chat-acomp"></div>
   <div class="chat-scroll" id="chat-scroll"></div>
   <div class="chat-bar">
     <textarea id="chat-input" rows="1" placeholder="Escreva uma mensagem…" oninput="chatAutoGrow(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMsg();}"></textarea>
     <button class="chat-send" onclick="enviarMsg()" aria-label="Enviar">➤</button>
   </div>
 </div>
+
+<!-- RAIO-X do paciente (resumo compartilhado) -->
+<div class="ov" id="mraiox" onclick="if(event.target===this)closeMod('mraiox')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div id="raiox-body"></div>
+</div></div></div>
 
 <!-- ADMIN: aprovação de profissionais -->
 <div class="V" id="vadmin">
@@ -6279,6 +6300,9 @@ function abrirChat(conv,asPro,otherNome,otherTel,from,otherInfo,prefill){
   document.getElementById('chat-scroll').innerHTML='<div class="chat-empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
   try{chatKbReset();}catch(e){}
   showV('vchat');
+  try{renderChatAcomp();}catch(e){}
+  // paciente: se já autorizou, atualiza o resumo compartilhado (dado bruto nunca sai)
+  if(!asPro && conv && conv.acomp==='ativo'){ try{const resumo=calcResumoPaciente();_chat.conv.resumo=resumo;_SB.from('conversas').update({resumo,resumo_em:new Date().toISOString()}).eq('id',conv.id);}catch(e){} }
   carregarMsgs(true);
   marcarLida(conv,!!asPro);
   clearInterval(_chat.poll); _chat.poll=setInterval(()=>carregarMsgs(false),4000);
@@ -6372,6 +6396,72 @@ function chatKbAdjust(){
   document.addEventListener('focusin',e=>{ if(e.target&&e.target.id==='chat-input') setTimeout(chatKbAdjust,60); });
   document.addEventListener('focusout',e=>{ if(e.target&&e.target.id==='chat-input') setTimeout(chatKbReset,60); });
 })();
+/* ══ RAIO-X: acompanhamento consentido (o app do paciente calcula e compartilha só o resumo) ══ */
+function calcResumoPaciente(){
+  const regs=(typeof gR==='function'?gR():[])||[], fs=(typeof gFs==='function'?gFs():[])||[];
+  const d=new Date();d.setDate(d.getDate()-30);const lim=d.toISOString().slice(0,10);
+  const r30=regs.filter(r=>r.data>=lim), f30=fs.filter(f=>f.data>=lim);
+  const soma=(arr,k)=>arr.reduce((s,x)=>s+(typeof parseBRL==='function'?parseBRL(x[k]):(parseFloat(x[k])||0)),0);
+  const topN=(arr,fn,n)=>{const m={};arr.forEach(x=>{const vs=fn(x);(Array.isArray(vs)?vs:[vs]).filter(Boolean).forEach(v=>{m[v]=(m[v]||0)+1;});});return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,n||4).map(([nm,c])=>({n:nm,c}));};
+  const serie=[];for(let w=7;w>=0;w--){const a=new Date();a.setDate(a.getDate()-w*7-6);const b=new Date();b.setDate(b.getDate()-w*7);const ai=a.toISOString().slice(0,10),bi=b.toISOString().slice(0,10);serie.push(regs.filter(r=>r.data>=ai&&r.data<=bi).length);}
+  let strk=0;try{strk=streak(regs);}catch(e){}
+  return {atualizado:new Date().toISOString(),usos30:r30.length,resist30:f30.length,gasto30:Math.round(soma(r30,'custo')),eco30:Math.round(soma(f30,'economia')),streak:strk,
+    topSubs:topN(r30,x=>x.substancias||[x.substancia],4),topEmo:topN(r30,x=>x.emoLabel,3),topCtx:topN(r30,x=>x.ctx,3),serie};
+}
+function renderChatAcomp(){
+  const box=document.getElementById('chat-acomp'); if(!box)return;
+  const st=(_chat.conv||{}).acomp; box.innerHTML='';
+  if(_chat.asPro){
+    if(st==='ativo') box.innerHTML='<div class="acomp-bar ativo"><div class="arow"><span style="flex:1">🔓 Acompanhamento autorizado — veja a evolução do paciente.</span><button class="acomp-vx" onclick="verRaioX()">Ver raio-x</button></div></div>';
+    else if(st==='pendente') box.innerHTML='<div class="acomp-bar pend">⏳ Aguardando o paciente autorizar o acompanhamento.</div>';
+    else box.innerHTML='<div class="acomp-bar pend"><div class="arow"><span style="flex:1">Acompanhe a evolução do paciente — um resumo dos registros dele no app.</span><button class="acomp-ok" onclick="solicitarAcomp()">Solicitar acompanhamento</button></div></div>';
+  } else {
+    if(st==='pendente') box.innerHTML='<div class="acomp-bar pend"><div>🔒 <b>'+esc(_chat.otherNome)+'</b> quer acompanhar sua evolução: um <b>resumo</b> dos seus registros (uso, humor, resistências, economia). Seus registros detalhados <b>não</b> são compartilhados.</div><div class="arow"><button class="acomp-ok" onclick="responderAcomp(true)">Autorizar</button><button class="acomp-no" onclick="responderAcomp(false)">Agora não</button></div></div>';
+    else if(st==='ativo') box.innerHTML='<div class="acomp-bar ativo"><div class="arow"><span style="flex:1">🔓 Você autorizou o acompanhamento da sua evolução.</span><button class="acomp-no" style="color:var(--ve)" onclick="revogarAcomp()">Revogar</button></div></div>';
+  }
+}
+async function solicitarAcomp(){
+  if(!_SB||!_chat.conv)return;
+  try{ await _SB.from('conversas').update({acomp:'pendente'}).eq('id',_chat.conv.id); _chat.conv.acomp='pendente';
+    const t='🔒 Pedi para acompanhar sua evolução no app. Você pode autorizar no aviso acima.';
+    await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:t});
+    await _SB.from('conversas').update({ultima_msg:t.slice(0,120),atualizado_em:new Date().toISOString()}).eq('id',_chat.conv.id);
+    renderChatAcomp(); carregarMsgs(true);
+  }catch(e){ toast('⚠️ '+((e&&e.message)||'erro'),5000); }
+}
+async function responderAcomp(ok){
+  if(!_SB||!_chat.conv)return;
+  try{
+    if(ok){ const resumo=calcResumoPaciente();
+      await _SB.from('conversas').update({acomp:'ativo',resumo,resumo_em:new Date().toISOString()}).eq('id',_chat.conv.id);
+      _chat.conv.acomp='ativo'; _chat.conv.resumo=resumo;
+      const t='✅ Autorizei o acompanhamento da minha evolução.';
+      await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:t});
+      await _SB.from('conversas').update({ultima_msg:t,atualizado_em:new Date().toISOString()}).eq('id',_chat.conv.id);
+      toast('Acompanhamento autorizado 💚');
+    } else { await _SB.from('conversas').update({acomp:'revogado'}).eq('id',_chat.conv.id); _chat.conv.acomp='revogado'; }
+    renderChatAcomp(); carregarMsgs(true);
+  }catch(e){ toast('⚠️ '+((e&&e.message)||'erro'),5000); }
+}
+async function revogarAcomp(){
+  if(!confirm('Revogar o acompanhamento? O profissional deixa de ver seu resumo.'))return;
+  try{ await _SB.from('conversas').update({acomp:'revogado',resumo:null}).eq('id',_chat.conv.id); _chat.conv.acomp='revogado'; _chat.conv.resumo=null; renderChatAcomp(); toast('Acompanhamento revogado'); }catch(e){}
+}
+function verRaioX(){ const r=_chat.conv&&_chat.conv.resumo; if(!r){toast('O paciente ainda não gerou o resumo. Peça para ele abrir o chat.');return;} renderRaioX(r,_chat.otherNome); openMod('mraiox'); }
+function renderRaioX(r,nome){
+  const body=document.getElementById('raiox-body'); if(!body)return;
+  const bars=r.serie||[],max=Math.max(1,...bars);
+  const spark='<svg viewBox="0 0 200 40" width="100%" height="40" preserveAspectRatio="none">'+bars.map((v,i)=>{const w=200/bars.length,h=(v/max)*34;return '<rect x="'+(i*w+2).toFixed(1)+'" y="'+(38-h).toFixed(1)+'" width="'+(w-4).toFixed(1)+'" height="'+h.toFixed(1)+'" rx="2" fill="var(--v)"/>';}).join('')+'</svg>';
+  const chips=a=>((a||[]).map(x=>'<span class="rx-tag">'+esc(x.n)+' ('+x.c+')</span>').join(''))||'—';
+  let at='—';try{at=new Date(r.atualizado).toLocaleDateString('pt-BR');}catch(e){}
+  body.innerHTML='<div style="font-size:28px;text-align:center">📊</div><div class="mt c">Raio-x · '+esc(nome||'')+'</div><div class="mb c" style="margin-bottom:6px">Resumo compartilhado pelo paciente · atualizado em '+at+'</div>'
+   +'<div class="rx-kpis"><div class="rx-k"><b>'+r.usos30+'</b><span>usos (30 dias)</span></div><div class="rx-k"><b>'+r.resist30+'</b><span>resistências (30d)</span></div><div class="rx-k"><b>'+r.streak+'</b><span>dias seq. sem uso</span></div><div class="rx-k"><b>R$ '+r.eco30+'</b><span>economia (30d)</span></div></div>'
+   +'<div style="font-size:12px;color:var(--txs);font-weight:700;margin:8px 0 2px">USOS POR SEMANA (8 semanas)</div>'+spark
+   +'<div style="font-size:12px;color:var(--txs);font-weight:700;margin:12px 0 4px">SUBSTÂNCIAS MAIS FREQUENTES</div><div>'+chips(r.topSubs)+'</div>'
+   +(r.topEmo&&r.topEmo.length?'<div style="font-size:12px;color:var(--txs);font-weight:700;margin:12px 0 4px">EMOÇÕES ANTES DO USO</div><div>'+chips(r.topEmo)+'</div>':'')
+   +(r.topCtx&&r.topCtx.length?'<div style="font-size:12px;color:var(--txs);font-weight:700;margin:12px 0 4px">CONTEXTOS</div><div>'+chips(r.topCtx)+'</div>':'')
+   +'<p style="font-size:11.5px;color:var(--txm);margin-top:14px">Resumo agregado, autorizado pelo paciente. Os registros detalhados permanecem privados no app dele. Ferramenta de apoio — não substitui a avaliação clínica.</p>';
+}
 // lista de conversas do profissional (aba Mensagens)
 async function renderConversasPro(){
   const box=document.getElementById('pd-msgs'); if(!box)return;
