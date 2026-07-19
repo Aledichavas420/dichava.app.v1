@@ -577,9 +577,10 @@ function viewAgenda(){
     const appts=dia.filter(a=>a.hora>=h&&a.hora<String(+h.slice(0,2)+1).padStart(2,'0')+':00');
     return `<div class="cal-time">${h}</div><div class="cal-slot">${appts.map(a=>{
       const st=STATUS[a.status];
+      const presOk=a.solicId&&PRESENCAS[a.solicId]==='confirmada';
       return `<div class="appt st-${a.status}" onclick="openAgendamento('${a.id}')">
-        <b>${a.hora} · ${esc(pacNome(a.pacienteId))}</b>
-        <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}${(MEMBROS.length>1&&a.profNome)?' · '+esc(a.profNome):''}</small>
+        <b>${a.hora} · ${esc(pacNome(a.pacienteId))}${presOk?' <span style="color:#2E7D32">✓</span>':''}</b>
+        <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}${(MEMBROS.length>1&&a.profNome)?' · '+esc(a.profNome):''}${presOk?' · <b style="color:#2E7D32">presença confirmada</b>':''}</small>
       </div>`;}).join('')}</div>`;
   }).join('');
 
@@ -610,9 +611,12 @@ function solicitacoesBanner(){
     </div>`).join('')}
   </div>`;
 }
+let PRESENCAS={};
 async function carregarSolicitacoes(){
   if(!CLINICA||!_SB){SOLIC=[];return;}
   try{ const{data}=await _SB.from('solicitacoes').select('*').eq('clinica_id',CLINICA.id).eq('status','nova').order('criado_em',{ascending:false}); SOLIC=data||[]; if(route==='agenda'||route==='mensagens')render(); try{atualizarBadgeMsgs();updateBadgeAgenda&&updateBadgeAgenda();}catch(e){} }catch(e){ SOLIC=[]; }
+  // presenças confirmadas pelos pacientes (p/ badge na agenda)
+  try{ const{data}=await _SB.from('solicitacoes').select('id,presenca').eq('clinica_id',CLINICA.id).eq('presenca','confirmada'); PRESENCAS={}; (data||[]).forEach(r=>{PRESENCAS[r.id]='confirmada';}); }catch(e){}
 }
 async function confirmarSolic(id){
   const s=SOLIC.find(x=>x.id===id); if(!s)return;
@@ -620,7 +624,7 @@ async function confirmarSolic(id){
   let p=DB.pacientes.find(x=>x.telefone&&s.telefone&&x.telefone.replace(/\D/g,'')===s.telefone.replace(/\D/g,''));
   if(!p){ p={id:uid(),nome:s.nome,telefone:s.telefone||'',tags:['novo'],criadoEm:now()}; DB.pacientes.push(p); }
   // cria o agendamento na preferência (ou hoje 09:00)
-  const ag={id:uid(),pacienteId:p.id,data:s.data_pref||todayISO(),hora:s.hora_pref||'09:00',duracao:50,tipo:'Consulta',status:'agendado',valor:0,formaPagamento:'',pago:false,obs:s.mensagem||'',criadoEm:now()};
+  const ag={id:uid(),pacienteId:p.id,data:s.data_pref||todayISO(),hora:s.hora_pref||'09:00',duracao:50,tipo:'Consulta',status:'agendado',valor:0,formaPagamento:'',pago:false,obs:s.mensagem||'',solicId:id,criadoEm:now()};
   DB.agendamentos.push(ag); save();
   try{ await _SB.from('solicitacoes').update({status:'confirmada'}).eq('id',id); }catch(e){}
   SOLIC=SOLIC.filter(x=>x.id!==id);
@@ -1397,7 +1401,9 @@ function sincronizarCaixa(ag){
 /* -- Prontuário -- */
 const PRONT_TIPOS=[['anamnese','Anamnese'],['avaliacao','Avaliação'],['evolucao','Evolução'],['consulta','Consulta'],['conduta','Conduta / Prescrição'],['nota','Nota']];
 function formProntuario(pid,rid){
-  const r=rid?DB.prontuarios.find(x=>x.id===rid):{pacienteId:pid,data:todayISO(),tipo:'evolucao'};
+  let proxSessao='';
+  if(!rid){ const nums=DB.prontuarios.filter(x=>x.pacienteId===pid&&x.sessao).map(x=>parseInt(x.sessao,10)).filter(n=>!isNaN(n)); if(nums.length)proxSessao=Math.max.apply(null,nums)+1; }
+  const r=rid?DB.prontuarios.find(x=>x.id===rid):{pacienteId:pid,data:todayISO(),tipo:'evolucao',sessao:proxSessao};
   openModal(`<div class="modal wide"><div class="modal-head"><h3>${rid?'Editar':'Novo'} registro — ${esc(pacNome(pid))}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="row3">

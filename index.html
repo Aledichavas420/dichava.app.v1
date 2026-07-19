@@ -6487,7 +6487,12 @@ async function confirmarAgendamento(codigo,data,hora){
   if(!_SB){toast('Sem conexão',1);return;}
   const btn=document.getElementById('ag-btn'); btn.disabled=true; btn.textContent='Enviando…';
   try{
-    const{error}=await _SB.rpc('solicitar_agendamento',{p_codigo:codigo,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:msg});
+    const args={p_codigo:codigo,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:msg};
+    if(U&&U.id&&U.id!=='demo')args.p_user_id=U.id;
+    let{error}=await _SB.rpc('solicitar_agendamento',args);
+    if(error&&/p_user_id|function/.test(error.message||'')){ // RPC antiga sem user_id
+      const r=await _SB.rpc('solicitar_agendamento',{p_codigo:codigo,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:msg}); error=r.error;
+    }
     if(error)throw error;
     closeMod('magendar'); toast('✓ Solicitação enviada! O profissional confirma com você.',4000);
   }catch(e){ toast('⚠️ '+((e&&e.message)||'não enviou'),5000); btn.disabled=false; btn.textContent='Solicitar este horário'; }
@@ -6738,19 +6743,53 @@ function pfTab(t){
 async function renderMinhasConversas(){
   const box=document.getElementById('pf-convs'); if(!box)return;
   if(!_SB||typeof U==='undefined'||!U){box.innerHTML='<div class="chat-empty" style="padding:40px 20px">Entre na sua conta para ver conversas.</div>';return;}
-  box.innerHTML='<div style="text-align:center;padding:30px"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
+  box.innerHTML='<div id="mc-consultas"></div><div style="text-align:center;padding:30px"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
+  try{carregarConsultasUser();}catch(e){}
   try{
     const{data}=await _SB.from('conversas').select('*').eq('user_id',U.id).order('atualizado_em',{ascending:false});
     const convs=data||[];
-    if(!convs.length){box.innerHTML='<div class="chat-empty" style="padding:44px 20px">Você ainda não tem conversas.<br>Toque em um profissional e em <b>"Solicitar contato"</b>.</div>';const b=document.getElementById('pf-convs-badge');if(b)b.style.display='none';return;}
-    let nu=0;
-    box.innerHTML=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
-      <div class="av">${ini2(c.prof_nome||'?')}</div>
-      <div style="flex:1;min-width:0"><div class="cn">${esc(c.prof_nome||'Profissional')}</div><div class="cl">${esc(c.ultima_msg||'Nova conversa')}</div></div>
-      ${nova?'<span class="conv-dot"></span>':''}
-    </div>`}).join('');
-    const b=document.getElementById('pf-convs-badge'); if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}
-  }catch(e){box.innerHTML='<div class="chat-empty" style="padding:40px 20px">Não consegui carregar as conversas.</div>';}
+    const convsHTML=convs.length
+      ? '<div class="pd-sec" style="margin:16px 2px 6px">Conversas</div>'+(()=>{let nu=0;const h=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+        <div class="av">${ini2(c.prof_nome||'?')}</div>
+        <div style="flex:1;min-width:0"><div class="cn">${esc(c.prof_nome||'Profissional')}</div><div class="cl">${esc(c.ultima_msg||'Nova conversa')}</div></div>
+        ${nova?'<span class="conv-dot"></span>':''}
+      </div>`}).join('');const b=document.getElementById('pf-convs-badge');if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}return h;})()
+      : '<div class="chat-empty" style="padding:30px 20px">Você ainda não tem conversas.<br>Toque em um profissional e em <b>"Solicitar contato"</b>.</div>';
+    box.innerHTML='<div id="mc-consultas"></div>'+convsHTML;
+    try{carregarConsultasUser();}catch(e){}
+  }catch(e){box.innerHTML='<div id="mc-consultas"></div><div class="chat-empty" style="padding:40px 20px">Não consegui carregar as conversas.</div>';try{carregarConsultasUser();}catch(_){}}
+}
+// ── Minhas consultas (paciente): confirma presença nas consultas agendadas ──
+async function carregarConsultasUser(){
+  const box=document.getElementById('mc-consultas'); if(!box||!_SB||!U||U.id==='demo')return;
+  let rows=[];
+  const hoje=new Date().toISOString().slice(0,10);
+  try{const{data}=await _SB.from('solicitacoes').select('*').eq('user_id',U.id).gte('data_pref',hoje).order('data_pref',{ascending:true});rows=data||[];}catch(e){return;}
+  rows=rows.filter(r=>r.status==='nova'||r.status==='confirmada');
+  if(!rows.length){box.innerHTML='';return;}
+  const fmt=d=>{try{const[y,m,dd]=d.split('-');return `${dd}/${m}`;}catch(e){return d;}};
+  box.innerHTML='<div class="pd-sec" style="margin:2px 2px 6px">Minhas consultas</div>'+rows.map(r=>{
+    const conf=r.presenca==='confirmada';
+    const st=r.status==='nova'
+      ? '<span style="font-size:11.5px;background:var(--amf,#FFF4D6);color:#9A6B00;padding:2px 8px;border-radius:20px">⏳ Aguardando confirmação do profissional</span>'
+      : '<span style="font-size:11.5px;background:var(--vf);color:var(--v);padding:2px 8px;border-radius:20px">✓ Confirmada</span>';
+    const acao=r.status==='confirmada'
+      ? (conf
+        ? '<div style="font-size:12.5px;color:var(--v);font-weight:700;margin-top:7px">✅ Presença confirmada</div>'
+        : `<button class="btn bv" style="margin-top:8px;padding:8px 14px;font-size:13px" onclick="confirmarPresenca('${r.id}')">Confirmar presença</button>`)
+      : '';
+    return `<div class="card" style="padding:13px 15px;margin-bottom:9px;border-radius:14px;background:var(--card);border:1px solid var(--line)">
+      <div style="font-weight:800;font-size:14.5px">📅 ${fmt(r.data_pref||'')}${r.hora_pref?' · '+esc(r.hora_pref):''}</div>
+      <div style="margin-top:5px">${st}</div>${acao}
+    </div>`;
+  }).join('');
+}
+async function confirmarPresenca(id){
+  if(!_SB){toast('Sem conexão');return;}
+  const{error}=await _SB.from('solicitacoes').update({presenca:'confirmada'}).eq('id',id);
+  if(error){toast('Não consegui confirmar: '+(error.message||''));return;}
+  try{sfx('star');}catch(e){}
+  toast('✓ Presença confirmada!');carregarConsultasUser();
 }
 async function abrirChatUser(c){
   let tel='',info='';
