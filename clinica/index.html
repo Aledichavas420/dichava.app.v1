@@ -491,6 +491,7 @@ function go(r){
   route=r;
   $$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===r));
   render();
+  if(r==='mensagens'||r==='agenda'){ try{carregarSolicitacoes();}catch(e){} }
   $('.content').scrollTo?.(0,0); window.scrollTo(0,0);
 }
 
@@ -506,7 +507,7 @@ function render(){
   else if(route==='prontuarios') v.innerHTML=viewProntuarios();
   else if(route==='caixa') v.innerHTML=viewCaixa();
   else if(route==='documentos') v.innerHTML=viewDocumentos();
-  else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); carregarSolicitacoes(); }
+  else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
   else if(route==='equipe') v.innerHTML=viewEquipe();
   else if(route==='config') v.innerHTML=viewConfig();
