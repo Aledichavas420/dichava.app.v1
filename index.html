@@ -1898,9 +1898,10 @@ a{color:inherit;text-decoration:none}
 .zen-hero{padding:14px 22px 20px}
 .zen-hero h2{font-family:'DM Sans',sans-serif;font-size:27px;font-weight:800;color:#fff;line-height:1.12;letter-spacing:-.5px}
 .zen-hero p{font-size:14px;color:rgba(255,255,255,.66);margin-top:8px;line-height:1.55;max-width:300px}
-.zen-moon{position:absolute;top:44px;right:8px;width:82px;height:82px;pointer-events:none;filter:drop-shadow(0 0 30px rgba(255,221,120,.65));animation:zmoonglow 5s ease-in-out infinite}
-.zen-moon svg{width:100%;height:100%;display:block}
-@keyframes zmoonglow{0%,100%{filter:drop-shadow(0 0 26px rgba(255,221,120,.5))}50%{filter:drop-shadow(0 0 38px rgba(255,221,120,.8))}}
+.zen-moon{position:absolute;top:44px;right:8px;width:82px;height:82px;pointer-events:none}
+.zen-moon::before{content:"";position:absolute;inset:-45%;border-radius:50%;background:radial-gradient(circle,rgba(255,221,120,.55) 0%,rgba(255,221,120,.22) 42%,transparent 68%);animation:zmoonglow 5s ease-in-out infinite;z-index:0}
+.zen-moon svg{position:relative;z-index:1;width:100%;height:100%;display:block}
+@keyframes zmoonglow{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
 .zen-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .zen-star{position:absolute;background:#fff;border-radius:50%;opacity:.7;animation:twk 3s ease-in-out infinite}
 @keyframes twk{0%,100%{opacity:.25}50%{opacity:.9}}
@@ -2110,6 +2111,11 @@ a{color:inherit;text-decoration:none}
 .pd-hero::after{content:"";position:absolute;bottom:-90px;left:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07)}
 .pd-hero>*{position:relative;z-index:1}
 .pd-av{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:34px;font-weight:800;margin:0 auto 12px;border:3px solid rgba(255,255,255,.65);box-shadow:0 8px 22px rgba(0,0,0,.22)}
+.pd-avwrap{position:relative;width:96px;margin:0 auto 12px}
+.pd-avwrap .pd-av{margin:0}
+.pd-seal{position:absolute;right:-3px;bottom:-3px;width:32px;height:32px;border-radius:50%;background:#fff;border:none;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 9px rgba(0,0,0,.28);padding:0}
+.pd-seal .appicon{width:28px;height:28px}
+.pd-seal:active{transform:scale(.9)}
 .pd-nome{font-size:23px;font-weight:800;letter-spacing:-.3px}
 .pd-tipo{font-size:14.5px;opacity:.95;margin-top:3px;font-weight:600}
 .pd-reg{font-size:12px;opacity:.82;margin-top:3px}
@@ -2180,16 +2186,24 @@ a{color:inherit;text-decoration:none}
 .pc-esp{font-size:13px;color:var(--ve);font-weight:600;margin-top:1px}
 #shell.dkm .pc-esp{color:#7BD98A}
 .pc-reg{font-size:11px;color:var(--txm);font-family:'DM Sans',sans-serif;margin-top:2px}
-.pc-modtag{flex-shrink:0;font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.pf-chip-ic{display:inline-flex;vertical-align:-3px;margin-right:5px}
+.pf-chip-ic .appicon{width:16px;height:16px}
+.pc-star .appicon{width:14px;height:14px;display:block}
+.pc-modtag{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:4px 10px 4px 7px;border-radius:20px;white-space:nowrap}
+.pc-modtag .appicon{width:14px;height:14px}
 .mt-on{background:var(--saf);color:var(--sa)}
 .mt-pr{background:var(--lrjf);color:var(--lrj)}
 .mt-am{background:var(--roxof);color:var(--roxo)}
 .pc-bio{font-size:13px;color:var(--txs);line-height:1.5}
-.pc-meta{display:grid;grid-template-columns:1fr 1fr;gap:9px;border-top:1px solid var(--cinm);padding-top:12px}
+.pc-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--cinm);padding-top:12px}
 #shell.dkm .pc-meta{border-color:#32402F}
-.pc-mi{display:flex;flex-direction:column;gap:1px}
-.pc-mi .k{font-size:10px;color:var(--txm);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
-.pc-mi .v{font-size:13px;color:var(--dk);font-weight:600}
+.pc-mi{display:flex;align-items:center;gap:9px}
+.pc-mi .ic{width:33px;height:33px;flex:none;border-radius:9px;background:var(--cin);display:grid;place-items:center}
+#shell.dkm .pc-mi .ic{background:#212A21}
+.pc-mi .ic .appicon{width:18px;height:18px}
+.pc-mi .tx{min-width:0;display:block}
+.pc-mi .k{display:block;font-size:9.5px;color:var(--txm);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.pc-mi .v{display:block;font-size:12.5px;color:var(--dk);font-weight:700;line-height:1.2;word-break:break-word}
 #shell.dkm .pc-mi .v{color:#E9EFE7}
 .pc-tags{display:flex;flex-wrap:wrap;gap:6px}
 .pc-tg{font-size:11px;background:var(--cin);border:1px solid var(--cinm);color:var(--txs);padding:3px 9px;border-radius:20px}
@@ -2985,11 +2999,11 @@ a{color:inherit;text-decoration:none}
     <button class="pf-tab" id="pf-tab-convs" onclick="pfTab('convs')">Minhas conversas <span class="tabbadge" id="pf-convs-badge" style="display:none"></span></button>
   </div>
   <div class="pf-search" id="pf-searchbox">
-    <input class="pf-inp" id="pf-q" placeholder="🔍 Buscar por nome, especialidade ou cidade" oninput="renderProfs()">
+    <input class="pf-inp" id="pf-q" placeholder="Buscar por nome, especialidade ou cidade" oninput="renderProfs()">
     <div class="pf-filters" id="pf-fmod">
       <button class="pf-chip on" data-f="mod" data-v="" onclick="setFiltro('mod','',this)">Todos</button>
-      <button class="pf-chip" data-f="mod" data-v="online" onclick="setFiltro('mod','online',this)">💻 Online</button>
-      <button class="pf-chip" data-f="mod" data-v="presencial" onclick="setFiltro('mod','presencial',this)">📍 Presencial</button>
+      <button class="pf-chip" data-f="mod" data-v="online" onclick="setFiltro('mod','online',this)"><span class="pf-chip-ic" data-icon="pf-online"></span>Online</button>
+      <button class="pf-chip" data-f="mod" data-v="presencial" onclick="setFiltro('mod','presencial',this)"><span class="pf-chip-ic" data-icon="pf-local"></span>Presencial</button>
     </div>
     <div class="pf-filters" id="pf-fesp">
       <button class="pf-chip on" data-f="cat" data-v="" onclick="setFiltro('cat','',this)">Toda área</button>
@@ -4467,6 +4481,8 @@ const ICONS={
   "pf-valor":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-valor-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#3FA76A"></stop></linearGradient></defs><rect x="3" y="6.5" width="18" height="11" rx="2.4" fill="url(#pf-valor-g)"></rect><circle cx="12" cy="12" r="2.7" fill="#fff" opacity=".92"></circle><circle cx="6.2" cy="12" r="1" fill="#fff" opacity=".75"></circle><circle cx="17.8" cy="12" r="1" fill="#fff" opacity=".75"></circle></svg>`,
   "pf-duracao":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-dur-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#6FC3FF"></stop><stop offset="1" stop-color="#3E7BF0"></stop></linearGradient></defs><circle cx="12" cy="12.5" r="8.5" fill="url(#pf-dur-g)"></circle><path d="M9 3.5h6" stroke="url(#pf-dur-g)" stroke-width="2" stroke-linecap="round"></path><path d="M12 8.2v4.6l3 1.8" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
   "pf-disp":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-disp-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B692F6"></stop><stop offset="1" stop-color="#7B54D3"></stop></linearGradient></defs><rect x="4" y="5" width="16" height="15" rx="3" fill="url(#pf-disp-g)"></rect><path d="M4 9.2h16" stroke="#fff" stroke-width="1.2" opacity=".55"></path><path d="M8 3.4v3.2M16 3.4v3.2" stroke="url(#pf-disp-g)" stroke-width="2" stroke-linecap="round"></path><g fill="#fff"><circle cx="9" cy="13" r="1.1"></circle><circle cx="12" cy="13" r="1.1"></circle><circle cx="15" cy="13" r="1.1"></circle><circle cx="9" cy="16.4" r="1.1"></circle><circle cx="12" cy="16.4" r="1.1"></circle></g></svg>`,
+  "pf-verificado":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-vf-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4CD98A"></stop><stop offset="1" stop-color="#1E9E8A"></stop></linearGradient></defs><g fill="url(#pf-vf-g)"><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4"></rect><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4" transform="rotate(45 12 12)"></rect></g><path d="M8.5 12.2l2.3 2.3 4.7-5" stroke="#fff" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+  "pf-star":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-star-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFDD6B"></stop><stop offset="1" stop-color="#F5A623"></stop></linearGradient></defs><path d="M12 3.2l2.5 5.1 5.6.8-4.05 3.95.96 5.58L12 16.98 6.99 18.6l.96-5.58L3.9 9.1l5.6-.8L12 3.2Z" fill="url(#pf-star-g)"></path></svg>`,
   "pf-agenda":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="pf-ag-g" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"></stop><stop offset="1" stop-color="#2FA35F"></stop></linearGradient></defs><rect x="4" y="5" width="16" height="15" rx="3" fill="url(#pf-ag-g)"></rect><path d="M4 9.2h16" stroke="#fff" stroke-width="1.2" opacity=".5"></path><path d="M8 3.4v3.2M16 3.4v3.2" stroke="url(#pf-ag-g)" stroke-width="2" stroke-linecap="round"></path><path d="M8.4 14.6l2.3 2.2 4.6-4.9" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
   "pw-eye":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" fill="#0C9C8C"></path><circle cx="12" cy="12" r="3.3" fill="#fff"></circle><circle cx="12" cy="12" r="1.6" fill="#0C9C8C"></circle></svg>`,
   "pw-eyeoff":`<svg class="appicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" fill="#0C9C8C" opacity=".4"></path><circle cx="12" cy="12" r="3.3" fill="#fff" opacity=".55"></circle><path d="M4.5 4.5 19.5 19.5" stroke="#fff" stroke-width="3.4" stroke-linecap="round"></path><path d="M4.5 4.5 19.5 19.5" stroke="#0C9C8C" stroke-width="2" stroke-linecap="round"></path></svg>`,
@@ -6334,14 +6350,14 @@ async function renderProfs(){
   // médias de avaliação (1 query pra todos)
   let avMap={};
   if(_SB&&profs.length){try{const ids=profs.map(p=>p.id);const{data:avs}=await _SB.from('avaliacoes_prof').select('prof_id,nota').in('prof_id',ids);(avs||[]).forEach(a=>{(avMap[a.prof_id]=avMap[a.prof_id]||[]).push(a.nota);});}catch(e){}}
-  const avResumo=id=>{const arr=avMap[id];if(!arr||!arr.length)return '';const m=arr.reduce((s,n)=>s+n,0)/arr.length;return `<span style="color:#F5A623;font-weight:700;font-size:12.5px">★ ${m.toFixed(1)}</span> <span style="color:var(--txm);font-size:11.5px">(${arr.length})</span>`;};
+  const avResumo=id=>{const arr=avMap[id];if(!arr||!arr.length)return '';const m=arr.reduce((s,n)=>s+n,0)/arr.length;return `<span style="display:inline-flex;align-items:center;gap:3px"><span class="pc-star" data-icon="pf-star" style="display:inline-flex;width:14px;height:14px"></span><span style="color:#E5920A;font-weight:800;font-size:12.5px">${m.toFixed(1)}</span> <span style="color:var(--txm);font-size:11.5px">(${arr.length})</span></span>`;};
   const q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
   const list=profs.filter(p=>{
     if(_pfFilt.mod&&!(p.modalidade||'').includes(_pfFilt.mod))return false;
     if(q){const hay=(p.nome+' '+p.tipo_prof+' '+(p.cidade||'')+' '+(p.especialidades||'')).toLowerCase();if(!hay.includes(q))return false;}
     return true;
   });
-  const modtag=m=>{const ms=m||'';return ms.includes('online')&&ms.includes('presencial')?'<span class="pc-modtag mt-am">💻📍 Online e presencial</span>':ms.includes('online')?'<span class="pc-modtag mt-on">💻 Online</span>':'<span class="pc-modtag mt-pr">📍 Presencial</span>';};
+  const modtag=m=>{const ms=m||'';return ms.includes('online')&&ms.includes('presencial')?'<span class="pc-modtag mt-am"><span data-icon="pf-online"></span>Online e presencial</span>':ms.includes('online')?'<span class="pc-modtag mt-on"><span data-icon="pf-online"></span>Online</span>':'<span class="pc-modtag mt-pr"><span data-icon="pf-local"></span>Presencial</span>';};
   c.innerHTML=`<div class="pf-count">${list.length} profissio${list.length===1?'nal':'nais'} ${list.length===1?'encontrado':'encontrados'}</div>`+
     (list.length?list.map(p=>`
     <div class="pcard" onclick="abrirPerfilProf('${p.id}')" style="cursor:pointer">
@@ -6352,14 +6368,15 @@ async function renderProfs(){
       </div>
       <div class="pc-bio">${esc(p.bio||'')}</div>
       <div class="pc-meta">
-        ${p.valor?`<div class="pc-mi"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></div>`:''}
-        ${p.duracao?`<div class="pc-mi"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></div>`:''}
-        ${p.cidade?`<div class="pc-mi"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></div>`:''}
-        ${(p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length)?`<div class="pc-mi"><span class="k">Agendamento</span><span class="v" style="color:var(--ve)">Online ✓</span></div>`:''}
+        ${p.valor?`<div class="pc-mi"><span class="ic" data-icon="pf-valor"></span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
+        ${p.duracao?`<div class="pc-mi"><span class="ic" data-icon="pf-duracao"></span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
+        ${p.cidade?`<div class="pc-mi"><span class="ic" data-icon="pf-local"></span><span class="tx"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></span></div>`:''}
+        ${(p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length)?`<div class="pc-mi"><span class="ic" data-icon="pf-agenda"></span><span class="tx"><span class="k">Agendamento</span><span class="v" style="color:var(--ve)">Online</span></span></div>`:''}
       </div>
       ${p.especialidades?`<div class="pc-tags">${p.especialidades.split(',').map(t=>`<span class="pc-tg">${esc(t.trim())}</span>`).join('')}</div>`:''}
       <div class="pc-cta"><button class="pc-btn solid" onclick="event.stopPropagation();abrirPerfilProf('${p.id}')">Ver perfil →</button></div>
     </div>`).join(''):'<div style="text-align:center;color:var(--txm);font-size:14px;padding:40px 20px">Nenhum profissional encontrado.<br>Tente ampliar a busca.</div>');
+  try{aplicarIcones(c);}catch(e){}
 }
 /* ══ Perfil do profissional (detalhe) + agendamento por horários ══ */
 function abrirPerfilProf(id){
@@ -6370,12 +6387,14 @@ function abrirPerfilProf(id){
   const capa=CAPAS[p.capa]||CAPAS.verde;
   body.innerHTML=`
     <div class="pd-hero" style="background:${capa.grad}">
-      <div class="pd-av"${p.foto?' style="padding:0;overflow:hidden"':''}>${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:ini(p.nome)}</div>
+      <div class="pd-avwrap">
+        <div class="pd-av"${p.foto?' style="padding:0;overflow:hidden"':''}>${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:ini(p.nome)}</div>
+        <button class="pd-seal" data-icon="pf-verificado" onclick="verifInfo(event)" aria-label="Profissional verificado"></button>
+      </div>
       <div class="pd-nome">${esc(p.nome)}</div>
       <div class="pd-tipo">${esc(p.tipo_prof||'')}</div>
       ${p.reg?`<div class="pd-reg">${esc(p.reg)}</div>`:''}
       ${(()=>{const lk=proLink(p.link);return lk?`<a href="${esc(lk.href)}" target="_blank" rel="noopener" class="pd-link" style="display:inline-block;margin-top:8px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:20px">🔗 ${esc(lk.label)}</a>`:'';})()}
-      <div class="pd-badge">🩺 Profissional verificado</div>
       <div id="pd-hero-rate"></div>
     </div>
     <div class="pd-body">
@@ -6402,6 +6421,7 @@ function abrirPerfilProf(id){
   showV('vprofdet');
   carregarAvaliacoes(p.id);
 }
+function verifInfo(ev){ if(ev){ev.stopPropagation();} try{sfx('tap');}catch(e){} toast('✓ Profissional verificado — identidade e registro conferidos pela equipe dichava.',4200); }
 // ── Temas de capa da ficha do profissional ──
 const CAPAS={
   verde:{nome:'Verde',grad:'linear-gradient(150deg,#1B3A2A 0%,#2FA35F 62%,#3FA76A 100%)',sw:'#2FA35F'},
