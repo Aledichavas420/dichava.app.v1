@@ -2105,22 +2105,28 @@ a{color:inherit;text-decoration:none}
 /* indicador de chat na home */
 .hchat{position:relative;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);border:none;display:grid;place-items:center;font-size:18px;cursor:pointer;flex-shrink:0}
 .hchat-badge{position:absolute;top:-3px;right:-3px;background:var(--er);color:#fff;font-size:10px;font-weight:800;min-width:16px;height:16px;border-radius:20px;display:grid;place-items:center;padding:0 4px}
-.pd-hero{background:linear-gradient(135deg,var(--roxo),#9B5DE5);color:#fff;padding:26px 20px;text-align:center}
-.pd-av{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:30px;font-weight:800;margin:0 auto 10px}
-.pd-nome{font-size:22px;font-weight:800;letter-spacing:-.3px}
-.pd-tipo{font-size:14px;opacity:.92;margin-top:2px}
-.pd-reg{font-size:12px;opacity:.8;margin-top:2px}
-.pd-badge{display:inline-block;background:rgba(255,255,255,.22);border-radius:20px;padding:4px 13px;font-size:12px;font-weight:700;margin-top:10px}
-.pd-body{padding:16px 16px 6px}
-.pd-sec{font-size:11.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.4px;margin:16px 2px 8px}
-.pd-bio{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14.5px;line-height:1.55}
-.pd-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pd-mi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
-.pd-mi .k{font-size:11px;color:var(--txs);font-weight:700;display:block;margin-bottom:2px}
-.pd-mi .v{font-size:14px;font-weight:700}
-.pd-tags{display:flex;flex-wrap:wrap;gap:7px}
-.pd-tg{background:var(--roxof);color:var(--roxo);border-radius:20px;padding:4px 12px;font-size:12.5px;font-weight:700}
-.pd-body{padding:16px 16px 90px}
+.pd-hero{position:relative;overflow:hidden;background:linear-gradient(150deg,var(--dk) 0%,var(--v) 62%,#3FA76A 100%);color:#fff;padding:30px 20px 26px;text-align:center}
+.pd-hero::before{content:"";position:absolute;top:-70px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.10)}
+.pd-hero::after{content:"";position:absolute;bottom:-90px;left:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07)}
+.pd-hero>*{position:relative;z-index:1}
+.pd-av{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:34px;font-weight:800;margin:0 auto 12px;border:3px solid rgba(255,255,255,.65);box-shadow:0 8px 22px rgba(0,0,0,.22)}
+.pd-nome{font-size:23px;font-weight:800;letter-spacing:-.3px}
+.pd-tipo{font-size:14.5px;opacity:.95;margin-top:3px;font-weight:600}
+.pd-reg{font-size:12px;opacity:.82;margin-top:3px}
+.pd-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.28);border-radius:20px;padding:5px 14px;font-size:12.5px;font-weight:700;margin-top:12px;backdrop-filter:blur(4px)}
+.pd-hero-rate{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:rgba(0,0,0,.16);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700}
+.pd-sec{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--tx);letter-spacing:.2px;margin:22px 2px 10px}
+.pd-sec::before{content:"";width:4px;height:15px;border-radius:3px;background:var(--v);display:inline-block}
+.pd-bio{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 17px;font-size:14.5px;line-height:1.6;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+.pd-meta{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.pd-mi{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px 14px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+.pd-mi .ic{width:38px;height:38px;flex:none;border-radius:11px;background:var(--vf);display:grid;place-items:center;font-size:18px}
+.pd-mi .tx{min-width:0}
+.pd-mi .k{font-size:11px;color:var(--txs);font-weight:700;display:block;margin-bottom:1px}
+.pd-mi .v{font-size:14px;font-weight:800;line-height:1.25;word-break:break-word}
+.pd-tags{display:flex;flex-wrap:wrap;gap:8px}
+.pd-tg{background:var(--vf);color:var(--ve);border:1px solid color-mix(in srgb,var(--v) 22%,transparent);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700}
+.pd-body{padding:8px 16px 92px}
 .pd-acts{display:flex;gap:10px;position:sticky;bottom:0;padding:12px 16px calc(12px + var(--sb));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-top:1px solid var(--line)}
 .pd-acts button{flex:1;padding:13px;border-radius:14px;font-weight:800;font-size:14.5px;border:none;cursor:pointer}
 .pd-contato{background:var(--card);border:1.5px solid var(--v)!important;color:var(--ve)}
@@ -6358,17 +6364,19 @@ function abrirPerfilProf(id){
       ${p.reg?`<div class="pd-reg">${esc(p.reg)}</div>`:''}
       ${(()=>{const lk=proLink(p.link);return lk?`<a href="${esc(lk.href)}" target="_blank" rel="noopener" class="pd-link" style="display:inline-block;margin-top:8px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:20px">🔗 ${esc(lk.label)}</a>`:'';})()}
       <div class="pd-badge">🩺 Profissional verificado</div>
+      <div id="pd-hero-rate"></div>
     </div>
     <div class="pd-body">
       ${p.bio?`<div class="pd-sec">Sobre</div><div class="pd-bio">${esc(p.bio)}</div>`:''}
       ${p.especialidades?`<div class="pd-sec">Especialidades</div><div class="pd-tags">${p.especialidades.split(',').map(t=>`<span class="pd-tg">${esc(t.trim())}</span>`).join('')}</div>`:''}
       <div class="pd-sec">Atendimento</div>
       <div class="pd-meta">
-        <div class="pd-mi"><span class="k">Modalidade</span><span class="v">${modLabel}</span></div>
-        ${p.valor?`<div class="pd-mi"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></div>`:''}
-        ${p.duracao?`<div class="pd-mi"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></div>`:''}
-        ${p.cidade?`<div class="pd-mi"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></div>`:''}
-        ${p.disponibilidade?`<div class="pd-mi"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></div>`:''}
+        <div class="pd-mi"><span class="ic">${(p.modalidade||'').includes('presencial')&&!(p.modalidade||'').includes('online')?'📍':'💻'}</span><span class="tx"><span class="k">Modalidade</span><span class="v">${modLabel.replace(/^[^ ]+ /,'')}</span></span></div>
+        ${p.valor?`<div class="pd-mi"><span class="ic">💰</span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
+        ${p.duracao?`<div class="pd-mi"><span class="ic">⏱️</span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
+        ${p.cidade?`<div class="pd-mi"><span class="ic">📍</span><span class="tx"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></span></div>`:''}
+        ${p.disponibilidade?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic">🗓️</span><span class="tx"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></span></div>`:''}
+        ${temAgenda?`<div class="pd-mi" style="grid-column:1/-1;background:var(--vf);border-color:color-mix(in srgb,var(--v) 24%,transparent)"><span class="ic" style="background:var(--v);color:#fff">📅</span><span class="tx"><span class="k" style="color:var(--ve)">Agendamento online</span><span class="v" style="color:var(--ve)">Escolha um horário abaixo ✓</span></span></div>`:''}
       </div>
       ${temAgenda?`<div class="pd-sec">Agendar horário</div><div id="pd-slots"></div>`:''}
       <div class="pd-sec">Avaliações</div>
@@ -6391,6 +6399,8 @@ async function carregarAvaliacoes(profId){
   const podeAvaliar=U&&U.id&&U.id!=='demo';
   const minha=podeAvaliar?avs.find(a=>a.user_id===U.id):null;
   const media=avs.length?avs.reduce((s,a)=>s+a.nota,0)/avs.length:0;
+  const hr=document.getElementById('pd-hero-rate');
+  if(hr)hr.innerHTML=avs.length?`<div class="pd-hero-rate">⭐ ${media.toFixed(1)} · ${avs.length} avaliaç${avs.length===1?'ão':'ões'}</div>`:'';
   const cabec=avs.length
     ? `<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="font-family:'Poppins',sans-serif;font-size:30px;font-weight:800;color:var(--tx);line-height:1">${media.toFixed(1)}</div>
