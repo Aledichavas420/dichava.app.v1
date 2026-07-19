@@ -2086,14 +2086,25 @@ a{color:inherit;text-decoration:none}
 .conv-dot{width:10px;height:10px;border-radius:50%;background:var(--er);flex-shrink:0;margin-left:6px}
 .tabbadge{display:inline-block;background:var(--er);color:#fff;font-size:11px;font-weight:800;min-width:18px;text-align:center;padding:1px 5px;border-radius:20px;vertical-align:middle}
 #chat-acomp:empty{display:none}
-.acomp-bar{padding:11px 14px;font-size:13px;line-height:1.5;display:flex;flex-direction:column;gap:8px}
-.acomp-bar.pend{background:var(--roxof);color:var(--roxo)}
-.acomp-bar.ativo{background:var(--vf);color:var(--ve)}
-.acomp-bar .arow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.acomp-bar button{border:none;border-radius:20px;font-weight:800;font-size:12.5px;padding:7px 14px;cursor:pointer}
-.acomp-ok{background:var(--v);color:#fff}
-.acomp-no{background:transparent;color:var(--roxo);text-decoration:underline}
-.acomp-vx{background:var(--ve);color:#fff}
+.acx{margin:10px 12px;padding:12px 14px;border-radius:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh);background:var(--roxof);border:1px solid color-mix(in srgb,var(--roxo) 22%,transparent)}
+.acx.pend{background:var(--roxof);border-color:color-mix(in srgb,var(--roxo) 22%,transparent)}
+.acx.ativo{background:var(--vf);border-color:color-mix(in srgb,var(--v) 30%,transparent)}
+.acx.col{flex-direction:column;align-items:stretch;gap:10px}
+.acx-top{display:flex;gap:12px;align-items:flex-start}
+.acx-ic{font-size:24px;flex-shrink:0;line-height:1.1}
+.acx-tx{flex:1;line-height:1.4}
+.acx-tx b{display:block;font-size:14px;color:var(--tx)}
+.acx-tx span{font-size:12.5px;color:var(--txs)}
+.acx-btns{display:flex;gap:8px}
+.acx-b{border:none;border-radius:22px;font-weight:800;font-size:13.5px;padding:10px 16px;cursor:pointer;flex-shrink:0}
+.acx-btns .acx-b{flex:1}
+.acx-ok{background:var(--v);color:#fff}
+.acx-no{background:var(--cinm);color:var(--txs)}
+.acx-vx{background:var(--ve);color:#fff}
+.acx-rev{background:transparent;color:var(--ve);text-decoration:underline;font-weight:700}
+/* indicador de chat na home */
+.hchat{position:relative;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);border:none;display:grid;place-items:center;font-size:18px;cursor:pointer;flex-shrink:0}
+.hchat-badge{position:absolute;top:-3px;right:-3px;background:var(--er);color:#fff;font-size:10px;font-weight:800;min-width:16px;height:16px;border-radius:20px;display:grid;place-items:center;padding:0 4px}
 .rx-kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
 .rx-k{background:var(--cin);border-radius:13px;padding:11px 13px}
 .rx-k b{font-size:22px;font-weight:800;display:block;line-height:1.1}
@@ -2256,7 +2267,7 @@ a{color:inherit;text-decoration:none}
 <!-- HOME -->
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden" id="p-home">
 <div class="sc scpad">
-  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hrow"><div class="hpill">🎯 <strong id="h-mt">—</strong></div><button class="hero-prem" id="hero-prem" onclick="abrirPremium()" aria-label="dichava premium"><span class="hpc">👑</span><span id="hero-prem-lb">Premium</span></button></div></div>
+  <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hrow"><div class="hpill">🎯 <strong id="h-mt">—</strong></div><button class="hchat" id="h-chat" onclick="abrirConversasUser()" style="display:none" aria-label="Minhas conversas">💬<span class="hchat-badge" id="h-chat-badge" style="display:none"></span></button><button class="hero-prem" id="hero-prem" onclick="abrirPremium()" aria-label="dichava premium"><span class="hpc">👑</span><span id="hero-prem-lb">Premium</span></button></div></div>
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
     <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
@@ -4979,6 +4990,7 @@ function renderHome(){
   renderHero(st,mp);
   renderTempo();renderDiaHoje();renderQuick();renderInstall();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
   try{renderFin();}catch(e){}
+  try{atualizarChatHome();}catch(e){}
 }
 /* ══ FINANÇAS ══ */
 function calcFin(){
@@ -6301,11 +6313,12 @@ function abrirChat(conv,asPro,otherNome,otherTel,from,otherInfo,prefill){
   try{chatKbReset();}catch(e){}
   showV('vchat');
   try{renderChatAcomp();}catch(e){}
+  try{refreshAcomp();}catch(e){}
   // paciente: se já autorizou, atualiza o resumo compartilhado (dado bruto nunca sai)
   if(!asPro && conv && conv.acomp==='ativo'){ try{const resumo=calcResumoPaciente();_chat.conv.resumo=resumo;_SB.from('conversas').update({resumo,resumo_em:new Date().toISOString()}).eq('id',conv.id);}catch(e){} }
   carregarMsgs(true);
   marcarLida(conv,!!asPro);
-  clearInterval(_chat.poll); _chat.poll=setInterval(()=>carregarMsgs(false),4000);
+  clearInterval(_chat.poll); _chat.poll=setInterval(()=>{carregarMsgs(false);refreshAcomp();},4000);
 }
 // marca a conversa como lida por mim (usa a coluna do meu lado)
 async function marcarLida(conv,asPro){
@@ -6412,13 +6425,20 @@ function renderChatAcomp(){
   const box=document.getElementById('chat-acomp'); if(!box)return;
   const st=(_chat.conv||{}).acomp; box.innerHTML='';
   if(_chat.asPro){
-    if(st==='ativo') box.innerHTML='<div class="acomp-bar ativo"><div class="arow"><span style="flex:1">🔓 Acompanhamento autorizado — veja a evolução do paciente.</span><button class="acomp-vx" onclick="verRaioX()">Ver raio-x</button></div></div>';
-    else if(st==='pendente') box.innerHTML='<div class="acomp-bar pend">⏳ Aguardando o paciente autorizar o acompanhamento.</div>';
-    else box.innerHTML='<div class="acomp-bar pend"><div class="arow"><span style="flex:1">Acompanhe a evolução do paciente — um resumo dos registros dele no app.</span><button class="acomp-ok" onclick="solicitarAcomp()">Solicitar acompanhamento</button></div></div>';
+    if(st==='ativo') box.innerHTML='<div class="acx ativo"><div class="acx-ic">🔓</div><div class="acx-tx"><b>Acompanhamento ativo</b><span>Veja a evolução do paciente entre as sessões.</span></div><button class="acx-b acx-vx" onclick="verRaioX()">Ver raio-x</button></div>';
+    else if(st==='pendente') box.innerHTML='<div class="acx pend"><div class="acx-ic">⏳</div><div class="acx-tx"><b>Aguardando autorização</b><span>O paciente precisa autorizar o acompanhamento no app dele.</span></div></div>';
+    else box.innerHTML='<div class="acx"><div class="acx-ic">📊</div><div class="acx-tx"><b>Acompanhar a evolução</b><span>Peça acesso a um resumo dos registros do paciente no app.</span></div><button class="acx-b acx-ok" onclick="solicitarAcomp()">Solicitar</button></div>';
   } else {
-    if(st==='pendente') box.innerHTML='<div class="acomp-bar pend"><div>🔒 <b>'+esc(_chat.otherNome)+'</b> quer acompanhar sua evolução: um <b>resumo</b> dos seus registros (uso, humor, resistências, economia). Seus registros detalhados <b>não</b> são compartilhados.</div><div class="arow"><button class="acomp-ok" onclick="responderAcomp(true)">Autorizar</button><button class="acomp-no" onclick="responderAcomp(false)">Agora não</button></div></div>';
-    else if(st==='ativo') box.innerHTML='<div class="acomp-bar ativo"><div class="arow"><span style="flex:1">🔓 Você autorizou o acompanhamento da sua evolução.</span><button class="acomp-no" style="color:var(--ve)" onclick="revogarAcomp()">Revogar</button></div></div>';
+    if(st==='pendente') box.innerHTML='<div class="acx pend col"><div class="acx-top"><div class="acx-ic">🔒</div><div class="acx-tx"><b>'+esc(_chat.otherNome)+' quer acompanhar sua evolução</b><span>Você compartilha só um <b>resumo</b> (uso, humor, resistências, economia). Seus registros detalhados <b>continuam privados</b> e você pode revogar quando quiser.</span></div></div><div class="acx-btns"><button class="acx-b acx-ok" onclick="responderAcomp(true)">✓ Autorizar</button><button class="acx-b acx-no" onclick="responderAcomp(false)">Agora não</button></div></div>';
+    else if(st==='ativo') box.innerHTML='<div class="acx ativo"><div class="acx-ic">🔓</div><div class="acx-tx"><b>Acompanhamento autorizado</b><span>Você está compartilhando seu resumo de evolução.</span></div><button class="acx-b acx-rev" onclick="revogarAcomp()">Revogar</button></div>';
   }
+}
+async function refreshAcomp(){
+  if(!_SB||!_chat.conv)return;
+  try{
+    const{data}=await _SB.from('conversas').select('acomp,resumo').eq('id',_chat.conv.id).maybeSingle();
+    if(data){ const changed=(data.acomp||null)!==(_chat.conv.acomp||null); _chat.conv.acomp=data.acomp; _chat.conv.resumo=data.resumo; if(changed) renderChatAcomp(); }
+  }catch(e){}
 }
 async function solicitarAcomp(){
   if(!_SB||!_chat.conv)return;
@@ -6514,6 +6534,20 @@ async function abrirChatUser(c){
   let tel='',info='';
   try{const{data:p}=await _SB.from('profissionais').select('telefone,tipo_prof').eq('id',c.prof_id).maybeSingle();if(p){tel=p.telefone||'';info=p.tipo_prof||'';}}catch(e){}
   abrirChat(c,false,c.prof_nome||'Profissional',tel,'vprofs',info,'');
+}
+function abrirConversasUser(){ abrirProfs(); setTimeout(()=>{try{pfTab('convs');}catch(e){}},60); }
+// indicador de conversas na home (só aparece se o usuário tiver conversas)
+async function atualizarChatHome(){
+  const btn=document.getElementById('h-chat'),bd=document.getElementById('h-chat-badge');
+  if(!btn||!_SB||typeof U==='undefined'||!U){if(btn)btn.style.display='none';return;}
+  try{
+    const{data}=await _SB.from('conversas').select('atualizado_em,user_lida_em,ultima_msg').eq('user_id',U.id);
+    const convs=data||[];
+    if(!convs.length){btn.style.display='none';return;}
+    btn.style.display='';
+    const n=convs.filter(c=>convNaoLida(c,false)).length;
+    if(bd){ if(n){bd.textContent=n;bd.style.display='';}else{bd.style.display='none';} }
+  }catch(e){ btn.style.display='none'; }
 }
 
 /* ══ PERFIL PROFISSIONAL ══ */
