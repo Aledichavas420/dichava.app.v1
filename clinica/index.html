@@ -233,6 +233,9 @@ tbody tr:hover{background:var(--cin)}
 .esc-ops{display:flex;flex-direction:column;gap:5px;margin-top:5px}
 .esc-op{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--tx);background:var(--cin);border:1px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer}
 .esc-op input{accent-color:var(--v)}
+.conv-row{display:flex;align-items:center;gap:12px;padding:12px 8px;border-bottom:1px solid var(--line);cursor:pointer}
+.conv-row:last-child{border-bottom:none}
+.conv-row:hover{background:var(--cin)}
 .hide{display:none!important}
 
 /* ============ LOGIN / GATE ============ */
@@ -349,6 +352,8 @@ tbody tr:hover{background:var(--cin)}
     <a class="nav-item" data-nav="prontuarios"><span class="ic">▤</span> Prontuários</a>
     <a class="nav-item" data-nav="caixa"><span class="ic">$</span> Caixa</a>
     <a class="nav-item" data-nav="documentos"><span class="ic">▦</span> Documentos</a>
+    <a class="nav-item" data-nav="mensagens"><span class="ic">✉</span> Mensagens <span class="badge" id="badge-msgs"></span></a>
+    <a class="nav-item" data-nav="perfil"><span class="ic">☺</span> Meu perfil</a>
     <a class="nav-item" data-nav="equipe"><span class="ic">⧉</span> Equipe</a>
     <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
     <div class="side-foot">
@@ -490,7 +495,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
 function render(){
   const [t,s]=TITLES[route]||['',''];
   $('#pg-title').textContent=t; $('#pg-sub').textContent=s;
@@ -501,6 +506,8 @@ function render(){
   else if(route==='prontuarios') v.innerHTML=viewProntuarios();
   else if(route==='caixa') v.innerHTML=viewCaixa();
   else if(route==='documentos') v.innerHTML=viewDocumentos();
+  else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
+  else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
   else if(route==='equipe') v.innerHTML=viewEquipe();
   else if(route==='config') v.innerHTML=viewConfig();
   updateBadges();
@@ -1093,6 +1100,73 @@ function imprimirDocumento(id){
   w.document.write(html); w.document.close(); setTimeout(()=>{try{w.print();}catch(e){}},400);
 }
 
+/* =============== MENSAGENS (chat com pacientes) =============== */
+let PCONVS=[], _pconv=null, _ppoll=null;
+function viewMensagens(){ return '<div id="conv-list" style="max-width:640px"><div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div>'; }
+async function carregarConversas(){
+  const box=document.getElementById('conv-list'); if(!box||!_SB||!AUTH)return;
+  try{
+    const{data}=await _SB.from('conversas').select('*').eq('prof_id',AUTH.id).order('atualizado_em',{ascending:false});
+    PCONVS=data||[];
+    if(!PCONVS.length){ box.innerHTML='<div class="card empty"><div class="big">✉</div><b>Nenhuma conversa ainda</b>Quando um paciente falar com você pelo app, aparece aqui.</div>'; atualizarBadgeMsgs(); return; }
+    box.innerHTML='<div class="card" style="padding:4px 10px">'+PCONVS.map(c=>{const nova=c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em));return `<div class="conv-row" onclick="abrirConversaPanel('${c.id}')"><div class="avatar">${initials(c.user_nome||'?')}</div><div style="flex:1;min-width:0"><b>${esc(c.user_nome||'Paciente')}</b><div style="font-size:12.5px;color:var(--txs);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.ultima_msg||'Nova conversa')}</div></div>${nova?'<span style="width:10px;height:10px;border-radius:50%;background:var(--er);flex-shrink:0"></span>':''}</div>`;}).join('')+'</div>';
+    atualizarBadgeMsgs();
+  }catch(e){ box.innerHTML='<div class="card empty">Não consegui carregar as conversas.</div>'; }
+}
+function atualizarBadgeMsgs(){ const b=document.getElementById('badge-msgs'); if(!b)return; const n=(PCONVS||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length; b.textContent=n||''; b.style.display=n?'':'none'; }
+async function contarMsgsPanel(){ if(!_SB||!AUTH)return; try{ const{data}=await _SB.from('conversas').select('atualizado_em,prof_lida_em').eq('prof_id',AUTH.id); const n=(data||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length; const b=document.getElementById('badge-msgs'); if(b){b.textContent=n||'';b.style.display=n?'':'none';} }catch(e){} }
+function abrirConversaPanel(id){
+  const c=PCONVS.find(x=>x.id===id); if(!c)return; _pconv=c;
+  openModal(`<div class="modal"><div class="modal-head"><div class="avatar">${initials(c.user_nome||'?')}</div><h3 style="flex:1">${esc(c.user_nome||'Paciente')}</h3><button class="icon-btn" onclick="fecharConversaPanel()">✕</button></div>
+    <div id="pchat-scroll" style="height:54vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--cin);padding:16px"></div>
+    <div class="modal-foot" style="gap:8px"><textarea id="pchat-input" rows="1" placeholder="Escreva uma mensagem…" style="flex:1;resize:none;max-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;background:var(--bg)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMsgPanel();}"></textarea><button class="btn" onclick="enviarMsgPanel()">Enviar</button></div>
+  </div>`);
+  carregarMsgsPanel(true); clearInterval(_ppoll); _ppoll=setInterval(()=>carregarMsgsPanel(false),4000); marcarLidaPanel();
+}
+function fecharConversaPanel(){ clearInterval(_ppoll); closeModal(); carregarConversas(); }
+async function carregarMsgsPanel(scroll){
+  if(!_SB||!_pconv)return;
+  try{
+    const{data}=await _SB.from('mensagens').select('*').eq('conversa_id',_pconv.id).order('criado_em',{ascending:true});
+    const msgs=data||[]; const sc=document.getElementById('pchat-scroll'); if(!sc)return;
+    sc.innerHTML=msgs.map(m=>{const mine=m.de_id===AUTH.id;const hora=new Date(m.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});return `<div style="max-width:78%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${hora}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px">Sem mensagens ainda. Diga um oi 👋</div>';
+    sc.scrollTop=sc.scrollHeight;
+  }catch(e){}
+}
+async function enviarMsgPanel(){
+  const el=document.getElementById('pchat-input'); const txt=(el.value||'').trim(); if(!txt||!_pconv||!_SB)return; el.value='';
+  try{
+    const agora=new Date().toISOString();
+    await _SB.from('mensagens').insert({conversa_id:_pconv.id,de_id:AUTH.id,texto:txt});
+    await _SB.from('conversas').update({ultima_msg:txt.slice(0,120),atualizado_em:agora,prof_lida_em:agora}).eq('id',_pconv.id);
+    try{ _SB.functions.invoke('push-msg',{body:{conversa_id:_pconv.id,de_id:AUTH.id,texto:txt}}); }catch(e){}
+    carregarMsgsPanel(true);
+  }catch(e){ toast('Não enviou',1); el.value=txt; }
+}
+async function marcarLidaPanel(){ if(!_SB||!_pconv)return; try{ await _SB.from('conversas').update({prof_lida_em:new Date().toISOString()}).eq('id',_pconv.id);}catch(e){} }
+/* =============== MEU PERFIL =============== */
+async function carregarPerfil(){
+  const v=document.getElementById('view'); if(!v||!_SB||!AUTH)return;
+  try{
+    const{data:p}=await _SB.from('profissionais').select('*').eq('id',AUTH.id).maybeSingle();
+    if(!p){ v.innerHTML='<div class="card" style="padding:22px;max-width:560px"><b>Você ainda não tem um perfil público.</b><p style="color:var(--txs);font-size:13.5px;margin-top:8px">Crie seu perfil profissional no <b>app dichava</b> (área do profissional) para aparecer na rede e receber pacientes.</p></div>'; return; }
+    const mod=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'Online e presencial':(p.modalidade||'').includes('online')?'Online':'Presencial';
+    const st={pendente:'Em análise',aprovado:'Aprovado',rejeitado:'Reprovado'}[p.status]||p.status||'—';
+    v.innerHTML=`<div class="card" style="padding:22px;max-width:620px">
+      <div class="cell-user" style="margin-bottom:14px"><div class="avatar" style="width:54px;height:54px;font-size:19px">${initials(p.nome)}</div><div><b style="font-size:17px">${esc(p.nome)}</b><div style="color:var(--txs);font-size:13px">${esc(p.tipo_prof||'')}${p.reg?' · '+esc(p.reg):''}</div><span class="chip ${p.status==='aprovado'?'v':(p.status==='rejeitado'?'e':'a')}" style="margin-top:4px">${st}</span></div></div>
+      ${p.bio?`<div class="pro-field"><div class="lbl">Bio</div><div class="val">${esc(p.bio)}</div></div>`:''}
+      ${p.especialidades?`<div class="pro-field"><div class="lbl">Especialidades</div><div class="val">${esc(p.especialidades)}</div></div>`:''}
+      <div class="info-grid" style="margin-top:10px">
+        <div><div class="il">Modalidade</div><div class="iv">${mod}</div></div>
+        ${p.valor?`<div><div class="il">Valor médio</div><div class="iv">${esc(p.valor)}</div></div>`:''}
+        ${p.cidade?`<div><div class="il">Cidade</div><div class="iv">${esc(p.cidade)}</div></div>`:''}
+        ${p.telefone?`<div><div class="il">WhatsApp</div><div class="iv">${esc(p.telefone)}</div></div>`:''}
+      </div>
+      <p style="font-size:12.5px;color:var(--txm);margin-top:16px">Para <b>editar</b> o perfil público, use o app dichava → área do profissional (a edição passa por nova aprovação). A <b>disponibilidade de agendamento</b> você define aqui em <b>Configurações</b>.</p>
+    </div>`;
+  }catch(e){ v.innerHTML='<div class="card empty">Não consegui carregar o perfil.</div>'; }
+}
+
 /* =============== EQUIPE (clínica compartilhada) =============== */
 function viewEquipe(){
   if(!CLINICA){
@@ -1549,6 +1623,7 @@ function startApp(){
   go('dash');
   try{carregarSolicitacoes();}catch(e){}
   try{carregarAgendaCfg();}catch(e){}
+  try{contarMsgsPanel();}catch(e){}
   if(!localStorage.getItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'))) setTimeout(tutStart,400);
 }
 // puxa alterações da equipe ao voltar pra aba
