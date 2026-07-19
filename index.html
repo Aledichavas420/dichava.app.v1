@@ -6381,6 +6381,8 @@ async function enviarMsg(){
     await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:txt});
     const upd={ultima_msg:txt.slice(0,120),atualizado_em:agora}; upd[_chat.asPro?'prof_lida_em':'user_lida_em']=agora;
     await _SB.from('conversas').update(upd).eq('id',_chat.conv.id);
+    // dispara o push pro destinatário (não bloqueia; ignora erro se a função não existir)
+    try{ _SB.functions.invoke('push-msg',{body:{conversa_id:_chat.conv.id,de_id:U.id,texto:txt}}); }catch(e){}
     carregarMsgs(true);
   }catch(e){ toast('⚠️ não enviou: '+((e&&e.message)||''),4000); el.value=txt; }
 }
