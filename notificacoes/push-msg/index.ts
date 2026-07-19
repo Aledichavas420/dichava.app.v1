@@ -9,8 +9,10 @@ import webpush from "npm:web-push@3";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-const VAPID_PUB  = Deno.env.get("VAPID_PUB")!;
-const VAPID_PRIV = Deno.env.get("VAPID_PRIVATE")!;
+// normaliza para base64 URL-safe SEM padding (o que a lib de push exige)
+const urlsafe = (k: string) => (k || "").trim().replace(/\s+/g, "").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/,"");
+const VAPID_PUB  = urlsafe(Deno.env.get("VAPID_PUB")!);
+const VAPID_PRIV = urlsafe(Deno.env.get("VAPID_PRIVATE")!);
 webpush.setVapidDetails("mailto:contato@dichava.app", VAPID_PUB, VAPID_PRIV);
 
 Deno.serve(async (req) => {

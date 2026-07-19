@@ -6468,8 +6468,11 @@ async function carregarMsgs(scroll){
   try{
     const{data}=await _SB.from('mensagens').select('*').eq('conversa_id',_chat.conv.id).order('criado_em',{ascending:true});
     const msgs=data||[];
-    if(msgs.length===_chat.lastN && !scroll)return;   // nada novo
+    const prevN=_chat.lastN;
+    if(msgs.length===prevN && !scroll)return;   // nada novo
     _chat.lastN=msgs.length;
+    // som ao receber mensagem nova (não na carga inicial, não nas minhas)
+    if(prevN>0 && msgs.length>prevN){ const last=msgs[msgs.length-1]; if(last && last.de_id!==U.id){ try{sfx('msg');vib(30);}catch(e){} } }
     const sc=document.getElementById('chat-scroll');
     if(!msgs.length){
       sc.innerHTML='<div class="chat-intro"><div class="ci-av">'+ini2(_chat.otherNome)+'</div><b>'+esc(_chat.otherNome||'Conversa')+'</b><small>'+esc(_chat.otherInfo||(_chat.asPro?'Usuário do app':'Profissional parceiro'))+'<br>'+(_chat.asPro?'Responda com atenção e acolhimento.':'Envie uma mensagem para iniciar o contato.')+'</small></div>';
@@ -6497,6 +6500,7 @@ async function enviarMsg(){
     await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:txt});
     const upd={ultima_msg:txt.slice(0,120),atualizado_em:agora}; upd[_chat.asPro?'prof_lida_em':'user_lida_em']=agora;
     await _SB.from('conversas').update(upd).eq('id',_chat.conv.id);
+    try{sfx('send');}catch(e){}
     // dispara o push pro destinatário (não bloqueia; ignora erro se a função não existir)
     try{ _SB.functions.invoke('push-msg',{body:{conversa_id:_chat.conv.id,de_id:U.id,texto:txt}}); }catch(e){}
     carregarMsgs(true);
@@ -6798,12 +6802,15 @@ function sfx(kind){
       case 'start': _sfxSeq([[392,0,0.10,0.09],[523,0.09,0.10,0.09],[659,0.18,0.16,0.10]],'triangle');break;
       case 'complete': _sfxSeq([[523,0,0.14,0.12],[659,0.12,0.14,0.12],[784,0.24,0.14,0.12],[1047,0.36,0.30,0.13],[1319,0.52,0.34,0.11]],'triangle');break;
       case 'xp': _sfxSeq([[784,0,0.08,0.08],[1047,0.07,0.12,0.09]],'sine');break;
+      case 'send': _sfxSeq([[880,0,0.05,0.05],[1175,0.04,0.07,0.05]],'sine');break;
+      case 'msg': _sfxSeq([[1047,0,0.08,0.08],[784,0.09,0.12,0.08]],'triangle');break;
+      case 'nav': _sfxSeq([[587,0,0.05,0.045]],'sine');break;
       default: _sfxSeq([[660,0,0.06,0.05]],'sine');
     }
   }catch(e){}
 }
 // tap sonoro leve e global em itens de navegação/seleção (conquistas têm som próprio)
-document.addEventListener('click',function(ev){try{if(!sfxOn())return;const t=ev.target&&ev.target.closest&&ev.target.closest('.ni,.fab,.chip,.tb-track,.tbm-h,.tbfaq-h,.plncard');if(t)sfx('tap');}catch(e){}},true);
+document.addEventListener('click',function(ev){try{if(!sfxOn())return;const el=ev.target&&ev.target.closest&&ev.target.closest('.ni,.fab,.chip,.tb-track,.tbm-h,.tbfaq-h,.plncard,.btn,.qac,.qac-wide,.crc,.cfgi,.pcard,.slot-chip,.acx-b,.pd-acts button,.hero-prem,.hchat,.icon-btn,.pc-btn,.conv-item,.adm-tab,.pf-tab,.pro-tab');if(!el)return;const nav=ev.target.closest('.ni,.pf-tab,.pro-tab,.adm-tab');sfx(nav?'nav':'tap');}catch(e){}},true);
 const SOM_INFO={rain:{e:'🌧️',n:'Chuva'},ocean:{e:'🌊',n:'Oceano'},night:{e:'🦗',n:'Noite'},stream:{e:'🏞️',n:'Riacho'},wind:{e:'🍃',n:'Vento'},forest:{e:'🌲',n:'Floresta'},branco:{e:'⚪',n:'Ruído branco'},marrom:{e:'🟤',n:'Ruído marrom'},f432:{e:'🎵',n:'432 Hz'},f528:{e:'🎶',n:'528 Hz'},binaural:{e:'🧘',n:'Binaural θ'},f528r:{e:'💚',n:'Bem-estar · 528 Hz'},aguas:{e:'💧',n:'Águas serenas'},luz:{e:'✨',n:'Luz que cura'},yoga:{e:'🧘',n:'Yoga & meditação'},cura:{e:'🔮',n:'Frequências de cura'},deriva:{e:'🌊',n:'À deriva'},serenidade:{e:'🕊️',n:'Serenidade'},ceuazul:{e:'🌌',n:'Céu azul'},sono:{e:'🌙',n:'Sono profundo'}};
 // Sons reais hospedados no Supabase Storage (bucket público "sons"). Se o arquivo não existir, cai no som sintetizado.
 const _SOM_BUCKET='https://gnpwaywyexcevtzbwiyq.supabase.co/storage/v1/object/public/sons/';
