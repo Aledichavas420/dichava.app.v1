@@ -2105,6 +2105,29 @@ a{color:inherit;text-decoration:none}
 /* indicador de chat na home */
 .hchat{position:relative;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);border:none;display:grid;place-items:center;font-size:18px;cursor:pointer;flex-shrink:0}
 .hchat-badge{position:absolute;top:-3px;right:-3px;background:var(--er);color:#fff;font-size:10px;font-weight:800;min-width:16px;height:16px;border-radius:20px;display:grid;place-items:center;padding:0 4px}
+.pd-hero{background:linear-gradient(135deg,var(--roxo),#9B5DE5);color:#fff;padding:26px 20px;text-align:center}
+.pd-av{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:30px;font-weight:800;margin:0 auto 10px}
+.pd-nome{font-size:22px;font-weight:800;letter-spacing:-.3px}
+.pd-tipo{font-size:14px;opacity:.92;margin-top:2px}
+.pd-reg{font-size:12px;opacity:.8;margin-top:2px}
+.pd-badge{display:inline-block;background:rgba(255,255,255,.22);border-radius:20px;padding:4px 13px;font-size:12px;font-weight:700;margin-top:10px}
+.pd-body{padding:16px 16px 6px}
+.pd-sec{font-size:11.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.4px;margin:16px 2px 8px}
+.pd-bio{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14.5px;line-height:1.55}
+.pd-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pd-mi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.pd-mi .k{font-size:11px;color:var(--txs);font-weight:700;display:block;margin-bottom:2px}
+.pd-mi .v{font-size:14px;font-weight:700}
+.pd-tags{display:flex;flex-wrap:wrap;gap:7px}
+.pd-tg{background:var(--roxof);color:var(--roxo);border-radius:20px;padding:4px 12px;font-size:12.5px;font-weight:700}
+.pd-acts{display:flex;gap:10px;position:sticky;bottom:0;padding:12px 16px calc(12px + var(--sb))}
+.pd-acts button{flex:1;padding:13px;border-radius:14px;font-weight:800;font-size:14.5px;border:none;cursor:pointer}
+.pd-contato{background:var(--card);border:1.5px solid var(--v)!important;color:var(--ve)}
+.pd-agendar{background:var(--v);color:#fff}
+.slot-day{margin-top:12px}
+.slot-day b{font-size:13px;color:var(--tx);text-transform:capitalize}
+.slot-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.slot-chip{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:8px 14px;font-weight:700;font-size:13.5px;cursor:pointer}
 .rx-kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
 .rx-k{background:var(--cin);border-radius:13px;padding:11px 13px}
 .rx-k b{font-size:22px;font-weight:800;display:block;line-height:1.1}
@@ -2973,6 +2996,18 @@ a{color:inherit;text-decoration:none}
     <div style="height:24px"></div>
   </div>
 </div>
+
+<!-- PERFIL DO PROFISSIONAL (detalhe) -->
+<div class="V" id="vprofdet" style="background:var(--bg)">
+  <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="showV('vprofs')">←</button><div class="ptb-tit">Profissional</div></div>
+  <div class="sc" style="flex:1;overflow-y:auto"><div id="profdet-body"></div><div style="height:30px"></div></div>
+</div>
+
+<!-- AGENDAR HORÁRIO (confirmar slot) -->
+<div class="ov" id="magendar" onclick="if(event.target===this)closeMod('magendar')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div id="agendar-body"></div>
+</div></div></div>
 
 <!-- CHAT (usuário ↔ profissional) -->
 <div class="V" id="vchat" style="background:var(--cin)">
@@ -6263,7 +6298,7 @@ async function renderProfs(){
   const modtag=m=>{const ms=m||'';return ms.includes('online')&&ms.includes('presencial')?'<span class="pc-modtag mt-am">💻📍 Online e presencial</span>':ms.includes('online')?'<span class="pc-modtag mt-on">💻 Online</span>':'<span class="pc-modtag mt-pr">📍 Presencial</span>';};
   c.innerHTML=`<div class="pf-count">${list.length} profissio${list.length===1?'nal':'nais'} ${list.length===1?'encontrado':'encontrados'}</div>`+
     (list.length?list.map(p=>`
-    <div class="pcard">
+    <div class="pcard" onclick="abrirPerfilProf('${p.id}')" style="cursor:pointer">
       <div class="pc-head">
         <div class="pc-av" style="background:var(--roxof)">${ini(p.nome)}</div>
         <div class="pc-id"><div class="pc-nome">${esc(p.nome)}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div></div>
@@ -6274,11 +6309,92 @@ async function renderProfs(){
         ${p.valor?`<div class="pc-mi"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></div>`:''}
         ${p.duracao?`<div class="pc-mi"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></div>`:''}
         ${p.cidade?`<div class="pc-mi"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></div>`:''}
-        ${p.disponibilidade?`<div class="pc-mi"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></div>`:''}
+        ${(p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length)?`<div class="pc-mi"><span class="k">Agendamento</span><span class="v" style="color:var(--ve)">Online ✓</span></div>`:''}
       </div>
       ${p.especialidades?`<div class="pc-tags">${p.especialidades.split(',').map(t=>`<span class="pc-tg">${esc(t.trim())}</span>`).join('')}</div>`:''}
-      <div class="pc-cta"><button class="pc-btn solid" onclick="contatarProf('${p.id}')">Solicitar contato</button></div>
+      <div class="pc-cta"><button class="pc-btn solid" onclick="event.stopPropagation();abrirPerfilProf('${p.id}')">Ver perfil →</button></div>
     </div>`).join(''):'<div style="text-align:center;color:var(--txm);font-size:14px;padding:40px 20px">Nenhum profissional encontrado.<br>Tente ampliar a busca.</div>');
+}
+/* ══ Perfil do profissional (detalhe) + agendamento por horários ══ */
+function abrirPerfilProf(id){
+  const p=_profsById[id]; if(!p){toast('Perfil indisponível');return;}
+  const modLabel=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'💻📍 Online e presencial':(p.modalidade||'').includes('online')?'💻 Online':'📍 Presencial';
+  const temAgenda=p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length;
+  const body=document.getElementById('profdet-body');
+  body.innerHTML=`
+    <div class="pd-hero">
+      <div class="pd-av">${ini(p.nome)}</div>
+      <div class="pd-nome">${esc(p.nome)}</div>
+      <div class="pd-tipo">${esc(p.tipo_prof||'')}</div>
+      ${p.reg?`<div class="pd-reg">${esc(p.reg)}</div>`:''}
+      <div class="pd-badge">🩺 Profissional verificado</div>
+    </div>
+    <div class="pd-body">
+      ${p.bio?`<div class="pd-sec">Sobre</div><div class="pd-bio">${esc(p.bio)}</div>`:''}
+      ${p.especialidades?`<div class="pd-sec">Especialidades</div><div class="pd-tags">${p.especialidades.split(',').map(t=>`<span class="pd-tg">${esc(t.trim())}</span>`).join('')}</div>`:''}
+      <div class="pd-sec">Atendimento</div>
+      <div class="pd-meta">
+        <div class="pd-mi"><span class="k">Modalidade</span><span class="v">${modLabel}</span></div>
+        ${p.valor?`<div class="pd-mi"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></div>`:''}
+        ${p.duracao?`<div class="pd-mi"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></div>`:''}
+        ${p.cidade?`<div class="pd-mi"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></div>`:''}
+        ${p.disponibilidade?`<div class="pd-mi"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></div>`:''}
+      </div>
+      ${temAgenda?`<div class="pd-sec">Agendar horário</div><div id="pd-slots"></div>`:''}
+    </div>
+    <div class="pd-acts">
+      <button class="pd-contato" onclick="contatarProf('${p.id}')">💬 Conversar</button>
+      ${temAgenda?`<button class="pd-agendar" onclick="verSlots('${p.id}')">📅 Agendar horário</button>`:''}
+    </div>`;
+  showV('vprofdet');
+}
+function gerarSlots(p){
+  const cfg=p.agenda_config; if(!cfg||!cfg.dias)return [];
+  const dur=+cfg.dur||50; const out=[];
+  const hm=s=>{const[h,m]=s.split(':').map(Number);return h*60+m;};
+  const mh=n=>String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
+  for(let i=1;i<=14;i++){
+    const d=new Date(); d.setDate(d.getDate()+i); const wd=d.getDay(); const win=cfg.dias[wd]||cfg.dias[String(wd)];
+    if(!win)continue;
+    const times=[]; for(let t=hm(win[0]); t+dur<=hm(win[1]); t+=dur) times.push(mh(t));
+    if(times.length) out.push({data:d.toISOString().slice(0,10),label:d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'}),times});
+  }
+  return out;
+}
+function verSlots(id){
+  const p=_profsById[id]; if(!p)return;
+  const box=document.getElementById('pd-slots'); if(!box)return;
+  const dias=gerarSlots(p);
+  if(!dias.length){ box.innerHTML='<div style="color:var(--txm);font-size:13.5px">Sem horários publicados no momento. Use "Conversar" para combinar.</div>'; return; }
+  box.innerHTML=dias.map(d=>`<div class="slot-day"><b>${esc(d.label)}</b><div class="slot-chips">${d.times.map(t=>`<span class="slot-chip" onclick="agendarSlot('${id}','${d.data}','${t}')">${t}</span>`).join('')}</div></div>`).join('');
+}
+function agendarSlot(id,data,hora){
+  const p=_profsById[id]; if(!p)return;
+  const codigo=p.agenda_codigo||'';
+  if(!codigo){toast('Este profissional ainda não configurou o agendamento.');return;}
+  const nome=(typeof U!=='undefined'&&U&&U.nome)||'';
+  const body=document.getElementById('agendar-body');
+  body.innerHTML=`<div style="font-size:26px;text-align:center">📅</div><div class="mt c">Confirmar agendamento</div>
+    <div class="mb c" style="margin-bottom:12px">Com <b>${esc(p.nome)}</b> · ${new Date(data+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} às <b>${hora}</b></div>
+    <div class="fld"><div class="lbl">Seu nome</div><input class="inp" id="ag-nome" value="${esc(nome)}" placeholder="Como se chama"></div>
+    <div class="fld"><div class="lbl">WhatsApp / telefone</div><input class="inp" id="ag-tel" type="tel" inputmode="tel" placeholder="(00) 00000-0000"></div>
+    <div class="fld"><div class="lbl">Mensagem (opcional)</div><textarea class="ft" id="ag-msg" rows="2" placeholder="Algo que queira adiantar"></textarea></div>
+    <button class="btn bv bfull" id="ag-btn" onclick="confirmarAgendamento('${codigo}','${data}','${hora}')">Solicitar este horário</button>`;
+  openMod('magendar');
+}
+async function confirmarAgendamento(codigo,data,hora){
+  const nome=(document.getElementById('ag-nome').value||'').trim();
+  const tel=(document.getElementById('ag-tel').value||'').trim();
+  const msg=(document.getElementById('ag-msg').value||'').trim();
+  if(!nome){toast('Informe seu nome',1);return;}
+  if(!tel){toast('Informe um telefone para contato',1);return;}
+  if(!_SB){toast('Sem conexão',1);return;}
+  const btn=document.getElementById('ag-btn'); btn.disabled=true; btn.textContent='Enviando…';
+  try{
+    const{error}=await _SB.rpc('solicitar_agendamento',{p_codigo:codigo,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:msg});
+    if(error)throw error;
+    closeMod('magendar'); toast('✓ Solicitação enviada! O profissional confirma com você.',4000);
+  }catch(e){ toast('⚠️ '+((e&&e.message)||'não enviou'),5000); btn.disabled=false; btn.textContent='Solicitar este horário'; }
 }
 /* ══ CHAT usuário ↔ profissional ══ */
 let _profsById={};
