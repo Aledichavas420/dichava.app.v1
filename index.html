@@ -2086,11 +2086,15 @@ a{color:inherit;text-decoration:none}
 .conv-item.nova::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--v)}
 .conv-item .cbody{flex:1;min-width:0}
 .conv-item .cn{font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;color:var(--tx);display:flex;align-items:center;gap:6px}
+.conv-item .csub{font-size:11.5px;color:var(--ve);font-weight:700;margin-top:1px}
 .conv-item .cl{font-size:13px;color:var(--txs);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .conv-item.nova .cl{color:var(--tx);font-weight:600}
 .conv-item .cchev{color:var(--cinm);font-size:20px;flex-shrink:0}
+.conv-item .av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .conv-dot{width:9px;height:9px;border-radius:50%;background:var(--v);flex-shrink:0;box-shadow:0 0 0 3px color-mix(in srgb,var(--v) 18%,transparent)}
-.conv-item .cmeta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.conv-item .cmeta{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0;height:100%;justify-content:space-between;padding:2px 0}
+.conv-item .ctime{font-size:11px;color:var(--txm);font-weight:600;white-space:nowrap}
+.conv-item .cmrow{display:flex;align-items:center;gap:7px}
 .tabbadge{display:inline-block;background:var(--er);color:#fff;font-size:11px;font-weight:800;min-width:18px;text-align:center;padding:1px 5px;border-radius:20px;vertical-align:middle}
 #chat-acomp:empty{display:none}
 .acx{margin:10px 12px;padding:12px 14px;border-radius:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh);background:var(--roxof);border:1px solid color-mix(in srgb,var(--roxo) 22%,transparent)}
@@ -6785,8 +6789,8 @@ async function renderConversasPro(){
     let nu=0;
     box.innerHTML=convs.map(c=>{const nova=convNaoLida(c,true);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatPro(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
       <div class="av">${ini2(c.user_nome||'?')}</div>
-      <div class="cbody"><div class="cn">${esc(c.user_nome||'Usuário')}</div><div class="cl">${nova?'<b style="color:var(--ve)">Nova · </b>':''}${esc(c.ultima_msg||'Iniciar conversa')}</div></div>
-      <div class="cmeta">${nova?'<span class="conv-dot"></span>':''}<span class="cchev">›</span></div>
+      <div class="cbody"><div class="cn">${esc(c.user_nome||'Usuário')}</div><div class="csub">Paciente</div><div class="cl">${nova?'<b style="color:var(--ve)">Nova · </b>':''}${esc(c.ultima_msg||'Iniciar conversa')}</div></div>
+      <div class="cmeta"><span class="ctime">${tempoRel(c.atualizado_em)}</span><div class="cmrow">${nova?'<span class="conv-dot"></span>':''}<span class="cchev">›</span></div></div>
     </div>`}).join('');
     const b=document.getElementById('pd-msgs-badge'); if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}
   }catch(e){ box.innerHTML='<div class="msg-empty"><div class="msg-empty-s">Não consegui carregar as conversas.</div></div>'; }
@@ -6804,6 +6808,20 @@ function pfTab(t){
   if(pc)pc.style.display=buscar?'none':'';
   if(buscar){renderProfs();}else{renderMinhasConversas();}
 }
+// tempo relativo curto (agora, 14:32, ontem, 3d, 12/03)
+function tempoRel(iso){
+  if(!iso)return '';
+  const d=new Date(iso), now=new Date(); if(isNaN(d))return '';
+  const seg=Math.floor((now-d)/1000);
+  if(seg<60)return 'agora';
+  const mesmoDia=d.toDateString()===now.toDateString();
+  if(mesmoDia)return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const ont=new Date(now); ont.setDate(now.getDate()-1);
+  if(d.toDateString()===ont.toDateString())return 'ontem';
+  const dias=Math.floor(seg/86400);
+  if(dias<7)return dias+'d';
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+}
 async function renderMinhasConversas(){
   const box=document.getElementById('pf-convs'); if(!box)return;
   if(!_SB||typeof U==='undefined'||!U){box.innerHTML='<div class="chat-empty" style="padding:40px 20px">Entre na sua conta para ver conversas.</div>';return;}
@@ -6812,11 +6830,14 @@ async function renderMinhasConversas(){
   try{
     const{data}=await _SB.from('conversas').select('*').eq('user_id',U.id).order('atualizado_em',{ascending:false});
     const convs=data||[];
+    // busca tipo/foto dos profissionais (1 query) p/ enriquecer os cards
+    let profMap={};
+    if(convs.length){try{const ids=[...new Set(convs.map(c=>c.prof_id).filter(Boolean))];if(ids.length){const{data:ps}=await _SB.from('profissionais').select('id,tipo_prof,foto').in('id',ids);(ps||[]).forEach(p=>{profMap[p.id]=p;});}}catch(e){}}
     const convsHTML=convs.length
-      ? '<div class="pd-sec" style="margin:16px 2px 8px">Conversas</div>'+(()=>{let nu=0;const h=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
-        <div class="av">${ini2(c.prof_nome||'?')}</div>
-        <div class="cbody"><div class="cn">${esc(c.prof_nome||'Profissional')}</div><div class="cl">${nova?'<b style="color:var(--ve)">Nova · </b>':''}${esc(c.ultima_msg||'Iniciar conversa')}</div></div>
-        <div class="cmeta">${nova?'<span class="conv-dot"></span>':''}<span class="cchev">›</span></div>
+      ? '<div class="pd-sec" style="margin:16px 2px 8px">Conversas</div>'+(()=>{let nu=0;const h=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;const p=profMap[c.prof_id]||{};const av=p.foto?`<img src="${p.foto}" alt="">`:ini2(c.prof_nome||'?');return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+        <div class="av">${av}</div>
+        <div class="cbody"><div class="cn">${esc(c.prof_nome||'Profissional')}</div>${p.tipo_prof?`<div class="csub">${esc(p.tipo_prof)}</div>`:''}<div class="cl">${nova?'<b style="color:var(--ve)">Nova · </b>':''}${esc(c.ultima_msg||'Iniciar conversa')}</div></div>
+        <div class="cmeta"><span class="ctime">${tempoRel(c.atualizado_em)}</span><div class="cmrow">${nova?'<span class="conv-dot"></span>':''}<span class="cchev">›</span></div></div>
       </div>`}).join('');const b=document.getElementById('pf-convs-badge');if(b){b.textContent=nu||'';b.style.display=nu?'':'none';}return h;})()
       : '<div class="chat-empty" style="padding:30px 20px">Você ainda não tem conversas.<br>Toque em um profissional e em <b>"Solicitar contato"</b>.</div>';
     box.innerHTML='<div id="mc-consultas"></div>'+convsHTML;
