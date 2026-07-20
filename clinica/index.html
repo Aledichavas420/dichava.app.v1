@@ -163,6 +163,27 @@ a{color:inherit;text-decoration:none}
 .bkp-tx b{display:block;font-size:13.5px;color:var(--tx)}
 .bkp-tx span{display:block;font-size:11.5px;color:var(--txs);margin-top:1px}
 .bkp-go{color:var(--txm);font-size:18px;font-weight:700;flex:none}
+/* ── Construtor da bio ── */
+.bio-builder{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+@media(max-width:760px){.bio-builder{grid-template-columns:1fr}}
+.bb-controls{min-width:0}
+.bb-lbl{font-size:11.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.3px;margin:16px 0 7px}
+.bb-lbl:first-child{margin-top:0}
+.bb-sw-row{display:flex;flex-wrap:wrap;gap:8px}
+.bb-sw{width:34px;height:34px;border-radius:9px;border:2px solid transparent;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12);padding:0}
+.bb-sw.on{border-color:var(--tx);outline:2px solid var(--v);outline-offset:1px}
+.bb-color{width:46px;height:32px;border:1.5px solid var(--line);border-radius:8px;padding:2px;cursor:pointer;background:var(--card)}
+.bb-seg{display:inline-flex;flex-wrap:wrap;gap:6px}
+.bb-seg button{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:8px 13px;font-size:13px;font-weight:700;color:var(--txs);cursor:pointer}
+.bb-seg button.on{background:var(--v);border-color:var(--v);color:#fff}
+.bb-inp{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:13.5px}
+.bb-toggles{display:flex;flex-direction:column;gap:8px}
+.bb-toggles label{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--tx);cursor:pointer}
+.bb-toggles input{width:17px;height:17px;accent-color:var(--v)}
+.bbmv{background:none;border:none;color:var(--txm);cursor:pointer;font-size:14px;padding:2px 4px}.bbmv:disabled{opacity:.3;cursor:default}
+.bb-preview{position:sticky;top:16px}
+.bb-phone{width:300px;max-width:100%;height:560px;margin:0 auto;border-radius:30px;overflow:hidden;border:8px solid #1B2A1C;box-shadow:0 14px 40px rgba(0,0,0,.22);background:#000}
+.bb-phone iframe{width:100%;height:100%;border:none;display:block}
 
 table{width:100%;border-collapse:collapse}
 th{text-align:left;font-size:12px;color:var(--txs);font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:12px 14px;border-bottom:1px solid var(--line)}
@@ -1288,46 +1309,90 @@ async function carregarPerfil(){
       </div>
       <p style="font-size:12.5px;color:var(--txm);margin-top:16px">Para <b>editar</b> o perfil público, use o app dichava → área do profissional (a edição passa por nova aprovação). A <b>disponibilidade de agendamento</b> você define aqui em <b>Configurações</b>.</p>
     </div>
-    ${CLINICA?`<div class="card" style="padding:22px;max-width:620px;margin-top:16px">
-      <div class="sec-title" style="margin-top:0">🔗 Link na bio</div>
-      <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Uma página só sua com <b>agendamento, contatos e links externos</b> — cole na bio do Instagram. Os links abaixo <b>não passam por aprovação</b>.</p>
-      <div class="eq-code" style="border-style:solid;margin-bottom:14px"><span style="font-size:12.5px;color:var(--txs);font-weight:700;word-break:break-all;flex:1">dichava.app/bio/?c=${esc(CLINICA.codigo)}</span><button class="btn sm ghost cp" onclick="copiarLinkBio()">Copiar</button> <button class="btn sm ghost" onclick="window.open('https://dichava.app/bio/?c=${esc(CLINICA.codigo)}','_blank')">Ver</button></div>
-      <div id="biolinks-list"></div>
-      <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
-        <input id="bl-titulo" placeholder="Título (ex.: Meu site)" style="flex:1;min-width:120px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:13.5px">
-        <input id="bl-url" placeholder="https://..." style="flex:1.4;min-width:150px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:13.5px">
-        <button class="btn sm" onclick="addBioLink()">＋ Adicionar</button>
+    ${CLINICA?`<div class="card" style="padding:22px;max-width:980px;margin-top:16px">
+      <div class="sec-title" style="margin-top:0">🔗 Link na bio — construtor</div>
+      <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Monte sua página pública (estilo Linktree): fundo, cores, fonte, textos e links. A prévia atualiza <b>ao vivo</b>. <b>Não passa por aprovação.</b></p>
+      <div class="eq-code" style="border-style:solid;margin-bottom:16px"><span style="font-size:12.5px;color:var(--txs);font-weight:700;word-break:break-all;flex:1">dichava.app/bio/?c=${esc(CLINICA.codigo)}</span><button class="btn sm ghost cp" onclick="copiarLinkBio()">Copiar</button> <button class="btn sm ghost" onclick="window.open('https://dichava.app/bio/?c=${esc(CLINICA.codigo)}','_blank')">Abrir</button></div>
+      <div class="bio-builder">
+        <div class="bb-controls">
+          <div class="bb-lbl">Fundo</div>
+          <div class="bb-sw-row" id="bb-fundos"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:9px"><span style="font-size:12.5px;color:var(--txs)">Cor sólida:</span><input type="color" class="bb-color" id="bb-solid" value="#1B3A2A" oninput="setFundoSolid(this.value)"></div>
+          <div class="bb-lbl">Cor de destaque (botões)</div>
+          <input type="color" class="bb-color" id="bb-acc" value="#ffffff" oninput="setCfg('botao.cor',this.value)">
+          <div class="bb-lbl">Estilo dos botões</div>
+          <div class="bb-seg" id="bb-estilo"><button data-v="suave" onclick="setCfg('botao.estilo','suave',this)">Suave</button><button data-v="preench" onclick="setCfg('botao.estilo','preench',this)">Preenchido</button><button data-v="contorno" onclick="setCfg('botao.estilo','contorno',this)">Contorno</button></div>
+          <div class="bb-lbl">Cantos</div>
+          <div class="bb-seg" id="bb-raio"><button data-v="6" onclick="setCfg('botao.raio',6,this)">Reto</button><button data-v="16" onclick="setCfg('botao.raio',16,this)">Médio</button><button data-v="26" onclick="setCfg('botao.raio',26,this)">Redondo</button></div>
+          <div class="bb-lbl">Fonte</div>
+          <div class="bb-seg" id="bb-fonte"><button data-v="" onclick="setCfg('fonte','',this)">Padrão</button><button data-v="serif" onclick="setCfg('fonte','serif',this)">Elegante</button><button data-v="round" onclick="setCfg('fonte','round',this)">Arredondada</button><button data-v="poppins" onclick="setCfg('fonte','poppins',this)">Poppins</button></div>
+          <div class="bb-lbl">Título</div><input class="bb-inp" id="bb-titulo" placeholder="${esc(p.nome)}" oninput="setCfg('titulo',this.value)">
+          <div class="bb-lbl">Subtítulo</div><input class="bb-inp" id="bb-subt" placeholder="${esc(p.tipo_prof||'')}" oninput="setCfg('subtitulo',this.value)">
+          <div class="bb-lbl">Texto do botão de agendar</div><input class="bb-inp" id="bb-txtag" placeholder="Agendar consulta" oninput="setCfg('txtAgendar',this.value)">
+          <div class="bb-lbl">Mostrar</div>
+          <div class="bb-toggles">
+            <label><input type="checkbox" id="bb-nota" onchange="setCfg('mostrarNota',this.checked)"> Nota / avaliações</label>
+            <label><input type="checkbox" id="bb-reg" onchange="setCfg('mostrarReg',this.checked)"> Registro (CRP/CRM)</label>
+            <label><input type="checkbox" id="bb-selo" onchange="setCfg('selo',this.checked)"> Selo verificado</label>
+            <label><input type="checkbox" id="bb-bio" onchange="setCfg('mostrarBio',this.checked)"> Bio</label>
+          </div>
+          <div class="bb-lbl">Links</div>
+          <div id="biolinks-list"></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+            <input id="bl-icone" placeholder="🔗" maxlength="2" style="width:50px;text-align:center;padding:9px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:15px">
+            <input id="bl-titulo" placeholder="Título" style="flex:1;min-width:90px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:13px">
+            <input id="bl-url" placeholder="https://..." style="flex:1;min-width:120px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:13px">
+            <button class="btn sm" onclick="addBioLink()">＋</button>
+          </div>
+          <button class="btn" style="margin-top:16px;width:100%" onclick="salvarBio()">💾 Salvar e publicar</button>
+        </div>
+        <div class="bb-preview"><div class="bb-phone"><iframe id="bio-frame" src="/bio/?preview=1" title="Prévia"></iframe></div><div style="font-size:11px;color:var(--txm);text-align:center;margin-top:8px">Prévia ao vivo</div></div>
       </div>
-      <button class="btn" style="margin-top:12px" onclick="salvarBioLinks()">Salvar links da bio</button>
-    </div>`:`<div class="card" style="padding:18px;max-width:620px;margin-top:16px"><p style="font-size:13px;color:var(--txs)">Configure sua clínica no servidor pra ter um <b>link na bio</b> com agendamento e links externos.</p></div>`}`;
-    _bioLinks=Array.isArray(p.bio_links)?p.bio_links.slice():[];
-    renderBioLinks();
+    </div>`:`<div class="card" style="padding:18px;max-width:620px;margin-top:16px"><p style="font-size:13px;color:var(--txs)">Configure sua clínica no servidor pra ter um <b>link na bio</b>.</p></div>`}`;
+    _bioProf=p; _bioCfg=(p.bio_config&&typeof p.bio_config==='object')?p.bio_config:{}; _bioLinks=Array.isArray(p.bio_links)?p.bio_links.slice():[];
+    if(!_bioCfg.fundo&&p.capa)_bioCfg.fundo={tipo:'preset',v:p.capa};
+    bbInit();
   }catch(e){ v.innerHTML='<div class="card empty">Não consegui carregar o perfil.</div>'; }
 }
-let _bioLinks=[];
+let _bioProf=null,_bioCfg={},_bioLinks=[],_bioAvg=0,_bioN=0;
+const BIO_FUNDOS={verde:'linear-gradient(150deg,#1B3A2A,#2FA35F 62%,#3FA76A)',oceano:'linear-gradient(150deg,#0B2E4A,#1E7FB0 60%,#37C0C9)',roxo:'linear-gradient(150deg,#2E1B48,#6B4BCE 62%,#9B5DE5)',porsol:'linear-gradient(150deg,#5A1E3A,#E0642F 58%,#F5A623)',rosa:'linear-gradient(150deg,#4A1436,#C93E77 60%,#F473A6)',grafite:'linear-gradient(150deg,#15181C,#3A424C 60%,#5B6672)',petroleo:'linear-gradient(150deg,#08201E,#0E6B63 60%,#1BA89B)',vinho:'linear-gradient(150deg,#2B0B12,#7A1F3D 60%,#C0395F)',floresta:'linear-gradient(150deg,#12240F,#2E5B1E 55%,#6FA53C)',meianoite:'linear-gradient(160deg,#0B1026,#243B7A 60%,#4F73C4)'};
+async function bbInit(){
+  const fb=document.getElementById('bb-fundos');
+  if(fb)fb.innerHTML=Object.keys(BIO_FUNDOS).map(k=>`<button class="bb-sw" data-v="${k}" style="background:${BIO_FUNDOS[k]}" title="${k}" onclick="setFundoPreset('${k}',this)"></button>`).join('');
+  segActive('bb-estilo',(_bioCfg.botao&&_bioCfg.botao.estilo)||'suave');
+  segActive('bb-raio',String((_bioCfg.botao&&_bioCfg.botao.raio)||16));
+  segActive('bb-fonte',_bioCfg.fonte||'');
+  if(_bioCfg.fundo&&_bioCfg.fundo.tipo==='preset')fundoActive(_bioCfg.fundo.v);
+  const ac=document.getElementById('bb-acc');if(ac)ac.value=(_bioCfg.botao&&_bioCfg.botao.cor)||'#ffffff';
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
+  set('bb-titulo',_bioCfg.titulo);set('bb-subt',_bioCfg.subtitulo);set('bb-txtag',_bioCfg.txtAgendar);
+  const chk=(id,v)=>{const e=document.getElementById(id);if(e)e.checked=v;};
+  chk('bb-nota',_bioCfg.mostrarNota!==false);chk('bb-reg',_bioCfg.mostrarReg!==false);chk('bb-selo',_bioCfg.selo!==false);chk('bb-bio',_bioCfg.mostrarBio!==false);
+  renderBioLinks();
+  try{const{data:av}=await _SB.from('avaliacoes_prof').select('nota').eq('prof_id',_bioProf.id);if(av&&av.length){_bioN=av.length;_bioAvg=av.reduce((s,a)=>s+a.nota,0)/_bioN;}}catch(e){}
+  bioPreview();
+}
+function segActive(id,val){const c=document.getElementById(id);if(!c)return;[...c.children].forEach(b=>b.classList.toggle('on',b.dataset.v===String(val)));}
+function fundoActive(v){document.querySelectorAll('#bb-fundos .bb-sw').forEach(s=>s.classList.toggle('on',s.dataset.v===v));}
+function setCfg(path,val,btn){const parts=path.split('.');let o=_bioCfg;for(let i=0;i<parts.length-1;i++){o[parts[i]]=o[parts[i]]||{};o=o[parts[i]];}o[parts[parts.length-1]]=val;if(btn){[...btn.parentElement.children].forEach(c=>c.classList.remove('on'));btn.classList.add('on');}bioPreview();}
+function setFundoPreset(v,el){_bioCfg.fundo={tipo:'preset',v};fundoActive(v);bioPreview();}
+function setFundoSolid(hex){_bioCfg.fundo={tipo:'solid',cor:hex};fundoActive('__none__');bioPreview();}
 function renderBioLinks(){
   const el=document.getElementById('biolinks-list');if(!el)return;
-  el.innerHTML=_bioLinks.length?_bioLinks.map((l,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--cin);border-radius:11px;margin-bottom:7px">
-    <span style="font-size:15px">🔗</span>
-    <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">${esc(l.titulo||'Link')}</div><div style="font-size:11.5px;color:var(--txs);word-break:break-all">${esc(l.url||'')}</div></div>
-    <button style="background:none;border:none;color:var(--er);font-size:14px;cursor:pointer" onclick="remBioLink(${i})">✕</button>
-  </div>`).join(''):'<div style="font-size:12.5px;color:var(--txm);margin-bottom:8px">Nenhum link ainda. Adicione abaixo (Instagram, site, WhatsApp, etc.).</div>';
+  el.innerHTML=_bioLinks.length?_bioLinks.map((l,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--cin);border-radius:11px;margin-bottom:6px">
+    <span style="font-size:16px">${esc(l.icone||'🔗')}</span>
+    <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:12.5px">${esc(l.titulo||'Link')}</div><div style="font-size:11px;color:var(--txs);word-break:break-all">${esc(l.url||'')}</div></div>
+    <button class="bbmv" onclick="moveBioLink(${i},-1)" ${i===0?'disabled':''}>↑</button>
+    <button class="bbmv" onclick="moveBioLink(${i},1)" ${i===_bioLinks.length-1?'disabled':''}>↓</button>
+    <button class="bbmv" style="color:var(--er)" onclick="remBioLink(${i})">✕</button>
+  </div>`).join(''):'<div style="font-size:12px;color:var(--txm);margin-bottom:6px">Nenhum link ainda.</div>';
 }
-function addBioLink(){
-  const t=($('#bl-titulo').value||'').trim();let u=($('#bl-url').value||'').trim();
-  if(!t||!u){toast('Preencha título e URL',1);return;}
-  if(!/^https?:\/\//i.test(u)&&!/^mailto:|^tel:/i.test(u))u='https://'+u;
-  _bioLinks.push({titulo:t,url:u});$('#bl-titulo').value='';$('#bl-url').value='';renderBioLinks();
-}
-function remBioLink(i){_bioLinks.splice(i,1);renderBioLinks();}
-async function salvarBioLinks(){
-  if(!_SB||!AUTH){toast('Sem conexão',1);return;}
-  try{
-    const upd={bio_links:_bioLinks};if(CLINICA)upd.agenda_codigo=CLINICA.codigo; // garante que a página bio ache o profissional
-    const{error}=await _SB.from('profissionais').update(upd).eq('id',AUTH.id);
-    if(error)throw error;toast('✓ Links da bio salvos');
-  }catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}
-}
+function addBioLink(){const ic=($('#bl-icone').value||'').trim();const t=($('#bl-titulo').value||'').trim();let u=($('#bl-url').value||'').trim();if(!t||!u){toast('Preencha título e URL',1);return;}if(!/^https?:\/\//i.test(u)&&!/^mailto:|^tel:/i.test(u))u='https://'+u;_bioLinks.push({titulo:t,url:u,icone:ic||'🔗'});$('#bl-icone').value='';$('#bl-titulo').value='';$('#bl-url').value='';renderBioLinks();bioPreview();}
+function remBioLink(i){_bioLinks.splice(i,1);renderBioLinks();bioPreview();}
+function moveBioLink(i,d){const j=i+d;if(j<0||j>=_bioLinks.length)return;const t=_bioLinks[i];_bioLinks[i]=_bioLinks[j];_bioLinks[j]=t;renderBioLinks();bioPreview();}
+function bioPreview(){const f=document.getElementById('bio-frame');if(!f||!f.contentWindow||!_bioProf)return;const prof=Object.assign({},_bioProf,{bio_links:_bioLinks});f.contentWindow.postMessage({type:'bio-preview',prof,config:_bioCfg,avg:_bioAvg,n:_bioN},'*');}
+window.addEventListener('message',e=>{if(e.data&&e.data.type==='bio-preview-ready')bioPreview();});
+async function salvarBio(){if(!_SB||!AUTH){toast('Sem conexão',1);return;}try{const upd={bio_config:_bioCfg,bio_links:_bioLinks};if(CLINICA)upd.agenda_codigo=CLINICA.codigo;const{error}=await _SB.from('profissionais').update(upd).eq('id',AUTH.id);if(error)throw error;toast('✓ Bio publicada!');}catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}}
 function copiarLinkBio(){const url='https://dichava.app/bio/?c='+CLINICA.codigo;try{navigator.clipboard.writeText(url);toast('Link copiado');}catch(e){toast(url);}}
 
 /* =============== EQUIPE (clínica compartilhada) =============== */
