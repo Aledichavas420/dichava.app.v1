@@ -2765,6 +2765,7 @@ a{color:inherit;text-decoration:none}
     <div class="cfgi" style="cursor:default"><div class="cfgic">🕶️</div><div class="cfgb"><div class="cfgn">Modo discreto</div><div class="cfgd">App aparece como "Diário", sem referências a RD</div></div><label class="tog"><input type="checkbox" id="tog-disc" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">🔔</div><div class="cfgb"><div class="cfgn">Sons de interação</div><div class="cfgd">Cliques, conquistas e estrelas do app</div></div><label class="tog"><input type="checkbox" id="tog-sfx" onchange="setSfxCfg(this.checked)"><div class="tsl"></div></label></div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">🧭</div><div class="cfgb"><div class="cfgn">Mostrar todas as ferramentas</div><div class="cfgd">Libera de uma vez as funções gratuitas (o Premium continua separado)</div></div><label class="tog"><input type="checkbox" id="tog-showall" onchange="toggleMostrarTudo(this)"><div class="tsl"></div></label></div>
+    <div class="cfgi" onclick="preverDesbloqueios()"><div class="cfgic">🎬</div><div class="cfgb"><div class="cfgn">Rever telas das ferramentas</div><div class="cfgd">Assista de novo a apresentação de cada função liberada</div></div><div class="cfgar">›</div></div>
   </div>
   <div class="shr"><div class="sht">Segurança</div></div>
   <div class="cfgsec">
@@ -5148,13 +5149,13 @@ function renderHome(){
    Base enxuta no início; ferramentas free liberam por marcos OU dias (o que vier antes).
    Premium NUNCA é liberado por aqui — continua atrás do isPremium() + convite. */
 const FEATURES=[
-  {id:'prog',pg:'p-prog',nome:'Progresso',ic:'📊',free:true,gate:{reg:1,dias:1},
+  {id:'prog',pg:'p-prog',nome:'Progresso',ic:'📊',free:true,gate:{reg:3,dias:3},
    sub:'Seu mapa de evolução',
    passos:['Seus registros viram gráficos e padrões fáceis de ler','Acompanhe metas, dias seguidos e conquistas','Tudo se atualiza sozinho conforme você registra']},
-  {id:'ref',pg:'p-ref',nome:'Reflexões',ic:'✍️',free:true,gate:{reg:2,dias:3},
+  {id:'ref',pg:'p-ref',nome:'Reflexões',ic:'✍️',free:true,gate:{reg:6,dias:5},
    sub:'Um espaço pra olhar pra dentro',
    passos:['Cartas e perguntas que te ajudam a refletir','Escreva no seu ritmo, sem certo ou errado','Volte quando quiser reler o que sentiu']},
-  {id:'jogos',pg:'p-jogos',nome:'Pausa pra mente',ic:'🌿',free:true,gate:{reg:3,dias:5},
+  {id:'jogos',pg:'p-jogos',nome:'Pausa pra mente',ic:'🌿',free:true,gate:{reg:10,dias:7},
    sub:'Alívio na hora da vontade',
    passos:['Sons e respiração guiada pra acalmar','Joguinhos que ocupam a mente na fissura','Pausa de tolerância guiada — recurso <b>Premium 👑</b>'],
    premHint:true}
@@ -5202,6 +5203,13 @@ function proximoDesbloq(){
   try{vib([30,50,30,50,60]);sfx('star');}catch(e){}
 }
 function fecharDesbloq(){const el=document.getElementById('fdesbloq');el.classList.remove('on');const cc=document.getElementById('fd-confetti');if(cc)cc.innerHTML='';setTimeout(()=>{if(_filaDesbloq.length)proximoDesbloq();},350);}
+function preverDesbloqueios(){
+  const u=_unlocked();
+  const list=FEATURES.filter(f=>u.has(f.id));
+  if(!list.length){toast('Nenhuma ferramenta desbloqueada ainda. Ative "Mostrar tudo" ou registre-se um pouco. 🌱');return;}
+  _filaDesbloq.push(...list);
+  if(!document.getElementById('fdesbloq').classList.contains('on'))proximoDesbloq();
+}
 function toggleMostrarTudo(el){
   const on=el.checked; if(on)ls('dr_showall_'+uid(),1); else localStorage.removeItem('dr_showall_'+uid());
   // libera TODAS as free imediatamente (nunca mexe em premium)
