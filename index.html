@@ -5205,10 +5205,11 @@ function checarDesbloqueios(){
   }else{aplicarGatesFuncoes();}
 }
 function aplicarGatesFuncoes(){
-  const unlocked=_unlocked(), show=!!ls('dr_showall_'+uid());
+  // exibição = elegibilidade REAL (registros/dias) OU "mostrar tudo" — nunca depende de estado salvo antigo
+  const show=!!ls('dr_showall_'+uid());
   FEATURES.forEach(f=>{
     if(!f.pg)return; // extras (chat/finanças/tbreak) não têm item de menu
-    const vis=unlocked.has(f.id)||show;
+    const vis=featElegivel(f)||show;
     document.querySelectorAll(`.ni[data-p="${f.pg}"]`).forEach(b=>{b.style.display=vis?'':'none';});
   });
   try{aplicarSubGates();}catch(e){}
