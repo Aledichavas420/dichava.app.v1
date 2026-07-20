@@ -139,8 +139,20 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 /* ── TELA DE PARABÉNS (level-up) ── */
-#celebra{position:fixed;inset:0;z-index:3500;background:radial-gradient(circle at 50% 38%,#244a2c,#13230f 75%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;overflow:hidden}
-#celebra.on{display:flex;animation:celFade .35s ease}
+#celebra,#fdesbloq{position:fixed;inset:0;z-index:3500;background:radial-gradient(circle at 50% 38%,#244a2c,#13230f 75%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;overflow:hidden}
+#celebra.on,#fdesbloq.on{display:flex;animation:celFade .35s ease}
+#fdesbloq .cel-card{max-width:360px}
+.fd-tag{display:inline-block;font-size:11.5px;font-weight:800;padding:3px 11px;border-radius:20px;letter-spacing:.02em}
+.fd-tag.fd-free{background:rgba(124,217,138,.22);color:#8FF0A5;border:1px solid rgba(124,217,138,.4)}
+.fd-tag.fd-prem{background:rgba(255,210,75,.2);color:#FFD24B;border:1px solid rgba(255,210,75,.4)}
+.fd-tut{text-align:left;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:14px 16px;margin-top:16px;animation:splUp .5s ease .7s both}
+.fd-tut-t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#7BD98A;margin-bottom:8px}
+.fd-tut ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.fd-tut li{position:relative;padding-left:22px;font-size:13.5px;line-height:1.45;color:rgba(255,255,255,.9)}
+.fd-tut li::before{content:"";position:absolute;left:0;top:6px;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#9CF06B,#5CE3CF)}
+.fd-tut li b{color:#FFD24B}
+.fd-inv-btn{width:100%;margin-top:12px;background:linear-gradient(135deg,#FFD24B,#FFA470);color:#3a2600;border:none;border-radius:13px;padding:11px;font-weight:800;font-size:14px;cursor:pointer}
+.fd-depois{background:none;border:none;color:rgba(255,255,255,.6);font-size:13px;margin-top:10px;cursor:pointer;text-decoration:underline}
 @keyframes celFade{from{opacity:0}to{opacity:1}}
 .cel-rays{position:absolute;width:160vmax;height:160vmax;top:50%;left:50%;transform:translate(-50%,-58%);background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.05) 0deg 8deg,transparent 8deg 16deg);animation:celSpin 22s linear infinite;pointer-events:none}
 @keyframes celSpin{to{transform:translate(-50%,-58%) rotate(360deg)}}
@@ -2752,6 +2764,7 @@ a{color:inherit;text-decoration:none}
     <div class="cfgi" style="cursor:default"><div class="cfgic" data-icon="cfg-tema"></div><div class="cfgb"><div class="cfgn">Modo escuro</div><div class="cfgd">Mais conforto à noite</div></div><label class="tog"><input type="checkbox" id="tog-dark" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">🕶️</div><div class="cfgb"><div class="cfgn">Modo discreto</div><div class="cfgd">App aparece como "Diário", sem referências a RD</div></div><label class="tog"><input type="checkbox" id="tog-disc" onchange="salvCfg();applyTheme()"><div class="tsl"></div></label></div>
     <div class="cfgi" style="cursor:default"><div class="cfgic">🔔</div><div class="cfgb"><div class="cfgn">Sons de interação</div><div class="cfgd">Cliques, conquistas e estrelas do app</div></div><label class="tog"><input type="checkbox" id="tog-sfx" onchange="setSfxCfg(this.checked)"><div class="tsl"></div></label></div>
+    <div class="cfgi" style="cursor:default"><div class="cfgic">🧭</div><div class="cfgb"><div class="cfgn">Mostrar todas as ferramentas</div><div class="cfgd">Libera de uma vez as funções gratuitas (o Premium continua separado)</div></div><label class="tog"><input type="checkbox" id="tog-showall" onchange="toggleMostrarTudo(this)"><div class="tsl"></div></label></div>
   </div>
   <div class="shr"><div class="sht">Segurança</div></div>
   <div class="cfgsec">
@@ -4041,6 +4054,21 @@ a{color:inherit;text-decoration:none}
     <button class="btn bv bfull" style="margin-top:18px" onclick="fecharCelebra()">Continuar 🎉</button>
   </div>
 </div>
+<!-- FUNÇÃO DESBLOQUEADA (marco de uso) -->
+<div id="fdesbloq">
+  <div class="cel-rays"></div>
+  <div class="cel-confetti" id="fd-confetti"></div>
+  <div class="cel-card">
+    <div class="cel-badge" id="fd-badge">🌿</div>
+    <div class="cel-kicker">✨ Função desbloqueada</div>
+    <div class="cel-nome" id="fd-nome">Progresso</div>
+    <div class="cel-sub" id="fd-sub"></div>
+    <div class="fd-tut"><div class="fd-tut-t">Como funciona</div><ul id="fd-passos"></ul></div>
+    <div id="fd-invite" style="display:none"><button class="fd-inv-btn" onclick="fecharDesbloq();abrirPremium()">👑 Conhecer o Premium</button></div>
+    <button class="btn bv bfull" id="fd-explorar" style="margin-top:14px">Explorar agora →</button>
+    <button class="fd-depois" onclick="fecharDesbloq()">Ver depois</button>
+  </div>
+</div>
 <!-- Bibliotecas externas: carregadas DEPOIS do conteúdo pra tela nunca ficar preta esperando o CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" onerror="window.__chartFail=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbFail=1"></script>
@@ -5114,6 +5142,72 @@ function renderHome(){
   renderTempo();renderDiaHoje();renderQuick();renderInstall();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
   try{renderFin();}catch(e){}
   try{atualizarChatHome();}catch(e){}
+  try{checarDesbloqueios();}catch(e){}
+}
+/* ══ DESBLOQUEIO PROGRESSIVO DE FERRAMENTAS ══
+   Base enxuta no início; ferramentas free liberam por marcos OU dias (o que vier antes).
+   Premium NUNCA é liberado por aqui — continua atrás do isPremium() + convite. */
+const FEATURES=[
+  {id:'prog',pg:'p-prog',nome:'Progresso',ic:'📊',free:true,gate:{reg:1,dias:1},
+   sub:'Seu mapa de evolução',
+   passos:['Seus registros viram gráficos e padrões fáceis de ler','Acompanhe metas, dias seguidos e conquistas','Tudo se atualiza sozinho conforme você registra']},
+  {id:'ref',pg:'p-ref',nome:'Reflexões',ic:'✍️',free:true,gate:{reg:2,dias:3},
+   sub:'Um espaço pra olhar pra dentro',
+   passos:['Cartas e perguntas que te ajudam a refletir','Escreva no seu ritmo, sem certo ou errado','Volte quando quiser reler o que sentiu']},
+  {id:'jogos',pg:'p-jogos',nome:'Pausa pra mente',ic:'🌿',free:true,gate:{reg:3,dias:5},
+   sub:'Alívio na hora da vontade',
+   passos:['Sons e respiração guiada pra acalmar','Joguinhos que ocupam a mente na fissura','Pausa de tolerância guiada — recurso <b>Premium 👑</b>'],
+   premHint:true}
+];
+const BASE_PGS=['p-home','p-agenda','p-cfg']; // sempre visíveis (inclui Registrar e Config)
+function _unlocked(){return new Set(ls('dr_unlock_'+uid())||[]);}
+function _saveUnlocked(s){ls('dr_unlock_'+uid(),[...s]);}
+function diasDesdeInicio(){const o=gO();if(!o||!o.data)return 0;const d0=new Date(o.data),n=new Date();const d=Math.floor((n-d0)/86400000);return isNaN(d)?0:Math.max(0,d);}
+function featElegivel(f){if(ls('dr_showall_'+uid()))return true;return gR().length>=f.gate.reg||diasDesdeInicio()>=f.gate.dias;}
+let _filaDesbloq=[];
+function checarDesbloqueios(){
+  const unlocked=_unlocked();
+  const eleg=FEATURES.filter(featElegivel);
+  const novos=eleg.filter(f=>!unlocked.has(f.id));
+  // 1ª execução do sistema p/ este usuário: libera o já-elegível SEM comemorar (evita spam a quem já usa)
+  if(!ls('dr_unlock_init_'+uid())){
+    novos.forEach(f=>unlocked.add(f.id));_saveUnlocked(unlocked);ls('dr_unlock_init_'+uid(),1);
+    aplicarGatesFuncoes();return;
+  }
+  if(novos.length){
+    novos.forEach(f=>unlocked.add(f.id));_saveUnlocked(unlocked);
+    _filaDesbloq.push(...novos);aplicarGatesFuncoes();
+    if(!document.getElementById('fdesbloq').classList.contains('on'))proximoDesbloq();
+  }else{aplicarGatesFuncoes();}
+}
+function aplicarGatesFuncoes(){
+  const unlocked=_unlocked();
+  FEATURES.forEach(f=>{
+    document.querySelectorAll(`.ni[data-p="${f.pg}"]`).forEach(b=>{b.style.display=unlocked.has(f.id)?'':'none';});
+  });
+}
+function proximoDesbloq(){
+  const f=_filaDesbloq.shift();if(!f){return;}
+  const badge=f.free?'<span class="fd-tag fd-free">✓ Grátis</span>':'<span class="fd-tag fd-prem">👑 Premium</span>';
+  document.getElementById('fd-badge').textContent=f.ic;
+  document.getElementById('fd-nome').textContent=f.nome;
+  document.getElementById('fd-sub').innerHTML=badge+'<div style="margin-top:8px">'+f.sub+'</div>';
+  document.getElementById('fd-passos').innerHTML=f.passos.map(p=>`<li>${p}</li>`).join('');
+  const inv=document.getElementById('fd-invite');
+  if(inv)inv.style.display=f.premHint?'block':'none';
+  document.getElementById('fd-explorar').onclick=()=>{fecharDesbloq();try{goPg(f.pg);}catch(e){}};
+  // confete
+  const cc=document.getElementById('fd-confetti');if(cc){const cores=['#7BD98A','#FFD24B','#5CE3CF','#FF8A7A','#B79AF7','#FFA470'];let h='';for(let i=0;i<70;i++){h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;background:'+cores[i%cores.length]+';animation-duration:'+(2.2+Math.random()*2).toFixed(2)+'s;animation-delay:'+(Math.random()*1.2).toFixed(2)+'s;transform:rotate('+(Math.random()*360|0)+'deg)"></i>';}cc.innerHTML=h;}
+  document.getElementById('fdesbloq').classList.add('on');
+  try{vib([30,50,30,50,60]);sfx('star');}catch(e){}
+}
+function fecharDesbloq(){const el=document.getElementById('fdesbloq');el.classList.remove('on');const cc=document.getElementById('fd-confetti');if(cc)cc.innerHTML='';setTimeout(()=>{if(_filaDesbloq.length)proximoDesbloq();},350);}
+function toggleMostrarTudo(el){
+  const on=el.checked; if(on)ls('dr_showall_'+uid(),1); else localStorage.removeItem('dr_showall_'+uid());
+  // libera TODAS as free imediatamente (nunca mexe em premium)
+  if(on){const u=_unlocked();FEATURES.forEach(f=>u.add(f.id));_saveUnlocked(u);}
+  aplicarGatesFuncoes();
+  toast(on?'Todas as ferramentas gratuitas liberadas ✓':'Voltou ao modo progressivo. Já desbloqueadas continuam.');
 }
 /* ══ FINANÇAS ══ */
 function calcFin(){
@@ -6211,6 +6305,7 @@ function renderCfg(){
   document.getElementById('pfav').textContent=in2;document.getElementById('pfn').textContent=nm;document.getElementById('pfe').textContent=U?.email||'—';document.getElementById('pfm').textContent='🎯 '+(goal?.nome||'—');document.getElementById('cfg-obj').textContent=goal?.nome||'—';
   const cfg=gC();document.getElementById('tog-n').checked=cfg.notif;document.getElementById('tog-d').checked=cfg.dicas;document.getElementById('tog-ck').checked=cfg.ck!==false;document.getElementById('lim-d').value=cfg.limD||3;document.getElementById('lim-s').value=cfg.limS||12;
   try{setPushStatus();}catch(e){}
+  {const sa=document.getElementById('tog-showall');if(sa)sa.checked=!!ls('dr_showall_'+uid());}
   const pl=gP();document.getElementById('plano-prev').textContent=pl.frase||'Não configurado ainda';
   document.getElementById('tog-dark').checked=!!cfg.dark;
   document.getElementById('tog-disc').checked=!!cfg.discreto;
