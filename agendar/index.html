@@ -1,71 +1,167 @@
 <!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Agendar consulta — dichava.app</title><meta name="theme-color" content="#1B2A1C">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--v:#4CAF5A;--ve:#2E7D32;--dk:#1B2A1C;--tx:#1B2A1C;--txs:#5D7060;--line:#E4E4DF;--bg:#F4F7F2}
+:root{--v:#2FA35F;--ve:#1E7A44;--vf:#E8F5E9;--dk:#1B2A1C;--tx:#1B2A1C;--txs:#5D7060;--txm:#8A968A;--line:#E4E4DF;--bg:#F4F7F2;--card:#fff}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;min-height:100vh}
-.wrap{max-width:460px;margin:0 auto;padding:26px 20px 60px}
-.logo{font-weight:800;font-size:20px;color:var(--ve);text-align:center;margin-bottom:6px}.logo span{color:var(--dk)}
-.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 22px;box-shadow:0 10px 30px rgba(30,60,35,.06)}
-h1{font-size:22px;color:var(--dk);margin-bottom:4px}
-.sub{color:var(--txs);font-size:14px;margin-bottom:20px}
+.wrap{max-width:480px;margin:0 auto;padding-bottom:50px}
+.logo{font-weight:800;font-size:15px;color:#fff;text-align:center;padding:12px;opacity:.9}.logo span{opacity:.75}
+.hero{position:relative;overflow:hidden;color:#fff;padding:6px 22px 26px;text-align:center}
+.hero::before{content:"";position:absolute;top:-70px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1)}
+.hero::after{content:"";position:absolute;bottom:-90px;left:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07)}
+.hero>*{position:relative;z-index:1}
+.avw{position:relative;width:92px;margin:8px auto 12px}
+.av{width:92px;height:92px;border-radius:50%;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.65);display:grid;place-items:center;font-size:32px;font-weight:800;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.22)}
+.av img{width:100%;height:100%;object-fit:cover}
+.seal{position:absolute;right:-3px;bottom:-3px;width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.28)}
+.hnome{font-size:23px;font-weight:800;letter-spacing:-.3px}
+.htipo{font-size:14.5px;opacity:.95;font-weight:600;margin-top:2px}.hreg{font-size:12px;opacity:.82;margin-top:2px}
+.hrate{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:rgba(0,0,0,.16);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700}
+.body{padding:18px 18px 0}
+.sec{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--tx);margin:20px 2px 10px}
+.sec::before{content:"";width:4px;height:15px;border-radius:3px;background:var(--v)}
+.bio{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 17px;font-size:14.5px;line-height:1.6}
+.tags{display:flex;flex-wrap:wrap;gap:8px}.tag{background:var(--vf);color:var(--ve);border:1px solid rgba(47,163,95,.22);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.mi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 13px}
+.mi .k{font-size:11px;color:var(--txs);font-weight:700}.mi .v{font-size:14.5px;font-weight:800;margin-top:2px}
+.dates{display:flex;gap:9px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}.dates::-webkit-scrollbar{display:none}
+.date{flex:0 0 auto;width:62px;background:var(--card);border:1.5px solid var(--line);border-radius:15px;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}
+.date .wd{font-size:11px;font-weight:700;color:var(--txm);text-transform:capitalize}.date .dd{font-size:22px;font-weight:800;line-height:1.05}.date .mo{font-size:10.5px;font-weight:700;color:var(--txm);text-transform:capitalize}
+.date.on{background:var(--v);border-color:var(--v)}.date.on *{color:#fff!important}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:9px}
+.time{background:var(--vf);border:1.5px solid rgba(47,163,95,.22);border-radius:13px;padding:13px 6px;font-weight:800;font-size:15px;color:var(--ve);cursor:pointer;text-align:center}
+.time:active{background:var(--v);color:#fff}
+.rev{border-top:1px solid var(--line);padding:11px 0}.rev:first-child{border-top:none}
+.stars{color:#F5A623}
 label{display:block;font-size:13px;font-weight:700;color:var(--txs);margin:12px 0 5px}
 input,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit;background:#fafcfa}
 input:focus,textarea:focus{outline:none;border-color:var(--v)}
 .row{display:flex;gap:10px}.row>div{flex:1}
-.btn{width:100%;margin-top:18px;padding:14px;border:none;border-radius:14px;background:var(--v);color:#fff;font-size:16px;font-weight:800;cursor:pointer}
-.btn:disabled{opacity:.6}
+.btn{width:100%;margin-top:16px;padding:14px;border:none;border-radius:14px;background:var(--v);color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.6}.btn.out{background:none;border:1.5px solid var(--line);color:var(--tx)}
+.back{background:none;border:none;color:var(--ve);font-weight:700;font-size:13.5px;cursor:pointer;padding:2px 0 10px}
+.confirm{text-align:center;background:var(--vf);border-radius:16px;padding:16px;margin-bottom:14px}
 .err{color:#C62828;font-size:13px;margin-top:10px;display:none}
-.ok{text-align:center;padding:20px 0;display:none}
-.ok .ic{font-size:48px}
-.note{font-size:12px;color:#9aa89c;text-align:center;margin-top:16px}
-</style></head><body><div class=wrap>
-<div class="logo">dichava<span>.app</span></div>
-<div class="card">
-  <div id="form-box">
-    <h1 id="titulo">Agendar consulta</h1>
-    <div class="sub" id="sub">Preencha e o profissional confirma com você.</div>
-    <label>Seu nome *</label><input id="f-nome" placeholder="Nome completo">
-    <label>WhatsApp / telefone *</label><input id="f-tel" type="tel" inputmode="tel" placeholder="(00) 00000-0000">
-    <div class="row">
-      <div><label>Data preferida</label><input id="f-data" type="date"></div>
-      <div><label>Horário</label><input id="f-hora" type="time"></div>
-    </div>
-    <label>Mensagem (opcional)</label><textarea id="f-msg" rows="3" placeholder="Conte brevemente o que procura"></textarea>
-    <button class="btn" id="btn" onclick="enviar()">Solicitar agendamento</button>
-    <div class="err" id="err"></div>
-  </div>
-  <div class="ok" id="ok">
-    <div class="ic">✅</div>
-    <h1 style="margin-top:8px">Solicitação enviada!</h1>
-    <div class="sub" style="margin-top:8px" id="ok-msg">O profissional vai confirmar com você em breve pelo contato informado.</div>
-  </div>
-</div>
-<div class="note">Ao enviar, você concorda com o tratamento dos seus dados para fins de agendamento (LGPD).</div>
-</div>
+.note{font-size:12px;color:#9aa89c;text-align:center;margin:22px 18px 0}
+.hint{font-size:12px;color:var(--txm);text-align:center;margin-top:12px}
+.spin{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--v);border-radius:50%;animation:sp 1s linear infinite;margin:60px auto;display:block}@keyframes sp{to{transform:rotate(360deg)}}
+</style></head><body>
+<div class="wrap" id="wrap"><span class="spin"></span></div>
 <script>
 const SB=(typeof supabase!=='undefined')?supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'):null;
 const CODIGO=(new URLSearchParams(location.search).get('c')||'').toUpperCase();
+const CAPAS={verde:'linear-gradient(150deg,#1B3A2A 0%,#2FA35F 62%,#3FA76A 100%)',oceano:'linear-gradient(150deg,#0B2E4A 0%,#1E7FB0 60%,#37C0C9 100%)',roxo:'linear-gradient(150deg,#2E1B48 0%,#6B4BCE 62%,#9B5DE5 100%)',porsol:'linear-gradient(150deg,#5A1E3A 0%,#E0642F 58%,#F5A623 100%)',rosa:'linear-gradient(150deg,#4A1436 0%,#C93E77 60%,#F473A6 100%)',grafite:'linear-gradient(150deg,#15181C 0%,#3A424C 60%,#5B6672 100%)'};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ini=n=>String(n||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
+const SEAL='<svg width="26" height="26" viewBox="0 0 24 24"><defs><linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4CD98A"/><stop offset="1" stop-color="#1E9E8A"/></linearGradient></defs><g fill="url(#s)"><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4"/><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4" transform="rotate(45 12 12)"/></g><path d="M8.5 12.2l2.3 2.3 4.7-5" stroke="#fff" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+let PROF=null, AVS=[], DIAS=[], selIdx=0, selTime=null;
+const $=id=>document.getElementById(id);
+
+function proLink(v){v=(v||'').trim();if(!v)return null;if(v[0]==='@')return{href:'https://instagram.com/'+v.slice(1).replace(/[^\w.]/g,''),label:v};if(/instagram\.com/i.test(v)){const h=(v.split('instagram.com/')[1]||'').replace(/[/?#].*$/,'');return{href:'https://instagram.com/'+h,label:'@'+h};}let href=v;if(!/^https?:\/\//i.test(href))href='https://'+href;return{href,label:v.replace(/^https?:\/\//i,'').replace(/\/$/,'')};}
+function estrelas(n){n=Math.round(n||0);let s='';for(let i=1;i<=5;i++)s+=i<=n?'★':'☆';return s;}
+function gerarSlots(cfg){
+  if(!cfg||!cfg.dias)return[];const ocup=new Set(cfg.ocupados||[]);const out=[];const now=new Date();
+  for(let i=0;i<=27;i++){const d=new Date();d.setDate(d.getDate()+i);const wd=d.getDay();let t=cfg.dias[wd]||cfg.dias[String(wd)];if(!t||!t.length)continue;
+    const ds=d.toISOString().slice(0,10);const livres=t.filter(h=>{if(ocup.has(ds+' '+h))return false;if(i===0){const[hh,mm]=h.split(':').map(Number);const dt=new Date();dt.setHours(hh,mm,0,0);if(dt<=now)return false;}return true;}).sort();
+    if(livres.length)out.push({data:ds,label:d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'}),times:livres});}
+  return out;
+}
+
 (async function(){
-  if(!CODIGO||!SB)return;
-  try{ const{data}=await SB.rpc('clinica_nome',{p_codigo:CODIGO}); if(data){ document.getElementById('titulo').textContent='Agendar com '+data; document.getElementById('sub').textContent='Solicite um horário — '+data+' confirma com você.'; } }catch(e){}
-})();
-function val(id){return (document.getElementById(id).value||'').trim();}
-async function enviar(){
-  const err=document.getElementById('err'); err.style.display='none';
-  const nome=val('f-nome'), tel=val('f-tel');
-  if(!nome){err.textContent='Informe seu nome.';err.style.display='block';return;}
-  if(!tel){err.textContent='Informe um telefone/WhatsApp para contato.';err.style.display='block';return;}
-  if(!CODIGO){err.textContent='Link inválido (sem código da clínica).';err.style.display='block';return;}
-  if(!SB){err.textContent='Sem conexão com o servidor.';err.style.display='block';return;}
-  const btn=document.getElementById('btn'); btn.disabled=true; btn.textContent='Enviando…';
+  if(!CODIGO||!SB){render(null);return;}
   try{
-    const{data,error}=await SB.rpc('solicitar_agendamento',{p_codigo:CODIGO,p_nome:nome,p_tel:tel,p_data:val('f-data')||null,p_hora:val('f-hora')||null,p_msg:val('f-msg')||null});
+    const{data:profs}=await SB.from('profissionais').select('id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,foto,link,capa,agenda_config').eq('agenda_codigo',CODIGO).eq('status','aprovado');
+    PROF=(profs&&profs[0])||null;
+    if(PROF){
+      DIAS=gerarSlots(PROF.agenda_config);
+      try{const{data:av}=await SB.from('avaliacoes_prof').select('nota,comentario,user_nome').eq('prof_id',PROF.id).order('criado_em',{ascending:false});AVS=av||[];}catch(e){}
+    }
+  }catch(e){}
+  render(PROF);
+})();
+
+function render(p){
+  const wrap=$('wrap');
+  if(!p){ // fallback: só o formulário simples
+    let nome='esse profissional';
+    wrap.innerHTML=`<div style="background:${CAPAS.verde};" class="hero"><div class="logo">dichava<span>.app</span></div><div class="hnome">Agendar consulta</div><div class="htipo">Solicite um horário</div></div><div class="body" id="bd"></div>`;
+    formStep(); return;
+  }
+  const capa=CAPAS[p.capa]||CAPAS.verde;
+  const media=AVS.length?AVS.reduce((s,a)=>s+a.nota,0)/AVS.length:0;
+  const lk=proLink(p.link);
+  const modLabel=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'Online e presencial':(p.modalidade||'').includes('online')?'Online':'Presencial';
+  wrap.innerHTML=`
+  <div class="hero" style="background:${capa}">
+    <div class="logo">dichava<span>.app</span></div>
+    <div class="avw"><div class="av">${p.foto?`<img src="${p.foto}" alt="">`:ini(p.nome)}</div><div class="seal">${SEAL}</div></div>
+    <div class="hnome">${esc(p.nome)}</div>
+    <div class="htipo">${esc(p.tipo_prof||'')}</div>
+    ${p.reg?`<div class="hreg">${esc(p.reg)}</div>`:''}
+    ${lk?`<a href="${esc(lk.href)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:20px">🔗 ${esc(lk.label)}</a>`:''}
+    ${AVS.length?`<div class="hrate">⭐ ${media.toFixed(1)} · ${AVS.length} avaliaç${AVS.length===1?'ão':'ões'}</div>`:''}
+  </div>
+  <div class="body" id="bd">
+    ${p.bio?`<div class="sec">Sobre</div><div class="bio">${esc(p.bio)}</div>`:''}
+    ${p.especialidades?`<div class="sec">Especialidades</div><div class="tags">${p.especialidades.split(',').map(t=>`<span class="tag">${esc(t.trim())}</span>`).join('')}</div>`:''}
+    <div class="sec">Atendimento</div>
+    <div class="meta">
+      <div class="mi"><div class="k">Modalidade</div><div class="v">${modLabel}</div></div>
+      ${p.valor?`<div class="mi"><div class="k">Valor médio</div><div class="v">${esc(p.valor)}</div></div>`:''}
+      ${p.duracao?`<div class="mi"><div class="k">Duração</div><div class="v">${esc(p.duracao)}</div></div>`:''}
+      ${p.cidade?`<div class="mi"><div class="k">Local</div><div class="v">${esc(p.cidade)}</div></div>`:''}
+    </div>
+    <div class="sec">Agendar horário</div>
+    <div id="agd"></div>
+    ${AVS.length?`<div class="sec">Avaliações</div><div>${AVS.slice(0,6).map(a=>`<div class="rev"><div style="display:flex;gap:7px;align-items:center"><b style="font-size:13.5px">${esc(a.user_nome||'Paciente')}</b><span class="stars">${estrelas(a.nota)}</span></div>${a.comentario?`<div style="font-size:13.5px;color:var(--txs);margin-top:3px">${esc(a.comentario)}</div>`:''}</div>`).join('')}</div>`:''}
+  </div>
+  <div class="note">Ao enviar, você concorda com o tratamento dos seus dados para fins de agendamento (LGPD).</div>`;
+  renderAgenda(0);
+}
+
+function renderAgenda(idx){
+  selIdx=idx; const box=$('agd'); if(!box)return;
+  if(!DIAS.length){ box.innerHTML=`<div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center;color:var(--txs);font-size:14px">Sem horários disponíveis no momento. Deixe seus dados abaixo que ${esc(PROF.nome.split(' ')[0])} entra em contato.</div><div id="bd2"></div>`; formStep(); return; }
+  const d=DIAS[idx];
+  const dates=DIAS.map((x,i)=>{const dt=new Date(x.data+'T12:00');return `<button class="date${i===idx?' on':''}" onclick="renderAgenda(${i})"><span class="wd">${dt.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','')}</span><span class="dd">${dt.toLocaleDateString('pt-BR',{day:'2-digit'})}</span><span class="mo">${dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</span></button>`;}).join('');
+  const times=d.times.map(t=>`<button class="time" onclick="pickTime('${d.data}','${t}')">${t}</button>`).join('');
+  box.innerHTML=`<div class="dates">${dates}</div><div style="font-size:13px;color:var(--txs);font-weight:700;margin:12px 2px 8px;text-transform:capitalize">${esc(d.label)}</div><div class="times">${times}</div><div class="hint">Você envia uma solicitação; ${esc(PROF.nome.split(' ')[0])} confirma com você.</div>`;
+}
+function pickTime(data,hora){ selTime={data,hora}; formStep(); }
+
+function formStep(){
+  const box=PROF?$('agd'):$('bd');
+  const quando=selTime?`<div class="confirm"><div style="font-size:26px">📅</div><div style="font-weight:800;font-size:17px;margin-top:4px">Confirmar solicitação</div><div style="font-size:14px;color:var(--txs);margin-top:6px;text-transform:capitalize">${new Date(selTime.data+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} às <b>${selTime.hora}</b></div></div>`:'';
+  const back=selTime?`<button class="back" onclick="renderAgenda(${selIdx})">← escolher outro horário</button>`:'';
+  const dtRow=selTime?'':`<div class="row"><div><label>Data preferida</label><input id="f-data" type="date"></div><div><label>Horário</label><input id="f-hora" type="time"></div></div>`;
+  box.innerHTML=`${back}${quando}
+    <label>Seu nome *</label><input id="f-nome" placeholder="Nome completo">
+    <label>WhatsApp / telefone *</label><input id="f-tel" type="tel" inputmode="tel" placeholder="(00) 00000-0000">
+    ${dtRow}
+    <label>Mensagem (opcional)</label><textarea id="f-msg" rows="3" placeholder="Conte brevemente o que procura"></textarea>
+    <button class="btn" id="btn" onclick="enviar()">Enviar solicitação</button>
+    <div class="err" id="err"></div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function val(id){const e=$(id);return e?(e.value||'').trim():'';}
+async function enviar(){
+  const err=$('err'); if(err)err.style.display='none';
+  const nome=val('f-nome'), tel=val('f-tel');
+  const data=selTime?selTime.data:(val('f-data')||null);
+  const hora=selTime?selTime.hora:(val('f-hora')||null);
+  const showErr=m=>{if(err){err.textContent=m;err.style.display='block';}};
+  if(!nome)return showErr('Informe seu nome.');
+  if(!tel)return showErr('Informe um telefone/WhatsApp.');
+  if(!CODIGO||!SB)return showErr('Link inválido ou sem conexão.');
+  const btn=$('btn'); btn.disabled=true; btn.textContent='Enviando…';
+  try{
+    const{error}=await SB.rpc('solicitar_agendamento',{p_codigo:CODIGO,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:val('f-msg')||null});
     if(error)throw error;
-    if(data){document.getElementById('ok-msg').textContent=data+' vai confirmar seu horário em breve pelo contato informado.';}
-    document.getElementById('form-box').style.display='none';
-    document.getElementById('ok').style.display='block';
-  }catch(e){ err.textContent='Não consegui enviar: '+((e&&e.message)||'tente de novo'); err.style.display='block'; btn.disabled=false; btn.textContent='Solicitar agendamento'; }
+    const nomeProf=PROF?PROF.nome.split(' ')[0]:'O profissional';
+    document.getElementById('wrap').innerHTML=`<div class="hero" style="background:${CAPAS[(PROF&&PROF.capa)]||CAPAS.verde};padding-bottom:40px"><div class="logo">dichava<span>.app</span></div><div style="font-size:52px;margin-top:20px">✅</div><div class="hnome" style="margin-top:8px">Solicitação enviada!</div><div class="htipo" style="opacity:.9;max-width:300px;margin:10px auto 0">${esc(nomeProf)} vai confirmar seu horário em breve pelo contato informado.</div></div>`;
+  }catch(e){ showErr('Não consegui enviar: '+((e&&e.message)||'tente de novo')); btn.disabled=false; btn.textContent='Enviar solicitação'; }
 }
 </script>
 </body></html>
