@@ -1,5 +1,5 @@
 <!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover"><title>dichava.app</title><meta name="theme-color" content="#1B2A1C">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Playfair+Display:wght@700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Playfair+Display:wght@700;800&family=Nunito:wght@700;800;900&family=Oswald:wght@500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--acc:#ffffff;--accTx:#1E7A44;--rad:16px}
@@ -8,6 +8,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;m
 body.f-serif{font-family:'Playfair Display',Georgia,serif}
 body.f-round{font-family:'Nunito','Poppins',system-ui,sans-serif}
 body.f-poppins{font-family:'Poppins',system-ui,sans-serif}
+body.f-condensed{font-family:'Oswald',system-ui,sans-serif;letter-spacing:.3px}
+body.f-hand{font-family:'Caveat',cursive}
+body.f-mono{font-family:ui-monospace,'Courier New',monospace;letter-spacing:-.3px}
 .bg{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center}
 .bg::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 60% at 50% 0%,rgba(255,255,255,.1),transparent 60%)}
 .wrap{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:38px 22px 46px;text-align:center;min-height:100vh;display:flex;flex-direction:column}
@@ -62,10 +65,11 @@ function aplicarConfig(cfg){
   if(f.tipo==='preset')bg=CAPAS[f.v]||CAPAS.verde;
   else if(f.tipo==='solid')bg=f.cor||'#1B3A2A';
   else if(f.tipo==='grad')bg=`linear-gradient(150deg,${f.c1||'#1B3A2A'},${f.c2||'#2FA35F'})`;
-  document.getElementById('bg').style.background=bg;
-  document.getElementById('bg').style.backgroundSize='cover';
+  else if(f.tipo==='img'&&f.url)bg=`linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.56)), url(${f.url})`;
+  const bgEl=document.getElementById('bg');
+  bgEl.style.background=bg;bgEl.style.backgroundSize='cover';bgEl.style.backgroundPosition='center';
   // fonte
-  document.body.className=({serif:'f-serif',round:'f-round',poppins:'f-poppins'})[cfg.fonte]||'';
+  document.body.className=({serif:'f-serif',round:'f-round',poppins:'f-poppins',condensed:'f-condensed',hand:'f-hand',mono:'f-mono'})[cfg.fonte]||'';
   // cor de destaque
   const acc=(cfg.botao&&cfg.botao.cor)||'#ffffff';
   document.documentElement.style.setProperty('--acc',acc);
