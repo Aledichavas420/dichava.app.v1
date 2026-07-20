@@ -3908,8 +3908,22 @@ a{color:inherit;text-decoration:none}
   <div class="mt">Gerenciar metas</div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:13px">Marque, remova ou adicione novas metas.</p>
   <div id="mmetas-l" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
+  <div style="background:var(--cin);border-radius:13px;padding:13px 14px;margin-bottom:12px">
+    <div style="font-size:12.5px;font-weight:800;color:var(--tx);margin-bottom:9px">🎯 Meta de redução</div>
+    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:13.5px;color:var(--txs)">
+      <span>Usar no máximo</span>
+      <input id="ml-num" type="number" min="1" value="2" inputmode="numeric" style="width:54px;padding:7px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);font-size:14px;text-align:center;font-weight:700">
+      <span>vez(es) por</span>
+      <select id="ml-per" style="padding:7px 9px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);font-size:13.5px">
+        <option value="semana">semana</option>
+        <option value="dia">dia</option>
+      </select>
+      <button class="btn bv bsm" onclick="addMetaLimite()" style="margin-left:auto">Criar</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--txm);margin-top:8px">Acompanha seus registros e mostra o quanto do seu limite você já usou — sem cobrança, só clareza. 🌿</div>
+  </div>
   <div style="display:flex;gap:8px;margin-bottom:15px">
-    <input class="inp" id="nova-meta" type="text" placeholder="Adicionar minha própria meta…" style="flex:1">
+    <input class="inp" id="nova-meta" type="text" placeholder="Ou escreva sua própria meta…" style="flex:1">
     <button class="btn bv bsm" onclick="addMeta()">+</button>
   </div>
   <button class="btn bout bfull" onclick="closeMod('mmetas')">Fechar</button>
@@ -5574,11 +5588,26 @@ function metaProg(m){
   if(/\dx\s*por\s*semana/.test(t))return{cur:regSem,tot:num||3};
   return null;
 }
+// ── meta de redução (limite por período; menos é melhor) ──
+function metaLimiteProg(m){
+  const regs=gR();
+  const usos=m.periodo==='dia'?regs.filter(r=>r.data===hoje()).length:regs.filter(r=>r.data>=semISO(hoje())).length;
+  const limite=Math.max(1,m.limite||1);
+  return {usos,limite,dentro:usos<=limite,restante:Math.max(0,limite-usos)};
+}
 function renderMetas(){
   const mts=gM();const c=document.getElementById('metas-l');
   if(!mts.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);padding:0 18px">Nenhuma meta definida.</div>';return;}
   let mudou=false;
   c.innerHTML=mts.map((m,i)=>{
+    if(m.tipo==='limite'){
+      const pr=metaLimiteProg(m);const pct=Math.min(Math.round(pr.usos/pr.limite*100),100);
+      const per=m.periodo==='dia'?'hoje':'esta semana';
+      const bar=pr.dentro?'linear-gradient(90deg,#9CF06B,#5CE3CF)':'linear-gradient(90deg,#FF9A7A,#F2543D)';
+      const badge=pr.dentro?`<span class="mcbg bok">${pr.usos}/${pr.limite}</span>`:`<span class="mcbg" style="background:var(--lrjf,#FDE7E1);color:#C62828">${pr.usos}/${pr.limite}</span>`;
+      const msg=pr.dentro?`🎯 Dentro da meta — ${pr.restante} restante${pr.restante===1?'':'s'} ${per}`:`🎯 Passou do limite ${per} · recomeçar faz parte 🌿`;
+      return `<div class="mc"><div class="mch"><div class="mct">${esc(m.titulo)}</div>${badge}</div><div class="pgb"><div class="pgf" style="width:${pct}%;background:${bar}"></div></div><div class="mc-auto">${msg}</div></div>`;
+    }
     const p=metaProg(m);
     if(p){
       const cur=Math.max(0,Math.min(p.cur,p.tot)),tot=p.tot,pct=Math.round(cur/tot*100);
@@ -5616,9 +5645,22 @@ function abrirPerfil(){
 
 function togMeta(i){const m=gM();m[i].ok=!m[i].ok;sM(m);renderMetas();if(m[i].ok){vib([20,40,20]);confete();}toast(m[i].ok?'🎉 Meta concluída!':'Meta desmarcada.');}
 
+function addMetaLimite(){
+  const inp=document.getElementById('ml-num');const n=Math.max(0,parseInt(inp.value||'0',10)||0);
+  if(!n){shk(inp);return;}
+  const per=document.getElementById('ml-per').value;
+  const titulo=`Usar no máximo ${n} ${n===1?'vez':'vezes'} por ${per}`;
+  const m=gM();
+  if(m.some(x=>x.tipo==='limite'&&x.periodo===per)){toast('Você já tem uma meta de redução por '+per+'. Remova a antiga primeiro.');return;}
+  m.push({id:'m'+Date.now(),tipo:'limite',limite:n,periodo:per,titulo,ok:false,criada:hoje()});
+  sM(m);try{vib([15,30,15]);}catch(e){}openMetasMod();renderMetas();toast('✓ Meta de redução criada!');
+}
 function openMetasMod(){
   const mts=gM();
-  document.getElementById('mmetas-l').innerHTML=mts.map((m,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cin);border-radius:11px"><div style="font-size:18px;cursor:pointer" onclick="togMetaMod(${i})">${m.ok?'✅':'⬜'}</div><div style="flex:1;font-size:13px;color:var(--tx)">${esc(m.titulo)}</div><button style="background:none;border:none;font-size:14px;color:var(--er);cursor:pointer" onclick="remMeta(${i})">✕</button></div>`).join('');
+  document.getElementById('mmetas-l').innerHTML=mts.length?mts.map((m,i)=>{
+    const ic=m.tipo==='limite'?'<div style="font-size:17px">🎯</div>':`<div style="font-size:18px;cursor:pointer" onclick="togMetaMod(${i})">${m.ok?'✅':'⬜'}</div>`;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cin);border-radius:11px">${ic}<div style="flex:1;font-size:13px;color:var(--tx)">${esc(m.titulo)}</div><button style="background:none;border:none;font-size:14px;color:var(--er);cursor:pointer" onclick="remMeta(${i})">✕</button></div>`;
+  }).join(''):'<div style="font-size:12.5px;color:var(--txm);text-align:center;padding:6px">Nenhuma meta ainda. Crie uma abaixo.</div>';
   openMod('mmetas');
 }
 function togMetaMod(i){const m=gM();m[i].ok=!m[i].ok;sM(m);openMetasMod();renderMetas();}
