@@ -1307,7 +1307,8 @@ async function carregarPerfil(){
         ${p.cidade?`<div><div class="il">Cidade</div><div class="iv">${esc(p.cidade)}</div></div>`:''}
         ${p.telefone?`<div><div class="il">WhatsApp</div><div class="iv">${esc(p.telefone)}</div></div>`:''}
       </div>
-      <p style="font-size:12.5px;color:var(--txm);margin-top:16px">Para <b>editar</b> o perfil público, use o app dichava → área do profissional (a edição passa por nova aprovação). A <b>disponibilidade de agendamento</b> você define aqui em <b>Configurações</b>.</p>
+      <button class="btn" style="margin-top:16px" onclick="editarPerfilPanel()">✏️ Editar perfil público</button>
+      <p style="font-size:12px;color:var(--txm);margin-top:10px">Alterações no perfil público passam por <b>nova aprovação</b> da equipe. A <b>disponibilidade de agendamento</b> você define em <b>Configurações</b>.</p>
     </div>
     ${CLINICA?`<div class="card" style="padding:22px;max-width:980px;margin-top:16px">
       <div class="sec-title" style="margin-top:0">🔗 Link na bio — construtor</div>
@@ -1417,6 +1418,57 @@ function bioPreview(){const f=document.getElementById('bio-frame');if(!f||!f.con
 window.addEventListener('message',e=>{if(e.data&&e.data.type==='bio-preview-ready')bioPreview();});
 async function salvarBio(){if(!_SB||!AUTH){toast('Sem conexão',1);return;}try{const upd={bio_config:_bioCfg,bio_links:_bioLinks};if(CLINICA)upd.agenda_codigo=CLINICA.codigo;const{error}=await _SB.from('profissionais').update(upd).eq('id',AUTH.id);if(error)throw error;toast('✓ Bio publicada!');}catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}}
 function copiarLinkBio(){const url='https://dichava.app/bio/?c='+CLINICA.codigo;try{navigator.clipboard.writeText(url);toast('Link copiado');}catch(e){toast(url);}}
+/* ── Edição completa do perfil público (dentro do painel) ── */
+let _pfFoto=null,_pfCapa='verde';
+const PF_CAPAS={verde:'linear-gradient(150deg,#1B3A2A,#2FA35F 62%,#3FA76A)',oceano:'linear-gradient(150deg,#0B2E4A,#1E7FB0 60%,#37C0C9)',roxo:'linear-gradient(150deg,#2E1B48,#6B4BCE 62%,#9B5DE5)',porsol:'linear-gradient(150deg,#5A1E3A,#E0642F 58%,#F5A623)',rosa:'linear-gradient(150deg,#4A1436,#C93E77 60%,#F473A6)',grafite:'linear-gradient(150deg,#15181C,#3A424C 60%,#5B6672)'};
+const PF_TIPOS=['Psicóloga(o)','Psiquiatra','Médica(o)','Enfermeira(o)','Nutricionista','Fisioterapeuta','Terapeuta ocupacional','Terapeuta','Redutora(or) de danos','Assistente social','Outro profissional da saúde'];
+function editarPerfilPanel(){
+  const p=_bioProf||{};
+  _pfFoto=p.foto||null; _pfCapa=(p.capa&&PF_CAPAS[p.capa])?p.capa:'verde';
+  const mod=p.modalidade||'';
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>Editar perfil público</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="background:#FFF4D6;color:#8A6B00;border-radius:10px;padding:10px 12px;font-size:12.5px;margin-bottom:14px">⚠️ Ao salvar, seu perfil volta para <b>análise</b> e fica temporariamente indisponível na rede até a nova aprovação.</div>
+      <div class="field"><label>Foto de perfil</label>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div id="pf-foto-prev" style="width:64px;height:64px;border-radius:50%;background:var(--cin);border:1px solid var(--line);display:grid;place-items:center;font-size:24px;overflow:hidden;flex-shrink:0"></div>
+          <label class="btn sm ghost" style="cursor:pointer">📷 Escolher foto<input type="file" accept="image/*" id="pf-foto" onchange="pfFotoSel(this)" style="display:none"></label>
+          <button type="button" id="pf-foto-rm" onclick="pfFotoRm()" style="display:none;background:none;border:none;color:var(--txm);font-size:12px;cursor:pointer;text-decoration:underline">remover</button>
+        </div>
+      </div>
+      <div class="field"><label>Tema da capa da ficha</label><div class="bb-sw-row" id="pf-capas"></div></div>
+      <div class="field"><label>Tipo de profissional *</label><select id="pf-tipo">${PF_TIPOS.map(t=>`<option ${t===p.tipo_prof?'selected':''}>${t}</option>`).join('')}</select></div>
+      <div class="field"><label>Bio * <span style="color:var(--txm);font-weight:400">(como trabalha com uso de substâncias)</span></label><textarea id="pf-bio" style="min-height:90px" placeholder="Ex.: Atendo sem impor abstinência…">${esc(p.bio||'')}</textarea></div>
+      <div class="field"><label>Especialidades <span style="color:var(--txm);font-weight:400">(separadas por vírgula)</span></label><input id="pf-esp" value="${esc(p.especialidades||'')}" placeholder="Redução de danos, Ansiedade…"></div>
+      <div class="row2"><div class="field"><label>Modalidade *</label><select id="pf-mod"><option value="online" ${mod==='online'?'selected':''}>Online</option><option value="presencial" ${mod==='presencial'?'selected':''}>Presencial</option><option value="online,presencial" ${(mod.includes('online')&&mod.includes('presencial'))?'selected':''}>Online e presencial</option></select></div><div class="field"><label>Cidade / região</label><input id="pf-cidade" value="${esc(p.cidade||'')}"></div></div>
+      <div class="row2"><div class="field"><label>Valor médio</label><input id="pf-valor" value="${esc(p.valor||'')}" placeholder="R$ 150"></div><div class="field"><label>Duração</label><input id="pf-dur" value="${esc(p.duracao||'')}" placeholder="50 min"></div></div>
+      <div class="field"><label>Disponibilidade (texto na ficha)</label><input id="pf-disp" value="${esc(p.disponibilidade||'')}" placeholder="Ex.: Seg, Qua e Sex · tarde"></div>
+      <div class="row2"><div class="field"><label>WhatsApp</label><input id="pf-tel" value="${esc(p.telefone||'')}" placeholder="(00) 00000-0000"></div><div class="field"><label>Instagram / site</label><input id="pf-link" value="${esc(p.link||'')}" placeholder="@seu.insta ou site.com"></div></div>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="salvarPerfilPanel()">Salvar e enviar p/ aprovação</button></div>
+  </div>`);
+  const cs=document.getElementById('pf-capas');
+  if(cs)cs.innerHTML=Object.keys(PF_CAPAS).map(k=>`<button class="bb-sw" data-v="${k}" style="background:${PF_CAPAS[k]}" title="${k}" onclick="pfSetCapa('${k}',this)"></button>`).join('');
+  pfFotoRender(); pfCapaActive();
+}
+function pfFotoSel(input){const f=input.files&&input.files[0];if(!f)return;if(f.size>8*1024*1024){toast('Imagem muito grande (máx. 8 MB)',1);input.value='';return;}const rd=new FileReader();rd.onload=e=>{const img=new Image();img.onload=()=>{const max=320;let w=img.width,h=img.height;if(w>h){if(w>max){h=Math.round(h*max/w);w=max;}}else{if(h>max){w=Math.round(w*max/h);h=max;}}const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);_pfFoto=cv.toDataURL('image/jpeg',0.82);pfFotoRender();};img.onerror=()=>toast('Não consegui ler a imagem',1);img.src=e.target.result;};rd.readAsDataURL(f);}
+function pfFotoRm(){_pfFoto=null;pfFotoRender();const i=document.getElementById('pf-foto');if(i)i.value='';}
+function pfFotoRender(){const pv=document.getElementById('pf-foto-prev'),rm=document.getElementById('pf-foto-rm');if(!pv)return;if(_pfFoto){pv.innerHTML=`<img src="${_pfFoto}" style="width:100%;height:100%;object-fit:cover">`;if(rm)rm.style.display='inline';}else{pv.innerHTML='🩺';if(rm)rm.style.display='none';}}
+function pfSetCapa(k,el){_pfCapa=k;pfCapaActive();}
+function pfCapaActive(){document.querySelectorAll('#pf-capas .bb-sw').forEach(s=>s.classList.toggle('on',s.dataset.v===_pfCapa));}
+async function salvarPerfilPanel(){
+  if(!_SB||!AUTH){toast('Sem conexão',1);return;}
+  const g=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
+  const tipo=g('pf-tipo'),bio=g('pf-bio'),mod=g('pf-mod');
+  if(!tipo||bio.length<20||!mod){toast('Preencha tipo, bio (mín. 20 caracteres) e modalidade.',3500);return;}
+  const payload={tipo_prof:tipo,bio,especialidades:g('pf-esp'),modalidade:mod,cidade:g('pf-cidade'),valor:g('pf-valor'),duracao:g('pf-dur'),disponibilidade:g('pf-disp'),telefone:g('pf-tel'),link:g('pf-link'),foto:_pfFoto||null,capa:_pfCapa||'verde',status:'pendente'};
+  try{
+    let r=await _SB.from('profissionais').update(payload).eq('id',AUTH.id);
+    if(r.error&&/(foto|link|capa)/.test(r.error.message||'')){const{foto,link,capa,...base}=payload;r=await _SB.from('profissionais').update(base).eq('id',AUTH.id);}
+    if(r.error)throw r.error;
+    toast('✓ Perfil enviado para aprovação');closeModal();carregarPerfil();
+  }catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}
+}
 
 /* =============== EQUIPE (clínica compartilhada) =============== */
 function viewEquipe(){
