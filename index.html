@@ -2173,6 +2173,33 @@ a{color:inherit;text-decoration:none}
 .slot-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px;margin-top:6px}
 .slot-chip{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:11px 6px;font-weight:800;font-size:14px;cursor:pointer;text-align:center;color:var(--ve)}
 .slot-chip:active{background:var(--vf);border-color:var(--v)}
+/* ── TELA DE AGENDA (dedicada) ── */
+.agd-head{display:flex;align-items:center;gap:12px;padding:2px 0 14px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.agd-av{width:50px;height:50px;border-radius:50%;background:var(--vf);color:var(--ve);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none;overflow:hidden}
+.agd-av img{width:100%;height:100%;object-fit:cover}
+.agd-nome{font-family:'DM Sans',sans-serif;font-weight:800;font-size:17px;color:var(--tx);line-height:1.15}
+.agd-tipo{font-size:13px;color:var(--ve);font-weight:600}
+.agd-sec{font-size:12px;font-weight:800;color:var(--tx);letter-spacing:.2px;margin:16px 2px 9px;display:flex;align-items:center;gap:7px}
+.agd-sec::before{content:"";width:4px;height:14px;border-radius:3px;background:var(--v)}
+.agd-dates{display:flex;gap:9px;overflow-x:auto;padding:2px 2px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.agd-dates::-webkit-scrollbar{display:none}
+.agd-date{flex:0 0 auto;width:62px;background:var(--card);border:1.5px solid var(--line);border-radius:15px;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;transition:all .12s}
+.agd-date .agd-wd{font-size:11px;font-weight:700;color:var(--txm);text-transform:capitalize}
+.agd-date .agd-dd{font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:var(--tx);line-height:1.05}
+.agd-date .agd-mo{font-size:10.5px;font-weight:700;color:var(--txm);text-transform:capitalize}
+.agd-date.on{background:var(--v);border-color:var(--v);box-shadow:0 4px 14px color-mix(in srgb,var(--v) 40%,transparent)}
+.agd-date.on .agd-wd,.agd-date.on .agd-dd,.agd-date.on .agd-mo{color:#fff}
+.agd-times{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:9px}
+.agd-time{background:var(--vf);border:1.5px solid color-mix(in srgb,var(--v) 22%,transparent);border-radius:13px;padding:13px 6px;font-weight:800;font-size:15px;color:var(--ve);cursor:pointer;text-align:center;transition:all .1s}
+.agd-time:active{background:var(--v);color:#fff;transform:scale(.96)}
+.agd-hint{font-size:12px;color:var(--txm);text-align:center;margin-top:14px;line-height:1.5}
+.agd-empty{text-align:center;padding:26px 10px;color:var(--tx)}
+.agd-back{background:none;border:none;color:var(--ve);font-weight:700;font-size:13.5px;cursor:pointer;padding:2px 0 12px}
+.agd-confirm{text-align:center;background:var(--vf);border-radius:16px;padding:16px;margin-bottom:16px}
+.agd-confirm-ic{width:46px;height:46px;margin:0 auto 8px}
+.agd-confirm-ic .appicon{width:46px;height:46px}
+.agd-confirm-t{font-family:'DM Sans',sans-serif;font-weight:800;font-size:17px;color:var(--tx)}
+.agd-confirm-d{font-size:14px;color:var(--txs);margin-top:6px;line-height:1.5;text-transform:capitalize}
 .rx-kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
 .rx-k{background:var(--cin);border-radius:13px;padding:11px 13px}
 .rx-k b{font-size:22px;font-weight:800;display:block;line-height:1.1}
@@ -6685,13 +6712,12 @@ function abrirPerfilProf(id){
         ${p.disponibilidade?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic" data-icon="pf-disp"></span><span class="tx"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></span></div>`:''}
         ${temAgenda?`<div class="pd-mi" style="grid-column:1/-1;background:var(--vf);border-color:color-mix(in srgb,var(--v) 24%,transparent)"><span class="ic" data-icon="pf-agenda" style="background:#fff"></span><span class="tx"><span class="k" style="color:var(--ve)">Agendamento online</span><span class="v" style="color:var(--ve)">Escolha um horário abaixo ✓</span></span></div>`:''}
       </div>
-      ${temAgenda?`<div class="pd-sec">Agendar horário</div><div id="pd-slots"></div>`:''}
       <div class="pd-sec">Avaliações</div>
       <div id="pd-avaliacoes"><div style="text-align:center;padding:16px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div>
     </div>
     <div class="pd-acts">
       <button class="pd-contato" onclick="contatarProf('${p.id}')">💬 Conversar</button>
-      ${temAgenda?`<button class="pd-agendar" onclick="verSlots('${p.id}')">📅 Agendar horário</button>`:''}
+      ${temAgenda?`<button class="pd-agendar" onclick="abrirAgenda('${p.id}')">📅 Agendar horário</button>`:''}
     </div>`;
   try{aplicarIcones(body);}catch(e){}
   showV('vprofdet');
@@ -6779,18 +6805,42 @@ function gerarSlots(p){
   }
   return out;
 }
-let _slotDias=[], _slotProf='';
-function verSlots(id){
-  const p=_profsById[id]; const box=document.getElementById('pd-slots'); if(!p||!box)return;
-  _slotDias=gerarSlots(p); _slotProf=id;
-  if(!_slotDias.length){ box.innerHTML='<div style="color:var(--txm);font-size:13.5px;padding:8px 2px">Sem horários livres no momento. Use "Conversar" para combinar.</div>'; return; }
-  renderSlotUI(0);
+let _slotDias=[], _slotProf='', _slotIdx=0;
+// abre a TELA DE AGENDA dedicada (modal limpo)
+function abrirAgenda(id){
+  const p=_profsById[id]; if(!p)return;
+  _slotDias=gerarSlots(p); _slotProf=id; _slotIdx=0;
+  renderAgenda(0);
+  openMod('magendar');
 }
-function renderSlotUI(idx){
-  const box=document.getElementById('pd-slots'); if(!box)return; const d=_slotDias[idx]; if(!d)return;
-  const chips=_slotDias.map((x,i)=>`<button class="slot-datechip${i===idx?' on':''}" onclick="renderSlotUI(${i})">${esc(x.chip)}</button>`).join('');
-  const times=d.times.map(t=>`<button class="slot-chip" onclick="agendarSlot('${_slotProf}','${d.data}','${t}')">${t}</button>`).join('');
-  box.innerHTML='<div class="slot-dates">'+chips+'</div><div style="font-size:13px;color:var(--txs);font-weight:700;margin:12px 2px 2px;text-transform:capitalize">'+esc(d.label)+'</div><div class="slot-chips">'+times+'</div>';
+function renderAgenda(idx){
+  _slotIdx=idx;
+  const body=document.getElementById('agendar-body'); if(!body)return;
+  const p=_profsById[_slotProf]||{};
+  const head=`<div class="agd-head">
+      <div class="agd-av">${p.foto?`<img src="${p.foto}" alt="">`:ini(p.nome||'?')}</div>
+      <div style="min-width:0"><div class="agd-nome">${esc(p.nome||'Profissional')}</div><div class="agd-tipo">${esc(p.tipo_prof||'')}</div></div>
+    </div>`;
+  if(!_slotDias.length){
+    body.innerHTML=head+`<div class="agd-empty"><div style="font-size:34px;margin-bottom:8px">🗓️</div><b>Sem horários livres agora</b><div style="font-size:13.5px;color:var(--txm);margin-top:5px;line-height:1.5">Toque em <b>Conversar</b> pra combinar um horário direto com o profissional.</div></div>
+      <button class="btn bout bfull" style="margin-top:14px" onclick="closeMod('magendar')">Fechar</button>`;
+    return;
+  }
+  const d=_slotDias[idx];
+  const dates=_slotDias.map((x,i)=>{
+    const dt=new Date(x.data+'T12:00');
+    const wd=dt.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','');
+    const dd=dt.toLocaleDateString('pt-BR',{day:'2-digit'});
+    const mo=dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','');
+    return `<button class="agd-date${i===idx?' on':''}" onclick="renderAgenda(${i})"><span class="agd-wd">${wd}</span><span class="agd-dd">${dd}</span><span class="agd-mo">${mo}</span></button>`;
+  }).join('');
+  const times=d.times.map(t=>`<button class="agd-time" onclick="agendarSlot('${_slotProf}','${d.data}','${t}')">${t}</button>`).join('');
+  body.innerHTML=head+`
+    <div class="agd-sec">1 · Escolha o dia</div>
+    <div class="agd-dates">${dates}</div>
+    <div class="agd-sec" style="text-transform:capitalize">2 · Horários — ${esc(d.label)}</div>
+    <div class="agd-times">${times}</div>
+    <div class="agd-hint">Você envia uma <b>solicitação</b>; o profissional confirma com você.</div>`;
 }
 function agendarSlot(id,data,hora){
   const p=_profsById[id]; if(!p)return;
@@ -6798,13 +6848,17 @@ function agendarSlot(id,data,hora){
   if(!codigo){toast('Este profissional ainda não configurou o agendamento.');return;}
   const nome=(typeof U!=='undefined'&&U&&U.nome)||'';
   const body=document.getElementById('agendar-body');
-  body.innerHTML=`<div style="font-size:26px;text-align:center">📅</div><div class="mt c">Confirmar agendamento</div>
-    <div class="mb c" style="margin-bottom:12px">Com <b>${esc(p.nome)}</b> · ${new Date(data+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} às <b>${hora}</b></div>
+  body.innerHTML=`<button class="agd-back" onclick="renderAgenda(${_slotIdx})">← escolher outro horário</button>
+    <div class="agd-confirm">
+      <div class="agd-confirm-ic" data-icon="pf-agenda"></div>
+      <div class="agd-confirm-t">Confirmar solicitação</div>
+      <div class="agd-confirm-d">Com <b>${esc(p.nome)}</b><br>${new Date(data+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} às <b>${hora}</b></div>
+    </div>
     <div class="fld"><div class="lbl">Seu nome</div><input class="inp" id="ag-nome" value="${esc(nome)}" placeholder="Como se chama"></div>
     <div class="fld"><div class="lbl">WhatsApp / telefone</div><input class="inp" id="ag-tel" type="tel" inputmode="tel" placeholder="(00) 00000-0000"></div>
     <div class="fld"><div class="lbl">Mensagem (opcional)</div><textarea class="ft" id="ag-msg" rows="2" placeholder="Algo que queira adiantar"></textarea></div>
-    <button class="btn bv bfull" id="ag-btn" onclick="confirmarAgendamento('${codigo}','${data}','${hora}')">Solicitar este horário</button>`;
-  openMod('magendar');
+    <button class="btn bv bfull" id="ag-btn" onclick="confirmarAgendamento('${codigo}','${data}','${hora}')">Enviar solicitação</button>`;
+  try{aplicarIcones(body);}catch(e){}
 }
 async function confirmarAgendamento(codigo,data,hora){
   const nome=(document.getElementById('ag-nome').value||'').trim();
