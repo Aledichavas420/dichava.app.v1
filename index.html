@@ -365,6 +365,16 @@ a{color:inherit;text-decoration:none}
 .aw-acts{width:100%;max-width:340px;margin-top:34px}
 .aw-pro{background:none;border:none;color:rgba(255,255,255,.5);font-size:13px;font-weight:600;cursor:pointer;margin-top:20px;font-family:'DM Sans',sans-serif}
 .aw-back{display:block;margin:14px auto 0;background:none;border:none;color:var(--txs);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+.aw-prof-div{display:flex;align-items:center;gap:12px;margin:20px 2px 12px;color:rgba(255,255,255,.4)}
+.aw-prof-div::before,.aw-prof-div::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.13)}
+.aw-prof-div span{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.aw-prof-btn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:15px;padding:13px 15px;cursor:pointer;transition:background .15s,border-color .15s}
+.aw-prof-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22)}
+.aw-prof-btn .app-seal{font-size:22px;flex:none}
+.aw-prof-tx{flex:1;min-width:0}
+.aw-prof-tx b{display:block;font-size:14.5px;font-weight:800;color:#fff}
+.aw-prof-tx small{display:block;font-size:11.5px;color:rgba(255,255,255,.6);margin-top:1px}
+.aw-prof-go{color:rgba(255,255,255,.45);font-size:20px;font-weight:700;flex:none}
 .at{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px 24px;position:relative;overflow:hidden}
 /* Teclado aberto: sobe o conteúdo das telas ancoradas no rodapé (login/onboarding) */
 #shell.kbd #va,#shell.kbd #vo{justify-content:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:var(--kb,0px);scroll-padding-bottom:var(--kb,0px)}
@@ -2310,6 +2320,8 @@ a{color:inherit;text-decoration:none}
   <div class="aw-acts">
     <button class="btn bv bfull" onclick="iniciarJornada()">🌱 Iniciar jornada</button>
     <button class="btn bout bfull" style="margin-top:11px" onclick="mostrarLogin()">Já tenho conta · Entrar</button>
+    <div class="aw-prof-div"><span>profissional de saúde?</span></div>
+    <button class="aw-prof-btn" onclick="abrirPainelProf()"><span class="app-seal">🩺</span><span class="aw-prof-tx"><b>Painel dos profissionais de saúde</b><small>Perfil online, agenda, pacientes, prontuários e mais</small></span><span class="aw-prof-go">›</span></button>
   </div>
 </div>
 <!-- AUTH (login / cadastro pro) -->
@@ -4815,6 +4827,7 @@ function mostrarWelcome(){document.getElementById('aw-welcome').style.display='f
 function mostrarLogin(){document.getElementById('aw-welcome').style.display='none';document.getElementById('aw-auth').style.display='block';authTab('login');}
 function mostrarSignupPro(){document.getElementById('aw-welcome').style.display='none';document.getElementById('aw-auth').style.display='block';authTab('signup');setAcct('pro');}
 function iniciarJornada(){startOb();}
+function abrirPainelProf(){try{vib(12);}catch(e){}window.location.href='/clinica/';}
 async function doLogin(){
   blurAll();
   const e=document.getElementById('li-e').value.trim(),pw=document.getElementById('li-pw').value;
