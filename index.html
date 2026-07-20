@@ -142,6 +142,9 @@
 #celebra,#fdesbloq{position:fixed;inset:0;z-index:3500;background:radial-gradient(circle at 50% 38%,#244a2c,#13230f 75%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;overflow:hidden}
 #celebra.on,#fdesbloq.on{display:flex;animation:celFade .35s ease}
 #fdesbloq .cel-card{max-width:360px}
+#fdesbloq .cel-badge{width:76px;height:76px;margin:0 auto 16px;font-size:0}
+#fdesbloq .cel-badge .appicon{width:40px;height:40px}
+#fdesbloq .cel-kicker{margin-top:2px}
 .fd-tag{display:inline-block;font-size:11.5px;font-weight:800;padding:3px 11px;border-radius:20px;letter-spacing:.02em}
 .fd-tag.fd-free{background:rgba(124,217,138,.22);color:#8FF0A5;border:1px solid rgba(124,217,138,.4)}
 .fd-tag.fd-prem{background:rgba(255,210,75,.2);color:#FFD24B;border:1px solid rgba(255,210,75,.4)}
@@ -5149,13 +5152,13 @@ function renderHome(){
    Base enxuta no início; ferramentas free liberam por marcos OU dias (o que vier antes).
    Premium NUNCA é liberado por aqui — continua atrás do isPremium() + convite. */
 const FEATURES=[
-  {id:'prog',pg:'p-prog',nome:'Progresso',ic:'📊',free:true,gate:{reg:3,dias:3},
+  {id:'prog',pg:'p-prog',nome:'Progresso',ic:'progresso',free:true,gate:{reg:3,dias:3},
    sub:'Seu mapa de evolução',
    passos:['Seus registros viram gráficos e padrões fáceis de ler','Acompanhe metas, dias seguidos e conquistas','Tudo se atualiza sozinho conforme você registra']},
-  {id:'ref',pg:'p-ref',nome:'Reflexões',ic:'✍️',free:true,gate:{reg:6,dias:5},
+  {id:'ref',pg:'p-ref',nome:'Reflexões',ic:'reflexoes',free:true,gate:{reg:6,dias:5},
    sub:'Um espaço pra olhar pra dentro',
    passos:['Cartas e perguntas que te ajudam a refletir','Escreva no seu ritmo, sem certo ou errado','Volte quando quiser reler o que sentiu']},
-  {id:'jogos',pg:'p-jogos',nome:'Pausa pra mente',ic:'🌿',free:true,gate:{reg:10,dias:7},
+  {id:'jogos',pg:'p-jogos',nome:'Pausa pra mente',ic:'pausa-mente',free:true,gate:{reg:10,dias:7},
    sub:'Alívio na hora da vontade',
    passos:['Sons e respiração guiada pra acalmar','Joguinhos que ocupam a mente na fissura','Pausa de tolerância guiada — recurso <b>Premium 👑</b>'],
    premHint:true}
@@ -5190,7 +5193,7 @@ function aplicarGatesFuncoes(){
 function proximoDesbloq(){
   const f=_filaDesbloq.shift();if(!f){return;}
   const badge=f.free?'<span class="fd-tag fd-free">✓ Grátis</span>':'<span class="fd-tag fd-prem">👑 Premium</span>';
-  document.getElementById('fd-badge').textContent=f.ic;
+  {const be=document.getElementById('fd-badge');be.innerHTML=(typeof ICONS!=='undefined'&&ICONS[f.ic])?uniqSvgIds(ICONS[f.ic]):esc(f.ic);}
   document.getElementById('fd-nome').textContent=f.nome;
   document.getElementById('fd-sub').innerHTML=badge+'<div style="margin-top:8px">'+f.sub+'</div>';
   document.getElementById('fd-passos').innerHTML=f.passos.map(p=>`<li>${p}</li>`).join('');
