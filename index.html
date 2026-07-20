@@ -2435,7 +2435,7 @@ a{color:inherit;text-decoration:none}
       <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
       <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
     </div>
-    <div class="qac-wide qac-prof" data-gate="chat" onclick="abrirProfs()">
+    <div class="qac-wide qac-prof" onclick="abrirProfs()">
       <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <circle cx="346" cy="46" r="30" fill="rgba(255,255,255,.13)"/>
         <circle cx="346" cy="46" r="20" fill="rgba(255,255,255,.10)"/>
@@ -5201,10 +5201,7 @@ const FEATURES=[
    passos:['Sons e respiração guiada pra acalmar','Joguinhos que ocupam a mente na fissura','Pausa de tolerância guiada — recurso <b>Premium 👑</b>'],
    premHint:true},
   // ── Telas cheias "extras" (momentos uau) — anunciam recursos fortes; não escondem nada ──
-  {id:'chat',nome:'Fale com um profissional',ic:'profissional',free:true,gate:{reg:5,dias:4},
-   sub:'Apoio de quem entende',
-   passos:['Converse com psicólogos e redutores de danos','Agende horários direto pelo app','Sigilo total, sem julgamento'],
-   abrir:()=>{try{abrirProfs();}catch(e){}}},
+  // (Fale com um profissional NÃO é gated — acesso a apoio profissional fica sempre disponível)
   {id:'financas',nome:'Finanças',ic:'financas',free:false,premHint:true,gate:{reg:12,dias:12},
    sub:'Veja quanto gasta e economiza',
    passos:['Acompanhe gastos e o quanto economiza ao resistir','Metas de economia com o dinheiro poupado','Gráficos do seu bolso — recurso <b>Premium 👑</b>'],
