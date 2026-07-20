@@ -5188,6 +5188,8 @@ const FEATURES=[
    abrir:()=>{try{goPg('p-jogos');}catch(e){}}}
 ];
 const BASE_PGS=['p-home','p-agenda','p-cfg']; // sempre visíveis (inclui Registrar e Config)
+// "Mostrar tudo" é uma PRÉVIA temporária (em memória) — reseta ao recarregar o app
+let _showAll=false;
 function _unlocked(){return new Set(ls('dr_unlock_'+uid())||[]);}
 function _saveUnlocked(s){ls('dr_unlock_'+uid(),[...s]);}
 function diasDesdeInicio(){const o=gO();if(!o||!o.data)return 0;const d0=new Date(o.data),n=new Date();const d=Math.floor((n-d0)/86400000);return isNaN(d)?0:Math.max(0,d);}
@@ -5211,7 +5213,7 @@ function checarDesbloqueios(){
 }
 function aplicarGatesFuncoes(){
   // exibição = elegibilidade REAL (registros/dias) OU "mostrar tudo" — nunca depende de estado salvo antigo
-  const show=!!ls('dr_showall_'+uid());
+  const show=_showAll;
   FEATURES.forEach(f=>{
     if(!f.pg)return; // extras (chat/finanças/tbreak) não têm item de menu
     const vis=featElegivel(f)||show;
@@ -5236,7 +5238,7 @@ function subElegivel(s){return gR().length>=s.gate.reg||diasDesdeInicio()>=s.gat
 function _subNew(){return new Set(ls('dr_subnew_'+uid())||[]);}
 function _saveSubNew(s){ls('dr_subnew_'+uid(),[...s]);}
 function aplicarSubGates(){
-  const nv=_subNew(), show=!!ls('dr_showall_'+uid());
+  const nv=_subNew(), show=_showAll;
   SUBFEATS.forEach(s=>{
     const el=document.querySelector(`[data-sub="${s.id}"]`);if(!el)return;
     if(subElegivel(s)||show){
@@ -5279,7 +5281,7 @@ function proximoDesbloq(){
 }
 function fecharDesbloq(){const el=document.getElementById('fdesbloq');el.classList.remove('on');const cc=document.getElementById('fd-confetti');if(cc)cc.innerHTML='';setTimeout(()=>{if(_filaDesbloq.length)proximoDesbloq();},350);}
 function preverDesbloqueios(){
-  const u=_unlocked(), show=!!ls('dr_showall_'+uid());
+  const u=_unlocked(), show=_showAll;
   const list=FEATURES.filter(f=>u.has(f.id)||show);
   if(!list.length){toast('Nenhuma ferramenta desbloqueada ainda. Ative "Mostrar tudo" ou registre-se um pouco. 🌱');return;}
   _filaDesbloq.push(...list);
@@ -5287,7 +5289,7 @@ function preverDesbloqueios(){
 }
 function toggleMostrarTudo(el){
   // showall é só de EXIBIÇÃO (não persiste desbloqueio) — desligar volta ao progressivo
-  if(el.checked)ls('dr_showall_'+uid(),1); else localStorage.removeItem('dr_showall_'+uid());
+  _showAll=!!el.checked;
   aplicarGatesFuncoes();
   toast(el.checked?'Todas as ferramentas gratuitas visíveis ✓':'Voltou ao modo progressivo — o que você ainda não desbloqueou some.');
 }
@@ -6426,7 +6428,7 @@ function renderCfg(){
   document.getElementById('pfav').textContent=in2;document.getElementById('pfn').textContent=nm;document.getElementById('pfe').textContent=U?.email||'—';document.getElementById('pfm').textContent='🎯 '+(goal?.nome||'—');document.getElementById('cfg-obj').textContent=goal?.nome||'—';
   const cfg=gC();document.getElementById('tog-n').checked=cfg.notif;document.getElementById('tog-d').checked=cfg.dicas;document.getElementById('tog-ck').checked=cfg.ck!==false;document.getElementById('lim-d').value=cfg.limD||3;document.getElementById('lim-s').value=cfg.limS||12;
   try{setPushStatus();}catch(e){}
-  {const sa=document.getElementById('tog-showall');if(sa)sa.checked=!!ls('dr_showall_'+uid());}
+  {const sa=document.getElementById('tog-showall');if(sa)sa.checked=_showAll;}
   const pl=gP();document.getElementById('plano-prev').textContent=pl.frase||'Não configurado ainda';
   document.getElementById('tog-dark').checked=!!cfg.dark;
   document.getElementById('tog-disc').checked=!!cfg.discreto;
