@@ -20,15 +20,18 @@ Deno.serve(async (req) => {
     const payload = await req.json().catch(() => ({} as any));
     const rec = payload?.record || payload || {};
     const conversa_id = rec.conversa_id, de_id = rec.de_id, texto = rec.texto || "";
-    if (!conversa_id || !de_id) return new Response("ok");
+    console.log("push-msg: recebido", JSON.stringify({ conversa_id, de_id, temTexto: !!texto }));
+    if (!conversa_id || !de_id) { console.log("push-msg: FALTA conversa_id ou de_id"); return new Response("ok"); }
 
     // quem recebe = o OUTRO participante da conversa
-    const { data: conv } = await sb.from("conversas")
+    const { data: conv, error: convErr } = await sb.from("conversas")
       .select("user_id, prof_id, user_nome, prof_nome").eq("id", conversa_id).maybeSingle();
-    if (!conv) return new Response("ok");
+    if (convErr) console.log("push-msg: erro ao buscar conversa ·", convErr.message);
+    if (!conv) { console.log("push-msg: conversa NÃO encontrada para id", conversa_id); return new Response("ok"); }
     const dest = de_id === conv.user_id ? conv.prof_id : conv.user_id;
     const remetente = de_id === conv.user_id ? (conv.user_nome || "Paciente") : (conv.prof_nome || "Profissional");
-    if (!dest) return new Response("ok");
+    console.log("push-msg: conversa OK · user_id", conv.user_id, "prof_id", conv.prof_id, "→ destino", dest);
+    if (!dest) { console.log("push-msg: destino nulo (conversa sem o outro participante)"); return new Response("ok"); }
 
     // assinaturas push do destinatário
     const { data: subs } = await sb.from("push_subs").select("endpoint, p256dh, auth").eq("user_id", dest);
