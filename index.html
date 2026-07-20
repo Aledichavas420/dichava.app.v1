@@ -2347,7 +2347,7 @@ a{color:inherit;text-decoration:none}
   <div class="hh"><div class="hh-av" id="hh-av" onclick="abrirPerfil()">?</div><div class="hsd" id="h-sd">Bom dia,</div><div class="hn" id="h-n">—</div><div class="hrow"><div class="hpill">🎯 <strong id="h-mt">—</strong></div><button class="hchat" id="h-chat" onclick="abrirConversasUser()" style="display:none" aria-label="Minhas conversas">💬<span class="hchat-badge" id="h-chat-badge" style="display:none"></span></button><button class="hero-prem" id="hero-prem" onclick="abrirPremium()" aria-label="dichava premium"><span class="hpc">👑</span><span id="hero-prem-lb">Premium</span></button></div></div>
   <div class="hero">
     <div class="hero-leaves" id="hero-leaves"></div>
-    <button class="hero-info-btn" onclick="openMod('minfo')" aria-label="O que significam">ⓘ</button>
+    <button class="hero-info-btn" onclick="abrirInfoHero()" aria-label="O que significam">ⓘ</button>
     <div class="hero-top">
       <div class="hero-ring-wrap">
         <svg class="hero-ring" viewBox="0 0 104 104"><defs><linearGradient id="hgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9CF06B"></stop><stop offset="1" stop-color="#5CE3CF"></stop></linearGradient></defs><circle class="hr-bg" cx="52" cy="52" r="46"></circle><circle class="hr-fg" id="hero-ring-fg" cx="52" cy="52" r="46"></circle></svg>
@@ -2357,7 +2357,7 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="hero-info">
         <div class="hero-num" id="hs-st">0</div>
-        <div class="hero-unit">dias seguidos</div>
+        <div class="hero-unit" id="hs-unit">dias seguidos</div>
         <div class="hero-msg" id="hero-msg">Todo recomeço é válido 💚</div>
       </div>
     </div>
@@ -3761,7 +3761,7 @@ a{color:inherit;text-decoration:none}
   <button class="mclose" onclick="closeMod('minfo')" aria-label="Fechar">✕</button>
   <div class="mt">O que significam? <span class="tic" data-icon="sec-insights"></span></div>
   <p style="font-size:13px;color:var(--txs);margin-bottom:16px">Um resumo rápido do seu acompanhamento — sem cobrança, só pra te situar.</p>
-  <div class="infi"><div class="infi-ic" style="background:#E9F9ED">🔥</div><div><div class="infi-t">Dias seguidos</div><div class="infi-d">Quantos dias seguidos você registrou algo. Mede sua <strong>constância</strong> no acompanhamento — não é sobre acertar, é sobre estar presente.</div></div></div>
+  <div class="infi"><div class="infi-ic" style="background:#E9F9ED">🔥</div><div><div class="infi-t" id="infi-destaque-t">Seu destaque</div><div class="infi-d" id="infi-destaque-d">O número em destaque muda conforme o <strong>seu objetivo</strong>.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:#E8F1FF" data-icon="agenda"></div><div><div class="infi-t">Esta semana</div><div class="infi-d">Número de registros que você fez nos últimos 7 dias.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:#F2EBFF" data-icon="sec-meta"></div><div><div class="infi-t">Da meta</div><div class="infi-d">Porcentagem das suas metas concluídas. Defina e gerencie suas metas na aba <strong>Progresso</strong>.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:#FFF3E0" data-icon="agenda"></div><div><div class="infi-t">Este mês</div><div class="infi-d">Total de registros feitos no mês atual.</div></div></div>
@@ -5142,11 +5142,13 @@ function renderHome(){
   document.getElementById('h-n').innerHTML=`${esc(nome)} <span>cuida de si.</span>`;
   document.getElementById('h-mt').textContent=goal?.nome||'—';
   const st=streak(regs),sw=regs.filter(r=>r.data>=semISO(hoje())).length,mts=gM(),mp=mts.length?Math.round(mts.filter(m=>m.ok).length/mts.length*100):0;
-  document.getElementById('hs-st').textContent=st;
+  const d=metaDestaque(regs);
+  document.getElementById('hs-st').textContent=d.num;
+  {const u=document.getElementById('hs-unit');if(u)u.textContent=d.unit;}
   document.getElementById('hs-sw').textContent=sw;
   document.getElementById('hs-mt').textContent=mp+'%';
   const mes=hoje().slice(0,7);document.getElementById('hs-mes').textContent=regs.filter(r=>r.data.slice(0,7)===mes).length;
-  renderHero(st,mp);
+  renderHero(st,mp,d);
   renderTempo();renderDiaHoje();renderQuick();renderInstall();renderAlts(regs);renderWds(regs);renderResumo(regs,obj?.goal);
   try{renderFin();}catch(e){}
   try{atualizarChatHome();}catch(e){}
@@ -5354,7 +5356,35 @@ function renderCompras(){
   if(isPremium()){c.classList.remove('premgate','locked');c.innerHTML=body;}
   else{c.classList.add('premgate','locked');c.innerHTML=`<div class="premgate-body">${body}</div>`+premOverlayHTML('Registros de compra','Acompanhe seus gastos e o quanto você economiza — no premium.');}
 }
-function renderHero(st,mp){
+// destaque do hero adaptado ao OBJETIVO escolhido no onboarding
+function metaDestaque(regs){
+  const goal=(gO()||{}).goal;
+  if(goal==='parar'){const n=_consecSemUso();return{num:n,unit:n===1?'dia sem usar':'dias sem usar',marco:n,tipo:'semuso'};}
+  if(goal==='reduzir'){
+    const sem=regs.filter(r=>r.data>=semISO(hoje())).length;
+    const iniAnt=isoLocalDelta(-7),fimAnt=isoLocalDelta(-1);
+    const ant=regs.filter(r=>r.data>=iniAnt&&r.data<=fimAnt).length;
+    return{num:sem,unit:sem===1?'uso esta semana':'usos esta semana',marco:0,tipo:'usos',ant};
+  }
+  const s=streak(regs);
+  if(goal==='rd')return{num:s,unit:s===1?'dia no cuidado':'dias no cuidado',marco:s,tipo:'streak'};
+  return{num:s,unit:s===1?'dia acompanhando':'dias acompanhando',marco:s,tipo:'streak'};
+}
+// data ISO local deslocada por N dias (para janelas semanais)
+function isoLocalDelta(n){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
+// abre o "o que significam" com o texto do destaque adaptado ao objetivo
+function abrirInfoHero(){
+  const d=metaDestaque(gR());
+  const T={semuso:['Dias sem usar','Quantos dias seguidos você está sem registrar uso. É o número que mais importa em quem busca <strong>parar</strong> — cada dia conta, e recomeçar faz parte.'],
+    usos:['Usos esta semana','Quantos registros de uso você fez nos últimos 7 dias. Pra quem quer <strong>reduzir</strong>, o alvo é essa barra descer no seu ritmo — comparada à semana anterior.'],
+    streak:['Dias seguidos','Quantos dias seguidos você registrou algo. Mede sua <strong>constância</strong> — não é sobre acertar, é sobre estar presente.']};
+  const t=T[d.tipo]||T.streak;
+  const et=document.getElementById('infi-destaque-t'),ed=document.getElementById('infi-destaque-d');
+  if(et)et.textContent=t[0]; if(ed)ed.innerHTML=t[1];
+  openMod('minfo');
+}
+function renderHero(st,mp,d){
+  d=d||metaDestaque(gR());
   // mascote
   const mEl=document.getElementById('hero-mascot');
   if(mEl&&!mEl.getAttribute('src')){try{if(typeof brotoDataURI==='function')mEl.src=brotoDataURI();}catch(e){}}
@@ -5365,19 +5395,30 @@ function renderHero(st,mp){
     fg.style.stroke=cor;fg.style.filter='drop-shadow(0 0 5px '+cor+'88)';
     fg.style.strokeDasharray=circ.toFixed(1);requestAnimationFrame(()=>{fg.style.strokeDashoffset=(circ*(1-Math.min(100,mp)/100)).toFixed(1);});
   }
-  // mensagem adaptativa
-  const msg=document.getElementById('hero-msg');
-  if(msg)msg.textContent= st>=30?'Lendário. Que jornada! 🏆':st>=14?'Você tá voando ✨':st>=7?'Uma semana inteira 🌱':st>=3?'Pegando o ritmo 🔥':st>=1?'Começou! Um dia de cada vez 💪':'Todo recomeço é válido 💚';
-  // mascote reagindo: badge de humor + coroa
+  // mensagem adaptativa (conforme o objetivo)
+  const v=d.marco; const msg=document.getElementById('hero-msg');
+  if(msg){
+    if(d.tipo==='semuso'){
+      msg.textContent= v>=30?'Um mês sem usar. Que conquista! 🏆':v>=14?'Duas semanas livre ✨':v>=7?'Uma semana sem usar 🌱':v>=3?'Firme! Cada dia conta 🔥':v>=1?'Um dia sem usar já é vitória 💪':'Recomeçar faz parte 💚';
+    }else if(d.tipo==='usos'){
+      const dif=(d.ant||0)-d.num;
+      msg.textContent= d.num===0?'Semana sem registros de uso 🌱':dif>0?'Menos que a semana passada 📉 Mandou bem!':dif<0?'Semana mais puxada — sem culpa, siga no seu ritmo 💚':'Acompanhando de perto 🌿';
+    }else{
+      msg.textContent= v>=30?'Lendário. Que jornada! 🏆':v>=14?'Você tá voando ✨':v>=7?'Uma semana inteira 🌱':v>=3?'Pegando o ritmo 🔥':v>=1?'Começou! Um dia de cada vez 💪':'Todo recomeço é válido 💚';
+    }
+  }
+  // mascote reagindo: badge de humor + coroa (usa o valor do objetivo)
   const bd=document.getElementById('hero-badge');
-  if(bd)bd.textContent= st>=30?'🤩':st>=14?'😎':st>=7?'😄':st>=1?'🙂':'😴';
-  const cr=document.getElementById('hero-crown');if(cr)cr.classList.toggle('on',st>=30);
-  // confete ao bater um marco de sequência (uma vez por marco)
+  if(bd)bd.textContent= d.tipo==='usos'?(d.num===0?'😌':'🙂'):(v>=30?'🤩':v>=14?'😎':v>=7?'😄':v>=1?'🙂':'😴');
+  const cr=document.getElementById('hero-crown');if(cr)cr.classList.toggle('on',d.tipo!=='usos'&&v>=30);
+  // confete ao bater um marco (dias sem usar OU sequência) — uma vez por marco
   try{
-    const marcos=[3,7,14,30,60,100];
-    if(marcos.includes(st)){
-      const k='dr_marco_'+uid()+'_'+st;
-      if(!localStorage.getItem(k)){localStorage.setItem(k,'1');setTimeout(()=>{try{confete();vib([20,40,20]);toast('🎉 '+st+' dias seguidos!');}catch(e){}},700);}
+    if(d.tipo!=='usos'){
+      const marcos=[3,7,14,30,60,100];
+      if(marcos.includes(v)){
+        const k='dr_marco_'+d.tipo+'_'+uid()+'_'+v;
+        if(!localStorage.getItem(k)){localStorage.setItem(k,'1');setTimeout(()=>{try{confete();vib([20,40,20]);toast('🎉 '+v+' '+d.unit+'!');}catch(e){}},700);}
+      }
     }
   }catch(e){}
   // folhas flutuantes (uma vez)
