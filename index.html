@@ -2407,7 +2407,7 @@ a{color:inherit;text-decoration:none}
       <div class="qat" style="color:var(--ve)">Tire suas dúvidas</div>
       <div class="qad" style="color:var(--ve)">Uso, efeitos e riscos</div>
     </div>
-    <div class="qac-wide qac-prof" onclick="abrirProfs()">
+    <div class="qac-wide qac-prof" data-gate="chat" onclick="abrirProfs()">
       <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <circle cx="346" cy="46" r="30" fill="rgba(255,255,255,.13)"/>
         <circle cx="346" cy="46" r="20" fill="rgba(255,255,255,.10)"/>
@@ -2424,7 +2424,7 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="qacw-go">›</div>
     </div>
-    <div class="qac-wide" onclick="goPg('p-jogos')">
+    <div class="qac-wide" data-gate="jogos" onclick="goPg('p-jogos')">
       <svg class="qacw-bg" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <circle cx="340" cy="40" r="26" fill="rgba(255,221,120,.9)"/>
         <circle cx="330" cy="34" r="22" fill="#2A2A5C"/>
@@ -2437,7 +2437,7 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="qacw-go">›</div>
     </div>
-    <div class="tbcard tbcard-home" onclick="premDo(abrirTbreak)">
+    <div class="tbcard tbcard-home" data-gate="tbreak" onclick="premDo(abrirTbreak)">
       <div class="tbcard-glow"></div>
       <div class="tbcard-shine"></div>
       <div class="tbcard-stars"><svg viewBox="0 0 400 120" preserveAspectRatio="none"><g fill="#fff"><circle cx="250" cy="24" r="1.5" opacity=".7"/><circle cx="300" cy="60" r="1.2" opacity=".5"/><circle cx="360" cy="30" r="1.6" opacity=".8"/><circle cx="330" cy="92" r="1.3" opacity=".55"/><circle cx="380" cy="72" r="1.4" opacity=".6"/></g></svg></div>
@@ -5211,6 +5211,11 @@ function aplicarGatesFuncoes(){
     if(!f.pg)return; // extras (chat/finanças/tbreak) não têm item de menu
     const vis=featElegivel(f)||show;
     document.querySelectorAll(`.ni[data-p="${f.pg}"]`).forEach(b=>{b.style.display=vis?'':'none';});
+  });
+  // atalhos na home (e outros pontos) marcados com data-gate="<featureId>"
+  document.querySelectorAll('[data-gate]').forEach(el=>{
+    const f=FEATURES.find(x=>x.id===el.getAttribute('data-gate'));if(!f)return;
+    el.style.display=(featElegivel(f)||show)?'':'none';
   });
   try{aplicarSubGates();}catch(e){}
 }
