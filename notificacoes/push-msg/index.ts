@@ -17,7 +17,9 @@ webpush.setVapidDetails("mailto:contato@dichava.app", VAPID_PUB, VAPID_PRIV);
 
 Deno.serve(async (req) => {
   try {
-    const payload = await req.json().catch(() => ({} as any));
+    const raw = await req.text().catch(() => "");
+    console.log("push-msg: RAW body =", raw.slice(0, 500));
+    let payload: any = {}; try { payload = JSON.parse(raw || "{}"); } catch (_) { payload = {}; }
     const rec = payload?.record || payload || {};
     const conversa_id = rec.conversa_id, de_id = rec.de_id, texto = rec.texto || "";
     console.log("push-msg: recebido", JSON.stringify({ conversa_id, de_id, temTexto: !!texto }));
