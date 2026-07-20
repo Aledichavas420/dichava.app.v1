@@ -156,6 +156,8 @@
 .fd-tut li b{color:#FFD24B}
 .fd-inv-btn{width:100%;margin-top:12px;background:linear-gradient(135deg,#FFD24B,#FFA470);color:#3a2600;border:none;border-radius:13px;padding:11px;font-weight:800;font-size:14px;cursor:pointer}
 .fd-depois{background:none;border:none;color:rgba(255,255,255,.6);font-size:13px;margin-top:10px;cursor:pointer;text-decoration:underline}
+.sub-ribbon{position:relative;overflow:visible}
+.sub-ribbon::after{content:"✨ Novo";position:absolute;top:5px;right:5px;background:linear-gradient(135deg,#9CF06B,#5CE3CF);color:#06210F;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;z-index:4;letter-spacing:.02em;box-shadow:0 1px 5px rgba(0,0,0,.18);animation:splUp .4s ease both}
 @keyframes celFade{from{opacity:0}to{opacity:1}}
 .cel-rays{position:absolute;width:160vmax;height:160vmax;top:50%;left:50%;transform:translate(-50%,-58%);background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.05) 0deg 8deg,transparent 8deg 16deg);animation:celSpin 22s linear infinite;pointer-events:none}
 @keyframes celSpin{to{transform:translate(-50%,-58%) rotate(360deg)}}
@@ -2625,7 +2627,7 @@ a{color:inherit;text-decoration:none}
   <div id="metas-l"></div>
 
   <!-- INSIGHTS EM DESTAQUE -->
-  <div class="insbox">
+  <div class="insbox" data-sub="insights">
     <div class="insbox-hd"><div class="insbox-t"><span class="tic" data-icon="sec-insights"></span> Insights do seu padrão</div><span class="premtag">👑 Premium</span><button class="insbox-i" onclick="infoInsights()" aria-label="Sobre">i</button></div>
     <div id="insights-l"></div>
   </div>
@@ -2653,9 +2655,9 @@ a{color:inherit;text-decoration:none}
   <div class="shr" style="padding-top:10px;display:flex;align-items:center;justify-content:space-between"><div class="sht">Ferramentas de reflexão</div><button class="reftools-i" onclick="openMod('mrefinfo')" aria-label="Como funcionam">i</button></div>
   <div class="reftools">
     <button class="reftool" style="--c:#4CAF5A" onclick="abrirConversa()"><span class="rt-ic">🌱</span><span class="rt-t">Conversa com o Dichavaldo</span><span class="rt-x">Um papo guiado</span></button>
-    <button class="reftool" style="--c:#EC5B95" onclick="abrirRodaEmo()"><span class="rt-ic">🎡</span><span class="rt-t">Roda das emoções</span><span class="rt-x">Nomeie o que sente</span></button>
-    <button class="reftool" style="--c:#F2B705" onclick="abrirCofre()"><span class="rt-ic">🏆</span><span class="rt-t">Cofre de vitórias</span><span class="rt-x" id="viz-count">Guarde conquistas</span></button>
-    <button class="reftool" style="--c:#7C3AED" onclick="abrirTrilhaEsc()"><span class="rt-ic">✍️</span><span class="rt-t">Trilha de escrita</span><span class="rt-x">7 dias por tema</span></button>
+    <button class="reftool" data-sub="roda" style="--c:#EC5B95" onclick="abrirRodaEmo()"><span class="rt-ic">🎡</span><span class="rt-t">Roda das emoções</span><span class="rt-x">Nomeie o que sente</span></button>
+    <button class="reftool" data-sub="cofre" style="--c:#F2B705" onclick="abrirCofre()"><span class="rt-ic">🏆</span><span class="rt-t">Cofre de vitórias</span><span class="rt-x" id="viz-count">Guarde conquistas</span></button>
+    <button class="reftool" data-sub="trilha" style="--c:#7C3AED" onclick="abrirTrilhaEsc()"><span class="rt-ic">✍️</span><span class="rt-t">Trilha de escrita</span><span class="rt-x">7 dias por tema</span></button>
   </div>
   <!-- CARTA DE REFLEXÃO (tarot) -->
   <div class="shr" style="padding-top:6px"><div class="sht">Carta de reflexão <span class="tic" data-icon="ref-crystal"></span></div></div>
@@ -5170,6 +5172,7 @@ function diasDesdeInicio(){const o=gO();if(!o||!o.data)return 0;const d0=new Dat
 function featElegivel(f){if(ls('dr_showall_'+uid()))return true;return gR().length>=f.gate.reg||diasDesdeInicio()>=f.gate.dias;}
 let _filaDesbloq=[];
 function checarDesbloqueios(){
+  try{checarSubDesbloqueios();}catch(e){}
   const unlocked=_unlocked();
   const eleg=FEATURES.filter(featElegivel);
   const novos=eleg.filter(f=>!unlocked.has(f.id));
@@ -5189,7 +5192,44 @@ function aplicarGatesFuncoes(){
   FEATURES.forEach(f=>{
     document.querySelectorAll(`.ni[data-p="${f.pg}"]`).forEach(b=>{b.style.display=unlocked.has(f.id)?'':'none';});
   });
+  try{aplicarSubGates();}catch(e){}
 }
+/* ── NÍVEL 2: sub-funções dentro de cada aba (ocultas → surgem com selinho "✨ Novo") ── */
+const SUBFEATS=[
+  {id:'roda',   nome:'Roda das emoções',      tab:'Reflexões',gate:{reg:8,dias:7},  free:true},
+  {id:'trilha', nome:'Trilha de escrita',     tab:'Reflexões',gate:{reg:12,dias:10},free:true},
+  {id:'cofre',  nome:'Cofre de vitórias',     tab:'Reflexões',gate:{reg:16,dias:14},free:true},
+  {id:'insights',nome:'Insights do seu padrão',tab:'Progresso',gate:{reg:6,dias:6}, free:false}
+];
+function subElegivel(s){if(ls('dr_showall_'+uid()))return true;return gR().length>=s.gate.reg||diasDesdeInicio()>=s.gate.dias;}
+function _subNew(){return new Set(ls('dr_subnew_'+uid())||[]);}
+function _saveSubNew(s){ls('dr_subnew_'+uid(),[...s]);}
+function aplicarSubGates(){
+  const nv=_subNew();
+  SUBFEATS.forEach(s=>{
+    const el=document.querySelector(`[data-sub="${s.id}"]`);if(!el)return;
+    if(subElegivel(s)){
+      el.style.display='';
+      el.classList.toggle('sub-ribbon',nv.has(s.id));
+    }else{el.style.display='none';el.classList.remove('sub-ribbon');}
+  });
+}
+function checarSubDesbloqueios(){
+  const antes=new Set(ls('dr_subunlock_'+uid())||[]);
+  const eleg=SUBFEATS.filter(subElegivel).map(s=>s.id);
+  const novos=SUBFEATS.filter(s=>subElegivel(s)&&!antes.has(s.id));
+  if(!ls('dr_subinit_'+uid())){ls('dr_subunlock_'+uid(),eleg);ls('dr_subinit_'+uid(),1);return;}
+  if(novos.length){
+    ls('dr_subunlock_'+uid(),eleg);
+    const nv=_subNew();novos.forEach(s=>nv.add(s.id));_saveSubNew(nv);
+    // aviso leve (sem tela cheia)
+    novos.forEach(s=>{const tag=s.free?'grátis':'👑 Premium';setTimeout(()=>toast(`✨ Nova ferramenta em ${s.tab}: ${s.nome} (${tag})`,3800),200);});
+    try{sfx('star');}catch(e){}
+  }
+}
+function subVisto(id){const nv=_subNew();if(nv.has(id)){nv.delete(id);_saveSubNew(nv);aplicarSubGates();}}
+// tira o selinho "Novo" quando a pessoa abre a ferramenta
+document.addEventListener('click',function(ev){const el=ev.target&&ev.target.closest&&ev.target.closest('[data-sub]');if(el)subVisto(el.getAttribute('data-sub'));},true);
 function proximoDesbloq(){
   const f=_filaDesbloq.shift();if(!f){return;}
   const badge=f.free?'<span class="fd-tag fd-free">✓ Grátis</span>':'<span class="fd-tag fd-prem">👑 Premium</span>';
