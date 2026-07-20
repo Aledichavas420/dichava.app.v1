@@ -2544,6 +2544,7 @@ a{color:inherit;text-decoration:none}
   </div>
   </div><!-- /zen-freq -->
 
+  <div data-sub="jogos" style="position:relative">
   <div class="zen-sec" style="margin-top:24px">Jogos pra distrair</div>
   <div class="zen-grid">
     <div class="zcard zc-blue tall" onclick="abrirJogo('flap')">
@@ -2554,6 +2555,7 @@ a{color:inherit;text-decoration:none}
       <div class="zi" data-icon="jogo-respiracao"></div>
       <div><h4>Respiração guiada</h4><p>Siga o círculo: inspira e solta</p></div>
     </div>
+  </div>
   </div>
   <div class="zen-sec" style="margin-top:22px">Mais jogos <span class="premtag">👑 Premium</span></div>
   <div class="zen-grid" id="zen-jogos-extra">
@@ -5163,7 +5165,20 @@ const FEATURES=[
   {id:'jogos',pg:'p-jogos',nome:'Pausa pra mente',ic:'pausa-mente',free:true,gate:{reg:10,dias:7},
    sub:'Alívio na hora da vontade',
    passos:['Sons e respiração guiada pra acalmar','Joguinhos que ocupam a mente na fissura','Pausa de tolerância guiada — recurso <b>Premium 👑</b>'],
-   premHint:true}
+   premHint:true},
+  // ── Telas cheias "extras" (momentos uau) — anunciam recursos fortes; não escondem nada ──
+  {id:'chat',nome:'Fale com um profissional',ic:'profissional',free:true,gate:{reg:5,dias:4},
+   sub:'Apoio de quem entende',
+   passos:['Converse com psicólogos e redutores de danos','Agende horários direto pelo app','Sigilo total, sem julgamento'],
+   abrir:()=>{try{abrirProfs();}catch(e){}}},
+  {id:'financas',nome:'Finanças',ic:'financas',free:false,premHint:true,gate:{reg:12,dias:12},
+   sub:'Veja quanto gasta e economiza',
+   passos:['Acompanhe gastos e o quanto economiza ao resistir','Metas de economia com o dinheiro poupado','Gráficos do seu bolso — recurso <b>Premium 👑</b>'],
+   abrir:()=>{try{goPg('p-home');}catch(e){}}},
+  {id:'tbreak',nome:'Pausa de Tolerância',ic:'pausa-mente',free:false,premHint:true,gate:{reg:16,dias:14},
+   sub:'Um t-break guiado, dia a dia',
+   passos:['Missões simples a cada dia da pausa','Check-in do corpo e do humor','Análise da sua pausa no fim — recurso <b>Premium 👑</b>'],
+   abrir:()=>{try{goPg('p-jogos');}catch(e){}}}
 ];
 const BASE_PGS=['p-home','p-agenda','p-cfg']; // sempre visíveis (inclui Registrar e Config)
 function _unlocked(){return new Set(ls('dr_unlock_'+uid())||[]);}
@@ -5199,7 +5214,8 @@ const SUBFEATS=[
   {id:'roda',   nome:'Roda das emoções',      tab:'Reflexões',gate:{reg:8,dias:7},  free:true},
   {id:'trilha', nome:'Trilha de escrita',     tab:'Reflexões',gate:{reg:12,dias:10},free:true},
   {id:'cofre',  nome:'Cofre de vitórias',     tab:'Reflexões',gate:{reg:16,dias:14},free:true},
-  {id:'insights',nome:'Insights do seu padrão',tab:'Progresso',gate:{reg:6,dias:6}, free:false}
+  {id:'insights',nome:'Insights do seu padrão',tab:'Progresso',gate:{reg:6,dias:6}, free:false},
+  {id:'jogos',  nome:'Jogos pra distrair',     tab:'Pausa pra mente',gate:{reg:5,dias:5},free:true}
 ];
 function subElegivel(s){if(ls('dr_showall_'+uid()))return true;return gR().length>=s.gate.reg||diasDesdeInicio()>=s.gate.dias;}
 function _subNew(){return new Set(ls('dr_subnew_'+uid())||[]);}
@@ -5234,12 +5250,13 @@ function proximoDesbloq(){
   const f=_filaDesbloq.shift();if(!f){return;}
   const badge=f.free?'<span class="fd-tag fd-free">✓ Grátis</span>':'<span class="fd-tag fd-prem">👑 Premium</span>';
   {const be=document.getElementById('fd-badge');be.innerHTML=(typeof ICONS!=='undefined'&&ICONS[f.ic])?uniqSvgIds(ICONS[f.ic]):esc(f.ic);}
+  {const kk=document.querySelector('#fdesbloq .cel-kicker');if(kk)kk.textContent=f.free?'✨ Função desbloqueada':'✨ Novo recurso pra você';}
   document.getElementById('fd-nome').textContent=f.nome;
   document.getElementById('fd-sub').innerHTML=badge+'<div style="margin-top:8px">'+f.sub+'</div>';
   document.getElementById('fd-passos').innerHTML=f.passos.map(p=>`<li>${p}</li>`).join('');
   const inv=document.getElementById('fd-invite');
   if(inv)inv.style.display=f.premHint?'block':'none';
-  document.getElementById('fd-explorar').onclick=()=>{fecharDesbloq();try{goPg(f.pg);}catch(e){}};
+  document.getElementById('fd-explorar').onclick=()=>{fecharDesbloq();try{if(f.abrir)f.abrir();else if(f.pg)goPg(f.pg);}catch(e){}};
   // confete
   const cc=document.getElementById('fd-confetti');if(cc){const cores=['#7BD98A','#FFD24B','#5CE3CF','#FF8A7A','#B79AF7','#FFA470'];let h='';for(let i=0;i<70;i++){h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;background:'+cores[i%cores.length]+';animation-duration:'+(2.2+Math.random()*2).toFixed(2)+'s;animation-delay:'+(Math.random()*1.2).toFixed(2)+'s;transform:rotate('+(Math.random()*360|0)+'deg)"></i>';}cc.innerHTML=h;}
   document.getElementById('fdesbloq').classList.add('on');
@@ -7588,7 +7605,8 @@ const TUTORIAL=[
   {id:'pausa',bg:'radial-gradient(120% 80% at 50% 0%,#241a4d,#0d1017)',c1:'#6B43D6',c2:'#0C9C8C',t:'Atravesse a fissura',x:'Na <b>Pausa pra mente</b>: respiração, grounding e sons pra acalmar. E o <b>Modo SOS</b> pra crise.',badges:[{t:'Respiração, grounding, SOS e sons',f:true},{t:'Sons/frequências e jogos extras',f:false}]},
   {id:'padroes',bg:'radial-gradient(120% 80% at 50% 0%,#0e3b39,#0d1017)',c1:'#0C9C8C',c2:'#7C3AED',t:'Entenda seus padrões',x:'Em <b>Registros</b> e <b>Progresso</b>: calendário, humor, atividade e insights do seu padrão.',badges:[{t:'Histórico, humor e metas',f:true},{t:'Insights avançados e relatórios em PDF',f:false}]},
   {id:'cuidar',bg:'radial-gradient(120% 80% at 50% 0%,#4a2415,#0d1017)',c1:'#EA580C',c2:'#E0509E',t:'Cuide da mente e do bolso',x:'Em <b>Reflexões</b>: diário e carta pro seu eu do futuro. E o controle de <b>Finanças</b>.',badges:[{t:'Diário e reflexões',f:true},{t:'Cartas pra mim e finanças',f:false}]},
-  {id:'final',bg:'radial-gradient(120% 80% at 50% 0%,#12401f,#0d1017)',c1:'#2E9244',c2:'#5CE3CF',mascot:true,t:'O essencial é sempre grátis',x:'Registro, SOS, respiração e informação <b>nunca custam nada</b>. A coroa '+TIC.crown+' Premium libera só os extras. Comece no seu ritmo!',badges:[]},
+  {id:'trilha',bg:'radial-gradient(120% 80% at 50% 0%,#0e2f4a,#0d1017)',c1:'#3E7BF0',c2:'#5CE3CF',mascot:true,t:'O app cresce com você',x:'Pra não te sobrecarregar, ele começa <b>enxuto</b> e vai <b>liberando ferramentas aos poucos</b>, sozinho. Cada novidade abre por <b>uso</b> (quantos registros você fez) <b>ou</b> por <b>tempo</b> (dias no app) — o que acontecer primeiro. Quando algo abre, aparece uma tela de <b>✨ Função desbloqueada</b> com um mini-tutorial. Sem pressa: tudo no seu ritmo. 🌱',badges:[{t:'Todas as ferramentas do dia a dia',f:true},{t:'Recursos extras marcados com a coroa',f:false}]},
+  {id:'final',bg:'radial-gradient(120% 80% at 50% 0%,#12401f,#0d1017)',c1:'#2E9244',c2:'#5CE3CF',mascot:true,t:'O essencial é sempre grátis',x:'Registro, SOS, respiração e informação <b>nunca custam nada</b>. A coroa '+TIC.crown+' Premium libera só os extras. E você pode ligar <b>"Mostrar tudo"</b> em Configurações se quiser ver todas as ferramentas de uma vez. Comece no seu ritmo!',badges:[]},
 ];
 let _tutI=0;
 function tutStars(){const c=document.getElementById('tut-stars');if(!c||c.childElementCount)return;let h='';for(let i=0;i<28;i++){const sz=(Math.random()*2+1).toFixed(1);h+=`<span class="tut-star" style="width:${sz}px;height:${sz}px;left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*100).toFixed(1)}%;animation-delay:${(Math.random()*2.6).toFixed(1)}s"></span>`;}c.innerHTML=h;}
