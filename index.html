@@ -5186,7 +5186,7 @@ const BASE_PGS=['p-home','p-agenda','p-cfg']; // sempre visíveis (inclui Regist
 function _unlocked(){return new Set(ls('dr_unlock_'+uid())||[]);}
 function _saveUnlocked(s){ls('dr_unlock_'+uid(),[...s]);}
 function diasDesdeInicio(){const o=gO();if(!o||!o.data)return 0;const d0=new Date(o.data),n=new Date();const d=Math.floor((n-d0)/86400000);return isNaN(d)?0:Math.max(0,d);}
-function featElegivel(f){if(ls('dr_showall_'+uid()))return true;return gR().length>=f.gate.reg||diasDesdeInicio()>=f.gate.dias;}
+function featElegivel(f){return gR().length>=f.gate.reg||diasDesdeInicio()>=f.gate.dias;}
 let _filaDesbloq=[];
 function checarDesbloqueios(){
   try{checarSubDesbloqueios();}catch(e){}
@@ -5205,9 +5205,11 @@ function checarDesbloqueios(){
   }else{aplicarGatesFuncoes();}
 }
 function aplicarGatesFuncoes(){
-  const unlocked=_unlocked();
+  const unlocked=_unlocked(), show=!!ls('dr_showall_'+uid());
   FEATURES.forEach(f=>{
-    document.querySelectorAll(`.ni[data-p="${f.pg}"]`).forEach(b=>{b.style.display=unlocked.has(f.id)?'':'none';});
+    if(!f.pg)return; // extras (chat/finanças/tbreak) não têm item de menu
+    const vis=unlocked.has(f.id)||show;
+    document.querySelectorAll(`.ni[data-p="${f.pg}"]`).forEach(b=>{b.style.display=vis?'':'none';});
   });
   try{aplicarSubGates();}catch(e){}
 }
@@ -5219,14 +5221,14 @@ const SUBFEATS=[
   {id:'insights',nome:'Insights do seu padrão',tab:'Progresso',gate:{reg:6,dias:6}, free:false},
   {id:'jogos',  nome:'Jogos pra distrair',     tab:'Pausa pra mente',gate:{reg:5,dias:5},free:true}
 ];
-function subElegivel(s){if(ls('dr_showall_'+uid()))return true;return gR().length>=s.gate.reg||diasDesdeInicio()>=s.gate.dias;}
+function subElegivel(s){return gR().length>=s.gate.reg||diasDesdeInicio()>=s.gate.dias;}
 function _subNew(){return new Set(ls('dr_subnew_'+uid())||[]);}
 function _saveSubNew(s){ls('dr_subnew_'+uid(),[...s]);}
 function aplicarSubGates(){
-  const nv=_subNew();
+  const nv=_subNew(), show=!!ls('dr_showall_'+uid());
   SUBFEATS.forEach(s=>{
     const el=document.querySelector(`[data-sub="${s.id}"]`);if(!el)return;
-    if(subElegivel(s)){
+    if(subElegivel(s)||show){
       el.style.display='';
       el.classList.toggle('sub-ribbon',nv.has(s.id));
     }else{el.style.display='none';el.classList.remove('sub-ribbon');}
@@ -5266,18 +5268,17 @@ function proximoDesbloq(){
 }
 function fecharDesbloq(){const el=document.getElementById('fdesbloq');el.classList.remove('on');const cc=document.getElementById('fd-confetti');if(cc)cc.innerHTML='';setTimeout(()=>{if(_filaDesbloq.length)proximoDesbloq();},350);}
 function preverDesbloqueios(){
-  const u=_unlocked();
-  const list=FEATURES.filter(f=>u.has(f.id));
+  const u=_unlocked(), show=!!ls('dr_showall_'+uid());
+  const list=FEATURES.filter(f=>u.has(f.id)||show);
   if(!list.length){toast('Nenhuma ferramenta desbloqueada ainda. Ative "Mostrar tudo" ou registre-se um pouco. 🌱');return;}
   _filaDesbloq.push(...list);
   if(!document.getElementById('fdesbloq').classList.contains('on'))proximoDesbloq();
 }
 function toggleMostrarTudo(el){
-  const on=el.checked; if(on)ls('dr_showall_'+uid(),1); else localStorage.removeItem('dr_showall_'+uid());
-  // libera TODAS as free imediatamente (nunca mexe em premium)
-  if(on){const u=_unlocked();FEATURES.forEach(f=>u.add(f.id));_saveUnlocked(u);}
+  // showall é só de EXIBIÇÃO (não persiste desbloqueio) — desligar volta ao progressivo
+  if(el.checked)ls('dr_showall_'+uid(),1); else localStorage.removeItem('dr_showall_'+uid());
   aplicarGatesFuncoes();
-  toast(on?'Todas as ferramentas gratuitas liberadas ✓':'Voltou ao modo progressivo. Já desbloqueadas continuam.');
+  toast(el.checked?'Todas as ferramentas gratuitas visíveis ✓':'Voltou ao modo progressivo — o que você ainda não desbloqueou some.');
 }
 /* ══ FINANÇAS ══ */
 function calcFin(){
@@ -5649,7 +5650,7 @@ function verMisturaReg(){
   const map={'Cocaína':'Cocaína / Crack','Crack':'Cocaína / Crack'};
   const toCmb=n=>map[n]||n;
   try{openCombo();
-    const mc=document.getElementById('mcombo');if(mc)mc.style.zIndex='500';
+    const mc=document.getElementById('mcombo');if(mc)mc.style.zIndex='800';
     const sa=document.getElementById('cmb-a'),sb=document.getElementById('cmb-b');
     const has=(s,v)=>[...s.options].some(o=>o.value===v);
     const a=toCmb(nomes[0]),b=toCmb(nomes[1]);
