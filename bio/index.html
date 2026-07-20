@@ -1,0 +1,80 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover"><title>dichava.app</title><meta name="theme-color" content="#1B2A1C">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--v:#2FA35F;--ve:#1E7A44;--tx:#1B2A1C;--txs:#5D7060;--line:#E4E4DF}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;min-height:100vh;color:#fff;background:#1B2A1C}
+.bg{position:fixed;inset:0;z-index:0}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 60% at 50% 0%,rgba(255,255,255,.12),transparent 60%)}
+.wrap{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:38px 22px 50px;text-align:center;min-height:100vh;display:flex;flex-direction:column}
+.av{width:104px;height:104px;border-radius:50%;background:rgba(255,255,255,.18);border:3px solid rgba(255,255,255,.7);display:grid;place-items:center;font-size:38px;font-weight:800;overflow:hidden;margin:0 auto 14px;box-shadow:0 10px 30px rgba(0,0,0,.3);position:relative}
+.av img{width:100%;height:100%;object-fit:cover}
+.avw{position:relative;width:104px;margin:0 auto 14px}
+.seal{position:absolute;right:2px;bottom:2px;width:32px;height:32px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.nome{font-size:25px;font-weight:800;letter-spacing:-.3px}
+.tipo{font-size:15px;opacity:.9;font-weight:600;margin-top:2px}
+.reg{font-size:12.5px;opacity:.75;margin-top:2px}
+.rate{display:inline-flex;align-items:center;gap:6px;margin-top:11px;background:rgba(0,0,0,.2);border-radius:20px;padding:5px 14px;font-size:13.5px;font-weight:700}
+.bio{font-size:14px;opacity:.9;margin:16px auto 4px;max-width:340px;line-height:1.55}
+.links{margin-top:24px;display:flex;flex-direction:column;gap:12px}
+.lk{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(6px);border-radius:16px;padding:15px 18px;color:#fff;text-decoration:none;font-weight:700;font-size:15.5px;transition:transform .12s,background .12s}
+.lk:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}
+.lk.primary{background:#fff;color:var(--ve);border-color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.lk .li{width:26px;text-align:center;font-size:20px;flex:none}
+.lk .lt{flex:1;text-align:left}
+.lk .lg{opacity:.5;font-size:18px}
+.foot{margin-top:auto;padding-top:34px}
+.brand{font-size:13px;font-weight:800;opacity:.8;text-decoration:none;color:#fff}.brand span{opacity:.6}
+.foot-s{font-size:11px;opacity:.5;margin-top:4px}
+.spin{width:24px;height:24px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp 1s linear infinite;margin:80px auto;display:block}@keyframes sp{to{transform:rotate(360deg)}}
+</style></head><body>
+<div class="bg" id="bg" style="background:linear-gradient(150deg,#1B3A2A,#2FA35F 62%,#3FA76A)"></div>
+<div class="wrap" id="wrap"><span class="spin"></span></div>
+<script>
+const SB=(typeof supabase!=='undefined')?supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'):null;
+const CODIGO=(new URLSearchParams(location.search).get('c')||'').toUpperCase();
+const CAPAS={verde:'linear-gradient(150deg,#1B3A2A 0%,#2FA35F 62%,#3FA76A 100%)',oceano:'linear-gradient(150deg,#0B2E4A 0%,#1E7FB0 60%,#37C0C9 100%)',roxo:'linear-gradient(150deg,#2E1B48 0%,#6B4BCE 62%,#9B5DE5 100%)',porsol:'linear-gradient(150deg,#5A1E3A 0%,#E0642F 58%,#F5A623 100%)',rosa:'linear-gradient(150deg,#4A1436 0%,#C93E77 60%,#F473A6 100%)',grafite:'linear-gradient(150deg,#15181C 0%,#3A424C 60%,#5B6672 100%)'};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ini=n=>String(n||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
+const SEAL='<svg width="27" height="27" viewBox="0 0 24 24"><defs><linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4CD98A"/><stop offset="1" stop-color="#1E9E8A"/></linearGradient></defs><g fill="url(#s)"><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4"/><rect x="5.6" y="5.6" width="12.8" height="12.8" rx="4" transform="rotate(45 12 12)"/></g><path d="M8.5 12.2l2.3 2.3 4.7-5" stroke="#fff" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function proLink(v){v=(v||'').trim();if(!v)return null;if(v[0]==='@')return{href:'https://instagram.com/'+v.slice(1).replace(/[^\w.]/g,''),label:v};if(/instagram\.com/i.test(v)){const h=(v.split('instagram.com/')[1]||'').replace(/[/?#].*$/,'');return{href:'https://instagram.com/'+h,label:'@'+h};}let href=v;if(!/^https?:\/\//i.test(href))href='https://'+href;return{href,label:v.replace(/^https?:\/\//i,'').replace(/\/$/,'')};}
+
+(async function(){
+  if(!CODIGO||!SB){fail();return;}
+  try{
+    const{data:profs}=await SB.from('profissionais').select('id,nome,tipo_prof,reg,bio,foto,link,telefone,capa,agenda_config,bio_links').eq('agenda_codigo',CODIGO).eq('status','aprovado');
+    const p=(profs&&profs[0]);
+    if(!p){fail();return;}
+    let avg=0,n=0; try{const{data:av}=await SB.from('avaliacoes_prof').select('nota').eq('prof_id',p.id);if(av&&av.length){n=av.length;avg=av.reduce((s,a)=>s+a.nota,0)/n;}}catch(e){}
+    render(p,avg,n);
+  }catch(e){fail();}
+})();
+
+function fail(){
+  document.getElementById('wrap').innerHTML='<div style="margin:auto"><div style="font-size:44px">🔗</div><h1 style="margin-top:10px;font-size:20px">Link indisponível</h1><p style="opacity:.85;margin-top:8px;font-size:14px">Confira o link ou volte mais tarde.</p></div><div class="foot"><a class="brand" href="https://dichava.app">dichava<span>.app</span></a></div>';
+}
+
+function render(p,avg,n){
+  document.getElementById('bg').style.background=CAPAS[p.capa]||CAPAS.verde;
+  const temAgenda=p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length;
+  const lk=proLink(p.link);
+  const tel=(p.telefone||'').replace(/[^0-9]/g,'');
+  const wa=tel.length>=10?('55'+tel).replace(/^5555/,'55'):'';
+  const links=Array.isArray(p.bio_links)?p.bio_links:[];
+  let html=`
+    <div class="avw"><div class="av">${p.foto?`<img src="${p.foto}" alt="">`:ini(p.nome)}</div><div class="seal">${SEAL}</div></div>
+    <div class="nome">${esc(p.nome)}</div>
+    <div class="tipo">${esc(p.tipo_prof||'')}</div>
+    ${p.reg?`<div class="reg">${esc(p.reg)}</div>`:''}
+    ${n?`<div class="rate">⭐ ${avg.toFixed(1)} · ${n} avaliaç${n===1?'ão':'ões'}</div>`:''}
+    ${p.bio?`<div class="bio">${esc(p.bio)}</div>`:''}
+    <div class="links">`;
+  if(temAgenda||true) html+=`<a class="lk primary" href="/agendar/?c=${encodeURIComponent(CODIGO)}"><span class="li">📅</span><span class="lt">Agendar consulta</span><span class="lg">›</span></a>`;
+  if(wa) html+=`<a class="lk" href="https://wa.me/${wa}" target="_blank" rel="noopener"><span class="li">💬</span><span class="lt">WhatsApp</span><span class="lg">↗</span></a>`;
+  if(lk) html+=`<a class="lk" href="${esc(lk.href)}" target="_blank" rel="noopener"><span class="li">${/instagram/.test(lk.href)?'📸':'🌐'}</span><span class="lt">${esc(lk.label)}</span><span class="lg">↗</span></a>`;
+  links.forEach(l=>{ if(l&&l.url){ const u=proLink(l.url); html+=`<a class="lk" href="${esc((u&&u.href)||l.url)}" target="_blank" rel="noopener"><span class="li">🔗</span><span class="lt">${esc(l.titulo||l.url)}</span><span class="lg">↗</span></a>`; } });
+  html+=`</div><div class="foot"><a class="brand" href="https://dichava.app">dichava<span>.app</span></a><div class="foot-s">Rede de profissionais de redução de danos</div></div>`;
+  document.getElementById('wrap').innerHTML=html;
+}
+</script>
+</body></html>
