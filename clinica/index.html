@@ -143,6 +143,18 @@ a{color:inherit;text-decoration:none}
 .doc-count{font-size:11.5px;font-weight:800;background:var(--vf);color:var(--v);border-radius:20px;padding:1px 9px}
 .doc-pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:20px}
 .doc-tbl td{vertical-align:middle}
+/* ── Relatório financeiro ── */
+.rl-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.rl-k{font-size:11px;color:var(--txs);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.rl-v{font-family:'DM Sans',system-ui,sans-serif;font-size:22px;font-weight:800;color:var(--tx);margin-top:3px;line-height:1}
+.rl-s{font-size:13px;font-weight:600;color:var(--txm)}
+.rl-chart{display:flex;align-items:flex-end;gap:10px;height:120px;padding:0 2px}
+.rl-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%}
+.rl-barwrap{flex:1;width:100%;max-width:38px;display:flex;align-items:flex-end}
+.rl-bar{width:100%;border-radius:7px 7px 3px 3px;background:linear-gradient(180deg,#8FE06B,#2FA35F);min-height:2px;transition:height .4s cubic-bezier(.4,.1,.2,1)}
+.rl-bar.on{background:linear-gradient(180deg,#5CE3CF,#0EA5A0)}
+.rl-ml{font-size:11px;color:var(--txm);font-weight:700;margin-top:7px;text-transform:capitalize}
+.rl-hint{font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px}
 
 table{width:100%;border-collapse:collapse}
 th{text-align:left;font-size:12px;color:var(--txs);font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:12px 14px;border-bottom:1px solid var(--line)}
@@ -951,6 +963,7 @@ function viewCaixa(){
       <button class="btn" onclick="formFinanceiro('entrada')">＋ Entrada</button>
     </div>
     ${kpis}${formas}
+    ${relatorioFinanceiro()}
     <div class="sec-title">Movimentações</div>
     ${movs.length?`<div class="card"><div class="tbl-wrap"><table>
       <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Forma</th><th style="text-align:right">Valor</th><th></th></tr></thead>
@@ -958,6 +971,32 @@ function viewCaixa(){
     :`<div class="card empty"><div class="big">$</div><b>Sem movimentações neste mês</b>Consultas atendidas e marcadas como pagas entram aqui automaticamente.</div>`}`;
 }
 function shiftMes(n){ const [y,m]=caixaMes.split('-').map(Number); const d=new Date(y,m-1+n,1); caixaMes=d.toISOString().slice(0,7); render(); }
+// Relatório: faturamento 6 meses + ticket médio + comparecimento
+function relatorioFinanceiro(){
+  const [y,m]=caixaMes.split('-').map(Number);
+  const meses=[]; for(let i=5;i>=0;i--){const d=new Date(y,m-1-i,1);meses.push(d.toISOString().slice(0,7));}
+  const fat=meses.map(mm=>({mm,v:DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mm)).reduce((s,f)=>s+ +f.valor,0)}));
+  const maxFat=Math.max(...fat.map(x=>x.v),1);
+  const pagasMes=DB.agendamentos.filter(a=>a.pago&&(a.data||'').startsWith(caixaMes)&&+a.valor>0);
+  const ticket=pagasMes.length?pagasMes.reduce((s,a)=>s+ +a.valor,0)/pagasMes.length:0;
+  const atendidos=DB.agendamentos.filter(a=>a.status==='atendido'&&(a.data||'').startsWith(caixaMes)).length;
+  const marcados=DB.agendamentos.filter(a=>(a.data||'').startsWith(caixaMes)&&a.status!=='cancelado').length;
+  const compar=marcados?Math.round(atendidos/marcados*100):0;
+  const total6=fat.reduce((s,x)=>s+x.v,0);
+  return `<div class="sec-title">Relatório</div>
+  <div class="card" style="padding:18px 18px 14px">
+    <div class="rl-kpis">
+      <div><div class="rl-k">Ticket médio</div><div class="rl-v">${brl(ticket)}</div></div>
+      <div><div class="rl-k">Consultas atendidas</div><div class="rl-v">${atendidos}<span class="rl-s"> no mês</span></div></div>
+      <div><div class="rl-k">Comparecimento</div><div class="rl-v">${compar}<span class="rl-s">%</span></div></div>
+      <div><div class="rl-k">Faturamento 6 meses</div><div class="rl-v" style="color:var(--ve)">${brl(total6)}</div></div>
+    </div>
+    <div class="rl-chart">
+      ${fat.map(x=>{const h=Math.round(x.v/maxFat*100);const cur=x.mm===caixaMes;return `<div class="rl-col"><div class="rl-barwrap"><div class="rl-bar${cur?' on':''}" style="height:${Math.max(h,x.v>0?6:0)}%" title="${brl(x.v)}"></div></div><div class="rl-ml">${new Date(x.mm+'-01T12:00').toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</div></div>`;}).join('')}
+    </div>
+    <div class="rl-hint">Faturamento (entradas) dos últimos 6 meses</div>
+  </div>`;
+}
 
 /* =============== CONFIG =============== */
 /* =============== DISPONIBILIDADE PARA AGENDAMENTO ONLINE =============== */
