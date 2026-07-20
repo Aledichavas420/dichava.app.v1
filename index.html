@@ -245,8 +245,9 @@ a{color:inherit;text-decoration:none}
 
 /* BOTTOM NAV — item flex no rodapé (responsivo a qualquer tela) */
 #bnav{flex-shrink:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--cinm);display:none;padding:6px 0 calc(6px + var(--sb));z-index:100}
-#bnav.on{display:flex}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;padding:4px 1px;font-size:7.5px;color:var(--txm);font-weight:500;transition:color .15s}
+#bnav.on{display:flex;align-items:flex-start}
+.nav-side{flex:1;display:flex;justify-content:space-around;align-items:flex-start;min-width:0}
+.ni{flex:0 1 auto;min-width:48px;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;padding:4px 1px;font-size:7.5px;color:var(--txm);font-weight:500;transition:color .15s}
 .ni.on{color:var(--ve)}
 .ni-ic{font-size:18px;line-height:1;height:22px;display:flex;align-items:center;justify-content:center}
 .ni-ic .appicon{width:21px;height:21px;display:block}
@@ -2801,13 +2802,17 @@ a{color:inherit;text-decoration:none}
 </div><!-- /vpages -->
 <!-- BOTTOM NAV -->
 <nav id="bnav" class="on">
-  <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic" data-icon="inicio"></div><span>Início</span></button>
-  <button class="ni" data-p="p-jogos" onclick="goPg('p-jogos',this)"><div class="ni-ic" data-icon="jogos"></div><span>Jogos</span></button>
-  <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic" data-icon="agenda"></div><span>Registros</span></button>
+  <div class="nav-side">
+    <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic" data-icon="inicio"></div><span>Início</span></button>
+    <button class="ni" data-p="p-jogos" onclick="goPg('p-jogos',this)"><div class="ni-ic" data-icon="jogos"></div><span>Jogos</span></button>
+    <button class="ni" data-p="p-agenda" onclick="goPg('p-agenda',this)"><div class="ni-ic" data-icon="agenda"></div><span>Registros</span></button>
+  </div>
   <div class="fabw"><div class="fab" onclick="abrirNovo()" data-icon="registrar">+</div></div>
-  <button class="ni" data-p="p-prog" onclick="goPg('p-prog',this)"><div class="ni-ic" data-icon="progresso"></div><span>Progresso</span></button>
-  <button class="ni" data-p="p-ref" onclick="goPg('p-ref',this)"><div class="ni-ic" data-icon="reflexoes"></div><span>Reflexões</span></button>
-  <button class="ni" data-p="p-cfg" onclick="goPg('p-cfg',this)"><div class="ni-ic">⚙️</div><span>Config.</span></button>
+  <div class="nav-side">
+    <button class="ni" data-p="p-prog" onclick="goPg('p-prog',this)"><div class="ni-ic" data-icon="progresso"></div><span>Progresso</span></button>
+    <button class="ni" data-p="p-ref" onclick="goPg('p-ref',this)"><div class="ni-ic" data-icon="reflexoes"></div><span>Reflexões</span></button>
+    <button class="ni" data-p="p-cfg" onclick="goPg('p-cfg',this)"><div class="ni-ic">⚙️</div><span>Config.</span></button>
+  </div>
 </nav>
 
 </div><!-- /vapp -->
