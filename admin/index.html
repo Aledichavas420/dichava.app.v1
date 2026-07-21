@@ -94,6 +94,23 @@ a{color:var(--ve)}
   </div>
 </div>
 
+<!-- 2FA -->
+<div id="mfa" class="hide">
+  <div class="gate-card">
+    <div class="gate-logo">🔐</div>
+    <h2 id="mfa-title">Verificação em 2 etapas</h2>
+    <div class="gsub" id="mfa-sub">Digite o código do seu app autenticador.</div>
+    <div id="mfa-enroll-box" class="hide" style="margin-bottom:14px">
+      <div style="background:#fff;border-radius:14px;padding:12px;display:inline-block"><img id="mfa-qr" alt="QR" style="width:190px;height:190px;display:block"></div>
+      <div style="font-size:12.5px;color:var(--txm);margin-top:10px;line-height:1.5">Escaneie com <b>Google Authenticator</b>, <b>Authy</b> ou similar.<br>Ou use a chave: <code id="mfa-secret" style="color:var(--ve);word-break:break-all"></code></div>
+    </div>
+    <div class="gate-err" id="mfa-err"></div>
+    <div class="field"><label>Código de 6 dígitos</label><input id="mfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="text-align:center;letter-spacing:6px;font-size:20px"></div>
+    <button class="btn" id="mfa-btn" style="width:100%" onclick="verificarMfa()">Verificar</button>
+    <button class="btn ghost sm" style="width:100%;margin-top:10px" onclick="sair()">Cancelar</button>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="app" class="hide">
   <div class="top">
@@ -107,6 +124,9 @@ a{color:var(--ve)}
 
     <div class="sec">Crescimento de usuários</div>
     <div class="card chartcard" id="growth"><div class="spin"></div></div>
+
+    <div class="sec">Suporte — conversas</div>
+    <div class="plist" id="suplist"><div class="empty" style="padding:20px">—</div></div>
 
     <div class="sec">Profissionais</div>
     <div class="filters" id="filters"></div>
@@ -140,7 +160,7 @@ async function boot(){
   if(!SB){ gerr('Sem conexão com o servidor.'); return; }
   const {data}=await SB.auth.getSession();
   const u=data&&data.session&&data.session.user;
-  if(u && ADMIN_EMAILS.includes((u.email||'').toLowerCase())) abrirApp();
+  if(u && ADMIN_EMAILS.includes((u.email||'').toLowerCase())) await rotearMfa();
 }
 async function entrar(){
   gerr('');
@@ -152,12 +172,70 @@ async function entrar(){
     const {data,error}=await SB.auth.signInWithPassword({email,password:pw});
     if(error){ gerr(/Invalid/.test(error.message)?'E-mail ou senha incorretos.':error.message); return; }
     if(!ADMIN_EMAILS.includes((data.user.email||'').toLowerCase())){ gerr('Sem acesso admin.'); await SB.auth.signOut(); return; }
-    abrirApp();
+    await rotearMfa();
   }catch(e){ gerr('Não consegui entrar agora.'); }
   finally{ b.disabled=false; b.textContent='Entrar'; }
 }
 async function sair(){ try{await SB.auth.signOut();}catch(e){} location.reload(); }
-function abrirApp(){ $('#gate').classList.add('hide'); $('#app').classList.remove('hide'); carregar(); }
+function abrirApp(){ $('#gate').classList.add('hide'); $('#mfa').classList.add('hide'); $('#app').classList.remove('hide'); carregar(); }
+
+/* ===== 2FA (TOTP) ===== */
+let _mfaFactorId=null, _mfaChallengeId=null;
+function mfaErr(m){ $('#mfa-err').textContent=m||''; }
+async function rotearMfa(){
+  try{
+    const {data:aal,error}=await SB.auth.mfa.getAuthenticatorAssuranceLevel();
+    if(error) throw error;
+    if(aal.currentLevel==='aal2'){ abrirApp(); return; }
+    if(aal.nextLevel==='aal2'){ await mostrarChallenge(); return; }   // já tem 2FA, precisa do código
+    await mostrarEnroll();                                            // ainda sem 2FA → configurar agora
+  }catch(e){
+    // Se o projeto não tiver MFA habilitado, o método pode falhar → entra direto (não trava)
+    if(/mfa|not enabled|unsupported/i.test(e.message||'')) abrirApp(); else { gerr('Erro no 2FA: '+(e.message||'')); }
+  }
+}
+function mostrarGateMfa(){ $('#gate').classList.add('hide'); $('#mfa').classList.remove('hide'); setTimeout(()=>$('#mfa-code').focus(),100); }
+async function mostrarChallenge(){
+  mfaErr('');
+  $('#mfa-enroll-box').classList.add('hide');
+  $('#mfa-title').textContent='Verificação em 2 etapas';
+  $('#mfa-sub').textContent='Digite o código do seu app autenticador.';
+  const {data:fs}=await SB.auth.mfa.listFactors();
+  const totp=(fs&&fs.totp&&fs.totp[0])||null;
+  if(!totp){ await mostrarEnroll(); return; }
+  _mfaFactorId=totp.id;
+  const {data:ch,error}=await SB.auth.mfa.challenge({factorId:_mfaFactorId});
+  if(error){ mfaErr(error.message); return; }
+  _mfaChallengeId=ch.id;
+  mostrarGateMfa();
+}
+async function mostrarEnroll(){
+  mfaErr('');
+  $('#mfa-title').textContent='Ative a verificação em 2 etapas';
+  $('#mfa-sub').textContent='Pra proteger o painel, configure um app autenticador.';
+  $('#mfa-enroll-box').classList.remove('hide');
+  const {data,error}=await SB.auth.mfa.enroll({factorType:'totp',friendlyName:'admin-'+Date.now()});
+  if(error){ mfaErr(error.message); mostrarGateMfa(); return; }
+  _mfaFactorId=data.id;
+  $('#mfa-qr').src=data.totp.qr_code;
+  $('#mfa-secret').textContent=data.totp.secret;
+  const {data:ch}=await SB.auth.mfa.challenge({factorId:_mfaFactorId});
+  _mfaChallengeId=ch&&ch.id;
+  mostrarGateMfa();
+}
+async function verificarMfa(){
+  mfaErr('');
+  const code=($('#mfa-code').value||'').trim();
+  if(code.length<6){ mfaErr('Digite os 6 dígitos.'); return; }
+  const b=$('#mfa-btn'); b.disabled=true; b.textContent='Verificando…';
+  try{
+    if(!_mfaChallengeId){ const {data:ch}=await SB.auth.mfa.challenge({factorId:_mfaFactorId}); _mfaChallengeId=ch.id; }
+    const {error}=await SB.auth.mfa.verify({factorId:_mfaFactorId,challengeId:_mfaChallengeId,code});
+    if(error){ mfaErr('Código incorreto. Tente de novo.'); _mfaChallengeId=null; return; }
+    abrirApp();
+  }catch(e){ mfaErr('Não consegui verificar agora.'); }
+  finally{ b.disabled=false; b.textContent='Verificar'; }
+}
 
 async function carregar(){
   renderFiltros();
@@ -173,7 +251,52 @@ async function carregar(){
     if(error) throw error;
     PROFS=data||[]; renderProfs();
   }catch(e){ $('#plist').innerHTML='<div class="empty">Não consegui carregar os profissionais.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small></div>'; }
+  carregarSuporte();
 }
+
+/* ===== SUPORTE (admin) ===== */
+async function carregarSuporte(){
+  try{
+    const {data,error}=await SB.rpc('admin_suporte_conversas');
+    if(error) throw error;
+    const cs=data||[];
+    if(!cs.length){ $('#suplist').innerHTML='<div class="empty" style="padding:20px">Nenhuma conversa de suporte ainda.</div>'; return; }
+    $('#suplist').innerHTML=cs.map(c=>`<div class="pcard" style="cursor:pointer" onclick="abrirSuporte('${c.prof_id}','${esc((c.nome||'Profissional').replace(/'/g,''))}')">
+      <div class="phead"><div class="pav">${initials(c.nome)}</div>
+      <div style="flex:1;min-width:0"><div class="pn">${esc(c.nome||'Profissional')} ${c.nao_lidas?`<span class="chip a">${c.nao_lidas} nova(s)</span>`:''}</div>
+      <div class="pmeta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.ultima_msg||'')}</div></div></div>
+    </div>`).join('');
+  }catch(e){ $('#suplist').innerHTML='<div class="empty" style="padding:20px">Suporte indisponível.<br><small style="color:var(--txs)">'+esc(e.message||'')+' — rodou o suporte-setup.sql?</small></div>'; }
+}
+let _supProf=null, _supPoll=null;
+async function abrirSuporte(profId,nome){
+  _supProf=profId;
+  $('#modalRoot').innerHTML=`<div class="mbg" onclick="if(event.target===this)fecharSuporte()"><div class="modal" style="max-width:440px">
+    <h3>Suporte — ${esc(nome)}</h3>
+    <div id="sup-scroll" style="height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:#0b1310;border-radius:12px;padding:12px;margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px"><textarea id="sup-input" rows="1" placeholder="Responder…" style="flex:1;resize:none;max-height:90px;border:1.5px solid var(--line);border-radius:11px;padding:10px;background:#0b1310;color:var(--tx);font-family:inherit" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarSuporte();}"></textarea><button class="btn" onclick="enviarSuporte()">Enviar</button></div>
+    <button class="btn ghost sm" style="width:100%;margin-top:8px" onclick="fecharSuporte()">Fechar</button>
+  </div></div>`;
+  await carregarSupMsgs(true); await marcarSupLidas();
+  clearInterval(_supPoll); _supPoll=setInterval(()=>carregarSupMsgs(false),4000);
+}
+function fecharSuporte(){ clearInterval(_supPoll); _supProf=null; fecharModal(); carregarSuporte(); }
+async function carregarSupMsgs(scroll){
+  if(!_supProf)return;
+  try{
+    const {data}=await SB.from('suporte_mensagens').select('*').eq('prof_id',_supProf).order('criado_em',{ascending:true});
+    const sc=$('#sup-scroll'); if(!sc)return;
+    sc.innerHTML=(data||[]).map(m=>{const mine=m.remetente==='suporte';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.4;${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:4px':'align-self:flex-start;background:#1b2822;border-bottom-left-radius:4px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px">Sem mensagens.</div>';
+    if(scroll) sc.scrollTop=sc.scrollHeight;
+  }catch(e){}
+}
+async function enviarSuporte(){
+  const inp=$('#sup-input'); const t=(inp.value||'').trim(); if(!t||!_supProf)return;
+  inp.value='';
+  try{ await SB.from('suporte_mensagens').insert({prof_id:_supProf,remetente:'suporte',texto:t,lida_admin:true}); await carregarSupMsgs(true); }
+  catch(e){ toast('Erro ao enviar: '+(e.message||''),1); inp.value=t; }
+}
+async function marcarSupLidas(){ try{ await SB.from('suporte_mensagens').update({lida_admin:true}).eq('prof_id',_supProf).eq('remetente','prof'); }catch(e){} }
 
 function renderKpis(s){
   s=s||{};
@@ -316,6 +439,7 @@ async function acao(id,tipo,meses,obs){
 }
 
 $('#g-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') entrar(); });
+$('#mfa-code').addEventListener('keydown',e=>{ if(e.key==='Enter') verificarMfa(); });
 boot();
 </script>
 </body>

@@ -609,11 +609,41 @@ function pintarIconesClinica(){
 // menu "Mais" (mobile) — funções que não cabem na barra inferior
 function abrirMaisMenu(){
   const items=[['prontuarios','Prontuários'],['documentos','Documentos'],['caixa','Caixa'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
       ${items.map(([r,nome])=>`<button class="mais-item" onclick="closeModal();go('${r}')"><span class="mais-ic">${CIC[r]||''}</span><span>${nome}</span></button>`).join('')}
+      <button class="mais-item" onclick="closeModal();abrirSuporteProf()"><span class="mais-ic">${supIc}</span><span>Suporte <span class="badge" id="badge-sup-m" style="display:none"></span></span></button>
     </div></div></div>`);
 }
+/* ===== SUPORTE (lado do profissional) ===== */
+let _supPollP=null;
+function abrirSuporteProf(){
+  if(!_SB||!AUTH){ toast('Sem conexão',1); return; }
+  openModal(`<div class="modal"><div class="modal-head"><div class="avatar" style="background:linear-gradient(135deg,#FFC463,#F5871F);color:#fff">S</div><h3 style="flex:1">Suporte dichava</h3><button class="icon-btn" onclick="fecharSuporteProf()">✕</button></div>
+    <div id="supp-scroll" style="height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--cin);padding:14px"></div>
+    <div class="modal-foot" style="gap:8px"><textarea id="supp-input" rows="1" placeholder="Escreva pro suporte…" style="flex:1;resize:none;max-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;background:var(--bg)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarSuporteProf();}"></textarea><button class="btn" onclick="enviarSuporteProf()">Enviar</button></div>
+  </div>`);
+  carregarSuppMsgs(true); marcarSuppLidas();
+  clearInterval(_supPollP); _supPollP=setInterval(()=>carregarSuppMsgs(false),4000);
+}
+function fecharSuporteProf(){ clearInterval(_supPollP); closeModal(); }
+async function carregarSuppMsgs(scroll){
+  if(!_SB||!AUTH)return;
+  try{
+    const {data}=await _SB.from('suporte_mensagens').select('*').eq('prof_id',AUTH.id).order('criado_em',{ascending:true});
+    const sc=document.getElementById('supp-scroll'); if(!sc)return;
+    sc.innerHTML=(data||[]).map(m=>{const mine=m.remetente==='prof';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px;text-align:center;padding:0 20px">Fale com a equipe dichava. Dúvidas, pagamento, ajuda com o painel — responderemos por aqui. 🧡</div>';
+    if(scroll) sc.scrollTop=sc.scrollHeight;
+  }catch(e){ const sc=document.getElementById('supp-scroll'); if(sc)sc.innerHTML='<div style="margin:auto;color:var(--txm);font-size:13px">Suporte indisponível. Rode o suporte-setup.sql.</div>'; }
+}
+async function enviarSuporteProf(){
+  const inp=document.getElementById('supp-input'); const t=(inp.value||'').trim(); if(!t)return;
+  inp.value='';
+  try{ await _SB.from('suporte_mensagens').insert({prof_id:AUTH.id,remetente:'prof',texto:t,lida_prof:true}); await carregarSuppMsgs(true); }
+  catch(e){ toast('Erro ao enviar',1); inp.value=t; }
+}
+async function marcarSuppLidas(){ try{ await _SB.from('suporte_mensagens').update({lida_prof:true}).eq('prof_id',AUTH.id).eq('remetente','suporte'); }catch(e){} }
 function render(){
   const [t,s]=TITLES[route]||['',''];
   $('#pg-title').textContent=t; $('#pg-sub').textContent=s;
