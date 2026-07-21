@@ -6,7 +6,14 @@
 <meta name="theme-color" content="#1B2A1C">
 <title>dichava.app — Painel da Clínica</title>
 <meta name="description" content="Gestão de clínica: agenda, prontuários e caixa integrados.">
-<link rel="apple-touch-icon" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-pro-192.png">
+<link rel="apple-touch-icon" href="./icon-pro-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Painel dichava">
+<link rel="manifest" href="./manifest.webmanifest">
 <script>/* PORTÃO "EM BREVE": redireciona o público pra breve.html. Entra com ?acesso=chave */
 (function(){var MANUTENCAO=true;if(!MANUTENCAO)return;try{
   var q=new URLSearchParams(location.search);
@@ -98,6 +105,12 @@ html,body{overflow-x:clip;max-width:100vw;width:100%}
 .sup-item{display:flex;align-items:center;gap:10px;width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:13px;background:var(--card);color:var(--tx);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left}
 .sup-item:active{background:var(--cin)}
 .sup-back{background:none;border:none;color:var(--ve);font-weight:700;font-size:13.5px;cursor:pointer;padding:2px 0 8px}
+.atalho-card{margin:14px 14px 0;background:linear-gradient(135deg,#26402e,#1f3d2b);color:#f6f3ea;border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;box-shadow:var(--sh)}
+.atalho-card .ai{width:42px;height:42px;border-radius:12px;flex-shrink:0;background:radial-gradient(circle at 32% 28%,#4a7856,#2f5740 78%);display:grid;place-items:center}
+.atalho-card .ai svg{width:22px;height:22px;fill:none;stroke:#f6f3ea;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.atalho-card b{font-size:13.5px;display:block;margin-bottom:2px}
+.atalho-card p{font-size:12px;line-height:1.45;color:#cdddcf}
+.atalho-card .ax{background:none;border:none;color:#9db0a6;font-size:18px;cursor:pointer;flex-shrink:0;align-self:flex-start;line-height:1}
 .topbar>div:first-child{min-width:0}
 .topbar h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 table{max-width:100%}
@@ -331,6 +344,7 @@ tbody tr:hover{background:var(--cin)}
 .eq-mem .papel.dono{background:var(--vf);color:var(--ve)}
 .gate-card{width:100%;max-width:400px;background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh2);padding:30px 26px;animation:pop .25s}
 .gate-logo{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,var(--v),var(--sa));display:grid;place-items:center;font-weight:800;color:#fff;font-size:26px;margin:0 auto 14px}
+.gate-logo svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .gate-card h2{text-align:center;font-size:21px;font-weight:800;letter-spacing:-.4px}
 .gate-card .gsub{text-align:center;color:var(--txs);font-size:13.5px;margin:6px 0 20px}
 .gate-err{background:var(--erf);color:var(--er);border-radius:11px;padding:10px 13px;font-size:13px;font-weight:600;margin-bottom:12px;display:none}
@@ -339,6 +353,28 @@ tbody tr:hover{background:var(--cin)}
 .gate-note a{color:var(--v);font-weight:700}
 #gate .btn{width:100%;justify-content:center;padding:13px;font-size:15px;margin-top:4px}
 .gate-info{background:var(--vf);color:var(--ve);border-radius:12px;padding:13px 15px;font-size:13px;font-weight:600;line-height:1.55;text-align:center}
+
+/* ====== LOGIN ACOLHEDOR (tema quente, marca folhinha) ====== */
+#gate{background:radial-gradient(1200px 600px at 15% -10%,#274a35 0,transparent 55%),radial-gradient(900px 500px at 100% 110%,#26402e 0,transparent 50%),linear-gradient(160deg,#1b3324 0%,#1f3d2b 45%,#1a2f22 100%)}
+#gate .gate-card{background:linear-gradient(180deg,#fbf9f3 0%,#f6f3ea 100%);border-radius:26px;padding:38px 32px 28px;box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 30px 60px -20px rgba(12,28,18,.55),0 8px 20px -12px rgba(12,28,18,.4)}
+#gate .gate-logo{width:62px;height:62px;border-radius:20px;background:radial-gradient(circle at 32% 28%,#4a7856,#2f5740 78%);box-shadow:0 10px 22px -8px rgba(31,61,43,.6),0 0 0 5px rgba(139,191,159,.16);margin:0 auto 14px;font-size:0}
+#gate .gate-logo svg{width:32px;height:32px;fill:none;stroke:#f6f3ea;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#gate .saudacao{text-align:center;font-size:13px;color:#d99a3c;font-weight:600;letter-spacing:.3px;margin-bottom:2px}
+#gate .gate-card h2{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:#1f3d2b;letter-spacing:0}
+#gate .gate-card .gsub{color:#5c6b5a;font-size:13.5px;max-width:280px;margin:8px auto 20px}
+#gate .field label{color:#2f5740}
+#gate input{background:#fffdf8;border:1.5px solid #e2dccb;color:#243024}
+#gate input::placeholder{color:#b3ab97}
+#gate input:focus{border-color:#4a7856;box-shadow:0 0 0 4px rgba(139,191,159,.22);background:#fff}
+#gate .btn{background:linear-gradient(180deg,#4a7856 0%,#2f5740 100%);color:#f6f3ea;box-shadow:0 12px 24px -10px rgba(31,61,43,.7);border:none}
+#gate .btn.ghost{background:transparent;color:#2f5740;border:1.5px solid #d9d2c0;box-shadow:none}
+#gate .gate-note{color:#5c6b5a}
+#gate .gate-note a{color:#4a7856}
+#gate .gate-note a strong,#gate .gate-note strong{color:#2f5740}
+#gate .gate-err{color:#b4482f}
+#gate .gate-info{background:#eef4ea;color:#2f5740}
+.gate-abraco{margin-top:20px;text-align:center;font-size:11.5px;color:#5c6b5a;opacity:.85;display:flex;align-items:center;justify-content:center;gap:6px}
+.gate-abraco svg{width:13px;height:13px;fill:#c67b4e}
 
 /* ============ TUTORIAL ============ */
 #tut{position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:24px}
@@ -360,9 +396,10 @@ tbody tr:hover{background:var(--cin)}
 <!-- LOGIN GATE (mesmo login do app) -->
 <div id="gate">
   <div class="gate-card">
-    <div class="gate-logo">d</div>
+    <div class="gate-logo"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
+    <div class="saudacao" id="gate-saudacao">Bom te ver por aqui</div>
     <h2>Painel da Clínica</h2>
-    <div class="gsub">Área exclusiva para profissionais do dichava.app</div>
+    <div class="gsub">Um espaço de cuidado para quem cuida. Entre para acompanhar seus pacientes no dichava.app.</div>
     <div class="gate-err" id="gate-err"></div>
     <div id="gate-login">
       <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
@@ -393,6 +430,7 @@ tbody tr:hover{background:var(--cin)}
       <a class="btn ghost" id="gate-pending-wa" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;display:flex" href="https://wa.me/5527998451796?text=Ol%C3%A1!%20Fiz%20meu%20cadastro%20no%20painel%20dichava%20e%20quero%20liberar%20meu%20acesso." target="_blank" rel="noopener">Falar no WhatsApp</a>
       <button class="btn ghost" style="width:100%;justify-content:center;margin-top:10px" onclick="gateLogout()">Sair</button>
     </div>
+    <div class="gate-abraco"><svg viewBox="0 0 24 24"><path d="M12 21C-4 11 6 1 12 7C18 1 28 11 12 21Z"/></svg> Feito com cuidado para a rede dichava</div>
   </div>
 </div>
 
@@ -415,7 +453,7 @@ tbody tr:hover{background:var(--cin)}
 <!-- CRIAR / ENTRAR EM CLÍNICA -->
 <div id="clinicgate">
   <div class="gate-card">
-    <div class="gate-logo">C</div>
+    <div class="gate-logo"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
     <h2>Sua clínica</h2>
     <div class="gsub">Crie uma clínica ou entre na de um colega com o código.</div>
     <div class="cl-tabs">
@@ -439,7 +477,7 @@ tbody tr:hover{background:var(--cin)}
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo">d</div>
+      <div class="logo"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
       <div><b>dichava</b><small>Painel da clínica</small></div>
     </div>
     <a class="nav-item" data-nav="dash"><span class="ic">◧</span> Visão geral</a>
@@ -469,6 +507,7 @@ tbody tr:hover{background:var(--cin)}
       <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
       <button class="btn" id="quick-add">＋ Novo</button>
     </div>
+    <div id="atalho-hint"></div>
     <div class="content" id="view"></div>
   </div>
 </div>
@@ -2227,6 +2266,25 @@ async function gateLogout(){
 
 /* =============== INÍCIO DO APP (após login) =============== */
 let _appReady=false;
+// Orientação pra salvar o painel na tela inicial (com o ícone do profissional)
+function mostrarAtalhoHint(){
+  const box=document.getElementById('atalho-hint'); if(!box)return;
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+  if(standalone){ box.innerHTML=''; return; }                 // já está instalado
+  try{ if(localStorage.getItem('dichava_atalho_ok')==='1'){ box.innerHTML=''; return; } }catch(e){}
+  const ua=navigator.userAgent||'';
+  const iOS=/iPad|iPhone|iPod/.test(ua);
+  const passos = iOS
+    ? 'Toque em <b>Compartilhar</b> (ícone ⬆️) e depois em <b>“Adicionar à Tela de Início”</b>.'
+    : 'Abra o menu do navegador (⋮) e toque em <b>“Adicionar à tela inicial”</b>.';
+  const folha='<svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>';
+  box.innerHTML=`<div class="atalho-card">
+    <div class="ai">${folha}</div>
+    <div style="flex:1;min-width:0"><b>Deixe o painel na sua tela inicial</b><p>Acesse como um app, com um toque. ${passos}</p></div>
+    <button class="ax" onclick="fecharAtalhoHint()" title="Dispensar">✕</button>
+  </div>`;
+}
+function fecharAtalhoHint(){ try{ localStorage.setItem('dichava_atalho_ok','1'); }catch(e){} const b=document.getElementById('atalho-hint'); if(b)b.innerHTML=''; }
 async function iniciarApp(){
   if(_appReady) return;
   _appReady=true;
@@ -2242,6 +2300,7 @@ async function iniciarApp(){
     else formAgendamento(null,route==='agenda'?agendaDay:todayISO());
   });
   initTheme();
+  try{ mostrarAtalhoHint(); }catch(e){}
   await bootClinica();
 }
 // descobre a clínica do profissional (ou pede pra criar/entrar)
@@ -2349,6 +2408,9 @@ function tutFim(){ $('#tut').classList.remove('on'); try{localStorage.setItem('d
 /* =============== BOOT =============== */
 $('#g-pw')&&$('#g-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateLogin(); });
 $('#s-pw')&&$('#s-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateSignup(); });
+// saudação acolhedora conforme o horário
+(function(){ const el=document.getElementById('gate-saudacao'); if(!el)return; const h=new Date().getHours();
+  el.textContent = h<6?'Boa madrugada, cuide-se também' : h<12?'Bom dia, que bom te ver' : h<18?'Boa tarde, seja bem-vinde' : 'Boa noite, obrigada por estar aqui'; })();
 bootAuth();
 </script>
 </body>
