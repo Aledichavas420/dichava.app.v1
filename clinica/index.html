@@ -377,6 +377,11 @@ tbody tr:hover{background:var(--cin)}
       <div class="gate-info">Esta área é exclusiva para contas <b>profissionais</b>. Sua conta atual é de usuário comum.</div>
       <button class="btn ghost" style="width:100%;justify-content:center;margin-top:14px" onclick="gateLogout()">Sair e entrar com outra conta</button>
     </div>
+    <div id="gate-pending" class="hide">
+      <div class="gate-info" id="gate-pending-tx">Seu acesso ao painel está <b>em análise</b>. Assim que confirmarmos seu cadastro e pagamento, o painel completo é liberado — normalmente em pouco tempo.</div>
+      <a class="btn" id="gate-pending-wa" style="width:100%;justify-content:center;margin-top:14px;text-decoration:none;display:flex" href="https://wa.me/5527998451796?text=Ol%C3%A1!%20Fiz%20meu%20cadastro%20no%20painel%20dichava%20e%20quero%20liberar%20meu%20acesso." target="_blank" rel="noopener">Falar no WhatsApp pra liberar</a>
+      <button class="btn ghost" style="width:100%;justify-content:center;margin-top:10px" onclick="gateLogout()">Sair</button>
+    </div>
   </div>
 </div>
 
@@ -1551,8 +1556,9 @@ async function salvarPerfilPanel(){
   if(!tipo||bio.length<20||!mod){toast('Preencha tipo, bio (mín. 20 caracteres) e modalidade.',3500);return;}
   const payload={tipo_prof:tipo,bio,especialidades:g('pf-esp'),modalidade:mod,cidade:g('pf-cidade'),valor:g('pf-valor'),duracao:g('pf-dur'),disponibilidade:g('pf-disp'),telefone:g('pf-tel'),link:g('pf-link'),foto:_pfFoto||null,capa:_pfCapa||'verde',status:'pendente'};
   try{
-    let r=await _SB.from('profissionais').update(payload).eq('id',AUTH.id);
-    if(r.error&&/(foto|link|capa)/.test(r.error.message||'')){const{foto,link,capa,...base}=payload;r=await _SB.from('profissionais').update(base).eq('id',AUTH.id);}
+    const full=Object.assign({id:AUTH.id,nome:AUTH.nome,reg:AUTH.reg||null},payload);
+    let r=await _SB.from('profissionais').upsert(full);
+    if(r.error&&/(foto|link|capa)/.test(r.error.message||'')){const{foto,link,capa,...base}=full;r=await _SB.from('profissionais').upsert(base);}
     if(r.error)throw r.error;
     toast('✓ Perfil enviado para aprovação');closeModal();carregarPerfil();
   }catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}
@@ -1911,11 +1917,40 @@ const _SB = (typeof supabase!=='undefined')
   : null;
 
 function gateErr(msg){ const e=$('#gate-err'); if(!e)return; if(msg){e.textContent=msg;e.classList.add('on');}else{e.classList.remove('on');} }
-function showGate(mode){ // 'login' | 'signup' | 'notpro'
+function showGate(mode){ // 'login' | 'signup' | 'notpro' | 'pending'
   $('#gate').classList.add('on');
   $('#gate-login').classList.toggle('hide',mode!=='login');
   $('#gate-signup').classList.toggle('hide',mode!=='signup');
   $('#gate-notpro').classList.toggle('hide',mode!=='notpro');
+  $('#gate-pending').classList.toggle('hide',mode!=='pending');
+}
+const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
+function ehAdmin(){ return AUTH && ADMIN_EMAILS.includes((AUTH.email||'').toLowerCase()); }
+// Garante a linha do profissional (pra aparecer na fila do admin) e checa o acesso liberado.
+// Retorna {ok:true} pra entrar, ou {ok:false, expirado} pra tela de pendência.
+// Se as colunas de acesso ainda não existem (SQL não rodado), NÃO bloqueia (compatível).
+async function checarAcesso(){
+  if(!_SB||!AUTH) return {ok:true};
+  if(ehAdmin()) return {ok:true};
+  try{
+    let {data:p,error}=await _SB.from('profissionais').select('ativo,acesso_ate,nome').eq('id',AUTH.id).maybeSingle();
+    if(error && /column .*(ativo|acesso_ate)/i.test(error.message||'')) return {ok:true}; // SQL ainda não rodou
+    if(!p){
+      try{ await _SB.from('profissionais').upsert({id:AUTH.id,nome:AUTH.nome,reg:AUTH.reg||null,status:'pendente',ativo:false}); }catch(_){}
+      return {ok:false};
+    }
+    const liberado = p.ativo===true && (!p.acesso_ate || new Date(p.acesso_ate) > new Date());
+    const expirado = p.ativo===true && p.acesso_ate && new Date(p.acesso_ate) <= new Date();
+    return {ok:liberado, expirado};
+  }catch(e){ return {ok:true}; } // qualquer erro de rede/coluna: não trava
+}
+async function entrarLiberado(){
+  const acc=await checarAcesso();
+  if(!acc.ok){
+    if(acc.expirado){ $('#gate-pending-tx').innerHTML='Sua assinatura <b>expirou</b>. Renove pra reativar o acesso ao painel.'; }
+    showGate('pending'); return false;
+  }
+  hideGate(); iniciarApp(); return true;
 }
 function gateShowSignup(){ gateErr(''); showGate('signup'); }
 function gateShowLogin(){ gateErr(''); showGate('login'); }
@@ -1935,8 +1970,9 @@ async function gateSignup(){
       gateErr(''); showGate('login');
       toast('Conta criada! Confirme o e-mail que enviamos e depois faça login.',0); return;
     }
-    const u=metaFrom(data.user); AUTH=u; hideGate(); iniciarApp();
-    toast('Conta criada! Complete seu perfil em "Meu perfil".',0);
+    const u=metaFrom(data.user); AUTH=u;
+    const entrou=await entrarLiberado();
+    if(entrou) toast('Conta criada! Complete seu perfil em "Meu perfil".',0);
   }catch(e){ gateErr('Não consegui criar a conta agora. Tente de novo.'); }
   finally{ btn.disabled=false; btn.textContent=orig; }
 }
@@ -1956,7 +1992,7 @@ async function bootAuth(){
     if(!sess||!sess.user){ showGate('login'); return; }
     const u=metaFrom(sess.user);
     if(u.tipo!=='pro'){ showGate('notpro'); return; }
-    AUTH=u; hideGate(); iniciarApp();
+    AUTH=u; await entrarLiberado();
   }catch(e){ showGate('login'); }
 }
 
@@ -1971,7 +2007,7 @@ async function gateLogin(){
     if(error){ gateErr(/Invalid/.test(error.message)?'E-mail ou senha incorretos.':error.message); return; }
     const u=metaFrom(data.user);
     if(u.tipo!=='pro'){ showGate('notpro'); return; }
-    AUTH=u; hideGate(); iniciarApp();
+    AUTH=u; await entrarLiberado();
   }catch(e){ gateErr('Não consegui entrar agora. Tente de novo.'); }
   finally{ btn.disabled=false; btn.textContent=orig; }
 }

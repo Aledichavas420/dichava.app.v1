@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>dichava.app — Admin</title>
+<style>
+:root{--bg:#0e1512;--card:#16211c;--card2:#1b2822;--line:#25332c;--tx:#eaf3ee;--txm:#9db0a6;--txs:#7d918a;--v:#2FA35F;--ve:#41c47a;--vf:#14261c;--a:#F5A623;--er:#E5484D;--roxo:#8B6FE0;--azul:#4C8DF6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--ve)}
+.hide{display:none!important}
+/* LOGIN */
+#gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.gate-card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px 26px;text-align:center}
+.gate-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#3ecf8e,#1f9d63);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:#fff;margin:0 auto 14px}
+.gate-card h2{font-size:22px;margin-bottom:4px}
+.gsub{color:var(--txm);font-size:13.5px;margin-bottom:20px}
+.field{text-align:left;margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--txm);margin-bottom:6px}
+.field input,.field select{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#0b1310;color:var(--tx);font-size:15px;font-family:inherit}
+.field input:focus{outline:none;border-color:var(--v)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:13px;background:var(--v);color:#fff;font-weight:800;font-size:15px;padding:13px 18px;cursor:pointer;font-family:inherit}
+.btn:disabled{opacity:.55}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--tx)}
+.btn.sm{padding:8px 12px;font-size:13px;border-radius:10px}
+.btn.wv{background:var(--vf);color:var(--ve);border:1px solid #1f4030}
+.btn.wa{background:#1f2e26;color:#5adca0;border:1px solid #26463620}
+.btn.dg{background:transparent;border:1.5px solid #4a2626;color:#ff8b8b}
+.gate-err{color:#ff8b8b;font-size:13px;min-height:16px;margin-bottom:8px}
+/* SHELL */
+.top{position:sticky;top:0;z-index:10;background:rgba(14,21,18,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.top .lg{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#3ecf8e,#1f9d63);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.top h1{font-size:16px;flex:1}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 60px}
+.sec{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--txs);margin:26px 4px 12px}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.kpi .kl{font-size:12px;color:var(--txm);font-weight:600;display:flex;align-items:center;gap:6px}
+.kpi .kv{font-size:30px;font-weight:800;margin-top:6px;line-height:1}
+.kpi .kd{font-size:11.5px;color:var(--txs);margin-top:5px}
+.kpi.hl{background:linear-gradient(150deg,#16281d,#14211b);border-color:#22402f}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+/* PROF CARD */
+.plist{display:flex;flex-direction:column;gap:12px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.pcard.pend{border-color:#4a3d1e}
+.phead{display:flex;align-items:flex-start;gap:12px}
+.pav{width:46px;height:46px;border-radius:50%;background:#22332b;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:var(--ve);flex-shrink:0}
+.pn{font-size:16px;font-weight:800}
+.pmeta{font-size:12.5px;color:var(--txm);margin-top:2px;word-break:break-word}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:#22332b;color:var(--txm)}
+.chip.v{background:#12301f;color:#5adca0}
+.chip.a{background:#33290f;color:#f0b950}
+.chip.e{background:#3a1e1e;color:#ff9a9a}
+.chip.b{background:#1a2a3a;color:#7fb8ff}
+.pacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.obs{font-size:12px;color:var(--txs);margin-top:10px;background:#0b1310;border-radius:9px;padding:8px 10px;border:1px solid var(--line)}
+.empty{text-align:center;color:var(--txm);padding:40px 10px;font-size:14px}
+.spin{width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--v);border-radius:50%;animation:sp 1s linear infinite;margin:50px auto;display:block}@keyframes sp{to{transform:rotate(360deg)}}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.ft{font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:20px;background:var(--card);border:1px solid var(--line);color:var(--txm);cursor:pointer}
+.ft.on{background:var(--vf);color:var(--ve);border-color:#1f4030}
+/* MODAL */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;width:100%;max-width:400px}
+.modal h3{font-size:18px;margin-bottom:14px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(60px);background:#0b1310;border:1px solid var(--line);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;transition:.25s;z-index:100;max-width:90vw;text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.err{border-color:#4a2626}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">d</div>
+    <h2>Painel Admin</h2>
+    <div class="gsub">Acesso restrito — dichava.app</div>
+    <div class="gate-err" id="gerr"></div>
+    <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
+    <div class="field"><label>Senha</label><input id="g-pw" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+    <button class="btn" id="g-btn" style="width:100%" onclick="entrar()">Entrar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hide">
+  <div class="top">
+    <div class="lg">d</div><h1>Painel Admin</h1>
+    <button class="btn ghost sm" onclick="carregar()">↻ Atualizar</button>
+    <button class="btn ghost sm" onclick="sair()">Sair</button>
+  </div>
+  <div class="wrap">
+    <div class="sec">Visão geral</div>
+    <div class="kpis" id="kpis"><div class="spin"></div></div>
+
+    <div class="sec">Profissionais</div>
+    <div class="filters" id="filters"></div>
+    <div class="plist" id="plist"><div class="spin"></div></div>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const SB = (typeof supabase!=='undefined') ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4') : null;
+const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
+let PROFS=[], _filtro='todos';
+let _tT; function toast(m,err){const t=$('#toast');t.textContent=m;t.classList.toggle('err',!!err);t.classList.add('on');clearTimeout(_tT);_tT=setTimeout(()=>t.classList.remove('on'),2600);}
+function esc(s){return (s==null?'':''+s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function initials(n){return (n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();}
+function gerr(m){$('#gerr').textContent=m||'';}
+function fmtData(d){ if(!d)return '—'; const x=new Date(d); return x.toLocaleDateString('pt-BR'); }
+
+async function boot(){
+  if(!SB){ gerr('Sem conexão com o servidor.'); return; }
+  const {data}=await SB.auth.getSession();
+  const u=data&&data.session&&data.session.user;
+  if(u && ADMIN_EMAILS.includes((u.email||'').toLowerCase())) abrirApp();
+}
+async function entrar(){
+  gerr('');
+  const email=$('#g-email').value.trim(), pw=$('#g-pw').value;
+  if(!email||!pw){ gerr('Preencha e-mail e senha.'); return; }
+  if(!ADMIN_EMAILS.includes(email.toLowerCase())){ gerr('Esta conta não tem acesso admin.'); return; }
+  const b=$('#g-btn'); b.disabled=true; b.textContent='Entrando…';
+  try{
+    const {data,error}=await SB.auth.signInWithPassword({email,password:pw});
+    if(error){ gerr(/Invalid/.test(error.message)?'E-mail ou senha incorretos.':error.message); return; }
+    if(!ADMIN_EMAILS.includes((data.user.email||'').toLowerCase())){ gerr('Sem acesso admin.'); await SB.auth.signOut(); return; }
+    abrirApp();
+  }catch(e){ gerr('Não consegui entrar agora.'); }
+  finally{ b.disabled=false; b.textContent='Entrar'; }
+}
+async function sair(){ try{await SB.auth.signOut();}catch(e){} location.reload(); }
+function abrirApp(){ $('#gate').classList.add('hide'); $('#app').classList.remove('hide'); carregar(); }
+
+async function carregar(){
+  renderFiltros();
+  // stats
+  try{
+    const {data,error}=await SB.rpc('admin_stats');
+    if(error) throw error;
+    renderKpis(data);
+  }catch(e){ $('#kpis').innerHTML='<div class="empty">Não consegui carregar as estatísticas.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small><br><small style="color:var(--txs)">Rodou o admin-setup.sql?</small></div>'; }
+  // profissionais
+  try{
+    const {data,error}=await SB.rpc('admin_profissionais');
+    if(error) throw error;
+    PROFS=data||[]; renderProfs();
+  }catch(e){ $('#plist').innerHTML='<div class="empty">Não consegui carregar os profissionais.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small></div>'; }
+}
+
+function renderKpis(s){
+  s=s||{};
+  const cards=[
+    {l:'Usuários no app',v:s.usuarios_total??'—',d:(s.usuarios_novos_30d??0)+' novos em 30d',dot:'#4C8DF6',hl:true},
+    {l:'Ativos (7 dias)',v:s.usuarios_7d??'—',d:'entraram esta semana',dot:'#41c47a'},
+    {l:'Profissionais ativos',v:s.prof_ativos??'—',d:(s.prof_total??0)+' no total',dot:'#2FA35F',hl:true},
+    {l:'Aguardando liberação',v:s.prof_pendentes??'—',d:'na sua fila',dot:'#F5A623'},
+    {l:'Assinaturas expiradas',v:s.prof_expirados??'—',d:'precisam renovar',dot:'#E5484D'},
+    {l:'Avaliações',v:s.avaliacoes_total??'—',d:'média '+(s.avaliacoes_media??'—')+' ★',dot:'#8B6FE0'},
+  ];
+  $('#kpis').innerHTML=cards.map(c=>`<div class="kpi ${c.hl?'hl':''}">
+    <div class="kl"><span class="dot" style="background:${c.dot}"></span>${c.l}</div>
+    <div class="kv">${c.v}</div><div class="kd">${c.d}</div></div>`).join('');
+}
+
+function renderFiltros(){
+  const fs=[['todos','Todos'],['pendente','Pendentes'],['ativo','Ativos'],['expirado','Expirados'],['rejeitado','Rejeitados']];
+  $('#filters').innerHTML=fs.map(([k,l])=>`<button class="ft ${_filtro===k?'on':''}" onclick="setFiltro('${k}')">${l}</button>`).join('');
+}
+function setFiltro(f){ _filtro=f; renderFiltros(); renderProfs(); }
+
+function statusInfo(p){
+  const now=Date.now();
+  const expirado = p.ativo && p.acesso_ate && new Date(p.acesso_ate).getTime()<=now;
+  const ativo = p.ativo && !expirado;
+  return {ativo,expirado};
+}
+function renderProfs(){
+  let list=PROFS.slice();
+  list=list.filter(p=>{
+    const {ativo,expirado}=statusInfo(p);
+    if(_filtro==='todos')return true;
+    if(_filtro==='pendente')return (p.status||'pendente')==='pendente' && !ativo;
+    if(_filtro==='ativo')return ativo;
+    if(_filtro==='expirado')return expirado;
+    if(_filtro==='rejeitado')return p.status==='rejeitado';
+    return true;
+  });
+  if(!list.length){ $('#plist').innerHTML='<div class="empty">Nenhum profissional aqui.</div>'; return; }
+  $('#plist').innerHTML=list.map(p=>{
+    const {ativo,expirado}=statusInfo(p);
+    const chips=[];
+    if(ativo)chips.push('<span class="chip v">● Ativo</span>');
+    else if(expirado)chips.push('<span class="chip e">Expirado</span>');
+    else chips.push('<span class="chip a">Aguardando liberação</span>');
+    if(p.status==='aprovado')chips.push('<span class="chip v">Perfil aprovado</span>');
+    else if(p.status==='rejeitado')chips.push('<span class="chip e">Rejeitado</span>');
+    else chips.push('<span class="chip a">Perfil pendente</span>');
+    if(p.acesso_ate)chips.push('<span class="chip b">até '+fmtData(p.acesso_ate)+'</span>');
+    if(p.n_aval)chips.push('<span class="chip">'+(p.media_aval||'—')+' ★ ('+p.n_aval+')</span>');
+    const acts=[];
+    if(!ativo)acts.push(`<button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Liberar acesso</button>`);
+    else acts.push(`<button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar / editar</button>`);
+    if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
+    if(ativo)acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','bloquear')">Bloquear</button>`);
+    if(p.status!=='rejeitado')acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>`);
+    const wa = p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
+    return `<div class="pcard ${!ativo&&!expirado?'pend':''}">
+      <div class="phead">
+        <div class="pav">${initials(p.nome)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="pn">${esc(p.nome||'Sem nome')}</div>
+          <div class="pmeta">${esc(p.tipo_prof||'Profissional')}${p.reg?' · '+esc(p.reg):''}${p.cidade?' · '+esc(p.cidade):''}</div>
+          <div class="pmeta">${esc(p.email||'')}${p.telefone?' · '+esc(p.telefone):''}</div>
+          <div class="chips">${chips.join('')}</div>
+        </div>
+      </div>
+      ${p.obs_admin?`<div class="obs">📝 ${esc(p.obs_admin)}</div>`:''}
+      <div class="pacts">${acts.join('')}${wa}</div>
+    </div>`;
+  }).join('');
+}
+
+function abrirLiberar(id){
+  const p=PROFS.find(x=>x.id===id); if(!p)return;
+  $('#modalRoot').innerHTML=`<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal">
+    <h3>Liberar acesso — ${esc(p.nome||'')}</h3>
+    <div class="field"><label>Plano / validade</label><select id="m-meses">
+      <option value="1">Mensal (1 mês)</option>
+      <option value="3">Trimestral (3 meses)</option>
+      <option value="12">Anual (12 meses)</option>
+      <option value="0">Sem validade (vitalício)</option>
+    </select></div>
+    <div class="field"><label>Anotação (opcional)</label><input id="m-obs" placeholder="ex: pagou Pix 24/07, plano mensal" value="${esc(p.obs_admin||'')}"></div>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button class="btn ghost" style="flex:1" onclick="fecharModal()">Cancelar</button>
+      <button class="btn" style="flex:1" onclick="confirmarLiberar('${id}')">Liberar</button>
+    </div>
+  </div></div>`;
+}
+function fecharModal(){ $('#modalRoot').innerHTML=''; }
+async function confirmarLiberar(id){
+  const meses=parseInt($('#m-meses').value,10)||0;
+  const obs=$('#m-obs').value.trim()||null;
+  fecharModal();
+  await acao(id,'liberar',meses,obs);
+}
+async function acao(id,tipo,meses,obs){
+  const labels={aprovar:'Aprovar perfil deste profissional?',rejeitar:'Rejeitar este profissional? Ele perde o acesso.',bloquear:'Bloquear o acesso deste profissional?'};
+  if(labels[tipo] && !confirm(labels[tipo])) return;
+  try{
+    const {error}=await SB.rpc('admin_prof_acao',{p_id:id,p_acao:tipo,p_meses:meses??null,p_obs:obs??null});
+    if(error) throw error;
+    const msgs={aprovar:'Perfil aprovado',rejeitar:'Profissional rejeitado',liberar:'Acesso liberado!',bloquear:'Acesso bloqueado'};
+    toast(msgs[tipo]||'Feito');
+    carregar();
+  }catch(e){ toast('Erro: '+(e.message||''),1); }
+}
+
+$('#g-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') entrar(); });
+boot();
+</script>
+</body>
+</html>
