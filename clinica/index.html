@@ -1961,14 +1961,15 @@ function showGate(mode){ // 'login' | 'signup' | 'notpro' | 'pending'
 }
 const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
 function ehAdmin(){ return AUTH && ADMIN_EMAILS.includes((AUTH.email||'').toLowerCase()); }
-// Planos — mantenha igual ao /admin/ (renomeie conforme sua oferta)
+// Planos — mantenha igual ao /admin/ (valores da landing de profissionais)
 const PLANOS=[
-  {k:'essencial',nome:'Essencial'},
-  {k:'profissional',nome:'Profissional'},
-  {k:'clinica',nome:'Clínica / Equipe'},
+  {k:'essencial',   nome:'Essencial',   preco:'R$ 79,90/mês',  anual:'R$ 799/ano'},
+  {k:'profissional',nome:'Profissional',preco:'R$ 179,90/mês', anual:'R$ 1.799/ano'},
+  {k:'clinica',     nome:'Clínica',     preco:'R$ 299,90/mês', anual:'R$ 2.999/ano'},
 ];
 function planoNome(k){ const p=PLANOS.find(x=>x.k===k); return p?p.nome:(k||''); }
-function preencherPlanos(){ const s=$('#s-plano'); if(s&&!s.children.length) s.innerHTML=PLANOS.map(p=>`<option value="${p.k}">${p.nome}</option>`).join(''); }
+function planoLabel(k){ const p=PLANOS.find(x=>x.k===k); return p?(p.nome+' — '+p.preco):(k||''); }
+function preencherPlanos(){ const s=$('#s-plano'); if(s&&!s.children.length) s.innerHTML=PLANOS.map(p=>`<option value="${p.k}">${p.nome} — ${p.preco}</option>`).join(''); }
 async function enviarComprovante(file){
   if(!file||!_SB||!AUTH) return;
   const rd=new FileReader();
@@ -2004,7 +2005,7 @@ async function entrarLiberado(){
   if(!acc.ok){
     if(acc.expirado){ $('#gate-pending-tx').innerHTML='Sua assinatura <b>expirou</b>. Renove pra reativar o acesso ao painel.'; }
     const pl=acc.plano||(AUTH&&AUTH.plano); const pinfo=$('#gate-plano-info');
-    if(pl&&pinfo){ pinfo.innerHTML='Plano escolhido: <b>'+planoNome(pl)+'</b>'; pinfo.style.display='block'; }
+    if(pl&&pinfo){ pinfo.innerHTML='Plano escolhido: <b>'+planoLabel(pl)+'</b>'; pinfo.style.display='block'; }
     showGate('pending'); return false;
   }
   hideGate(); iniciarApp(); return true;

@@ -142,13 +142,14 @@ a{color:var(--ve)}
 const $=s=>document.querySelector(s);
 const SB = (typeof supabase!=='undefined') ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4') : null;
 const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
-// ⚠️ Renomeie os planos aqui conforme sua oferta (usado no cadastro e na liberação)
+// Planos — valores da landing de profissionais (mantenha igual ao painel da clínica)
 const PLANOS=[
-  {k:'essencial',nome:'Essencial'},
-  {k:'profissional',nome:'Profissional'},
-  {k:'clinica',nome:'Clínica / Equipe'},
+  {k:'essencial',   nome:'Essencial',   preco:'R$ 79,90/mês',  anual:'R$ 799/ano'},
+  {k:'profissional',nome:'Profissional',preco:'R$ 179,90/mês', anual:'R$ 1.799/ano'},
+  {k:'clinica',     nome:'Clínica',     preco:'R$ 299,90/mês', anual:'R$ 2.999/ano'},
 ];
 function planoNome(k){ const p=PLANOS.find(x=>x.k===k); return p?p.nome:(k||''); }
+function planoPreco(k){ const p=PLANOS.find(x=>x.k===k); return p?p.preco:''; }
 let PROFS=[], _filtro='todos';
 let _tT; function toast(m,err){const t=$('#toast');t.textContent=m;t.classList.toggle('err',!!err);t.classList.add('on');clearTimeout(_tT);_tT=setTimeout(()=>t.classList.remove('on'),2600);}
 function esc(s){return (s==null?'':''+s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -358,7 +359,7 @@ function renderProfs(){
     if(p.status==='aprovado')chips.push('<span class="chip v">Perfil aprovado</span>');
     else if(p.status==='rejeitado')chips.push('<span class="chip e">Rejeitado</span>');
     else chips.push('<span class="chip a">Perfil pendente</span>');
-    if(p.plano)chips.push('<span class="chip b">'+esc(planoNome(p.plano))+'</span>');
+    if(p.plano)chips.push('<span class="chip b">'+esc(planoNome(p.plano))+(planoPreco(p.plano)?' · '+esc(planoPreco(p.plano)):'')+'</span>');
     if(p.acesso_ate)chips.push('<span class="chip b">até '+fmtData(p.acesso_ate)+'</span>');
     if(p.tem_comprovante)chips.push('<span class="chip v">📎 comprovante</span>');
     if(p.n_aval)chips.push('<span class="chip">'+(p.media_aval||'—')+' ★ ('+p.n_aval+')</span>');
@@ -391,7 +392,7 @@ function abrirLiberar(id){
   $('#modalRoot').innerHTML=`<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal">
     <h3>Liberar acesso — ${esc(p.nome||'')}</h3>
     <div class="field"><label>Plano assinado</label><select id="m-plano">
-      ${PLANOS.map(pl=>`<option value="${pl.k}" ${p.plano===pl.k?'selected':''}>${esc(pl.nome)}</option>`).join('')}
+      ${PLANOS.map(pl=>`<option value="${pl.k}" ${p.plano===pl.k?'selected':''}>${esc(pl.nome)} — ${esc(pl.preco)}</option>`).join('')}
     </select></div>
     <div class="field"><label>Período / validade</label><select id="m-meses">
       <option value="1">Mensal (1 mês)</option>
