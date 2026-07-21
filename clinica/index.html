@@ -436,8 +436,8 @@ tbody tr:hover{background:var(--cin)}
     <div class="gsub">Um espaço de cuidado para quem cuida. Entre para acompanhar seus pacientes.</div>
     <div class="gate-err" id="gate-err"></div>
     <div id="gate-login">
-      <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
-      <div class="field"><label>Senha</label><input id="g-pw" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+      <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="off" placeholder="voce@email.com" onfocus="this.setAttribute('autocomplete','email')"></div>
+      <div class="field"><label>Senha</label><input id="g-pw" type="text" autocomplete="off" placeholder="Sua senha" style="-webkit-text-security:disc" onfocus="this.type='password';this.setAttribute('autocomplete','current-password')"></div>
       <button class="btn" id="g-btn" onclick="gateLogin()">Entrar</button>
       <div class="gate-note">Ainda não tem conta? <a href="#" onclick="event.preventDefault();gateShowSignup()">Criar conta profissional →</a></div>
       <div class="gate-note" style="margin-top:10px">É paciente? <a href="#" onclick="event.preventDefault();voltarAoApp()">← Voltar ao app dichava</a></div>
@@ -446,8 +446,8 @@ tbody tr:hover{background:var(--cin)}
       <div class="field"><label>Nome completo</label><input id="s-nome" type="text" autocomplete="name" placeholder="Como você atende (ex: Dra. Ana Lima)"></div>
       <div class="field"><label>Registro profissional</label><input id="s-reg" type="text" autocomplete="off" placeholder="ex: CRP 06/1234, CRM, CRESS…"></div>
       <div class="field"><label>Plano desejado</label><select id="s-plano"></select></div>
-      <div class="field"><label>E-mail</label><input id="s-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
-      <div class="field"><label>Senha</label><input id="s-pw" type="password" autocomplete="new-password" placeholder="Crie uma senha (8+ caracteres)"></div>
+      <div class="field"><label>E-mail</label><input id="s-email" type="email" autocomplete="off" placeholder="voce@email.com" onfocus="this.setAttribute('autocomplete','email')"></div>
+      <div class="field"><label>Senha</label><input id="s-pw" type="text" autocomplete="off" placeholder="Crie uma senha (8+ caracteres)" style="-webkit-text-security:disc" onfocus="this.type='password';this.setAttribute('autocomplete','new-password')"></div>
       <button class="btn" id="s-btn" onclick="gateSignup()">Criar conta profissional</button>
       <div class="gate-note">Ao criar, seu perfil público passa por uma <b>aprovação</b> antes de aparecer na rede. Você já pode usar o painel na hora.<br>Já tem conta? <a href="#" onclick="event.preventDefault();gateShowLogin()">Entrar →</a></div>
     </div>
