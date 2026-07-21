@@ -364,7 +364,7 @@ tbody tr:hover{background:var(--cin)}
       <div class="field"><label>Senha</label><input id="g-pw" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
       <button class="btn" id="g-btn" onclick="gateLogin()">Entrar</button>
       <div class="gate-note">Ainda não tem conta? <a href="#" onclick="event.preventDefault();gateShowSignup()">Criar conta profissional →</a></div>
-      <div class="gate-note" style="margin-top:10px">É paciente? <a href="/">← Voltar ao app dichava</a></div>
+      <div class="gate-note" style="margin-top:10px">É paciente? <a href="#" onclick="event.preventDefault();voltarAoApp()">← Voltar ao app dichava</a></div>
     </div>
     <div id="gate-signup" class="hide">
       <div class="field"><label>Nome completo</label><input id="s-nome" type="text" autocomplete="name" placeholder="Como você atende (ex: Dra. Ana Lima)"></div>
@@ -2012,6 +2012,14 @@ async function entrarLiberado(){
   hideGate(); iniciarApp(); return true;
 }
 function gateShowSignup(){ gateErr(''); preencherPlanos(); showGate('signup'); }
+// Volta pro app do paciente. Se houver sessão de PROFISSIONAL ativa, encerra antes
+// (senão o app detecta o login pro e redireciona de volta pra cá — ping-pong).
+async function voltarAoApp(){
+  try{
+    if(_SB){ const {data}=await _SB.auth.getSession(); const t=data&&data.session&&data.session.user&&data.session.user.user_metadata&&data.session.user.user_metadata.tipo; if(t==='pro') await _SB.auth.signOut(); }
+  }catch(e){}
+  window.location.href='/';
+}
 function gateShowLogin(){ gateErr(''); showGate('login'); }
 async function gateSignup(){
   gateErr('');
