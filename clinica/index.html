@@ -91,7 +91,11 @@ a{color:inherit;text-decoration:none}
 .side-foot .who{font-size:12.5px;color:#8ca08e;padding:0 4px}
 .side-foot .who b{color:#E9EFE7;font-weight:600;font-size:13.5px;display:block}
 
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
+html,body{overflow-x:hidden;max-width:100vw}
+.main{flex:1;min-width:0;max-width:100%;display:flex;flex-direction:column;overflow-x:hidden}
+.topbar>div:first-child{min-width:0}
+.topbar h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+table{max-width:100%}
 .topbar{
   display:flex;align-items:center;gap:14px;padding:16px 26px;
   padding-top:calc(16px + var(--st));position:sticky;top:0;z-index:20;
@@ -276,18 +280,28 @@ tbody tr:hover{background:var(--cin)}
 @media (max-width:860px){
   .sidebar{display:none}
   .content{padding:16px 14px 96px}
-  .topbar{padding:14px 16px;padding-top:calc(14px + var(--st))}
+  .topbar{padding:14px 14px;padding-top:calc(14px + var(--st));gap:8px}
   .topbar h1{font-size:18px}
+  #quick-add{padding:10px 13px;font-size:13.5px;white-space:nowrap;flex-shrink:0}
+  #theme-btn{flex-shrink:0}
   .row2,.row3{grid-template-columns:1fr}
   .info-grid{grid-template-columns:1fr}
   .mobnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);
     padding:8px 6px calc(8px + var(--sb));z-index:50;justify-content:space-around}
   .mobnav a{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--txs);font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:10px;flex:1}
   .mobnav a .ic{font-size:20px}
+  .mobnav a .ic-mais{font-size:22px;line-height:1;height:22px;display:flex;align-items:center;justify-content:center;font-weight:800}
   .mobnav a.on{color:var(--v)}
+  .mobnav .badge{position:absolute;top:2px;right:calc(50% - 22px)}
+  .mobnav a{position:relative}
   .daynav b{min-width:120px;font-size:13px}
   .kpi .val{font-size:24px}
 }
+.mais-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mais-item{display:flex;flex-direction:column;align-items:center;gap:9px;background:var(--cin);border:1px solid var(--line);border-radius:14px;padding:18px 10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--tx)}
+.mais-item:hover{border-color:var(--v);background:var(--card)}
+.mais-ic{width:30px;height:30px;display:grid;place-items:center}
+.mais-ic svg{width:30px;height:30px}
 .esc-ops{display:flex;flex-direction:column;gap:5px;margin-top:5px}
 .esc-op{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--tx);background:var(--cin);border:1px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer}
 .esc-op input{accent-color:var(--v)}
@@ -440,8 +454,8 @@ tbody tr:hover{background:var(--cin)}
   <a data-nav="dash"><span class="ic">◧</span>Início</a>
   <a data-nav="agenda"><span class="ic">◷</span>Agenda</a>
   <a data-nav="pacientes"><span class="ic">☺</span>Pacientes</a>
-  <a data-nav="caixa"><span class="ic">$</span>Caixa</a>
-  <a data-nav="equipe"><span class="ic">⧉</span>Equipe</a>
+  <a data-nav="mensagens"><span class="ic">✉</span>Mensagens <span class="badge" id="badge-msgs-m"></span></a>
+  <a onclick="abrirMaisMenu()"><span class="ic-mais">⋯</span>Mais</a>
 </nav>
 
 <div class="overlay" id="overlay"></div>
@@ -573,6 +587,14 @@ function pintarIconesClinica(){
     const nav=el.closest('[data-nav]').dataset.nav;
     if(CIC[nav]){ el.innerHTML=CIC[nav]; el.style.fontSize='0'; }
   });
+}
+// menu "Mais" (mobile) — funções que não cabem na barra inferior
+function abrirMaisMenu(){
+  const items=[['prontuarios','Prontuários'],['documentos','Documentos'],['caixa','Caixa'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
+      ${items.map(([r,nome])=>`<button class="mais-item" onclick="closeModal();go('${r}')"><span class="mais-ic">${CIC[r]||''}</span><span>${nome}</span></button>`).join('')}
+    </div></div></div>`);
 }
 function render(){
   const [t,s]=TITLES[route]||['',''];
@@ -1258,7 +1280,7 @@ async function carregarConversas(){
     atualizarBadgeMsgs();
   }catch(e){ box.innerHTML='<div class="card empty">Não consegui carregar as conversas.</div>'; }
 }
-function atualizarBadgeMsgs(){ const b=document.getElementById('badge-msgs'); if(!b)return; const n=(PCONVS||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length+(SOLIC||[]).length; b.textContent=n||''; b.style.display=n?'':'none'; }
+function atualizarBadgeMsgs(){ const n=(PCONVS||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length+(SOLIC||[]).length; ['badge-msgs','badge-msgs-m'].forEach(id=>{const b=document.getElementById(id);if(b){b.textContent=n||'';b.style.display=n?'':'none';}}); }
 async function contarMsgsPanel(){ if(!_SB||!AUTH)return; try{ const{data}=await _SB.from('conversas').select('atualizado_em,prof_lida_em').eq('prof_id',AUTH.id); const n=(data||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length+(SOLIC||[]).length; const b=document.getElementById('badge-msgs'); if(b){b.textContent=n||'';b.style.display=n?'':'none';} }catch(e){} }
 function abrirConversaPanel(id){
   const c=PCONVS.find(x=>x.id===id); if(!c)return; _pconv=c;
