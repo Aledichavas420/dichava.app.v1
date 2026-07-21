@@ -263,6 +263,8 @@ a{color:inherit;text-decoration:none}
 /* PAGE TOPBAR (views secundárias) */
 .ptb{display:flex;align-items:center;gap:11px;padding:50px 18px 14px;flex-shrink:0}
 .ptb-tit{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;color:#fff}
+.ptb-leaf{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex-shrink:0}
+.ptb-leaf svg{width:17px;height:17px;fill:none;stroke:#eaf5ec;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .ptb-tit.dk{color:var(--dk)}
 .bk{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#fff;flex-shrink:0;transition:background .15s}
 .bk:active{background:rgba(255,255,255,.25)}
@@ -2778,7 +2780,7 @@ a{color:inherit;text-decoration:none}
       <div class="cfgi" onclick="toast('Agenda de disponibilidade — em breve 💚')"><div class="cfgic">🗓️</div><div class="cfgb"><div class="cfgn">Disponibilidade</div><div class="cfgd">Defina seus horários de atendimento</div></div><div class="cfgar">›</div></div>
     </div>
   </div>
-  <a class="wppc" href="#" style="display:none" onclick="event.preventDefault();abrirProfs()"><div class="wppci">🩺</div><div class="wppcb"><div class="wppct">Fale com um profissional</div><div class="wppcs">Rede de psicólogos e psiquiatras alinhados à redução de danos</div><div class="wppcl">Ver profissionais →</div></div></a>
+  <a class="wppc" href="#" style="display:none" onclick="event.preventDefault();abrirProfs()"><div class="wppci"><svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="#2FA35F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v5a4 4 0 0 0 8 0V3"/><path d="M4 3h1.6M12.4 3H14M9 16v1a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="13.4" r="2.4"/></svg></div><div class="wppcb"><div class="wppct">Fale com um profissional</div><div class="wppcs">Rede de psicólogos e psiquiatras alinhados à redução de danos</div><div class="wppcl">Ver profissionais →</div></div></a>
   <!-- PLANO -->
   <div class="shr"><div class="sht">Plano de segurança</div><div class="shl" onclick="openPlanoMod()">editar</div></div>
   <div class="cfgsec" style="margin:0 18px 11px"><div class="cfgi" onclick="openPlanoMod()"><div class="cfgic" data-icon="cfg-plano"></div><div class="cfgb"><div class="cfgn">Meu plano pessoal</div><div class="cfgd" id="plano-prev">Não configurado ainda</div></div><div class="cfgar">›</div></div></div>
@@ -2867,7 +2869,7 @@ a{color:inherit;text-decoration:none}
   <button class="crc" onclick="abrirPlanoCrise()"><div class="crci" data-icon="cfg-plano"></div><div><div class="crcn">Meu plano de segurança</div><div class="crcd">O que você mesmo(a) preparou para esse momento</div></div></button>
   <a class="crc" href="tel:192" style="text-decoration:none"><div class="crci" data-icon="crise-ambulancia"></div><div><div class="crcn">SAMU — 192</div><div class="crcd">Emergência médica, overdose</div></div></a>
   <a class="crc" href="tel:188" style="text-decoration:none"><div class="crci" data-icon="crise-cvv"></div><div><div class="crcn">CVV — 188</div><div class="crcd">Apoio emocional 24h, de graça</div></div></a>
-  <button class="crc prof" onclick="abrirProfs()"><div class="crci">🩺</div><div><div class="crcn">Profissionais disponíveis</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
+  <button class="crc prof" onclick="abrirProfs()"><div class="crci"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v5a4 4 0 0 0 8 0V3"/><path d="M4 3h1.6M12.4 3H14M9 16v1a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="13.4" r="2.4"/></svg></div><div><div class="crcn">Profissionais disponíveis</div><div class="crcd">Psicólogos e psiquiatras alinhados à redução de danos</div></div></button>
   <button class="crc" onclick="showV('vapp');setTimeout(()=>openMod('mreg'),50)"><div class="crci">📓</div><div><div class="crcn">Registrar como estou</div><div class="crcd">Documentar esse momento</div></div></button>
   <div style="margin:13px 18px 0;background:rgba(255,255,255,.1);border-radius:15px;padding:15px">
     <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">⚡ Se alguém está mal</div>
@@ -3066,7 +3068,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- REDE DE PROFISSIONAIS -->
 <div class="V" id="vprofs">
-  <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="fecharProfs()">←</button><div class="ptb-tit">Fale com um profissional</div></div>
+  <div class="ptb" style="background:linear-gradient(150deg,#1f3d2b 0%,#2f5740 60%,#4a7856 100%)"><button class="bk" onclick="fecharProfs()">←</button><span class="ptb-leaf"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></span><div class="ptb-tit">Fale com um profissional</div></div>
   <div class="pf-tabs">
     <button class="pf-tab on" id="pf-tab-buscar" onclick="pfTab('buscar')">Profissionais</button>
     <button class="pf-tab" id="pf-tab-convs" onclick="pfTab('convs')">Minhas conversas <span class="tabbadge" id="pf-convs-badge" style="display:none"></span></button>
@@ -6705,7 +6707,7 @@ function abrirPerfilProf(id){
       <div class="pd-nome">${esc(p.nome)}</div>
       <div class="pd-tipo">${esc(p.tipo_prof||'')}</div>
       ${p.reg?`<div class="pd-reg">${esc(p.reg)}</div>`:''}
-      ${(()=>{const lk=proLink(p.link);return lk?`<a href="${esc(lk.href)}" target="_blank" rel="noopener" class="pd-link" style="display:inline-block;margin-top:8px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:20px">🔗 ${esc(lk.label)}</a>`:'';})()}
+      ${(()=>{const lk=proLink(p.link);return lk?`<a href="${esc(lk.href)}" target="_blank" rel="noopener" class="pd-link" style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:20px"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M10.5 6.5l1-1a3.5 3.5 0 0 1 5 5l-1 1M13.5 17.5l-1 1a3.5 3.5 0 0 1-5-5l1-1"/></svg>${esc(lk.label)}</a>`:'';})()}
       <div id="pd-hero-rate"></div>
     </div>
     <div class="pd-body">
@@ -6724,8 +6726,8 @@ function abrirPerfilProf(id){
       <div id="pd-avaliacoes"><div style="text-align:center;padding:16px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div>
     </div>
     <div class="pd-acts">
-      <button class="pd-contato" onclick="contatarProf('${p.id}')">💬 Conversar</button>
-      ${temAgenda?`<button class="pd-agendar" onclick="abrirAgenda('${p.id}')">📅 Agendar horário</button>`:''}
+      <button class="pd-contato" onclick="contatarProf('${p.id}')"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.8-.9L3 20.5l1.5-4.4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z"/></svg>Conversar</button>
+      ${temAgenda?`<button class="pd-agendar" onclick="abrirAgenda('${p.id}')"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M3.5 9.3h17M8 3v3.4M16 3v3.4"/></svg>Agendar horário</button>`:''}
     </div>`;
   try{aplicarIcones(body);}catch(e){}
   showV('vprofdet');
