@@ -120,6 +120,8 @@ table{max-width:100%}
   background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
 }
+.tb-leaf{display:none;width:34px;height:34px;border-radius:11px;flex-shrink:0;background:radial-gradient(circle at 32% 28%,#4a7856,#2f5740 78%);place-items:center}
+.tb-leaf svg{width:19px;height:19px;fill:none;stroke:#f6f3ea;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .topbar h1{font-size:20px;font-weight:800;letter-spacing:-.4px}
 .topbar .sub{font-size:12.5px;color:var(--txs);font-weight:500}
 .topbar .grow{flex:1}
@@ -298,8 +300,9 @@ tbody tr:hover{background:var(--cin)}
 @media (max-width:860px){
   .sidebar{display:none}
   .content{padding:16px 14px 96px}
-  .topbar{padding:14px 14px;padding-top:calc(14px + var(--st));gap:8px}
+  .topbar{padding:14px 14px;padding-top:calc(14px + var(--st));gap:10px}
   .topbar h1{font-size:18px}
+  .tb-leaf{display:grid}
   #quick-add{padding:10px 13px;font-size:13.5px;white-space:nowrap;flex-shrink:0}
   #theme-btn{flex-shrink:0}
   .row2,.row3{grid-template-columns:1fr}
@@ -422,7 +425,7 @@ tbody tr:hover{background:var(--cin)}
       <button class="btn ghost" style="width:100%;justify-content:center;margin-top:14px" onclick="gateLogout()">Sair e entrar com outra conta</button>
     </div>
     <div id="gate-pending" class="hide">
-      <div class="gate-info" id="gate-pending-tx">Seu acesso ao painel está <b>em análise</b>. Assim que confirmarmos seu cadastro e pagamento, o painel completo é liberado — normalmente em pouco tempo.</div>
+      <div class="gate-info" id="gate-pending-tx">Que bom ter você aqui 🌱 Seu acesso está <b>em análise</b> — assim que confirmarmos seu cadastro e pagamento, o painel completo abre pra você. Costuma ser rápido.</div>
       <div id="gate-plano-info" class="gate-info" style="background:var(--vf,#14261c);margin-top:10px;display:none"></div>
       <button class="btn" id="gate-comp-btn" style="width:100%;justify-content:center;margin-top:14px" onclick="$('#gate-comp-file').click()">📎 Enviar comprovante de pagamento</button>
       <input id="gate-comp-file" type="file" accept="image/*" style="display:none" onchange="enviarComprovante(this.files[0])">
@@ -498,7 +501,8 @@ tbody tr:hover{background:var(--cin)}
   <!-- MAIN -->
   <div class="main">
     <div class="topbar">
-      <div>
+      <div class="tb-leaf" title="Painel dichava"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
+      <div style="min-width:0">
         <h1 id="pg-title">Visão geral</h1>
         <div class="sub" id="pg-sub"></div>
       </div>
