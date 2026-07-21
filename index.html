@@ -360,23 +360,36 @@ a{color:inherit;text-decoration:none}
 @keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
 /* AUTH */
-#va{background:var(--dk);justify-content:flex-end}
+#va{background:radial-gradient(900px 520px at 18% -8%,#28503a 0%,transparent 56%),radial-gradient(760px 480px at 105% 106%,#20422d 0%,transparent 52%),linear-gradient(165deg,#16301f 0%,#1B2A1C 52%,#122012 100%);justify-content:flex-end}
 .aw{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--st) + 24px) 30px calc(30px + var(--sb));position:relative;overflow:hidden;text-align:center}
-.aw-broto{width:140px;height:140px;margin-bottom:18px;animation:hfloat 3s ease-in-out infinite}
-.aw-broto svg{width:140px;height:140px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35))}
+.aw>*:not(.aw-bg){position:relative;z-index:1}
+.aw-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aw-bg .orb{position:absolute;border-radius:50%;filter:blur(46px);opacity:.5}
+.aw-bg .orb.o1{width:280px;height:280px;background:#2f7a4d;top:-70px;left:-70px;animation:orbfloat 13s ease-in-out infinite}
+.aw-bg .orb.o2{width:240px;height:240px;background:#1f6f6a;bottom:-60px;right:-60px;animation:orbfloat 16s ease-in-out infinite reverse}
+.aw-bg .awleaf{position:absolute;fill:none;stroke:#8bbf9f;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;opacity:.09}
+.aw-bg .awleaf.a{width:110px;top:12%;right:-18px;transform:rotate(24deg);animation:leafsway 11s ease-in-out infinite}
+.aw-bg .awleaf.b{width:90px;bottom:16%;left:-14px;transform:rotate(-30deg);animation:leafsway 14s ease-in-out infinite}
+.aw-bg .awleaf.c{width:64px;top:30%;left:14%;transform:rotate(8deg);animation:leafsway 9s ease-in-out infinite}
+@keyframes orbfloat{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-20px)}}
+@keyframes leafsway{0%,100%{transform:translateY(0) rotate(var(--r,0))}50%{transform:translateY(-14px) rotate(calc(var(--r,0deg) + 5deg))}}
+.aw-broto{width:150px;height:150px;margin-bottom:14px;animation:awsway 6s ease-in-out infinite}
+.aw-broto svg{width:150px;height:150px;filter:drop-shadow(0 12px 26px rgba(0,0,0,.4))}
+@keyframes awsway{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-11px) rotate(2deg)}}
 .aw-acts{width:100%;max-width:340px;margin-top:34px}
 .aw-pro{background:none;border:none;color:rgba(255,255,255,.5);font-size:13px;font-weight:600;cursor:pointer;margin-top:20px;font-family:'DM Sans',sans-serif}
 .aw-back{display:block;margin:14px auto 0;background:none;border:none;color:var(--txs);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
 .aw-prof-div{display:flex;align-items:center;gap:12px;margin:20px 2px 12px;color:rgba(255,255,255,.4)}
 .aw-prof-div::before,.aw-prof-div::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.13)}
 .aw-prof-div span{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.aw-prof-btn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:15px;padding:13px 15px;cursor:pointer;transition:background .15s,border-color .15s}
-.aw-prof-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22)}
-.aw-prof-btn .app-seal{font-size:22px;flex:none}
+.aw-prof-btn{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:12px 14px;cursor:pointer;transition:background .15s,border-color .15s}
+.aw-prof-btn:active{background:rgba(255,255,255,.07)}
+.aw-prof-ic{width:32px;height:32px;flex:none;border-radius:9px;background:rgba(139,191,159,.12);display:grid;place-items:center;color:rgba(174,214,187,.85)}
+.aw-prof-ic svg{width:18px;height:18px}
 .aw-prof-tx{flex:1;min-width:0}
-.aw-prof-tx b{display:block;font-size:14.5px;font-weight:800;color:#fff}
-.aw-prof-tx small{display:block;font-size:11.5px;color:rgba(255,255,255,.6);margin-top:1px}
-.aw-prof-go{color:rgba(255,255,255,.45);font-size:20px;font-weight:700;flex:none}
+.aw-prof-tx b{display:block;font-size:13.5px;font-weight:700;color:rgba(255,255,255,.82)}
+.aw-prof-tx small{display:block;font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.aw-prof-go{color:rgba(255,255,255,.35);font-size:19px;font-weight:700;flex:none}
 .at{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px 24px;position:relative;overflow:hidden}
 /* Teclado aberto: sobe o conteúdo das telas ancoradas no rodapé (login/onboarding) */
 #shell.kbd #va,#shell.kbd #vo{justify-content:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:var(--kb,0px);scroll-padding-bottom:var(--kb,0px)}
@@ -2317,6 +2330,12 @@ a{color:inherit;text-decoration:none}
 <div class="V on" id="va">
 <!-- BOAS-VINDAS -->
 <div id="aw-welcome" class="aw">
+  <div class="aw-bg" aria-hidden="true">
+    <span class="orb o1"></span><span class="orb o2"></span>
+    <svg class="awleaf a" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>
+    <svg class="awleaf b" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>
+    <svg class="awleaf c" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>
+  </div>
   <div class="aw-broto" id="aw-broto"></div>
   <div class="alogo">dichava<em>.app</em></div>
   <div class="atag">Seu espaço de acompanhamento,<br>sem julgamento 💚</div>
@@ -2324,7 +2343,7 @@ a{color:inherit;text-decoration:none}
     <button class="btn bv bfull" onclick="iniciarJornada()">🌱 Iniciar jornada</button>
     <button class="btn bout bfull" style="margin-top:11px" onclick="mostrarLogin()">Já tenho conta · Entrar</button>
     <div class="aw-prof-div"><span>profissional de saúde?</span></div>
-    <button class="aw-prof-btn" onclick="abrirPainelProf()"><span class="app-seal">🩺</span><span class="aw-prof-tx"><b>Painel dos profissionais de saúde</b><small>Perfil online, agenda, pacientes, prontuários e mais</small></span><span class="aw-prof-go">›</span></button>
+    <button class="aw-prof-btn" onclick="abrirPainelProf()"><span class="aw-prof-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v5a4 4 0 0 0 8 0V3"/><path d="M4 3h1.6M12.4 3H14M9 16v1a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="13.4" r="2.4"/></svg></span><span class="aw-prof-tx"><b>Painel dos profissionais de saúde</b><small>Perfil, agenda, pacientes e prontuários</small></span><span class="aw-prof-go">›</span></button>
   </div>
 </div>
 <!-- AUTH (login / cadastro pro) -->
@@ -4693,7 +4712,7 @@ function uniqSvgIds(svg){
     .replace(/(xlink:href|href)="#([^"]+)"/g,'$1="#$2'+s+'"');
 }
 function aplicarIcones(root){(root||document).querySelectorAll('[data-icon]').forEach(el=>{const n=el.getAttribute('data-icon');if(n&&ICONS[n]&&!el.dataset.iconDone){el.innerHTML=uniqSvgIds(ICONS[n]);el.dataset.iconDone='1';}});}
-document.addEventListener('DOMContentLoaded',()=>aplicarIcones());
+document.addEventListener('DOMContentLoaded',()=>{aplicarIcones();try{const awb=document.getElementById('aw-broto');if(awb&&!awb.dataset.done&&typeof brotoSVG==='function'){awb.innerHTML=brotoSVG();awb.dataset.done='1';}}catch(e){}});
 /* ═══ ícones de substâncias (v16) ═══ */
 const SUBICONS={
   "alcool":`<svg class="subicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <path fill="#FFD98A" d="M6 8h10v9.5a3.5 3.5 0 0 1-3.5 3.5h-3A3.5 3.5 0 0 1 6 17.5Z"></path><path fill="#E0922A" d="M16 9.5h1.3A3.2 3.2 0 0 1 17.3 16H16v-2.4h1.1a.8.8 0 0 0 0-1.6H16Z"></path><path fill="#E0922A" d="M5.6 8.2a2.4 2.4 0 0 1 .5-4.55A2.9 2.9 0 0 1 11 2.3a2.9 2.9 0 0 1 4.9 1.35 2.4 2.4 0 0 1 .5 4.55Z"></path> </svg>`,
