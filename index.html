@@ -2336,17 +2336,12 @@ a{color:inherit;text-decoration:none}
     <button class="btn bdk bfull" id="btn-login" onclick="doLogin()">Entrar</button>
   </div>
   <div id="asignup" style="display:none">
-    <div class="acct-sel">
-      <button type="button" class="acct-opt on" id="acct-user" onclick="setAcct('user')"><span>🌱</span> Pra mim</button>
-      <button type="button" class="acct-opt" id="acct-pro" onclick="setAcct('pro')"><span>🩺</span> Sou profissional</button>
-    </div>
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
     <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="su-pwe">Senha muito fraca.</div></div>
     <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="su-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw2',this)"></button></div><div class="em" id="su-pw2e">As senhas não conferem.</div></div>
-    <div class="fld" id="pro-reg-fld" style="display:none"><div class="lbl">Registro profissional (CRP / CRM / CRESS…)</div><input class="inp" id="su-reg" type="text" placeholder="ex: CRP 16/7696" autocomplete="off"><div class="em" id="su-rege">Informe seu registro.</div></div>
-    <div class="acct-pronote" id="acct-pronote" style="display:none">🩺 Após criar a conta, você completa seu perfil e ele passa por uma <b>aprovação</b> antes de aparecer na rede. Você também ganha o <b>Painel da Clínica</b>.</div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
+    <div class="aw-prof-hint" style="margin-top:14px;text-align:center;font-size:12.5px;color:var(--txm);line-height:1.5">É profissional de saúde? <a href="#" onclick="event.preventDefault();abrirPainelProf()" style="color:var(--v);font-weight:700;text-decoration:none">Acesse o Painel dos profissionais →</a></div>
   </div>
   <button class="aw-back" onclick="mostrarWelcome()">← voltar</button>
 </div>
@@ -7307,11 +7302,9 @@ function proLink(v){
   return {href,label};
 }
 async function rotearPro(){
-  const st=await checkProStatus();
-  if(st===null){_ppCapa='verde';renderCapas();showV('vproperfil');}
-  else if(st==='aprovado'){entrarPro();}
-  else if(st==='rejeitado'){toast('Seu cadastro não foi aprovado. Entre em contato conosco.');showV('vpro-aguarda');}
-  else{showV('vpro-aguarda');}
+  // A área profissional agora vive no Painel dos profissionais (/clinica/).
+  // Contas de profissional são redirecionadas pra lá — o app é só pra pacientes.
+  window.location.href='/clinica/';
 }
 function proTab(id,btn){
   document.querySelectorAll('.pro-tab').forEach(b=>b.classList.remove('on'));

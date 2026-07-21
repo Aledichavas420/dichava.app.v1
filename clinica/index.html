@@ -609,7 +609,7 @@ function render(){
   else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
   else if(route==='equipe') v.innerHTML=viewEquipe();
-  else if(route==='config') v.innerHTML=viewConfig();
+  else if(route==='config') { v.innerHTML=viewConfig(); try{initAssinPad();}catch(e){} }
   updateBadges();
 }
 function updateBadges(){
@@ -1139,6 +1139,21 @@ function viewConfig(){
     <div class="field"><label>Especialidade</label><input id="cf-esp" value="${esc(c.especialidade||'')}"></div>
     <button class="btn" onclick="salvarConfig()">Salvar</button>
   </div>
+  <div class="card" style="padding:22px;max-width:560px;margin-top:16px">
+    <div class="sec-title" style="margin-top:0">Assinatura digital</div>
+    <p style="color:var(--txs);font-size:13.5px;margin-bottom:14px">Desenhe ou envie sua assinatura. Ela aparece automaticamente acima da linha nos documentos que você emitir (recibos, atestados, declarações…).</p>
+    <div id="assin-preview">${c.assinatura?`<div style="text-align:center;margin-bottom:12px"><img src="${c.assinatura}" style="max-width:280px;max-height:90px;object-fit:contain;border:1.5px solid var(--line);border-radius:10px;background:#fff;padding:6px"></div>`:''}</div>
+    <div style="border:1.5px dashed var(--line);border-radius:12px;background:#fff;padding:6px;margin-bottom:10px">
+      <canvas id="assin-pad" style="width:100%;height:150px;touch-action:none;display:block;border-radius:8px;cursor:crosshair"></canvas>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn sm" onclick="salvarAssinatura()">Salvar assinatura</button>
+      <button class="btn ghost sm" onclick="limparAssinatura()">Limpar</button>
+      <button class="btn ghost sm" onclick="$('#assin-file').click()">↑ Enviar imagem</button>
+      ${c.assinatura?`<button class="btn danger ghost sm" onclick="removerAssinatura()">Remover</button>`:''}
+      <input id="assin-file" type="file" accept="image/*" class="hide" onchange="assinaturaUpload(this.files[0])">
+    </div>
+  </div>
   ${dispCard()}
   <div class="card" style="padding:22px;max-width:560px;margin-top:16px">
     <div class="sec-title" style="margin-top:0">Backup e exportação</div>
@@ -1170,6 +1185,34 @@ function salvarConfig(){
 }
 function syncHeader(){ $('#side-prof').textContent=(AUTH&&AUTH.nome)||DB.config.profissional||'Profissional'; $('#side-clin').textContent=(CLINICA&&CLINICA.nome)||DB.config.clinica||'Minha Clínica'; }
 
+/* ===== Assinatura digital (canvas pad) ===== */
+let _assinPad=null;
+function initAssinPad(){
+  const cv=document.getElementById('assin-pad'); if(!cv)return; _assinPad={cv,drawn:false};
+  const dpr=window.devicePixelRatio||1; const r=cv.getBoundingClientRect();
+  cv.width=Math.max(1,r.width*dpr); cv.height=Math.max(1,r.height*dpr);
+  const ctx=cv.getContext('2d'); ctx.scale(dpr,dpr); ctx.lineWidth=2.4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#111';
+  _assinPad.ctx=ctx; let drawing=false;
+  const pos=e=>{const b=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-b.left,y:t.clientY-b.top};};
+  const start=e=>{drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault();};
+  const move=e=>{if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();_assinPad.drawn=true;e.preventDefault();};
+  const end=()=>{drawing=false;};
+  cv.addEventListener('mousedown',start); cv.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
+  cv.addEventListener('touchstart',start,{passive:false}); cv.addEventListener('touchmove',move,{passive:false}); cv.addEventListener('touchend',end);
+}
+function limparAssinatura(){ const cv=document.getElementById('assin-pad'); if(cv&&_assinPad){_assinPad.ctx.clearRect(0,0,cv.width,cv.height);_assinPad.drawn=false;} }
+function salvarAssinatura(){
+  if(!_assinPad||!_assinPad.drawn){toast('Desenhe a assinatura primeiro',1);return;}
+  // recorta o traço num canvas branco pra ficar leve e legível
+  const cv=_assinPad.cv; DB.config.assinatura=cv.toDataURL('image/png'); save(); toast('Assinatura salva'); render();
+}
+function removerAssinatura(){ if(!confirm('Remover a assinatura salva?'))return; delete DB.config.assinatura; save(); toast('Assinatura removida'); render(); }
+function assinaturaUpload(file){
+  if(!file)return; const rd=new FileReader();
+  rd.onload=()=>{const img=new Image();img.onload=()=>{const cv=document.createElement('canvas');const mw=560,sc=Math.min(1,mw/img.width);cv.width=img.width*sc;cv.height=img.height*sc;const cx=cv.getContext('2d');cx.drawImage(img,0,0,cv.width,cv.height);DB.config.assinatura=cv.toDataURL('image/png');save();toast('Assinatura enviada');render();};img.src=rd.result;};
+  rd.readAsDataURL(file);
+}
+
 /* =============== DOCUMENTOS (recibos, declarações, pareceres...) =============== */
 const DOC_TIPOS=[
   {k:'recibo',nome:'Recibo de pagamento',desc:'Comprovante de valor recebido',cor:'#2FA35F',bg:'#E9F7EE',ic:'<path d="M6 3h12v18l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4L6 21V3Z"/><path d="M9 8.5h6M9 12.5h6" stroke-linecap="round"/>'},
@@ -1179,6 +1222,20 @@ const DOC_TIPOS=[
   {k:'encaminhamento',nome:'Encaminhamento',desc:'Encaminha a outro profissional/serviço',cor:'#E0742F',bg:'#FCEEE2',ic:'<path d="M4 12h12" stroke-linecap="round"/><path d="M12 6.5 17.5 12 12 17.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 5v14" stroke-linecap="round"/>'},
 ];
 function docIcon(t){return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="${t.cor}" stroke-width="1.8">${t.ic}</svg>`;}
+// Modelos de parecer/relatório por especialidade — texto-base editável
+const MODELOS_ESP=[
+  {k:'psi',esp:'Psicologia',titulo:'Relatório psicológico',texto:'1. IDENTIFICAÇÃO\nPaciente atendido(a) em processo psicoterapêutico desde ____/____/______.\n\n2. DEMANDA / QUEIXA\nDescreva a demanda inicial e os objetivos do acompanhamento.\n\n3. PROCEDIMENTOS\nAtendimentos individuais, com frequência ____, em abordagem ____________.\n\n4. ANÁLISE\nDescreva a evolução, recursos e aspectos observados ao longo do processo.\n\n5. CONCLUSÃO\nConsiderações finais e, quando cabível, encaminhamentos e recomendações.\n\n(Elaborado conforme a Resolução CFP nº 06/2019.)'},
+  {k:'psiq',esp:'Psiquiatria',titulo:'Relatório médico',texto:'IDENTIFICAÇÃO: paciente em acompanhamento psiquiátrico.\n\nHISTÓRIA CLÍNICA: descreva o quadro, início e evolução dos sintomas.\n\nCONDUTA / PLANO TERAPÊUTICO: descreva a abordagem (medicamentosa e/ou psicossocial), na perspectiva da redução de danos.\n\nSITUAÇÃO ATUAL: descreva o estado atual e a adesão ao tratamento.\n\nCONCLUSÃO / RECOMENDAÇÕES.'},
+  {k:'social',esp:'Serviço Social',titulo:'Relatório social',texto:'1. IDENTIFICAÇÃO E DEMANDA\nDescreva a situação apresentada.\n\n2. SITUAÇÃO SOCIOFAMILIAR\nComposição familiar, moradia, renda, rede de apoio e vínculos.\n\n3. ANÁLISE SOCIAL\nAnálise da realidade social e dos determinantes envolvidos.\n\n4. PARECER / ENCAMINHAMENTOS\nConclusão técnica e encaminhamentos à rede socioassistencial.'},
+  {k:'rd',esp:'Redução de danos',titulo:'Relatório de acompanhamento (RD)',texto:'CONTEXTO: acompanhamento na lógica da redução de danos, sem exigência de abstinência.\n\nPADRÃO DE USO E METAS PACTUADAS: descreva o uso relatado e as metas construídas com o paciente.\n\nESTRATÉGIAS DE CUIDADO: práticas de menor risco, autocuidado e apoio adotadas.\n\nEVOLUÇÃO: mudanças observadas no período.\n\nCONSIDERAÇÕES E PRÓXIMOS PASSOS.'},
+  {k:'alta',esp:'Encerramento',titulo:'Relatório de encerramento',texto:'MOTIVO DO ENCERRAMENTO: descreva (alta, transferência, decisão do paciente etc.).\n\nRESUMO DO ACOMPANHAMENTO: período, objetivos e principais avanços.\n\nSITUAÇÃO NA ALTA: estado atual do paciente.\n\nRECOMENDAÇÕES / PORTAS ABERTAS PARA RETORNO.'},
+];
+function aplicarModeloEsp(){
+  const sel=$('#d-modelo'); if(!sel||!sel.value)return;
+  const m=MODELOS_ESP.find(x=>x.k===sel.value); if(!m)return;
+  const tx=$('#d-texto'), tt=$('#d-titulo');
+  if(tx&&(!tx.value.trim()||confirm('Substituir o conteúdo atual pelo modelo?'))){ tx.value=m.texto; if(tt)tt.value=m.titulo; }
+}
 function viewDocumentos(){
   const docs=(DB.documentos||[]).slice().sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
   const lixo='<svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Z" fill="#9AA3AD"/><path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 8Z" fill="#C0616B"/><g stroke="#fff" stroke-width="1.2"><path d="M10 11v7M14 11v7"/></g></svg>';
@@ -1209,7 +1266,7 @@ function formDocumento(tipo,id){
   if(tipo==='recibo') campos=`<div class="row2"><div class="field"><label>Valor (R$)</label><input id="d-valor" type="number" step="0.01" value="${esc(d.valor||'')}"></div><div class="field"><label>Referente a</label><input id="d-ref" value="${esc(d.ref||'sessão de atendimento')}"></div></div>`;
   else if(tipo==='declaracao') campos=`<div class="row2"><div class="field"><label>Das (hora)</label><input id="d-hi" type="time" value="${esc(d.hi||'09:00')}"></div><div class="field"><label>Às (hora)</label><input id="d-hf" type="time" value="${esc(d.hf||'10:00')}"></div></div>`;
   else if(tipo==='atestado') campos=`<div class="row2"><div class="field"><label>Dias de afastamento</label><input id="d-dias" type="number" value="${esc(d.dias||'1')}"></div><div class="field"><label>CID (opcional)</label><input id="d-cid" value="${esc(d.cid||'')}" placeholder="vazio = sigilo"></div></div><div class="field"><label>Observação (opcional)</label><textarea id="d-obs">${esc(d.obs||'')}</textarea></div>`;
-  else if(tipo==='parecer') campos=`<div class="field"><label>Título</label><input id="d-titulo" value="${esc(d.titulo||'Parecer técnico')}"></div><div class="field"><label>Conteúdo</label><textarea id="d-texto" style="min-height:160px" placeholder="Descreva o parecer/relatório...">${esc(d.texto||'')}</textarea></div>`;
+  else if(tipo==='parecer') campos=`<div class="field"><label>Modelo por especialidade <span style="color:var(--txm);font-weight:400">(opcional — preenche um texto-base)</span></label><select id="d-modelo" onchange="aplicarModeloEsp()"><option value="">— começar do zero —</option>${MODELOS_ESP.map(m=>`<option value="${m.k}">${esc(m.esp)} · ${esc(m.titulo)}</option>`).join('')}</select></div><div class="field"><label>Título</label><input id="d-titulo" value="${esc(d.titulo||'Parecer técnico')}"></div><div class="field"><label>Conteúdo</label><textarea id="d-texto" style="min-height:180px" placeholder="Descreva o parecer/relatório... ou escolha um modelo acima.">${esc(d.texto||'')}</textarea></div>`;
   else if(tipo==='encaminhamento') campos=`<div class="field"><label>Encaminhar para</label><input id="d-para" value="${esc(d.para||'')}" placeholder="Ex.: Psiquiatria, CAPS, Nutrição"></div><div class="field"><label>Motivo</label><textarea id="d-motivo">${esc(d.motivo||'')}</textarea></div>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} — ${t.nome}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
@@ -1253,6 +1310,7 @@ function imprimirDocumento(id){
     h1{font-size:17px;text-align:center;margin:0 0 22px;text-transform:uppercase;letter-spacing:1px}
     p{margin:0 0 12px;text-align:justify}
     .sig{margin-top:64px;text-align:center} .sig .line{border-top:1px solid #333;width:280px;margin:0 auto 4px}
+    .sig img{max-width:230px;max-height:78px;object-fit:contain;display:block;margin:0 auto -6px}
     .foot{margin-top:40px;font-size:11px;color:#888;border-top:1px solid #eee;padding-top:8px}
     @media print{body{margin:0}}</style></head>
     <body>
@@ -1260,7 +1318,7 @@ function imprimirDocumento(id){
     <h1>${t.nome}</h1>
     ${docCorpo(d)}
     <p style="text-align:right;margin-top:26px">${fmtDate(d.data)}.</p>
-    <div class="sig"><div class="line"></div><b>${esc(prof)}</b><br><small>${reg?esc(reg):'Registro profissional'}</small></div>
+    <div class="sig">${DB.config.assinatura?`<img src="${DB.config.assinatura}" alt="assinatura">`:''}<div class="line"></div><b>${esc(prof)}</b><br><small>${reg?esc(reg):'Registro profissional'}</small></div>
     <div class="foot">Documento gerado pelo dichava.app (ferramenta de apoio). A adequação às normas do conselho profissional e a validade da assinatura são de responsabilidade do profissional emissor.</div>
     </body></html>`;
   const w=window.open('','_blank'); if(!w){toast('Permita pop-ups para gerar o documento',1);return;}
