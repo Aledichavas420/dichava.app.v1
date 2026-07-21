@@ -5,7 +5,10 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;min-height:100vh}
 .wrap{max-width:480px;margin:0 auto;padding-bottom:50px}
-.logo{font-weight:800;font-size:15px;color:#fff;text-align:center;padding:12px;opacity:.9}.logo span{opacity:.75}
+.logo{font-weight:800;font-size:15px;color:#fff;padding:12px;opacity:.92;display:flex;align-items:center;justify-content:center;gap:6px}.logo span{opacity:.75}
+.logo .lf{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
+.credito{text-align:center;font-size:11.5px;color:var(--txm);padding:22px 20px 6px;display:flex;align-items:center;justify-content:center;gap:5px}
+.credito svg{width:12px;height:12px;fill:none;stroke:var(--v);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .hero{position:relative;overflow:hidden;color:#fff;padding:6px 22px 26px;text-align:center}
 .hero::before{content:"";position:absolute;top:-70px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1)}
 .hero::after{content:"";position:absolute;bottom:-90px;left:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07)}
@@ -92,7 +95,7 @@ function render(p){
   const wrap=$('wrap');
   if(!p){ // fallback: só o formulário simples
     let nome='esse profissional';
-    wrap.innerHTML=`<div style="background:${CAPAS.verde};" class="hero"><div class="logo">dichava<span>.app</span></div><div class="hnome">Agendar consulta</div><div class="htipo">Solicite um horário</div></div><div class="body" id="bd"></div>`;
+    wrap.innerHTML=`<div style="background:${CAPAS.verde};" class="hero"><div class="logo"><svg class="lf" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>dichava<span>.app</span></div><div class="hnome">Agendar consulta</div><div class="htipo">Solicite um horário</div></div><div class="body" id="bd"></div>`;
     formStep(); return;
   }
   const capa=CAPAS[p.capa]||CAPAS.verde;
@@ -101,7 +104,7 @@ function render(p){
   const modLabel=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'Online e presencial':(p.modalidade||'').includes('online')?'Online':'Presencial';
   wrap.innerHTML=`
   <div class="hero" style="background:${capa}">
-    <div class="logo">dichava<span>.app</span></div>
+    <div class="logo"><svg class="lf" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>dichava<span>.app</span></div>
     <div class="avw"><div class="av">${p.foto?`<img src="${p.foto}" alt="">`:ini(p.nome)}</div><div class="seal">${SEAL}</div></div>
     <div class="hnome">${esc(p.nome)}</div>
     <div class="htipo">${esc(p.tipo_prof||'')}</div>
@@ -123,7 +126,8 @@ function render(p){
     <div id="agd"></div>
     ${AVS.length?`<div class="sec">Avaliações</div><div>${AVS.slice(0,6).map(a=>`<div class="rev"><div style="display:flex;gap:7px;align-items:center"><b style="font-size:13.5px">${esc(a.user_nome||'Paciente')}</b><span class="stars">${estrelas(a.nota)}</span></div>${a.comentario?`<div style="font-size:13.5px;color:var(--txs);margin-top:3px">${esc(a.comentario)}</div>`:''}</div>`).join('')}</div>`:''}
   </div>
-  <div class="note">Ao enviar, você concorda com o tratamento dos seus dados para fins de agendamento (LGPD).</div>`;
+  <div class="note">Ao enviar, você concorda com o tratamento dos seus dados para fins de agendamento (LGPD).</div>
+  <div class="credito"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg> Feito com cuidado pela rede dichava</div>`;
   renderAgenda(0);
 }
 
@@ -189,7 +193,7 @@ function telaSucesso(){
   const bg=CAPAS[(PROF&&PROF.capa)]||CAPAS.verde;
   document.getElementById('wrap').innerHTML=`
   <div class="hero" style="background:${bg};padding-bottom:44px">
-    <div class="logo">dichava<span>.app</span></div>
+    <div class="logo"><svg class="lf" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>dichava<span>.app</span></div>
     <div class="okcheck"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg></div>
     <div class="hnome" style="margin-top:14px">Solicitação enviada!</div>
     <div class="htipo" style="opacity:.92;max-width:300px;margin:10px auto 0">${esc(nomeProf)} vai confirmar seu horário em breve pelo contato informado.</div>

@@ -38,7 +38,8 @@ body.f-mono{font-family:ui-monospace,'Courier New',monospace;letter-spacing:-.3p
 .st-contorno .lk{background:rgba(0,0,0,.12);border:1.6px solid rgba(255,255,255,.55);color:#fff}
 .st-contorno .lk.primary{background:var(--acc);color:var(--accTx);border-color:var(--acc)}
 .foot{margin-top:auto;padding-top:34px}
-.brand{font-size:13px;font-weight:800;opacity:.8;text-decoration:none;color:#fff}.brand span{opacity:.6}
+.brand{font-size:13px;font-weight:800;opacity:.8;text-decoration:none;color:#fff;display:inline-flex;align-items:center;gap:5px}.brand span{opacity:.6}
+.brand .lf{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .foot-s{font-size:11px;opacity:.5;margin-top:4px}
 .spin{width:24px;height:24px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp 1s linear infinite;margin:80px auto;display:block}@keyframes sp{to{transform:rotate(360deg)}}
 </style></head><body>
@@ -100,10 +101,10 @@ function render(p,cfg,avg,n){
   if(wa) html+=`<a class="lk" href="${PREVIEW?'javascript:void 0':'https://wa.me/'+wa}" target="_blank" rel="noopener"><span class="li">💬</span><span class="lt">WhatsApp</span><span class="lg">↗</span></a>`;
   if(lk) html+=`<a class="lk" href="${PREVIEW?'javascript:void 0':esc(lk.href)}" target="_blank" rel="noopener"><span class="li">${/instagram/.test(lk.href)?'📸':'🌐'}</span><span class="lt">${esc(lk.label)}</span><span class="lg">↗</span></a>`;
   links.forEach(l=>{ if(l&&l.url){ const u=proLink(l.url); html+=`<a class="lk" href="${PREVIEW?'javascript:void 0':esc((u&&u.href)||l.url)}" target="_blank" rel="noopener"><span class="li">${esc(l.icone||'🔗')}</span><span class="lt">${esc(l.titulo||l.url)}</span><span class="lg">↗</span></a>`; } });
-  html+=`</div><div class="foot"><a class="brand" href="${PREVIEW?'javascript:void 0':'https://dichava.app'}">dichava<span>.app</span></a><div class="foot-s">Rede de profissionais de redução de danos</div></div>`;
+  html+=`</div><div class="foot"><a class="brand" href="${PREVIEW?'javascript:void 0':'https://dichava.app'}"><svg class="lf" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>dichava<span>.app</span></a><div class="foot-s">Rede de profissionais de redução de danos</div></div>`;
   document.getElementById('wrap').innerHTML=html;
 }
-function fail(){document.getElementById('bg').style.background=CAPAS.verde;document.getElementById('wrap').innerHTML='<div style="margin:auto"><div style="font-size:44px">🔗</div><h1 style="margin-top:10px;font-size:20px">Link indisponível</h1><p style="opacity:.85;margin-top:8px;font-size:14px">Confira o link ou volte mais tarde.</p></div><div class="foot"><a class="brand" href="https://dichava.app">dichava<span>.app</span></a></div>';}
+function fail(){document.getElementById('bg').style.background=CAPAS.verde;document.getElementById('wrap').innerHTML='<div style="margin:auto"><div style="font-size:44px">🔗</div><h1 style="margin-top:10px;font-size:20px">Link indisponível</h1><p style="opacity:.85;margin-top:8px;font-size:14px">Confira o link ou volte mais tarde.</p></div><div class="foot"><a class="brand" href="https://dichava.app"><svg class="lf" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>dichava<span>.app</span></a></div>';}
 
 if(PREVIEW){
   // preview ao vivo: recebe {prof, config, avg, n} do editor via postMessage
