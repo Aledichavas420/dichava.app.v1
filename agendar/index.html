@@ -46,6 +46,13 @@ input:focus,textarea:focus{outline:none;border-color:var(--v)}
 .note{font-size:12px;color:#9aa89c;text-align:center;margin:22px 18px 0}
 .hint{font-size:12px;color:var(--txm);text-align:center;margin-top:12px}
 .spin{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--v);border-radius:50%;animation:sp 1s linear infinite;margin:60px auto;display:block}@keyframes sp{to{transform:rotate(360deg)}}
+.okcheck{width:66px;height:66px;border-radius:20px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;margin:22px auto 0;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.sucbox{max-width:460px;margin:0 auto;padding:22px 20px 40px}
+.convite{background:var(--vf,#EAF7EE);border:1.5px solid var(--line,#e6ece7);border-radius:18px;padding:20px;text-align:center}
+.conv-tit{font-size:17px;font-weight:800;color:var(--tx,#183a24);margin-bottom:8px}
+.conv-tx{font-size:14px;line-height:1.6;color:var(--txm,#5a6b5e);margin-bottom:16px}
+.conv-btn{display:inline-block;background:var(--v,#2FA35F);color:#fff;font-weight:800;font-size:15px;text-decoration:none;padding:13px 22px;border-radius:14px;box-shadow:0 4px 14px rgba(47,163,95,.32)}
+.voltar-link{display:block;margin:18px auto 0;background:none;border:none;color:var(--ve,#2FA35F);font-weight:700;font-size:14px;cursor:pointer;padding:8px}
 </style></head><body>
 <div class="wrap" id="wrap"><span class="spin"></span></div>
 <script>
@@ -156,12 +163,46 @@ async function enviar(){
   if(!tel)return showErr('Informe um telefone/WhatsApp.');
   if(!CODIGO||!SB)return showErr('Link inválido ou sem conexão.');
   const btn=$('btn'); btn.disabled=true; btn.textContent='Enviando…';
+  const enviarRpc=()=>SB.rpc('solicitar_agendamento',{p_codigo:CODIGO,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:val('f-msg')||null});
   try{
-    const{error}=await SB.rpc('solicitar_agendamento',{p_codigo:CODIGO,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:val('f-msg')||null});
-    if(error)throw error;
-    const nomeProf=PROF?PROF.nome.split(' ')[0]:'O profissional';
-    document.getElementById('wrap').innerHTML=`<div class="hero" style="background:${CAPAS[(PROF&&PROF.capa)]||CAPAS.verde};padding-bottom:40px"><div class="logo">dichava<span>.app</span></div><div style="font-size:52px;margin-top:20px">✅</div><div class="hnome" style="margin-top:8px">Solicitação enviada!</div><div class="htipo" style="opacity:.9;max-width:300px;margin:10px auto 0">${esc(nomeProf)} vai confirmar seu horário em breve pelo contato informado.</div></div>`;
-  }catch(e){ showErr('Não consegui enviar: '+((e&&e.message)||'tente de novo')); btn.disabled=false; btn.textContent='Enviar solicitação'; }
+    // A 1ª tentativa às vezes falha com "Load failed" (conexão fria/transitória).
+    // Tentamos de novo automaticamente antes de mostrar erro ao usuário.
+    let res=await enviarRpc();
+    if(res.error && /load failed|fetch|network|timeout/i.test(res.error.message||'')){
+      await new Promise(r=>setTimeout(r,600));
+      res=await enviarRpc();
+    }
+    if(res.error)throw res.error;
+    telaSucesso();
+  }catch(e){
+    const msg=(e&&e.message)||'';
+    if(/load failed|fetch|network|timeout/i.test(msg)){
+      // uma retentativa final silenciosa em erro de rede
+      try{ const r2=await enviarRpc(); if(r2.error)throw r2.error; telaSucesso(); return; }catch(_){}
+      showErr('Falha de conexão. Toque em "Enviar solicitação" novamente.');
+    } else showErr('Não consegui enviar: '+(msg||'tente de novo'));
+    btn.disabled=false; btn.textContent='Enviar solicitação';
+  }
+}
+function telaSucesso(){
+  const nomeProf=PROF?PROF.nome.split(' ')[0]:'O profissional';
+  const bg=CAPAS[(PROF&&PROF.capa)]||CAPAS.verde;
+  document.getElementById('wrap').innerHTML=`
+  <div class="hero" style="background:${bg};padding-bottom:44px">
+    <div class="logo">dichava<span>.app</span></div>
+    <div class="okcheck"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg></div>
+    <div class="hnome" style="margin-top:14px">Solicitação enviada!</div>
+    <div class="htipo" style="opacity:.92;max-width:300px;margin:10px auto 0">${esc(nomeProf)} vai confirmar seu horário em breve pelo contato informado.</div>
+  </div>
+  <div class="sucbox">
+    <div class="convite">
+      <div class="conv-tit">Cuide de você todos os dias 💚</div>
+      <div class="conv-tx">O <b>dichava.app</b> é um app gratuito de autocuidado e redução de danos: registre seu progresso, respire nos momentos difíceis e encontre profissionais como ${esc(nomeProf)}. Faça parte da comunidade.</div>
+      <a class="conv-btn" href="https://dichava.app" target="_blank" rel="noopener">Conhecer o dichava.app →</a>
+    </div>
+    <button class="voltar-link" onclick="location.reload()">← Voltar ao perfil</button>
+  </div>`;
+  window.scrollTo(0,0);
 }
 </script>
 </body></html>
