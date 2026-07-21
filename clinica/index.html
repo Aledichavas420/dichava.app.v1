@@ -8,7 +8,7 @@
 <meta name="description" content="Gestão de clínica: agenda, prontuários e caixa integrados.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-pro-192.png">
 <link rel="apple-touch-icon" href="./icon-pro-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -364,6 +364,9 @@ tbody tr:hover{background:var(--cin)}
 #gate .gate-logo svg{width:32px;height:32px;fill:none;stroke:#f6f3ea;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #gate .saudacao{text-align:center;font-size:13px;color:#d99a3c;font-weight:600;letter-spacing:.3px;margin-bottom:2px}
 #gate .gate-card h2{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:#1f3d2b;letter-spacing:0}
+.gate-word{font-family:'Bagel Fat One',system-ui;font-size:34px;line-height:1;letter-spacing:.5px;color:#2f5740;text-shadow:1px 2px 0 rgba(31,61,43,.14);margin-top:2px}
+.gate-word span{color:#d99a3c}
+.gate-panel-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7a8a6f;margin-top:9px}
 #gate .gate-card .gsub{color:#5c6b5a;font-size:13.5px;max-width:280px;margin:8px auto 20px}
 #gate .field label{color:#2f5740}
 #gate input{background:#fffdf8;border:1.5px solid #e2dccb;color:#243024}
@@ -428,8 +431,9 @@ tbody tr:hover{background:var(--cin)}
   <div class="gate-card">
     <div class="gate-logo"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
     <div class="saudacao" id="gate-saudacao">Bom te ver por aqui</div>
-    <h2>Painel da Clínica</h2>
-    <div class="gsub">Um espaço de cuidado para quem cuida. Entre para acompanhar seus pacientes no dichava.app.</div>
+    <div class="gate-word">dichava<span>.app</span></div>
+    <div class="gate-panel-label">Painel da Clínica</div>
+    <div class="gsub">Um espaço de cuidado para quem cuida. Entre para acompanhar seus pacientes.</div>
     <div class="gate-err" id="gate-err"></div>
     <div id="gate-login">
       <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
