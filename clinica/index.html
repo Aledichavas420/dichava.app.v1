@@ -2012,12 +2012,10 @@ async function entrarLiberado(){
   hideGate(); iniciarApp(); return true;
 }
 function gateShowSignup(){ gateErr(''); preencherPlanos(); showGate('signup'); }
-// Volta pro app do paciente. Se houver sessão de PROFISSIONAL ativa, encerra antes
-// (senão o app detecta o login pro e redireciona de volta pra cá — ping-pong).
-async function voltarAoApp(){
-  try{
-    if(_SB){ const {data}=await _SB.auth.getSession(); const t=data&&data.session&&data.session.user&&data.session.user.user_metadata&&data.session.user.user_metadata.tipo; if(t==='pro') await _SB.auth.signOut(); }
-  }catch(e){}
+// Volta pro app do paciente. Marca uma flag pra que o app (que compartilha a sessão)
+// NÃO redirecione de volta pra cá caso haja uma sessão de profissional ativa.
+function voltarAoApp(){
+  try{ localStorage.setItem('dr_voltar_app','1'); }catch(e){}
   window.location.href='/';
 }
 function gateShowLogin(){ gateErr(''); showGate('login'); }

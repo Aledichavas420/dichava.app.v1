@@ -7302,6 +7302,15 @@ function proLink(v){
   return {href,label};
 }
 async function rotearPro(){
+  // Se o usuário clicou "Voltar ao app" no painel, NÃO redireciona de volta:
+  // encerra a sessão de profissional e mostra a tela inicial do app.
+  try{
+    if(localStorage.getItem('dr_voltar_app')==='1'){
+      localStorage.removeItem('dr_voltar_app');
+      if(_SB)await _SB.auth.signOut().catch(()=>{});
+      U=null; ls('dr_session',null); showV('va'); return;
+    }
+  }catch(e){}
   // A área profissional agora vive no Painel dos profissionais (/clinica/).
   // Contas de profissional são redirecionadas pra lá — o app é só pra pacientes.
   window.location.href='/clinica/';
