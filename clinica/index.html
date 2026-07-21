@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#1B2A1C">
 <title>dichava.app — Painel da Clínica</title>
 <meta name="description" content="Gestão de clínica: agenda, prontuários e caixa integrados.">
@@ -91,8 +91,13 @@ a{color:inherit;text-decoration:none}
 .side-foot .who{font-size:12.5px;color:#8ca08e;padding:0 4px}
 .side-foot .who b{color:#E9EFE7;font-weight:600;font-size:13.5px;display:block}
 
-html,body{overflow-x:hidden;max-width:100vw}
-.main{flex:1;min-width:0;max-width:100%;display:flex;flex-direction:column;overflow-x:hidden}
+html,body{overflow-x:clip;max-width:100vw;width:100%}
+.main{flex:1;min-width:0;max-width:100%;display:flex;flex-direction:column;overflow-x:clip}
+.content,#view{overflow-x:clip;max-width:100%}
+*{-webkit-tap-highlight-color:transparent}
+.sup-item{display:flex;align-items:center;gap:10px;width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:13px;background:var(--card);color:var(--tx);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left}
+.sup-item:active{background:var(--cin)}
+.sup-back{background:none;border:none;color:var(--ve);font-weight:700;font-size:13.5px;cursor:pointer;padding:2px 0 8px}
 .topbar>div:first-child{min-width:0}
 .topbar h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 table{max-width:100%}
@@ -656,22 +661,111 @@ function compartilharCodigo(cod){
 }
 /* ===== SUPORTE (lado do profissional) ===== */
 let _supPollP=null;
+// ===== FAQ / Pré-atendimento — perguntas e respostas por ferramenta do painel =====
+const SUP_FAQ=[
+  {t:'Conta, plano e pagamento', ic:'💳', q:[
+    {p:'Como libero meu acesso ao painel?',r:'Após o cadastro, seu acesso fica "em análise". É só falar com a gente (WhatsApp ou aqui no chat), combinar o pagamento do plano escolhido e assim que confirmarmos, liberamos na hora. Você também pode enviar o comprovante pelo botão na tela de análise.'},
+    {p:'Onde envio o comprovante de pagamento?',r:'Na tela "acesso em análise" (logo após o login, antes de liberar) tem o botão "📎 Enviar comprovante de pagamento". Se já estiver com o painel liberado, mande por aqui mesmo.'},
+    {p:'Como troco de plano?',r:'Nos conte por aqui qual plano você quer (Essencial, Profissional ou Clínica) que ajustamos pra você. A diferença é: destaque no diretório, códigos premium pra presentear e equipe compartilhada no Clínica.'},
+    {p:'Minha assinatura expirou, e agora?',r:'Quando o período acaba, o painel pede renovação. É só combinar o novo pagamento com a gente que reativamos o acesso na hora, sem perder nenhum dado.'},
+  ]},
+  {t:'Agenda e agendamento online', ic:'📅', q:[
+    {p:'Como marco uma consulta?',r:'Em Agenda, toque em "＋ Novo" (ou no dia desejado) e preencha paciente, horário, tipo e valor. O que estiver marcado pra hoje aparece automaticamente na Visão geral.'},
+    {p:'Como configuro meus horários disponíveis online?',r:'Em Configurações → Disponibilidade online, defina os dias e faixas de horário. Esses horários é que aparecem pro paciente quando ele acessa seu link de agendamento.'},
+    {p:'Onde está meu link de agendamento?',r:'Na aba Equipe (ou no seu perfil) tem o link dichava.app/agendar/?c=SEUCODIGO. Compartilhe na bio do Instagram e no WhatsApp — o paciente pede um horário e você confirma na Agenda.'},
+    {p:'Um paciente pediu horário, como confirmo?',r:'A solicitação aparece na Agenda e em Mensagens com um aviso. É só tocar em Confirmar (ou Recusar). Ao confirmar, o horário entra na sua agenda.'},
+  ]},
+  {t:'Pacientes e prontuários', ic:'🗂️', q:[
+    {p:'Como cadastro um paciente?',r:'Na aba Pacientes, toque em "＋ Novo" e preencha os dados. Depois você pode abrir o paciente e adicionar prontuários (registros clínicos) na linha do tempo dele.'},
+    {p:'Como escrevo um prontuário?',r:'Abra o paciente e toque em novo registro. Você escreve anamnese, evolução, condutas — tudo fica organizado por data. Em Prontuários você vê o histórico completo.'},
+    {p:'O que são as escalas clínicas?',r:'No prontuário você pode aplicar escalas (AUDIT, PHQ-9, GAD-7, DAST-10) com pontuação automática e acompanhar a evolução ao longo do tempo.'},
+  ]},
+  {t:'Caixa e financeiro', ic:'💰', q:[
+    {p:'Como o caixa é preenchido?',r:'Ao marcar uma consulta como Atendida + Paga, uma entrada é lançada no caixa automaticamente. Você também pode lançar entradas e saídas manualmente na aba Caixa.'},
+    {p:'O que é "A receber"?',r:'É a soma das consultas marcadas como atendidas mas ainda não pagas. Assim você não perde de vista o que falta receber.'},
+    {p:'Consigo ver um relatório financeiro?',r:'Sim. Na aba Caixa você vê faturamento do mês, saídas e saldo. Há também o relatório financeiro com o resumo do período.'},
+  ]},
+  {t:'Documentos e assinatura', ic:'📄', q:[
+    {p:'Como emito um recibo ou atestado?',r:'Na aba Documentos (menu Mais), escolha o tipo (recibo, declaração, atestado, parecer, encaminhamento), preencha e toque em "Salvar e gerar" — abre pronto pra imprimir/salvar em PDF.'},
+    {p:'Como coloco minha assinatura nos documentos?',r:'Em Configurações → Assinatura digital, desenhe ou envie uma imagem da sua assinatura. Ela aparece automaticamente acima da linha em todo documento que você emitir.'},
+    {p:'Tem modelos prontos de relatório?',r:'Sim. Ao emitir um Parecer/Relatório, há modelos por especialidade (Psicologia, Psiquiatria, Serviço Social, Redução de danos, Encerramento) que preenchem um texto-base editável.'},
+  ]},
+  {t:'Meu perfil público', ic:'🪪', q:[
+    {p:'Como apareço na rede de profissionais do app?',r:'Em Meu perfil, preencha tipo, bio, especialidades, modalidade, foto e capa, e envie para aprovação. Após aprovarmos, seu perfil aparece no diretório do app pros pacientes.'},
+    {p:'Por que meu perfil está "em análise"?',r:'Todo perfil público passa por uma aprovação rápida antes de aparecer na rede, pra garantir a qualidade. Assim que revisarmos, ele é publicado.'},
+    {p:'O que é o selo Destaque?',r:'Nos planos Profissional e Clínica, seu perfil ganha um selo ★ Destaque e aparece no topo da lista de profissionais do app.'},
+  ]},
+  {t:'Link na bio e códigos premium', ic:'🔗', q:[
+    {p:'Como monto meu "link na bio"?',r:'No painel há o construtor do link na bio (estilo Linktree): foto, fundo, cores, fontes, títulos e links, com prévia ao vivo. Publique e use o link na bio do Instagram.'},
+    {p:'Como funcionam os códigos premium?',r:'Nos planos Profissional (10) e Clínica (25), em Mais → Códigos premium você gera códigos pra presentear pacientes com 1 ano de premium. Cada código só pode ser usado uma vez.'},
+    {p:'Como o paciente usa o código?',r:'No app, na tela de Premium, ele toca em "🎁 Tenho um código de presente", digita o código e o premium é ativado na conta dele.'},
+  ]},
+  {t:'Equipe e clínica compartilhada', ic:'👥', q:[
+    {p:'Como convido outros profissionais?',r:'A equipe compartilhada é um recurso do plano Clínica (até 5 profissionais). Na aba Equipe você copia o código e o profissional entra por ele, passando a ver a mesma agenda, pacientes e caixa.'},
+    {p:'Meu plano não deixa convidar, por quê?',r:'Essencial e Profissional são individuais (1 profissional). Pra ter equipe na mesma clínica, faça upgrade pro plano Clínica.'},
+  ]},
+  {t:'Mensagens e backup', ic:'⚙️', q:[
+    {p:'Como converso com meus pacientes?',r:'Na aba Mensagens você vê as conversas iniciadas pelos pacientes pelo app e responde por ali mesmo, em tempo real.'},
+    {p:'Meus dados estão seguros? Como faço backup?',r:'Seus dados ficam salvos com segurança ligados à sua conta. Em Configurações você exporta um backup completo (JSON) e os prontuários em PDF quando quiser.'},
+  ]},
+];
 function abrirSuporteProf(){
   if(!_SB||!AUTH){ toast('Sem conexão',1); return; }
-  openModal(`<div class="modal"><div class="modal-head"><div class="avatar" style="background:linear-gradient(135deg,#FFC463,#F5871F);color:#fff">S</div><h3 style="flex:1">Suporte dichava</h3><button class="icon-btn" onclick="fecharSuporteProf()">✕</button></div>
-    <div id="supp-scroll" style="height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--cin);padding:14px"></div>
-    <div class="modal-foot" style="gap:8px"><textarea id="supp-input" rows="1" placeholder="Escreva pro suporte…" style="flex:1;resize:none;max-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;background:var(--bg)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarSuporteProf();}"></textarea><button class="btn" onclick="enviarSuporteProf()">Enviar</button></div>
-  </div>`);
+  openModal(`<div class="modal"><div class="modal-head"><div class="avatar" style="background:linear-gradient(135deg,#FFC463,#F5871F);color:#fff">S</div><div style="flex:1"><h3 style="margin:0">Central de ajuda</h3><div style="font-size:12px;color:var(--txm)">dichava · pré-atendimento</div></div><button class="icon-btn" onclick="fecharSuporteProf()">✕</button></div>
+    <div id="sup-root"></div></div>`);
+  supHome();
+}
+function fecharSuporteProf(){ clearInterval(_supPollP); _supPollP=null; closeModal(); }
+function supHome(){
+  clearInterval(_supPollP); _supPollP=null;
+  const root=document.getElementById('sup-root'); if(!root)return;
+  root.innerHTML=`<div style="padding:16px;max-height:64vh;overflow-y:auto">
+    <p style="font-size:13.5px;color:var(--txs);margin:0 2px 14px">Sobre o que é sua dúvida? Escolha um tópico — a maioria se resolve na hora. 💚</p>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${SUP_FAQ.map((t,i)=>`<button class="sup-item" onclick="supTopico(${i})"><span style="font-size:18px">${t.ic}</span><span style="flex:1;text-align:left">${esc(t.t)}</span><span style="color:var(--txm)">›</span></button>`).join('')}
+    </div>
+    <button class="btn ghost" style="width:100%;justify-content:center;margin-top:14px" onclick="supChatHumano()">Falar com um atendente</button>
+  </div>`;
+}
+function supTopico(i){
+  const t=SUP_FAQ[i]; const root=document.getElementById('sup-root'); if(!t||!root)return;
+  root.innerHTML=`<div style="padding:16px;max-height:64vh;overflow-y:auto">
+    <button class="sup-back" onclick="supHome()">← Todos os tópicos</button>
+    <div style="font-size:16px;font-weight:800;margin:6px 2px 12px">${t.ic} ${esc(t.t)}</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${t.q.map((qa,j)=>`<button class="sup-item" onclick="supResposta(${i},${j})"><span style="flex:1;text-align:left">${esc(qa.p)}</span><span style="color:var(--txm)">›</span></button>`).join('')}
+    </div>
+    <button class="btn ghost" style="width:100%;justify-content:center;margin-top:14px" onclick="supChatHumano()">Não achei minha dúvida — falar com atendente</button>
+  </div>`;
+}
+function supResposta(i,j){
+  const qa=SUP_FAQ[i].q[j]; const root=document.getElementById('sup-root'); if(!qa||!root)return;
+  root.innerHTML=`<div style="padding:16px;max-height:64vh;overflow-y:auto">
+    <button class="sup-back" onclick="supTopico(${i})">← ${esc(SUP_FAQ[i].t)}</button>
+    <div style="font-size:15px;font-weight:800;margin:8px 2px 10px">${esc(qa.p)}</div>
+    <div style="background:var(--cin);border-radius:12px;padding:14px;font-size:14px;line-height:1.6;color:var(--tx)">${esc(qa.r)}</div>
+    <div style="text-align:center;margin-top:16px;font-size:13.5px;color:var(--txs)">Isso resolveu?</div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn" style="flex:1;justify-content:center" onclick="supResolvido()">Sim, obrigado 💚</button>
+      <button class="btn ghost" style="flex:1;justify-content:center" onclick="supChatHumano()">Não, falar com atendente</button>
+    </div>
+  </div>`;
+}
+function supResolvido(){ toast('Que bom! Qualquer coisa, estamos aqui 💚'); fecharSuporteProf(); }
+function supChatHumano(){
+  const root=document.getElementById('sup-root'); if(!root)return;
+  root.innerHTML=`<button class="sup-back" style="margin:12px 0 0 16px" onclick="supHome()">← Central de ajuda</button>
+    <div id="supp-scroll" style="height:46vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--cin);padding:14px;margin-top:10px"></div>
+    <div class="modal-foot" style="gap:8px"><textarea id="supp-input" rows="1" placeholder="Descreva sua dúvida pro atendente…" style="flex:1;resize:none;max-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;background:var(--bg)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarSuporteProf();}"></textarea><button class="btn" onclick="enviarSuporteProf()">Enviar</button></div>`;
   carregarSuppMsgs(true); marcarSuppLidas();
   clearInterval(_supPollP); _supPollP=setInterval(()=>carregarSuppMsgs(false),4000);
 }
-function fecharSuporteProf(){ clearInterval(_supPollP); closeModal(); }
 async function carregarSuppMsgs(scroll){
   if(!_SB||!AUTH)return;
   try{
     const {data}=await _SB.from('suporte_mensagens').select('*').eq('prof_id',AUTH.id).order('criado_em',{ascending:true});
     const sc=document.getElementById('supp-scroll'); if(!sc)return;
-    sc.innerHTML=(data||[]).map(m=>{const mine=m.remetente==='prof';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px;text-align:center;padding:0 20px">Fale com a equipe dichava. Dúvidas, pagamento, ajuda com o painel — responderemos por aqui. 🧡</div>';
+    sc.innerHTML=(data||[]).map(m=>{const mine=m.remetente==='prof';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px;text-align:center;padding:0 20px">Escreva sua dúvida que um atendente responde por aqui. 🧡</div>';
     if(scroll) sc.scrollTop=sc.scrollHeight;
   }catch(e){ const sc=document.getElementById('supp-scroll'); if(sc)sc.innerHTML='<div style="margin:auto;color:var(--txm);font-size:13px">Suporte indisponível. Rode o suporte-setup.sql.</div>'; }
 }
