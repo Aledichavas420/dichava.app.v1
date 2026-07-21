@@ -363,7 +363,15 @@ tbody tr:hover{background:var(--cin)}
       <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
       <div class="field"><label>Senha</label><input id="g-pw" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
       <button class="btn" id="g-btn" onclick="gateLogin()">Entrar</button>
-      <div class="gate-note">Use a mesma conta <b>profissional</b> do app dichava.<br>Ainda não tem conta pro? <a href="../#pro" >Crie no app →</a></div>
+      <div class="gate-note">Ainda não tem conta? <a href="#" onclick="event.preventDefault();gateShowSignup()">Criar conta profissional →</a></div>
+    </div>
+    <div id="gate-signup" class="hide">
+      <div class="field"><label>Nome completo</label><input id="s-nome" type="text" autocomplete="name" placeholder="Como você atende (ex: Dra. Ana Lima)"></div>
+      <div class="field"><label>Registro profissional</label><input id="s-reg" type="text" autocomplete="off" placeholder="ex: CRP 06/1234, CRM, CRESS…"></div>
+      <div class="field"><label>E-mail</label><input id="s-email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
+      <div class="field"><label>Senha</label><input id="s-pw" type="password" autocomplete="new-password" placeholder="Crie uma senha (8+ caracteres)"></div>
+      <button class="btn" id="s-btn" onclick="gateSignup()">Criar conta profissional</button>
+      <div class="gate-note">Ao criar, seu perfil público passa por uma <b>aprovação</b> antes de aparecer na rede. Você já pode usar o painel na hora.<br>Já tem conta? <a href="#" onclick="event.preventDefault();gateShowLogin()">Entrar →</a></div>
     </div>
     <div id="gate-notpro" class="hide">
       <div class="gate-info">Esta área é exclusiva para contas <b>profissionais</b>. Sua conta atual é de usuário comum.</div>
@@ -1903,10 +1911,34 @@ const _SB = (typeof supabase!=='undefined')
   : null;
 
 function gateErr(msg){ const e=$('#gate-err'); if(!e)return; if(msg){e.textContent=msg;e.classList.add('on');}else{e.classList.remove('on');} }
-function showGate(mode){ // 'login' | 'notpro'
+function showGate(mode){ // 'login' | 'signup' | 'notpro'
   $('#gate').classList.add('on');
-  $('#gate-login').classList.toggle('hide',mode==='notpro');
+  $('#gate-login').classList.toggle('hide',mode!=='login');
+  $('#gate-signup').classList.toggle('hide',mode!=='signup');
   $('#gate-notpro').classList.toggle('hide',mode!=='notpro');
+}
+function gateShowSignup(){ gateErr(''); showGate('signup'); }
+function gateShowLogin(){ gateErr(''); showGate('login'); }
+async function gateSignup(){
+  gateErr('');
+  const nome=$('#s-nome').value.trim(), reg=$('#s-reg').value.trim(), email=$('#s-email').value.trim(), pw=$('#s-pw').value;
+  if(!nome){ gateErr('Informe seu nome.'); return; }
+  if(!reg){ gateErr('Informe seu registro profissional.'); return; }
+  if(!email||!/.+@.+\..+/.test(email)){ gateErr('Informe um e-mail válido.'); return; }
+  if(!pw||pw.length<8){ gateErr('A senha precisa ter ao menos 8 caracteres.'); return; }
+  if(!_SB){ gateErr('Sem conexão com o servidor.'); return; }
+  const btn=$('#s-btn'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Criando…';
+  try{
+    const{data,error}=await _SB.auth.signUp({email,password:pw,options:{data:{nome,tipo:'pro',reg}}});
+    if(error){ gateErr(/already|registered/i.test(error.message)?'Este e-mail já tem conta. Faça login.':error.message); return; }
+    if(!data.session){ // precisa confirmar e-mail
+      gateErr(''); showGate('login');
+      toast('Conta criada! Confirme o e-mail que enviamos e depois faça login.',0); return;
+    }
+    const u=metaFrom(data.user); AUTH=u; hideGate(); iniciarApp();
+    toast('Conta criada! Complete seu perfil em "Meu perfil".',0);
+  }catch(e){ gateErr('Não consegui criar a conta agora. Tente de novo.'); }
+  finally{ btn.disabled=false; btn.textContent=orig; }
 }
 function hideGate(){ $('#gate').classList.remove('on'); }
 
@@ -2071,6 +2103,7 @@ function tutFim(){ $('#tut').classList.remove('on'); try{localStorage.setItem('d
 
 /* =============== BOOT =============== */
 $('#g-pw')&&$('#g-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateLogin(); });
+$('#s-pw')&&$('#s-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateSignup(); });
 bootAuth();
 </script>
 </body>
