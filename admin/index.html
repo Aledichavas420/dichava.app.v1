@@ -60,6 +60,12 @@ a{color:var(--ve)}
 .pacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .obs{font-size:12px;color:var(--txs);margin-top:10px;background:#0b1310;border-radius:9px;padding:8px 10px;border:1px solid var(--line)}
 .empty{text-align:center;color:var(--txm);padding:40px 10px;font-size:14px}
+.chartcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px 12px}
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:8px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bar .col{width:100%;max-width:44px;border-radius:7px 7px 3px 3px;background:linear-gradient(180deg,#41c47a,#2FA35F);min-height:3px;transition:height .4s}
+.bar .bn{font-size:12px;font-weight:800;color:var(--tx)}
+.bar .bl{font-size:10.5px;color:var(--txs)}
 .spin{width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--v);border-radius:50%;animation:sp 1s linear infinite;margin:50px auto;display:block}@keyframes sp{to{transform:rotate(360deg)}}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
 .ft{font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:20px;background:var(--card);border:1px solid var(--line);color:var(--txm);cursor:pointer}
@@ -99,6 +105,9 @@ a{color:var(--ve)}
     <div class="sec">Visão geral</div>
     <div class="kpis" id="kpis"><div class="spin"></div></div>
 
+    <div class="sec">Crescimento de usuários</div>
+    <div class="card chartcard" id="growth"><div class="spin"></div></div>
+
     <div class="sec">Profissionais</div>
     <div class="filters" id="filters"></div>
     <div class="plist" id="plist"><div class="spin"></div></div>
@@ -113,6 +122,13 @@ a{color:var(--ve)}
 const $=s=>document.querySelector(s);
 const SB = (typeof supabase!=='undefined') ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4') : null;
 const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
+// ⚠️ Renomeie os planos aqui conforme sua oferta (usado no cadastro e na liberação)
+const PLANOS=[
+  {k:'essencial',nome:'Essencial'},
+  {k:'profissional',nome:'Profissional'},
+  {k:'clinica',nome:'Clínica / Equipe'},
+];
+function planoNome(k){ const p=PLANOS.find(x=>x.k===k); return p?p.nome:(k||''); }
 let PROFS=[], _filtro='todos';
 let _tT; function toast(m,err){const t=$('#toast');t.textContent=m;t.classList.toggle('err',!!err);t.classList.add('on');clearTimeout(_tT);_tT=setTimeout(()=>t.classList.remove('on'),2600);}
 function esc(s){return (s==null?'':''+s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -149,8 +165,8 @@ async function carregar(){
   try{
     const {data,error}=await SB.rpc('admin_stats');
     if(error) throw error;
-    renderKpis(data);
-  }catch(e){ $('#kpis').innerHTML='<div class="empty">Não consegui carregar as estatísticas.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small><br><small style="color:var(--txs)">Rodou o admin-setup.sql?</small></div>'; }
+    renderKpis(data); renderGrowth(data.usuarios_por_mes||[]);
+  }catch(e){ $('#kpis').innerHTML='<div class="empty">Não consegui carregar as estatísticas.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small><br><small style="color:var(--txs)">Rodou o admin-setup.sql?</small></div>'; $('#growth').innerHTML=''; }
   // profissionais
   try{
     const {data,error}=await SB.rpc('admin_profissionais');
@@ -167,6 +183,7 @@ function renderKpis(s){
     {l:'Profissionais ativos',v:s.prof_ativos??'—',d:(s.prof_total??0)+' no total',dot:'#2FA35F',hl:true},
     {l:'Aguardando liberação',v:s.prof_pendentes??'—',d:'na sua fila',dot:'#F5A623'},
     {l:'Assinaturas expiradas',v:s.prof_expirados??'—',d:'precisam renovar',dot:'#E5484D'},
+    {l:'Agendamentos solicitados',v:s.agend_total??'—',d:(s.agend_30d??0)+' em 30d · '+(s.agend_novas??0)+' novos',dot:'#41c47a',hl:true},
     {l:'Avaliações',v:s.avaliacoes_total??'—',d:'média '+(s.avaliacoes_media??'—')+' ★',dot:'#8B6FE0'},
   ];
   $('#kpis').innerHTML=cards.map(c=>`<div class="kpi ${c.hl?'hl':''}">
@@ -174,6 +191,17 @@ function renderKpis(s){
     <div class="kv">${c.v}</div><div class="kd">${c.d}</div></div>`).join('');
 }
 
+function renderGrowth(rows){
+  const box=$('#growth'); if(!box)return;
+  if(!rows||!rows.length){ box.innerHTML='<div class="empty" style="padding:20px">Sem dados de crescimento ainda.</div>'; return; }
+  const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const max=Math.max(1,...rows.map(r=>r.n||0));
+  box.innerHTML='<div class="bars">'+rows.map(r=>{
+    const mi=parseInt((r.mes||'').split('-')[1],10)-1;
+    const h=Math.round(((r.n||0)/max)*100);
+    return `<div class="bar"><div class="bn">${r.n||0}</div><div class="col" style="height:${h}%"></div><div class="bl">${meses[mi]||''}</div></div>`;
+  }).join('')+'</div>';
+}
 function renderFiltros(){
   const fs=[['todos','Todos'],['pendente','Pendentes'],['ativo','Ativos'],['expirado','Expirados'],['rejeitado','Rejeitados']];
   $('#filters').innerHTML=fs.map(([k,l])=>`<button class="ft ${_filtro===k?'on':''}" onclick="setFiltro('${k}')">${l}</button>`).join('');
@@ -207,7 +235,9 @@ function renderProfs(){
     if(p.status==='aprovado')chips.push('<span class="chip v">Perfil aprovado</span>');
     else if(p.status==='rejeitado')chips.push('<span class="chip e">Rejeitado</span>');
     else chips.push('<span class="chip a">Perfil pendente</span>');
+    if(p.plano)chips.push('<span class="chip b">'+esc(planoNome(p.plano))+'</span>');
     if(p.acesso_ate)chips.push('<span class="chip b">até '+fmtData(p.acesso_ate)+'</span>');
+    if(p.tem_comprovante)chips.push('<span class="chip v">📎 comprovante</span>');
     if(p.n_aval)chips.push('<span class="chip">'+(p.media_aval||'—')+' ★ ('+p.n_aval+')</span>');
     const acts=[];
     if(!ativo)acts.push(`<button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Liberar acesso</button>`);
@@ -215,6 +245,7 @@ function renderProfs(){
     if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
     if(ativo)acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','bloquear')">Bloquear</button>`);
     if(p.status!=='rejeitado')acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>`);
+    if(p.tem_comprovante)acts.push(`<button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>`);
     const wa = p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
     return `<div class="pcard ${!ativo&&!expirado?'pend':''}">
       <div class="phead">
@@ -236,13 +267,17 @@ function abrirLiberar(id){
   const p=PROFS.find(x=>x.id===id); if(!p)return;
   $('#modalRoot').innerHTML=`<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal">
     <h3>Liberar acesso — ${esc(p.nome||'')}</h3>
-    <div class="field"><label>Plano / validade</label><select id="m-meses">
+    <div class="field"><label>Plano assinado</label><select id="m-plano">
+      ${PLANOS.map(pl=>`<option value="${pl.k}" ${p.plano===pl.k?'selected':''}>${esc(pl.nome)}</option>`).join('')}
+    </select></div>
+    <div class="field"><label>Período / validade</label><select id="m-meses">
       <option value="1">Mensal (1 mês)</option>
       <option value="3">Trimestral (3 meses)</option>
+      <option value="6">Semestral (6 meses)</option>
       <option value="12">Anual (12 meses)</option>
       <option value="0">Sem validade (vitalício)</option>
     </select></div>
-    <div class="field"><label>Anotação (opcional)</label><input id="m-obs" placeholder="ex: pagou Pix 24/07, plano mensal" value="${esc(p.obs_admin||'')}"></div>
+    <div class="field"><label>Anotação (opcional)</label><input id="m-obs" placeholder="ex: pagou Pix 24/07" value="${esc(p.obs_admin||'')}"></div>
     <div style="display:flex;gap:8px;margin-top:6px">
       <button class="btn ghost" style="flex:1" onclick="fecharModal()">Cancelar</button>
       <button class="btn" style="flex:1" onclick="confirmarLiberar('${id}')">Liberar</button>
@@ -250,17 +285,29 @@ function abrirLiberar(id){
   </div></div>`;
 }
 function fecharModal(){ $('#modalRoot').innerHTML=''; }
+let _libPlano=null;
 async function confirmarLiberar(id){
   const meses=parseInt($('#m-meses').value,10)||0;
   const obs=$('#m-obs').value.trim()||null;
+  _libPlano=$('#m-plano').value||null;
   fecharModal();
   await acao(id,'liberar',meses,obs);
+  _libPlano=null;
+}
+async function verComprovante(id){
+  try{
+    const {data,error}=await SB.rpc('admin_comprovante',{p_id:id});
+    if(error) throw error;
+    if(!data){ toast('Sem comprovante enviado.',1); return; }
+    const w=window.open('','_blank');
+    if(w) w.document.write('<title>Comprovante</title><body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+data+'" style="max-width:100%;max-height:100vh"></body>');
+  }catch(e){ toast('Erro: '+(e.message||''),1); }
 }
 async function acao(id,tipo,meses,obs){
   const labels={aprovar:'Aprovar perfil deste profissional?',rejeitar:'Rejeitar este profissional? Ele perde o acesso.',bloquear:'Bloquear o acesso deste profissional?'};
   if(labels[tipo] && !confirm(labels[tipo])) return;
   try{
-    const {error}=await SB.rpc('admin_prof_acao',{p_id:id,p_acao:tipo,p_meses:meses??null,p_obs:obs??null});
+    const {error}=await SB.rpc('admin_prof_acao',{p_id:id,p_acao:tipo,p_meses:meses??null,p_obs:obs??null,p_plano:_libPlano??null});
     if(error) throw error;
     const msgs={aprovar:'Perfil aprovado',rejeitar:'Profissional rejeitado',liberar:'Acesso liberado!',bloquear:'Acesso bloqueado'};
     toast(msgs[tipo]||'Feito');
