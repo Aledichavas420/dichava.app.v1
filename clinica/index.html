@@ -378,6 +378,10 @@ tbody tr:hover{background:var(--cin)}
 #gate .gate-note a{color:#4a7856}
 #gate .gate-note a strong,#gate .gate-note strong{color:#2f5740}
 #gate .gate-err{color:#b4482f}
+.pw-wrap{position:relative;display:flex;align-items:center}
+.pw-wrap input{flex:1;padding-right:44px}
+.pw-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;padding:6px;cursor:pointer;color:#8a9a86;display:flex;align-items:center;justify-content:center}
+.pw-eye:active{color:#4a7856}
 #gate .gate-info{background:#eef4ea;color:#2f5740}
 .gate-abraco{margin-top:20px;text-align:center;font-size:11.5px;color:#5c6b5a;opacity:.85;display:flex;align-items:center;justify-content:center;gap:6px}
 .gate-abraco svg{width:13px;height:13px;fill:#c67b4e}
@@ -438,7 +442,8 @@ tbody tr:hover{background:var(--cin)}
     <div class="gate-err" id="gate-err"></div>
     <div id="gate-login">
       <div class="field"><label>E-mail</label><input id="g-email" type="email" autocomplete="off" placeholder="voce@email.com" onfocus="this.setAttribute('autocomplete','email')"></div>
-      <div class="field"><label>Senha</label><input id="g-pw" type="text" autocomplete="off" placeholder="Sua senha" style="-webkit-text-security:disc" onfocus="this.type='password';this.setAttribute('autocomplete','current-password')"></div>
+      <div class="field"><label>Senha</label><div class="pw-wrap"><input id="g-pw" type="text" autocomplete="off" placeholder="Sua senha" style="-webkit-text-security:disc" onfocus="pwFocus(this,'current-password')"><button type="button" class="pw-eye" aria-label="Mostrar senha" onclick="togPwClin('g-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+      <div style="text-align:right;margin:-4px 2px 10px"><a href="#" onclick="event.preventDefault();gateEsqueci()" style="font-size:12.5px;color:#4a7856;font-weight:600;text-decoration:none">Esqueci minha senha</a></div>
       <button class="btn" id="g-btn" onclick="gateLogin()">Entrar</button>
       <div class="gate-note">Ainda não tem conta? <a href="#" onclick="event.preventDefault();gateShowSignup()">Criar conta profissional →</a></div>
       <div class="gate-note" style="margin-top:10px">É paciente? <a href="#" onclick="event.preventDefault();voltarAoApp()">← Voltar ao app dichava</a></div>
@@ -448,7 +453,7 @@ tbody tr:hover{background:var(--cin)}
       <div class="field"><label>Registro profissional</label><input id="s-reg" type="text" autocomplete="off" placeholder="ex: CRP 06/1234, CRM, CRESS…"></div>
       <div class="field"><label>Plano desejado</label><select id="s-plano"></select></div>
       <div class="field"><label>E-mail</label><input id="s-email" type="email" autocomplete="off" placeholder="voce@email.com" onfocus="this.setAttribute('autocomplete','email')"></div>
-      <div class="field"><label>Senha</label><input id="s-pw" type="text" autocomplete="off" placeholder="Crie uma senha (8+ caracteres)" style="-webkit-text-security:disc" onfocus="this.type='password';this.setAttribute('autocomplete','new-password')"></div>
+      <div class="field"><label>Senha</label><div class="pw-wrap"><input id="s-pw" type="text" autocomplete="off" placeholder="Crie uma senha (8+ caracteres)" style="-webkit-text-security:disc" onfocus="pwFocus(this,'new-password')"><button type="button" class="pw-eye" aria-label="Mostrar senha" onclick="togPwClin('s-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       <button class="btn" id="s-btn" onclick="gateSignup()">Criar conta profissional</button>
       <div class="gate-note">Ao criar, seu perfil público passa por uma <b>aprovação</b> antes de aparecer na rede. Você já pode usar o painel na hora.<br>Já tem conta? <a href="#" onclick="event.preventDefault();gateShowLogin()">Entrar →</a></div>
     </div>
@@ -2164,6 +2169,8 @@ $('#theme-btn').addEventListener('click',()=>{
 const _SB = (typeof supabase!=='undefined')
   ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4')
   : null;
+// Chegou pelo link de "esqueci a senha" → mostra o formulário de nova senha
+if(_SB){ try{ _SB.auth.onAuthStateChange((event)=>{ if(event==='PASSWORD_RECOVERY'){ try{const sp=document.getElementById('psplash'); if(sp){sp.classList.add('hide');sp.style.display='none';}}catch(e){} try{showResetForm();}catch(e){} } }); }catch(e){} }
 
 function gateErr(msg){ const e=$('#gate-err'); if(!e)return; if(msg){e.textContent=msg;e.classList.add('on');}else{e.classList.remove('on');} }
 function showGate(mode){ // 'login' | 'signup' | 'notpro' | 'pending'
@@ -2229,6 +2236,40 @@ async function entrarLiberado(){
   }
   hideGate(); iniciarApp(); return true;
 }
+// senha: começa mascarada (type text + text-security) e vira password de verdade no 1º foco
+function pwFocus(el,ac){ if(!el.dataset.init){ el.type='password'; el.style.webkitTextSecurity='none'; el.dataset.init='1'; if(ac)el.setAttribute('autocomplete',ac); } }
+const EYE_OFF='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7c2 0 3.7.6 5.2 1.5M22 12s-3.5 7-10 7c-2 0-3.7-.6-5.2-1.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M3 3l18 18"/></svg>';
+const EYE_ON='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+function togPwClin(id,btn){ const el=document.getElementById(id); if(!el)return; el.dataset.init='1'; el.style.webkitTextSecurity='none';
+  if(el.type==='password'){ el.type='text'; btn.innerHTML=EYE_OFF; btn.setAttribute('aria-label','Ocultar senha'); }
+  else { el.type='password'; btn.innerHTML=EYE_ON; btn.setAttribute('aria-label','Mostrar senha'); } }
+// Esqueci a senha — envia e-mail de redefinição (volta pro painel)
+async function gateEsqueci(){
+  const email=($('#g-email').value||'').trim();
+  gateErr('');
+  if(!email||!/.+@.+\..+/.test(email)){ gateErr('Digite seu e-mail no campo acima e toque em "Esqueci minha senha".'); $('#g-email').focus(); return; }
+  if(!_SB){ gateErr('Sem conexão com o servidor.'); return; }
+  try{
+    const {error}=await _SB.auth.resetPasswordForEmail(email,{redirectTo:'https://dichava.app/clinica/'});
+    if(error) throw error;
+    toast('Enviamos um link de redefinição para '+email+'. Confira seu e-mail 💚',0);
+  }catch(e){ gateErr('Não consegui enviar agora. Tente de novo.'); }
+}
+// Se o usuário chega pelo link de redefinição, mostra o formulário de nova senha
+function showResetForm(){
+  showGate('login');
+  $('#gate-login').innerHTML=`
+    <div class="gate-info" style="margin-bottom:14px">Defina sua nova senha de acesso ao painel.</div>
+    <div class="field"><label>Nova senha</label><div class="pw-wrap"><input id="r-pw" type="password" placeholder="Mínimo 8 caracteres"><button type="button" class="pw-eye" onclick="togPwClin('r-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+    <button class="btn" onclick="salvarNovaSenha()">Salvar nova senha</button>`;
+}
+async function salvarNovaSenha(){
+  const pw=($('#r-pw').value||''); gateErr('');
+  if(pw.length<8){ gateErr('A senha precisa ter ao menos 8 caracteres.'); return; }
+  try{ const {error}=await _SB.auth.updateUser({password:pw}); if(error)throw error;
+    toast('Senha atualizada! Você já está conectado 💚',0); await entrarLiberado(); }
+  catch(e){ gateErr('Não consegui salvar. Tente reenviar o link.'); }
+}
 function gateShowSignup(){ gateErr(''); preencherPlanos(); showGate('signup'); }
 // Volta pro app do paciente. Marca uma flag pra que o app (que compartilha a sessão)
 // NÃO redirecione de volta pra cá caso haja uma sessão de profissional ativa.
@@ -2248,7 +2289,7 @@ async function gateSignup(){
   if(!_SB){ gateErr('Sem conexão com o servidor.'); return; }
   const btn=$('#s-btn'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Criando…';
   try{
-    const{data,error}=await _SB.auth.signUp({email,password:pw,options:{data:{nome,tipo:'pro',reg,plano}}});
+    const{data,error}=await _SB.auth.signUp({email,password:pw,options:{data:{nome,tipo:'pro',reg,plano},emailRedirectTo:'https://dichava.app/clinica/'}});
     if(error){ gateErr(/already|registered/i.test(error.message)?'Este e-mail já tem conta. Faça login.':error.message); return; }
     if(!data.session){ // precisa confirmar e-mail
       gateErr(''); showGate('login');
@@ -2465,9 +2506,10 @@ $('#s-pw')&&$('#s-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateS
   }catch(e){} }
   chime();
   window.addEventListener('pointerdown',function once(){ chime(); window.removeEventListener('pointerdown',once); },{once:true});
-  if(sp){ setTimeout(function(){ try{sp.blur();}catch(e){} sp.classList.add('hide'); setTimeout(function(){ if(sp.parentNode) sp.style.display='none'; },650); }, 2200); }
+  // Só inicia o login DEPOIS da splash sair — evita o iOS oferecer a senha salva (Face ID) na abertura
+  if(sp){ setTimeout(function(){ try{sp.blur();}catch(e){} sp.classList.add('hide'); try{bootAuth();}catch(e){} setTimeout(function(){ if(sp.parentNode) sp.style.display='none'; },650); }, 2000); }
+  else { try{bootAuth();}catch(e){} }
 })();
-bootAuth();
 </script>
 </body>
 </html>
