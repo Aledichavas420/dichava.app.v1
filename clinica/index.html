@@ -614,8 +614,45 @@ function abrirMaisMenu(){
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
       ${items.map(([r,nome])=>`<button class="mais-item" onclick="closeModal();go('${r}')"><span class="mais-ic">${CIC[r]||''}</span><span>${nome}</span></button>`).join('')}
+      <button class="mais-item" onclick="closeModal();abrirCodigosPremium()"><span class="mais-ic">${CIC.caixa||''}</span><span>Códigos premium</span></button>
       <button class="mais-item" onclick="closeModal();abrirSuporteProf()"><span class="mais-ic">${supIc}</span><span>Suporte <span class="badge" id="badge-sup-m" style="display:none"></span></span></button>
     </div></div></div>`);
+}
+/* ===== CÓDIGOS PREMIUM (presentear pacientes) ===== */
+async function abrirCodigosPremium(){
+  const caps=meusCaps();
+  if(!caps.codigos){
+    openModal(`<div class="modal"><div class="modal-head"><h3>Códigos premium</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+      <div class="modal-body"><div class="card" style="text-align:center;padding:22px">
+        <div style="font-size:15px;font-weight:800;margin-bottom:8px">Recurso dos planos Profissional e Clínica ✨</div>
+        <p style="color:var(--txs);font-size:13.5px">Presenteie seus pacientes com o <b>dichava premium</b>. O plano <b>Profissional</b> inclui 10 códigos e o <b>Clínica</b>, 25. Faça um upgrade pra liberar.</p>
+      </div></div></div>`);
+    return;
+  }
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>Códigos premium</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" id="cod-body"><div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div></div>`);
+  try{
+    const {data,error}=await _SB.rpc('gerar_codigos_premium');
+    if(error)throw error;
+    renderCodigos(data);
+  }catch(e){ document.getElementById('cod-body').innerHTML='<div class="card empty">Não consegui carregar.<br><small style="color:var(--txm)">'+esc(e.message||'')+' — rodou o planos-recursos-setup.sql?</small></div>'; }
+}
+function renderCodigos(d){
+  const cods=(d&&d.codigos)||[]; const usados=cods.filter(c=>c.usado_por).length;
+  document.getElementById('cod-body').innerHTML=`
+    <p style="color:var(--txs);font-size:13.5px;margin:0 2px 12px">Presenteie pacientes com o <b>premium</b> (1 ano). ${usados} de ${cods.length} usados.</p>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${cods.map(c=>`<div class="eq-code" style="border-style:solid;${c.usado_por?'opacity:.5':''}">
+        <b style="flex:1;letter-spacing:1px;font-family:monospace">${esc(c.codigo)}</b>
+        ${c.usado_por?'<span class="chip" style="background:var(--vf);color:var(--ve);font-size:11px;padding:2px 8px;border-radius:20px">usado</span>':`<button class="btn sm ghost cp" onclick="compartilharCodigo('${esc(c.codigo)}')">Compartilhar</button>`}
+      </div>`).join('')}
+    </div>
+    <p style="color:var(--txm);font-size:12px;margin-top:14px">Cada código dá 1 ano de premium e só pode ser usado uma vez. O paciente resgata em <b>Premium → Tenho um código</b> no app.</p>`;
+}
+function compartilharCodigo(cod){
+  const msg='Ganhei um presente pra você no dichava.app 💚 Use o código '+cod+' pra ativar 1 ano de premium. Baixe em https://dichava.app';
+  if(navigator.share){ navigator.share({text:msg}).catch(()=>{}); }
+  else { try{ navigator.clipboard.writeText(msg); toast('Mensagem copiada'); }catch(e){ toast(cod); } }
 }
 /* ===== SUPORTE (lado do profissional) ===== */
 let _supPollP=null;
@@ -1607,12 +1644,19 @@ function viewEquipe(){
   }
   const ehDono=CLINICA.papel==='dono';
   const membros=MEMBROS.slice().sort((a,b)=>(a.papel==='dono'?-1:1)-(b.papel==='dono'?-1:1)||String(a.nome||'').localeCompare(String(b.nome||'')));
+  const caps=meusCaps(); const podeEquipe=caps.equipe_max>1; const cheio=membros.length>=caps.equipe_max;
+  const equipeCard = (!podeEquipe)
+    ? `<div class="card" style="padding:20px;max-width:620px">
+        <div class="sec-title" style="margin-top:0">Equipe compartilhada ✨</div>
+        <p style="color:var(--txs);font-size:13.5px">Ter outros profissionais na mesma agenda, pacientes e caixa é um recurso do plano <b>Clínica</b> (até 5 profissionais). Faça upgrade pra convidar sua equipe.</p>
+      </div>`
+    : `<div class="card" style="padding:20px;max-width:620px">
+        <div class="sec-title" style="margin-top:0">Convide sua equipe <span style="color:var(--txm);font-weight:600;font-size:13px">(${membros.length}/${caps.equipe_max})</span></div>
+        <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">${cheio?'Você atingiu o limite de profissionais do seu plano.':'Compartilhe este código com outros profissionais. Quem entrar passa a ver a <b>mesma agenda, pacientes e caixa</b>.'}</p>
+        ${cheio?'':`<div class="eq-code"><span style="font-size:12px;color:var(--txs);font-weight:700">CÓDIGO</span> <b id="eq-code-v">${esc(CLINICA.codigo)}</b><button class="btn sm ghost cp" onclick="copiarCodigo()">Copiar</button></div>`}
+      </div>`;
   return `
-  <div class="card" style="padding:20px;max-width:620px">
-    <div class="sec-title" style="margin-top:0">Convide sua equipe</div>
-    <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Compartilhe este código com outros profissionais. Quem entrar com ele passa a ver a <b>mesma agenda, pacientes e caixa</b>.</p>
-    <div class="eq-code"><span style="font-size:12px;color:var(--txs);font-weight:700">CÓDIGO</span> <b id="eq-code-v">${esc(CLINICA.codigo)}</b><button class="btn sm ghost cp" onclick="copiarCodigo()">Copiar</button></div>
-  </div>
+  ${equipeCard}
   <div class="card" style="padding:20px;max-width:620px;margin-top:16px">
     <div class="sec-title" style="margin-top:0">Agendamento online</div>
     <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Compartilhe este link com seus pacientes (bio do Instagram, WhatsApp). Eles solicitam um horário e você confirma na <b>Agenda</b>.</p>
@@ -1970,6 +2014,10 @@ const PLANOS=[
 ];
 function planoNome(k){ const p=PLANOS.find(x=>x.k===k); return p?p.nome:(k||''); }
 function planoLabel(k){ const p=PLANOS.find(x=>x.k===k); return p?(p.nome+' — '+p.preco):(k||''); }
+// Capacidades por plano (espelho do banco: plano_caps)
+const PLANO_CAPS={ essencial:{destaque:false,codigos:0,equipe_max:1}, profissional:{destaque:true,codigos:10,equipe_max:1}, clinica:{destaque:true,codigos:25,equipe_max:5} };
+let _meuPlano=null;
+function meusCaps(){ return PLANO_CAPS[_meuPlano]||PLANO_CAPS.essencial; }
 function preencherPlanos(){ const s=$('#s-plano'); if(s&&!s.children.length) s.innerHTML=PLANOS.map(p=>`<option value="${p.k}">${p.nome} — ${p.preco}</option>`).join(''); }
 async function enviarComprovante(file){
   if(!file||!_SB||!AUTH) return;
@@ -1996,6 +2044,7 @@ async function checarAcesso(){
       try{ await _SB.from('profissionais').upsert({id:AUTH.id,nome:AUTH.nome,reg:AUTH.reg||null,plano:AUTH.plano||null,status:'pendente',ativo:false}); }catch(_){}
       return {ok:false, plano:AUTH.plano};
     }
+    _meuPlano=p.plano||AUTH.plano||null;
     const liberado = p.ativo===true && (!p.acesso_ate || new Date(p.acesso_ate) > new Date());
     const expirado = p.ativo===true && p.acesso_ate && new Date(p.acesso_ate) <= new Date();
     return {ok:liberado, expirado, plano:p.plano};

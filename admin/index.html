@@ -262,11 +262,11 @@ async function carregarSuporte(){
     if(error) throw error;
     const cs=data||[];
     if(!cs.length){ $('#suplist').innerHTML='<div class="empty" style="padding:20px">Nenhuma conversa de suporte ainda.</div>'; return; }
-    $('#suplist').innerHTML=cs.map(c=>`<div class="pcard" style="cursor:pointer" onclick="abrirSuporte('${c.prof_id}','${esc((c.nome||'Profissional').replace(/'/g,''))}')">
+    $('#suplist').innerHTML=cs.map(c=>{const prio=c.plano==='clinica'||c.plano==='profissional';return `<div class="pcard" style="cursor:pointer${prio?';border-color:#4a3d1e':''}" onclick="abrirSuporte('${c.prof_id}','${esc((c.nome||'Profissional').replace(/'/g,''))}')">
       <div class="phead"><div class="pav">${initials(c.nome)}</div>
-      <div style="flex:1;min-width:0"><div class="pn">${esc(c.nome||'Profissional')} ${c.nao_lidas?`<span class="chip a">${c.nao_lidas} nova(s)</span>`:''}</div>
+      <div style="flex:1;min-width:0"><div class="pn">${esc(c.nome||'Profissional')} ${prio?`<span class="chip a">⭐ ${esc(planoNome(c.plano))}</span>`:''} ${c.nao_lidas?`<span class="chip a">${c.nao_lidas} nova(s)</span>`:''}</div>
       <div class="pmeta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.ultima_msg||'')}</div></div></div>
-    </div>`).join('');
+    </div>`;}).join('');
   }catch(e){ $('#suplist').innerHTML='<div class="empty" style="padding:20px">Suporte indisponível.<br><small style="color:var(--txs)">'+esc(e.message||'')+' — rodou o suporte-setup.sql?</small></div>'; }
 }
 let _supProf=null, _supPoll=null;

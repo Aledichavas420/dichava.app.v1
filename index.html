@@ -2249,6 +2249,7 @@ a{color:inherit;text-decoration:none}
 #shell.dkm .pc-av{background:#1D3320}
 .pc-id{flex:1;min-width:0}
 .pc-nome{font-family:'DM Sans',sans-serif;font-size:15.5px;font-weight:700;color:var(--dk)}
+.pc-destaque{display:inline-block;vertical-align:middle;font-size:10px;font-weight:800;color:#B26A00;background:linear-gradient(135deg,#FFE7A8,#FFD066);border-radius:20px;padding:1px 8px;margin-left:5px;letter-spacing:.2px}
 #shell.dkm .pc-nome{color:#E9EFE7}
 .pc-esp{font-size:13px;color:var(--ve);font-weight:600;margin-top:1px}
 #shell.dkm .pc-esp{color:#7BD98A}
@@ -3335,6 +3336,7 @@ a{color:inherit;text-decoration:none}
   <div id="plns-list"></div>
   <label class="plns-accept" for="plns-chk"><input type="checkbox" id="plns-chk"><span>Li e aceito os <a onclick="event.stopPropagation();openDoc('assinatura','planos')">Termos da Assinatura Premium</a> — incluindo cancelamento, reembolso e o <b>direito de arrependimento de 7 dias</b>.</span></label>
   <button class="plns-cta" id="plns-cta" onclick="assinarPlano()">Assinar premium</button>
+  <button class="plns-free" onclick="resgatarCodigoPremium()" style="color:var(--roxo)">🎁 Tenho um código de presente</button>
   <button class="plns-free" onclick="fecharPlanos()">Continuar com a versão gratuita</button>
   <div class="plns-legal"><a onclick="openDoc('assinatura','planos')">Termos da Assinatura</a> · <a onclick="openDoc('termos','planos')">Termos de Uso</a> · <a onclick="openDoc('privacidade','planos')">Privacidade</a></div>
 </div>
@@ -6661,17 +6663,18 @@ async function renderProfs(){
   const avResumo=id=>{const arr=avMap[id];if(!arr||!arr.length)return '';const m=arr.reduce((s,n)=>s+n,0)/arr.length;return `<span style="display:inline-flex;align-items:center;gap:3px"><span class="pc-star" data-icon="pf-star" style="display:inline-flex;width:14px;height:14px"></span><span style="color:#E5920A;font-weight:800;font-size:12.5px">${m.toFixed(1)}</span> <span style="color:var(--txm);font-size:11.5px">(${arr.length})</span></span>`;};
   const q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
   const list=profs.filter(p=>{
+    if(p.ativo===false)return false; // só profissionais com acesso liberado (pagantes)
     if(_pfFilt.mod&&!(p.modalidade||'').includes(_pfFilt.mod))return false;
     if(q){const hay=(p.nome+' '+p.tipo_prof+' '+(p.cidade||'')+' '+(p.especialidades||'')).toLowerCase();if(!hay.includes(q))return false;}
     return true;
-  });
+  }).sort((a,b)=>(b.destaque?1:0)-(a.destaque?1:0)); // planos com destaque aparecem primeiro
   const modtag=m=>{const ms=m||'';return ms.includes('online')&&ms.includes('presencial')?'<span class="pc-modtag mt-am"><span data-icon="pf-online"></span>Online e presencial</span>':ms.includes('online')?'<span class="pc-modtag mt-on"><span data-icon="pf-online"></span>Online</span>':'<span class="pc-modtag mt-pr"><span data-icon="pf-local"></span>Presencial</span>';};
   c.innerHTML=`<div class="pf-count">${list.length} profissio${list.length===1?'nal':'nais'} ${list.length===1?'encontrado':'encontrados'}</div>`+
     (list.length?list.map(p=>`
     <div class="pcard" onclick="abrirPerfilProf('${p.id}')" style="cursor:pointer">
       <div class="pc-head">
         <div class="pc-av" style="background:var(--roxof)${p.foto?';padding:0;overflow:hidden':''}">${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover">`:ini(p.nome)}</div>
-        <div class="pc-id"><div class="pc-nome">${esc(p.nome)}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div>${avResumo(p.id)?`<div style="margin-top:2px">${avResumo(p.id)}</div>`:''}</div>
+        <div class="pc-id"><div class="pc-nome">${esc(p.nome)}${p.destaque?' <span class="pc-destaque">★ Destaque</span>':''}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div>${avResumo(p.id)?`<div style="margin-top:2px">${avResumo(p.id)}</div>`:''}</div>
         ${modtag(p.modalidade)}
       </div>
       <div class="pc-bio">${esc(p.bio||'')}</div>
@@ -9025,6 +9028,24 @@ function openPlanos(){try{closeMod('mprem');}catch(e){}renderPlanos();showV('vpl
 function fecharPlanos(){showV('vapp');}
 // Pagamento real ATIVO pra todos (PagBank produção). Pra pausar: return false;
 function pagamentoAtivo(){return true;}
+async function resgatarCodigoPremium(){
+  if(!_SB||!U||U.id==='demo'){toast('Entre na sua conta pra resgatar 💚');return;}
+  const cod=(prompt('Digite o código de presente (ex: DICHA-XXXXXX):')||'').trim();
+  if(!cod)return;
+  try{
+    const{data,error}=await _SB.rpc('resgatar_codigo_premium',{p_codigo:cod});
+    if(error)throw error;
+    // atualiza cache local de premium e re-renderiza
+    _premServer=true; try{ls('dr_premsrv_'+uid(),1);if(data&&data.expira){ls('dr_premexp_'+uid(),data.expira);}ls('dr_premtipo_'+uid(),'cortesia');}catch(e){}
+    try{renderPremUI();reRenderGated();}catch(e){}
+    closeMod('mprem');
+    toast('🎁 Código válido! Premium ativado 💜');
+    try{abrirPremWin();}catch(e){}
+  }catch(e){
+    const m=(e&&e.message)||'';
+    toast(/já foi usado/i.test(m)?'Este código já foi usado.':/não encontrado/i.test(m)?'Código não encontrado.':'Não consegui resgatar: '+m,1);
+  }
+}
 async function assinarPlano(){
   const chk=document.getElementById('plns-chk');
   if(chk&&!chk.checked){toast('Marque que você leu e aceita os Termos da Assinatura 💚');try{const l=chk.closest('.plns-accept');l.classList.add('shake');setTimeout(()=>l.classList.remove('shake'),450);}catch(e){}return;}
