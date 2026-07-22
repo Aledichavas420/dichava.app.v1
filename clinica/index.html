@@ -2252,7 +2252,7 @@ async function gateEsqueci(){
     const {error}=await _SB.auth.resetPasswordForEmail(email,{redirectTo:'https://dichava.app/clinica/'});
     if(error) throw error;
     toast('Enviamos um link de redefinição para '+email+'. Confira seu e-mail 💚',0);
-  }catch(e){ gateErr('Não consegui enviar agora. Tente de novo.'); }
+  }catch(e){ const m=(e&&e.message)||''; gateErr(/rate|limit/i.test(m)?'Muitas tentativas — aguarde alguns minutos e tente de novo.':/redirect|url/i.test(m)?'URL de redirecionamento não autorizada no Supabase.':('Erro: '+(m||'tente de novo'))); }
 }
 // Se o usuário chega pelo link de redefinição, mostra o formulário de nova senha
 function showResetForm(){
