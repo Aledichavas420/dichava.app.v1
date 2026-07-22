@@ -34,20 +34,26 @@ const btn = (href: string, label: string) =>
    </td></tr></table>`;
 
 // shell com a cara do app: cabeçalho verde + wordmark + rodapé Rede Dichava
+// color-scheme light-only + backgrounds explícitos = não some no modo escuro do Gmail
 const shell = (label: string, inner: string) =>
-  `<div style="margin:0;padding:26px 12px;background:#eef2ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
-     <div style="max-width:460px;margin:0 auto;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e6ece7">
-       <div style="background:#1f3d2b;padding:28px 24px;text-align:center">
+  `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1">
+   <meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light">
+   <style>:root{color-scheme:light only;supported-color-schemes:light}</style></head>
+   <body style="margin:0;padding:0;background-color:#eef2ea">
+   <div style="margin:0;padding:26px 12px;background-color:#eef2ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+     <div style="max-width:460px;margin:0 auto;background-color:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e6ece7">
+       <div style="background-color:#1f3d2b;padding:28px 24px;text-align:center">
          <div style="font-size:27px;font-weight:800;color:#ffffff;letter-spacing:.3px">dichava<span style="color:#f0a742">.app</span></div>
          <div style="color:#a9c6b6;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;margin-top:7px">${label}</div>
        </div>
-       <div style="padding:30px 28px 20px;color:#243024;font-size:15px;line-height:1.65;text-align:center">${inner}</div>
-       <div style="padding:16px 24px 24px;text-align:center;color:#8a9a86;font-size:12px;border-top:1px solid #eef1ea">
+       <div style="background-color:#ffffff;padding:30px 28px 20px;color:#243024;font-size:15px;line-height:1.65;text-align:center">${inner}</div>
+       <div style="background-color:#ffffff;padding:16px 24px 24px;text-align:center;color:#8a9a86;font-size:12px;border-top:1px solid #eef1ea">
          Feito com cuidado pela <b style="color:#2f5740">Rede Dichava</b><br>
          <span style="color:#aab6a6">dichava.app</span>
        </div>
      </div>
-   </div>`;
+   </div></body></html>`;
 
 const H2 = (t: string) => `<div style="font-size:21px;font-weight:800;color:#1f3d2b;margin-bottom:10px">${t}</div>`;
 const P  = (t: string) => `<div style="margin:0 auto 4px;max-width:340px">${t}</div>`;
