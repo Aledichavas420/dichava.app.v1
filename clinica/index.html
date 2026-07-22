@@ -2152,7 +2152,12 @@ function formProntuario(pid,rid){
       </div>
       <div class="field"><label>Queixa do dia / Foco</label><input id="f-queixa" value="${esc(r.queixa||'')}" placeholder="Motivo, tema central ou queixa principal"></div>
       <div class="field"><label>Objetivos trabalhados</label><textarea id="f-objetivos" placeholder="O que se buscou nesta sessão/atendimento">${esc(r.objetivos||'')}</textarea></div>
-      <div class="field"><label>Registro clínico / Evolução</label><textarea id="f-texto" style="min-height:130px" placeholder="Evolução, observações, conteúdo do atendimento...">${esc(r.texto||'')}</textarea></div>
+      <div class="field"><label>Registro clínico / Evolução</label><textarea id="f-texto" style="min-height:130px" placeholder="Escreva em tópicos soltos e toque em “Organizar com IA” — ou registre normalmente...">${esc(r.texto||'')}</textarea>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px">
+          <button type="button" class="btn sm" id="ia-btn" onclick="organizarComIA()" style="background:linear-gradient(135deg,#7B54D3,#5C8DE3)"><span id="ia-btn-tx">✨ Organizar com IA</span></button>
+          <span style="font-size:12px;color:var(--txs)">A IA distribui seu rascunho nos campos abaixo. <b>Revise sempre</b> antes de salvar.</span>
+        </div>
+      </div>
       <div class="row2">
         <div class="field"><label>Intervenções / Condutas realizadas</label><textarea id="f-intervencoes" placeholder="Técnicas, procedimentos, condutas aplicadas">${esc(r.intervencoes||'')}</textarea></div>
         <div class="field"><label>Recursos usados</label><textarea id="f-recursos" placeholder="Materiais, escalas, exames, instrumentos">${esc(r.recursos||'')}</textarea></div>
@@ -2181,6 +2186,31 @@ function saveProntuario(pid,rid){
 function delProntuario(rid){
   if(!confirm('Excluir este registro clínico?')) return;
   DB.prontuarios=DB.prontuarios.filter(r=>r.id!==rid); save(); closeModal(); toast('Registro excluído'); render();
+}
+/* ===== IA: organiza o rascunho nos campos do prontuário ===== */
+async function organizarComIA(){
+  const btn=$('#ia-btn'), tx=$('#ia-btn-tx');
+  const g=id=>{const el=$('#'+id);return el?el.value.trim():'';};
+  // fonte = o rascunho principal; se vazio, junta o que já estiver preenchido
+  let texto=g('f-texto');
+  if(!texto){
+    texto=[['Queixa',g('f-queixa')],['Objetivos',g('f-objetivos')],['Intervenções',g('f-intervencoes')],['Recursos',g('f-recursos')],['Pontos de atenção',g('f-pontos')],['Plano',g('f-plano')]]
+      .filter(([,v])=>v).map(([k,v])=>k+': '+v).join('\n');
+  }
+  if(texto.length<3){ toast('Escreva algumas anotações no registro antes de organizar.',1); return; }
+  if(!_SB){ toast('Sem conexão',1); return; }
+  const antes=tx?tx.textContent:'';
+  if(btn){btn.disabled=true;btn.style.opacity='.7';} if(tx)tx.textContent='⏳ Organizando…';
+  try{
+    const {data,error}=await _SB.functions.invoke('evolucao-ia',{body:{texto,contexto:(DB.config&&DB.config.especialidade)||''}});
+    if(error){ let msg=''; try{const b=await error.context.json(); msg=b&&b.error;}catch(_){}; throw new Error(msg||'A IA está indisponível. Tente novamente.'); }
+    const c=(data&&data.campos)||{};
+    const set=(id,val)=>{ const el=$('#'+id); if(el && typeof val==='string' && val.trim()) el.value=val.trim(); };
+    set('f-texto',c.evolucao); set('f-queixa',c.queixa); set('f-objetivos',c.objetivos);
+    set('f-intervencoes',c.intervencoes); set('f-recursos',c.recursos); set('f-pontos',c.pontos); set('f-plano',c.plano);
+    toast('✓ Organizado — revise e salve');
+  }catch(e){ toast((e&&e.message)||'Erro ao organizar',4000); }
+  finally{ if(btn){btn.disabled=false;btn.style.opacity='';} if(tx)tx.textContent=antes||'✨ Organizar com IA'; }
 }
 
 /* -- Financeiro manual -- */
