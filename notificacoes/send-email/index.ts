@@ -27,47 +27,63 @@ function actionLink(d: any) {
   return `${SB_URL}/auth/v1/verify?token=${d.token_hash}&type=${d.email_action_type}${rt}`;
 }
 
+// botão em <table> pra compatibilidade (Outlook/Gmail/Apple Mail)
 const btn = (href: string, label: string) =>
-  `<p style="margin:22px 0"><a href="${href}" style="display:inline-block;background:#2f5740;color:#fff;padding:13px 24px;border-radius:12px;text-decoration:none;font-weight:700;font-family:system-ui,sans-serif">${label}</a></p>`;
+  `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px auto"><tr><td style="border-radius:12px;background:#2f7a4d">
+     <a href="${href}" style="display:inline-block;padding:14px 30px;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif">${label}</a>
+   </td></tr></table>`;
 
-const wrap = (inner: string, accent = "#2f5740") =>
-  `<div style="max-width:480px;margin:0 auto;padding:28px 22px;font-family:system-ui,-apple-system,sans-serif;color:#243024;line-height:1.6">
-     ${inner}
-     <hr style="border:none;border-top:1px solid #eee;margin:26px 0 12px">
-     <p style="color:#7a8a6f;font-size:12px">Feito com cuidado pela <b style="color:${accent}">Rede Dichava</b> · dichava.app</p>
+// shell com a cara do app: cabeçalho verde + wordmark + rodapé Rede Dichava
+const shell = (label: string, inner: string) =>
+  `<div style="margin:0;padding:26px 12px;background:#eef2ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+     <div style="max-width:460px;margin:0 auto;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e6ece7">
+       <div style="background:#1f3d2b;padding:28px 24px;text-align:center">
+         <div style="font-size:27px;font-weight:800;color:#ffffff;letter-spacing:.3px">dichava<span style="color:#f0a742">.app</span></div>
+         <div style="color:#a9c6b6;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;margin-top:7px">${label}</div>
+       </div>
+       <div style="padding:30px 28px 20px;color:#243024;font-size:15px;line-height:1.65;text-align:center">${inner}</div>
+       <div style="padding:16px 24px 24px;text-align:center;color:#8a9a86;font-size:12px;border-top:1px solid #eef1ea">
+         Feito com cuidado pela <b style="color:#2f5740">Rede Dichava</b><br>
+         <span style="color:#aab6a6">dichava.app</span>
+       </div>
+     </div>
    </div>`;
+
+const H2 = (t: string) => `<div style="font-size:21px;font-weight:800;color:#1f3d2b;margin-bottom:10px">${t}</div>`;
+const P  = (t: string) => `<div style="margin:0 auto 4px;max-width:340px">${t}</div>`;
+const SMALL = (t: string) => `<div style="color:#8a9a86;font-size:13px;margin-top:14px">${t}</div>`;
 
 // ── Templates ──────────────────────────────────────────────
 function tplPro(action: string, link: string) {
   if (action === "recovery") return {
     subject: "Redefinir sua senha — Rede Dichava",
-    html: wrap(`<h2 style="color:#1f3d2b">Redefinir sua senha</h2>
-      <p>Recebemos um pedido para redefinir a senha do seu acesso ao <b>Painel dichava</b>. Toque abaixo para criar uma nova:</p>
-      ${btn(link, "Criar nova senha")}
-      <p style="color:#5c6b5a;font-size:13px">Se não foi você, ignore este e-mail — sua senha continua a mesma.</p>`),
+    html: shell("Painel dos profissionais", H2("Redefinir sua senha") +
+      P("Recebemos um pedido para redefinir a senha do seu acesso ao <b>Painel dichava</b>.") +
+      btn(link, "Criar nova senha") +
+      SMALL("Se não foi você, ignore este e-mail — sua senha continua a mesma.")),
   };
   return {
     subject: "Confirme seu e-mail — Rede Dichava",
-    html: wrap(`<h2 style="color:#1f3d2b">Bem-vindo(a) à Rede Dichava 🌱</h2>
-      <p>Que bom ter você com a gente. Confirme seu e-mail para ativar seu acesso ao <b>Painel dos profissionais</b>.</p>
-      ${btn(link, "Confirmar e-mail")}
-      <p style="color:#5c6b5a;font-size:13px">Se você não criou esta conta, é só ignorar este e-mail.</p>`),
+    html: shell("Painel dos profissionais", H2("Bem-vindo(a) à Rede Dichava 🌱") +
+      P("Que bom ter você com a gente. Confirme seu e-mail para ativar seu acesso ao <b>Painel dos profissionais</b>.") +
+      btn(link, "Confirmar e-mail") +
+      SMALL("Se você não criou esta conta, é só ignorar este e-mail.")),
   };
 }
 function tplUser(action: string, link: string) {
   if (action === "recovery") return {
     subject: "Redefinir sua senha — dichava.app",
-    html: wrap(`<h2 style="color:#1f3d2b">Vamos criar uma nova senha 💚</h2>
-      <p>Recebemos um pedido para redefinir a senha da sua conta no dichava.app.</p>
-      ${btn(link, "Criar nova senha")}
-      <p style="color:#5c6b5a;font-size:13px">Se não foi você, pode ignorar — nada muda.</p>`),
+    html: shell("Autocuidado, sem julgamento", H2("Vamos criar uma nova senha 💚") +
+      P("Recebemos um pedido para redefinir a senha da sua conta no dichava.app.") +
+      btn(link, "Criar nova senha") +
+      SMALL("Se não foi você, pode ignorar — nada muda.")),
   };
   return {
     subject: "Confirme seu e-mail — dichava.app",
-    html: wrap(`<h2 style="color:#1f3d2b">Boas-vindas ao dichava.app 🌱</h2>
-      <p>Falta só um passo: confirme seu e-mail para começar seu acompanhamento, sem julgamento.</p>
-      ${btn(link, "Confirmar e-mail")}
-      <p style="color:#5c6b5a;font-size:13px">Se você não criou esta conta, é só ignorar este e-mail.</p>`),
+    html: shell("Autocuidado, sem julgamento", H2("Boas-vindas ao dichava.app 🌱") +
+      P("Falta só um passo: confirme seu e-mail para começar seu acompanhamento, sem julgamento.") +
+      btn(link, "Confirmar e-mail") +
+      SMALL("Se você não criou esta conta, é só ignorar este e-mail.")),
   };
 }
 

@@ -2169,7 +2169,10 @@ const _SB = (typeof supabase!=='undefined')
   ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4')
   : null;
 // Chegou pelo link de "esqueci a senha" → mostra o formulário de nova senha
-if(_SB){ try{ _SB.auth.onAuthStateChange((event)=>{ if(event==='PASSWORD_RECOVERY'){ try{const sp=document.getElementById('psplash'); if(sp){sp.classList.add('hide');sp.style.display='none';}}catch(e){} try{showResetForm();}catch(e){} } }); }catch(e){} }
+let _recoveryMode=false;
+// detecta recuperação também pela URL (antes de qualquer sessão entrar)
+try{ const h=new URLSearchParams((location.hash||'').replace(/^#/,'')); if(h.get('type')==='recovery' || /type=recovery/.test(location.search)) _recoveryMode=true; }catch(e){}
+if(_SB){ try{ _SB.auth.onAuthStateChange((event)=>{ if(event==='PASSWORD_RECOVERY'){ _recoveryMode=true; try{const sp=document.getElementById('psplash'); if(sp){sp.classList.add('hide');sp.style.display='none';}}catch(e){} try{showResetForm();}catch(e){} } }); }catch(e){} }
 
 function gateErr(msg){ const e=$('#gate-err'); if(!e)return; if(msg){e.textContent=msg;e.classList.add('on');}else{e.classList.remove('on');} }
 function showGate(mode){ // 'login' | 'signup' | 'notpro' | 'pending'
@@ -2267,6 +2270,7 @@ async function salvarNovaSenha(){
   const pw=($('#r-pw').value||''); gateErr('');
   if(pw.length<8){ gateErr('A senha precisa ter ao menos 8 caracteres.'); return; }
   try{ const {error}=await _SB.auth.updateUser({password:pw}); if(error)throw error;
+    _recoveryMode=false; try{history.replaceState(null,'',location.pathname);}catch(e){}
     toast('Senha atualizada! Você já está conectado 💚',0); await entrarLiberado(); }
   catch(e){ gateErr('Não consegui salvar. Tente reenviar o link.'); }
 }
@@ -2309,6 +2313,8 @@ function metaFrom(user){
 }
 
 async function bootAuth(){
+  // veio pelo link de redefinição → OBRIGA a definir nova senha (não entra direto)
+  if(_recoveryMode){ showResetForm(); return; }
   // sem Supabase (offline) → deixa entrar em modo local pra não travar
   if(!_SB){ AUTH={id:'local',nome:'Profissional',email:'',tipo:'pro',reg:''}; return iniciarApp(); }
   try{
