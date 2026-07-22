@@ -112,6 +112,18 @@ html,body{overflow-x:clip;max-width:100vw;width:100%}
 .jtx b{display:block;font-size:14px;color:var(--tx)}
 .jtx span{display:block;font-size:12.5px;color:var(--txs);margin-top:1px;line-height:1.4}
 .jline{width:2px;height:16px;background:var(--line);margin-left:21px}
+.ck-card{padding:18px 18px 8px;max-width:620px;background:linear-gradient(160deg,var(--vf),var(--card))}
+.ck-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ck-head b{font-size:15.5px}.ck-head span{display:block;font-size:12.5px;color:var(--txs);margin-top:1px}
+.ck-x{background:none;border:none;color:var(--txm);font-size:15px;cursor:pointer;line-height:1;flex-shrink:0}
+.ck-bar{height:7px;border-radius:20px;background:var(--cinm,#e3e9e3);margin:12px 0 6px;overflow:hidden}
+.ck-fill{height:100%;background:linear-gradient(90deg,var(--v),var(--ve));border-radius:20px;transition:width .4s}
+.ck-list{display:flex;flex-direction:column}
+.ck-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px solid var(--line)}
+.ck-tick{width:22px;height:22px;border-radius:50%;flex-shrink:0;border:2px solid var(--line);display:grid;place-items:center}
+.ck-item.done .ck-tick{background:var(--v);border-color:var(--v)}
+.ck-tx{flex:1;min-width:0}.ck-tx b{display:block;font-size:13.5px;color:var(--tx)}.ck-tx span{display:block;font-size:12px;color:var(--txs)}
+.ck-item.done .ck-tx b{color:var(--txm);text-decoration:line-through}
 .atalho-card{margin:14px 14px 0;background:linear-gradient(135deg,#26402e,#1f3d2b);color:#f6f3ea;border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;box-shadow:var(--sh)}
 .atalho-card .ai{width:42px;height:42px;border-radius:12px;flex-shrink:0;background:radial-gradient(circle at 32% 28%,#4a7856,#2f5740 78%);display:grid;place-items:center}
 .atalho-card .ai svg{width:22px;height:22px;fill:none;stroke:#f6f3ea;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
@@ -129,6 +141,8 @@ table{max-width:100%}
 }
 .tb-leaf{display:none;width:34px;height:34px;border-radius:11px;flex-shrink:0;background:radial-gradient(circle at 32% 28%,#4a7856,#2f5740 78%);place-items:center}
 .tb-leaf svg{width:19px;height:19px;fill:none;stroke:#f6f3ea;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.beta-chip{background:var(--amf,#fdf0d9);color:var(--am,#c98a1a);border:1px solid var(--am,#e0a93a);font-size:11px;font-weight:800;letter-spacing:.4px;padding:3px 10px;border-radius:20px;cursor:pointer;flex-shrink:0}
+.brand .beta-chip{margin-top:3px;padding:1px 8px;font-size:10px}
 .topbar h1{font-size:20px;font-weight:800;letter-spacing:-.4px}
 .topbar .sub{font-size:12.5px;color:var(--txs);font-weight:500}
 .topbar .grow{flex:1}
@@ -309,7 +323,9 @@ tbody tr:hover{background:var(--cin)}
   .content{padding:16px 14px 96px}
   .topbar{padding:14px 14px;padding-top:calc(14px + var(--st));gap:10px}
   .topbar h1{font-size:18px}
-  .tb-leaf{display:grid}
+  .tb-leaf{display:grid;width:30px;height:30px}
+  .topbar .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .topbar .beta-chip{display:none}
   #quick-add{padding:10px 13px;font-size:13.5px;white-space:nowrap;flex-shrink:0}
   #theme-btn{flex-shrink:0}
   .row2,.row3{grid-template-columns:1fr}
@@ -537,7 +553,7 @@ tbody tr:hover{background:var(--cin)}
   <aside class="sidebar">
     <div class="brand">
       <div class="logo"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
-      <div><b>dichava</b><small>Painel da clínica</small></div>
+      <div><b>dichava</b><small>Painel da clínica</small><button class="beta-chip" onclick="abrirSuporteProf()" title="Enviar feedback">Beta</button></div>
     </div>
     <a class="nav-item" data-nav="dash"><span class="ic">◧</span> Visão geral</a>
     <a class="nav-item" data-nav="agenda"><span class="ic">◷</span> Agenda <span class="badge" id="badge-agenda"></span></a>
@@ -558,11 +574,11 @@ tbody tr:hover{background:var(--cin)}
   <div class="main">
     <div class="topbar">
       <div class="tb-leaf" title="Painel dichava"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
-      <div style="min-width:0">
+      <div style="min-width:0;flex:1">
         <h1 id="pg-title">Visão geral</h1>
         <div class="sub" id="pg-sub"></div>
       </div>
-      <div class="grow"></div>
+      <button class="beta-chip" onclick="abrirSuporteProf()" title="Enviar feedback">Beta</button>
       <span id="save-dot"></span>
       <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
       <button class="btn" id="quick-add">＋ Novo</button>
@@ -879,7 +895,7 @@ function render(){
   const [t,s]=TITLES[route]||['',''];
   $('#pg-title').textContent=t; $('#pg-sub').textContent=s;
   const v=$('#view');
-  if(route==='dash') v.innerHTML=viewDash();
+  if(route==='dash') { v.innerHTML=viewDash(); try{renderChecklist();}catch(e){} }
   else if(route==='agenda') v.innerHTML=viewAgenda();
   else if(route==='pacientes') v.innerHTML=viewPacientes();
   else if(route==='prontuarios') v.innerHTML=viewProntuarios();
@@ -940,11 +956,40 @@ function viewDash(){
     ${aniv.map(p=>{const dd=p.nascimento.slice(8,10);const isHoje=dd===hojeDD;return `<button class="chip ${isHoje?'a':'v'}" style="cursor:pointer;padding:6px 12px" onclick="openPaciente('${p.id}')">${isHoje?'':''}${esc(p.nome.split(' ')[0])} · ${dd}/${mm}</button>`}).join('')}
   </div></div>` : '';
 
-  return kpis
+  return `<div id="checklist-box"></div>` + kpis
     + `<div class="sec-title">Agenda de hoje <span class="grow"></span><button class="btn sm ghost" onclick="go('agenda')">Ver agenda →</button></div>`+ag
     + (aniv.length?`<div class="sec-title">Aniversariantes do mês <span class="grow"></span><span style="font-size:12px;color:var(--txm);font-weight:600">${aniv.length}</span></div>`+anivHtml:'')
     + `<div class="sec-title">Próximas consultas</div>`+proxHtml;
 }
+/* ===== Checklist "Comece por aqui" (primeiros passos) ===== */
+async function renderChecklist(){
+  const box=document.getElementById('checklist-box'); if(!box||!AUTH)return;
+  try{ if(localStorage.getItem('dr_checklist_done_'+AUTH.id)==='1'){ box.innerHTML=''; return; } }catch(e){}
+  // estado de cada passo
+  let perfilOk=false;
+  try{ if(_SB){ const{data:p}=await _SB.from('profissionais').select('bio,tipo_prof,status').eq('id',AUTH.id).maybeSingle(); perfilOk=!!(p&&p.bio&&p.tipo_prof); } }catch(e){}
+  const dispOk = !!(AGENDA_CFG&&AGENDA_CFG.dias&&Object.keys(AGENDA_CFG.dias).length);
+  let notifOk=false; try{ notifOk=await pushProAtivo(); }catch(e){}
+  let linkOk=false; try{ linkOk=localStorage.getItem('dr_link_shared_'+AUTH.id)==='1'; }catch(e){}
+  const passos=[
+    {ok:perfilOk, t:'Complete seu perfil público', d:'Foto, bio, especialidades e valor', act:"go('perfil')", cta:'Completar'},
+    {ok:dispOk,  t:'Defina sua disponibilidade', d:'Os horários que o paciente pode escolher', act:"go('config')", cta:'Definir'},
+    {ok:linkOk,  t:'Compartilhe seu link de agendamento', d:'Na bio do Instagram, WhatsApp…', act:"go('equipe')", cta:'Compartilhar'},
+    {ok:notifOk, t:'Ative as notificações', d:'Avisos de agendamento e mensagem', act:"go('config')", cta:'Ativar'},
+  ];
+  const feitos=passos.filter(p=>p.ok).length;
+  if(feitos===passos.length){ try{localStorage.setItem('dr_checklist_done_'+AUTH.id,'1');}catch(e){} box.innerHTML=''; return; }
+  box.innerHTML=`<div class="card ck-card">
+    <div class="ck-head"><div><b>Comece por aqui 🌱</b><span>${feitos} de ${passos.length} concluídos</span></div><button class="ck-x" onclick="fecharChecklist()" title="Dispensar">✕</button></div>
+    <div class="ck-bar"><div class="ck-fill" style="width:${Math.round(feitos/passos.length*100)}%"></div></div>
+    <div class="ck-list">${passos.map(p=>`<div class="ck-item ${p.ok?'done':''}">
+      <span class="ck-tick">${p.ok?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg>':''}</span>
+      <span class="ck-tx"><b>${p.t}</b><span>${p.d}</span></span>
+      ${p.ok?'':`<button class="btn sm" onclick="${p.act}">${p.cta}</button>`}
+    </div>`).join('')}</div>
+  </div>`;
+}
+function fecharChecklist(){ try{localStorage.setItem('dr_checklist_done_'+AUTH.id,'1');}catch(e){} const b=document.getElementById('checklist-box'); if(b)b.innerHTML=''; }
 
 /* =============== AGENDA =============== */
 const HORAS=[];for(let h=7;h<=20;h++){HORAS.push(String(h).padStart(2,'0')+':00');}
@@ -1893,7 +1938,7 @@ function viewEquipe(){
   </div>`;
 }
 function copiarCodigo(){ try{ navigator.clipboard.writeText(CLINICA.codigo); toast('Código copiado'); }catch(e){ toast(CLINICA.codigo); } }
-function copiarLinkAgenda(){ const url='https://dichava.app/agendar/?c='+CLINICA.codigo; try{ navigator.clipboard.writeText(url); toast('Link copiado'); }catch(e){ toast(url); } }
+function copiarLinkAgenda(){ const url='https://dichava.app/agendar/?c='+CLINICA.codigo; try{localStorage.setItem('dr_link_shared_'+(AUTH?AUTH.id:''),'1');}catch(e){} try{ navigator.clipboard.writeText(url); toast('Link copiado'); }catch(e){ toast(url); } }
 async function renomearClinica(){
   const nome=($('#eq-nome').value||'').trim(); if(!nome){toast('Informe um nome',1);return;}
   try{ const{error}=await _SB.from('clinicas').update({nome}).eq('id',CLINICA.id); if(error)throw error;
@@ -2509,7 +2554,28 @@ function startApp(){
   try{carregarAgendaCfg();}catch(e){}
   try{contarMsgsPanel();}catch(e){}
   if(!localStorage.getItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'))) setTimeout(tutStart,400);
+  else setTimeout(mostrarLGPDPro,300);
 }
+/* ===== Termo de responsabilidade LGPD (profissional) ===== */
+function mostrarLGPDPro(){
+  if(!AUTH)return;
+  try{ if(localStorage.getItem('dr_lgpd_pro_'+AUTH.id)==='1')return; }catch(e){}
+  openModal(`<div class="modal"><div class="modal-head"><h3>Cuidado com os dados dos pacientes</h3></div>
+    <div class="modal-body" style="font-size:13.5px;line-height:1.6;color:var(--txs)">
+      <p>Ao registrar pacientes, prontuários e documentos no Painel dichava, você atua como <b>controlador dos dados</b> dos seus pacientes, conforme a <b>LGPD (Lei nº 13.709/2018)</b>. Você se compromete a:</p>
+      <ul style="margin:8px 0 0 18px;padding:0">
+        <li>Usar os dados apenas para o <b>atendimento</b>, com base legal adequada;</li>
+        <li>Obter <b>consentimento</b> do paciente quando necessário;</li>
+        <li>Guardar tudo com <b>sigilo profissional</b>, sem compartilhamento indevido;</li>
+        <li>Respeitar os direitos do paciente (acesso, correção, exclusão).</li>
+      </ul>
+      <p style="margin-top:10px">O dichava.app <b>armazena com segurança</b> esses dados; a responsabilidade pelo conteúdo clínico e pela relação com o paciente é sua.</p>
+      <label style="display:flex;gap:9px;align-items:flex-start;margin-top:14px;cursor:pointer"><input type="checkbox" id="lgpd-chk" style="margin-top:3px;flex-shrink:0"><span>Li e concordo com minha responsabilidade como controlador dos dados dos meus pacientes.</span></label>
+    </div>
+    <div class="modal-foot"><button class="btn" style="width:100%;justify-content:center" onclick="aceitarLGPDPro()">Concordo e continuar</button></div>
+  </div>`);
+}
+function aceitarLGPDPro(){ if(!document.getElementById('lgpd-chk')||!document.getElementById('lgpd-chk').checked){ toast('Marque que você leu e concorda',1); return; } try{localStorage.setItem('dr_lgpd_pro_'+AUTH.id,'1');}catch(e){} closeModal(); }
 // puxa alterações da equipe ao voltar pra aba
 window.addEventListener('focus', ()=>{ if(CLINICA){ refreshClinica(); try{carregarSolicitacoes();}catch(e){} } });
 
@@ -2566,7 +2632,7 @@ function renderTut(){
   $('#tut-skip').style.display=_tutI===TUT.length-1?'none':'';
 }
 function tutNext(){ if(_tutI<TUT.length-1){_tutI++;renderTut();} else tutFim(); }
-function tutFim(){ $('#tut').classList.remove('on'); try{localStorage.setItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'),'1');}catch(e){} }
+function tutFim(){ $('#tut').classList.remove('on'); try{localStorage.setItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'),'1');}catch(e){} setTimeout(mostrarLGPDPro,300); }
 
 /* =============== BOOT =============== */
 $('#g-pw')&&$('#g-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateLogin(); });
