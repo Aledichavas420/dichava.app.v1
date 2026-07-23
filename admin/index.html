@@ -122,6 +122,10 @@ a{color:var(--ve)}
     <div class="sec">Visão geral</div>
     <div class="kpis" id="kpis"><div class="spin"></div></div>
 
+    <div class="sec">Lista de espera <span id="wl-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
+    <div class="filters" id="wl-filters"></div>
+    <div class="plist" id="wl-list"><div class="spin"></div></div>
+
     <div class="sec">Crescimento de usuários</div>
     <div class="card chartcard" id="growth"><div class="spin"></div></div>
 
@@ -252,7 +256,66 @@ async function carregar(){
     if(error) throw error;
     PROFS=data||[]; renderProfs();
   }catch(e){ $('#plist').innerHTML='<div class="empty">Não consegui carregar os profissionais.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small></div>'; }
+  carregarWaitlist();
   carregarSuporte();
+}
+let WL=[], _wlFiltro='pendente';
+async function carregarWaitlist(){
+  try{
+    const {data,error}=await SB.rpc('admin_waitlist');
+    if(error) throw error;
+    WL=data||[]; renderWlFiltros(); renderWaitlist();
+  }catch(e){
+    $('#wl-list').innerHTML='<div class="empty">Não consegui carregar a lista de espera.<br><small style="color:var(--txs)">'+esc(e.message||'')+' — rodou o admin-waitlist-setup.sql?</small></div>';
+    $('#wl-filters').innerHTML=''; $('#wl-count').textContent='';
+  }
+}
+const WL_ST={pendente:{l:'Pendente',c:'a'},contato:{l:'Em contato',c:'b'},liberado:{l:'Liberado',c:'v'},recusado:{l:'Recusado',c:'e'}};
+function renderWlFiltros(){
+  const cont=k=>WL.filter(w=>(w.status||'pendente')===k).length;
+  const fs=[['pendente','Pendentes ('+cont('pendente')+')'],['contato','Em contato ('+cont('contato')+')'],['liberado','Liberados ('+cont('liberado')+')'],['recusado','Recusados ('+cont('recusado')+')'],['todos','Todos ('+WL.length+')']];
+  $('#wl-filters').innerHTML=fs.map(([k,l])=>`<button class="ft ${_wlFiltro===k?'on':''}" onclick="setWlFiltro('${k}')">${l}</button>`).join('');
+  $('#wl-count').textContent=WL.length?('· '+WL.length+' cadastro(s)'):'';
+}
+function setWlFiltro(f){ _wlFiltro=f; renderWlFiltros(); renderWaitlist(); }
+function renderWaitlist(){
+  let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
+  if(!list.length){ $('#wl-list').innerHTML='<div class="empty">Nenhum cadastro '+(_wlFiltro==='todos'?'':'“'+(WL_ST[_wlFiltro]?WL_ST[_wlFiltro].l.toLowerCase():_wlFiltro)+'”')+' por aqui.</div>'; return; }
+  $('#wl-list').innerHTML=list.map(w=>{
+    const st=WL_ST[w.status||'pendente']||WL_ST.pendente;
+    const wa=w.whatsapp?('<a class="btn wa sm" href="https://wa.me/55'+String(w.whatsapp).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
+    const chips=[`<span class="chip ${st.c}">${st.l}</span>`];
+    if(w.plano)chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
+    if(w.cidade)chips.push('<span class="chip">'+esc(w.cidade)+'</span>');
+    if(w.atendimento)chips.push('<span class="chip">'+esc(w.atendimento)+'</span>');
+    const meta=[w.registro,w.especialidade].filter(Boolean).map(esc).join(' · ');
+    const acts=[];
+    if((w.status||'pendente')!=='contato')acts.push(`<button class="btn ghost sm" onclick="wlStatus('${w.id}','contato')">Marcar em contato</button>`);
+    if((w.status||'pendente')!=='liberado')acts.push(`<button class="btn wv sm" onclick="wlStatus('${w.id}','liberado')">✓ Liberado</button>`);
+    if((w.status||'pendente')!=='pendente')acts.push(`<button class="btn ghost sm" onclick="wlStatus('${w.id}','pendente')">← Pendente</button>`);
+    if((w.status||'pendente')!=='recusado')acts.push(`<button class="btn dg sm" onclick="wlStatus('${w.id}','recusado')">Recusar</button>`);
+    return `<div class="pcard">
+      <div class="phead">
+        <div class="pav">${initials(w.nome)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="pn">${esc(w.nome||'Sem nome')}</div>
+          <div class="pmeta">${meta||'—'}</div>
+          <div class="pmeta"><a href="mailto:${esc(w.email||'')}" style="color:var(--v)">${esc(w.email||'')}</a> · ${esc(w.whatsapp||'')} · ${fmtData(w.criado_em)}</div>
+        </div>
+      </div>
+      ${w.mensagem?`<div style="font-size:13.5px;color:var(--txs);background:#0f1a14;border-radius:10px;padding:9px 12px;margin:8px 0">“${esc(w.mensagem)}”</div>`:''}
+      <div class="chips" style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0">${chips.join('')}</div>
+      <div class="acts" style="display:flex;flex-wrap:wrap;gap:8px">${wa}${acts.join('')}</div>
+    </div>`;
+  }).join('');
+}
+async function wlStatus(id,status){
+  try{
+    const {error}=await SB.rpc('admin_waitlist_status',{p_id:id,p_status:status});
+    if(error) throw error;
+    const w=WL.find(x=>x.id===id); if(w)w.status=status;
+    renderWlFiltros(); renderWaitlist(); toast('Atualizado');
+  }catch(e){ toast(e.message||'Erro ao atualizar',1); }
 }
 
 /* ===== SUPORTE (admin) ===== */
