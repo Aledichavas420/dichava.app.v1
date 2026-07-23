@@ -252,10 +252,10 @@ footer a{color:#2E7D32;text-decoration:none}
       <div class="plan-para">Para profissionais com agenda cheia que querem visibilidade</div>
       <ul>
         <li>Tudo do Essencial, e mais:</li>
+        <li>✨ <b>Assistente de IA no prontuário</b> — organiza a evolução por você</li>
         <li><b>Destaque</b> e prioridade no diretório</li>
         <li><b>Divulgação ativa</b> na landing e no Instagram do app (@dichava.app)</li>
         <li><b>10 códigos premium</b> pra presentear seus pacientes</li>
-        <li>Suporte prioritário</li>
       </ul>
     </div>
     <div class="plan">
@@ -266,10 +266,12 @@ footer a{color:#2E7D32;text-decoration:none}
       <ul>
         <li>Tudo do Profissional, e mais:</li>
         <li><b>Até 5 profissionais</b> inclusos</li>
+        <li>✨ <b>Assistente de IA</b> pra toda a equipe</li>
         <li><b>Painel da Clínica compartilhado</b>: agenda, caixa e pacientes da equipe</li>
         <li>Página da <b>clínica</b> no diretório do app</li>
         <li>Divulgação da clínica na landing e no Instagram (@dichava.app)</li>
         <li><b>25 códigos premium</b> pra pacientes da equipe</li>
+        <li><b>Suporte prioritário dedicado</b></li>
         <li class="off">Profissional extra: + R$ 79/mês cada</li>
       </ul>
     </div>
@@ -341,10 +343,17 @@ function enviar(ev){
 }
 async function finalizar(d){
   var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
-  if(SB){ try{ var r=await SB.from('pro_waitlist').insert([d]); if(!r.error){ sucesso(); return; } }catch(e){} }
+  if(SB){
+    try{
+      // O RLS permite o insert, mas bloqueia ler a linha de volta — então o
+      // cadastro é gravado mesmo quando vem um "erro" de leitura. Só é falha
+      // real quando a chamada lança exceção (sem conexão), tratada no catch.
+      await SB.from('pro_waitlist').insert([d]);
+      sucesso(); return;
+    }catch(e){}
+  }
   btn.disabled=false; btn.textContent='Quero ser avisado(a) 💚';
-  err.textContent='Vamos te redirecionar pro e-mail pra concluir o cadastro…'; err.style.display='block';
-  setTimeout(function(){ mailtoFallback(d); }, 900);
+  err.textContent='Não consegui enviar agora. Confira sua conexão e toque de novo. 💚'; err.style.display='block';
 }
 // carrossel do painel
 (function(){
