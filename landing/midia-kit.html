@@ -1,0 +1,214 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1">
+<title>Dichava está expandindo — mídia kit para profissionais</title>
+<meta name=description content="A maior comunidade de redução de danos do Brasil agora tem um painel completo pra você atender melhor. Conheça o Dichava e faça parte do lançamento.">
+<meta name=robots content="noindex">
+<meta property="og:title" content="A Dichava está expandindo — e você pode fazer parte">
+<meta property="og:description" content="Painel da clínica completo + o app de cuidado gratuito pros seus pacientes. Valores de lançamento por tempo limitado.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ve:#2E7D32;--v:#4CAF5A;--am:#F2B705;--roxo:#7C3AED;--dk:#16261a;--txs:#5E7062;--line:#E2ECE3}
+*{box-sizing:border-box}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#1B2A1C;line-height:1.6;-webkit-font-smoothing:antialiased;
+background:radial-gradient(120% 60% at 80% -5%,#DFF3E4 0%,transparent 55%),radial-gradient(90% 50% at 0% 5%,#E7EEFB 0%,transparent 50%),linear-gradient(180deg,#F5FAF4,#EEF6EE)}
+.wrap{max-width:900px;margin:0 auto;padding:20px 20px 90px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.logo{font-weight:800;font-size:20px;color:#1B2A1C;text-decoration:none}.logo span{color:#2E7D32}
+.kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#2E7D32;background:#DCF0DE;border:1px solid #BFE3C4;padding:6px 14px;border-radius:30px}
+h1{font-size:clamp(29px,6.5vw,46px);line-height:1.12;margin:16px 0 10px;letter-spacing:-.5px}
+h1 span{color:#2E7D32}
+.lead{font-size:clamp(16px,3.4vw,19px);color:#37493a;max-width:640px;margin:0 auto 8px}
+.hero{text-align:center;padding:20px 0 8px}
+.sec{font-size:clamp(23px,4.6vw,30px);font-weight:800;letter-spacing:-.4px;margin:8px 0 4px}
+.sub{color:var(--txs);font-size:15.5px;margin-bottom:20px}
+section{margin-top:44px}
+.center{text-align:center}
+/* prova social */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 14px;text-align:center;box-shadow:0 10px 30px rgba(30,60,35,.05)}
+.stat b{display:block;font-size:clamp(24px,5vw,32px);color:#2E7D32;font-weight:800;line-height:1}
+.stat small{display:block;color:var(--txs);font-size:12.5px;margin-top:6px;font-weight:600}
+/* dois lados */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.side{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 22px;box-shadow:0 14px 40px rgba(30,60,35,.06)}
+.side .tag{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:5px 12px;border-radius:20px;display:inline-block}
+.side.pac .tag{color:#2E7D32;background:#E8F5E9}
+.side.pro .tag{color:#6A3EC0;background:#F1EBFB}
+.side h3{font-size:21px;margin:12px 0 6px}
+.side p.d{color:var(--txs);font-size:14.5px;margin:0 0 14px}
+.side ul{list-style:none;padding:0;margin:0}
+.side li{position:relative;padding:6px 0 6px 26px;font-size:14.5px}
+.side li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--v)}
+.side.pro li::before{background:var(--roxo)}
+.free{display:inline-block;margin-top:14px;background:#2E7D32;color:#fff;font-weight:800;font-size:13px;padding:6px 14px;border-radius:20px}
+/* feature grid */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 18px;box-shadow:0 10px 30px rgba(30,60,35,.05)}
+.card .i{font-size:26px;display:block;margin-bottom:8px}
+.card b{display:block;font-size:15.5px;margin-bottom:3px}
+.card small{color:var(--txs);font-size:13.5px}
+/* faixa oportunidade */
+.opp{background:linear-gradient(135deg,#16261a,#20402a);color:#EAF6EC;border-radius:24px;padding:34px 26px;text-align:center;box-shadow:0 20px 50px rgba(20,45,30,.25)}
+.opp h2{color:#fff;font-size:clamp(22px,4.4vw,28px);margin:0 0 10px}
+.opp p{color:#C7E3CC;max-width:600px;margin:0 auto;font-size:15.5px}
+.opp .pill{display:inline-block;margin-top:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:24px}
+/* planos */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+.plan{background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:24px 20px;position:relative}
+.plan.best{border-color:var(--v);box-shadow:0 16px 44px rgba(76,175,90,.18)}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(120deg,#F2B705,#EA8B0C);color:#fff;font-weight:800;font-size:11.5px;padding:5px 15px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 12px rgba(234,139,12,.35)}
+.plan-n{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#2E7D32}
+.plan-p{font-size:30px;font-weight:800;margin:6px 0 2px}.plan-p small{font-size:14px;color:var(--txs);font-weight:600}
+.plan-anual{font-size:12.5px;color:var(--txs);margin-bottom:12px}
+.plan ul{list-style:none;padding:0;margin:10px 0 0}
+.plan li{position:relative;padding:5px 0 5px 22px;font-size:13.5px}
+.plan li::before{content:"✓";position:absolute;left:0;top:5px;color:var(--v);font-weight:800}
+.note{text-align:center;color:var(--txs);font-size:13.5px;margin-top:16px;max-width:640px;margin-left:auto;margin-right:auto}
+.launch{background:#FFF6DC;border:1px solid #F2D98A;border-radius:16px;padding:14px 18px;text-align:center;font-size:14.5px;font-weight:700;color:#8A6D0B;margin-top:18px}
+/* selos */
+.selos{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+.selo{background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:700;color:#2b3b2d}
+/* cta */
+.cta{text-align:center;margin-top:48px;background:#fff;border:1px solid var(--line);border-radius:26px;padding:34px 24px;box-shadow:0 18px 46px rgba(30,60,35,.08)}
+.btn{display:inline-block;margin-top:18px;background:#2fbd6a;color:#fff;text-decoration:none;border-radius:30px;padding:16px 34px;font-size:16.5px;font-weight:800;box-shadow:0 12px 28px rgba(47,189,106,.3);transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.foot{text-align:center;color:var(--txs);font-size:12.5px;margin-top:40px}
+@media(max-width:680px){.duo,.grid,.plans,.stats{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="logo" href="https://dichava.app">dichava<span>.app</span></a><span class="kick">Mídia kit</span></div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="kick">Convite para profissionais da saúde</span>
+    <h1>A Dichava está <span>expandindo</span>.<br>E você pode fazer parte disso.</h1>
+    <p class="lead">Construímos a <b>maior comunidade de redução de danos do Brasil</b>. Agora abrimos um painel completo pra você <b>organizar sua prática</b> e ser encontrado por quem já busca cuidado — enquanto seus pacientes usam nossas ferramentas <b>de graça</b>.</p>
+  </div>
+
+  <!-- PROVA SOCIAL -->
+  <div class="stats">
+    <div class="stat"><b>+143 mil</b><small>na comunidade Dichava</small></div>
+    <div class="stat"><b>#1</b><small>maior comunidade RD do Brasil</small></div>
+    <div class="stat"><b>Grátis</b><small>pro paciente, sempre</small></div>
+  </div>
+
+  <!-- OS DOIS LADOS -->
+  <section class="center">
+    <h2 class="sec">Um projeto, dois cuidados</h2>
+    <div class="sub">Um app que acolhe o paciente e um painel que fortalece o profissional.</div>
+    <div class="duo" style="text-align:left">
+      <div class="side pac">
+        <span class="tag">Para o paciente</span>
+        <h3>App de cuidado &amp; redução de danos</h3>
+        <p class="d">Acolhimento sem julgamento, na palma da mão — e sempre gratuito.</p>
+        <ul>
+          <li>Informação de segurança e autoconhecimento</li>
+          <li>Modo SOS e exercícios de respiração</li>
+          <li>Registro pessoal e acompanhamento</li>
+          <li>Encontra profissionais parceiros e agenda direto</li>
+          <li>CVV 188 e canais de apoio sempre à vista</li>
+        </ul>
+        <span class="free">100% gratuito pro paciente</span>
+      </div>
+      <div class="side pro">
+        <span class="tag">Para você</span>
+        <h3>Painel da Clínica</h3>
+        <p class="d">Tudo o que você precisa pra atender com organização, num lugar só.</p>
+        <ul>
+          <li>Agenda com link de agendamento próprio</li>
+          <li>Pacientes e prontuários (com <b>IA que organiza a evolução</b>)</li>
+          <li>Caixa: faturamento, entradas e saídas</li>
+          <li>Documentos: recibos, atestados e declarações com sua assinatura</li>
+          <li>Perfil verificado no diretório do app</li>
+        </ul>
+        <span class="free" style="background:#7C3AED">Visibilidade pra +143 mil pessoas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- O QUE O PAINEL FAZ -->
+  <section class="center">
+    <h2 class="sec">O que o Painel da Clínica faz por você</h2>
+    <div class="sub">Feito com profissionais da saúde, pra caber na rotina real.</div>
+    <div class="grid" style="text-align:left">
+      <div class="card"><span class="i">◷</span><b>Agenda inteligente</b><small>Seu link de agendamento na bio. O paciente marca, você confirma — sem troca infinita de mensagem.</small></div>
+      <div class="card"><span class="i">▤</span><b>Prontuário com IA</b><small>Escreva em tópicos soltos e a IA organiza queixa, evolução, condutas e plano. Você revisa e salva.</small></div>
+      <div class="card"><span class="i">$</span><b>Caixa da clínica</b><small>Faturamento do mês, a receber, entradas e saídas — sem planilha paralela.</small></div>
+      <div class="card"><span class="i">▦</span><b>Documentos prontos</b><small>Recibos, atestados e declarações gerados com a sua assinatura digital.</small></div>
+      <div class="card"><span class="i">☺</span><b>Diretório verificado</b><small>Seu perfil aparece pra quem já busca cuidado no app — com selo de verificação.</small></div>
+      <div class="card"><span class="i">✉</span><b>Conexão com o paciente</b><small>Mensagens, lembretes e presença confirmada, tudo dentro do painel.</small></div>
+    </div>
+  </section>
+
+  <!-- OPORTUNIDADE -->
+  <section>
+    <div class="opp">
+      <span class="kick" style="color:#fff;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25)">Por que agora</span>
+      <h2>Entrar agora é entrar como fundador.</h2>
+      <p>Você não está só assinando uma ferramenta — está ajudando a moldar a maior rede de cuidado e redução de danos do país, com voz direta sobre o que construímos a seguir. Os primeiros a entrar garantem <b>valores de lançamento</b> e prioridade no diretório.</p>
+      <span class="pill">Vagas limitadas · liberação gradual</span>
+    </div>
+  </section>
+
+  <!-- PLANOS -->
+  <section class="center">
+    <h2 class="sec">Planos transparentes</h2>
+    <div class="sub">Sem fidelidade — cancele quando quiser. <b>Todos incluem o Painel da Clínica.</b></div>
+    <div class="plans" style="text-align:left">
+      <div class="plan">
+        <div class="plan-n">Essencial</div>
+        <div class="plan-p">R$ 79,90<small>/mês</small></div>
+        <div class="plan-anual">ou R$ 799/ano (2 meses grátis)</div>
+        <ul>
+          <li>Perfil verificado no diretório</li>
+          <li>Painel completo: agenda, pacientes, prontuário, caixa, documentos</li>
+          <li>Lembretes e lista de espera</li>
+        </ul>
+      </div>
+      <div class="plan best">
+        <div class="plan-badge">★ mais escolhido</div>
+        <div class="plan-n">Profissional</div>
+        <div class="plan-p">R$ 179,90<small>/mês</small></div>
+        <div class="plan-anual">ou R$ 1.799/ano (2 meses grátis)</div>
+        <ul>
+          <li>Tudo do Essencial, e mais:</li>
+          <li>Destaque e prioridade no diretório</li>
+          <li>Divulgação na landing e no @dichava.app</li>
+          <li>10 códigos premium pra presentear pacientes</li>
+          <li>Suporte prioritário</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="plan-n">Clínica</div>
+        <div class="plan-p">R$ 299,90<small>/mês</small></div>
+        <div class="plan-anual">ou R$ 2.999/ano (2 meses grátis)</div>
+        <ul>
+          <li>Tudo do Profissional, e mais:</li>
+          <li>Até 5 profissionais inclusos</li>
+          <li>Painel compartilhado da equipe</li>
+          <li>Página da clínica no diretório</li>
+          <li>25 códigos premium</li>
+        </ul>
+      </div>
+    </div>
+    <div class="launch">🚀 Estes são <u>valores de lançamento</u> — em breve os preços sofrerão reajuste. Quem entrar agora mantém a condição de lançamento.</div>
+    <div class="note">A cobrança começa só quando sua área de profissionais for ativada. Plano anual com desconto disponível.</div>
+    <div class="selos">
+      <span class="selo">🔒 Conexão criptografada</span>
+      <span class="selo">🗄️ Criptografia em repouso</span>
+      <span class="selo">⚖️ Conforme a LGPD</span>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta">
+    <span class="kick">Próximo passo</span>
+    <h2 class="sec" style="margin-top:12px">Garanta sua vaga na lista de espera</h2>
+    <div class="sub" style="margin-bottom:0">Preencha seus dados, a gente verifica seu registro e vai liberando os acessos aos poucos. Sem compromisso agora.</div>
+    <a class="btn" href="https://dichava.app/landing/profissionais.html#lista">Entrar na lista de espera →</a>
+  </div>
+
+  <div class="foot">dichava.app · Saúde · Redução de danos · Autoconhecimento — sem julgamento.</div>
+</div>
+</body></html>
