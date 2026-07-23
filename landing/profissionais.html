@@ -343,15 +343,17 @@ function enviar(ev){
 }
 async function finalizar(d){
   var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
+  var ok=false;
   if(SB){
+    // 1) Caminho confiável: função SECURITY DEFINER (ignora o RLS, sempre grava)
     try{
-      // O RLS permite o insert, mas bloqueia ler a linha de volta — então o
-      // cadastro é gravado mesmo quando vem um "erro" de leitura. Só é falha
-      // real quando a chamada lança exceção (sem conexão), tratada no catch.
-      await SB.from('pro_waitlist').insert([d]);
-      sucesso(); return;
+      var r=await SB.rpc('pro_waitlist_add',{p_nome:d.nome,p_registro:d.registro,p_especialidade:d.especialidade,p_cidade:d.cidade,p_atendimento:d.atendimento,p_email:d.email,p_whatsapp:d.whatsapp,p_plano:d.plano,p_mensagem:d.mensagem});
+      if(!r.error) ok=true;
     }catch(e){}
+    // 2) Fallback: insert direto (caso a função ainda não tenha sido criada)
+    if(!ok){ try{ var r2=await SB.from('pro_waitlist').insert([d]); if(!r2.error) ok=true; }catch(e){} }
   }
+  if(ok){ sucesso(); return; }
   btn.disabled=false; btn.textContent='Quero ser avisado(a) 💚';
   err.textContent='Não consegui enviar agora. Confira sua conexão e toque de novo. 💚'; err.style.display='block';
 }
