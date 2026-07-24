@@ -1,0 +1,36 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Acesso da equipe — dichava.app</title>
+<meta name=theme-color content="#0e150f">
+<meta name=robots content="noindex">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{min-height:100vh;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#EAF3EC;
+background:radial-gradient(120% 70% at 50% -10%,#1c3a25 0%,transparent 55%),linear-gradient(180deg,#0e150f,#0c1710);
+display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 22px}
+h1{font-size:26px;font-weight:800;margin-top:8px}h1 b{color:#7BD98A}
+.kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#7BD98A;background:rgba(123,217,138,.1);border:1px solid rgba(123,217,138,.3);padding:7px 16px;border-radius:30px}
+p{margin-top:16px;max-width:400px;color:#A9BCAC;font-size:15px;line-height:1.6}
+.btns{margin-top:24px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px}
+a.btn{display:block;text-decoration:none;font-weight:800;font-size:15px;padding:14px;border-radius:26px}
+a.app{background:#2fbd6a;color:#fff}
+a.pro{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#EAF3EC}
+</style></head><body>
+<span class="kick">Acesso da equipe</span>
+<h1>dichava<b>.app</b></h1>
+<p id="msg">Liberando seu acesso neste aparelho…</p>
+<div class="btns" id="btns" style="display:none">
+  <a class="btn app" href="/">Abrir o app 💚</a>
+  <a class="btn pro" href="/clinica/">Abrir o Painel da Clínica</a>
+</div>
+<script>
+try{ localStorage.setItem('dr_acesso','1'); }catch(e){}
+// Libera e leva direto pro app. Se voltar aqui, mostra os atalhos.
+setTimeout(function(){
+  try{ if(sessionStorage.getItem('eq_go')==='1'){ document.getElementById('msg').textContent='Acesso liberado neste aparelho. Escolha por onde entrar:'; document.getElementById('btns').style.display='flex'; return; } sessionStorage.setItem('eq_go','1'); }catch(e){}
+  location.replace('/');
+}, 300);
+</script>
+</body></html>
