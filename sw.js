@@ -1,5 +1,5 @@
 // dichava.app — service worker v194
-const CACHE = 'dichavard-v332';
+const CACHE = 'dichavard-v333';
 const ASSETS = ['./', './index.html'];
 
 self.addEventListener('install', e => {
@@ -28,7 +28,15 @@ self.addEventListener('fetch', e => {
       const copy = res.clone();
       caches.open(CACHE).then(c => c.put(req, copy)).catch(()=>{});
       return res;
-    }).catch(() => caches.match(req).then(r => r || caches.match('./')))
+    }).catch(() => caches.match(req).then(r => {
+      if (r) return r;
+      // Só servimos o app (index) como fallback offline NA RAIZ. Nunca em
+      // /landing/, /breve, etc. — senão o redirect do index recria um loop.
+      if (req.mode === 'navigate') {
+        try { const p = new URL(req.url).pathname; if (p === '/' || p === '/index.html') return caches.match('./'); } catch (e) {}
+      }
+      return Response.error();
+    }))
   );
 });
 

@@ -20,12 +20,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Painel dichava">
 <link rel="manifest" href="./manifest.webmanifest">
-<script>/* PORTÃO "EM BREVE": redireciona o público pra breve.html. Entra com ?acesso=chave */
-(function(){var MANUTENCAO=true;if(!MANUTENCAO)return;try{
-  var q=new URLSearchParams(location.search);
-  if(q.get('acesso')==='dichava-equipe-2026'){localStorage.setItem('dr_acesso','1');history.replaceState(null,'',location.pathname);return;}
-  if(localStorage.getItem('dr_acesso')==='1')return;
-}catch(e){}location.replace('/breve.html');})();</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* ============ TOKENS (tema claro/escuro, herdado do app) ============ */
