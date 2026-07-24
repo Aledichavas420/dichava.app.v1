@@ -41,6 +41,31 @@ section{margin-top:44px}
 .side li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--v)}
 .side.pro li::before{background:var(--roxo)}
 .free{display:inline-block;margin-top:14px;background:#2E7D32;color:#fff;font-weight:800;font-size:13px;padding:6px 14px;border-radius:20px}
+/* mockup de celular */
+.ph-wrap{display:flex;justify-content:center;margin-bottom:20px}
+.phone{width:172px;border-radius:26px;padding:7px;background:linear-gradient(160deg,#1B2A1C,#0f1a12);box-shadow:0 20px 44px rgba(20,45,30,.3)}
+.scr{position:relative;background:#F1FAF2;border-radius:20px;overflow:hidden;height:338px;display:flex;flex-direction:column}
+.scr::before{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);width:52px;height:5px;border-radius:6px;background:rgba(0,0,0,.16);z-index:2}
+.ph-top{display:flex;align-items:center;gap:7px;padding:20px 14px 10px;font-weight:800;font-size:13px;color:#1B2A1C}
+.ph-ic{width:26px;height:26px;border-radius:7px;object-fit:cover}
+.ph-greet{padding:0 14px 12px;font-size:12.5px;color:#37493a;line-height:1.35}
+.ph-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px}
+.ph-tile{background:#fff;border-radius:12px;padding:9px 8px;font-size:17px;display:flex;flex-direction:column;gap:2px;box-shadow:0 4px 12px rgba(30,60,35,.06);border-bottom:2.5px solid var(--c)}
+.ph-tile span{font-size:10px;font-weight:700;color:#2b3b2d}
+.ph-card{margin:12px 14px 0;background:#DCF0DE;color:#216b2c;border-radius:11px;padding:9px 11px;font-size:10.5px;font-weight:700;text-align:center}
+.scr-dk{background:#0f1a13}
+.ph-top.dk{color:#EAF6EC}
+.ph-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 14px 10px}
+.ph-kpi{background:#17251b;border:1px solid #23372a;border-radius:12px;padding:9px 10px}
+.ph-kpi small{font-size:8.5px;color:#89a891;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.ph-kpi b{display:block;font-size:15px;color:#5CE39A;margin:2px 0}
+.ph-kpi i{font-size:9px;color:#89a891;font-style:normal}
+.ph-row{display:flex;align-items:center;gap:6px;margin:0 14px 6px;background:#17251b;border-radius:10px;padding:8px 10px;font-size:11px;color:#dfeee3}
+.ph-t{font-weight:800;color:#fff}
+.ph-chip{margin-left:auto;background:#234a2f;color:#7fe0a0;border-radius:8px;padding:2px 7px;font-size:8.5px;font-weight:700}
+.ph-chip.g{background:#2a3550;color:#9fc0ff}
+.ph-nav{margin-top:auto;display:flex;justify-content:space-around;padding:9px 6px;background:#0b130d;font-size:9.5px;color:#6f8a76;font-weight:700}
+.ph-nav .on{color:#5CE39A}
 /* feature grid */
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 18px;box-shadow:0 10px 30px rgba(30,60,35,.05)}
@@ -99,6 +124,17 @@ section{margin-top:44px}
     <div class="sub">Um app que acolhe o paciente e um painel que fortalece o profissional.</div>
     <div class="duo" style="text-align:left">
       <div class="side pac">
+        <div class="ph-wrap"><div class="phone"><div class="scr">
+          <div class="ph-top"><img class="ph-ic" src="/icon-192.png" alt=""><span>dichava</span></div>
+          <div class="ph-greet">Oi 💚<br><b>Como você está hoje?</b></div>
+          <div class="ph-tiles">
+            <div class="ph-tile" style="--c:#E53935">🆘<span>Crise</span></div>
+            <div class="ph-tile" style="--c:#4CAF5A">🌬️<span>Respirar</span></div>
+            <div class="ph-tile" style="--c:#7C3AED">✍️<span>Registrar</span></div>
+            <div class="ph-tile" style="--c:#F2B705">📊<span>Progresso</span></div>
+          </div>
+          <div class="ph-card">☎️ CVV 188 — sempre à mão</div>
+        </div></div></div>
         <span class="tag">Para o paciente</span>
         <h3>App de cuidado &amp; redução de danos</h3>
         <p class="d">Acolhimento sem julgamento, na palma da mão — e sempre gratuito.</p>
@@ -112,6 +148,16 @@ section{margin-top:44px}
         <span class="free">100% gratuito pro paciente</span>
       </div>
       <div class="side pro">
+        <div class="ph-wrap"><div class="phone"><div class="scr scr-dk">
+          <div class="ph-top dk"><img class="ph-ic" src="/clinica/icon-pro-192.png" alt=""><span>Painel da Clínica</span></div>
+          <div class="ph-kpis">
+            <div class="ph-kpi"><small>Hoje</small><b>4</b><i>consultas</i></div>
+            <div class="ph-kpi"><small>Mês</small><b>R$ 3.240</b><i>faturamento</i></div>
+          </div>
+          <div class="ph-row"><span class="ph-t">09:00</span> Ana Beatriz <span class="ph-chip">confirmado</span></div>
+          <div class="ph-row"><span class="ph-t">11:00</span> Carlos M. <span class="ph-chip g">retorno</span></div>
+          <div class="ph-nav"><span class="on">Início</span><span>Agenda</span><span>Pacientes</span><span>✉</span></div>
+        </div></div></div>
         <span class="tag">Para você</span>
         <h3>Painel da Clínica</h3>
         <p class="d">Tudo o que você precisa pra atender com organização, num lugar só.</p>
