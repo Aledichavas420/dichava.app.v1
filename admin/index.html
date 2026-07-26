@@ -286,11 +286,12 @@ function wlFirst(nome){ return String(nome||'').trim().split(/\s+/)[0]||''; }
 // Mensagem direta pronta pra quem já escolheu iniciar a plataforma
 function wlMsg(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
-  return oi+' Aqui é o Alexandre, do Dichava 💚 Que bom ter você com a gente pra começar na plataforma!\n\n'
-    +'Já dá pra explorar tudo funcionando, sem precisar criar conta (modo demonstração):\n\n'
+  return oi+' Aqui é o Alexandre, do Dichava 💚\n\n'
+    +'A partir de agora você já está quase dentro do projeto — mas antes de qualquer coisa, quero que você teste com calma e veja se faz sentido pra você.\n\n'
+    +'Dá pra explorar as duas plataformas funcionando, sem precisar criar conta (modo demonstração):\n\n'
     +'🩺 Painel do profissional: dichava.app/clinica/?demo=1\n'
     +'📱 App do paciente (o que você indica pros seus pacientes): dichava.app/?demo=1\n\n'
-    +'Entra, clica em tudo e sente se combina. Quando quiser começar de verdade, é só criar sua conta pelo botão lá dentro que a gente acerta os detalhes juntos. Qualquer dúvida, me chama por aqui. Sem pressa 🌱';
+    +'Entra, clica em tudo, sente o jeito. Se fizer sentido pra você, é só criar sua conta pelo botão lá dentro que a gente acerta os detalhes juntos. Sem pressa e sem compromisso — quero que você entre porque quis. Qualquer dúvida, é só me chamar por aqui 🌱';
 }
 function renderWaitlist(){
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
