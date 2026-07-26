@@ -105,7 +105,7 @@ function render(p){
   wrap.innerHTML=`
   <div class="hero" style="background:${capa}">
     <div class="logo"><svg class="lf" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>dichava<span>.app</span></div>
-    <div class="avw"><div class="av">${p.foto?`<img src="${p.foto}" alt="">`:ini(p.nome)}</div><div class="seal">${SEAL}</div></div>
+    <div class="avw"><div class="av">${p.foto?`<img src="${esc(p.foto)}" alt="">`:ini(p.nome)}</div><div class="seal">${SEAL}</div></div>
     <div class="hnome">${esc(p.nome)}</div>
     <div class="htipo">${esc(p.tipo_prof||'')}</div>
     ${p.reg?`<div class="hreg">${esc(p.reg)}</div>`:''}

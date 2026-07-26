@@ -21,9 +21,15 @@ const cors = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET") || "";
+
 Deno.serve(async (req) => {
   // responde o preflight CORS do navegador (senão o POST real é bloqueado)
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+  // Se WEBHOOK_SECRET estiver configurado, exige o header do Database Webhook.
+  // (Backward-compatible: sem o secret setado, nada muda.)
+  if (WEBHOOK_SECRET && (req.headers.get("x-webhook-secret") || "") !== WEBHOOK_SECRET)
+    return new Response("forbidden", { status: 403, headers: cors });
   try {
     const raw = await req.text().catch(() => "");
     console.log("push-msg: RAW body =", raw.slice(0, 500));

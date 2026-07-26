@@ -13,7 +13,12 @@ const APP_URL     = Deno.env.get("SITE_URL")    || "https://dichava.app";
 const esc = (s: unknown) =>
   String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
+const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET") || "";
+
 Deno.serve(async (req) => {
+  // Se WEBHOOK_SECRET estiver configurado, exige o header do Database Webhook.
+  if (WEBHOOK_SECRET && (req.headers.get("x-webhook-secret") || "") !== WEBHOOK_SECRET)
+    return new Response("forbidden", { status: 403 });
   try {
     const payload = await req.json().catch(() => ({} as any));
     // Database Webhook manda { type, table, record, old_record, schema }

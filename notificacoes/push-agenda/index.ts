@@ -32,8 +32,13 @@ async function pushTo(userIds: string[], notif: string) {
   ));
 }
 
+const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET") || "";
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+  // Se WEBHOOK_SECRET estiver configurado, exige o header do Database Webhook.
+  if (WEBHOOK_SECRET && (req.headers.get("x-webhook-secret") || "") !== WEBHOOK_SECRET)
+    return new Response("forbidden", { status: 403, headers: cors });
   try {
     const raw = await req.text().catch(() => "");
     let payload: any = {}; try { payload = JSON.parse(raw || "{}"); } catch (_) {}

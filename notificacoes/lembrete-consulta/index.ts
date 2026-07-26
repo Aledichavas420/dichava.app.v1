@@ -20,7 +20,12 @@ function amanhaISO(): string {
   return sp.toISOString().slice(0, 10);
 }
 
-Deno.serve(async () => {
+const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET") || "";
+
+Deno.serve(async (req) => {
+  // Se WEBHOOK_SECRET estiver configurado, exige o header (cron/pg_cron manda).
+  if (WEBHOOK_SECRET && (req.headers.get("x-webhook-secret") || "") !== WEBHOOK_SECRET)
+    return new Response("forbidden", { status: 403 });
   try {
     const alvo = amanhaISO();
     // consultas confirmadas, para amanhã, com paciente logado e ainda sem lembrete

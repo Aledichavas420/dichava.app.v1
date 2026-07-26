@@ -18,22 +18,23 @@ Deno.serve(async (req) => {
   try {
     const payload = await req.json().catch(() => ({} as any));
 
-    // A notificação pode trazer o pedido direto (charges[]) ou só um id.
-    let orderId: string | undefined = payload?.id || payload?.data?.id;
-    let reference: string | undefined = payload?.reference_id || payload?.data?.reference_id;
-    let charges: any[] | undefined = payload?.charges || payload?.data?.charges;
+    // A notificação SÓ nos dá o id do pedido; o resto (status + reference)
+    // é lido EXCLUSIVAMENTE da API do PagBank. Nunca confiamos no corpo:
+    // qualquer um poderia forjar charges[]=PAID + reference apontando p/ um user.
+    const orderId: string | undefined = payload?.id || payload?.data?.id;
+    if (!orderId) return new Response("ok"); // sem id não há o que confirmar
 
-    // Reconsulta o pedido pra CONFIRMAR (nunca confiar só no corpo)
-    if (orderId) {
-      const r = await fetch(`${PAGBANK_BASE}/orders/${orderId}`, {
-        headers: { "Authorization": `Bearer ${PAGBANK_TOKEN}`, "accept": "application/json" },
-      });
-      if (r.ok) {
-        const o = await r.json();
-        reference = o.reference_id || reference;
-        charges = o.charges || charges;
-      }
+    const r = await fetch(`${PAGBANK_BASE}/orders/${orderId}`, {
+      headers: { "Authorization": `Bearer ${PAGBANK_TOKEN}`, "accept": "application/json" },
+    });
+    if (!r.ok) {
+      // não conseguimos confirmar na fonte autoritativa → NÃO libera nada.
+      console.error("webhook: falha ao reconsultar pedido", orderId, r.status);
+      return new Response("ok");
     }
+    const o = await r.json();
+    const reference: string | undefined = o?.reference_id;
+    const charges: any[] | undefined = o?.charges;
 
     const paid = Array.isArray(charges) &&
       charges.some((c) => String(c?.status || "").toUpperCase() === "PAID");
