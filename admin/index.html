@@ -125,7 +125,17 @@ a{color:var(--ve)}
     <div class="sec">Visão geral</div>
     <div class="kpis" id="kpis"><div class="spin"></div></div>
 
+    <div class="sec">💰 Financeiro</div>
+    <div id="fin-resumo" class="kpis"><div class="spin"></div></div>
+
+    <div class="sec">📎 Comprovantes a conferir <span id="comp-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
+    <div class="plist" id="comp-list"><div class="empty" style="padding:16px">—</div></div>
+
+    <div class="sec">⏰ Assinaturas a vencer (próximos 7 dias)</div>
+    <div class="plist" id="vencer-list"><div class="empty" style="padding:16px">—</div></div>
+
     <div class="sec">Lista de espera <span id="wl-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
+    <div id="wl-funnel" class="kpis" style="margin-bottom:10px"></div>
     <div class="filters" id="wl-filters"></div>
     <div class="plist" id="wl-list"><div class="spin"></div></div>
 
@@ -157,6 +167,9 @@ const PLANOS=[
 ];
 function planoNome(k){ const p=PLANOS.find(x=>x.k===k); return p?p.nome:(k||''); }
 function planoPreco(k){ const p=PLANOS.find(x=>x.k===k); return p?p.preco:''; }
+const PLANO_MENSAL={essencial:79.90,profissional:179.90,clinica:299.90};
+const brl=v=>'R$ '+(Number(v)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+function diasAte(iso){ if(!iso)return null; const d=new Date(iso), h=new Date(); return Math.ceil((d-h)/864e5); }
 let PROFS=[], _filtro='todos';
 let _tT; function toast(m,err){const t=$('#toast');t.textContent=m;t.classList.toggle('err',!!err);t.classList.add('on');clearTimeout(_tT);_tT=setTimeout(()=>t.classList.remove('on'),2600);}
 function esc(s){return (s==null?'':''+s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -257,7 +270,7 @@ async function carregar(){
   try{
     const {data,error}=await SB.rpc('admin_profissionais');
     if(error) throw error;
-    PROFS=data||[]; renderProfs();
+    PROFS=data||[]; renderProfs(); renderFinanceiro(); renderComprovantes(); renderVencer();
   }catch(e){ $('#plist').innerHTML='<div class="empty">Não consegui carregar os profissionais.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small></div>'; }
   carregarWaitlist();
   carregarSuporte();
@@ -267,13 +280,29 @@ async function carregarWaitlist(){
   try{
     const {data,error}=await SB.rpc('admin_waitlist');
     if(error) throw error;
-    WL=data||[]; renderWlFiltros(); renderWaitlist();
+    WL=data||[]; renderWlFiltros(); renderWaitlist(); renderWlFunnel();
   }catch(e){
     $('#wl-list').innerHTML='<div class="empty">Não consegui carregar a lista de espera.<br><small style="color:var(--txs)">'+esc(e.message||'')+' — rodou o admin-waitlist-setup.sql?</small></div>';
     $('#wl-filters').innerHTML=''; $('#wl-count').textContent='';
   }
 }
 const WL_ST={pendente:{l:'Pendente',c:'a'},contato:{l:'Em contato',c:'b'},liberado:{l:'Liberado',c:'v'},recusado:{l:'Recusado',c:'e'}};
+// ===== FUNIL DA LISTA DE ESPERA =====
+function renderWlFunnel(){
+  const box=$('#wl-funnel'); if(!box)return;
+  const total=WL.length; if(!total){ box.innerHTML=''; return; }
+  const cont=k=>WL.filter(w=>(w.status||'pendente')===k).length;
+  const pend=cont('pendente'),ct=cont('contato'),lib=cont('liberado'),rec=cont('recusado');
+  const conv=total?Math.round((lib/total)*100):0;
+  const cards=[
+    {l:'Na lista (total)',v:total,d:'profissionais interessados',dot:'#4C8DF6',hl:true},
+    {l:'Pendentes',v:pend,d:'ainda não contatados',dot:'#F5A623'},
+    {l:'Em contato',v:ct,d:'conversa iniciada',dot:'#8B6FE0'},
+    {l:'Liberados',v:lib,d:conv+'% de conversão',dot:'#2FA35F',hl:true},
+    {l:'Recusados',v:rec,d:'não seguiram',dot:'#E5484D'},
+  ];
+  box.innerHTML=cards.map(c=>`<div class="kpi ${c.hl?'hl':''}"><div class="kl"><span class="dot" style="background:${c.dot}"></span>${c.l}</div><div class="kv">${c.v}</div><div class="kd">${c.d}</div></div>`).join('');
+}
 function renderWlFiltros(){
   const cont=k=>WL.filter(w=>(w.status||'pendente')===k).length;
   const fs=[['pendente','Pendentes ('+cont('pendente')+')'],['contato','Em contato ('+cont('contato')+')'],['liberado','Liberados ('+cont('liberado')+')'],['recusado','Recusados ('+cont('recusado')+')'],['todos','Todos ('+WL.length+')']];
@@ -334,7 +363,7 @@ async function wlStatus(id,status){
     const {error}=await SB.rpc('admin_waitlist_status',{p_id:id,p_status:status});
     if(error) throw error;
     const w=WL.find(x=>x.id===id); if(w)w.status=status;
-    renderWlFiltros(); renderWaitlist(); toast('Atualizado');
+    renderWlFiltros(); renderWaitlist(); renderWlFunnel(); toast('Atualizado');
   }catch(e){ toast(e.message||'Erro ao atualizar',1); }
 }
 // Ao clicar em WhatsApp/E-mail, marca "em contato" (só se ainda estava pendente),
@@ -428,6 +457,55 @@ function statusInfo(p){
   const expirado = p.ativo && p.acesso_ate && new Date(p.acesso_ate).getTime()<=now;
   const ativo = p.ativo && !expirado;
   return {ativo,expirado};
+}
+// ===== FINANCEIRO (estimado a partir dos planos ativos) =====
+function renderFinanceiro(){
+  const box=$('#fin-resumo'); if(!box)return;
+  const ativos=PROFS.filter(p=>statusInfo(p).ativo);
+  let mrr=0; const porPlano={essencial:0,profissional:0,clinica:0};
+  ativos.forEach(p=>{ const v=PLANO_MENSAL[p.plano]||0; mrr+=v; if(p.plano in porPlano)porPlano[p.plano]++; });
+  const arr=mrr*12;
+  const cards=[
+    {l:'Receita mensal (MRR)',v:brl(mrr),d:ativos.length+' assinatura(s) ativa(s)',dot:'#2FA35F',hl:true},
+    {l:'Projeção anual (ARR)',v:brl(arr),d:'se todos mantiverem',dot:'#41c47a'},
+    {l:'Por plano',v:porPlano.essencial+' · '+porPlano.profissional+' · '+porPlano.clinica,d:'Essencial · Profissional · Clínica',dot:'#8B6FE0'},
+  ];
+  box.innerHTML=cards.map(c=>`<div class="kpi ${c.hl?'hl':''}"><div class="kl"><span class="dot" style="background:${c.dot}"></span>${c.l}</div><div class="kv">${c.v}</div><div class="kd">${c.d}</div></div>`).join('');
+}
+// ===== COMPROVANTES A CONFERIR (pagou/enviou, ainda não liberado) =====
+function renderComprovantes(){
+  const box=$('#comp-list'); if(!box)return;
+  const list=PROFS.filter(p=>p.tem_comprovante && !statusInfo(p).ativo);
+  const c=$('#comp-count'); if(c)c.textContent=list.length?('· '+list.length+' aguardando'):'';
+  if(!list.length){ box.innerHTML='<div class="empty" style="padding:16px">Nenhum comprovante aguardando conferência 👍</div>'; return; }
+  box.innerHTML=list.map(p=>{
+    const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
+    return `<div class="pcard pend"><div class="phead"><div class="pav">${initials(p.nome)}</div>
+      <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')}</div>
+      <div class="pmeta">${esc(p.email||'')}${p.plano?' · '+esc(planoNome(p.plano)):''}</div></div></div>
+      <div class="pacts">
+        <button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>
+        <button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Conferir e liberar</button>${wa}
+      </div></div>`;
+  }).join('');
+}
+// ===== ASSINATURAS A VENCER (próximos 7 dias) =====
+function renderVencer(){
+  const box=$('#vencer-list'); if(!box)return;
+  const list=PROFS.filter(p=>{const {ativo}=statusInfo(p); const d=diasAte(p.acesso_ate); return ativo && d!==null && d>=0 && d<=7;})
+    .sort((a,b)=>diasAte(a.acesso_ate)-diasAte(b.acesso_ate));
+  if(!list.length){ box.innerHTML='<div class="empty" style="padding:16px">Nenhuma assinatura vencendo nos próximos 7 dias 👍</div>'; return; }
+  box.innerHTML=list.map(p=>{
+    const d=diasAte(p.acesso_ate);
+    const quando=d===0?'vence hoje':(d===1?'vence amanhã':'vence em '+d+' dias');
+    const msg=encodeURIComponent('Oi'+(p.nome?(', '+String(p.nome).trim().split(/\s+/)[0]):'')+'! Passando pra avisar que sua assinatura do painel dichava ('+planoNome(p.plano)+') '+quando+'. Quer renovar? Te mando o link 💚');
+    const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'?text='+msg+'" target="_blank" rel="noopener">💬 Cobrar renovação</a>'):'';
+    return `<div class="pcard"><div class="phead"><div class="pav">${initials(p.nome)}</div>
+      <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')}</div>
+      <div class="pmeta">${esc(p.email||'')}${p.plano?' · '+esc(planoNome(p.plano)):''}</div>
+      <div class="chips"><span class="chip ${d<=1?'e':'a'}">${quando}</span></div></div></div>
+      <div class="pacts"><button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar</button>${wa}</div></div>`;
+  }).join('');
 }
 function renderProfs(){
   let list=PROFS.slice();
