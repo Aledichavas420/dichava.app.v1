@@ -651,6 +651,20 @@ function ageNo(){ document.querySelectorAll('#age-gate button').forEach(function
   </div>
 </section>
 
+<div class="nlwrap" style="max-width:520px;margin:0 auto 8px;padding:26px 22px;text-align:center">
+  <div style="font-size:16px;font-weight:800;color:#cfe0d2;margin-bottom:6px">Fique por dentro 💌</div>
+  <div style="font-size:13.5px;color:#8fa393;line-height:1.6;margin-bottom:16px">Novidades, conteúdo de redução de danos e melhorias do app — sem spam, no seu tempo.</div>
+  <form id="nlform" onsubmit="return nlSub(event)" style="display:flex;flex-direction:column;gap:10px;align-items:center">
+    <input id="nl-email" type="email" required placeholder="seu@email.com" autocomplete="email" inputmode="email" style="width:100%;max-width:340px;padding:13px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0d120d;color:#eaf3ee;font-size:15px">
+    <label style="display:flex;gap:8px;align-items:flex-start;max-width:340px;font-size:12px;color:#8fa393;text-align:left;line-height:1.5;cursor:pointer">
+      <input id="nl-consent" type="checkbox" required style="margin-top:2px;flex:none">
+      <span>Aceito receber e-mails do dichava.app e concordo com a <a href="privacidade.html">Política de Privacidade</a>. Posso descadastrar quando quiser.</span>
+    </label>
+    <button id="nl-btn" type="submit" class="cta-big" style="max-width:340px;width:100%">Quero receber</button>
+    <div id="nl-msg" style="font-size:13px;color:#5BC06F;min-height:18px"></div>
+  </form>
+</div>
+
 <footer>
   <div class="disp">dichava.app</div>
   cuidado, informação e redução de danos — feito com <svg class="ic" viewBox="0 0 24 24"><path d="M12 20.2S3.5 14.6 3.5 8.9A4.4 4.4 0 0 1 12 6.7 4.4 4.4 0 0 1 20.5 8.9C20.5 14.6 12 20.2 12 20.2Z" fill="#4DBE63"/><path d="M7.2 8.2c-.9.3-1.5 1-1.7 1.9" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".7"/></svg> no Brasil<br>
@@ -690,6 +704,31 @@ function tab(t){
   document.getElementById('st-ios').classList.toggle('on',t==='ios');
   document.getElementById('st-and').classList.toggle('on',t==='and');
   document.querySelectorAll('.steps.on .rv').forEach(function(el){el.classList.add('in');});
+}
+</script>
+<!-- Newsletter (Supabase) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var _NLSB=null;
+try{ _NLSB=supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
+async function nlSub(ev){
+  ev.preventDefault();
+  var email=(document.getElementById('nl-email').value||'').trim();
+  var consent=document.getElementById('nl-consent').checked;
+  var msg=document.getElementById('nl-msg'), btn=document.getElementById('nl-btn');
+  if(!email||!consent){msg.style.color='#E5847F';msg.textContent='Preencha o e-mail e marque o aceite.';return false;}
+  btn.disabled=true; var old=btn.textContent; btn.textContent='Enviando…';
+  try{
+    if(!_NLSB) throw new Error('sem conexão');
+    var r=await _NLSB.rpc('newsletter_add',{p_email:email,p_consent:true,p_origem:'landing'});
+    if(r.error) throw r.error;
+    msg.style.color='#5BC06F'; msg.textContent='Pronto! Você está na lista 💚';
+    document.getElementById('nlform').reset();
+  }catch(e){
+    msg.style.color='#E5847F'; msg.textContent='Não consegui agora. Tente de novo em instantes.';
+  }
+  btn.disabled=false; btn.textContent=old;
+  return false;
 }
 </script>
 <!-- Cloudflare Web Analytics (sem cookies) -->
