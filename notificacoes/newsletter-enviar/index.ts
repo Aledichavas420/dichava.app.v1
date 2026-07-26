@@ -34,24 +34,28 @@ const rodape = (token: string) =>
      <a href="${APP_URL}/newsletter-sair.html?t=${token}" style="color:#9aa89c">Descadastrar</a>
    </div>`;
 
+const ANON  = Deno.env.get("SUPABASE_ANON_KEY") || "";
 const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com")
   .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 
-async function autorizado(req: Request): Promise<boolean> {
-  if (SECRET && (req.headers.get("x-webhook-secret") || "") === SECRET) return true;
-  const auth = req.headers.get("Authorization") || "";
-  const token = auth.replace(/^Bearer\s+/i, "");
-  if (!token) return false;
+async function ehAdmin(req: Request): Promise<{ ok: boolean; motivo?: string }> {
+  if (SECRET && (req.headers.get("x-webhook-secret") || "") === SECRET) return { ok: true };
+  const authHeader = req.headers.get("Authorization") || "";
+  if (!authHeader) return { ok: false, motivo: "sem Authorization header" };
   try {
-    const { data } = await sb.auth.getUser(token);
-    const email = (data?.user?.email || "").toLowerCase();
-    return ADMINS.includes(email);
-  } catch (_) { return false; }
+    const authClient = createClient(SB_URL, ANON, { global: { headers: { Authorization: authHeader } } });
+    const { data, error } = await authClient.auth.getUser();
+    if (error || !data?.user) return { ok: false, motivo: "token inválido/expirado" };
+    const email = (data.user.email || "").toLowerCase();
+    if (!ADMINS.includes(email)) return { ok: false, motivo: "não é admin: " + email + " (ADMIN_EMAIL=" + ADMINS.join(",") + ")" };
+    return { ok: true };
+  } catch (e) { return { ok: false, motivo: "erro auth: " + String((e as any)?.message || e) }; }
 }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
-  if (!(await autorizado(req))) return J({ erro: "forbidden" }, 403);
+  const auth = await ehAdmin(req);
+  if (!auth.ok) return J({ erro: "forbidden", motivo: auth.motivo }, 403);
   try {
     if (!RESEND) return J({ erro: "sem RESEND_API_KEY" }, 500);
     const body = await req.json().catch(() => ({} as any));

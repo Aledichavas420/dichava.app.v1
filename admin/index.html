@@ -317,7 +317,7 @@ async function enviarComunicado(teste){
   st.style.color='var(--txm)'; st.textContent='Enviando…';
   try{
     const {data,error}=await SB.functions.invoke('newsletter-enviar',{body:{subject,html,teste:!!teste}});
-    if(error){ let det=''; try{const b=await error.context.json(); det=b&&(b.erro||b.error);}catch(_){}; throw new Error(det||error.message||'erro'); }
+    if(error){ let det=''; try{const b=await error.context.json(); det=b&&((b.erro||b.error||'')+(b.motivo?(' — '+b.motivo):''));}catch(_){}; throw new Error(det||error.message||'erro'); }
     if(data&&data.erro){ throw new Error(data.erro); }
     st.style.color='#2FA35F';
     st.textContent=teste?'✓ Teste enviado pro seu e-mail.':('✓ Enviado! '+((data&&data.enviados)??'?')+' entregues'+(data&&data.falhas?(' · '+data.falhas+' falhas'):'')+'.');
