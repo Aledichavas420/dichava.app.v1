@@ -281,12 +281,24 @@ function renderWlFiltros(){
   $('#wl-count').textContent=WL.length?('· '+WL.length+' cadastro(s)'):'';
 }
 function setWlFiltro(f){ _wlFiltro=f; renderWlFiltros(); renderWaitlist(); }
+// Primeiro nome (pra deixar a mensagem pessoal)
+function wlFirst(nome){ return String(nome||'').trim().split(/\s+/)[0]||''; }
+// Mensagem direta pronta pra quem já escolheu iniciar a plataforma
+function wlMsg(w){
+  const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
+  return oi+' Aqui é o Alexandre, do Dichava 💚 Que bom ter você com a gente pra começar na plataforma!\n\n'
+    +'Já dá pra ver o painel funcionando por dentro, sem precisar criar conta (modo demonstração):\n'
+    +'dichava.app/clinica/?demo=1\n\n'
+    +'Quando quiser começar de verdade, é só criar sua conta pelo botão lá dentro que a gente acerta os detalhes juntos. Qualquer dúvida, me chama por aqui. Sem pressa 🌱';
+}
 function renderWaitlist(){
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
   if(!list.length){ $('#wl-list').innerHTML='<div class="empty">Nenhum cadastro '+(_wlFiltro==='todos'?'':'“'+(WL_ST[_wlFiltro]?WL_ST[_wlFiltro].l.toLowerCase():_wlFiltro)+'”')+' por aqui.</div>'; return; }
   $('#wl-list').innerHTML=list.map(w=>{
     const st=WL_ST[w.status||'pendente']||WL_ST.pendente;
-    const wa=w.whatsapp?('<a class="btn wa sm" href="https://wa.me/55'+String(w.whatsapp).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
+    const msg=encodeURIComponent(wlMsg(w));
+    const wa=w.whatsapp?('<a class="btn wa sm" href="https://wa.me/55'+String(w.whatsapp).replace(/\D/g,'')+'?text='+msg+'" target="_blank" rel="noopener" onclick="wlTocado(\''+w.id+'\')">💬 WhatsApp</a>'):'';
+    const mail=w.email?('<a class="btn ghost sm" href="mailto:'+esc(w.email)+'?subject='+encodeURIComponent('Seu acesso ao Dichava 💚')+'&body='+msg+'" onclick="wlTocado(\''+w.id+'\')">✉️ E-mail</a>'):'';
     const chips=[`<span class="chip ${st.c}">${st.l}</span>`];
     if(w.plano)chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
     if(w.cidade)chips.push('<span class="chip">'+esc(w.cidade)+'</span>');
@@ -308,7 +320,7 @@ function renderWaitlist(){
       </div>
       ${w.mensagem?`<div style="font-size:13.5px;color:var(--txs);background:#0f1a14;border-radius:10px;padding:9px 12px;margin:8px 0">“${esc(w.mensagem)}”</div>`:''}
       <div class="chips" style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0">${chips.join('')}</div>
-      <div class="acts" style="display:flex;flex-wrap:wrap;gap:8px">${wa}${acts.join('')}</div>
+      <div class="acts" style="display:flex;flex-wrap:wrap;gap:8px">${wa}${mail}${acts.join('')}</div>
     </div>`;
   }).join('');
 }
@@ -319,6 +331,14 @@ async function wlStatus(id,status){
     const w=WL.find(x=>x.id===id); if(w)w.status=status;
     renderWlFiltros(); renderWaitlist(); toast('Atualizado');
   }catch(e){ toast(e.message||'Erro ao atualizar',1); }
+}
+// Ao clicar em WhatsApp/E-mail, marca "em contato" (só se ainda estava pendente),
+// pra você acompanhar quem já foi abordado dos 41 — sem re-renderizar na cara.
+function wlTocado(id){
+  const w=WL.find(x=>x.id===id);
+  if(!w || (w.status && w.status!=='pendente')) return;
+  w.status='contato';
+  SB.rpc('admin_waitlist_status',{p_id:id,p_status:'contato'}).catch(()=>{});
 }
 
 /* ===== SUPORTE (admin) ===== */
