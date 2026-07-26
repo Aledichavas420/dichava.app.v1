@@ -1,0 +1,97 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>Contrato terapêutico — dichava.app</title>
+<meta name=robots content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ve:#2E7D32;--v:#4CAF5A;--txs:#5E7062;--line:#E2ECE3}
+*{box-sizing:border-box}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#1B2A1C;line-height:1.6;background:linear-gradient(180deg,#F5FAF4,#EEF6EE);padding:0}
+.wrap{max-width:720px;margin:0 auto;padding:26px 20px 70px}
+.brand{font-weight:800;font-size:18px;color:#1B2A1C}.brand span{color:#2E7D32}
+.doc{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(30,60,35,.07);padding:30px 26px;margin-top:16px}
+h1{font-size:23px;margin:0 0 4px;letter-spacing:-.3px}
+.by{color:var(--txs);font-size:14px;margin:0 0 18px}
+.texto{white-space:pre-wrap;font-size:15px;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
+.aceite-box{margin-top:22px;background:#F0F7F1;border:1px solid #CDE7D2;border-radius:14px;padding:18px}
+.aceite-box label{display:block;font-weight:700;font-size:13.5px;margin-bottom:6px}
+input[type=text]{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit;background:#fff}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;cursor:pointer}
+.chk input{margin-top:3px;flex:none;width:18px;height:18px}
+.btn{width:100%;margin-top:16px;background:#2fbd6a;color:#fff;border:none;border-radius:26px;padding:15px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px rgba(47,189,106,.28)}
+.btn:disabled{opacity:.55;box-shadow:none;cursor:default}
+.btn.ghost{background:#fff;color:#2E7D32;border:1.5px solid var(--line);box-shadow:none}
+.ok{margin-top:16px;background:#E8F5E9;border:1px solid #BFE3C4;border-radius:14px;padding:16px 18px;font-size:14.5px}
+.ok b{color:#216b2c}
+.selo{display:flex;align-items:center;gap:8px;margin-top:18px;padding-top:14px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--txs)}
+.err{color:#C62828;font-size:13.5px;margin-top:10px;display:none}
+.foot{text-align:center;color:var(--txs);font-size:12px;margin-top:26px}
+.spin{width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--v);border-radius:50%;animation:sp 1s linear infinite;margin:60px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media print{
+  body{background:#fff}.wrap{padding:0}.aceite-box,.btn,.foot,.brand{display:none!important}
+  .doc{box-shadow:none;border:none;border-radius:0;padding:0}
+}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="brand">dichava<span>.app</span></div>
+  <div id="app"><div class="spin"></div></div>
+  <div class="foot">Documento gerado por dichava.app · aceite eletrônico</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SB=null; try{ SB=supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
+var ID=new URLSearchParams(location.search).get('id');
+function esc(s){return (s==null?'':''+s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function fmt(d){ if(!d)return''; try{return new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return d;} }
+var app=document.getElementById('app');
+
+function render(c){
+  if(!c){ app.innerHTML='<div class="doc"><h1>Contrato não encontrado</h1><p class="by">O link pode estar incorreto ou o contrato foi removido. Peça um novo link ao profissional.</p></div>'; return; }
+  var aceito=c.status==='aceito';
+  var doc='<div class="doc">'
+    +'<h1>'+esc(c.titulo)+'</h1>'
+    +'<p class="by">Profissional: <b>'+esc(c.prof_nome)+'</b>'+(c.paciente_nome?(' · Paciente: <b>'+esc(c.paciente_nome)+'</b>'):'')+'</p>'
+    +'<div class="texto">'+esc(c.texto)+'</div>';
+  if(aceito){
+    doc+='<div class="ok">✓ <b>Aceito eletronicamente</b> por <b>'+esc(c.aceite_nome)+'</b> em '+fmt(c.aceite_em)+'.</div>'
+      +'<div class="selo">🔒 Aceite eletrônico registrado em dichava.app — este documento comprova a concordância com os termos acima.</div>'
+      +'</div>'
+      +'<button class="btn ghost" onclick="window.print()">🖨️ Imprimir / salvar PDF</button>';
+    app.innerHTML=doc;
+  }else{
+    doc+='<div class="aceite-box">'
+      +'<label>Seu nome completo</label>'
+      +'<input type="text" id="nome" maxlength="90" placeholder="Como no seu documento" autocomplete="name">'
+      +'<label class="chk"><input type="checkbox" id="chk"><span>Li e aceito os termos deste contrato terapêutico.</span></label>'
+      +'<button class="btn" id="btn" onclick="aceitar()">Aceitar contrato</button>'
+      +'<div class="err" id="err"></div>'
+      +'</div></div>';
+    app.innerHTML=doc;
+  }
+}
+async function aceitar(){
+  var nome=(document.getElementById('nome').value||'').trim();
+  var chk=document.getElementById('chk').checked;
+  var err=document.getElementById('err'), btn=document.getElementById('btn');
+  err.style.display='none';
+  if(nome.length<3){ err.textContent='Digite seu nome completo.'; err.style.display='block'; return; }
+  if(!chk){ err.textContent='Marque "Li e aceito" para continuar.'; err.style.display='block'; return; }
+  if(!SB){ err.textContent='Sem conexão. Tente novamente.'; err.style.display='block'; return; }
+  btn.disabled=true; btn.textContent='Registrando…';
+  try{
+    var r=await SB.rpc('contrato_aceitar',{p_id:ID,p_nome:nome});
+    if(r.error) throw new Error(r.error.message);
+    render(r.data);
+    window.scrollTo(0,0);
+  }catch(e){ btn.disabled=false; btn.textContent='Aceitar contrato'; err.textContent='Não consegui registrar: '+((e&&e.message)||'tente de novo'); err.style.display='block'; }
+}
+(async function(){
+  if(!ID){ render(null); return; }
+  if(!SB){ app.innerHTML='<div class="doc"><h1>Sem conexão</h1></div>'; return; }
+  try{ var r=await SB.rpc('contrato_ver',{p_id:ID}); if(r.error)throw r.error; render(r.data); }
+  catch(e){ app.innerHTML='<div class="doc"><h1>Erro ao carregar</h1><p class="by">'+esc((e&&e.message)||'')+'</p></div>'; }
+})();
+</script>
+</body></html>

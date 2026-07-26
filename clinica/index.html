@@ -562,6 +562,7 @@ tbody tr:hover{background:var(--cin)}
     <a class="nav-item" data-nav="caixa"><span class="ic">$</span> Caixa</a>
     <a class="nav-item" data-nav="projecao"><span class="ic">◎</span> Projeção</a>
     <a class="nav-item" data-nav="documentos"><span class="ic">▦</span> Documentos</a>
+    <a class="nav-item" data-nav="contratos"><span class="ic">✍</span> Contratos</a>
     <a class="nav-item" data-nav="mensagens"><span class="ic">✉</span> Mensagens <span class="badge" id="badge-msgs"></span></a>
     <a class="nav-item" data-nav="perfil"><span class="ic">☺</span> Meu perfil</a>
     <a class="nav-item" data-nav="equipe"><span class="ic">⧉</span> Equipe</a>
@@ -708,7 +709,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],contratos:['Contratos','Contrato terapêutico e aceite do paciente'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
 /* ===== ÍCONES SVG DO PAINEL (estilo gradiente do app) ===== */
 const CIC={
   dash:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-dash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="8" height="8" rx="2.2" fill="url(#cic-dash)"/><rect x="13" y="3" width="8" height="5" rx="2.2" fill="url(#cic-dash)" opacity=".65"/><rect x="13" y="10" width="8" height="11" rx="2.2" fill="url(#cic-dash)"/><rect x="3" y="13" width="8" height="8" rx="2.2" fill="url(#cic-dash)" opacity=".65"/></svg>`,
@@ -730,7 +731,7 @@ function pintarIconesClinica(){
 }
 // menu "Mais" (mobile) — funções que não cabem na barra inferior
 function abrirMaisMenu(){
-  const items=[['prontuarios','Prontuários'],['documentos','Documentos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  const items=[['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
   const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
@@ -903,6 +904,7 @@ function render(){
   else if(route==='caixa') v.innerHTML=viewCaixa();
   else if(route==='projecao') { v.innerHTML=viewProjecao(); }
   else if(route==='documentos') v.innerHTML=viewDocumentos();
+  else if(route==='contratos') { v.innerHTML=viewContratos(); carregarContratos(); }
   else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
   else if(route==='equipe') v.innerHTML=viewEquipe();
@@ -2261,6 +2263,92 @@ function calcProjecao(){
     </div>
   </div>
   <p style="font-size:12px;color:var(--txs);max-width:620px;margin-top:12px">Estimativa de planejamento — considera 4,33 semanas/mês e não desconta impostos, faltas ou despesas. Use como norte, não como promessa.</p>`;
+}
+/* =============== CONTRATOS =============== */
+let CONTRATOS=[];
+function fmtDT(d){ if(!d)return''; try{return new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return d;} }
+const CONTR_TPL={
+  generico:`CONTRATO TERAPÊUTICO\n\n1. Do atendimento\nAs sessões terão duração de 50 minutos, com frequência combinada entre as partes.\n\n2. Sigilo\nTudo o que for tratado é protegido por sigilo profissional, conforme o código de ética da categoria e a LGPD, salvo as exceções previstas em lei (risco à vida do paciente ou de terceiros).\n\n3. Valor e pagamento\nO valor da sessão e a forma de pagamento são combinados previamente.\n\n4. Faltas e cancelamentos\nCancelamentos devem ser avisados com no mínimo 24h de antecedência. Faltas sem aviso poderão ser cobradas.\n\n5. Duração do processo\nNão há prazo fixo; o processo é reavaliado periodicamente entre as partes.\n\n6. Compromisso\nO paciente se compromete a comparecer e participar ativamente; o profissional se compromete com o cuidado técnico e ético.`,
+  tcc:`CONTRATO TERAPÊUTICO — ABORDAGEM COGNITIVO-COMPORTAMENTAL (TCC)\n\n1. Enquadre\nSessões de 50 minutos, em geral semanais. A TCC é um trabalho ativo e colaborativo, que pode incluir tarefas entre as sessões.\n\n2. Objetivos\nOs objetivos são definidos em conjunto e revisados ao longo do processo.\n\n3. Sigilo\nGarantido conforme o código de ética e a LGPD, salvo risco à vida do paciente ou de terceiros.\n\n4. Tarefas entre sessões\nParte do progresso depende do engajamento com as práticas combinadas fora da sessão.\n\n5. Valor, faltas e cancelamentos\nValor combinado previamente. Cancelar com 24h de antecedência; faltas sem aviso podem ser cobradas.\n\n6. Compromisso mútuo\nColaboração ativa do paciente e conduta técnica e ética do profissional.`,
+  psicanalise:`CONTRATO TERAPÊUTICO — ABORDAGEM PSICANALÍTICA\n\n1. Enquadre\nAs sessões terão dia, horário e frequência combinados entre as partes. A constância do enquadre faz parte do trabalho.\n\n2. Associação livre e sigilo\nO paciente é convidado a falar livremente. Tudo é protegido por sigilo, conforme o código de ética e a LGPD, salvo risco à vida.\n\n3. Sessões reservadas\nPor se tratar de horário reservado, sessões não canceladas com a antecedência combinada poderão ser cobradas.\n\n4. Valor e pagamento\nCombinados previamente e reajustados conforme acordo.\n\n5. Duração\nO processo não tem prazo determinado e é conduzido conforme a demanda do paciente.\n\n6. Compromisso\nComparecimento regular do paciente e escuta ética e qualificada do profissional.`
+};
+function viewContratos(){
+  return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;color:var(--txs);font-size:13.5px">Crie o contrato, copie o link e envie ao paciente. Ele lê, assina o aceite e vira um documento validado. ✍️</div><button class="btn" onclick="formContrato()">＋ Novo contrato</button></div>
+  <div id="contr-list"><div class="card empty">Carregando…</div></div>`;
+}
+async function carregarContratos(){
+  const box=$('#contr-list');
+  if(!_SB||!AUTH){ if(box)box.innerHTML='<div class="card empty">Sem conexão.</div>'; return; }
+  try{
+    const {data,error}=await _SB.from('contratos').select('*').eq('prof_id',AUTH.id).order('criado_em',{ascending:false});
+    if(error) throw error;
+    CONTRATOS=data||[]; renderContratos();
+  }catch(e){ if(box)box.innerHTML='<div class="card empty">Não consegui carregar os contratos.<br><small style="color:var(--txs)">'+esc(e.message||'')+' — rodou o contrato-setup.sql?</small></div>'; }
+}
+function renderContratos(){
+  const box=$('#contr-list'); if(!box)return;
+  if(!CONTRATOS.length){ box.innerHTML='<div class="card empty"><div class="big">✍</div><b>Nenhum contrato ainda</b>Crie o primeiro e envie o link pro paciente aceitar.</div>'; return; }
+  box.innerHTML=CONTRATOS.map(c=>{
+    const aceito=c.status==='aceito';
+    const chip=aceito?`<span class="chip v">✓ Aceito</span>`:`<span class="chip a">Aguardando aceite</span>`;
+    return `<div class="card" style="padding:16px 18px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:15px">${esc(c.titulo)}</b>${chip}</div>
+      <div style="font-size:13px;color:var(--txs);margin:4px 0 12px">${c.paciente_nome?esc(c.paciente_nome)+' · ':''}${aceito?('aceito por '+esc(c.aceite_nome)+' em '+fmtDT(c.aceite_em)):('criado em '+fmtDT(c.criado_em))}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm" onclick="copiarLinkContrato('${c.id}')">🔗 Copiar link</button>
+        <button class="btn ghost sm" onclick="verContrato('${c.id}')">Ver / imprimir</button>
+        ${aceito?'':`<button class="btn ghost sm" onclick="formContrato('${c.id}')">Editar</button>`}
+        <button class="btn danger ghost sm" onclick="delContrato('${c.id}')">Excluir</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function formContrato(id){
+  const c=id?CONTRATOS.find(x=>x.id===id):{titulo:'Contrato terapêutico',texto:'',paciente_nome:''};
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${id?'Editar':'Novo'} contrato</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="field"><label>Título</label><input id="ct-tit" value="${esc(c.titulo||'Contrato terapêutico')}"></div>
+        <div class="field"><label>Paciente (opcional)</label><input id="ct-pac" value="${esc(c.paciente_nome||'')}" placeholder="Nome do paciente"></div>
+      </div>
+      ${id?'':`<div class="field"><label>Modelo por abordagem</label><select id="ct-tpl" onchange="aplicarTpl()"><option value="">— escolher um modelo pra começar —</option><option value="generico">Genérico</option><option value="tcc">TCC (cognitivo-comportamental)</option><option value="psicanalise">Psicanálise</option></select></div>`}
+      <div class="field"><label>Texto do contrato</label><textarea id="ct-txt" style="min-height:280px" placeholder="Escreva ou escolha um modelo acima…">${esc(c.texto||'')}</textarea></div>
+      <p style="font-size:12px;color:var(--txs);background:var(--cin);border-radius:10px;padding:10px 12px">Ajuste o texto como quiser. Depois de salvar, copie o link e envie ao paciente pra ele dar o aceite.</p>
+    </div>
+    <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delContrato('${id}')">Excluir</button>`:''}
+      <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn" onclick="salvarContrato('${id||''}')">Salvar</button></div>
+  </div>`);
+}
+function aplicarTpl(){ const s=$('#ct-tpl'), t=$('#ct-txt'); if(s&&t&&CONTR_TPL[s.value]){ if(!t.value.trim()||confirm('Substituir o texto atual pelo modelo?')) t.value=CONTR_TPL[s.value]; } }
+async function salvarContrato(id){
+  const tit=($('#ct-tit').value||'').trim()||'Contrato terapêutico';
+  const pac=($('#ct-pac').value||'').trim();
+  const txt=($('#ct-txt').value||'').trim();
+  if(txt.length<10){ toast('Escreva o texto do contrato',1); return; }
+  if(!_SB||!AUTH){ toast('Sem conexão',1); return; }
+  try{
+    if(id){ const {error}=await _SB.from('contratos').update({titulo:tit,paciente_nome:pac,texto:txt}).eq('id',id); if(error)throw error; }
+    else { const {error}=await _SB.from('contratos').insert({prof_id:AUTH.id,titulo:tit,paciente_nome:pac,texto:txt}); if(error)throw error; }
+    closeModal(); toast('✓ Contrato salvo'); carregarContratos();
+  }catch(e){ toast('Erro ao salvar: '+((e&&e.message)||''),5000); }
+}
+function copiarLinkContrato(id){ const url='https://dichava.app/contrato/?id='+id; try{navigator.clipboard.writeText(url);toast('🔗 Link copiado — envie ao paciente');}catch(e){toast(url);} }
+function verContrato(id){
+  const c=CONTRATOS.find(x=>x.id===id); if(!c)return;
+  const aceito=c.status==='aceito';
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${esc(c.titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--txs);margin-bottom:10px">${aceito?('✓ Aceito por <b>'+esc(c.aceite_nome)+'</b> em '+fmtDT(c.aceite_em)):'Aguardando aceite do paciente'}</div>
+      <div style="white-space:pre-wrap;font-size:14px;line-height:1.7;border:1px solid var(--line);border-radius:12px;padding:16px;max-height:52vh;overflow:auto">${esc(c.texto)}</div>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="copiarLinkContrato('${c.id}')">🔗 Copiar link</button><button class="btn" onclick="window.open('/contrato/?id=${c.id}','_blank')">Abrir página / imprimir</button></div>
+  </div>`);
+}
+async function delContrato(id){
+  if(!confirm('Excluir este contrato?'))return;
+  if(!_SB)return;
+  try{ const {error}=await _SB.from('contratos').delete().eq('id',id); if(error)throw error; closeModal(); toast('Contrato excluído'); carregarContratos(); }catch(e){ toast('Erro ao excluir',3000); }
 }
 
 /* -- Financeiro manual -- */
