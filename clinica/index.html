@@ -284,6 +284,11 @@ tbody tr:hover{background:var(--cin)}
 #demo-banner button{background:#fff;color:#5a3ec0;border:none;font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;flex:none}
 #demo-banner button:hover{opacity:.92}
 body.has-demo-banner{padding-bottom:64px}
+.pw-req{margin-top:9px;display:flex;flex-direction:column;gap:5px}
+.pw-ri{font-size:12.5px;color:#8aa08f;display:flex;align-items:center;gap:7px;transition:.15s}
+.pw-ri .pw-rk{font-size:13px;width:15px;text-align:center}
+.pw-ri.ok{color:#2f9e5f}
+.pw-ri.ok .pw-rk{color:#2f9e5f}
 /* no mobile o banner fica ACIMA da barra de navegação inferior */
 @media (max-width:860px){
   #demo-banner{bottom:calc(58px + var(--sb));padding:9px 14px}
@@ -504,7 +509,14 @@ body.has-demo-banner{padding-bottom:64px}
       <div class="field"><label>Registro profissional</label><input id="s-reg" type="text" autocomplete="off" placeholder="ex: CRP 06/1234, CRM, CRESS…"></div>
       <div class="field"><label>Plano desejado</label><select id="s-plano"></select></div>
       <div class="field"><label>E-mail</label><input id="s-email" type="email" autocomplete="off" placeholder="voce@email.com" onfocus="this.setAttribute('autocomplete','email')"></div>
-      <div class="field"><label>Senha</label><div class="pw-wrap"><input id="s-pw" type="text" autocomplete="off" placeholder="Crie uma senha (8+ caracteres)" style="-webkit-text-security:disc" onfocus="pwFocus(this,'new-password')"><button type="button" class="pw-eye" aria-label="Mostrar senha" onclick="togPwClin('s-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+      <div class="field"><label>Senha</label><div class="pw-wrap"><input id="s-pw" type="text" autocomplete="off" placeholder="Crie uma senha segura" style="-webkit-text-security:disc" onfocus="pwFocus(this,'new-password')" oninput="checarSenha(this.value)"><button type="button" class="pw-eye" aria-label="Mostrar senha" onclick="togPwClin('s-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <div class="pw-req" id="s-pw-req">
+          <div class="pw-ri" data-r="len"><span class="pw-rk">○</span> Pelo menos 8 caracteres</div>
+          <div class="pw-ri" data-r="up"><span class="pw-rk">○</span> Uma letra maiúscula</div>
+          <div class="pw-ri" data-r="low"><span class="pw-rk">○</span> Uma letra minúscula</div>
+          <div class="pw-ri" data-r="num"><span class="pw-rk">○</span> Um número</div>
+        </div>
+      </div>
       <button class="btn" id="s-btn" onclick="gateSignup()">Criar conta profissional</button>
       <div class="gate-note">Ao criar, seu perfil público passa por uma <b>aprovação</b> antes de aparecer na rede. Você já pode usar o painel na hora.<br>Já tem conta? <a href="#" onclick="event.preventDefault();gateShowLogin()">Entrar →</a></div>
     </div>
@@ -521,6 +533,13 @@ body.has-demo-banner{padding-bottom:64px}
       <div id="gate-comp-ok" style="display:none;color:var(--ve);font-size:13px;margin-top:8px;text-align:center">✓ Comprovante enviado! Vamos conferir e liberar.</div>
       <a class="btn ghost" id="gate-pending-wa" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;display:flex" href="https://wa.me/5527998451796?text=Ol%C3%A1!%20Fiz%20meu%20cadastro%20no%20painel%20dichava%20e%20quero%20liberar%20meu%20acesso." target="_blank" rel="noopener">Falar no WhatsApp</a>
       <button class="btn ghost" style="width:100%;justify-content:center;margin-top:10px" onclick="gateLogout()">Sair</button>
+    </div>
+    <div id="gate-confirm" class="hide">
+      <div style="text-align:center;font-size:40px;margin-bottom:6px">📩</div>
+      <div class="gate-info" style="text-align:center">Conta criada! Enviamos um <b>link de confirmação</b> para <b id="gate-confirm-email">seu e-mail</b>. Abra o link pra ativar seu acesso ao painel.</div>
+      <div class="gate-info" style="background:#fff6e8;color:#8a5a00;margin-top:10px">💡 Não achou? Verifique a caixa de <b>spam / lixo eletrônico</b>. Pode levar alguns minutos.</div>
+      <button class="btn ghost" id="gate-resend-btn" style="width:100%;justify-content:center;margin-top:14px" onclick="reenviarConfirmacao()">Reenviar e-mail de confirmação</button>
+      <div class="gate-note" style="margin-top:12px">Já confirmou? <a href="#" onclick="event.preventDefault();gateShowLogin()">Entrar →</a></div>
     </div>
     <div class="gate-abraco"><svg viewBox="0 0 24 24"><path d="M12 21C-4 11 6 1 12 7C18 1 28 11 12 21Z"/></svg> Feito com cuidado pela Rede Dichava</div>
   </div>
@@ -2523,6 +2542,24 @@ function showGate(mode){ // 'login' | 'signup' | 'reset' | 'notpro' | 'pending'
   $('#gate-reset')&&$('#gate-reset').classList.toggle('hide',mode!=='reset');
   $('#gate-notpro').classList.toggle('hide',mode!=='notpro');
   $('#gate-pending').classList.toggle('hide',mode!=='pending');
+  $('#gate-confirm')&&$('#gate-confirm').classList.toggle('hide',mode!=='confirm');
+}
+let _lastSignupEmail='';
+function mostrarConfirmarEmail(email){
+  _lastSignupEmail=email||_lastSignupEmail;
+  const el=$('#gate-confirm-email'); if(el)el.textContent=_lastSignupEmail||'seu e-mail';
+  showGate('confirm');
+}
+async function reenviarConfirmacao(){
+  if(!_SB||!_lastSignupEmail){ toast('Faça o cadastro primeiro',1); return; }
+  const b=$('#gate-resend-btn'); const o=b?b.textContent:''; if(b){b.disabled=true;b.textContent='Reenviando…';}
+  try{
+    const{error}=await _SB.auth.resend({type:'signup',email:_lastSignupEmail,options:{emailRedirectTo:'https://dichava.app/clinica/'}});
+    if(error)throw error;
+    toast('E-mail reenviado! Confira a caixa de entrada e o spam 💚',4000);
+  }catch(e){
+    const m=(e&&e.message)||''; toast(/rate|seconds|limit/i.test(m)?'Aguarde um instante antes de reenviar.':('Não consegui reenviar: '+m),5000);
+  }finally{ if(b){b.disabled=false;b.textContent=o;} }
 }
 const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
 function ehAdmin(){ return AUTH && ADMIN_EMAILS.includes((AUTH.email||'').toLowerCase()); }
@@ -2628,6 +2665,18 @@ async function salvarNovaSenha(){
   catch(e){ gateErr('Não consegui salvar. Tente reenviar o link.'); }
 }
 function gateShowSignup(){ gateErr(''); preencherPlanos(); showGate('signup'); }
+// Regras de senha (espelham uma política forte no Supabase)
+function senhaRegras(pw){ pw=pw||''; return {
+  len:pw.length>=8, up:/[A-Z]/.test(pw), low:/[a-z]/.test(pw), num:/[0-9]/.test(pw)
+}; }
+function senhaValida(pw){ const r=senhaRegras(pw); return r.len&&r.up&&r.low&&r.num; }
+function checarSenha(pw){
+  const r=senhaRegras(pw); const box=document.getElementById('s-pw-req'); if(!box)return;
+  box.querySelectorAll('.pw-ri').forEach(el=>{
+    const ok=r[el.dataset.r]; el.classList.toggle('ok',!!ok);
+    const k=el.querySelector('.pw-rk'); if(k)k.textContent=ok?'✓':'○';
+  });
+}
 // Volta pro app do paciente. Marca uma flag pra que o app (que compartilha a sessão)
 // NÃO redirecione de volta pra cá caso haja uma sessão de profissional ativa.
 function voltarAoApp(){
@@ -2642,15 +2691,20 @@ async function gateSignup(){
   if(!nome){ gateErr('Informe seu nome.'); return; }
   if(!reg){ gateErr('Informe seu registro profissional.'); return; }
   if(!email||!/.+@.+\..+/.test(email)){ gateErr('Informe um e-mail válido.'); return; }
-  if(!pw||pw.length<8){ gateErr('A senha precisa ter ao menos 8 caracteres.'); return; }
+  if(!senhaValida(pw)){ gateErr('A senha precisa ter 8+ caracteres, com maiúscula, minúscula e número.'); checarSenha(pw); return; }
   if(!_SB){ gateErr('Sem conexão com o servidor.'); return; }
   const btn=$('#s-btn'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Criando…';
   try{
     const{data,error}=await _SB.auth.signUp({email,password:pw,options:{data:{nome,tipo:'pro',reg,plano},emailRedirectTo:'https://dichava.app/clinica/'}});
-    if(error){ gateErr(/already|registered/i.test(error.message)?'Este e-mail já tem conta. Faça login.':error.message); return; }
+    if(error){
+      const m=error.message||'';
+      if(/already|registered/i.test(m)) gateErr('Este e-mail já tem conta. Faça login.');
+      else if(/password/i.test(m)) gateErr('Senha fraca: use 8+ caracteres com maiúscula, minúscula e número.');
+      else gateErr(m);
+      return;
+    }
     if(!data.session){ // precisa confirmar e-mail
-      gateErr(''); showGate('login');
-      toast('Conta criada! Confirme o e-mail que enviamos e depois faça login.',0); return;
+      _lastSignupEmail=email; gateErr(''); mostrarConfirmarEmail(email); return;
     }
     const u=metaFrom(data.user); AUTH=u;
     const entrou=await entrarLiberado();
