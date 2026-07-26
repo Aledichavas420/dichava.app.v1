@@ -35,7 +35,8 @@ begin
     'id', c.id, 'titulo', c.titulo, 'texto', c.texto,
     'paciente_nome', c.paciente_nome, 'status', c.status,
     'aceite_nome', c.aceite_nome, 'aceite_em', c.aceite_em, 'criado_em', c.criado_em,
-    'prof_nome', coalesce(p.nome, 'Profissional')
+    'prof_nome', coalesce(p.nome, 'Profissional'),
+    'prof_reg', p.reg, 'prof_tipo', p.tipo_prof
   ) into r
   from public.contratos c
   left join public.profissionais p on p.id = c.prof_id

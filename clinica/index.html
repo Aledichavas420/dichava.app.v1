@@ -2360,7 +2360,7 @@ function formContrato(id){
     <div class="modal-body">
       <div class="row2">
         <div class="field"><label>Título</label><input id="ct-tit" value="${esc(c.titulo||'Contrato terapêutico')}"></div>
-        <div class="field"><label>Paciente (opcional)</label><input id="ct-pac" value="${esc(c.paciente_nome||'')}" placeholder="Nome do paciente"></div>
+        <div class="field"><label>Paciente</label><input id="ct-pac" list="ct-pac-list" value="${esc(c.paciente_nome||'')}" placeholder="Escolha um paciente ou digite o nome" autocomplete="off"><datalist id="ct-pac-list">${(DB.pacientes||[]).slice().sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).map(p=>`<option value="${esc(p.nome)}">`).join('')}</datalist></div>
       </div>
       ${id?'':`<div class="field"><label>Modelo por abordagem</label><select id="ct-tpl" onchange="aplicarTpl()"><option value="">— escolher um modelo pra começar —</option><option value="generico">Genérico</option><option value="tcc">TCC (cognitivo-comportamental)</option><option value="psicanalise">Psicanálise</option></select></div>`}
       <div class="field"><label>Texto do contrato</label><textarea id="ct-txt" style="min-height:280px" placeholder="Escreva ou escolha um modelo acima…">${esc(c.texto||'')}</textarea></div>
@@ -2388,10 +2388,16 @@ function copiarLinkContrato(id){ const url='https://dichava.app/contrato/?id='+i
 function verContrato(id){
   const c=CONTRATOS.find(x=>x.id===id); if(!c)return;
   const aceito=c.status==='aceito';
+  const docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
   openModal(`<div class="modal wide"><div class="modal-head"><h3>${esc(c.titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div style="font-size:13px;color:var(--txs);margin-bottom:10px">${aceito?('✓ Aceito por <b>'+esc(c.aceite_nome)+'</b> em '+fmtDT(c.aceite_em)):'Aguardando aceite do paciente'}</div>
-      <div style="white-space:pre-wrap;font-size:14px;line-height:1.7;border:1px solid var(--line);border-radius:12px;padding:16px;max-height:52vh;overflow:auto">${esc(c.texto)}</div>
+      <div style="font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:12px">
+        Profissional: <b style="color:var(--tx)">${esc((AUTH&&AUTH.nome)||'')}</b>${AUTH&&AUTH.reg?' — '+esc(AUTH.reg):''}<br>
+        ${c.paciente_nome?('Paciente: <b style="color:var(--tx)">'+esc(c.paciente_nome)+'</b><br>'):''}
+        Documento nº ${docNum} · criado em ${fmtDT(c.criado_em)}<br>
+        <span style="font-weight:700;color:${aceito?'var(--ve)':'var(--am,#EA8B0C)'}">${aceito?('✓ Aceito por '+esc(c.aceite_nome)+' em '+fmtDT(c.aceite_em)):'⏳ Aguardando aceite do paciente'}</span>
+      </div>
+      <div style="white-space:pre-wrap;font-size:14px;line-height:1.7;border:1px solid var(--line);border-radius:12px;padding:16px;max-height:50vh;overflow:auto">${esc(c.texto)}</div>
     </div>
     <div class="modal-foot"><button class="btn ghost" onclick="copiarLinkContrato('${c.id}')">🔗 Copiar link</button><button class="btn" onclick="window.open('/contrato/?id=${c.id}','_blank')">Abrir página / imprimir</button></div>
   </div>`);

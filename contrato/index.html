@@ -12,6 +12,7 @@ body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#1B
 .doc{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(30,60,35,.07);padding:30px 26px;margin-top:16px}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:-.3px}
 .by{color:var(--txs);font-size:14px;margin:0 0 18px}
+.meta{color:var(--txs);font-size:14px;line-height:1.7;margin:0 0 16px}
 .texto{white-space:pre-wrap;font-size:15px;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
 .aceite-box{margin-top:22px;background:#F0F7F1;border:1px solid #CDE7D2;border-radius:14px;padding:18px}
 .aceite-box label{display:block;font-weight:700;font-size:13.5px;margin-bottom:6px}
@@ -50,13 +51,17 @@ var app=document.getElementById('app');
 function render(c){
   if(!c){ app.innerHTML='<div class="doc"><h1>Contrato não encontrado</h1><p class="by">O link pode estar incorreto ou o contrato foi removido. Peça um novo link ao profissional.</p></div>'; return; }
   var aceito=c.status==='aceito';
+  var docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
+  var meta='<div>Profissional: <b>'+esc(c.prof_nome)+'</b>'+(c.prof_reg?' — '+esc(c.prof_reg):'')+(c.prof_tipo?' · '+esc(c.prof_tipo):'')+'</div>'
+    +(c.paciente_nome?('<div>Paciente: <b>'+esc(c.paciente_nome)+'</b></div>'):'')
+    +'<div style="font-size:12.5px;opacity:.85">Documento nº '+docNum+' · gerado em '+fmt(c.criado_em)+'</div>';
   var doc='<div class="doc">'
     +'<h1>'+esc(c.titulo)+'</h1>'
-    +'<p class="by">Profissional: <b>'+esc(c.prof_nome)+'</b>'+(c.paciente_nome?(' · Paciente: <b>'+esc(c.paciente_nome)+'</b>'):'')+'</p>'
+    +'<div class="meta">'+meta+'</div>'
     +'<div class="texto">'+esc(c.texto)+'</div>';
   if(aceito){
     doc+='<div class="ok">✓ <b>Aceito eletronicamente</b> por <b>'+esc(c.aceite_nome)+'</b> em '+fmt(c.aceite_em)+'.</div>'
-      +'<div class="selo">🔒 Aceite eletrônico registrado em dichava.app — este documento comprova a concordância com os termos acima.</div>'
+      +'<div class="selo">🔒 Aceite eletrônico registrado em dichava.app · Documento nº '+docNum+' — comprova a concordância com os termos acima.</div>'
       +'</div>'
       +'<button class="btn ghost" onclick="window.print()">🖨️ Imprimir / salvar PDF</button>';
     app.innerHTML=doc;
