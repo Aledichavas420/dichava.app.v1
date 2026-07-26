@@ -6943,15 +6943,18 @@ async function contatarProf(id){
   if(!_SB){toast('Sem conexão com o servidor.');return;}
   const p=_profsById[id]||{};
   try{
-    // acha ou cria a conversa (user_id = eu, prof_id = profissional)
-    let conv=null;
-    const{data:ex}=await _SB.from('conversas').select('*').eq('user_id',U.id).eq('prof_id',id).maybeSingle();
-    if(ex){conv=ex;}
-    else{
-      const cid=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():('cv-'+Date.now());
-      const{data:nc,error}=await _SB.from('conversas').insert({id:cid,user_id:U.id,prof_id:id,user_nome:U.nome||'',prof_nome:p.nome||''}).select().maybeSingle();
-      if(error)throw error; conv=nc||{id:cid,user_id:U.id,prof_id:id,prof_nome:p.nome||''};
+    // precisa de uma sessão VÁLIDA (o servidor precisa te reconhecer, não só o cache local)
+    const{data:sd}=await _SB.auth.getSession();
+    if(!sd||!sd.session){ toast('Sua sessão expirou. Entre novamente para conversar 💚',4500); return; }
+    // cria (ou recupera) a conversa via função no servidor — define user_id = você
+    // e evita de vez o erro de RLS ao inserir direto na tabela.
+    const{data,error}=await _SB.rpc('iniciar_conversa',{p_prof_id:id,p_user_nome:U.nome||'',p_prof_nome:p.nome||''});
+    if(error){
+      if(/login_required/.test(error.message||'')){ toast('Sua sessão expirou. Entre novamente para conversar 💚',4500); return; }
+      throw error;
     }
+    const conv=Array.isArray(data)?data[0]:data;
+    if(!conv){ throw new Error('não consegui abrir a conversa'); }
     const prefill='Olá! Vi seu perfil no dichava.app e gostaria de conversar sobre seus atendimentos. Você tem disponibilidade?';
     abrirChat(conv,false,p.nome||conv.prof_nome||'Profissional',p.telefone||'','vprofs',p.tipo_prof||'',prefill);
   }catch(e){toast('⚠️ '+((e&&e.message)||'não consegui abrir a conversa'),5000);}
