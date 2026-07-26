@@ -1925,7 +1925,20 @@ function editarPerfilPanel(){
       <div class="row2"><div class="field"><label>Modalidade *</label><select id="pf-mod"><option value="online" ${mod==='online'?'selected':''}>Online</option><option value="presencial" ${mod==='presencial'?'selected':''}>Presencial</option><option value="online,presencial" ${(mod.includes('online')&&mod.includes('presencial'))?'selected':''}>Online e presencial</option></select></div><div class="field"><label>Cidade / região</label><input id="pf-cidade" value="${esc(p.cidade||'')}"></div></div>
       <div class="row2"><div class="field"><label>Valor médio</label><input id="pf-valor" value="${esc(p.valor||'')}" placeholder="R$ 150"></div><div class="field"><label>Duração</label><input id="pf-dur" value="${esc(p.duracao||'')}" placeholder="50 min"></div></div>
       <div class="field"><label>Disponibilidade (texto na ficha)</label><input id="pf-disp" value="${esc(p.disponibilidade||'')}" placeholder="Ex.: Seg, Qua e Sex · tarde"></div>
-      <div class="row2"><div class="field"><label>WhatsApp</label><input id="pf-tel" value="${esc(p.telefone||'')}" placeholder="(00) 00000-0000"></div><div class="field"><label>Instagram / site</label><input id="pf-link" value="${esc(p.link||'')}" placeholder="@seu.insta ou site.com"></div></div>
+      <div class="field"><label>WhatsApp</label><input id="pf-tel" value="${esc(p.telefone||'')}" placeholder="(00) 00000-0000"></div>
+
+      <div class="sec-title" style="margin:18px 0 4px;font-size:13px;color:var(--txm);text-transform:uppercase;letter-spacing:1px">Formação</div>
+      <div class="row2"><div class="field"><label>Registro (CRP/CRM)</label><input id="pf-reg" value="${esc(p.reg||AUTH.reg||'')}" placeholder="ex: CRP 06/1234"></div><div class="field"><label>Estado (UF)</label><input id="pf-estado" value="${esc(p.estado||'')}" placeholder="ex: SP" maxlength="2" style="text-transform:uppercase"></div></div>
+      <div class="row2"><div class="field"><label>Instituição onde se formou</label><input id="pf-inst" value="${esc(p.instituicao||'')}" placeholder="ex: USP"></div><div class="field"><label>Ano de formação</label><input id="pf-ano" value="${esc(p.ano_formacao||'')}" inputmode="numeric" maxlength="4" placeholder="ex: 2015"></div></div>
+      <div class="field"><label>Especialização <span style="color:var(--txm);font-weight:400">(se tiver)</span></label><input id="pf-espz" value="${esc(p.especializacao||'')}" placeholder="ex: TCC, Psicanálise, Redução de danos…"></div>
+
+      <div class="sec-title" style="margin:18px 0 4px;font-size:13px;color:var(--txm);text-transform:uppercase;letter-spacing:1px">Atendimento</div>
+      <div class="field"><label>Públicos que atende</label><input id="pf-pub" value="${esc(p.publicos||'')}" placeholder="ex: adultos, adolescentes, LGBTQIA+…"></div>
+      <div class="field"><label>Idiomas de atendimento</label><input id="pf-idiomas" value="${esc(p.idiomas||'')}" placeholder="ex: Português, Inglês, Libras"></div>
+
+      <div class="sec-title" style="margin:18px 0 4px;font-size:13px;color:var(--txm);text-transform:uppercase;letter-spacing:1px">Redes</div>
+      <div class="row2"><div class="field"><label>Instagram</label><input id="pf-insta" value="${esc(p.instagram||'')}" placeholder="@seu.insta"></div><div class="field"><label>Site</label><input id="pf-site" value="${esc(p.site||'')}" placeholder="site.com"></div></div>
+      <div class="field"><label>LinkedIn <span style="color:var(--txm);font-weight:400">(opcional)</span></label><input id="pf-linkedin" value="${esc(p.linkedin||'')}" placeholder="linkedin.com/in/voce"></div>
     </div>
     <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="salvarPerfilPanel()">Salvar e enviar p/ aprovação</button></div>
   </div>`);
@@ -1943,11 +1956,18 @@ async function salvarPerfilPanel(){
   const g=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
   const tipo=g('pf-tipo'),bio=g('pf-bio'),mod=g('pf-mod');
   if(!tipo||bio.length<20||!mod){toast('Preencha tipo, bio (mín. 20 caracteres) e modalidade.',3500);return;}
-  const payload={tipo_prof:tipo,bio,especialidades:g('pf-esp'),modalidade:mod,cidade:g('pf-cidade'),valor:g('pf-valor'),duracao:g('pf-dur'),disponibilidade:g('pf-disp'),telefone:g('pf-tel'),link:g('pf-link'),foto:_pfFoto||null,capa:_pfCapa||'verde',status:'pendente'};
+  const insta=g('pf-insta'), site=g('pf-site');
+  const payload={tipo_prof:tipo,bio,especialidades:g('pf-esp'),modalidade:mod,cidade:g('pf-cidade'),valor:g('pf-valor'),duracao:g('pf-dur'),disponibilidade:g('pf-disp'),telefone:g('pf-tel'),
+    link:(insta||site||''), reg:(g('pf-reg')||AUTH.reg||null), estado:g('pf-estado').toUpperCase(), instituicao:g('pf-inst'), ano_formacao:g('pf-ano'), especializacao:g('pf-espz'), publicos:g('pf-pub'), idiomas:g('pf-idiomas'), instagram:insta, site:site, linkedin:g('pf-linkedin'),
+    foto:_pfFoto||null,capa:_pfCapa||'verde',status:'pendente'};
   try{
-    const full=Object.assign({id:AUTH.id,nome:AUTH.nome,reg:AUTH.reg||null},payload);
+    const full=Object.assign({id:AUTH.id,nome:AUTH.nome},payload);
     let r=await _SB.from('profissionais').upsert(full);
-    if(r.error&&/(foto|link|capa)/.test(r.error.message||'')){const{foto,link,capa,...base}=full;r=await _SB.from('profissionais').upsert(base);}
+    if(r.error){
+      // alguma coluna nova ainda não existe (SQL não rodado) → salva o essencial e não trava
+      const base={id:AUTH.id,nome:AUTH.nome,reg:full.reg,tipo_prof:full.tipo_prof,bio:full.bio,especialidades:full.especialidades,modalidade:full.modalidade,cidade:full.cidade,valor:full.valor,duracao:full.duracao,disponibilidade:full.disponibilidade,telefone:full.telefone,status:'pendente'};
+      r=await _SB.from('profissionais').upsert(base);
+    }
     if(r.error)throw r.error;
     toast('✓ Perfil enviado para aprovação');closeModal();carregarPerfil();
   }catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}
