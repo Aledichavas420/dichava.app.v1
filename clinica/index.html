@@ -736,7 +736,6 @@ function abrirMaisMenu(){
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
       ${items.map(([r,nome])=>`<button class="mais-item" onclick="closeModal();go('${r}')"><span class="mais-ic">${CIC[r]||''}</span><span>${nome}</span></button>`).join('')}
-      <button class="mais-item" onclick="closeModal();abrirCodigosPremium()"><span class="mais-ic">${CIC.caixa||''}</span><span>Códigos premium</span></button>
       <button class="mais-item" onclick="closeModal();abrirSuporteProf()"><span class="mais-ic">${supIc}</span><span>Suporte <span class="badge" id="badge-sup-m" style="display:none"></span></span></button>
     </div></div></div>`);
 }
@@ -814,8 +813,6 @@ const SUP_FAQ=[
   ]},
   {t:'Link na bio e códigos premium', ic:'🔗', q:[
     {p:'Como monto meu "link na bio"?',r:'No painel há o construtor do link na bio (estilo Linktree): foto, fundo, cores, fontes, títulos e links, com prévia ao vivo. Publique e use o link na bio do Instagram.'},
-    {p:'Como funcionam os códigos premium?',r:'Nos planos Profissional (10) e Clínica (25), em Mais → Códigos premium você gera códigos pra presentear pacientes com 1 ano de premium. Cada código só pode ser usado uma vez.'},
-    {p:'Como o paciente usa o código?',r:'No app, na tela de Premium, ele toca em "🎁 Tenho um código de presente", digita o código e o premium é ativado na conta dele.'},
   ]},
   {t:'Equipe e clínica compartilhada', ic:'👥', q:[
     {p:'Como convido outros profissionais?',r:'A equipe compartilhada é um recurso do plano Clínica (até 5 profissionais). Na aba Equipe você copia o código e o profissional entra por ele, passando a ver a mesma agenda, pacientes e caixa.'},
