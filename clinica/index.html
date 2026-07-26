@@ -278,6 +278,17 @@ tbody tr:hover{background:var(--cin)}
   background:var(--dk);color:#fff;padding:13px 20px;border-radius:14px;font-weight:600;font-size:14px;
   box-shadow:var(--sh2);z-index:200;opacity:0;transition:.25s;pointer-events:none;display:flex;align-items:center;gap:9px}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#demo-banner{position:fixed;left:0;right:0;bottom:0;z-index:210;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:nowrap;padding:10px 14px calc(10px + var(--sb));background:#8B6FE0;color:#fff;font-size:13px;box-shadow:0 -6px 24px rgba(0,0,0,.25)}
+#demo-banner span{min-width:0}
+#demo-banner b{font-weight:800}
+#demo-banner button{background:#fff;color:#5a3ec0;border:none;font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;flex:none}
+#demo-banner button:hover{opacity:.92}
+body.has-demo-banner{padding-bottom:64px}
+/* no mobile o banner fica ACIMA da barra de navegação inferior */
+@media (max-width:860px){
+  #demo-banner{bottom:calc(58px + var(--sb));padding:9px 14px}
+  body.has-demo-banner{padding-bottom:calc(112px + var(--sb))}
+}
 
 /* segmented */
 .seg{display:inline-flex;background:var(--cin);border-radius:12px;padding:4px;gap:2px}
@@ -470,6 +481,8 @@ tbody tr:hover{background:var(--cin)}
       <div class="field"><label>Senha</label><div class="pw-wrap"><input id="g-pw" type="text" autocomplete="off" placeholder="Sua senha" style="-webkit-text-security:disc" onfocus="pwFocus(this,'current-password')"><button type="button" class="pw-eye" aria-label="Mostrar senha" onclick="togPwClin('g-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       <div style="text-align:right;margin:-4px 2px 10px"><a href="#" onclick="event.preventDefault();gateShowReset()" style="font-size:12.5px;color:#4a7856;font-weight:600;text-decoration:none">Esqueci minha senha</a></div>
       <button class="btn" id="g-btn" onclick="gateLogin()">Entrar</button>
+      <button class="btn ghost" id="g-demo" style="width:100%;justify-content:center;margin-top:10px" onclick="entrarDemo()">🎬 Ver demonstração (sem cadastro)</button>
+      <div class="gate-note" style="margin-top:8px">Explore o painel completo com dados de exemplo, sem compromisso.</div>
       <div class="gate-note">Ainda não tem conta? <a href="#" onclick="event.preventDefault();gateShowSignup()">Criar conta profissional →</a></div>
       <div class="gate-note" style="margin-top:10px">É paciente? <a href="#" onclick="event.preventDefault();voltarAoApp()">← Voltar ao app dichava</a></div>
     </div>
@@ -631,6 +644,7 @@ function addDaysISO(iso,n){ const d=new Date(iso+'T12:00'); d.setDate(d.getDate(
 let KEY='dichava_clinica_v1';
 let DB;
 let AUTH=null;     // {id,nome,email,reg} do profissional logado
+let _DEMO=false;   // modo demonstração: painel completo com dados fictícios, sem conta
 let CLINICA=null;  // {id,nome,codigo,papel,dono_id} — clínica ativa
 let MEMBROS=[];    // membros da clínica
 function emptyDB(){ return {config:{clinica:'Minha Clínica',profissional:'',especialidade:''},pacientes:[],agendamentos:[],prontuarios:[],financeiro:[],documentos:[],avaliacoes:[]}; }
@@ -2205,6 +2219,7 @@ async function organizarComIA(){
       .filter(([,v])=>v).map(([k,v])=>k+': '+v).join('\n');
   }
   if(texto.length<3){ toast('Escreva algumas anotações no registro antes de organizar.',1); return; }
+  if(_DEMO){ toast('✨ A IA organiza suas anotações automaticamente. No modo demonstração ela fica desativada — crie sua conta pra usar de verdade.',4500); return; }
   if(!_SB){ toast('Sem conexão',1); return; }
   const antes=tx?tx.textContent:'';
   if(btn){btn.disabled=true;btn.style.opacity='.7';} if(tx)tx.textContent='⏳ Organizando…';
@@ -2642,12 +2657,40 @@ async function gateSignup(){
 }
 function hideGate(){ $('#gate').classList.remove('on'); }
 
+// ===== MODO DEMONSTRAÇÃO =====
+// Abre o painel completo com dados fictícios, sem conta e sem tocar no banco.
+// Ideal pra o profissional "ver funcionando" antes de criar a conta de verdade.
+function entrarDemo(){
+  _DEMO=true;
+  // id UUID-zero: qualquer leitura que escape volta vazia (nunca casa com dados reais) e não gera erro de formato
+  AUTH={id:'00000000-0000-0000-0000-000000000000',nome:'Dra. Marina Alves',email:'',tipo:'pro',reg:'CRP 00/00000',plano:'clinica'};
+  _meuPlano='clinica'; // libera todas as ferramentas na demonstração
+  hideGate();
+  iniciarApp();
+}
+function mostrarBannerDemo(){
+  if(document.getElementById('demo-banner')) return;
+  const b=document.createElement('div');
+  b.id='demo-banner';
+  b.innerHTML='<span>🎬 <b>Modo demonstração</b> — dados fictícios, nada é salvo.</span>'
+    +'<button onclick="sairDemo()">Criar minha conta →</button>';
+  document.body.appendChild(b);
+  document.body.classList.add('has-demo-banner');
+}
+function sairDemo(){
+  try{ if(KEY) localStorage.removeItem(KEY); }catch(e){}
+  _DEMO=false;
+  location.reload();
+}
+
 function metaFrom(user){
   const m=(user&&user.user_metadata)||{};
   return {id:user.id,nome:m.nome||user.email||'Profissional',email:user.email||'',tipo:m.tipo||'user',reg:m.reg||'',plano:m.plano||null};
 }
 
 async function bootAuth(){
+  // link direto de demonstração: dichava.app/clinica/?demo=1
+  try{ if(new URLSearchParams(location.search).get('demo')==='1'){ return entrarDemo(); } }catch(e){}
   // veio pelo link de redefinição → OBRIGA a definir nova senha (não entra direto)
   if(_recoveryMode){ showResetForm(); return; }
   // sem Supabase (offline) → deixa entrar em modo local pra não travar
@@ -2747,12 +2790,13 @@ async function iniciarApp(){
     else formAgendamento(null,route==='agenda'?agendaDay:todayISO());
   });
   initTheme();
-  try{ mostrarAtalhoHint(); }catch(e){}
-  try{ registrarSWPro(); ativarNotificacoesPro(true); }catch(e){}  // reinscreve em silêncio se já autorizado
+  if(!_DEMO) try{ mostrarAtalhoHint(); }catch(e){}
+  if(!_DEMO) try{ registrarSWPro(); ativarNotificacoesPro(true); }catch(e){}  // reinscreve em silêncio se já autorizado
   await bootClinica();
 }
 // descobre a clínica do profissional (ou pede pra criar/entrar)
 async function bootClinica(){
+  if(_DEMO){ DB=seed(); normalizeDB(DB); CLINICA=null; startApp(); mostrarBannerDemo(); return; }
   if(!_SB){ load(); startApp(); return; }
   try{
     const {data:mem,error} = await _SB.from('clinica_membros').select('clinica_id,papel').eq('user_id',AUTH.id);
@@ -2790,11 +2834,13 @@ function startApp(){
   }
   syncHeader();
   go('dash');
-  try{carregarSolicitacoes();}catch(e){}
-  try{carregarAgendaCfg();}catch(e){}
-  try{contarMsgsPanel();}catch(e){}
+  if(!_DEMO){
+    try{carregarSolicitacoes();}catch(e){}
+    try{carregarAgendaCfg();}catch(e){}
+    try{contarMsgsPanel();}catch(e){}
+  }
   if(!localStorage.getItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'))) setTimeout(tutStart,400);
-  else setTimeout(mostrarLGPDPro,300);
+  else if(!_DEMO) setTimeout(mostrarLGPDPro,300);
 }
 /* ===== Termo de responsabilidade LGPD (profissional) ===== */
 function mostrarLGPDPro(){
