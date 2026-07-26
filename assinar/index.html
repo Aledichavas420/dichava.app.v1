@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C2A19">
+<meta name="robots" content="noindex,nofollow">
+<title>dichava.app — Assinar plano profissional</title>
+<meta name="description" content="Escolha seu plano profissional do dichava.app e comece a usar o painel completo.">
+<style>
+:root{--verde:#1B3A2A;--verde2:#2f7a4d;--ve:#4CAF5A;--ouro:#E7A400;--roxo:#8B6FE0;--tx:#16241b;--txm:#5D7060;--linha:#e4ece3;--cream:#F5F5F0;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--cream);color:var(--tx);line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 0 60px}
+.wrap{max-width:940px;margin:0 auto;padding:0 18px}
+header{text-align:center;padding:44px 18px 26px;background:linear-gradient(160deg,#123A24,#0C2A19);color:#fff;border-radius:0 0 32px 32px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:23px;letter-spacing:-.5px}
+.logo svg{width:28px;height:28px;color:var(--ve)}
+.logo em{font-style:normal;color:var(--ve);margin-left:-6px}
+h1{font-size:27px;font-weight:800;margin:20px 0 8px;letter-spacing:-.5px}
+header p{font-size:15px;opacity:.85;max-width:520px;margin:0 auto}
+.demo-cta{display:inline-flex;gap:8px;align-items:center;margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:24px;text-decoration:none}
+.sec{margin-top:34px}
+.sec-t{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--verde2);margin-bottom:12px;text-align:center}
+/* toggles */
+.togg{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.togg-grp{display:inline-flex;background:#e8efe7;border-radius:30px;padding:5px}
+.togg-grp button{border:none;background:transparent;font-family:inherit;font-size:14.5px;font-weight:700;color:var(--txm);padding:10px 20px;border-radius:24px;cursor:pointer;transition:.15s;position:relative}
+.togg-grp button.on{background:#fff;color:var(--verde);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.togg-grp button .eco{display:block;font-size:10.5px;font-weight:700;color:var(--ve);margin-top:1px}
+.metodo-note{text-align:center;font-size:13px;color:var(--txm);margin:6px 0 0}
+/* planos */
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.plano{background:var(--card);border:1.5px solid var(--linha);border-radius:20px;padding:22px 18px;display:flex;flex-direction:column;position:relative}
+.plano.best{border-color:var(--ouro);box-shadow:0 10px 30px rgba(231,164,0,.13)}
+.plano-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--ouro);color:#3a2600;font-size:11.5px;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap}
+.plano-n{font-size:19px;font-weight:800;color:var(--verde)}
+.plano-para{font-size:12.5px;color:var(--txm);margin:3px 0 12px;min-height:34px}
+.plano-p{font-size:32px;font-weight:800;letter-spacing:-1px;color:var(--tx)}
+.plano-p .cif{font-size:16px;vertical-align:super;font-weight:700;color:var(--txm)}
+.plano-p .un{font-size:15px;font-weight:600;color:var(--txm)}
+.plano-eq{font-size:12px;color:var(--txm);margin-top:3px;min-height:16px}
+.plano ul{list-style:none;margin:14px 0 18px;display:flex;flex-direction:column;gap:8px}
+.plano li{font-size:13px;display:flex;gap:8px;align-items:flex-start;color:#33453a}
+.plano li svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--ve)}
+.plano-btn{margin-top:auto;background:var(--verde2);color:#fff;border:none;font-family:inherit;font-size:15px;font-weight:800;padding:13px;border-radius:12px;cursor:pointer;transition:.15s;text-align:center}
+.plano.best .plano-btn{background:var(--ouro);color:#3a2600}
+.plano-btn:hover{filter:brightness(1.06)}
+/* métodos explicação */
+.metodos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.met{background:var(--card);border:1.5px solid var(--linha);border-radius:18px;padding:20px}
+.met.on{border-color:var(--verde2);background:#f4faf5}
+.met-h{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:800;color:var(--verde);margin-bottom:8px}
+.met-h .ic{width:38px;height:38px;border-radius:11px;background:#eaf4ec;display:grid;place-items:center;flex:none}
+.met-h .ic svg{width:21px;height:21px;color:var(--verde2)}
+.met p{font-size:13.5px;color:#33453a}
+.met ul{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.met li{font-size:12.5px;color:var(--txm);display:flex;gap:7px;align-items:flex-start}
+.met li b{color:#33453a}
+/* termos + info */
+.info{background:#eef5ee;border:1px solid #dce8db;border-radius:16px;padding:18px 20px;margin-top:26px;font-size:13.5px;color:#33453a}
+.info b{color:var(--verde)}
+.termos{display:flex;gap:11px;align-items:flex-start;margin-top:20px;background:var(--card);border:1.5px solid var(--linha);border-radius:14px;padding:16px 18px;transition:.2s}
+.termos.err{border-color:#e5484d;background:#fdf1f1}
+.termos input{margin-top:2px;width:20px;height:20px;flex:none;accent-color:var(--verde2)}
+.termos label{font-size:13.5px;color:#33453a}
+.termos a{color:var(--verde2);font-weight:600}
+.foot{text-align:center;font-size:12.5px;color:var(--txm);margin-top:24px;line-height:1.7}
+.foot a{color:var(--verde2)}
+@media(max-width:720px){
+  .planos{grid-template-columns:1fr}
+  .metodos{grid-template-columns:1fr}
+  h1{font-size:23px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>dichava<em>.app</em></div>
+  <h1>Escolha seu plano</h1>
+  <p>Você testou, viu funcionando — agora é só escolher como quer começar. Sem fidelidade: cancele quando quiser.</p>
+  <a class="demo-cta" href="/clinica/?demo=1">🎬 Ainda quer testar? Ver a demonstração</a>
+</header>
+
+<div class="wrap">
+
+  <!-- CICLO -->
+  <div class="sec">
+    <div class="sec-t">1 · Ciclo de cobrança</div>
+    <div class="togg">
+      <div class="togg-grp" id="ciclo">
+        <button data-ciclo="mensal" class="on" onclick="setCiclo('mensal')">Mensal</button>
+        <button data-ciclo="anual" onclick="setCiclo('anual')">Anual<span class="eco">economize ~2 meses</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTODO -->
+  <div class="sec">
+    <div class="sec-t">2 · Forma de pagamento</div>
+    <div class="togg">
+      <div class="togg-grp" id="metodo">
+        <button data-metodo="recorrente" class="on" onclick="setMetodo('recorrente')">Recorrente (cartão)</button>
+        <button data-metodo="manual" onclick="setMetodo('manual')">Manual (Pix/cartão)</button>
+      </div>
+    </div>
+    <div class="metodo-note" id="metodo-note"></div>
+
+    <!-- explicação dos métodos -->
+    <div class="metodos">
+      <div class="met" id="met-recorrente">
+        <div class="met-h"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg></span>Recorrente</div>
+        <p>A cobrança acontece <b>automaticamente</b> no seu cartão de crédito a cada período. Você não precisa fazer nada — e pode cancelar quando quiser.</p>
+        <ul>
+          <li>💳 <span><b>Cartão de crédito</b> (débito automático)</span></li>
+          <li>🔄 <span>Renova sozinho — sem risco de esquecer</span></li>
+          <li>🛑 <span>Cancele a qualquer momento, sem multa</span></li>
+        </ul>
+      </div>
+      <div class="met" id="met-manual">
+        <div class="met-h"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>Manual</div>
+        <p>Você paga por <b>Pix ou cartão</b> a cada período. Quando estiver perto de vencer, a gente te avisa e reenvia o link pra renovar.</p>
+        <ul>
+          <li>⚡ <span><b>Pix</b> (sem taxa) ou cartão</span></li>
+          <li>📅 <span>Você controla quando renovar</span></li>
+          <li>✋ <span>Ideal pra quem prefere Pix</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANOS -->
+  <div class="sec">
+    <div class="sec-t">3 · Seu plano</div>
+    <div class="planos" id="planos"></div>
+  </div>
+
+  <!-- INFO PESSOA FÍSICA -->
+  <div class="info">
+    <b>Sobre o pagamento:</b> o Dichava é um projeto independente, então a cobrança é feita com segurança pela <b>PagBank/PagSeguro</b>, direto pra pessoa física do fundador. Você recebe <b>recibo</b> normalmente. Todos os planos incluem o <b>Painel da Clínica</b> completo e não têm fidelidade.
+  </div>
+
+  <!-- TERMOS -->
+  <div class="termos" id="termos-box">
+    <input type="checkbox" id="aceite">
+    <label for="aceite">Li e concordo com os <a href="/landing/assinatura.html" target="_blank">Termos da Assinatura</a>, os <a href="/landing/termos.html" target="_blank">Termos de Uso</a> e a <a href="/landing/privacidade.html" target="_blank">Política de Privacidade</a>.</label>
+  </div>
+
+  <div class="foot">
+    Dúvidas? Fale com a gente no <a href="https://wa.me/5527998451796" target="_blank" rel="noopener">WhatsApp</a>.<br>
+    Valores de lançamento, sujeitos a ajuste. dichava.app · redução de danos, sem julgamento 💚
+  </div>
+
+</div>
+
+<script>
+// ── links de pagamento (PagBank) ──
+const LINKS = {
+  'essencial-mensal-recorrente':'https://pag.ae/81_xT8PxN',
+  'profissional-mensal-recorrente':'https://pag.ae/81_xTrshN',
+  'clinica-mensal-recorrente':'https://pag.ae/81_xTFDsN',
+  'essencial-mensal-manual':'https://pag.ae/81_xS837N',
+  'profissional-mensal-manual':'https://pag.ae/81_xSmVb4',
+  'clinica-mensal-manual':'https://pag.ae/81_xSGn7N',
+  'essencial-anual-recorrente':'https://pag.ae/81_xNu89p',
+  'profissional-anual-recorrente':'https://pag.ae/81_xNTsG4',
+  'clinica-anual-recorrente':'https://pag.ae/81_xPxkps',
+};
+
+const PLANOS = [
+  { k:'essencial', nome:'Essencial', para:'Pra quem está começando ou consolidando a prática',
+    mensal:'79,90', anual:'799', eqAnual:'equivale a R$ 66/mês',
+    feats:['Painel da Clínica completo','Perfil verificado no diretório','Lembretes e lista de espera'] },
+  { k:'profissional', nome:'Profissional', best:true, para:'Pra quem quer visibilidade e agilidade',
+    mensal:'179,90', anual:'1.799', eqAnual:'equivale a R$ 150/mês',
+    feats:['Tudo do Essencial','✨ Assistente de IA no prontuário','Destaque e divulgação no @dichava.app'] },
+  { k:'clinica', nome:'Clínica', para:'Pra clínicas e coletivos com equipe',
+    mensal:'299,90', anual:'2.999', eqAnual:'equivale a R$ 250/mês',
+    feats:['Tudo do Profissional','Até 5 profissionais + painel compartilhado','Suporte prioritário dedicado'] },
+];
+
+let _ciclo='mensal', _metodo='recorrente';
+const CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+
+function setCiclo(c){
+  _ciclo=c;
+  document.querySelectorAll('#ciclo button').forEach(b=>b.classList.toggle('on',b.dataset.ciclo===c));
+  // Anual só tem recorrente
+  const grpMet=document.getElementById('metodo');
+  if(c==='anual'){ _metodo='recorrente'; grpMet.style.opacity='.5'; grpMet.style.pointerEvents='none'; setMetodoUI('recorrente'); }
+  else{ grpMet.style.opacity='1'; grpMet.style.pointerEvents='auto'; }
+  atualizarNota(); render();
+}
+function setMetodo(m){ if(_ciclo==='anual')return; _metodo=m; setMetodoUI(m); atualizarNota(); render(); }
+function setMetodoUI(m){
+  document.querySelectorAll('#metodo button').forEach(b=>b.classList.toggle('on',b.dataset.metodo===m));
+  document.getElementById('met-recorrente').classList.toggle('on',m==='recorrente');
+  document.getElementById('met-manual').classList.toggle('on',m==='manual');
+}
+function atualizarNota(){
+  const n=document.getElementById('metodo-note');
+  if(_ciclo==='anual'){ n.textContent='No plano anual a cobrança é recorrente no cartão (renova 1x por ano).'; }
+  else if(_metodo==='recorrente'){ n.textContent='Cartão de crédito, cobrado automaticamente todo mês.'; }
+  else { n.textContent='Pix ou cartão — você renova a cada mês pelo link que enviamos.'; }
+}
+function render(){
+  document.getElementById('planos').innerHTML = PLANOS.map(p=>{
+    const preco = _ciclo==='mensal'
+      ? `<span class="cif">R$</span> ${p.mensal}<span class="un">/mês</span>`
+      : `<span class="cif">R$</span> ${p.anual}<span class="un">/ano</span>`;
+    const eq = _ciclo==='anual' ? p.eqAnual : '&nbsp;';
+    return `<div class="plano ${p.best?'best':''}">
+      ${p.best?'<div class="plano-badge">★ mais escolhido</div>':''}
+      <div class="plano-n">${p.nome}</div>
+      <div class="plano-para">${p.para}</div>
+      <div class="plano-p">${preco}</div>
+      <div class="plano-eq">${eq}</div>
+      <ul>${p.feats.map(f=>`<li>${CHK}<span>${f}</span></li>`).join('')}</ul>
+      <button class="plano-btn" onclick="assinar('${p.k}','${p.nome}')">Assinar ${p.nome} →</button>
+    </div>`;
+  }).join('');
+}
+function assinar(k,nome){
+  if(!document.getElementById('aceite').checked){
+    const box=document.getElementById('termos-box');
+    box.classList.add('err'); box.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>box.classList.remove('err'),2200);
+    return;
+  }
+  const key=k+'-'+_ciclo+'-'+_metodo;
+  const url=LINKS[key];
+  if(!url){ alert('Combinação indisponível no momento. Fale com a gente no WhatsApp.'); return; }
+  const w=window.open(url,'_blank','noopener');
+  if(!w){ location.href=url; }
+}
+// init
+setMetodoUI('recorrente'); atualizarNota(); render();
+</script>
+</body>
+</html>

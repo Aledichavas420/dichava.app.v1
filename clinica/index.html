@@ -515,7 +515,8 @@ body.has-demo-banner{padding-bottom:64px}
     <div id="gate-pending" class="hide">
       <div class="gate-info" id="gate-pending-tx">Que bom ter você aqui 🌱 Seu acesso está <b>em análise</b> — assim que confirmarmos seu cadastro e pagamento, o painel completo abre pra você. Costuma ser rápido.</div>
       <div id="gate-plano-info" class="gate-info" style="background:var(--vf,#14261c);margin-top:10px;display:none"></div>
-      <button class="btn" id="gate-comp-btn" style="width:100%;justify-content:center;margin-top:14px" onclick="$('#gate-comp-file').click()">📎 Enviar comprovante de pagamento</button>
+      <a class="btn" style="width:100%;justify-content:center;margin-top:14px;text-decoration:none;display:flex" href="/assinar/" target="_blank" rel="noopener">💳 Ver planos e assinar</a>
+      <button class="btn ghost" id="gate-comp-btn" style="width:100%;justify-content:center;margin-top:10px" onclick="$('#gate-comp-file').click()">📎 Já paguei — enviar comprovante</button>
       <input id="gate-comp-file" type="file" accept="image/*" style="display:none" onchange="enviarComprovante(this.files[0])">
       <div id="gate-comp-ok" style="display:none;color:var(--ve);font-size:13px;margin-top:8px;text-align:center">✓ Comprovante enviado! Vamos conferir e liberar.</div>
       <a class="btn ghost" id="gate-pending-wa" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;display:flex" href="https://wa.me/5527998451796?text=Ol%C3%A1!%20Fiz%20meu%20cadastro%20no%20painel%20dichava%20e%20quero%20liberar%20meu%20acesso." target="_blank" rel="noopener">Falar no WhatsApp</a>
