@@ -2681,7 +2681,7 @@ function mostrarBannerDemo(){
 function sairDemo(){
   try{ if(KEY) localStorage.removeItem(KEY); }catch(e){}
   _DEMO=false;
-  location.reload();
+  location.href='/clinica/'; // sem ?demo=1 → cai na tela de login/cadastro
 }
 
 function metaFrom(user){

@@ -4866,6 +4866,7 @@ function entrarDemoApp(){
 function sairDemoApp(){
   const b=document.getElementById('demo-banner-app'); if(b)b.style.display='none';
   U=null; try{ls('dr_session',null);}catch(e){}
+  try{history.replaceState(null,'',location.pathname);}catch(e){} // remove ?demo=1 pra não recair no demo
   showV('va'); try{mostrarWelcome();}catch(e){}
 }
 function abrirPainelProf(){try{vib(12);}catch(e){}window.location.href='/clinica/';}
