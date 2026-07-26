@@ -560,6 +560,7 @@ tbody tr:hover{background:var(--cin)}
     <a class="nav-item" data-nav="pacientes"><span class="ic">☺</span> Pacientes</a>
     <a class="nav-item" data-nav="prontuarios"><span class="ic">▤</span> Prontuários</a>
     <a class="nav-item" data-nav="caixa"><span class="ic">$</span> Caixa</a>
+    <a class="nav-item" data-nav="projecao"><span class="ic">◎</span> Projeção</a>
     <a class="nav-item" data-nav="documentos"><span class="ic">▦</span> Documentos</a>
     <a class="nav-item" data-nav="mensagens"><span class="ic">✉</span> Mensagens <span class="badge" id="badge-msgs"></span></a>
     <a class="nav-item" data-nav="perfil"><span class="ic">☺</span> Meu perfil</a>
@@ -707,7 +708,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
 /* ===== ÍCONES SVG DO PAINEL (estilo gradiente do app) ===== */
 const CIC={
   dash:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-dash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="8" height="8" rx="2.2" fill="url(#cic-dash)"/><rect x="13" y="3" width="8" height="5" rx="2.2" fill="url(#cic-dash)" opacity=".65"/><rect x="13" y="10" width="8" height="11" rx="2.2" fill="url(#cic-dash)"/><rect x="3" y="13" width="8" height="8" rx="2.2" fill="url(#cic-dash)" opacity=".65"/></svg>`,
@@ -729,7 +730,7 @@ function pintarIconesClinica(){
 }
 // menu "Mais" (mobile) — funções que não cabem na barra inferior
 function abrirMaisMenu(){
-  const items=[['prontuarios','Prontuários'],['documentos','Documentos'],['caixa','Caixa'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  const items=[['prontuarios','Prontuários'],['documentos','Documentos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
   const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
@@ -900,6 +901,7 @@ function render(){
   else if(route==='pacientes') v.innerHTML=viewPacientes();
   else if(route==='prontuarios') v.innerHTML=viewProntuarios();
   else if(route==='caixa') v.innerHTML=viewCaixa();
+  else if(route==='projecao') { v.innerHTML=viewProjecao(); }
   else if(route==='documentos') v.innerHTML=viewDocumentos();
   else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
@@ -2211,6 +2213,54 @@ async function organizarComIA(){
     toast('✓ Organizado — revise e salve');
   }catch(e){ toast((e&&e.message)||'Erro ao organizar',4000); }
   finally{ if(btn){btn.disabled=false;btn.style.opacity='';} if(tx)tx.textContent=antes||'✨ Organizar com IA'; }
+}
+/* =============== PROJEÇÃO / METAS =============== */
+function viewProjecao(){
+  const m=(DB.config&&DB.config.meta)||{};
+  const alvo=+m.alvo||0, vs=+m.valorSessao||0, freq=+m.freq||4;
+  setTimeout(()=>{try{calcProjecao();}catch(e){}},0);
+  return `<div class="card" style="padding:22px;max-width:620px">
+    <div class="sec-title" style="margin-top:0">Sua meta</div>
+    <p style="color:var(--txs);font-size:13.5px;margin-bottom:16px">Defina onde quer chegar e o painel calcula quantos pacientes e sessões você precisa — e quanto já andou este mês (puxando do Caixa).</p>
+    <div class="row3">
+      <div class="field"><label>Meta de faturamento / mês (R$)</label><input id="m-alvo" type="number" min="0" step="50" value="${alvo||''}" placeholder="ex.: 8000" oninput="calcProjecao()"></div>
+      <div class="field"><label>Valor médio da sessão (R$)</label><input id="m-vs" type="number" min="0" step="10" value="${vs||''}" placeholder="ex.: 180" oninput="calcProjecao()"></div>
+      <div class="field"><label>Sessões por paciente / mês</label><input id="m-freq" type="number" min="1" max="30" step="1" value="${freq}" placeholder="4 = semanal" oninput="calcProjecao()"></div>
+    </div>
+  </div>
+  <div id="proj-res" style="margin-top:16px"></div>`;
+}
+function calcProjecao(){
+  const g=id=>{const el=$('#'+id);return el?+el.value||0:0;};
+  const alvo=g('m-alvo'), vs=g('m-vs'); let freq=g('m-freq'); if(freq<1)freq=4;
+  if(!DB.config)DB.config={}; DB.config.meta={alvo,valorSessao:vs,freq}; save();
+  const box=$('#proj-res'); if(!box)return;
+  if(!alvo||!vs){ box.innerHTML='<div class="card empty">Preencha a meta e o valor da sessão pra ver a projeção. 🌱</div>'; return; }
+  const sessMes=Math.ceil(alvo/vs);
+  const pacientes=Math.ceil(sessMes/freq);
+  const sessSemana=Math.ceil(sessMes/4.33);
+  const mes=todayISO().slice(0,7);
+  const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
+  const pct=alvo>0?Math.min(100,Math.round(entradasMes/alvo*100)):0;
+  const falta=Math.max(0,alvo-entradasMes);
+  const pacAtuais=DB.pacientes.length;
+  const gapPac=Math.max(0,pacientes-pacAtuais);
+  box.innerHTML=`<div class="grid kpis">
+    <div class="card kpi"><div class="ic-bg">☺</div><div class="lbl">Pacientes necessários</div><div class="val">${pacientes}</div><div class="dl">atendendo ${freq}x/mês cada</div></div>
+    <div class="card kpi"><div class="ic-bg">◷</div><div class="lbl">Sessões / mês</div><div class="val">${sessMes}</div><div class="dl">≈ ${sessSemana}/semana</div></div>
+    <div class="card kpi"><div class="ic-bg">$</div><div class="lbl">Valor da sessão</div><div class="val" style="color:var(--ve)">${brl(vs)}</div><div class="dl">meta ${brl(alvo)}/mês</div></div>
+  </div>
+  <div class="card" style="padding:20px;max-width:620px;margin-top:4px">
+    <div class="sec-title" style="margin-top:0">Este mês, na vida real</div>
+    <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px"><span style="color:var(--txs)">Faturado</span><b>${brl(entradasMes)} de ${brl(alvo)}</b></div>
+    <div style="height:12px;background:var(--line);border-radius:8px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--v),var(--ve))"></div></div>
+    <div style="font-size:13px;color:var(--txs);margin-top:10px">${pct}% da meta · ${falta>0?('faltam '+brl(falta)):'meta batida! 🎉'}</div>
+    <div style="border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:13.5px;color:var(--txs)">
+      Você tem <b style="color:var(--tx)">${pacAtuais}</b> paciente(s) cadastrado(s).
+      ${gapPac>0?` Pra bater a meta nessa frequência, faltam cerca de <b style="color:var(--tx)">${gapPac}</b>.`:' Já tem base suficiente pra meta — foco na agenda cheia! 💚'}
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--txs);max-width:620px;margin-top:12px">Estimativa de planejamento — considera 4,33 semanas/mês e não desconta impostos, faltas ou despesas. Use como norte, não como promessa.</p>`;
 }
 
 /* -- Financeiro manual -- */
