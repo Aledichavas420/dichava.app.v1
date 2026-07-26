@@ -6938,6 +6938,7 @@ function ini2(n){return (n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'')
 async function contatarProf(id){
   try{vib(12);}catch(e){}
   if(typeof U==='undefined'||!U){toast('Entre na sua conta para conversar.');return;}
+  if(U.id==='demo'){toast('🎬 No modo demonstração o chat fica desativado. Crie sua conta grátis pra conversar com profissionais 💚',4500);return;}
   if(!_SB){toast('Sem conexão com o servidor.');return;}
   const p=_profsById[id]||{};
   try{
