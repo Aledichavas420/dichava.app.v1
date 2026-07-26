@@ -50,6 +50,18 @@ nav.solid{background:rgba(20,26,20,.86);backdrop-filter:blur(14px);border-bottom
   border:2.5px solid #3A2063;box-shadow:3px 3px 0 #3A2063;transition:transform .15s,box-shadow .15s;display:inline-block}
 .nav-cta:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #3A2063}
 .nav-cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #3A2063}
+.nav-cta-wrap{position:relative}
+.nav-cta-wrap .nav-cta{cursor:pointer;border:none;font-family:inherit}
+.nav-choose{position:absolute;top:calc(100% + 10px);right:0;min-width:252px;background:#141b14;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.5);display:none;flex-direction:column;gap:2px;z-index:60}
+.nav-cta-wrap.open .nav-choose{display:flex}
+.nav-choose a{display:flex;gap:12px;align-items:center;padding:11px 13px;border-radius:12px;color:#eaf3ee!important;text-decoration:none;transition:background .15s}
+.nav-choose a:hover{background:rgba(255,255,255,.06);color:#eaf3ee!important}
+.nav-choose .ico{font-size:22px;flex:none;line-height:1}
+.nav-choose b{display:block;font-size:14px;color:#eaf3ee;font-weight:800}
+.nav-choose small{display:block;font-size:12px;color:#8fa393;font-weight:600;margin-top:1px}
+@media(max-width:760px){
+  .nav-choose{position:static;min-width:0;margin-top:10px;box-shadow:none;background:rgba(255,255,255,.04)}
+}
 .nav-links{display:flex;align-items:center;gap:22px}
 .nav-links>a:not(.nav-cta){color:#D9EBDB;font-weight:700;font-size:14px;transition:color .2s}
 .nav-links>a:not(.nav-cta):hover{color:#5BC06F}
@@ -251,7 +263,13 @@ function ageNo(){ document.querySelectorAll('#age-gate button').forEach(function
     <a href="#quem" onclick="closeMenu()">Quem faz</a>
     <a href="profissionais.html" onclick="closeMenu()">Para profissionais</a>
     <a href="#planos" class="nav-prem" onclick="closeMenu()">✨ É grátis</a>
-    <a class="nav-cta" href="../" target="_blank" onclick="closeMenu()">Abrir o app →</a>
+    <div class="nav-cta-wrap" id="ctaWrap">
+      <button class="nav-cta" type="button" onclick="toggleCta(event)" aria-haspopup="true" aria-expanded="false">Abrir o app →</button>
+      <div class="nav-choose" id="navChoose" role="menu">
+        <a href="../" target="_blank" onclick="closeMenu()" role="menuitem"><span class="ico">📱</span><div><b>Sou paciente / usuário</b><small>App gratuito de autocuidado</small></div></a>
+        <a href="../clinica/" target="_blank" onclick="closeMenu()" role="menuitem"><span class="ico">🩺</span><div><b>Sou profissional</b><small>Painel da clínica</small></div></a>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -679,7 +697,10 @@ function ageNo(){ document.querySelectorAll('#age-gate button').forEach(function
 <script>
 // menu de navegação (mobile)
 function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');document.getElementById('navBurger').classList.toggle('open');}
-function closeMenu(){document.getElementById('navLinks').classList.remove('open');document.getElementById('navBurger').classList.remove('open');}
+function closeMenu(){document.getElementById('navLinks').classList.remove('open');document.getElementById('navBurger').classList.remove('open');closeCta();}
+function toggleCta(ev){ev.stopPropagation();var w=document.getElementById('ctaWrap');var open=w.classList.toggle('open');w.querySelector('.nav-cta').setAttribute('aria-expanded',open?'true':'false');}
+function closeCta(){var w=document.getElementById('ctaWrap');if(w){w.classList.remove('open');var b=w.querySelector('.nav-cta');if(b)b.setAttribute('aria-expanded','false');}}
+document.addEventListener('click',function(e){var w=document.getElementById('ctaWrap');if(w&&!w.contains(e.target))closeCta();});
 // estrelas
 function mkStars(id,n){var c=document.getElementById(id);if(!c)return;var h='';
   for(var i=0;i<n;i++){var s=(Math.random()*2.2+1).toFixed(1);
