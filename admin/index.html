@@ -286,12 +286,14 @@ function wlFirst(nome){ return String(nome||'').trim().split(/\s+/)[0]||''; }
 // Mensagem direta pronta pra quem já escolheu iniciar a plataforma
 function wlMsg(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
-  return oi+' Aqui é o Alexandre, do Dichava 💚\n\n'
-    +'A partir de agora você já está quase dentro do projeto — mas antes de qualquer coisa, quero que você teste com calma e veja se faz sentido pra você.\n\n'
-    +'Dá pra explorar as duas plataformas funcionando, sem precisar criar conta (modo demonstração):\n\n'
-    +'🩺 Painel do profissional: dichava.app/clinica/?demo=1\n'
-    +'📱 App do paciente (o que você indica pros seus pacientes): dichava.app/?demo=1\n\n'
-    +'Entra, clica em tudo, sente o jeito. Se fizer sentido pra você, é só criar sua conta pelo botão lá dentro que a gente acerta os detalhes juntos. Sem pressa e sem compromisso — quero que você entre porque quis. Qualquer dúvida, é só me chamar por aqui 🌱';
+  return oi+' Tudo bem? Aqui é o Alexandre, psicólogo e criador do Dichava.\n\n'
+    +'Antes de qualquer coisa, queria te convidar para conhecer a plataforma com calma. Minha ideia é que você teste tudo antes de decidir se faz sentido fazer parte da rede.\n\n'
+    +'Você pode acessar as duas versões em modo demonstração, sem precisar criar uma conta:\n\n'
+    +'🧑‍⚕️ Painel do profissional:\nhttps://dichava.app/clinica/?demo=1\n\n'
+    +'📱 App do paciente:\nhttps://dichava.app/?demo=1\n\n'
+    +'Explora, clica em tudo e vê se a proposta conversa com a sua forma de cuidar. Se gostar, é só criar sua conta pelo próprio painel que a gente conversa sobre os próximos passos.\n\n'
+    +'O lançamento oficial será no dia 5 de agosto, uma data muito especial para nós: a Dichavando completa 8 anos. Depois de todos esses anos produzindo conteúdo e construindo uma comunidade, esse aplicativo é o presente que queremos entregar para quem acompanha nosso trabalho — uma ferramenta pensada para fortalecer uma clínica mais ética, humana e alinhada à redução de danos.\n\n'
+    +'Vai ser muito bom ter você com a gente nessa nova jornada. 💚';
 }
 function renderWaitlist(){
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
