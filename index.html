@@ -2344,6 +2344,7 @@ a{color:inherit;text-decoration:none}
   <div class="aw-acts">
     <button class="btn bv bfull" onclick="iniciarJornada()">🌱 Iniciar jornada</button>
     <button class="btn bout bfull" style="margin-top:11px" onclick="mostrarLogin()">Já tenho conta · Entrar</button>
+    <button class="btn bout bfull" style="margin-top:11px;opacity:.85" onclick="entrarDemoApp()">🎬 Explorar sem conta (demonstração)</button>
     <div class="aw-prof-div"><span>profissional de saúde?</span></div>
     <button class="aw-prof-btn" onclick="abrirPainelProf()"><span class="aw-prof-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v5a4 4 0 0 0 8 0V3"/><path d="M4 3h1.6M12.4 3H14M9 16v1a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="13.4" r="2.4"/></svg></span><span class="aw-prof-tx"><b>Painel dos profissionais de saúde</b><small>Perfil, agenda, pacientes e prontuários</small></span><span class="aw-prof-go">›</span></button>
   </div>
@@ -2859,6 +2860,10 @@ a{color:inherit;text-decoration:none}
 
 </div><!-- /vpages -->
 <!-- BOTTOM NAV -->
+<div id="demo-banner-app" style="display:none;flex-shrink:0;align-items:center;justify-content:center;gap:12px;padding:9px 14px;background:#8B6FE0;color:#fff;font-size:13px;z-index:120">
+  <span>🎬 <b>Modo demonstração</b> — explore à vontade</span>
+  <button onclick="sairDemoApp()" style="background:#fff;color:#5a3ec0;border:none;font-weight:800;font-size:12.5px;padding:7px 14px;border-radius:20px;cursor:pointer;white-space:nowrap">Criar conta grátis →</button>
+</div>
 <nav id="bnav" class="on">
   <div class="nav-side">
     <button class="ni on" data-p="p-home" onclick="goPg('p-home',this)"><div class="ni-ic" data-icon="inicio"></div><span>Início</span></button>
@@ -4847,6 +4852,22 @@ function mostrarWelcome(){document.getElementById('aw-welcome').style.display='f
 function mostrarLogin(){document.getElementById('aw-welcome').style.display='none';document.getElementById('aw-auth').style.display='block';authTab('login');}
 function mostrarSignupPro(){document.getElementById('aw-welcome').style.display='none';document.getElementById('aw-auth').style.display='block';authTab('signup');setAcct('pro');}
 function iniciarJornada(){startOb();}
+// ===== MODO DEMONSTRAÇÃO (app do paciente) =====
+// Entra no app completo, sem conta e sem tocar na nuvem (U.id==='demo' já é
+// tratado em todo o código: não sincroniza, não avalia, etc.). Todas as
+// ferramentas ficam liberadas (o app é 100% gratuito no lançamento).
+function entrarDemoApp(){
+  U={id:'demo',nome:'Visitante',tipo:'user',email:''};
+  try{ if(!ls('dr_o_demo')) sO({goal:'reduzir',subs:['Álcool'],data:hoje()}); }catch(e){}
+  document.getElementById('va').classList.remove('on');
+  const b=document.getElementById('demo-banner-app'); if(b)b.style.display='flex';
+  try{ entrar(); }catch(e){ try{showV('vapp');}catch(_){}}
+}
+function sairDemoApp(){
+  const b=document.getElementById('demo-banner-app'); if(b)b.style.display='none';
+  U=null; try{ls('dr_session',null);}catch(e){}
+  showV('va'); try{mostrarWelcome();}catch(e){}
+}
 function abrirPainelProf(){try{vib(12);}catch(e){}window.location.href='/clinica/';}
 async function doLogin(){
   blurAll();
@@ -9518,8 +9539,9 @@ setTimeout(function(){
     applyTheme();
     maybeLock();
   } else {
-    showV('va');
-    try{mostrarWelcome();}catch(e){}
+    let _demo=false; try{ _demo=new URLSearchParams(location.search).get('demo')==='1'; }catch(e){}
+    if(_demo){ entrarDemoApp(); }
+    else { showV('va'); try{mostrarWelcome();}catch(e){} }
   }
   setTimeout(()=>{buildIntRow('crise-int','cr');buildIntRow('fiss-int','fs');},200);
 })();
