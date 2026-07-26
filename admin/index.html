@@ -317,12 +317,13 @@ async function enviarComunicado(teste){
   st.style.color='var(--txm)'; st.textContent='Enviando…';
   try{
     const {data,error}=await SB.functions.invoke('newsletter-enviar',{body:{subject,html,teste:!!teste}});
-    if(error) throw error;
+    if(error){ let det=''; try{const b=await error.context.json(); det=b&&(b.erro||b.error);}catch(_){}; throw new Error(det||error.message||'erro'); }
+    if(data&&data.erro){ throw new Error(data.erro); }
     st.style.color='#2FA35F';
     st.textContent=teste?'✓ Teste enviado pro seu e-mail.':('✓ Enviado! '+((data&&data.enviados)??'?')+' entregues'+(data&&data.falhas?(' · '+data.falhas+' falhas'):'')+'.');
   }catch(e){
     st.style.color='#E5484D';
-    st.textContent='Falhou: '+((e&&e.message)||'')+' — a função newsletter-enviar está deployada e com os secrets (RESEND_API_KEY, EMAIL_FROM, WEBHOOK_SECRET, ADMIN_EMAIL)?';
+    st.textContent='Falhou: '+((e&&e.message)||'')+' — confira: função deployada, Verify JWT OFF, e secrets RESEND_API_KEY / EMAIL_FROM / ADMIN_EMAIL configurados.';
   }
 }
 // ===== BUSCAR / DELETAR USUÁRIO =====
