@@ -515,14 +515,18 @@ body.has-demo-banner{padding-bottom:64px}
           <div class="pw-ri" data-r="up"><span class="pw-rk">○</span> Uma letra maiúscula</div>
           <div class="pw-ri" data-r="low"><span class="pw-rk">○</span> Uma letra minúscula</div>
           <div class="pw-ri" data-r="num"><span class="pw-rk">○</span> Um número</div>
+          <div class="pw-ri" data-r="sym"><span class="pw-rk">○</span> Um símbolo (ex: !@#$)</div>
         </div>
       </div>
       <button class="btn" id="s-btn" onclick="gateSignup()">Criar conta profissional</button>
       <div class="gate-note">Ao criar, seu perfil público passa por uma <b>aprovação</b> antes de aparecer na rede. Você já pode usar o painel na hora.<br>Já tem conta? <a href="#" onclick="event.preventDefault();gateShowLogin()">Entrar →</a></div>
     </div>
     <div id="gate-notpro" class="hide">
-      <div class="gate-info">Esta área é exclusiva para contas <b>profissionais</b>. Sua conta atual é de usuário comum.</div>
-      <button class="btn ghost" style="width:100%;justify-content:center;margin-top:14px" onclick="gateLogout()">Sair e entrar com outra conta</button>
+      <div class="gate-info">Este e-mail está cadastrado como <b>paciente</b> no dichava.app. Esta área é exclusiva para contas <b>profissionais</b>.</div>
+      <div class="gate-info" style="background:#fff6e8;color:#8a5a00;margin-top:10px">Cada e-mail vale para uma conta só. Para atender como profissional, <b>crie uma conta com outro e-mail</b>. Seu app de paciente continua funcionando normalmente.</div>
+      <a class="btn" style="width:100%;justify-content:center;margin-top:14px;text-decoration:none;display:flex" href="#" onclick="event.preventDefault();sairECriarPro()">Criar conta profissional (outro e-mail)</a>
+      <a class="btn ghost" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;display:flex" href="/">← Voltar ao app de paciente</a>
+      <button class="btn ghost" style="width:100%;justify-content:center;margin-top:10px" onclick="gateLogout()">Sair</button>
     </div>
     <div id="gate-pending" class="hide">
       <div class="gate-info" id="gate-pending-tx">Que bom ter você aqui 🌱 Seu acesso está <b>em análise</b> — assim que confirmarmos seu cadastro e pagamento, o painel completo abre pra você. Costuma ser rápido.</div>
@@ -2667,9 +2671,9 @@ async function salvarNovaSenha(){
 function gateShowSignup(){ gateErr(''); preencherPlanos(); showGate('signup'); }
 // Regras de senha (espelham uma política forte no Supabase)
 function senhaRegras(pw){ pw=pw||''; return {
-  len:pw.length>=8, up:/[A-Z]/.test(pw), low:/[a-z]/.test(pw), num:/[0-9]/.test(pw)
+  len:pw.length>=8, up:/[A-Z]/.test(pw), low:/[a-z]/.test(pw), num:/[0-9]/.test(pw), sym:/[^A-Za-z0-9]/.test(pw)
 }; }
-function senhaValida(pw){ const r=senhaRegras(pw); return r.len&&r.up&&r.low&&r.num; }
+function senhaValida(pw){ const r=senhaRegras(pw); return r.len&&r.up&&r.low&&r.num&&r.sym; }
 function checarSenha(pw){
   const r=senhaRegras(pw); const box=document.getElementById('s-pw-req'); if(!box)return;
   box.querySelectorAll('.pw-ri').forEach(el=>{
@@ -2684,6 +2688,7 @@ function voltarAoApp(){
   window.location.href='/';
 }
 function gateShowLogin(){ gateErr(''); showGate('login'); }
+async function sairECriarPro(){ try{ if(_SB) await _SB.auth.signOut(); }catch(e){} AUTH=null; try{$('#s-email').value='';$('#s-pw').value='';}catch(e){} gateErr(''); gateShowSignup(); }
 async function gateSignup(){
   gateErr('');
   const nome=$('#s-nome').value.trim(), reg=$('#s-reg').value.trim(), email=$('#s-email').value.trim(), pw=$('#s-pw').value;
@@ -2691,16 +2696,21 @@ async function gateSignup(){
   if(!nome){ gateErr('Informe seu nome.'); return; }
   if(!reg){ gateErr('Informe seu registro profissional.'); return; }
   if(!email||!/.+@.+\..+/.test(email)){ gateErr('Informe um e-mail válido.'); return; }
-  if(!senhaValida(pw)){ gateErr('A senha precisa ter 8+ caracteres, com maiúscula, minúscula e número.'); checarSenha(pw); return; }
+  if(!senhaValida(pw)){ gateErr('A senha precisa ter 8+ caracteres, com maiúscula, minúscula, número e símbolo.'); checarSenha(pw); return; }
   if(!_SB){ gateErr('Sem conexão com o servidor.'); return; }
   const btn=$('#s-btn'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Criando…';
   try{
     const{data,error}=await _SB.auth.signUp({email,password:pw,options:{data:{nome,tipo:'pro',reg,plano},emailRedirectTo:'https://dichava.app/clinica/'}});
     if(error){
       const m=error.message||'';
-      if(/already|registered/i.test(m)) gateErr('Este e-mail já tem conta. Faça login.');
+      if(/already|registered|exist/i.test(m)) gateErr('Este e-mail já tem uma conta no dichava.app. Se você já usa como paciente, use OUTRO e-mail para a conta profissional — ou faça login.');
       else if(/password/i.test(m)) gateErr('Senha fraca: use 8+ caracteres com maiúscula, minúscula e número.');
       else gateErr(m);
+      return;
+    }
+    // Supabase ofusca e-mail já existente: retorna user com identities vazio (sem erro)
+    if(data && data.user && Array.isArray(data.user.identities) && data.user.identities.length===0){
+      gateErr('Este e-mail já tem uma conta no dichava.app. Cada e-mail vale para UMA conta (paciente ou profissional). Se você já usa como paciente, use outro e-mail para a conta profissional — ou faça login.');
       return;
     }
     if(!data.session){ // precisa confirmar e-mail
