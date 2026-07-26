@@ -5,7 +5,7 @@
 <script>/* ANTI-CLICKJACKING: se a página for aberta dentro de um <iframe>, quebra pra fora (ou esconde). */
 if(self!==top){try{top.location=self.location;}catch(e){document.documentElement.style.display='none';}}</script>
 <script>/* PORTÃO PRÉ-LANÇAMENTO: público vai pra landing. Você/testers entram com ?acesso=dichava-equipe-2026 */
-(function(){var MANUTENCAO=true;if(!MANUTENCAO)return;try{
+(function(){var MANUTENCAO=false;if(!MANUTENCAO)return;try{
   var q=new URLSearchParams(location.search);
   if(q.get('acesso')==='dichava-equipe-2026'){localStorage.setItem('dr_acesso','1');history.replaceState(null,'',location.pathname);return;}
   if(localStorage.getItem('dr_acesso')==='1')return;
