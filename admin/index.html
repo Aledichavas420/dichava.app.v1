@@ -148,6 +148,30 @@ a{color:var(--ve)}
     <div class="sec">Profissionais</div>
     <div class="filters" id="filters"></div>
     <div class="plist" id="plist"><div class="spin"></div></div>
+
+    <div class="sec">📣 Enviar comunicado</div>
+    <div class="card" style="padding:16px">
+      <div style="font-size:13.5px;color:var(--txs);margin-bottom:10px">Inscritos na newsletter: <b id="nl-count">—</b></div>
+      <input id="cm-subject" placeholder="Assunto do e-mail" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
+      <textarea id="cm-html" rows="4" placeholder="Mensagem (texto ou HTML simples)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;font-family:inherit"></textarea>
+      <div class="pacts" style="margin-top:10px">
+        <button class="btn ghost sm" onclick="enviarComunicado(true)">Enviar teste (só p/ mim)</button>
+        <button class="btn sm" onclick="enviarComunicado(false)">Enviar pra todos</button>
+      </div>
+      <div id="cm-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
+    </div>
+
+    <div class="sec">🔎 Buscar / gerenciar usuário</div>
+    <div class="card" style="padding:16px">
+      <div style="display:flex;gap:8px">
+        <input id="us-q" placeholder="e-mail (ou parte dele)" style="flex:1;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px" onkeydown="if(event.key==='Enter')buscarUsuario()">
+        <button class="btn sm" onclick="buscarUsuario()">Buscar</button>
+      </div>
+      <div id="us-list" style="margin-top:10px"></div>
+    </div>
+
+    <div class="sec">⭐ Avaliações (moderar)</div>
+    <div class="plist" id="av-list"><div class="empty" style="padding:16px">—</div></div>
   </div>
 </div>
 
@@ -274,6 +298,77 @@ async function carregar(){
   }catch(e){ $('#plist').innerHTML='<div class="empty">Não consegui carregar os profissionais.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small></div>'; }
   carregarWaitlist();
   carregarSuporte();
+  carregarNewsletterCount();
+  carregarAvaliacoesAdmin();
+}
+// ===== NEWSLETTER (contador) =====
+async function carregarNewsletterCount(){
+  const el=$('#nl-count'); if(!el)return;
+  try{ const {data,error}=await SB.rpc('admin_newsletter_count'); if(error)throw error; el.textContent=(data??0)+' inscrito(s)'; }
+  catch(e){ el.textContent='— (rode o admin-extras-setup.sql)'; }
+}
+// ===== ENVIAR COMUNICADO (via Edge Function newsletter-enviar) =====
+async function enviarComunicado(teste){
+  const subject=($('#cm-subject').value||'').trim();
+  const html=($('#cm-html').value||'').trim();
+  const st=$('#cm-status');
+  if(!subject||!html){ st.textContent='Preencha assunto e mensagem.'; st.style.color='#E5484D'; return; }
+  if(!teste && !confirm('Enviar este comunicado para TODOS os inscritos da newsletter?')) return;
+  st.style.color='var(--txm)'; st.textContent='Enviando…';
+  try{
+    const {data,error}=await SB.functions.invoke('newsletter-enviar',{body:{subject,html,teste:!!teste}});
+    if(error) throw error;
+    st.style.color='#2FA35F';
+    st.textContent=teste?'✓ Teste enviado pro seu e-mail.':('✓ Enviado! '+((data&&data.enviados)??'?')+' entregues'+(data&&data.falhas?(' · '+data.falhas+' falhas'):'')+'.');
+  }catch(e){
+    st.style.color='#E5484D';
+    st.textContent='Falhou: '+((e&&e.message)||'')+' — a função newsletter-enviar está deployada e com os secrets (RESEND_API_KEY, EMAIL_FROM, WEBHOOK_SECRET, ADMIN_EMAIL)?';
+  }
+}
+// ===== BUSCAR / DELETAR USUÁRIO =====
+async function buscarUsuario(){
+  const q=($('#us-q').value||'').trim(); const box=$('#us-list');
+  if(!q){ box.innerHTML=''; return; }
+  box.innerHTML='<div class="spin"></div>';
+  try{
+    const {data,error}=await SB.rpc('admin_buscar_usuario',{p_email:q});
+    if(error) throw error;
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<div class="empty" style="padding:12px">Nenhum usuário encontrado.</div>'; return; }
+    box.innerHTML=rows.map(u=>`<div class="pcard"><div class="phead"><div style="flex:1;min-width:0">
+      <div class="pn">${esc(u.email||'')}</div>
+      <div class="pmeta">${esc(u.tipo||'user')} · ${u.confirmado?'✓ confirmado':'⚠ não confirmado'} · ${fmtData(u.criado)}</div>
+      </div></div>
+      <div class="pacts"><button class="btn dg sm" onclick="delUsuario('${u.id}','${esc(u.email||'')}')">🗑️ Deletar conta</button></div></div>`).join('');
+  }catch(e){ box.innerHTML='<div class="empty" style="padding:12px">'+esc(e.message||'')+' — rodou o admin-extras-setup.sql?</div>'; }
+}
+async function delUsuario(id,email){
+  if(!confirm('DELETAR permanentemente a conta '+email+' e todos os dados dela? Não dá pra desfazer.')) return;
+  try{
+    const {error}=await SB.rpc('admin_deletar_usuario',{p_id:id});
+    if(error) throw error;
+    toast('Conta removida'); buscarUsuario();
+  }catch(e){ toast(e.message||'Erro ao deletar',1); }
+}
+// ===== MODERAR AVALIAÇÕES =====
+async function carregarAvaliacoesAdmin(){
+  const box=$('#av-list'); if(!box)return;
+  try{
+    const {data,error}=await SB.rpc('admin_avaliacoes');
+    if(error) throw error;
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<div class="empty" style="padding:16px">Nenhuma avaliação ainda.</div>'; return; }
+    box.innerHTML=rows.map(a=>`<div class="pcard"><div class="phead"><div style="flex:1;min-width:0">
+      <div class="pn">${'★'.repeat(Math.max(0,Math.min(5,a.nota||0)))||'—'} <span style="color:var(--txs);font-size:12px">${fmtData(a.criado_em)}</span></div>
+      ${a.comentario?`<div class="pmeta" style="white-space:normal">“${esc(a.comentario)}”</div>`:''}
+      </div></div>
+      <div class="pacts"><button class="btn dg sm" onclick="removerAvaliacao('${a.id}')">Remover</button></div></div>`).join('');
+  }catch(e){ box.innerHTML='<div class="empty" style="padding:16px">'+esc(e.message||'')+' — rodou o admin-extras-setup.sql?</div>'; }
+}
+async function removerAvaliacao(id){
+  if(!confirm('Remover esta avaliação?')) return;
+  try{ const {error}=await SB.rpc('admin_avaliacao_remover',{p_id:id}); if(error)throw error; toast('Avaliação removida'); carregarAvaliacoesAdmin(); }
+  catch(e){ toast(e.message||'Erro',1); }
 }
 let WL=[], _wlFiltro='pendente';
 async function carregarWaitlist(){

@@ -33,8 +33,24 @@ const rodape = (token: string) =>
      <a href="${APP_URL}/newsletter-sair.html?t=${token}" style="color:#9aa89c">Descadastrar</a>
    </div>`;
 
+const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com")
+  .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+
+// autoriza se: (a) veio com o WEBHOOK_SECRET (cron/curl) OU (b) é um admin logado (JWT)
+async function autorizado(req: Request): Promise<boolean> {
+  if (SECRET && (req.headers.get("x-webhook-secret") || "") === SECRET) return true;
+  const auth = req.headers.get("Authorization") || "";
+  const token = auth.replace(/^Bearer\s+/i, "");
+  if (!token) return false;
+  try {
+    const { data } = await sb.auth.getUser(token);
+    const email = (data?.user?.email || "").toLowerCase();
+    return ADMINS.includes(email);
+  } catch (_) { return false; }
+}
+
 Deno.serve(async (req) => {
-  if (SECRET && (req.headers.get("x-webhook-secret") || "") !== SECRET)
+  if (!(await autorizado(req)))
     return new Response("forbidden", { status: 403 });
   try {
     if (!RESEND) return new Response(JSON.stringify({ erro: "sem RESEND_API_KEY" }), { status: 500 });
