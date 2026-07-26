@@ -286,23 +286,24 @@ function wlFirst(nome){ return String(nome||'').trim().split(/\s+/)[0]||''; }
 // Mensagem direta pronta pra quem já escolheu iniciar a plataforma
 function wlMsg(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
-  return oi+' Tudo bem? Aqui é o Alexandre, psicólogo e criador do Dichava.\n\n'
-    +'Antes de qualquer coisa, queria te convidar para conhecer a plataforma com calma. Minha ideia é que você teste tudo antes de decidir se faz sentido fazer parte da rede.\n\n'
+  return oi+' Tudo bem? Aqui é o Alexandre, fundador da Rede Dichava.\n\n'
+    +'A partir de agora você já está quase dentro do projeto. Antes de qualquer coisa, queria te convidar para conhecer a plataforma com calma. A ideia é que você teste tudo antes de cadastrar seu perfil na Rede.\n\n'
     +'Você pode acessar as duas versões em modo demonstração, sem precisar criar uma conta:\n\n'
     +'🧑‍⚕️ Painel do profissional:\nhttps://dichava.app/clinica/?demo=1\n\n'
     +'📱 App do paciente:\nhttps://dichava.app/?demo=1\n\n'
     +'Explora, clica em tudo e vê se a proposta conversa com a sua forma de cuidar. Se gostar, é só criar sua conta pelo próprio painel que a gente conversa sobre os próximos passos.\n\n'
-    +'O lançamento oficial será no dia 5 de agosto, uma data muito especial para nós: a Dichavando completa 8 anos. Depois de todos esses anos produzindo conteúdo e construindo uma comunidade, esse aplicativo é o presente que queremos entregar para quem acompanha nosso trabalho — uma ferramenta pensada para fortalecer uma clínica mais ética, humana e alinhada à redução de danos.\n\n'
-    +'Vai ser muito bom ter você com a gente nessa nova jornada. 💚';
+    +'O *lançamento oficial será no dia 5 de agosto*, uma data muito especial para nós: a *Dichavando completa 8 anos*. Depois de todos esses anos produzindo conteúdo e construindo uma comunidade, esse aplicativo é o presente que queremos entregar para quem acompanha nosso trabalho — uma ferramenta pensada para fortalecer uma clínica mais ética, humana e alinhada à redução de danos.\n\n'
+    +'Vai ser *muito bom ter você com a gente* nessa nova jornada. 💚';
 }
 function renderWaitlist(){
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
   if(!list.length){ $('#wl-list').innerHTML='<div class="empty">Nenhum cadastro '+(_wlFiltro==='todos'?'':'“'+(WL_ST[_wlFiltro]?WL_ST[_wlFiltro].l.toLowerCase():_wlFiltro)+'”')+' por aqui.</div>'; return; }
   $('#wl-list').innerHTML=list.map(w=>{
     const st=WL_ST[w.status||'pendente']||WL_ST.pendente;
-    const msg=encodeURIComponent(wlMsg(w));
-    const wa=w.whatsapp?('<a class="btn wa sm" href="https://wa.me/55'+String(w.whatsapp).replace(/\D/g,'')+'?text='+msg+'" target="_blank" rel="noopener" onclick="wlTocado(\''+w.id+'\')">💬 WhatsApp</a>'):'';
-    const mail=w.email?('<a class="btn ghost sm" href="mailto:'+esc(w.email)+'?subject='+encodeURIComponent('Seu acesso ao Dichava 💚')+'&body='+msg+'" onclick="wlTocado(\''+w.id+'\')">✉️ E-mail</a>'):'';
+    const msgWa=encodeURIComponent(wlMsg(w));                    // com *negrito* do WhatsApp
+    const msgMail=encodeURIComponent(wlMsg(w).replace(/\*/g,'')); // sem asteriscos no e-mail
+    const wa=w.whatsapp?('<a class="btn wa sm" href="https://wa.me/55'+String(w.whatsapp).replace(/\D/g,'')+'?text='+msgWa+'" target="_blank" rel="noopener" onclick="wlTocado(\''+w.id+'\')">💬 WhatsApp</a>'):'';
+    const mail=w.email?('<a class="btn ghost sm" href="mailto:'+esc(w.email)+'?subject='+encodeURIComponent('Seu acesso à Rede Dichava 💚')+'&body='+msgMail+'" onclick="wlTocado(\''+w.id+'\')">✉️ E-mail</a>'):'';
     const chips=[`<span class="chip ${st.c}">${st.l}</span>`];
     if(w.plano)chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
     if(w.cidade)chips.push('<span class="chip">'+esc(w.cidade)+'</span>');
