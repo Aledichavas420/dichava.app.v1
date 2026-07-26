@@ -2219,50 +2219,101 @@ async function organizarComIA(){
 /* =============== PROJEÇÃO / METAS =============== */
 function viewProjecao(){
   const m=(DB.config&&DB.config.meta)||{};
-  const alvo=+m.alvo||0, vs=+m.valorSessao||0, freq=+m.freq||4;
+  const alvo=+m.alvo||0, vs=+m.valorSessao||0, freq=+m.freq||4, dias=+m.dias||5, desp=+m.desp||0, faltas=+m.faltas||0;
   setTimeout(()=>{try{calcProjecao();}catch(e){}},0);
-  return `<div class="card" style="padding:22px;max-width:620px">
+  return `<div class="card" style="padding:22px;max-width:640px">
     <div class="sec-title" style="margin-top:0">Sua meta</div>
-    <p style="color:var(--txs);font-size:13.5px;margin-bottom:16px">Defina onde quer chegar e o painel calcula quantos pacientes e sessões você precisa — e quanto já andou este mês (puxando do Caixa).</p>
+    <p style="color:var(--txs);font-size:13.5px;margin-bottom:16px">Preencha o que souber. O painel calcula quantos pacientes e sessões você precisa, o líquido, quanto cobrar — e te dá dicas conforme seus números. 🌱</p>
     <div class="row3">
       <div class="field"><label>Meta de faturamento / mês (R$)</label><input id="m-alvo" type="number" min="0" step="50" value="${alvo||''}" placeholder="ex.: 8000" oninput="calcProjecao()"></div>
       <div class="field"><label>Valor médio da sessão (R$)</label><input id="m-vs" type="number" min="0" step="10" value="${vs||''}" placeholder="ex.: 180" oninput="calcProjecao()"></div>
       <div class="field"><label>Sessões por paciente / mês</label><input id="m-freq" type="number" min="1" max="30" step="1" value="${freq}" placeholder="4 = semanal" oninput="calcProjecao()"></div>
+    </div>
+    <div class="row3">
+      <div class="field"><label>Dias de atendimento / semana</label><input id="m-dias" type="number" min="1" max="7" step="1" value="${dias}" placeholder="ex.: 5" oninput="calcProjecao()"></div>
+      <div class="field"><label>Despesas fixas / mês (R$)</label><input id="m-desp" type="number" min="0" step="50" value="${desp||''}" placeholder="aluguel, sistema… (opcional)" oninput="calcProjecao()"></div>
+      <div class="field"><label>Taxa de faltas estimada (%)</label><input id="m-faltas" type="number" min="0" max="90" step="1" value="${faltas||''}" placeholder="ex.: 10 (opcional)" oninput="calcProjecao()"></div>
     </div>
   </div>
   <div id="proj-res" style="margin-top:16px"></div>`;
 }
 function calcProjecao(){
   const g=id=>{const el=$('#'+id);return el?+el.value||0:0;};
-  const alvo=g('m-alvo'), vs=g('m-vs'); let freq=g('m-freq'); if(freq<1)freq=4;
-  if(!DB.config)DB.config={}; DB.config.meta={alvo,valorSessao:vs,freq}; save();
+  const alvo=g('m-alvo'), vs=g('m-vs');
+  let freq=g('m-freq'); if(freq<1)freq=4;
+  let dias=g('m-dias'); if(dias<1)dias=5;
+  const desp=g('m-desp'); let faltasPct=g('m-faltas'); if(faltasPct<0)faltasPct=0; if(faltasPct>90)faltasPct=90;
+  if(!DB.config)DB.config={}; DB.config.meta={alvo,valorSessao:vs,freq,dias,desp,faltas:faltasPct}; save();
   const box=$('#proj-res'); if(!box)return;
-  if(!alvo||!vs){ box.innerHTML='<div class="card empty">Preencha a meta e o valor da sessão pra ver a projeção. 🌱</div>'; return; }
-  const sessMes=Math.ceil(alvo/vs);
-  const pacientes=Math.ceil(sessMes/freq);
-  const sessSemana=Math.ceil(sessMes/4.33);
+  if(!alvo||!vs){ box.innerHTML='<div class="card empty">Preencha ao menos a <b>meta</b> e o <b>valor da sessão</b> pra ver a projeção. 🌱</div>'; return; }
+
+  const faltasFrac=faltasPct/100;
+  const sessMesLiq=Math.ceil(alvo/vs);                                  // sessões que precisam acontecer
+  const sessMesBruto=Math.ceil(sessMesLiq/Math.max(0.1,(1-faltasFrac)));// agendar mais pra compensar faltas
+  const pacientes=Math.ceil(sessMesLiq/freq);
+  const sessSemana=Math.ceil(sessMesBruto/4.33);
+  const sessDiaNum=dias>0?sessSemana/dias:0;
+  const sessDia=dias>0?sessDiaNum.toFixed(1):'—';
+  const liquido=alvo-desp;
+  const reserva=Math.round(alvo*0.15);
+  const anual=alvo*12;
+  const perdaFaltas=Math.round((sessMesBruto-sessMesLiq)*vs);
+
+  // realidade
   const mes=todayISO().slice(0,7);
   const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
   const pct=alvo>0?Math.min(100,Math.round(entradasMes/alvo*100)):0;
   const falta=Math.max(0,alvo-entradasMes);
   const pacAtuais=DB.pacientes.length;
   const gapPac=Math.max(0,pacientes-pacAtuais);
+  const atend=DB.agendamentos.filter(a=>a.status==='atendido'&&+a.valor>0);
+  const ticketReal=atend.length?Math.round(atend.reduce((s,a)=>s+ +a.valor,0)/atend.length):0;
+  const precoNec=pacAtuais>0?Math.ceil(alvo/(pacAtuais*freq)):0;
+
+  // dicas dinâmicas
+  const dicas=[];
+  if(sessDiaNum>8) dicas.push('Sua agenda precisaria de ~<b>'+sessDia+' sessões/dia</b> — atenção à sobrecarga. Aumentar o valor da sessão, criar pacotes ou abrir mais um dia alivia bastante.');
+  if(faltasFrac>=0.15) dicas.push('Faltas em '+faltasPct+'% custam cerca de <b>'+brl(perdaFaltas)+'/mês</b>. Política de cancelamento (aviso de 24h) e cobrança de falta reduzem essa perda.');
+  if(ticketReal&&vs<ticketReal) dicas.push('Seu <b>ticket médio real</b> é '+brl(ticketReal)+' — acima do valor que você informou ('+brl(vs)+'). Talvez já dê pra mirar mais alto.');
+  if(pacAtuais>0&&precoNec>vs*1.25) dicas.push('Com seus <b>'+pacAtuais+' pacientes atuais</b>, o valor precisaria ir a <b>'+brl(precoNec)+'/sessão</b> pra bater a meta. Captar novos pacientes divide esse peso.');
+  if(desp>0&&liquido<alvo*0.6) dicas.push('As despesas fixas consomem <b>'+Math.round(desp/alvo*100)+'%</b> do faturamento. Vale revisar os custos ou repassar parte ao valor da sessão.');
+  if(pct>=100) dicas.push('Meta do mês <b>batida! 🎉</b> Que tal subir a meta, ou investir em captação e formação?');
+  dicas.push('Separe ~15% do faturamento (<b>'+brl(reserva)+'</b>) pra impostos e reserva — assim a meta líquida não vira susto lá na frente.');
+  dicas.push('<b>Pacotes mensais</b> com pequeno desconto trazem previsibilidade de renda e reduzem faltas.');
+  const dicasHtml=dicas.slice(0,5).map(d=>`<li style="position:relative;padding:7px 0 7px 24px;font-size:13.5px;color:var(--txs);border-top:1px solid var(--line)"><span style="position:absolute;left:0;top:7px">💡</span>${d}</li>`).join('');
+
+  const row=(lbl,val,strong)=>`<div style="display:flex;justify-content:space-between;padding:7px 0;font-size:14px;border-top:1px solid var(--line)"><span style="color:var(--txs)">${lbl}</span><b style="${strong||''}">${val}</b></div>`;
+
   box.innerHTML=`<div class="grid kpis">
-    <div class="card kpi"><div class="ic-bg">☺</div><div class="lbl">Pacientes necessários</div><div class="val">${pacientes}</div><div class="dl">atendendo ${freq}x/mês cada</div></div>
-    <div class="card kpi"><div class="ic-bg">◷</div><div class="lbl">Sessões / mês</div><div class="val">${sessMes}</div><div class="dl">≈ ${sessSemana}/semana</div></div>
+    <div class="card kpi"><div class="ic-bg">☺</div><div class="lbl">Pacientes necessários</div><div class="val">${pacientes}</div><div class="dl">${freq}x/mês cada</div></div>
+    <div class="card kpi"><div class="ic-bg">◷</div><div class="lbl">Sessões / mês</div><div class="val">${sessMesLiq}</div><div class="dl">${faltasPct>0?('agende ~'+sessMesBruto+' p/ faltas'):('≈ '+sessSemana+'/semana')}</div></div>
+    <div class="card kpi"><div class="ic-bg">▦</div><div class="lbl">Sessões / dia</div><div class="val">${sessDia}</div><div class="dl">em ${dias} dia(s)/semana</div></div>
     <div class="card kpi"><div class="ic-bg">$</div><div class="lbl">Valor da sessão</div><div class="val" style="color:var(--ve)">${brl(vs)}</div><div class="dl">meta ${brl(alvo)}/mês</div></div>
   </div>
-  <div class="card" style="padding:20px;max-width:620px;margin-top:4px">
+  <div class="card" style="padding:20px;max-width:640px;margin-top:4px">
+    <div class="sec-title" style="margin-top:0">Financeiro</div>
+    ${row('Faturamento bruto (meta)',brl(alvo))}
+    ${desp>0?row('Despesas fixas','− '+brl(desp)):''}
+    ${row('Líquido estimado',brl(liquido),'color:var(--ve)')}
+    ${row('Reserva sugerida (impostos ~15%)','− '+brl(reserva))}
+    ${row('Projeção anual',brl(anual))}
+  </div>
+  ${pacAtuais>0?`<div class="card" style="padding:18px 20px;max-width:640px;margin-top:14px;background:var(--vf,#f0f7f1)">
+    <div style="font-size:13.5px;color:var(--txs)">Com seus <b style="color:var(--tx)">${pacAtuais}</b> pacientes atuais atendendo ${freq}x/mês, pra bater a meta você precisaria cobrar</div>
+    <div style="font-size:26px;font-weight:800;color:var(--ve);margin-top:4px">${brl(precoNec)}<span style="font-size:14px;font-weight:600;color:var(--txs)"> / sessão</span></div>
+  </div>`:''}
+  <div class="card" style="padding:20px;max-width:640px;margin-top:14px">
     <div class="sec-title" style="margin-top:0">Este mês, na vida real</div>
     <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px"><span style="color:var(--txs)">Faturado</span><b>${brl(entradasMes)} de ${brl(alvo)}</b></div>
     <div style="height:12px;background:var(--line);border-radius:8px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--v),var(--ve))"></div></div>
-    <div style="font-size:13px;color:var(--txs);margin-top:10px">${pct}% da meta · ${falta>0?('faltam '+brl(falta)):'meta batida! 🎉'}</div>
-    <div style="border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:13.5px;color:var(--txs)">
-      Você tem <b style="color:var(--tx)">${pacAtuais}</b> paciente(s) cadastrado(s).
-      ${gapPac>0?` Pra bater a meta nessa frequência, faltam cerca de <b style="color:var(--tx)">${gapPac}</b>.`:' Já tem base suficiente pra meta — foco na agenda cheia! 💚'}
-    </div>
+    <div style="font-size:13px;color:var(--txs);margin-top:10px">${pct}% da meta · ${falta>0?('faltam '+brl(falta)):'meta batida! 🎉'}${ticketReal?(' · ticket médio real '+brl(ticketReal)):''}</div>
+    <div style="border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:13.5px;color:var(--txs)">Você tem <b style="color:var(--tx)">${pacAtuais}</b> paciente(s) cadastrado(s).${gapPac>0?(' Pra bater a meta nessa frequência, faltam cerca de <b style="color:var(--tx)">'+gapPac+'</b>.'):' Já tem base suficiente pra meta — foco na agenda cheia! 💚'}</div>
   </div>
-  <p style="font-size:12px;color:var(--txs);max-width:620px;margin-top:12px">Estimativa de planejamento — considera 4,33 semanas/mês e não desconta impostos, faltas ou despesas. Use como norte, não como promessa.</p>`;
+  <div class="card" style="padding:20px;max-width:640px;margin-top:14px">
+    <div class="sec-title" style="margin-top:0">Dicas pra você</div>
+    <ul style="list-style:none;margin:0;padding:0">${dicasHtml}</ul>
+  </div>
+  <p style="font-size:12px;color:var(--txs);max-width:640px;margin-top:12px">Estimativas de planejamento (4,33 semanas/mês). Não substituem contador — use como norte, não como promessa.</p>`;
 }
 /* =============== CONTRATOS =============== */
 let CONTRATOS=[];
