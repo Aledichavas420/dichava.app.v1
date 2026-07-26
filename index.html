@@ -6768,10 +6768,25 @@ function abrirPerfilProf(id){
         <div class="pd-mi"><span class="ic" data-icon="${(p.modalidade||'').includes('presencial')&&!(p.modalidade||'').includes('online')?'pf-local':'pf-online'}"></span><span class="tx"><span class="k">Modalidade</span><span class="v">${modLabel.replace(/^[^ ]+ /,'')}</span></span></div>
         ${p.valor?`<div class="pd-mi"><span class="ic" data-icon="pf-valor"></span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
         ${p.duracao?`<div class="pd-mi"><span class="ic" data-icon="pf-duracao"></span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
-        ${p.cidade?`<div class="pd-mi"><span class="ic" data-icon="pf-local"></span><span class="tx"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></span></div>`:''}
+        ${(p.cidade||p.estado)?`<div class="pd-mi"><span class="ic" data-icon="pf-local"></span><span class="tx"><span class="k">Local</span><span class="v">${esc([p.cidade,p.estado].filter(Boolean).join(' · '))}</span></span></div>`:''}
+        ${p.publicos?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic" data-icon="pf-online"></span><span class="tx"><span class="k">Públicos atendidos</span><span class="v">${esc(p.publicos)}</span></span></div>`:''}
+        ${p.idiomas?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic" data-icon="pf-disp"></span><span class="tx"><span class="k">Idiomas</span><span class="v">${esc(p.idiomas)}</span></span></div>`:''}
         ${p.disponibilidade?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic" data-icon="pf-disp"></span><span class="tx"><span class="k">Disponibilidade</span><span class="v">${esc(p.disponibilidade)}</span></span></div>`:''}
         ${temAgenda?`<div class="pd-mi" style="grid-column:1/-1;background:var(--vf);border-color:color-mix(in srgb,var(--v) 24%,transparent)"><span class="ic" data-icon="pf-agenda" style="background:#fff"></span><span class="tx"><span class="k" style="color:var(--ve)">Agendamento online</span><span class="v" style="color:var(--ve)">Escolha um horário abaixo ✓</span></span></div>`:''}
       </div>
+      ${(p.instituicao||p.ano_formacao||p.especializacao)?`
+      <div class="pd-sec">Formação</div>
+      <div class="pd-meta">
+        ${p.especializacao?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic" data-icon="pf-verificado"></span><span class="tx"><span class="k">Especialização</span><span class="v">${esc(p.especializacao)}</span></span></div>`:''}
+        ${p.instituicao?`<div class="pd-mi"><span class="ic" data-icon="pf-local"></span><span class="tx"><span class="k">Instituição</span><span class="v">${esc(p.instituicao)}</span></span></div>`:''}
+        ${p.ano_formacao?`<div class="pd-mi"><span class="ic" data-icon="pf-agenda"></span><span class="tx"><span class="k">Formado(a) em</span><span class="v">${esc(p.ano_formacao)}</span></span></div>`:''}
+      </div>`:''}
+      ${(()=>{const r=[];
+        if(p.instagram){const h=String(p.instagram).trim().replace(/^@/,'');if(h)r.push(['Instagram','https://instagram.com/'+encodeURIComponent(h.split('/').pop())]);}
+        if(p.site){let s=String(p.site).trim();if(s){if(!/^https?:\/\//i.test(s))s='https://'+s;r.push(['Site',s]);}}
+        if(p.linkedin){let s=String(p.linkedin).trim();if(s){if(!/^https?:\/\//i.test(s))s='https://'+s;r.push(['LinkedIn',s]);}}
+        return r.length?`<div class="pd-sec">Redes</div><div class="pd-tags">${r.map(([lb,href])=>`<a class="pd-tg" href="${esc(href)}" target="_blank" rel="noopener" style="text-decoration:none">${lb} ↗</a>`).join('')}</div>`:'';
+      })()}
       <div class="pd-sec">Avaliações</div>
       <div id="pd-avaliacoes"><div style="text-align:center;padding:16px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div>
     </div>
