@@ -8956,7 +8956,7 @@ function pushLater(){ls('dr_pushask_'+uid(),true);closeMod('mpush');}
 // _premServer = verdade do servidor (Supabase, tabela perfis). Fonte segura.
 // dr_prem_ = simulação LOCAL de teste (some quando o pagamento real entrar).
 let _premServer=false,_premExpira=null,_premTipo=null;
-const isPremium=()=>_premServer||!!ls('dr_prem_'+uid());
+const isPremium=()=>true;/* lançamento: todas as ferramentas gratuitas pro paciente */
 // lê o plano do servidor no login e re-renderiza os gates
 async function carregarPlano(){
   const antes=!!ls('dr_premsrv_'+uid())||_premServer;   // estado premium conhecido
@@ -8983,7 +8983,7 @@ function checkPremWelcome(){
   try{localStorage.setItem(k,'1');}catch(e){}
   try{abrirPremWin();}catch(e){}
 }
-function abrirPremium(){renderPremMod();openMod('mprem');const m=document.getElementById('prem-mascot');if(m&&!m.getAttribute('src')){try{if(typeof brotoDataURI==='function')m.src=brotoDataURI();}catch(e){}}}
+function abrirPremium(){try{toast('Tudo liberado — o app é 100% gratuito 💚');}catch(e){}}
 // ── Tela de boas-vindas ao Premium ──
 function planoNomeAtual(){const exp=_premExpira?new Date(_premExpira):null;const isVita=(_premTipo==='vita')||(exp&&exp.getFullYear()>=2099);const N={mensal:'Mensal',anual:'Anual',vita:'Vitalício'};return isVita?'Vitalício':(N[_premTipo]||'Premium');}
 function pwConfete(){const host=document.getElementById('prem-welcome');if(!host)return;const cores=['#F2B705','#E5C877','#B387F2','#7C3AED','#8FE3A6','#ffffff'];for(let i=0;i<42;i++){const c=document.createElement('div');c.className='cfp';c.style.left=(3+Math.random()*94)+'%';c.style.background=cores[i%cores.length];c.style.borderRadius=Math.random()>.5?'50%':'2px';c.style.animationDelay=(Math.random()*.6)+'s';c.style.animationDuration=(1.7+Math.random()*1.3)+'s';host.appendChild(c);setTimeout(()=>c.remove(),3400);}}

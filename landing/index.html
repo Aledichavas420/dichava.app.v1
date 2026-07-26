@@ -224,6 +224,24 @@ footer a{color:#93AC96;text-decoration:underline}
 </head>
 <body>
 
+<!-- Aviso +18 -->
+<div id="age-gate" style="position:fixed;inset:0;z-index:99999;background:radial-gradient(120% 70% at 50% -10%,#1c3a25 0%,transparent 55%),linear-gradient(180deg,#0e150f,#0c1710);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 24px;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#EAF3EC">
+  <div style="font-weight:800;font-size:24px;letter-spacing:-.3px">dichava<span style="color:#7BD98A">.app</span></div>
+  <div style="margin-top:22px;font-size:34px">🔞</div>
+  <h2 style="margin:12px 0 6px;font-size:22px;font-weight:800">Conteúdo para maiores de 18 anos</h2>
+  <p style="max-width:420px;color:#A9BCAC;font-size:15px;line-height:1.6;margin:0">Este site trata de redução de danos e uso de substâncias, com foco em cuidado e informação — sem julgamento. Para entrar, confirme que você tem 18 anos ou mais.</p>
+  <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;margin-top:26px">
+    <button onclick="ageOk()" style="background:#2fbd6a;color:#fff;border:none;border-radius:26px;padding:15px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer">Tenho 18 anos ou mais</button>
+    <button onclick="ageNo()" style="background:transparent;color:#A9BCAC;border:1px solid rgba(255,255,255,.18);border-radius:26px;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">Sou menor de 18</button>
+  </div>
+  <p id="age-no" style="display:none;max-width:400px;color:#A9BCAC;font-size:13.5px;line-height:1.6;margin-top:22px">Tudo bem — este conteúdo não é indicado para menores de 18. Se você está passando por um momento difícil, ligue para o <b style="color:#EAF3EC">CVV 188</b> (24h, gratuito e sigiloso). Cuide-se. 💚</p>
+</div>
+<script>
+(function(){try{ if(localStorage.getItem('dr_maior')==='1'){ var g=document.getElementById('age-gate'); if(g)g.style.display='none'; } }catch(e){}})();
+function ageOk(){ try{localStorage.setItem('dr_maior','1');}catch(e){} var g=document.getElementById('age-gate'); if(g)g.style.display='none'; }
+function ageNo(){ document.querySelectorAll('#age-gate button').forEach(function(b){b.style.display='none';}); var m=document.getElementById('age-no'); if(m)m.style.display='block'; }
+</script>
+
 <nav id="nav">
   <a class="nav-logo" href="#top">dichava<span>.app</span></a>
   <button class="nav-burger" id="navBurger" onclick="toggleMenu()" aria-label="Abrir menu"><span></span><span></span><span></span></button>
@@ -232,7 +250,7 @@ footer a{color:#93AC96;text-decoration:underline}
     <a href="#respaldo" onclick="closeMenu()">Por que confiar</a>
     <a href="#quem" onclick="closeMenu()">Quem faz</a>
     <a href="profissionais.html" onclick="closeMenu()">Para profissionais</a>
-    <a href="#planos" class="nav-prem" onclick="closeMenu()">✨ Premium</a>
+    <a href="#planos" class="nav-prem" onclick="closeMenu()">✨ É grátis</a>
     <a class="nav-cta" href="../" target="_blank" onclick="closeMenu()">Abrir o app →</a>
   </div>
 </nav>
@@ -589,11 +607,12 @@ footer a{color:#93AC96;text-decoration:underline}
 <section class="planos" id="planos">
   <div class="wrap">
     <span class="kicker rv">planos</span>
-    <h2 class="rv">Comece de graça. <span class="hl2">Evolua se quiser</span>.</h2>
-    <p class="lead rv" style="margin-inline:auto">O cuidado essencial é <b>sempre gratuito</b>. O Premium desbloqueia os recursos avançados — e ajuda o dichava a continuar de pé pra quem precisa. 💚</p>
-    <div class="plan-grid">
-      <div class="plan rv">
-        <div class="plan-tag">Grátis</div>
+    <h2 class="rv">Tudo <span class="hl2">gratuito</span>. Sempre. 💚</h2>
+    <p class="lead rv" style="margin-inline:auto">Sem premium, sem pegadinha, sem cartão. <b>Todas as ferramentas de cuidado e redução de danos são de graça</b> — porque cuidado não devia ter barreira.</p>
+    <div class="plan-grid" style="justify-content:center">
+      <div class="plan best rv" style="max-width:520px">
+        <div class="plan-badge">✨ 100% grátis</div>
+        <div class="plan-tag">Grátis pra sempre</div>
         <div class="plan-price">R$ 0<span>/sempre</span></div>
         <ul class="plan-feats">
           <li>Registro de uso e resistências</li>
@@ -601,32 +620,17 @@ footer a{color:#93AC96;text-decoration:underline}
           <li>Respiração, grounding e sons da natureza</li>
           <li>Biblioteca de artigos de redução de danos</li>
           <li>Progresso, metas e conquistas</li>
-          <li>Notificações de cuidado</li>
-        </ul>
-        <a class="plan-cta ghost" href="../" target="_blank">Usar grátis</a>
-      </div>
-      <div class="plan best rv">
-        <div class="plan-badge">✨ mais completo</div>
-        <div class="plan-tag">Premium</div>
-        <div class="plan-opts">
-          <div class="plan-opt"><span class="po-n">Mensal</span><span class="po-p">R$ 12,90</span><span class="po-u">por mês</span></div>
-          <div class="plan-opt po-best"><span class="po-tag">★ mais escolhido</span><span class="po-n">Anual</span><span class="po-p">R$ 99,90</span><span class="po-u">≈ R$ 8,33/mês · economize 35%</span></div>
-          <div class="plan-opt"><span class="po-n">Vitalício</span><span class="po-p">R$ 189,90</span><span class="po-u">pague uma vez, sem mensalidade</span></div>
-        </div>
-        <ul class="plan-feats">
-          <li>Tudo do plano grátis, e mais:</li>
           <li><b>Insights avançados</b> — padrões, gatilhos e horários em gráficos</li>
           <li><b>Finanças</b> — gastos e economia detalhados</li>
-          <li><b>Relatórios em PDF</b> — seu raio-x pra guardar ou levar ao profissional</li>
+          <li><b>Relatórios em PDF</b> pra guardar ou levar ao profissional</li>
           <li>Pausa de Tolerância guiada (t-break) 🌱</li>
           <li>Cartas pra mim (eu do futuro)</li>
           <li>Backup na nuvem e exportar dados</li>
           <li>Sons e jogos extras 🎧</li>
         </ul>
-        <a class="plan-cta" href="../" target="_blank">✨ Assinar premium</a>
+        <a class="plan-cta" href="../" target="_blank">Usar agora — é grátis 💚</a>
       </div>
     </div>
-    <p class="lead rv" style="margin-inline:auto;font-size:14px;opacity:.85">Sem loja e sem intermediário: paga direto por <b>Pix</b> ou cartão. Cancela quando quiser.</p>
   </div>
 </section>
 
