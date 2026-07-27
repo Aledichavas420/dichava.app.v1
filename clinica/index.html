@@ -1543,6 +1543,8 @@ function viewConfig(){
     <div class="bkp-row" onclick="baixarModeloPacientes()"><div class="bkp-ic" style="background:#FFF4E0;color:#E7A400">${docIcon({cor:'#E7A400',ic:'<path d="M12 3v11m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16" stroke-linecap="round"/>'})}</div><div class="bkp-tx"><b>Baixar modelo (CSV)</b><span>Planilha com todas as colunas pra você preencher</span></div><span class="bkp-go">↓</span></div>
     <div class="bkp-row" onclick="$('#imp-pac-file').click()"><div class="bkp-ic" style="background:#E9F7EE;color:#2FA35F">${docIcon({cor:'#2FA35F',ic:'<path d="M12 21V10m0 0l-4 4m4-4l4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 4h16" stroke-linecap="round"/>'})}</div><div class="bkp-tx"><b>Importar planilha de pacientes</b><span>Arquivo CSV (Excel, Google Sheets ou outro sistema)</span></div><span class="bkp-go">›</span></div>
     <input id="imp-pac-file" type="file" accept=".csv,text/csv" class="hide" onchange="importarPacientesCSV(this.files[0]);this.value='';">
+    <div class="bkp-row" onclick="$('#imp-ag-file').click()"><div class="bkp-ic" style="background:#E8F0FF;color:#3E7BF0">${docIcon({cor:'#3E7BF0',ic:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4" stroke-linecap="round"/>'})}</div><div class="bkp-tx"><b>Importar agenda / sessões</b><span>CSV com Data, Horário, Paciente e Valor — cria os agendamentos (e pacientes que faltarem)</span></div><span class="bkp-go">›</span></div>
+    <input id="imp-ag-file" type="file" accept=".csv,text/csv" class="hide" onchange="importarAgendaCSV(this.files[0]);this.value='';">
 
     <button class="btn danger sm" style="margin-top:16px" onclick="resetar()">Apagar todos os dados</button>
   </div>
@@ -2565,6 +2567,11 @@ function _mapPacCol(h){ const n=_normH(h); const inc=(...ks)=>ks.some(k=>n.inclu
   if(inc('endereco','logradouro','rua')) return 'endereco';
   if(inc('tags','etiquetas','marcadores')) return 'tags';
   if(inc('observacoes','observacao','anotacoes','notas','historico','obs')) return 'obs';
+  // extras (ex: grade de pacientes) — vão pra dentro das observações
+  if(inc('frequencia','periodicidade')) return '_freq';
+  if(inc('valor por sessao','valor sessao','valor')) return '_valor';
+  if(inc('dia da semana','dia')) return '_dia';
+  if(inc('horario','hora')) return '_hora';
   return null;
 }
 function _normData(v){ v=String(v||'').trim(); if(!v)return'';
@@ -2594,8 +2601,13 @@ function importarPacientesCSV(file){
     for(let r=1;r<rows.length;r++){ const row=rows[r]; const o={};
       map.forEach((f,ci)=>{ if(f&&!o[f])o[f]=String(row[ci]||'').trim(); });
       if(!o.nome)continue;
+      const extra=[];
+      if(o._dia||o._hora) extra.push('Sessão: '+[o._dia,o._hora].filter(Boolean).join(' '));
+      if(o._freq) extra.push('Frequência: '+o._freq);
+      if(o._valor) extra.push('Valor: R$ '+o._valor);
+      const obsFull=[o.obs,extra.join(' · ')].filter(Boolean).join(' · ');
       novos.push({ nome:o.nome, nascimento:_normData(o.nascimento), telefone:o.telefone||'', email:o.email||'', cpf:o.cpf||'', endereco:o.endereco||'',
-        emergNome:o.emergNome||'', emergTel:o.emergTel||'', emergParen:o.emergParen||'', obs:o.obs||'',
+        emergNome:o.emergNome||'', emergTel:o.emergTel||'', emergParen:o.emergParen||'', obs:obsFull,
         tags:(o.tags||'').split(/[;,]/).map(s=>s.trim()).filter(Boolean) });
     }
     const existe=p=>DB.pacientes.some(x=>(p.cpf&&x.cpf&&x.cpf.replace(/\D/g,'')===p.cpf.replace(/\D/g,''))||(String(x.nome||'').trim().toLowerCase()===p.nome.trim().toLowerCase()&&String(x.telefone||'').replace(/\D/g,'')===String(p.telefone||'').replace(/\D/g,'')));
@@ -2615,6 +2627,58 @@ function confirmarImportPac(){
   _impPacBuffer.forEach(p=>DB.pacientes.push({id:uid(),...p,criadoEm:now()}));
   const n=_impPacBuffer.length; _impPacBuffer=[];
   save(); closeModal(); toast('✓ '+n+' paciente(s) importado(s) 💚'); render();
+}
+/* ===== IMPORTAR AGENDA / SESSÕES (CSV) ===== */
+function _normHora(v){ v=String(v||'').trim(); const m=v.match(/^(\d{1,2}):?(\d{2})/); return m?(m[1].padStart(2,'0')+':'+m[2]):v; }
+function _numBRL(v){ v=String(v||'').replace(/[^\d,.-]/g,''); if(v.indexOf(',')>-1)v=v.replace(/\./g,'').replace(',','.'); const n=parseFloat(v); return isNaN(n)?0:n; }
+function _mapAgCol(h){ const n=_normH(h); const inc=(...ks)=>ks.some(k=>n.includes(k));
+  if(inc('data')&&!inc('nascimento')) return 'data';
+  if(inc('paciente','nome')) return 'paciente';
+  if(inc('horario','hora')) return 'hora';
+  if(inc('valor')) return 'valor';
+  if(inc('tipo')) return 'tipo';
+  if(inc('frequencia','periodicidade')) return 'freq';
+  if(inc('observ','anota')) return 'obs';
+  return null;
+}
+let _impAgBuffer=null;
+function importarAgendaCSV(file){
+  if(!file)return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{
+    const rows=parseCSV(String(rd.result||'')); if(rows.length<2){toast('Planilha vazia ou só com cabeçalho.',3000);return;}
+    const map=rows[0].map(_mapAgCol);
+    if(!map.includes('data')||!map.includes('paciente')){ toast('A planilha de agenda precisa das colunas "Data" e "Paciente". Se é a grade (sem datas), use "Importar planilha de pacientes".',6000); return; }
+    const idx={}; DB.pacientes.forEach(p=>{ idx[String(p.nome||'').trim().toLowerCase()]=p; });
+    const novosPac=[]; const ags=[]; const hoje=todayISO();
+    for(let r=1;r<rows.length;r++){ const row=rows[r]; const o={};
+      map.forEach((f,ci)=>{ if(f&&o[f]===undefined)o[f]=String(row[ci]||'').trim(); });
+      const nome=(o.paciente||'').trim(); const data=_normData(o.data); if(!nome||!data)continue;
+      const key=nome.toLowerCase(); let pac=idx[key];
+      if(!pac){ pac={id:uid(),nome,tags:['ativo'],obs:(o.freq?('Frequência: '+o.freq):''),criadoEm:now()}; idx[key]=pac; novosPac.push(pac); }
+      ags.push({ pacienteId:pac.id, _nome:nome, data, hora:_normHora(o.hora), duracao:50, tipo:o.tipo||'Consulta', status:(data<hoje?'atendido':'agendado'), valor:_numBRL(o.valor), formaPagamento:'', pago:false, obs:o.obs||'' });
+    }
+    const existeAg=a=>DB.agendamentos.some(x=>x.pacienteId===a.pacienteId&&x.data===a.data&&String(x.hora||'')===String(a.hora||''));
+    const agNovos=ags.filter(a=>!existeAg(a));
+    _impAgBuffer={pacientes:novosPac, ags:agNovos};
+    const jaAg=ags.length-agNovos.length;
+    const amostra=agNovos.slice(0,7).map(a=>`<tr><td style="padding:6px 8px">${esc(fmtDate(a.data))}</td><td style="padding:6px 8px">${esc(a.hora)}</td><td style="padding:6px 8px">${esc(a._nome)}</td><td style="padding:6px 8px">${a.valor?brl(a.valor):'—'}</td></tr>`).join('');
+    openModal(`<div class="modal"><div class="modal-head"><h3>Importar agenda</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+      <div class="modal-body">
+        <div class="gate-info" style="margin-bottom:12px">Encontrei <b>${ags.length}</b> sessão(ões).<br><b>${agNovos.length}</b> novas serão adicionadas${jaAg?` · <b>${jaAg}</b> já existem (ignoradas)`:''}.${novosPac.length?`<br><b>${novosPac.length}</b> novos pacientes serão criados automaticamente.`:''}</div>
+        ${agNovos.length?`<div style="overflow:auto;max-height:280px;border:1px solid var(--line);border-radius:10px"><table style="width:100%;font-size:13px;border-collapse:collapse"><thead><tr style="text-align:left;color:var(--txm)"><th style="padding:6px 8px">Data</th><th style="padding:6px 8px">Hora</th><th style="padding:6px 8px">Paciente</th><th style="padding:6px 8px">Valor</th></tr></thead><tbody>${amostra}${agNovos.length>7?`<tr><td colspan="4" style="padding:6px 8px;color:var(--txm)">…e mais ${agNovos.length-7}</td></tr>`:''}</tbody></table></div>`:'<div class="card empty" style="padding:16px">Nada novo pra importar.</div>'}
+        <div style="font-size:12px;color:var(--txm);margin-top:10px">Sessões passadas entram como <b>atendidas</b>; as futuras, como <b>agendadas</b>. Você pode ajustar depois.</div>
+      </div>
+      <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button>${agNovos.length?`<button class="btn" onclick="confirmarImportAgenda()">Importar ${agNovos.length} sessão(ões)</button>`:''}</div></div>`);
+  }catch(e){toast('Não consegui ler a planilha: '+((e&&e.message)||''),4000);} };
+  rd.readAsText(file,'utf-8');
+}
+function confirmarImportAgenda(){
+  if(!_impAgBuffer){closeModal();return;}
+  _impAgBuffer.pacientes.forEach(p=>DB.pacientes.push(p));
+  _impAgBuffer.ags.forEach(a=>{ const{_nome,...rest}=a; DB.agendamentos.push({id:uid(),...rest,criadoEm:now()}); });
+  const np=_impAgBuffer.pacientes.length, na=_impAgBuffer.ags.length; _impAgBuffer=null;
+  save(); closeModal(); toast('✓ '+na+' sessão(ões)'+(np?' e '+np+' paciente(s)':'')+' importados 💚'); render();
 }
 function resetar(){
   if(!confirm('Apagar TODOS os dados da clínica neste dispositivo? Esta ação não pode ser desfeita.')) return;
