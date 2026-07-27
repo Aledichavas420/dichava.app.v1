@@ -6661,7 +6661,8 @@ const PROFS=[
    tags:['Redução de danos','Saúde geral','Testagem'],disp:'Ter e Qui · manhã'},
 ];
 let _pfFilt={mod:'',cat:''};
-function abrirProfs(){_pfFilt={mod:'',cat:''};document.getElementById('pf-q').value='';document.querySelectorAll('.pf-chip').forEach(c=>c.classList.toggle('on',c.dataset.v===''));showV('vprofs');try{pfTab('buscar');}catch(e){renderProfs();}try{contarNaoLidasUser();}catch(e){}}
+let _profRnd={}; // ordem de rodízio (sorteada 1x por abertura da aba; estável durante a busca)
+function abrirProfs(){_pfFilt={mod:'',cat:''};_profRnd={};document.getElementById('pf-q').value='';document.querySelectorAll('.pf-chip').forEach(c=>c.classList.toggle('on',c.dataset.v===''));showV('vprofs');try{pfTab('buscar');}catch(e){renderProfs();}try{contarNaoLidasUser();}catch(e){}}
 function fecharProfs(){if(U?.tipo==='pro')entrarPro();else showV('vapp');}
 
 /* ══ PERFIL PROFISSIONAL ══ */
@@ -6708,7 +6709,7 @@ async function renderProfs(){
   c.innerHTML='<div style="text-align:center;padding:40px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
   let profs=[];
   if(_SB){try{const q=_SB.from('profissionais').select('*').eq('status','aprovado');const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);profs=data||[];}catch(e){profs=[];}}
-  profs.forEach(p=>{_profsById[p.id]=p;});
+  profs.forEach(p=>{_profsById[p.id]=p; if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random();});
   // médias de avaliação (1 query pra todos)
   let avMap={};
   if(_SB&&profs.length){try{const ids=profs.map(p=>p.id);const{data:avs}=await _SB.from('avaliacoes_prof').select('prof_id,nota').in('prof_id',ids);(avs||[]).forEach(a=>{(avMap[a.prof_id]=avMap[a.prof_id]||[]).push(a.nota);});}catch(e){}}
@@ -6719,7 +6720,9 @@ async function renderProfs(){
     if(_pfFilt.mod&&!(p.modalidade||'').includes(_pfFilt.mod))return false;
     if(q){const hay=(p.nome+' '+p.tipo_prof+' '+(p.cidade||'')+' '+(p.especialidades||'')).toLowerCase();if(!hay.includes(q))return false;}
     return true;
-  }).sort((a,b)=>(b.destaque?1:0)-(a.destaque?1:0)); // planos com destaque aparecem primeiro
+  }).sort((a,b)=>((b.destaque?1:0)-(a.destaque?1:0)) || ((_profRnd[a.id]||0)-(_profRnd[b.id]||0)));
+  // Destaques (planos Profissional e Clínica) sempre primeiro; dentro de cada grupo,
+  // rodízio aleatório sorteado a cada abertura da aba (justo — ninguém fica sempre no fim).
   const modtag=m=>{const ms=m||'';return ms.includes('online')&&ms.includes('presencial')?'<span class="pc-modtag mt-am"><span data-icon="pf-online"></span>Online e presencial</span>':ms.includes('online')?'<span class="pc-modtag mt-on"><span data-icon="pf-online"></span>Online</span>':'<span class="pc-modtag mt-pr"><span data-icon="pf-local"></span>Presencial</span>';};
   c.innerHTML=`<div class="pf-count">${list.length} profissio${list.length===1?'nal':'nais'} ${list.length===1?'encontrado':'encontrados'}</div>`+
     (list.length?list.map(p=>`
