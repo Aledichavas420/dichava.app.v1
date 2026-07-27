@@ -2712,15 +2712,18 @@ async function checarAcesso(){
   if(!_SB||!AUTH) return {ok:true};
   if(ehAdmin()) return {ok:true};
   try{
-    let {data:p,error}=await _SB.from('profissionais').select('ativo,acesso_ate,nome,plano').eq('id',AUTH.id).maybeSingle();
+    let {data:p,error}=await _SB.from('profissionais').select('ativo,acesso_ate,nome,plano,obs_admin').eq('id',AUTH.id).maybeSingle();
     if(error && /column .*(ativo|acesso_ate|plano)/i.test(error.message||'')) return {ok:true}; // SQL ainda não rodou
     if(!p){
       try{ await _SB.from('profissionais').upsert({id:AUTH.id,nome:AUTH.nome,reg:AUTH.reg||null,plano:AUTH.plano||null,status:'pendente',ativo:false}); }catch(_){}
       return {ok:false, plano:AUTH.plano};
     }
     _meuPlano=p.plano||AUTH.plano||null;
-    const liberado = p.ativo===true && (!p.acesso_ate || new Date(p.acesso_ate) > new Date());
-    const expirado = p.ativo===true && p.acesso_ate && new Date(p.acesso_ate) <= new Date();
+    // Recorrente: 5 dias corridos de carência após o vencimento antes de cortar.
+    const grace = /♻️|recorrente/i.test(p.obs_admin||'') ? 5*864e5 : 0;
+    const fim = p.acesso_ate ? new Date(new Date(p.acesso_ate).getTime()+grace) : null;
+    const liberado = p.ativo===true && (!fim || fim > new Date());
+    const expirado = p.ativo===true && fim && fim <= new Date();
     return {ok:liberado, expirado, plano:p.plano};
   }catch(e){ return {ok:true}; } // qualquer erro de rede/coluna: não trava
 }

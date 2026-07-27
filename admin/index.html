@@ -550,7 +550,10 @@ function setFiltro(f){ _filtro=f; renderFiltros(); renderProfs(); }
 
 function statusInfo(p){
   const now=Date.now();
-  const expirado = p.ativo && p.acesso_ate && new Date(p.acesso_ate).getTime()<=now;
+  // Recorrente: 5 dias corridos de carência após o vencimento antes de cortar.
+  const grace = ehRecorrente(p) ? 5*864e5 : 0;
+  const fim = p.acesso_ate ? new Date(p.acesso_ate).getTime()+grace : null;
+  const expirado = p.ativo && fim && fim<=now;
   const ativo = p.ativo && !expirado;
   return {ativo,expirado};
 }
@@ -588,7 +591,7 @@ function renderComprovantes(){
 // ===== ASSINATURAS A VENCER (próximos 7 dias) =====
 function renderVencer(){
   const box=$('#vencer-list'); if(!box)return;
-  const list=PROFS.filter(p=>{const {ativo}=statusInfo(p); const d=diasAte(p.acesso_ate); return ativo && d!==null && d>=0 && d<=7;})
+  const list=PROFS.filter(p=>{const {ativo}=statusInfo(p); const d=diasAte(p.acesso_ate); const min=ehRecorrente(p)?-5:0; return ativo && d!==null && d>=min && d<=7;})
     .sort((a,b)=>diasAte(a.acesso_ate)-diasAte(b.acesso_ate));
   if(!list.length){ box.innerHTML='<div class="empty" style="padding:16px">Nenhuma assinatura vencendo nos próximos 7 dias 👍</div>'; return; }
   box.innerHTML=list.map(p=>{
@@ -597,11 +600,14 @@ function renderVencer(){
     const rec=ehRecorrente(p);
     if(rec){
       // Recorrente: você confere no PagBank se a mensalidade caiu e confirma (renova +1 mês)
+      let sit, cls;
+      if(d>=0){ sit=quando; cls=(d<=1?'e':'a'); }
+      else { const rest=5+d; sit='venceu há '+(-d)+' dia(s) · '+rest+' de carência'; cls='e'; }
       return `<div class="pcard"><div class="phead"><div class="pav">${initials(p.nome)}</div>
         <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')} <span class="chip b">♻️ Recorrente</span></div>
         <div class="pmeta">${esc(p.email||'')}${p.plano?' · '+esc(planoNome(p.plano)):''}</div>
-        <div class="pmeta" style="color:#8a6b00">Confira no PagBank se a mensalidade caiu, depois confirme.</div>
-        <div class="chips"><span class="chip ${d<=1?'e':'a'}">${quando}</span></div></div></div>
+        <div class="pmeta" style="color:#8a6b00">Confira no PagBank se a mensalidade caiu, depois confirme. ${d<0?'<b>Sem confirmar, o acesso é cortado ao fim da carência.</b>':''}</div>
+        <div class="chips"><span class="chip ${cls}">${sit}</span></div></div></div>
         <div class="pacts"><button class="btn wv sm" onclick="confirmarMensalidade('${p.id}')">✓ Confirmar mensalidade (+1 mês)</button><button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Editar</button></div></div>`;
     }
     const msg=encodeURIComponent('Oi'+(p.nome?(', '+String(p.nome).trim().split(/\s+/)[0]):'')+'! Passando pra avisar que sua assinatura do painel dichava ('+planoNome(p.plano)+') '+quando+'. Quer renovar? Te mando o link 💚');
