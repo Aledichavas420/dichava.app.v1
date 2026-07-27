@@ -3215,7 +3215,9 @@ async function bootAuth(){
   try{
     const{data}=await _SB.auth.getSession();
     const sess=data&&data.session;
-    if(!sess||!sess.user){ showGate('login'); return; }
+    // link direto de cadastro: dichava.app/clinica/?criar (abre o formulário de criar conta)
+    let _querCriar=false; try{ const _q=new URLSearchParams(location.search); _querCriar=_q.has('criar')||_q.get('cadastro')==='1'; }catch(e){}
+    if(!sess||!sess.user){ if(_querCriar){ gateShowSignup(); } else { showGate('login'); } return; }
     const u=metaFrom(sess.user);
     if(u.tipo!=='pro'){ showGate('notpro'); return; }
     AUTH=u; await entrarLiberado();
