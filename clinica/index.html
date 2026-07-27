@@ -277,6 +277,37 @@ tbody tr:hover{background:var(--cin)}
 .modal-head h3{font-size:17px;font-weight:800;flex:1}
 .modal-body{padding:20px 22px;overflow-y:auto;min-height:0;flex:1 1 auto}
 .modal-foot{padding:16px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
+/* agenda: seletor de visão + grades semana/mês */
+.seg{display:inline-flex;background:var(--cin);border-radius:12px;padding:3px}
+.segb{border:none;background:transparent;font-family:inherit;font-weight:700;font-size:13px;color:var(--txs);padding:7px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+.segb.on{background:var(--card);color:var(--dk);box-shadow:0 1px 5px rgba(0,0,0,.09)}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.wk-col{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.wk-col.hoje{border-color:var(--v);box-shadow:0 0 0 1px var(--v)}
+.wk-h{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line);cursor:pointer;background:var(--cin)}
+.wk-h b{display:block;font-size:12.5px}.wk-h span{font-size:11px;color:var(--txs)}
+.wk-col.hoje .wk-h{background:var(--vf);color:var(--ve)}
+.wk-body{padding:6px;display:flex;flex-direction:column;gap:4px;min-height:70px}
+.wk-ap{font-size:11.5px;padding:5px 7px;border-radius:8px;background:var(--cin);cursor:pointer;border-left:3px solid var(--v);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-ap b{font-weight:800}
+.wk-ap.st-faltou,.wk-ap.st-cancelado{border-left-color:var(--er,#E5484D);opacity:.75}
+.wk-empty{text-align:center;color:var(--txm);font-size:12px;padding:10px 0}
+.mo-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.mo-wd{text-align:center;font-size:11px;font-weight:700;color:var(--txs);padding:2px 0}
+.mo-cell{position:relative;min-height:66px;border:1px solid var(--line);border-radius:10px;padding:6px;cursor:pointer;background:var(--card);transition:.12s}
+.mo-cell:hover{border-color:var(--v)}
+.mo-cell.off{opacity:.38}
+.mo-cell.hoje{border-color:var(--v);background:var(--vf)}
+.mo-n{font-size:13px;font-weight:700}
+.mo-badge{position:absolute;bottom:6px;right:6px;background:var(--v);color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+@media(max-width:860px){
+  .wk{grid-template-columns:1fr;gap:6px}
+  .wk-col{flex-direction:row}
+  .wk-h{border-bottom:none;border-right:1px solid var(--line);min-width:64px;display:flex;flex-direction:column;justify-content:center}
+  .wk-body{flex:1;flex-direction:row;flex-wrap:wrap;min-height:0}
+  .mo-cell{min-height:52px;padding:4px}
+  .mo-n{font-size:12px}
+}
 
 /* toast */
 .toast{position:fixed;bottom:calc(20px + var(--sb));left:50%;transform:translateX(-50%) translateY(20px);
@@ -744,6 +775,7 @@ const PAG = {pix:'Pix',dinheiro:'Dinheiro',cartao:'Cartão',transferencia:'Trans
 /* =============== ESTADO DE NAVEGAÇÃO =============== */
 let route='dash';
 let agendaDay=todayISO();
+let agendaView='dia';
 let filtroPaciente='';
 let prontSelPaciente=null;
 
@@ -1043,9 +1075,34 @@ function fecharChecklist(){ try{localStorage.setItem('dr_checklist_done_'+AUTH.i
 
 /* =============== AGENDA =============== */
 const HORAS=[];for(let h=7;h<=20;h++){HORAS.push(String(h).padStart(2,'0')+':00');}
+function weekStartISO(iso){ const d=new Date(iso+'T12:00'); const wd=(d.getDay()+6)%7; return addDaysISO(iso,-wd); }
+function shiftMonthISO(iso,n){ let [y,m,d]=iso.split('-').map(Number); m=m-1+n; y+=Math.floor(m/12); m=((m%12)+12)%12; const last=new Date(y,m+1,0).getDate(); d=Math.min(d,last); return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+function shiftAgenda(dir){ if(agendaView==='semana')agendaDay=addDaysISO(agendaDay,7*dir); else if(agendaView==='mes')agendaDay=shiftMonthISO(agendaDay,dir); else agendaDay=addDaysISO(agendaDay,dir); render(); }
+function setAgendaView(v){ agendaView=v; render(); }
+function mesLabel(iso){ const M=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro']; const [y,m]=iso.split('-').map(Number); return M[m-1]+' de '+y; }
 function viewAgenda(){
+  const seg=`<div class="seg">${[['dia','Dia'],['semana','Semana'],['mes','Mês']].map(([v,l])=>`<button class="segb ${agendaView===v?'on':''}" onclick="setAgendaView('${v}')">${l}</button>`).join('')}</div>`;
+  let label;
+  if(agendaView==='semana'){ const s=weekStartISO(agendaDay); label=fmtDate(s)+' – '+fmtDate(addDaysISO(s,6)); }
+  else if(agendaView==='mes'){ label=mesLabel(agendaDay); }
+  else { label=(agendaDay===todayISO()?'Hoje, ':'')+fmtDateLong(agendaDay); }
+  const toolbar=`<div class="toolbar">
+      <div class="daynav">
+        <button class="icon-btn" onclick="shiftAgenda(-1)">‹</button>
+        <b>${label}</b>
+        <button class="icon-btn" onclick="shiftAgenda(1)">›</button>
+      </div>
+      <button class="btn sm ghost" onclick="agendaDay=todayISO();render()">Hoje</button>
+      <input type="date" value="${agendaDay}" onchange="agendaDay=this.value;render()" style="padding:9px 12px;border-radius:11px;border:1.5px solid var(--line);background:var(--card)">
+      ${seg}
+      <div class="grow"></div>
+      <button class="btn" onclick="formAgendamento(null,'${agendaDay}')">＋ Agendamento</button>
+    </div>`;
+  const body = agendaView==='semana'?viewAgendaSemana() : agendaView==='mes'?viewAgendaMes() : viewAgendaDia();
+  return toolbar + solicitacoesBanner() + body;
+}
+function viewAgendaDia(){
   const dia=DB.agendamentos.filter(a=>a.data===agendaDay).sort((a,b)=>a.hora.localeCompare(b.hora));
-  const isHoje=agendaDay===todayISO();
   let slots=HORAS.map(h=>{
     const appts=dia.filter(a=>a.hora>=h&&a.hora<String(+h.slice(0,2)+1).padStart(2,'0')+':00');
     return `<div class="cal-time">${h}</div><div class="cal-slot">${appts.map(a=>{
@@ -1056,21 +1113,31 @@ function viewAgenda(){
         <small>${esc(a.tipo)} · ${st.l} · ${brl(a.valor)}${(MEMBROS.length>1&&a.profNome)?' · '+esc(a.profNome):''}${presOk?' · <b style="color:#2E7D32">presença confirmada</b>':''}</small>
       </div>`;}).join('')}</div>`;
   }).join('');
-
-  return `<div class="toolbar">
-      <div class="daynav">
-        <button class="icon-btn" onclick="shiftDay(-1)">‹</button>
-        <b>${isHoje?'Hoje, ':''}${fmtDateLong(agendaDay)}</b>
-        <button class="icon-btn" onclick="shiftDay(1)">›</button>
-      </div>
-      <button class="btn sm ghost" onclick="agendaDay=todayISO();render()">Hoje</button>
-      <input type="date" value="${agendaDay}" onchange="agendaDay=this.value;render()" style="padding:9px 12px;border-radius:11px;border:1.5px solid var(--line);background:var(--card)">
-      <div class="grow"></div>
-      <button class="btn" onclick="formAgendamento(null,'${agendaDay}')">＋ Agendamento</button>
-    </div>
-    ${solicitacoesBanner()}
-    ${dia.length?'':'<div class="card empty" style="margin-bottom:14px"><div class="big">◷</div><b>Dia livre</b>Nenhuma consulta marcada para esta data.</div>'}
+  return `${dia.length?'':'<div class="card empty" style="margin-bottom:14px"><div class="big">◷</div><b>Dia livre</b>Nenhuma consulta marcada para esta data.</div>'}
     <div class="card"><div class="cal">${slots}</div></div>`;
+}
+function viewAgendaSemana(){
+  const s=weekStartISO(agendaDay); const wd=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  const cols=[]; for(let i=0;i<7;i++){ const di=addDaysISO(s,i);
+    const appts=DB.agendamentos.filter(a=>a.data===di).sort((a,b)=>a.hora.localeCompare(b.hora));
+    cols.push(`<div class="wk-col ${di===todayISO()?'hoje':''}">
+      <div class="wk-h" onclick="agendaDay='${di}';setAgendaView('dia')"><b>${wd[i]}</b><span>${di.slice(8,10)}/${di.slice(5,7)}</span></div>
+      <div class="wk-body">${appts.length?appts.map(a=>`<div class="wk-ap st-${a.status}" onclick="openAgendamento('${a.id}')"><b>${a.hora}</b> ${esc(pacNome(a.pacienteId).split(' ')[0])}</div>`).join(''):'<div class="wk-empty">—</div>'}</div>
+    </div>`);
+  }
+  return `<div class="card" style="padding:12px"><div class="wk">${cols.join('')}</div></div>`;
+}
+function viewAgendaMes(){
+  const wd=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  const first=agendaDay.slice(0,7)+'-01'; const start=weekStartISO(first);
+  const head=wd.map(w=>`<div class="mo-wd">${w}</div>`).join('');
+  let cells='';
+  for(let i=0;i<42;i++){ const di=addDaysISO(start,i);
+    const inMonth=di.slice(0,7)===agendaDay.slice(0,7);
+    const n=DB.agendamentos.filter(a=>a.data===di).length;
+    cells+=`<div class="mo-cell ${inMonth?'':'off'} ${di===todayISO()?'hoje':''}" onclick="agendaDay='${di}';setAgendaView('dia')"><span class="mo-n">${di.slice(8,10)}</span>${n?`<span class="mo-badge">${n}</span>`:''}</div>`;
+  }
+  return `<div class="card" style="padding:12px"><div class="mo-grid">${head}${cells}</div></div>`;
 }
 let SOLIC=[];
 function solicitacoesBanner(){
@@ -1550,6 +1617,7 @@ function viewConfig(){
     <input id="imp-pac-file" type="file" accept=".csv,text/csv" class="hide" onchange="importarPacientesCSV(this.files[0]);this.value='';">
     <div class="bkp-row" onclick="$('#imp-ag-file').click()"><div class="bkp-ic" style="background:#E8F0FF;color:#3E7BF0">${docIcon({cor:'#3E7BF0',ic:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4" stroke-linecap="round"/>'})}</div><div class="bkp-tx"><b>Importar agenda / sessões</b><span>CSV com Data, Horário, Paciente e Valor — cria os agendamentos (e pacientes que faltarem)</span></div><span class="bkp-go">›</span></div>
     <input id="imp-ag-file" type="file" accept=".csv,text/csv" class="hide" onchange="importarAgendaCSV(this.files[0]);this.value='';">
+    <div class="bkp-row" onclick="removerDuplicados()"><div class="bkp-ic" style="background:#FFF0F0;color:#C0616B">${docIcon({cor:'#C0616B',ic:'<path d="M8 8h9a2 2 0 0 1 2 2v9" stroke-linecap="round"/><rect x="5" y="5" width="11" height="11" rx="2"/>'})}</div><div class="bkp-tx"><b>Remover pacientes duplicados</b><span>Une cadastros com o mesmo nome (mantém agenda e prontuários)</span></div><span class="bkp-go">›</span></div>
 
     <button class="btn danger sm" style="margin-top:16px" onclick="resetar()">Apagar todos os dados</button>
   </div>
@@ -2522,8 +2590,10 @@ function saveFinanceiro(tipo){
 }
 function delFinanceiro(id){
   const f=DB.financeiro.find(x=>x.id===id);
-  if(f&&f.agendamentoId){ if(!confirm('Esta entrada veio de um agendamento atendido/pago. Excluir mesmo assim? (marque o agendamento como não pago para removê-la de forma definitiva)')) return; }
-  else if(!confirm('Excluir este lançamento?')) return;
+  if(f&&f.agendamentoId){
+    if(!confirm('Esta entrada veio de um agendamento pago. Ao excluir, o agendamento fica marcado como NÃO pago (pra não recriar a entrada). Continuar?')) return;
+    const ag=DB.agendamentos.find(a=>a.id===f.agendamentoId); if(ag)ag.pago=false;
+  } else if(!confirm('Excluir este lançamento?')) return;
   DB.financeiro=DB.financeiro.filter(x=>x.id!==id); save(); toast('Lançamento excluído'); render();
 }
 
@@ -2615,7 +2685,7 @@ function importarPacientesCSV(file){
         emergNome:o.emergNome||'', emergTel:o.emergTel||'', emergParen:o.emergParen||'', obs:obsFull,
         tags:(o.tags||'').split(/[;,]/).map(s=>s.trim()).filter(Boolean) });
     }
-    const existe=p=>DB.pacientes.some(x=>(p.cpf&&x.cpf&&x.cpf.replace(/\D/g,'')===p.cpf.replace(/\D/g,''))||(String(x.nome||'').trim().toLowerCase()===p.nome.trim().toLowerCase()&&String(x.telefone||'').replace(/\D/g,'')===String(p.telefone||'').replace(/\D/g,'')));
+    const existe=p=>DB.pacientes.some(x=>(p.cpf&&x.cpf&&x.cpf.replace(/\D/g,'')===p.cpf.replace(/\D/g,''))||(String(x.nome||'').trim().toLowerCase()===p.nome.trim().toLowerCase()));
     const add=novos.filter(p=>!existe(p)); const ja=novos.length-add.length; _impPacBuffer=add;
     const amostra=add.slice(0,6).map(p=>`<tr><td style="padding:7px 8px">${esc(p.nome)}</td><td style="padding:7px 8px">${esc(p.telefone||'—')}</td><td style="padding:7px 8px">${esc(p.email||'—')}</td></tr>`).join('');
     openModal(`<div class="modal"><div class="modal-head"><h3>Importar pacientes</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
@@ -2632,6 +2702,23 @@ function confirmarImportPac(){
   _impPacBuffer.forEach(p=>DB.pacientes.push({id:uid(),...p,criadoEm:now()}));
   const n=_impPacBuffer.length; _impPacBuffer=[];
   save(); closeModal(); toast('✓ '+n+' paciente(s) importado(s) 💚'); render();
+}
+// Une pacientes com o MESMO nome, mantendo agenda/prontuários vinculados ao único.
+function removerDuplicados(){
+  const byName={}, keep=[], remap={};
+  DB.pacientes.forEach(p=>{ const k=String(p.nome||'').trim().toLowerCase();
+    if(!k){ keep.push(p); return; }
+    if(byName[k]){ const orig=byName[k];
+      ['nascimento','telefone','email','cpf','endereco','obs','emergNome','emergTel','emergParen'].forEach(f=>{ if(!orig[f]&&p[f])orig[f]=p[f]; });
+      if(p.tags&&p.tags.length) orig.tags=[...new Set([...(orig.tags||[]),...p.tags])];
+      remap[p.id]=orig.id;
+    } else { byName[k]=p; keep.push(p); }
+  });
+  const n=DB.pacientes.length-keep.length;
+  if(!n){ toast('Nenhum paciente duplicado encontrado 👍'); return; }
+  if(!confirm('Encontrei '+n+' paciente(s) duplicado(s) (mesmo nome). Unir e remover as cópias? Agenda e prontuários continuam vinculados ao paciente único.')) return;
+  ['agendamentos','prontuarios','financeiro','documentos'].forEach(col=>{ (DB[col]||[]).forEach(x=>{ if(x.pacienteId&&remap[x.pacienteId])x.pacienteId=remap[x.pacienteId]; }); });
+  DB.pacientes=keep; save(); toast('✓ '+n+' duplicado(s) removido(s) 💚'); render();
 }
 /* ===== IMPORTAR AGENDA / SESSÕES (CSV) ===== */
 function _normHora(v){ v=String(v||'').trim(); const m=v.match(/^(\d{1,2}):?(\d{2})/); return m?(m[1].padStart(2,'0')+':'+m[2]):v; }
