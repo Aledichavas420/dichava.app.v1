@@ -720,9 +720,10 @@ function load(){ // fallback offline / modo solo local
   if(!DB || !DB.pacientes){ DB=emptyDB(); }
   normalizeDB(DB);
 }
-let _saveT=null;
+let _saveT=null, _pendingSave=false;
 function save(){
   if(CLINICA && _SB){
+    _pendingSave=true; // há edição local ainda não confirmada na nuvem → refresh não pode sobrescrever
     try{ localStorage.setItem('clinica_cache_'+CLINICA.id, JSON.stringify(DB)); }catch(e){}
     const dot=$('#save-dot'); if(dot) dot.textContent='salvando…';
     clearTimeout(_saveT); _saveT=setTimeout(salvarNuvem, 700);
@@ -731,12 +732,16 @@ function save(){
   }
 }
 async function salvarNuvem(){
-  if(!CLINICA || !_SB) return;
+  if(!CLINICA || !_SB){ _pendingSave=false; return; }
   try{
     const{error}=await _SB.from('clinicas').update({dados:DB, atualizado_em:new Date().toISOString()}).eq('id',CLINICA.id);
     if(error) throw error;
+    _pendingSave=false;
     const dot=$('#save-dot'); if(dot){ dot.textContent='✓ salvo'; clearTimeout(dot._t); dot._t=setTimeout(()=>{dot.textContent='';},1600); }
-  }catch(e){ const dot=$('#save-dot'); if(dot) dot.textContent='⚠ sem conexão'; }
+  }catch(e){
+    const dot=$('#save-dot'); if(dot) dot.textContent='⚠ salvando…';
+    clearTimeout(_saveT); _saveT=setTimeout(salvarNuvem, 3000); // mantém _pendingSave e tenta de novo (não perde a edição)
+  }
 }
 
 /* -------- dados de exemplo -------- */
@@ -3159,6 +3164,7 @@ async function carregarClinica(cid,papel){
 }
 async function refreshClinica(){
   if(!CLINICA || !_SB) return;
+  if(_pendingSave){ return; } // há edição local ainda não salva → não recarrega da nuvem (senão desfaz)
   try{
     const {data:c}=await _SB.from('clinicas').select('dados').eq('id',CLINICA.id).maybeSingle();
     if(c){ normalizeDB(c.dados); if(route) render(); }
