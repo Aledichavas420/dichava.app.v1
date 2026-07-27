@@ -594,6 +594,16 @@ function renderVencer(){
   box.innerHTML=list.map(p=>{
     const d=diasAte(p.acesso_ate);
     const quando=d===0?'vence hoje':(d===1?'vence amanhã':'vence em '+d+' dias');
+    const rec=ehRecorrente(p);
+    if(rec){
+      // Recorrente: você confere no PagBank se a mensalidade caiu e confirma (renova +1 mês)
+      return `<div class="pcard"><div class="phead"><div class="pav">${initials(p.nome)}</div>
+        <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')} <span class="chip b">♻️ Recorrente</span></div>
+        <div class="pmeta">${esc(p.email||'')}${p.plano?' · '+esc(planoNome(p.plano)):''}</div>
+        <div class="pmeta" style="color:#8a6b00">Confira no PagBank se a mensalidade caiu, depois confirme.</div>
+        <div class="chips"><span class="chip ${d<=1?'e':'a'}">${quando}</span></div></div></div>
+        <div class="pacts"><button class="btn wv sm" onclick="confirmarMensalidade('${p.id}')">✓ Confirmar mensalidade (+1 mês)</button><button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Editar</button></div></div>`;
+    }
     const msg=encodeURIComponent('Oi'+(p.nome?(', '+String(p.nome).trim().split(/\s+/)[0]):'')+'! Passando pra avisar que sua assinatura do painel dichava ('+planoNome(p.plano)+') '+quando+'. Quer renovar? Te mando o link 💚');
     const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'?text='+msg+'" target="_blank" rel="noopener">💬 Cobrar renovação</a>'):'';
     return `<div class="pcard"><div class="phead"><div class="pav">${initials(p.nome)}</div>
@@ -625,6 +635,7 @@ function renderProfs(){
     else if(p.status==='rejeitado')chips.push('<span class="chip e">Rejeitado</span>');
     else chips.push('<span class="chip a">Perfil pendente</span>');
     if(p.plano)chips.push('<span class="chip b">'+esc(planoNome(p.plano))+(planoPreco(p.plano)?' · '+esc(planoPreco(p.plano)):'')+'</span>');
+    if(ehRecorrente(p))chips.push('<span class="chip b">♻️ Recorrente</span>');
     if(p.acesso_ate)chips.push('<span class="chip b">até '+fmtData(p.acesso_ate)+'</span>');
     if(p.tem_comprovante)chips.push('<span class="chip v">📎 comprovante</span>');
     if(p.n_aval)chips.push('<span class="chip">'+(p.media_aval||'—')+' ★ ('+p.n_aval+')</span>');
@@ -659,6 +670,10 @@ function abrirLiberar(id){
     <div class="field"><label>Plano assinado</label><select id="m-plano">
       ${PLANOS.map(pl=>`<option value="${pl.k}" ${p.plano===pl.k?'selected':''}>${esc(pl.nome)} — ${esc(pl.preco)}</option>`).join('')}
     </select></div>
+    <div class="field"><label>Tipo de cobrança</label><select id="m-tipo" onchange="libTipoChange()">
+      <option value="manual" ${!ehRecorrente(p)?'selected':''}>Manual — link avulso (você renova a cada período)</option>
+      <option value="recorrente" ${ehRecorrente(p)?'selected':''}>♻️ Recorrente — cobrança automática (você confirma todo mês)</option>
+    </select></div>
     <div class="field"><label>Período / validade</label><select id="m-meses">
       <option value="1">Mensal (1 mês)</option>
       <option value="3">Trimestral (3 meses)</option>
@@ -666,21 +681,43 @@ function abrirLiberar(id){
       <option value="12">Anual (12 meses)</option>
       <option value="0">Sem validade (vitalício)</option>
     </select></div>
-    <div class="field"><label>Anotação (opcional)</label><input id="m-obs" placeholder="ex: pagou Pix 24/07" value="${esc(p.obs_admin||'')}"></div>
+    <div id="m-rec-note" style="display:none;font-size:12.5px;color:#8a6b00;background:#fff6e8;border-radius:9px;padding:9px 11px;margin:-4px 0 12px">♻️ Recorrente: libere <b>1 mês</b>. Todo mês, confira no PagBank se a mensalidade caiu e clique em <b>"Confirmar mensalidade"</b> pra renovar +1 mês. O acesso só é cortado se você não confirmar.</div>
+    <div class="field"><label>Anotação (opcional)</label><input id="m-obs" placeholder="ex: pagou Pix 24/07" value="${esc((p.obs_admin||'').replace(/♻️ Recorrente[^·]*·?\s*/,'').trim())}"></div>
     <div style="display:flex;gap:8px;margin-top:6px">
       <button class="btn ghost" style="flex:1" onclick="fecharModal()">Cancelar</button>
       <button class="btn" style="flex:1" onclick="confirmarLiberar('${id}')">Liberar</button>
     </div>
   </div></div>`;
+  try{libTipoChange();}catch(e){}
 }
 function fecharModal(){ $('#modalRoot').innerHTML=''; }
 let _libPlano=null;
+function ehRecorrente(p){ return /♻️|recorrente/i.test((p&&p.obs_admin)||''); }
+function libTipoChange(){
+  const rec=$('#m-tipo').value==='recorrente';
+  const note=$('#m-rec-note'); if(note)note.style.display=rec?'block':'none';
+  const ms=$('#m-meses'); if(rec&&ms)ms.value='1';
+}
 async function confirmarLiberar(id){
-  const meses=parseInt($('#m-meses').value,10)||0;
-  const obs=$('#m-obs').value.trim()||null;
+  let meses=parseInt($('#m-meses').value,10)||0;
+  let obs=$('#m-obs').value.trim();
   _libPlano=$('#m-plano').value||null;
+  const rec=$('#m-tipo').value==='recorrente';
+  if(rec){
+    const marker='♻️ Recorrente ('+planoNome(_libPlano)+')';
+    obs=obs?(marker+' · '+obs):marker;
+  }
   fecharModal();
-  await acao(id,'liberar',meses,obs);
+  await acao(id,'liberar',meses,obs||null);
+  _libPlano=null;
+}
+// Confirma que a mensalidade recorrente caiu e renova +1 mês, mantendo o marcador.
+async function confirmarMensalidade(id){
+  const p=PROFS.find(x=>x.id===id); if(!p)return;
+  if(!confirm('Confirmar que a mensalidade recorrente do plano '+planoNome(p.plano)+' caiu no PagBank e renovar +1 mês de acesso?')) return;
+  _libPlano=p.plano||null;
+  const obs='♻️ Recorrente ('+planoNome(p.plano)+') · última confirmação '+new Date().toLocaleDateString('pt-BR');
+  await acao(id,'liberar',1,obs);
   _libPlano=null;
 }
 async function verComprovante(id){
