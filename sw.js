@@ -1,5 +1,5 @@
-// dichava.app — service worker v224
-const CACHE = 'dichavard-v371';
+// dichava.app — service worker v225
+const CACHE = 'dichavard-v372';
 const ASSETS = ['./', './index.html'];
 
 self.addEventListener('install', e => {
