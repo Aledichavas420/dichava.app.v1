@@ -34,7 +34,8 @@ header p{font-size:15px;opacity:.85;max-width:520px;margin:0 auto}
 .plano.best{border-color:var(--ouro);box-shadow:0 10px 30px rgba(231,164,0,.13)}
 .plano-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--ouro);color:#3a2600;font-size:11.5px;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap}
 .plano-n{font-size:19px;font-weight:800;color:var(--verde)}
-.plano-para{font-size:12.5px;color:var(--txm);margin:3px 0 12px;min-height:34px}
+.plano-destaque{font-size:13.5px;font-weight:700;color:var(--verde2);margin-top:3px;line-height:1.35}
+.plano-para{font-size:12.5px;color:var(--txm);margin:4px 0 12px;min-height:32px}
 .plano-p{font-size:32px;font-weight:800;letter-spacing:-1px;color:var(--tx)}
 .plano-p .cif{font-size:16px;vertical-align:super;font-weight:700;color:var(--txm)}
 .plano-p .un{font-size:15px;font-weight:600;color:var(--txm)}
@@ -167,15 +168,15 @@ const LINKS = {
 };
 
 const PLANOS = [
-  { k:'essencial', nome:'Essencial', para:'Pra quem está começando ou consolidando a prática',
+  { k:'essencial', nome:'Essencial', destaque:'Sua clínica organizada, do zero.', para:'Pra quem está começando ou quer profissionalizar a rotina',
     mensal:'79,90', anual:'799', eqAnual:'equivale a R$ 66/mês',
-    feats:['Painel da Clínica completo','Perfil verificado no diretório','Lembretes e lista de espera'] },
-  { k:'profissional', nome:'Profissional', best:true, para:'Pra quem quer visibilidade e agilidade',
+    feats:['Painel completo: agenda, pacientes, prontuários e caixa','Perfil verificado no app (pacientes te encontram)','Contrato terapêutico + recibos e documentos','Lembretes automáticos e lista de espera'] },
+  { k:'profissional', nome:'Profissional', best:true, destaque:'Menos trabalho manual, mais visibilidade.', para:'Pra quem quer agenda cheia e ganhar tempo',
     mensal:'179,90', anual:'1.799', eqAnual:'equivale a R$ 150/mês',
-    feats:['Tudo do Essencial','✨ Assistente de IA no prontuário','Destaque e divulgação no @dichava.app'] },
-  { k:'clinica', nome:'Clínica', para:'Pra clínicas e coletivos com equipe',
+    feats:['Tudo do Essencial, e mais:','✨ Assistente de IA no prontuário — organiza a evolução por você','★ Destaque no topo do diretório do app','Divulgação ativa na landing e no @dichava.app'] },
+  { k:'clinica', nome:'Clínica', destaque:'Sua equipe inteira num só lugar.', para:'Pra clínicas e coletivos com mais de um profissional',
     mensal:'299,90', anual:'2.999', eqAnual:'equivale a R$ 250/mês',
-    feats:['Tudo do Profissional','Até 5 profissionais + painel compartilhado','Suporte prioritário dedicado'] },
+    feats:['Tudo do Profissional, e mais:','Até 5 profissionais na mesma conta','Painel compartilhado: agenda, caixa e pacientes da equipe','Página da clínica no app + suporte prioritário dedicado'] },
 ];
 
 let _ciclo='mensal', _metodo='recorrente';
@@ -211,6 +212,7 @@ function render(){
     return `<div class="plano ${p.best?'best':''}">
       ${p.best?'<div class="plano-badge">★ mais escolhido</div>':''}
       <div class="plano-n">${p.nome}</div>
+      <div class="plano-destaque">${p.destaque||''}</div>
       <div class="plano-para">${p.para}</div>
       <div class="plano-p">${preco}</div>
       <div class="plano-eq">${eq}</div>

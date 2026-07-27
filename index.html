@@ -6964,22 +6964,30 @@ async function contatarProf(id){
   if(U.id==='demo'){toast('🎬 No modo demonstração o chat fica desativado. Crie sua conta grátis pra conversar com profissionais 💚',4500);return;}
   if(!_SB){toast('Sem conexão com o servidor.');return;}
   const p=_profsById[id]||{};
-  try{
-    // precisa de uma sessão VÁLIDA (o servidor precisa te reconhecer, não só o cache local)
-    const{data:sd}=await _SB.auth.getSession();
-    if(!sd||!sd.session){ toast('Sua sessão expirou. Entre novamente para conversar 💚',4500); return; }
-    // cria (ou recupera) a conversa via função no servidor — define user_id = você
-    // e evita de vez o erro de RLS ao inserir direto na tabela.
+  // cria (ou recupera) a conversa via função no servidor (define user_id = você, sem erro de RLS)
+  const chamar=async()=>{
     const{data,error}=await _SB.rpc('iniciar_conversa',{p_prof_id:id,p_user_nome:U.nome||'',p_prof_nome:p.nome||''});
-    if(error){
-      if(/login_required/.test(error.message||'')){ toast('Sua sessão expirou. Entre novamente para conversar 💚',4500); return; }
-      throw error;
+    if(error) throw error;
+    return Array.isArray(data)?data[0]:data;
+  };
+  try{
+    let conv;
+    try{ conv=await chamar(); }
+    catch(e1){
+      // sessão pode ter vencido → renova em silêncio e tenta de novo, sem incomodar
+      if(/login_required|JWT|token/i.test((e1&&e1.message)||'')){
+        try{ await _SB.auth.refreshSession(); }catch(_){}
+        conv=await chamar();
+      } else throw e1;
     }
-    const conv=Array.isArray(data)?data[0]:data;
     if(!conv){ throw new Error('não consegui abrir a conversa'); }
     const prefill='Olá! Vi seu perfil no dichava.app e gostaria de conversar sobre seus atendimentos. Você tem disponibilidade?';
     abrirChat(conv,false,p.nome||conv.prof_nome||'Profissional',p.telefone||'','vprofs',p.tipo_prof||'',prefill);
-  }catch(e){toast('⚠️ '+((e&&e.message)||'não consegui abrir a conversa'),5000);}
+  }catch(e){
+    const m=(e&&e.message)||'';
+    if(/login_required/.test(m)){ toast('Entre na sua conta novamente para conversar 💚',4000); }
+    else toast('⚠️ '+(m||'não consegui abrir a conversa'),5000);
+  }
 }
 function abrirChat(conv,asPro,otherNome,otherTel,from,otherInfo,prefill){
   _chat={conv,otherNome,otherInfo:otherInfo||'',otherTel:otherTel||'',asPro:!!asPro,from:from||(asPro?'vpro-dash':'vprofs'),prefill:prefill||'',poll:null,lastN:0};
