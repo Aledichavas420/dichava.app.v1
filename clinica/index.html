@@ -2223,6 +2223,14 @@ function formAgendamento(id,dataDefault,pacDefault){
         <div class="field"><label>Tipo</label><select id="f-tipo">${['Consulta','Retorno','Avaliação','Primeira sessão','Online'].map(t=>`<option ${t===a.tipo?'selected':''}>${t}</option>`).join('')}</select></div>
         <div class="field"><label>Status</label><select id="f-status">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===a.status?'selected':''}>${v.l}</option>`).join('')}</select></div>
       </div>
+      ${!id?`<div class="row2">
+        <div class="field"><label>Repetição</label><select id="f-rec" onchange="_recToggle()">
+          <option value="avulsa">Sessão avulsa (única)</option>
+          <option value="semanal">Semanal — toda semana</option>
+          <option value="quinzenal">Quinzenal — a cada 15 dias</option>
+        </select></div>
+        <div class="field" id="f-rec-qtd-wrap" style="display:none"><label>Nº de sessões</label><input id="f-rec-qtd" type="number" min="2" max="52" value="8"></div>
+      </div>`:(a.serieId?`<p style="display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--txs);margin:0 0 4px"><span style="font-size:14px">🔁</span><span>Faz parte de uma série <b>${a.recorrencia==='quinzenal'?'quinzenal':'semanal'}</b>. Editar aqui altera só esta sessão.</span></p>`:'')}
       ${(MEMBROS&&MEMBROS.length>1)?`<div class="field"><label>Profissional</label><select id="f-prof">${MEMBROS.map(m=>`<option value="${m.user_id}" ${((a.profId||AUTH&&AUTH.id)===m.user_id)?'selected':''}>${esc(m.nome||'Profissional')}</option>`).join('')}</select></div>`:''}
       <div class="row3">
         <div class="field"><label>Valor (R$)</label><input id="f-valor" type="number" step="0.01" value="${a.valor}"></div>
@@ -2265,6 +2273,21 @@ function saveAgendamento(id){
     const quem=pacNome(conflito.pacienteId);
     if(!confirm('⚠️ Já existe '+quem+' agendado(a) às '+conflito.hora+' neste dia'+(conflito.profNome&&MEMBROS.length>1?' com '+conflito.profNome:'')+'.\n\nMarcar mesmo assim?')) return;
   }
+  // Recorrência (só ao criar): gera a série de sessões
+  const recEl=!id&&$('#f-rec'); const rec=recEl?recEl.value:'avulsa';
+  if(!id && rec!=='avulsa'){
+    const passo=rec==='quinzenal'?14:7;
+    const qtd=Math.max(2,Math.min(52,parseInt(($('#f-rec-qtd')||{}).value,10)||8));
+    const serieId=uid(); const hoje=todayISO(); let criados=0;
+    for(let k=0;k<qtd;k++){ const dISO=addDaysISO(data.data,passo*k);
+      const st=(k===0)?data.status:(dISO<hoje?'atendido':'agendado');
+      const ag={id:uid(),...data,data:dISO,status:st,pago:(k===0?data.pago:false),serieId,recorrencia:rec,criadoEm:now()};
+      DB.agendamentos.push(ag); sincronizarCaixa(ag); criados++;
+    }
+    save(); closeModal(); toast('✓ '+criados+' sessões '+(rec==='quinzenal'?'quinzenais':'semanais')+' criadas 💚',3000); render();
+    try{syncOcupados();}catch(e){}
+    return;
+  }
   let ag;
   if(id){ ag=DB.agendamentos.find(x=>x.id===id); Object.assign(ag,data); }
   else { ag={id:uid(),...data,criadoEm:now()}; DB.agendamentos.push(ag); }
@@ -2272,8 +2295,18 @@ function saveAgendamento(id){
   save(); closeModal(); toast('Agendamento salvo'); render();
   try{syncOcupados();}catch(e){}
 }
+function _recToggle(){ const s=$('#f-rec'),w=$('#f-rec-qtd-wrap'); if(s&&w)w.style.display=(s.value==='avulsa')?'none':''; }
 function delAgendamento(id){
-  if(!confirm('Excluir este agendamento?')) return;
+  const a=DB.agendamentos.find(x=>x.id===id);
+  const serie=a&&a.serieId?DB.agendamentos.filter(x=>x.serieId===a.serieId&&x.data>=a.data&&x.status!=='atendido'):[];
+  if(serie.length>1){
+    if(confirm('Esta sessão faz parte de uma série recorrente.\n\nApagar TAMBÉM as '+(serie.length-1)+' sessões seguintes desta série (que ainda não foram atendidas)?\n\nOK = apagar a série · Cancelar = só esta.')){
+      const ids=new Set(serie.map(x=>x.id));
+      DB.agendamentos=DB.agendamentos.filter(x=>!ids.has(x.id));
+      DB.financeiro=DB.financeiro.filter(f=>!ids.has(f.agendamentoId));
+      save(); closeModal(); toast('Série removida ('+serie.length+' sessões)'); render(); return;
+    }
+  } else if(!confirm('Excluir este agendamento?')) return;
   DB.agendamentos=DB.agendamentos.filter(a=>a.id!==id);
   DB.financeiro=DB.financeiro.filter(f=>f.agendamentoId!==id); // remove entrada vinculada
   save(); closeModal(); toast('Agendamento excluído'); render();
