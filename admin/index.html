@@ -642,12 +642,14 @@ function renderProfs(){
     else chips.push('<span class="chip a">Perfil pendente</span>');
     if(p.plano)chips.push('<span class="chip b">'+esc(planoNome(p.plano))+(planoPreco(p.plano)?' · '+esc(planoPreco(p.plano)):'')+'</span>');
     if(ehRecorrente(p))chips.push('<span class="chip b">♻️ Recorrente</span>');
+    if(ehTrial(p))chips.push('<span class="chip a">🎁 Teste grátis</span>');
     if(p.acesso_ate)chips.push('<span class="chip b">até '+fmtData(p.acesso_ate)+'</span>');
     if(p.tem_comprovante)chips.push('<span class="chip v">📎 comprovante</span>');
     if(p.n_aval)chips.push('<span class="chip">'+(p.media_aval||'—')+' ★ ('+p.n_aval+')</span>');
     const acts=[];
     if(!ativo)acts.push(`<button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Liberar acesso</button>`);
     else acts.push(`<button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar / editar</button>`);
+    if(!ativo)acts.push(`<button class="btn ghost sm" onclick="liberarTrial('${p.id}')">🎁 Teste 7 dias</button>`);
     if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
     if(ativo)acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','bloquear')">Bloquear</button>`);
     if(p.status!=='rejeitado')acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>`);
@@ -693,8 +695,22 @@ function abrirLiberar(id){
       <button class="btn ghost" style="flex:1" onclick="fecharModal()">Cancelar</button>
       <button class="btn" style="flex:1" onclick="confirmarLiberar('${id}')">Liberar</button>
     </div>
+    <div style="border-top:1px solid var(--line,#2a2a2a);margin:14px 0 10px"></div>
+    <button class="btn ghost" style="width:100%" onclick="liberarTrial('${id}')">🎁 Liberar teste grátis de 7 dias</button>
+    <div style="font-size:12px;color:var(--txm,#999);margin-top:7px;line-height:1.4">Dá acesso completo por 7 dias sem cobrar nada. No 7º dia o acesso é cortado até o pagamento. Usa o plano selecionado acima.</div>
   </div></div>`;
   try{libTipoChange();}catch(e){}
+}
+function ehTrial(p){ return /🎁|teste gr[aá]tis|trial/i.test((p&&p.obs_admin)||''); }
+async function liberarTrial(id){
+  const p=PROFS.find(x=>x.id===id); if(!p)return;
+  const sel=$('#m-plano'); const plano=(sel&&sel.value)||p.plano||'essencial';
+  if(!confirm('Liberar 7 dias de teste grátis do plano '+planoNome(plano)+' para '+(p.nome||'este profissional')+'?\n\nAcesso completo por 7 dias, sem cobrança. Depois disso o acesso é cortado até o pagamento.')) return;
+  _libPlano=plano;
+  const ate=new Date(Date.now()+7*864e5).toLocaleDateString('pt-BR');
+  const obs='🎁 Teste grátis 7 dias ('+planoNome(plano)+') · até '+ate;
+  await acao(id,'trial',7,obs);
+  _libPlano=null;
 }
 function fecharModal(){ $('#modalRoot').innerHTML=''; }
 let _libPlano=null;
@@ -741,7 +757,7 @@ async function acao(id,tipo,meses,obs){
   try{
     const {error}=await SB.rpc('admin_prof_acao',{p_id:id,p_acao:tipo,p_meses:meses??null,p_obs:obs??null,p_plano:_libPlano??null});
     if(error) throw error;
-    const msgs={aprovar:'Perfil aprovado',rejeitar:'Profissional rejeitado',liberar:'Acesso liberado!',bloquear:'Acesso bloqueado'};
+    const msgs={aprovar:'Perfil aprovado',rejeitar:'Profissional rejeitado',liberar:'Acesso liberado!',trial:'Teste de 7 dias liberado! 🎁',bloquear:'Acesso bloqueado'};
     toast(msgs[tipo]||'Feito');
     carregar();
   }catch(e){ toast('Erro: '+(e.message||''),1); }

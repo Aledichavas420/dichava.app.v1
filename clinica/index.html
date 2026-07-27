@@ -662,6 +662,7 @@ body.has-demo-banner{padding-bottom:64px}
       <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
       <button class="btn" id="quick-add">＋ Novo</button>
     </div>
+    <div id="trial-banner" style="display:none"></div>
     <div id="atalho-hint"></div>
     <div class="content" id="view"></div>
   </div>
@@ -3020,6 +3021,7 @@ function planoLabel(k){ const p=PLANOS.find(x=>x.k===k); return p?(p.nome+' — 
 // Capacidades por plano (espelho do banco: plano_caps)
 const PLANO_CAPS={ essencial:{destaque:false,codigos:0,equipe_max:1}, profissional:{destaque:true,codigos:10,equipe_max:1}, clinica:{destaque:true,codigos:25,equipe_max:5} };
 let _meuPlano=null;
+let _meuAcesso=null; // {ate, trial, plano} — usado pelo banner de teste grátis
 function meusCaps(){ return PLANO_CAPS[_meuPlano]||PLANO_CAPS.essencial; }
 function preencherPlanos(){ const s=$('#s-plano'); if(s&&!s.children.length) s.innerHTML=PLANOS.map(p=>`<option value="${p.k}">${p.nome} — ${p.preco}</option>`).join(''); }
 async function enviarComprovante(file){
@@ -3055,13 +3057,16 @@ async function checarAcesso(){
     const fim = p.acesso_ate ? new Date(new Date(p.acesso_ate).getTime()+grace) : null;
     const liberado = p.ativo===true && (!fim || fim > new Date());
     const expirado = p.ativo===true && fim && fim <= new Date();
+    _meuAcesso={ate:p.acesso_ate||null, trial:/🎁|teste gr[aá]tis|trial/i.test(p.obs_admin||''), plano:p.plano};
     return {ok:liberado, expirado, plano:p.plano};
   }catch(e){ return {ok:true}; } // qualquer erro de rede/coluna: não trava
 }
 async function entrarLiberado(){
   const acc=await checarAcesso();
   if(!acc.ok){
-    if(acc.expirado){ $('#gate-pending-tx').innerHTML='Sua assinatura <b>expirou</b>. Renove pra reativar o acesso ao painel.'; }
+    if(acc.expirado){ $('#gate-pending-tx').innerHTML=(_meuAcesso&&_meuAcesso.trial)
+      ? 'Seu <b>teste grátis de 7 dias</b> terminou 💚 Assine pra continuar de onde parou — seus dados estão salvos e te esperando.'
+      : 'Sua assinatura <b>expirou</b>. Renove pra reativar o acesso ao painel.'; }
     const pl=acc.plano||(AUTH&&AUTH.plano); const pinfo=$('#gate-plano-info');
     if(pl&&pinfo){ pinfo.innerHTML='Plano escolhido: <b>'+planoLabel(pl)+'</b>'; pinfo.style.display='block'; }
     showGate('pending'); return false;
@@ -3303,8 +3308,22 @@ async function iniciarApp(){
   });
   initTheme();
   if(!_DEMO) try{ mostrarAtalhoHint(); }catch(e){}
+  if(!_DEMO) try{ mostrarBannerTrial(); }catch(e){}
   if(!_DEMO) try{ registrarSWPro(); ativarNotificacoesPro(true); }catch(e){}  // reinscreve em silêncio se já autorizado
   await bootClinica();
+}
+// Banner de contagem regressiva do teste grátis (some quando não é trial)
+function mostrarBannerTrial(){
+  const b=document.getElementById('trial-banner'); if(!b)return;
+  if(!_meuAcesso||!_meuAcesso.trial||!_meuAcesso.ate){ b.style.display='none'; b.innerHTML=''; return; }
+  const ms=new Date(_meuAcesso.ate).getTime()-Date.now();
+  const dias=Math.ceil(ms/864e5);
+  if(dias<0){ b.style.display='none'; return; }
+  const label=dias<=0?'termina hoje':(dias===1?'falta 1 dia':'faltam '+dias+' dias');
+  const urg=dias<=2;
+  b.style.cssText='display:block;background:'+(urg?'linear-gradient(135deg,#FDE9D0,#FAD9AF)':'linear-gradient(135deg,#EAF7EE,#D6EFDD)')+';border-bottom:1px solid '+(urg?'#E8B872':'#B9E2C4')+';padding:9px 16px;font-size:13px;color:#3a3320;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center';
+  b.innerHTML='<span>🎁 <b>Teste grátis</b> — '+label+'. Depois, garanta seu acesso pra não perder seus dados.</span>'+
+    '<a href="/assinar/" target="_blank" rel="noopener" style="background:#128C4B;color:#fff;text-decoration:none;font-weight:700;padding:5px 14px;border-radius:20px;white-space:nowrap">Assinar agora →</a>';
 }
 // descobre a clínica do profissional (ou pede pra criar/entrar)
 async function bootClinica(){
