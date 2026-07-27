@@ -1622,6 +1622,8 @@ function viewConfig(){
     <input id="imp-pac-file" type="file" accept=".csv,text/csv" class="hide" onchange="importarPacientesCSV(this.files[0]);this.value='';">
     <div class="bkp-row" onclick="$('#imp-ag-file').click()"><div class="bkp-ic" style="background:#E8F0FF;color:#3E7BF0">${docIcon({cor:'#3E7BF0',ic:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4" stroke-linecap="round"/>'})}</div><div class="bkp-tx"><b>Importar agenda / sessões</b><span>CSV com Data, Horário, Paciente e Valor — cria os agendamentos (e pacientes que faltarem)</span></div><span class="bkp-go">›</span></div>
     <input id="imp-ag-file" type="file" accept=".csv,text/csv" class="hide" onchange="importarAgendaCSV(this.files[0]);this.value='';">
+    <div class="bkp-row" onclick="$('#imp-pront-file').click()"><div class="bkp-ic" style="background:#F1EBFB;color:#7B54D3">${docIcon({cor:'#7B54D3',ic:'<path d="M7 3h10v18H7z"/><path d="M9.5 8h5M9.5 12h5M9.5 16h3" stroke-linecap="round"/>'})}</div><div class="bkp-tx"><b>Importar prontuários / evoluções</b><span>CSV com registros clínicos — vincula cada sessão ao paciente (você revisa antes)</span></div><span class="bkp-go">›</span></div>
+    <input id="imp-pront-file" type="file" accept=".csv,text/csv" class="hide" onchange="importarProntuariosCSV(this.files[0]);this.value='';">
     <div class="bkp-row" onclick="removerDuplicados()"><div class="bkp-ic" style="background:#FFF0F0;color:#C0616B">${docIcon({cor:'#C0616B',ic:'<path d="M8 8h9a2 2 0 0 1 2 2v9" stroke-linecap="round"/><rect x="5" y="5" width="11" height="11" rx="2"/>'})}</div><div class="bkp-tx"><b>Remover pacientes duplicados</b><span>Une cadastros com o mesmo nome (mantém agenda e prontuários)</span></div><span class="bkp-go">›</span></div>
 
     <button class="btn danger sm" style="margin-top:16px" onclick="resetar()">Apagar todos os dados</button>
@@ -2776,6 +2778,127 @@ function confirmarImportAgenda(){
   _impAgBuffer.ags.forEach(a=>{ const{_nome,...rest}=a; DB.agendamentos.push({id:uid(),...rest,criadoEm:now()}); });
   const np=_impAgBuffer.pacientes.length, na=_impAgBuffer.ags.length; _impAgBuffer=null;
   save(); closeModal(); toast('✓ '+na+' sessão(ões)'+(np?' e '+np+' paciente(s)':'')+' importados 💚'); render();
+}
+/* ===== IMPORTAR PRONTUÁRIOS / EVOLUÇÕES (CSV) ===== */
+function _lev(a,b){ a=a||'';b=b||''; const m=a.length,n=b.length; if(!m)return n; if(!n)return m;
+  let prev=Array.from({length:n+1},(_, j)=>j), cur=new Array(n+1);
+  for(let i=1;i<=m;i++){ cur[0]=i;
+    for(let j=1;j<=n;j++){ const c=a[i-1]===b[j-1]?0:1; cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+c); }
+    [prev,cur]=[cur,prev];
+  } return prev[n];
+}
+function _sim(a,b){ const L=Math.max(a.length,b.length,1); return 1-_lev(a,b)/L; }
+// Pontua o quão bem o nome da planilha (q) casa com o nome do paciente cadastrado (p).
+function _scorePac(q,p){ q=_normH(q); p=_normH(p); if(!q||!p)return 0; if(q===p)return 1;
+  const qt=q.split(' ').filter(Boolean), pt=p.split(' ').filter(Boolean);
+  const tokM=t=> pt.some(x=> x===t || x.startsWith(t) || t.startsWith(x) || _sim(t,x)>=0.82 );
+  if(qt.length&&qt.every(tokM)){ const shared=qt.filter(tokM).length; return 0.86+Math.min(0.1,shared*0.03); }
+  return _sim(q,p)*0.8;
+}
+function _mapProntCol(h){ const n=_normH(h); const inc=(...ks)=>ks.some(k=>n.includes(k));
+  if(inc('paciente')) return 'paciente';
+  if(inc('n sessao','no sessao','numero da sessao','numero sessao','n da sessao')||n==='sessao'||n==='sessoes') return 'sessao';
+  if(inc('data')&&!inc('nascimento')) return 'data';
+  if(inc('titulo','assunto')) return 'titulo';
+  if(inc('humor inicio','humor inicial')) return 'humorIni';
+  if(inc('humor final','humor fim')) return 'humorFim';
+  if(inc('queixa')) return 'queixa';
+  if(inc('objetivo')) return 'objetivos';
+  if(inc('intervenc')) return 'intervencoes';
+  if(inc('ponto de atenc','pontos de atenc','atencao')) return 'pontos';
+  if(inc('plano')) return 'plano';
+  if(inc('encaminha')) return 'encaminhamentos';
+  if(inc('recurso')) return 'recursos';
+  return null;
+}
+let _impProntState=null;
+function importarProntuariosCSV(file){
+  if(!file)return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{
+    const rows=parseCSV(String(rd.result||'')); if(rows.length<2){toast('Planilha vazia ou só com cabeçalho.',3000);return;}
+    const map=rows[0].map(_mapProntCol);
+    if(!map.includes('paciente')){ toast('A planilha precisa da coluna "Paciente".',5000); return; }
+    // Monta os registros e agrupa por nome (bruto) da planilha.
+    const recs=[]; const grupos={};
+    for(let r=1;r<rows.length;r++){ const row=rows[r]; const o={};
+      map.forEach((f,ci)=>{ if(f&&o[f]===undefined)o[f]=String(row[ci]||'').trim(); });
+      const nome=(o.paciente||'').trim(); if(!nome)continue;
+      const humor=[o.humorIni&&('Humor inicial: '+o.humorIni), o.humorFim&&('Humor final: '+o.humorFim)].filter(Boolean).join(' · ');
+      const tit=(o.titulo||'').trim(); const titOk=tit&&!/^s(essao|\.)?\s*\d+$/i.test(_normH(tit).replace(/\s+/g,''))&&_normH(tit)!=='sessao';
+      const texto=[titOk?tit:'', humor].filter(Boolean).join('\n');
+      const pontos=[o.pontos, o.encaminhamentos&&('Encaminhamentos: '+o.encaminhamentos)].filter(Boolean).join('\n');
+      const rec={ _nome:nome, data:_normData(o.data)||todayISO(), sessao:(o.sessao||'').replace(/\D/g,''), tipo:'evolucao',
+        queixa:o.queixa||'', objetivos:o.objetivos||'', intervencoes:o.intervencoes||'', recursos:o.recursos||'',
+        pontos, plano:o.plano||'', texto };
+      if(!(rec.queixa||rec.objetivos||rec.intervencoes||rec.pontos||rec.plano||rec.texto||rec.recursos)) continue;
+      recs.push(rec);
+      const k=_normH(nome); (grupos[k]=grupos[k]||{raw:nome,recs:[]}).recs.push(rec);
+    }
+    if(!recs.length){ toast('Nenhum registro clínico encontrado na planilha.',4000); return; }
+    // Resolve cada nome distinto -> melhor paciente cadastrado (palpite), com opções ordenadas.
+    const nomes=Object.keys(grupos).map(k=>{ const g=grupos[k];
+      const cand=DB.pacientes.map(p=>({id:p.id,nome:p.nome,score:_scorePac(g.raw,p.nome)})).sort((a,b)=>b.score-a.score);
+      const best=cand[0];
+      // Ambíguo se o 2º candidato empata quase igual (ex.: dois "Alessandra").
+      const ambiguo=cand[1]&&best&&(best.score-cand[1].score)<0.04&&best.score>=0.72;
+      const guess=(best&&best.score>=0.72&&!ambiguo)?best.id:'__novo__';
+      return { key:k, raw:g.raw, count:g.recs.length, guess, ambiguo:!!ambiguo, cand };
+    }).sort((a,b)=>b.count-a.count);
+    _impProntState={grupos, nomes, recs, sel:{}};
+    nomes.forEach(nm=>_impProntState.sel[nm.key]=nm.guess);
+    _renderImportProntModal();
+  }catch(e){toast('Não consegui ler a planilha: '+((e&&e.message)||''),4000);} };
+  rd.readAsText(file,'utf-8');
+}
+function _renderImportProntModal(){
+  const st=_impProntState; if(!st)return;
+  const optsFor=nm=>{ const opts=nm.cand.filter(c=>c.score>=0.4).slice(0,8);
+    return `<option value="__novo__" ${st.sel[nm.key]==='__novo__'?'selected':''}>➕ Criar novo paciente</option>`+
+      opts.map(c=>`<option value="${c.id}" ${st.sel[nm.key]===c.id?'selected':''}>${esc(c.nome)}${c.score>=0.999?' (exato)':' ('+Math.round(c.score*100)+'%)'}</option>`).join('')+
+      DB.pacientes.filter(p=>!opts.some(c=>c.id===p.id)).sort((a,b)=>String(a.nome).localeCompare(String(b.nome))).map(p=>`<option value="${p.id}" ${st.sel[nm.key]===p.id?'selected':''}>${esc(p.nome)}</option>`).join('');
+  };
+  const nMatch=st.nomes.filter(nm=>st.sel[nm.key]!=='__novo__').length;
+  const nNovo=st.nomes.length-nMatch;
+  const linhas=st.nomes.map(nm=>{ const novo=st.sel[nm.key]==='__novo__';
+    return `<tr style="border-top:1px solid var(--line)">
+      <td style="padding:8px;white-space:nowrap"><b>${esc(nm.raw)}</b><br><span style="font-size:11px;color:var(--txm)">${nm.count} registro(s)</span></td>
+      <td style="padding:8px">${nm.ambiguo?'<span title="Vários pacientes parecidos — confira" style="color:#E7A400">⚠️ </span>':''}<select onchange="_impProntPick('${nm.key}',this.value)" style="width:100%;padding:7px 8px;border:1px solid ${novo?'#2FA35F':'var(--line)'};border-radius:8px;background:var(--bg);color:var(--tx);font-size:13px">${optsFor(nm)}</select></td>
+    </tr>`;
+  }).join('');
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>Importar prontuários</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="gate-info" style="margin-bottom:12px"><b>${st.recs.length}</b> registro(s) clínico(s) em <b>${st.nomes.length}</b> nome(s).<br>
+        <b>${nMatch}</b> vinculado(s) a pacientes já cadastrados${nNovo?` · <b>${nNovo}</b> criarão paciente novo`:''}.<br>
+        <span style="font-size:12px">Como os nomes vêm de jeitos diferentes na planilha, <b>confira a coluna da direita</b> antes de importar. Deixe em “Criar novo paciente” só quem ainda não existe.</span></div>
+      <div style="overflow:auto;max-height:52vh;border:1px solid var(--line);border-radius:10px"><table style="width:100%;font-size:13px;border-collapse:collapse">
+        <thead><tr style="text-align:left;color:var(--txm);position:sticky;top:0;background:var(--card)"><th style="padding:8px">Nome na planilha</th><th style="padding:8px">Vincular ao paciente</th></tr></thead>
+        <tbody>${linhas}</tbody></table></div>
+      <div style="font-size:12px;color:var(--txs);margin-top:10px">Registros iguais (mesmo paciente, data e sessão) que já existirem não são duplicados. Dados clínicos ficam só neste dispositivo/na sua conta.</div>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="confirmarImportProntuarios()">Importar ${st.recs.length} registro(s)</button></div></div>`);
+}
+function _impProntPick(key,val){ if(_impProntState){ _impProntState.sel[key]=val; _renderImportProntModal(); } }
+function confirmarImportProntuarios(){
+  const st=_impProntState; if(!st){closeModal();return;}
+  // Resolve o pacienteId final de cada nome (criando os novos).
+  const resolved={}; let novosPac=0;
+  st.nomes.forEach(nm=>{ let id=st.sel[nm.key];
+    if(id==='__novo__'){ const p={id:uid(),nome:nm.raw,tags:['ativo'],obs:'',criadoEm:now()}; DB.pacientes.push(p); id=p.id; novosPac++; }
+    resolved[nm.key]=id;
+  });
+  const existe=(pid,r)=>DB.prontuarios.some(x=>x.pacienteId===pid&&x.data===r.data&&String(x.sessao||'')===String(r.sessao||'')&&(String(x.queixa||'').slice(0,40)===String(r.queixa||'').slice(0,40)));
+  let add=0, ja=0;
+  st.recs.forEach(r=>{ const pid=resolved[_normH(r._nome)]; if(!pid)return;
+    if(existe(pid,r)){ ja++; return; }
+    const{_nome,...rest}=r;
+    DB.prontuarios.push({id:uid(),pacienteId:pid,agendamentoId:null,conduta:rest.plano||'',...rest,criadoEm:now()});
+    add++;
+  });
+  _impProntState=null;
+  save(); closeModal();
+  toast('✓ '+add+' prontuário(s) importado(s)'+(novosPac?' · '+novosPac+' paciente(s) novo(s)':'')+(ja?' · '+ja+' já existiam':'')+' 💚',3500);
+  render();
 }
 function resetar(){
   if(!confirm('Apagar TODOS os dados da clínica neste dispositivo? Esta ação não pode ser desfeita.')) return;
