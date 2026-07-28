@@ -2880,6 +2880,7 @@ function _mapProntCol(h){ const n=_normH(h); const inc=(...ks)=>ks.some(k=>n.inc
   if(inc('plano')) return 'plano';
   if(inc('encaminha')) return 'encaminhamentos';
   if(inc('recurso')) return 'recursos';
+  if(inc('registro','evolucao','relato','descricao','anotac','historico')) return 'registro';
   return null;
 }
 let _impProntState=null;
@@ -2897,7 +2898,7 @@ function importarProntuariosCSV(file){
       const nome=(o.paciente||'').trim(); if(!nome)continue;
       const humor=[o.humorIni&&('Humor inicial: '+o.humorIni), o.humorFim&&('Humor final: '+o.humorFim)].filter(Boolean).join(' · ');
       const tit=(o.titulo||'').trim(); const titOk=tit&&!/^s(essao|\.)?\s*\d+$/i.test(_normH(tit).replace(/\s+/g,''))&&_normH(tit)!=='sessao';
-      const texto=[titOk?tit:'', humor].filter(Boolean).join('\n');
+      const texto=[titOk?tit:'', o.registro||'', humor].filter(Boolean).join('\n\n');
       const pontos=[o.pontos, o.encaminhamentos&&('Encaminhamentos: '+o.encaminhamentos)].filter(Boolean).join('\n');
       const rec={ _nome:nome, data:_normData(o.data)||todayISO(), sessao:(o.sessao||'').replace(/\D/g,''), tipo:'evolucao',
         queixa:o.queixa||'', objetivos:o.objetivos||'', intervencoes:o.intervencoes||'', recursos:o.recursos||'',
