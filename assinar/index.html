@@ -168,15 +168,15 @@ const LINKS = {
 };
 
 const PLANOS = [
-  { k:'essencial', nome:'Essencial', destaque:'Sua clínica organizada, do zero.', para:'Pra quem está começando ou quer profissionalizar a rotina',
-    mensal:'79,90', anual:'799', eqAnual:'equivale a R$ 66/mês',
-    feats:['Painel completo: agenda, pacientes, prontuários e caixa','Perfil verificado no app (pacientes te encontram)','Contrato terapêutico + recibos e documentos','Lembretes automáticos e lista de espera'] },
-  { k:'profissional', nome:'Profissional', best:true, destaque:'Menos trabalho manual, mais visibilidade.', para:'Pra quem quer agenda cheia e ganhar tempo',
-    mensal:'179,90', anual:'1.799', eqAnual:'equivale a R$ 150/mês',
-    feats:['Tudo do Essencial, e mais:','✨ Assistente de IA no prontuário — organiza a evolução por você','★ Destaque no topo do diretório do app','Divulgação ativa na landing e no @dichava.app'] },
+  { k:'essencial', nome:'Essencial', destaque:'Sua prática organizada, do começo ao fim.', para:'Pra quem está começando ou quer profissionalizar a rotina',
+    de:'99,90', mensal:'79,90', anual:'799', eqAnual:'equivale a R$ 66/mês',
+    feats:['Perfil verificado no diretório do app','Agenda completa (dia, semana e mês) + sessões recorrentes','Pacientes ilimitados, com prontuário completo','Caixa e controle financeiro do mês','Recibos, declarações e contrato terapêutico','Lembretes e lista de espera','Backup e importação dos seus dados'] },
+  { k:'profissional', nome:'Profissional', best:true, destaque:'Menos trabalho manual, mais tempo pra clínica.', para:'Pra quem quer ganhar tempo e profissionalizar o atendimento',
+    de:'199,90', mensal:'179,90', anual:'1.799', eqAnual:'equivale a R$ 150/mês',
+    feats:['Tudo do Essencial, e mais:','📅 Agendamento online — o paciente marca sozinho pelos seus horários','🔔 Lembretes automáticos de consulta','✨ Assistente de IA no prontuário — organiza a evolução por você','📊 Relatórios: faturamento, ticket médio e comparecimento','📄 Pareceres e relatórios técnicos com modelos por especialidade','★ Destaque no diretório + divulgação nos nossos canais'] },
   { k:'clinica', nome:'Clínica', destaque:'Sua equipe inteira num só lugar.', para:'Pra clínicas e coletivos com mais de um profissional',
-    mensal:'299,90', anual:'2.999', eqAnual:'equivale a R$ 250/mês',
-    feats:['Tudo do Profissional, e mais:','Até 5 profissionais na mesma conta','Painel compartilhado: agenda, caixa e pacientes da equipe','Página da clínica no app + suporte prioritário dedicado'] },
+    de:'349,90', mensal:'299,90', anual:'2.999', eqAnual:'equivale a R$ 250/mês',
+    feats:['Tudo do Profissional, e mais:','Até 5 profissionais na mesma conta','Painel compartilhado: agenda, caixa e pacientes da equipe','IA e relatórios pra toda a equipe','Página da clínica no diretório do app','Suporte prioritário dedicado'] },
 ];
 
 let _ciclo='mensal', _metodo='recorrente';
@@ -206,9 +206,9 @@ function atualizarNota(){
 function render(){
   document.getElementById('planos').innerHTML = PLANOS.map(p=>{
     const preco = _ciclo==='mensal'
-      ? `<span class="cif">R$</span> ${p.mensal}<span class="un">/mês</span>`
+      ? `${p.de?`<span style="text-decoration:line-through;opacity:.45;font-size:.42em;font-weight:700;vertical-align:middle">R$ ${p.de}</span> `:''}<span class="cif">R$</span> ${p.mensal}<span class="un">/mês</span>`
       : `<span class="cif">R$</span> ${p.anual}<span class="un">/ano</span>`;
-    const eq = _ciclo==='anual' ? p.eqAnual : '&nbsp;';
+    const eq = _ciclo==='anual' ? p.eqAnual : (p.de?'🌱 Preço de lançamento':'&nbsp;');
     return `<div class="plano ${p.best?'best':''}">
       ${p.best?'<div class="plano-badge">★ mais escolhido</div>':''}
       <div class="plano-n">${p.nome}</div>

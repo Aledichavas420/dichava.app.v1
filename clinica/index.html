@@ -869,7 +869,7 @@ const SUP_FAQ=[
   {t:'Conta, plano e pagamento', ic:'💳', q:[
     {p:'Como libero meu acesso ao painel?',r:'Após o cadastro, seu acesso fica "em análise". É só falar com a gente (WhatsApp ou aqui no chat), combinar o pagamento do plano escolhido e assim que confirmarmos, liberamos na hora. Você também pode enviar o comprovante pelo botão na tela de análise.'},
     {p:'Onde envio o comprovante de pagamento?',r:'Na tela "acesso em análise" (logo após o login, antes de liberar) tem o botão "📎 Enviar comprovante de pagamento". Se já estiver com o painel liberado, mande por aqui mesmo.'},
-    {p:'Como troco de plano?',r:'Nos conte por aqui qual plano você quer (Essencial, Profissional ou Clínica) que ajustamos pra você. A diferença é: destaque no diretório, códigos premium pra presentear e equipe compartilhada no Clínica.'},
+    {p:'Como troco de plano?',r:'Nos conte por aqui qual plano você quer (Essencial, Profissional ou Clínica) que ajustamos pra você. O Profissional acrescenta agendamento online, lembretes automáticos, assistente de IA no prontuário, relatórios e destaque no diretório. O Clínica ainda inclui equipe compartilhada (até 5 profissionais).'},
     {p:'Minha assinatura expirou, e agora?',r:'Quando o período acaba, o painel pede renovação. É só combinar o novo pagamento com a gente que reativamos o acesso na hora, sem perder nenhum dado.'},
   ]},
   {t:'Agenda e agendamento online', ic:'📅', q:[
@@ -898,7 +898,7 @@ const SUP_FAQ=[
     {p:'Por que meu perfil está "em análise"?',r:'Todo perfil público passa por uma aprovação rápida antes de aparecer na rede, pra garantir a qualidade. Assim que revisarmos, ele é publicado.'},
     {p:'O que é o selo Destaque?',r:'Nos planos Profissional e Clínica, seu perfil ganha um selo ★ Destaque e aparece no topo da lista de profissionais do app.'},
   ]},
-  {t:'Link na bio e códigos premium', ic:'🔗', q:[
+  {t:'Link na bio', ic:'🔗', q:[
     {p:'Como monto meu "link na bio"?',r:'No painel há o construtor do link na bio (estilo Linktree): foto, fundo, cores, fontes, títulos e links, com prévia ao vivo. Publique e use o link na bio do Instagram.'},
   ]},
   {t:'Equipe e clínica compartilhada', ic:'👥', q:[
@@ -1501,6 +1501,10 @@ function viewCaixa(){
 function shiftMes(n){ const [y,m]=caixaMes.split('-').map(Number); const d=new Date(y,m-1+n,1); caixaMes=d.toISOString().slice(0,7); render(); }
 // Relatório: faturamento 6 meses + ticket médio + comparecimento
 function relatorioFinanceiro(){
+  if(!meusCaps().relatorios && !_DEMO) return `<div class="sec-title">Relatório <span style="font-size:11px;background:var(--roxof,#F1EBFB);color:#7B54D3;border-radius:20px;padding:2px 9px;font-weight:800;vertical-align:middle">Profissional</span></div>
+    <div class="card" style="padding:20px;max-width:620px">
+      <p style="color:var(--txs);font-size:13.5px;line-height:1.55;margin:0 0 14px">📊 Veja <b>faturamento dos últimos meses</b>, ticket médio, taxa de comparecimento e a evolução da sua clínica — num relatório visual, exportável.</p>
+      <a class="btn" href="/assinar/" target="_blank" rel="noopener" style="text-decoration:none">Liberar no Profissional →</a></div>`;
   const [y,m]=caixaMes.split('-').map(Number);
   const meses=[]; for(let i=5;i>=0;i--){const d=new Date(y,m-1-i,1);meses.push(d.toISOString().slice(0,7));}
   const fat=meses.map(mm=>({mm,v:DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mm)).reduce((s,f)=>s+ +f.valor,0)}));
@@ -1538,6 +1542,10 @@ async function carregarAgendaCfg(){
 }
 function dispCard(){
   const cfg=AGENDA_CFG||{dur:50,dias:{}};
+  if(!meusCaps().agendaOnline && !_DEMO) return `<div class="card" style="padding:22px;max-width:560px;margin-top:16px">
+    <div class="sec-title" style="margin-top:0">Agendamento online <span style="font-size:11px;background:var(--roxof,#F1EBFB);color:#7B54D3;border-radius:20px;padding:2px 9px;font-weight:800;vertical-align:middle">Profissional</span></div>
+    <p style="color:var(--txs);font-size:13.5px;line-height:1.55;margin:2px 0 14px">📅 Deixe o <b>paciente marcar sozinho</b> nos horários que você abrir — e ele recebe um <b>lembrete automático</b> um dia antes. Menos idas e vindas no WhatsApp.</p>
+    <a class="btn" href="/assinar/" target="_blank" rel="noopener" style="text-decoration:none">Liberar no Profissional →</a></div>`;
   if(!AGENDA_CFG) return `<div class="card" style="padding:22px;max-width:560px;margin-top:16px"><div class="sec-title" style="margin-top:0">Disponibilidade online</div><div style="text-align:center;padding:14px"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div>`;
   return `<div class="card" style="padding:22px;max-width:560px;margin-top:16px">
     <div class="sec-title" style="margin-top:0">Disponibilidade para agendamento online</div>
@@ -2083,11 +2091,11 @@ function viewEquipe(){
       </div>`;
   return `
   ${equipeCard}
-  <div class="card" style="padding:20px;max-width:620px;margin-top:16px">
+  ${(meusCaps().agendaOnline||_DEMO)?`<div class="card" style="padding:20px;max-width:620px;margin-top:16px">
     <div class="sec-title" style="margin-top:0">Agendamento online</div>
     <p style="color:var(--txs);font-size:13.5px;margin-bottom:12px">Compartilhe este link com seus pacientes (bio do Instagram, WhatsApp). Eles solicitam um horário e você confirma na <b>Agenda</b>.</p>
     <div class="eq-code" style="border-style:solid"><span style="font-size:12px;color:var(--txs);font-weight:700;word-break:break-all;flex:1">dichava.app/agendar/?c=${esc(CLINICA.codigo)}</span><button class="btn sm ghost cp" onclick="copiarLinkAgenda()">Copiar</button> <button class="btn sm ghost" onclick="qrAgenda()">QR code</button></div>
-  </div>
+  </div>`:''}
   <div class="card" style="padding:20px;max-width:620px;margin-top:16px">
     <div class="sec-title" style="margin-top:0">Profissionais (${membros.length})</div>
     ${membros.map(m=>`<div class="eq-mem">
@@ -2394,6 +2402,7 @@ function delProntuario(rid){
 }
 /* ===== IA: organiza o rascunho nos campos do prontuário ===== */
 async function organizarComIA(){
+  if(!meusCaps().ia && !_DEMO){ upsellPro('Assistente de IA no prontuário','A IA organiza seu rascunho nos campos do prontuário — queixa, objetivos, intervenções, plano — em segundos. Você escreve solto e ela estrutura pra você.'); return; }
   const btn=$('#ia-btn'), tx=$('#ia-btn-tx');
   const g=id=>{const el=$('#'+id);return el?el.value.trim():'';};
   // fonte = o rascunho principal; se vazio, junta o que já estiver preenchido
@@ -3019,7 +3028,21 @@ const PLANOS=[
 function planoNome(k){ const p=PLANOS.find(x=>x.k===k); return p?p.nome:(k||''); }
 function planoLabel(k){ const p=PLANOS.find(x=>x.k===k); return p?(p.nome+' — '+p.preco):(k||''); }
 // Capacidades por plano (espelho do banco: plano_caps)
-const PLANO_CAPS={ essencial:{destaque:false,codigos:0,equipe_max:1}, profissional:{destaque:true,codigos:10,equipe_max:1}, clinica:{destaque:true,codigos:25,equipe_max:5} };
+const PLANO_CAPS={
+  essencial:   {destaque:false, equipe_max:1, ia:false, agendaOnline:false, relatorios:false, lembretesAuto:false},
+  profissional:{destaque:true,  equipe_max:1, ia:true,  agendaOnline:true,  relatorios:true,  lembretesAuto:true},
+  clinica:     {destaque:true,  equipe_max:5, ia:true,  agendaOnline:true,  relatorios:true,  lembretesAuto:true}
+};
+// Upsell padrão pra recursos do plano Profissional/Clínica
+function upsellPro(titulo,desc){
+  openModal(`<div class="modal"><div class="modal-head"><h3>${titulo}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="text-align:center;font-size:34px;margin:6px 0 2px">✨</div>
+      <p style="color:var(--txs);font-size:14px;text-align:center;line-height:1.5;margin:0 0 6px">${desc}</p>
+      <p style="color:var(--txm);font-size:12.5px;text-align:center;margin:0">Disponível nos planos <b>Profissional</b> e <b>Clínica</b>.</p>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Agora não</button><a class="btn" href="/assinar/" target="_blank" rel="noopener" style="text-decoration:none">Ver planos →</a></div></div>`);
+}
 let _meuPlano=null;
 let _meuAcesso=null; // {ate, trial, plano} — usado pelo banner de teste grátis
 function meusCaps(){ return PLANO_CAPS[_meuPlano]||PLANO_CAPS.essencial; }
