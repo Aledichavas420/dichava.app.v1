@@ -40,6 +40,8 @@ header p{font-size:15px;opacity:.85;max-width:520px;margin:0 auto}
 .plano-p .cif{font-size:16px;vertical-align:super;font-weight:700;color:var(--txm)}
 .plano-p .un{font-size:15px;font-weight:600;color:var(--txm)}
 .plano-eq{font-size:12px;color:var(--txm);margin-top:3px;min-height:16px}
+.plano-de{font-size:14px;font-weight:600;color:var(--txm);margin-bottom:1px;min-height:17px}
+.plano-de s{opacity:.75}
 .plano ul{list-style:none;margin:14px 0 18px;display:flex;flex-direction:column;gap:8px}
 .plano li{font-size:13px;display:flex;gap:8px;align-items:flex-start;color:#33453a}
 .plano li svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--ve)}
@@ -205,15 +207,17 @@ function atualizarNota(){
 }
 function render(){
   document.getElementById('planos').innerHTML = PLANOS.map(p=>{
+    const de = (_ciclo==='mensal' && p.de) ? `<div class="plano-de">de <s>R$ ${p.de}</s></div>` : `<div class="plano-de">&nbsp;</div>`;
     const preco = _ciclo==='mensal'
-      ? `${p.de?`<span style="text-decoration:line-through;opacity:.45;font-size:.42em;font-weight:700;vertical-align:middle">R$ ${p.de}</span> `:''}<span class="cif">R$</span> ${p.mensal}<span class="un">/mês</span>`
+      ? `<span class="cif">R$</span> ${p.mensal}<span class="un">/mês</span>`
       : `<span class="cif">R$</span> ${p.anual}<span class="un">/ano</span>`;
-    const eq = _ciclo==='anual' ? p.eqAnual : (p.de?'🌱 Preço de lançamento':'&nbsp;');
+    const eq = _ciclo==='anual' ? p.eqAnual : (p.de?'🌱 preço de lançamento':'&nbsp;');
     return `<div class="plano ${p.best?'best':''}">
       ${p.best?'<div class="plano-badge">★ mais escolhido</div>':''}
       <div class="plano-n">${p.nome}</div>
       <div class="plano-destaque">${p.destaque||''}</div>
       <div class="plano-para">${p.para}</div>
+      ${de}
       <div class="plano-p">${preco}</div>
       <div class="plano-eq">${eq}</div>
       <ul>${p.feats.map(f=>`<li>${CHK}<span>${f}</span></li>`).join('')}</ul>
