@@ -2279,7 +2279,8 @@ a{color:inherit;text-decoration:none}
 .mt-on{background:var(--saf);color:var(--sa)}
 .mt-pr{background:var(--lrjf);color:var(--lrj)}
 .mt-am{background:var(--roxof);color:var(--roxo)}
-.pc-bio{font-size:13px;color:var(--txs);line-height:1.5}
+.pc-bio{font-size:13px;color:var(--txs);line-height:1.5;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.pc-bio-more{font-size:12.5px;color:var(--v);font-weight:700;margin-top:2px}
 .pc-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--cinm);padding-top:12px}
 #shell.dkm .pc-meta{border-color:#32402F}
 .pc-mi{display:flex;align-items:center;gap:9px}
@@ -6733,7 +6734,7 @@ async function renderProfs(){
         <div class="pc-id"><div class="pc-nome">${esc(p.nome)}${p.destaque?' <span class="pc-destaque">★ Destaque</span>':''}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div>${avResumo(p.id)?`<div style="margin-top:2px">${avResumo(p.id)}</div>`:''}</div>
         ${modtag(p.modalidade)}
       </div>
-      <div class="pc-bio">${esc(p.bio||'')}</div>
+      ${p.bio?`<div class="pc-bio">${esc(p.bio)}</div>${p.bio.length>170?`<div class="pc-bio-more">ler mais →</div>`:''}`:''}
       <div class="pc-meta">
         ${p.valor?`<div class="pc-mi"><span class="ic" data-icon="pf-valor"></span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
         ${p.duracao?`<div class="pc-mi"><span class="ic" data-icon="pf-duracao"></span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
