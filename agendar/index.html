@@ -148,7 +148,8 @@ function formStep(){
   const dtRow=selTime?'':`<div class="row"><div><label>Data preferida</label><input id="f-data" type="date"></div><div><label>Horário</label><input id="f-hora" type="time"></div></div>`;
   box.innerHTML=`${back}${quando}
     <label>Seu nome *</label><input id="f-nome" placeholder="Nome completo">
-    <label>WhatsApp / telefone *</label><input id="f-tel" type="tel" inputmode="tel" placeholder="(00) 00000-0000">
+    <label>WhatsApp (com DDD) *</label><input id="f-tel" type="tel" inputmode="tel" placeholder="(00) 00000-0000">
+    <div style="font-size:12px;color:var(--txs);margin:-6px 0 12px">É por aqui que ${esc((PROF&&PROF.nome?PROF.nome.split(' ')[0]:'o profissional'))} vai falar com você pra confirmar o horário.</div>
     ${dtRow}
     <label>Mensagem (opcional)</label><textarea id="f-msg" rows="3" placeholder="Conte brevemente o que procura"></textarea>
     <button class="btn" id="btn" onclick="enviar()">Enviar solicitação</button>
@@ -165,6 +166,7 @@ async function enviar(){
   const showErr=m=>{if(err){err.textContent=m;err.style.display='block';}};
   if(!nome)return showErr('Informe seu nome.');
   if(!tel)return showErr('Informe um telefone/WhatsApp.');
+  if((tel||'').replace(/\D/g,'').length<10)return showErr('Informe um WhatsApp válido com DDD — o profissional entra em contato por ele.');
   if(!CODIGO||!SB)return showErr('Link inválido ou sem conexão.');
   const btn=$('btn'); btn.disabled=true; btn.textContent='Enviando…';
   const enviarRpc=()=>SB.rpc('solicitar_agendamento',{p_codigo:CODIGO,p_nome:nome,p_tel:tel,p_data:data,p_hora:hora,p_msg:val('f-msg')||null});

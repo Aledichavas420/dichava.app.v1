@@ -1149,13 +1149,27 @@ let SOLIC=[];
 function solicitacoesBanner(){
   if(!SOLIC||!SOLIC.length)return '';
   return `<div class="card" style="padding:14px 16px;margin-bottom:14px;border-left:3px solid var(--am,#FFD600)">
-    <div style="display:flex;align-items:center;gap:7px;font-weight:800;font-size:14px;margin-bottom:8px"><svg width="17" height="17" viewBox="0 0 24 24" style="flex:none"><path d="M12 3a5 5 0 0 0-5 5v3l-1.5 3a1 1 0 0 0 .9 1.5h11.2a1 1 0 0 0 .9-1.5L17 11V8a5 5 0 0 0-5-5Z" fill="#EA8B0C"/><path d="M10 18.5a2 2 0 0 0 4 0" fill="none" stroke="#EA8B0C" stroke-width="1.7" stroke-linecap="round"/></svg>Solicitações de agendamento (${SOLIC.length})</div>
-    ${SOLIC.map(s=>`<div style="border-top:1px solid var(--line);padding:9px 0">
-      <div style="font-weight:700">${esc(s.nome)}${s.telefone?` · <a href="tel:${esc((s.telefone||'').replace(/[^0-9+]/g,''))}" style="color:var(--v)">${esc(s.telefone)}</a>`:''}</div>
-      <div style="font-size:12.5px;color:var(--txs)">${s.data_pref?'Preferência: '+fmtDate(s.data_pref):'Sem data'}${s.hora_pref?' às '+esc(s.hora_pref):''}${s.mensagem?' · "'+esc(s.mensagem)+'"':''}</div>
-      <div style="display:flex;gap:8px;margin-top:7px"><button class="btn sm" onclick="confirmarSolic('${s.id}')">Confirmar na agenda</button><button class="btn sm ghost" onclick="recusarSolic('${s.id}')">Recusar</button></div>
-    </div>`).join('')}
+    <div style="display:flex;align-items:center;gap:7px;font-weight:800;font-size:14px;margin-bottom:4px"><svg width="17" height="17" viewBox="0 0 24 24" style="flex:none"><path d="M12 3a5 5 0 0 0-5 5v3l-1.5 3a1 1 0 0 0 .9 1.5h11.2a1 1 0 0 0 .9-1.5L17 11V8a5 5 0 0 0-5-5Z" fill="#EA8B0C"/><path d="M10 18.5a2 2 0 0 0 4 0" fill="none" stroke="#EA8B0C" stroke-width="1.7" stroke-linecap="round"/></svg>Solicitações de agendamento (${SOLIC.length})</div>
+    <div style="font-size:12px;color:var(--txs);margin-bottom:8px">💡 Fale com a pessoa pelo WhatsApp pra combinar os detalhes <b>antes</b> de confirmar na agenda.</div>
+    ${SOLIC.map(s=>{ const tel=(s.telefone||'').replace(/\D/g,''); const temTel=tel.length>=10; return `<div style="border-top:1px solid var(--line);padding:11px 0">
+      <div style="font-weight:700;font-size:14.5px">${esc(s.nome||'Visitante')}</div>
+      <div style="font-size:12.5px;color:var(--txs);margin-top:3px">📅 ${s.data_pref?fmtDate(s.data_pref):'Sem data preferida'}${s.hora_pref?' às '+esc(s.hora_pref):''}</div>
+      ${s.telefone?`<div style="font-size:12.5px;color:var(--txs);margin-top:2px">📱 ${esc(s.telefone)}</div>`:''}
+      ${s.mensagem?`<div style="font-size:12.5px;color:var(--tx);margin-top:6px;background:var(--cin);border-radius:9px;padding:8px 10px">“${esc(s.mensagem)}”</div>`:''}
+      ${temTel?`<button class="btn sm" style="margin-top:9px;background:#25D366;color:#fff;display:inline-flex;align-items:center;gap:6px" onclick="contatarSolicWA('${s.id}')"><svg width="15" height="15" viewBox="0 0 24 24" style="flex:none"><path d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L3.5 20.5l4.4-1.2A8.4 8.4 0 1 0 12 3.5Z" fill="#fff"/><path d="M8.5 8.2c.2-.5.4-.5.7-.5h.5c.2 0 .4 0 .6.4l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.1-.2.3-.1.5.3.6 1.3 1.7 2.3 2.1.2.1.4.1.5-.1l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .5-.2 1.2-.9 1.5-.6.3-1.6.3-3.4-.6-2-1-3.3-3-3.5-3.4-.2-.3-.9-1.4-.9-2.5 0-.9.4-1.3.6-1.4Z" fill="#25D366"/></svg>Falar no WhatsApp</button>`:`<div style="font-size:12px;color:#C0616B;margin-top:8px">⚠️ Sem WhatsApp informado</div>`}
+      <div style="display:flex;gap:8px;margin-top:9px"><button class="btn sm" onclick="confirmarSolic('${s.id}')">✓ Confirmar na agenda</button><button class="btn sm ghost" onclick="recusarSolic('${s.id}')">Recusar</button></div>
+    </div>`;}).join('')}
   </div>`;
+}
+function contatarSolicWA(id){
+  const s=SOLIC.find(x=>x.id===id); if(!s)return;
+  const tel=(s.telefone||'').replace(/\D/g,''); if(tel.length<10){ toast('Sem telefone válido nesta solicitação',1); return; }
+  const num=tel.length<=11?('55'+tel):tel;
+  const nome=s.nome?String(s.nome).trim().split(/\s+/)[0]:'';
+  const prof=(AUTH&&AUTH.nome)?String(AUTH.nome).split(' ')[0]:((CLINICA&&CLINICA.nome)||'');
+  const quando=s.data_pref?(fmtDate(s.data_pref)+(s.hora_pref?' às '+s.hora_pref:'')):'';
+  const msg='Olá'+(nome?', '+nome:'')+'! '+(prof?('Aqui é '+prof+'. '):'')+'Recebi sua solicitação de horário'+(quando?' para '+quando:'')+' pelo dichava.app 💚 Podemos confirmar os detalhes?';
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
 }
 let PRESENCAS={};
 async function carregarSolicitacoes(){
