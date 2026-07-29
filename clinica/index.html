@@ -3524,7 +3524,9 @@ $('#s-pw')&&$('#s-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') gateS
   try{ if(sp)sp.focus({preventScroll:true}); if(document.activeElement&&document.activeElement!==sp&&document.activeElement.blur)document.activeElement.blur(); }catch(e){}
   var box=document.getElementById('ps-leaves');
   if(box){ var leaf='<path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/>'; var h='';
-    for(var i=0;i<18;i++){ var size=(26+Math.random()*40)|0, left=(Math.random()*100).toFixed(1), dur=(6+Math.random()*5), del=(-(Math.random()*dur)).toFixed(1), dx=((Math.random()*120-60)|0), rot=((Math.random()*360+150)|0);
+    // densidade proporcional à largura: no PC (tela larga) caem mais folhas, igual à sensação do mobile
+    var NLEAF=Math.max(18, Math.min(60, Math.round(18*((window.innerWidth||430)/430))));
+    for(var i=0;i<NLEAF;i++){ var size=(26+Math.random()*40)|0, left=(Math.random()*100).toFixed(1), dur=(6+Math.random()*5), del=(-(Math.random()*dur)).toFixed(1), dx=((Math.random()*120-60)|0), rot=((Math.random()*360+150)|0);
       h+='<svg class="ps-leaf" viewBox="0 0 24 24" width="'+size+'" height="'+size+'" style="left:'+left+'%;--dx:'+dx+'px;--rot:'+rot+'deg;animation-duration:'+dur.toFixed(1)+'s;animation-delay:'+del+'s">'+leaf+'</svg>'; }
     box.innerHTML=h;
   }
