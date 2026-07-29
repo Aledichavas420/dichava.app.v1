@@ -2174,16 +2174,21 @@ function formPaciente(id){
         <div class="field"><label>Telefone</label><input id="f-emtel" value="${esc(p.emergTel||'')}" placeholder="(00) 00000-0000"></div>
         <div class="field"><label>Parentesco/vínculo</label><input id="f-empar" value="${esc(p.emergParen||'')}" placeholder="Ex.: mãe, cônjuge"></div>
       </div>
-      <div class="sec-title" style="font-size:13px;margin:8px 0 6px">Financeiro</div>
-      <div class="row3">
-        <div class="field"><label>Valor (R$)</label><input id="f-valorsess" type="number" step="0.01" min="0" value="${p.valorSessao!=null&&p.valorSessao!==''?esc(p.valorSessao):''}" placeholder="Ex.: 180"></div>
+      <div class="sec-title" style="font-size:13px;margin:8px 0 6px">Atendimento e financeiro</div>
+      <div class="row2">
+        <div class="field"><label>Frequência</label><select id="f-freq">
+          ${[['','—'],['semanal','Semanal'],['quinzenal','Quinzenal'],['mensal','Mensal'],['avulsa','Avulsa / sob demanda']].map(([k,v])=>`<option value="${k}" ${k===(p.frequencia||'')?'selected':''}>${v}</option>`).join('')}
+        </select></div>
         <div class="field"><label>Cobrança</label><select id="f-cobranca">
           <option value="avulso" ${p.cobranca!=='pacote'?'selected':''}>Avulsa (por sessão)</option>
           <option value="pacote" ${p.cobranca==='pacote'?'selected':''}>Pacote (fechado/mensal)</option>
         </select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Valor (R$)</label><input id="f-valorsess" type="number" step="0.01" min="0" value="${p.valorSessao!=null&&p.valorSessao!==''?esc(p.valorSessao):''}" placeholder="Ex.: 180"></div>
         <div class="field"><label>Meio de pagamento</label><select id="f-formapg">${Object.entries(PAG).map(([k,v])=>`<option value="${k}" ${k===(p.formaPagamento||'')?'selected':''}>${v}</option>`).join('')}</select></div>
       </div>
-      <div style="font-size:11.5px;color:var(--txs);margin:-4px 0 8px">No <b>pacote</b>, o valor é o combinado do período (ex.: mensal). Esse valor já entra automático quando você agenda com este paciente.</div>
+      <div style="font-size:11.5px;color:var(--txs);margin:-4px 0 8px">Valor e forma já entram automático quando você agenda com este paciente. Se a frequência for <b>semanal</b> ou <b>quinzenal</b>, o agendamento já sugere a série recorrente.</div>
       <div class="field"><label>Tags (separadas por vírgula)</label><input id="f-tags" value="${esc((p.tags||[]).join(', '))}" placeholder="ativo, retorno..."></div>
       <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas gerais (alergias, condições, etc.)">${esc(p.obs||'')}</textarea></div>
     </div>
@@ -2199,7 +2204,7 @@ function savePaciente(id){
   const data={nome,nascimento:$('#f-nasc').value,telefone:$('#f-tel').value.trim(),email:$('#f-email').value.trim(),
     cpf:$('#f-cpf').value.trim(),endereco:$('#f-end').value.trim(),obs:$('#f-obs').value.trim(),
     emergNome:$('#f-emnome').value.trim(),emergTel:$('#f-emtel').value.trim(),emergParen:$('#f-empar').value.trim(),
-    valorSessao:$('#f-valorsess').value!==''?(+$('#f-valorsess').value||0):'',cobranca:$('#f-cobranca').value,formaPagamento:$('#f-formapg').value,
+    valorSessao:$('#f-valorsess').value!==''?(+$('#f-valorsess').value||0):'',cobranca:$('#f-cobranca').value,formaPagamento:$('#f-formapg').value,frequencia:$('#f-freq').value,
     tags:$('#f-tags').value.split(',').map(s=>s.trim()).filter(Boolean)};
   if(id){ Object.assign(pac(id),data); } else { DB.pacientes.push({id:uid(),...data,criadoEm:now()}); }
   save(); closeModal(); toast('Paciente salvo'); render();
@@ -2223,6 +2228,7 @@ function openPaciente(id){
         <div><div class="il">Nascimento</div><div class="iv">${fmtDate(p.nascimento)}</div></div>
         <div><div class="il">CPF</div><div class="iv">${esc(p.cpf||'—')}</div></div>
         <div><div class="il">Endereço</div><div class="iv">${esc(p.endereco||'—')}</div></div>
+        <div><div class="il">Frequência</div><div class="iv">${p.frequencia?({semanal:'Semanal',quinzenal:'Quinzenal',mensal:'Mensal',avulsa:'Avulsa'}[p.frequencia]||esc(p.frequencia)):'—'}</div></div>
         <div><div class="il">Valor</div><div class="iv">${(p.valorSessao!=null&&p.valorSessao!=='')?brl(+p.valorSessao)+(p.cobranca==='pacote'?' · pacote':' · avulsa'):'—'}</div></div>
         <div><div class="il">Pagamento</div><div class="iv">${p.formaPagamento?esc(PAG[p.formaPagamento]||p.formaPagamento):'—'}</div></div>
       </div>
@@ -2285,10 +2291,12 @@ function formAgendamento(id,dataDefault,pacDefault){
       <button class="btn ghost" onclick="closeModal()">Cancelar</button>
       <button class="btn" onclick="saveAgendamento('${id||''}')">Salvar</button></div>
   </div>`);
+  if(!id&&pacDefault){ try{_agPacChange();}catch(e){} }
 }
 function _agPacChange(){ const pid=$('#f-pac')?.value; const p=pid?pac(pid):null; if(!p)return;
   const v=$('#f-valor'); if(v&&p.valorSessao!=null&&p.valorSessao!=='')v.value=p.valorSessao;
   const f=$('#f-forma'); if(f&&p.formaPagamento)f.value=p.formaPagamento;
+  const r=$('#f-rec'); if(r&&(p.frequencia==='semanal'||p.frequencia==='quinzenal')){ r.value=p.frequencia; try{_recToggle();}catch(e){} }
 }
 function lembrarConsulta(agId){
   const a=DB.agendamentos.find(x=>x.id===agId); if(!a)return;
