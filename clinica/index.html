@@ -2174,6 +2174,16 @@ function formPaciente(id){
         <div class="field"><label>Telefone</label><input id="f-emtel" value="${esc(p.emergTel||'')}" placeholder="(00) 00000-0000"></div>
         <div class="field"><label>Parentesco/vínculo</label><input id="f-empar" value="${esc(p.emergParen||'')}" placeholder="Ex.: mãe, cônjuge"></div>
       </div>
+      <div class="sec-title" style="font-size:13px;margin:8px 0 6px">Financeiro</div>
+      <div class="row3">
+        <div class="field"><label>Valor (R$)</label><input id="f-valorsess" type="number" step="0.01" min="0" value="${p.valorSessao!=null&&p.valorSessao!==''?esc(p.valorSessao):''}" placeholder="Ex.: 180"></div>
+        <div class="field"><label>Cobrança</label><select id="f-cobranca">
+          <option value="avulso" ${p.cobranca!=='pacote'?'selected':''}>Avulsa (por sessão)</option>
+          <option value="pacote" ${p.cobranca==='pacote'?'selected':''}>Pacote (fechado/mensal)</option>
+        </select></div>
+        <div class="field"><label>Meio de pagamento</label><select id="f-formapg">${Object.entries(PAG).map(([k,v])=>`<option value="${k}" ${k===(p.formaPagamento||'')?'selected':''}>${v}</option>`).join('')}</select></div>
+      </div>
+      <div style="font-size:11.5px;color:var(--txs);margin:-4px 0 8px">No <b>pacote</b>, o valor é o combinado do período (ex.: mensal). Esse valor já entra automático quando você agenda com este paciente.</div>
       <div class="field"><label>Tags (separadas por vírgula)</label><input id="f-tags" value="${esc((p.tags||[]).join(', '))}" placeholder="ativo, retorno..."></div>
       <div class="field"><label>Observações</label><textarea id="f-obs" placeholder="Notas gerais (alergias, condições, etc.)">${esc(p.obs||'')}</textarea></div>
     </div>
@@ -2189,6 +2199,7 @@ function savePaciente(id){
   const data={nome,nascimento:$('#f-nasc').value,telefone:$('#f-tel').value.trim(),email:$('#f-email').value.trim(),
     cpf:$('#f-cpf').value.trim(),endereco:$('#f-end').value.trim(),obs:$('#f-obs').value.trim(),
     emergNome:$('#f-emnome').value.trim(),emergTel:$('#f-emtel').value.trim(),emergParen:$('#f-empar').value.trim(),
+    valorSessao:$('#f-valorsess').value!==''?(+$('#f-valorsess').value||0):'',cobranca:$('#f-cobranca').value,formaPagamento:$('#f-formapg').value,
     tags:$('#f-tags').value.split(',').map(s=>s.trim()).filter(Boolean)};
   if(id){ Object.assign(pac(id),data); } else { DB.pacientes.push({id:uid(),...data,criadoEm:now()}); }
   save(); closeModal(); toast('Paciente salvo'); render();
@@ -2212,6 +2223,8 @@ function openPaciente(id){
         <div><div class="il">Nascimento</div><div class="iv">${fmtDate(p.nascimento)}</div></div>
         <div><div class="il">CPF</div><div class="iv">${esc(p.cpf||'—')}</div></div>
         <div><div class="il">Endereço</div><div class="iv">${esc(p.endereco||'—')}</div></div>
+        <div><div class="il">Valor</div><div class="iv">${(p.valorSessao!=null&&p.valorSessao!=='')?brl(+p.valorSessao)+(p.cobranca==='pacote'?' · pacote':' · avulsa'):'—'}</div></div>
+        <div><div class="il">Pagamento</div><div class="iv">${p.formaPagamento?esc(PAG[p.formaPagamento]||p.formaPagamento):'—'}</div></div>
       </div>
       ${p.emergNome||p.emergTel?`<div style="background:var(--erf);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b style="color:var(--er)">Emergência:</b> ${esc(p.emergNome||'—')}${p.emergParen?' ('+esc(p.emergParen)+')':''}${p.emergTel?' · <a href="tel:'+esc(p.emergTel.replace(/[^0-9+]/g,''))+'" style="color:var(--er);font-weight:700">'+esc(p.emergTel)+'</a>':''}</div>`:''}
       ${p.obs?`<div style="background:var(--cin);border-radius:11px;padding:11px 13px;margin-bottom:16px;font-size:13.5px"><b>Obs:</b> ${esc(p.obs)}</div>`:''}
@@ -2231,11 +2244,12 @@ function openPaciente(id){
 
 /* -- Agendamento -- */
 function formAgendamento(id,dataDefault,pacDefault){
-  const a=id?DB.agendamentos.find(x=>x.id===id):{pacienteId:pacDefault||'',data:dataDefault||todayISO(),hora:'09:00',duracao:50,tipo:'Consulta',status:'agendado',valor:180,formaPagamento:'',pago:false,obs:''};
+  const dp=(!id&&pacDefault)?pac(pacDefault):null;
+  const a=id?DB.agendamentos.find(x=>x.id===id):{pacienteId:pacDefault||'',data:dataDefault||todayISO(),hora:'09:00',duracao:50,tipo:'Consulta',status:'agendado',valor:(dp&&dp.valorSessao?+dp.valorSessao:180),formaPagamento:(dp&&dp.formaPagamento)||'',pago:false,obs:''};
   const opts=DB.pacientes.sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<option value="${p.id}" ${p.id===a.pacienteId?'selected':''}>${esc(p.nome)}</option>`).join('');
   openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} agendamento</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="field"><label>Paciente *</label><select id="f-pac"><option value="">— selecione —</option>${opts}</select>
+      <div class="field"><label>Paciente *</label><select id="f-pac" onchange="_agPacChange()"><option value="">— selecione —</option>${opts}</select>
         <button class="btn sm ghost" style="margin-top:8px" onclick="closeModal();formPaciente()">＋ Cadastrar novo paciente</button></div>
       <div class="row3">
         <div class="field"><label>Data</label><input id="f-data" type="date" value="${a.data}"></div>
@@ -2271,6 +2285,10 @@ function formAgendamento(id,dataDefault,pacDefault){
       <button class="btn ghost" onclick="closeModal()">Cancelar</button>
       <button class="btn" onclick="saveAgendamento('${id||''}')">Salvar</button></div>
   </div>`);
+}
+function _agPacChange(){ const pid=$('#f-pac')?.value; const p=pid?pac(pid):null; if(!p)return;
+  const v=$('#f-valor'); if(v&&p.valorSessao!=null&&p.valorSessao!=='')v.value=p.valorSessao;
+  const f=$('#f-forma'); if(f&&p.formaPagamento)f.value=p.formaPagamento;
 }
 function lembrarConsulta(agId){
   const a=DB.agendamentos.find(x=>x.id===agId); if(!a)return;
