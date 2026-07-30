@@ -1,0 +1,95 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dichavando</title>
+<meta name=description content="Dichavando — redução de danos, sem julgamento. Links da comunidade.">
+<meta property="og:title" content="Dichavando">
+<meta property="og:description" content="Redução de danos, sem julgamento.">
+<meta property="og:image" content="/og-image.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;min-height:100vh;color:#f4f0e6;transition:background .3s}
+.leaves{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.leaf{position:absolute;top:-8%;fill:none;stroke:rgba(255,255,255,.22);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;opacity:0;animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(0) translateX(0) rotate(0);opacity:0}10%{opacity:.55}90%{opacity:.55}100%{transform:translateY(112vh) translateX(var(--dx,20px)) rotate(var(--rot,240deg));opacity:0}}
+.wrap{position:relative;z-index:2;max-width:520px;margin:0 auto;padding:52px 22px 44px;min-height:100vh;display:flex;flex-direction:column;align-items:center;text-align:center}
+.avw{position:relative;width:104px;height:104px;margin-bottom:16px}
+.av{width:104px;height:104px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.14);border:3px solid rgba(255,255,255,.5);display:grid;place-items:center;font-family:'Bagel Fat One';font-size:34px;box-shadow:0 14px 34px rgba(0,0,0,.3)}
+.av img{width:100%;height:100%;object-fit:cover}
+.seal{position:absolute;bottom:-2px;right:-2px;width:32px;height:32px;border-radius:50%;background:#4CAF5A;border:3px solid var(--sealbd,#123A24);display:grid;place-items:center}
+.seal svg{width:16px;height:16px}
+.nome{font-family:'Bagel Fat One',system-ui;font-size:29px;letter-spacing:.4px;line-height:1.1}
+.subt{font-size:14.5px;opacity:.88;margin-top:8px;max-width:340px;line-height:1.5}
+.links{width:100%;margin-top:28px;display:flex;flex-direction:column;gap:13px}
+.lk{display:flex;align-items:center;gap:13px;text-decoration:none;color:inherit;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:15px 16px;font-weight:700;font-size:15.5px;backdrop-filter:blur(6px);transition:transform .14s,background .14s;box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.lk:hover{transform:translateY(-2px);background:rgba(255,255,255,.14)}
+.lk.primary{background:var(--acc,#4CAF5A);color:var(--accTx,#08210f);border-color:transparent}
+.lk .li{font-size:20px;flex:none;width:24px;text-align:center}
+.lk .lt{flex:1;text-align:left;min-width:0}
+.lk .lg{opacity:.6;font-size:18px}
+.foot{margin-top:auto;padding-top:36px;font-size:12px;opacity:.6}
+.foot a{color:inherit;font-weight:700;text-decoration:none}
+.light .lk{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.09);box-shadow:0 6px 16px rgba(30,60,35,.06)}
+.light .lk:hover{background:rgba(0,0,0,.07)}
+.light .av{border-color:rgba(0,0,0,.12)}
+.light .leaf{stroke:rgba(30,60,35,.18)}
+</style></head>
+<body>
+<div class="leaves" id="leaves"></div>
+<div class="wrap" id="app"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var params=new URLSearchParams(location.search), PREVIEW=params.has('preview');
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+var SEAL='<svg viewBox="0 0 24 24" fill="none" stroke="#08210f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+var LEAF='<path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/>';
+var THEMES={
+  verde:{bg:'radial-gradient(1000px 560px at 50% -10%,#3f7857,transparent 58%),linear-gradient(165deg,#123A24,#0c2a19)',tx:'#f4f0e6',acc:'#8FE06B',accTx:'#08210f',seal:'#123A24',light:false},
+  floresta:{bg:'linear-gradient(160deg,#0F5132,#08281a)',tx:'#f4f0e6',acc:'#FFCF87',accTx:'#231a08',seal:'#0F5132',light:false},
+  roxo:{bg:'radial-gradient(900px 500px at 50% -10%,#5C3FB0,transparent 60%),linear-gradient(160deg,#2d1f52,#171030)',tx:'#f4f0e6',acc:'#C9B3F7',accTx:'#1a1030',seal:'#2d1f52',light:false},
+  noite:{bg:'linear-gradient(165deg,#101820,#05080c)',tx:'#eaf3ee',acc:'#5CE3CF',accTx:'#052420',seal:'#101820',light:false},
+  claro:{bg:'radial-gradient(120% 60% at 80% -5%,#DFF3E4,transparent 55%),#F6FAF6',tx:'#1B2A1C',acc:'#2FA35F',accTx:'#fff',seal:'#F6FAF6',light:true}
+};
+function proHref(u){u=(u||'').trim();if(!u)return'';if(/^https?:\/\//i.test(u))return u;if(/^@/.test(u))return 'https://instagram.com/'+u.slice(1);if(/^mailto:|^tel:/i.test(u))return u;return 'https://'+u;}
+function render(cfg){
+  cfg=cfg||{};
+  var t=THEMES[cfg.tema]||THEMES.verde;
+  document.body.style.background=t.bg; document.body.style.color=t.tx;
+  document.body.className=t.light?'light':'';
+  document.documentElement.style.setProperty('--acc',cfg.cor||t.acc);
+  document.documentElement.style.setProperty('--accTx',t.accTx);
+  document.documentElement.style.setProperty('--sealbd',t.seal);
+  var nome=cfg.nome||'Dichavando';
+  var ini=nome.trim().slice(0,2).toUpperCase();
+  var links=Array.isArray(cfg.links)?cfg.links:[];
+  var h='<div class="avw"><div class="av">'+(cfg.avatar?'<img src="'+esc(cfg.avatar)+'" alt="">':esc(ini))+'</div>'+(cfg.selo!==false?'<div class="seal">'+SEAL+'</div>':'')+'</div>'+
+    '<div class="nome">'+esc(nome)+'</div>'+
+    (cfg.subtitulo?'<div class="subt">'+esc(cfg.subtitulo)+'</div>':'')+
+    '<div class="links">';
+  links.forEach(function(l,i){ if(!l||(!l.titulo&&!l.url))return;
+    var href=PREVIEW?'javascript:void 0':proHref(l.url);
+    h+='<a class="lk'+(l.destaque?' primary':'')+'" href="'+esc(href)+'"'+(PREVIEW?'':' target="_blank" rel="noopener"')+'><span class="li">'+esc(l.icone||'🔗')+'</span><span class="lt">'+esc(l.titulo||l.url)+'</span><span class="lg">↗</span></a>';
+  });
+  h+='</div><div class="foot">feito com 🌱 <a href="/landing/" target="_blank" rel="noopener">dichava.app</a></div>';
+  document.getElementById('app').innerHTML=h;
+}
+// folhas
+(function(){var box=document.getElementById('leaves');var n=Math.max(14,Math.min(40,Math.round(14*(innerWidth/430))));var s='';for(var i=0;i<n;i++){var sz=(22+Math.random()*34)|0,left=(Math.random()*100).toFixed(1),dur=(8+Math.random()*6),del=(-(Math.random()*dur)).toFixed(1),dx=((Math.random()*120-60)|0),rot=((Math.random()*360+150)|0);s+='<svg class="leaf" viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" style="left:'+left+'%;--dx:'+dx+'px;--rot:'+rot+'deg;animation-duration:'+dur.toFixed(1)+'s;animation-delay:'+del+'s">'+LEAF+'</svg>';}box.innerHTML=s;})();
+
+if(PREVIEW){
+  render({}); // placeholder até chegar config do editor
+  window.addEventListener('message',function(e){var d=e.data;if(d&&d.type==='bio-site-preview'){try{render(d.config||{});}catch(err){}}});
+  try{parent.postMessage({type:'bio-site-ready'},'*');}catch(e){}
+}else{
+  var SB=null; try{ SB=supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
+  (async function(){
+    var cfg={nome:'Dichavando',subtitulo:'Redução de danos, sem julgamento 🌱',tema:'verde',links:[{icone:'📸',titulo:'Instagram',url:'@dichavandoard',destaque:true},{icone:'🌱',titulo:'Conhecer o dichava.app',url:'https://dichava.app/landing/'}]};
+    try{ if(SB){ var r=await SB.from('bio_site').select('dados').eq('id',1).maybeSingle(); if(r.data&&r.data.dados&&Object.keys(r.data.dados).length)cfg=r.data.dados; } }catch(e){}
+    render(cfg);
+  })();
+}
+</script>
+</body></html>

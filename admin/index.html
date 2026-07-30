@@ -175,6 +175,43 @@ a{color:var(--ve)}
       <div id="nt-list" style="margin-top:12px"></div>
     </div>
 
+    <style>
+    .bio-l{font-size:11.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.3px;margin:14px 0 6px}
+    .bio-i,.bio-i2{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card2);color:var(--tx);font-size:14px}
+    .bio-temas{display:flex;gap:8px;flex-wrap:wrap}
+    .bio-sw{width:34px;height:34px;border-radius:9px;border:2px solid transparent;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+    .bio-sw.on{outline:2px solid var(--v);outline-offset:1px;border-color:#fff}
+    .bio-cor{width:52px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--card2);cursor:pointer;padding:2px}
+    .bio-lk{display:flex;gap:6px;align-items:center;margin-bottom:7px}
+    .bio-emoji{width:46px;text-align:center;padding:9px 4px;border:1px solid var(--line);border-radius:9px;background:var(--card2);color:var(--tx);font-size:15px}
+    .bio-frame{width:300px;max-width:100%;height:540px;border:8px solid #1B2A1C;border-radius:28px;background:#000;display:block;box-shadow:0 14px 40px rgba(0,0,0,.3)}
+    .bio-wrap{display:grid;grid-template-columns:1fr 316px;gap:20px;align-items:start}
+    @media(max-width:760px){.bio-wrap{grid-template-columns:1fr}.bio-prevwrap{display:flex;justify-content:center}}
+    </style>
+    <div class="sec">🔗 Meu link na bio (Dichavando)</div>
+    <div class="card" style="padding:16px">
+      <div style="font-size:13px;color:var(--txs);margin-bottom:12px">Sua página pública estilo Linktree, com a cara do app — fica em <b>dichava.app/dichavando</b>. Edite e veja a prévia ao vivo.</div>
+      <div class="bio-wrap">
+        <div>
+          <div class="bio-l">Nome</div><input id="bio-nome" class="bio-i" oninput="bioPush()" placeholder="Dichavando">
+          <div class="bio-l">Subtítulo</div><input id="bio-subt" class="bio-i" oninput="bioPush()" placeholder="Redução de danos, sem julgamento">
+          <div class="bio-l">Foto (URL)</div><input id="bio-avatar" class="bio-i" oninput="bioPush()" placeholder="https://... (link de uma imagem)">
+          <div class="bio-l">Tema</div><div id="bio-temas" class="bio-temas"></div>
+          <div class="bio-l">Cor de destaque</div><input id="bio-cor" type="color" class="bio-cor" value="#8FE06B" oninput="bioPush()">
+          <div class="bio-l">Links <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--txm)">(emoji · título · link/@perfil)</span></div>
+          <div id="bio-links"></div>
+          <button class="btn ghost sm" onclick="bioAddLink()" style="margin-top:8px">+ Adicionar link</button>
+          <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+            <button class="btn sm" onclick="salvarBioSite()">💾 Salvar e publicar</button>
+            <button class="btn ghost sm" onclick="window.open('/dichavando/','_blank')">Abrir</button>
+            <button class="btn ghost sm" onclick="bioCopiar()">Copiar link</button>
+          </div>
+          <div id="bio-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
+        </div>
+        <div class="bio-prevwrap"><iframe id="bio-frame" class="bio-frame" src="/dichavando/?preview" title="Prévia"></iframe></div>
+      </div>
+    </div>
+
     <div class="sec">🔎 Buscar / gerenciar usuário</div>
     <div class="card" style="padding:16px">
       <div style="display:flex;gap:8px">
@@ -315,6 +352,7 @@ async function carregar(){
   carregarNewsletterCount();
   carregarAvaliacoesAdmin();
   carregarNoticias();
+  carregarBioSite();
 }
 // ===== NEWSLETTER (contador) =====
 async function carregarNewsletterCount(){
@@ -420,6 +458,40 @@ async function removerNoticia(id){
   if(!confirm('Excluir esta notícia do banner?')) return;
   try{ const {error}=await SB.from('noticias').delete().eq('id',id); if(error)throw error; toast('Notícia excluída'); carregarNoticias(); }catch(e){ toast(e.message||'Erro',1); }
 }
+/* ===== LINK NA BIO (DICHAVANDO) ===== */
+let _bio={nome:'',subtitulo:'',avatar:'',tema:'verde',cor:'',links:[]}, _bioReady=false;
+function bioVal(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+function bioColeta(){ _bio.nome=bioVal('bio-nome'); _bio.subtitulo=bioVal('bio-subt'); _bio.avatar=bioVal('bio-avatar'); const c=document.getElementById('bio-cor'); _bio.cor=c?c.value:''; }
+function bioPush(){ bioColeta(); const f=document.getElementById('bio-frame'); if(f&&f.contentWindow&&_bioReady){ try{ f.contentWindow.postMessage({type:'bio-site-preview',config:_bio},'*'); }catch(e){} } }
+function bioTemasRender(){ const box=document.getElementById('bio-temas'); if(!box)return;
+  const temas=[['verde','#123A24'],['floresta','#0F5132'],['roxo','#2d1f52'],['noite','#101820'],['claro','#DFF3E4']];
+  box.innerHTML=temas.map(t=>`<button type="button" title="${t[0]}" onclick="bioSetTema('${t[0]}')" class="bio-sw${_bio.tema===t[0]?' on':''}" style="background:${t[1]}"></button>`).join(''); }
+function bioSetTema(t){ _bio.tema=t; bioTemasRender(); bioPush(); }
+function bioLinksRender(){ const box=document.getElementById('bio-links'); if(!box)return;
+  box.innerHTML=(_bio.links||[]).map((l,i)=>`<div class="bio-lk">
+    <input class="bio-emoji" value="${esc(l.icone||'')}" onchange="bioUpd(${i},'icone',this.value)" placeholder="🔗">
+    <input class="bio-i2" value="${esc(l.titulo||'')}" oninput="bioUpd(${i},'titulo',this.value)" placeholder="Título">
+    <input class="bio-i2" value="${esc(l.url||'')}" oninput="bioUpd(${i},'url',this.value)" placeholder="link ou @perfil">
+    <button class="btn dg sm" onclick="bioDel(${i})">✕</button></div>`).join(''); }
+function bioUpd(i,k,v){ if(_bio.links[i]){ _bio.links[i][k]=v; bioPush(); } }
+function bioAddLink(){ _bio.links.push({icone:'🔗',titulo:'',url:''}); bioLinksRender(); bioPush(); }
+function bioDel(i){ _bio.links.splice(i,1); bioLinksRender(); bioPush(); }
+function bioFill(){ const s=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'';}; s('bio-nome',_bio.nome); s('bio-subt',_bio.subtitulo); s('bio-avatar',_bio.avatar); const c=document.getElementById('bio-cor'); if(c)c.value=_bio.cor||'#8FE06B'; }
+async function carregarBioSite(){
+  if(!SB)return;
+  try{ const {data}=await SB.from('bio_site').select('dados').eq('id',1).maybeSingle(); if(data&&data.dados&&Object.keys(data.dados).length)_bio=Object.assign({nome:'',subtitulo:'',avatar:'',tema:'verde',cor:'',links:[]},data.dados); }catch(e){}
+  if(!_bio.nome)_bio.nome='Dichavando';
+  if(!_bio.subtitulo)_bio.subtitulo='Redução de danos, sem julgamento 🌱';
+  if(!Array.isArray(_bio.links)||!_bio.links.length)_bio.links=[{icone:'📸',titulo:'Instagram',url:'@dichavandoard',destaque:true},{icone:'🌱',titulo:'Conhecer o dichava.app',url:'https://dichava.app/landing/'}];
+  bioFill(); bioTemasRender(); bioLinksRender(); bioPush();
+}
+async function salvarBioSite(){
+  bioColeta(); const st=document.getElementById('bio-status'); st.textContent='Salvando…';
+  try{ const {error}=await SB.from('bio_site').upsert({id:1,dados:_bio,atualizado_em:new Date().toISOString()}); if(error)throw error; st.textContent='✓ Publicado em dichava.app/dichavando'; }
+  catch(e){ st.textContent='Erro: '+(e.message||'')+(/(policy|denied|permission)/i.test(e.message||'')?' — você está logado como admin?':''); }
+}
+function bioCopiar(){ try{ navigator.clipboard.writeText('https://dichava.app/dichavando'); toast('Link copiado'); }catch(e){ toast('https://dichava.app/dichavando'); } }
+window.addEventListener('message',function(e){ if(e.data&&e.data.type==='bio-site-ready'){ _bioReady=true; bioPush(); } });
 let WL=[], _wlFiltro='pendente';
 async function carregarWaitlist(){
   try{
