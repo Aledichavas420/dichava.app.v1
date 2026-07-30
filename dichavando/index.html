@@ -16,8 +16,9 @@ body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;min-height:100vh;c
 @keyframes fall{0%{transform:translateY(0) translateX(0) rotate(0);opacity:0}10%{opacity:.55}90%{opacity:.55}100%{transform:translateY(112vh) translateX(var(--dx,20px)) rotate(var(--rot,240deg));opacity:0}}
 .wrap{position:relative;z-index:2;max-width:520px;margin:0 auto;padding:52px 22px 44px;min-height:100vh;display:flex;flex-direction:column;align-items:center;text-align:center}
 .avw{position:relative;width:104px;height:104px;margin-bottom:16px}
-.av{width:104px;height:104px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.14);border:3px solid rgba(255,255,255,.5);display:grid;place-items:center;font-family:'Bagel Fat One';font-size:34px;box-shadow:0 14px 34px rgba(0,0,0,.3)}
+.av{width:108px;height:108px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.14);border:3px solid rgba(255,255,255,.5);display:grid;place-items:center;font-family:'Bagel Fat One';font-size:34px;box-shadow:0 14px 34px rgba(0,0,0,.3)}
 .av img{width:100%;height:100%;object-fit:cover}
+.av img.mascote{object-fit:contain;padding:9px}
 .seal{position:absolute;bottom:-2px;right:-2px;width:32px;height:32px;border-radius:50%;background:#4CAF5A;border:3px solid var(--sealbd,#123A24);display:grid;place-items:center}
 .seal svg{width:16px;height:16px}
 .nome{font-family:'Bagel Fat One',system-ui;font-size:29px;letter-spacing:.4px;line-height:1.1}
@@ -29,6 +30,15 @@ body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;min-height:100vh;c
 .lk .li{font-size:20px;flex:none;width:24px;text-align:center}
 .lk .lt{flex:1;text-align:left;min-width:0}
 .lk .lg{opacity:.6;font-size:18px}
+.faq{width:100%;margin-top:26px;text-align:left}
+.faq-h{font-size:12.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin:0 4px 10px;text-align:center}
+.fq{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;margin-bottom:10px;backdrop-filter:blur(6px)}
+.fq summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:700;font-size:14.5px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.fq summary::-webkit-details-marker{display:none}
+.fq summary::after{content:'▾';opacity:.55;transition:transform .22s;flex:none}
+.fq[open] summary::after{transform:rotate(180deg)}
+.fq .fa{padding:0 16px 15px;font-size:13.5px;line-height:1.6;opacity:.9;white-space:pre-wrap}
+.light .fq{background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.08)}
 .foot{margin-top:auto;padding-top:36px;font-size:12px;opacity:.6}
 .foot a{color:inherit;font-weight:700;text-decoration:none}
 .light .lk{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.09);box-shadow:0 6px 16px rgba(30,60,35,.06)}
@@ -63,17 +73,26 @@ function render(cfg){
   document.documentElement.style.setProperty('--accTx',t.accTx);
   document.documentElement.style.setProperty('--sealbd',t.seal);
   var nome=cfg.nome||'Dichavando';
-  var ini=nome.trim().slice(0,2).toUpperCase();
   var links=Array.isArray(cfg.links)?cfg.links:[];
-  var h='<div class="avw"><div class="av">'+(cfg.avatar?'<img src="'+esc(cfg.avatar)+'" alt="">':esc(ini))+'</div>'+(cfg.selo!==false?'<div class="seal">'+SEAL+'</div>':'')+'</div>'+
+  var faq=Array.isArray(cfg.faq)?cfg.faq:[];
+  var avatar=cfg.avatar||'/guia-assets/dichavaldo.svg';
+  var isMasc=/dichavaldo/.test(avatar);
+  var h='<div class="avw"><div class="av"><img class="'+(isMasc?'mascote':'')+'" src="'+esc(avatar)+'" alt=""></div>'+(cfg.selo!==false?'<div class="seal">'+SEAL+'</div>':'')+'</div>'+
     '<div class="nome">'+esc(nome)+'</div>'+
     (cfg.subtitulo?'<div class="subt">'+esc(cfg.subtitulo)+'</div>':'')+
     '<div class="links">';
-  links.forEach(function(l,i){ if(!l||(!l.titulo&&!l.url))return;
+  links.forEach(function(l){ if(!l||(!l.titulo&&!l.url))return;
     var href=PREVIEW?'javascript:void 0':proHref(l.url);
     h+='<a class="lk'+(l.destaque?' primary':'')+'" href="'+esc(href)+'"'+(PREVIEW?'':' target="_blank" rel="noopener"')+'><span class="li">'+esc(l.icone||'🔗')+'</span><span class="lt">'+esc(l.titulo||l.url)+'</span><span class="lg">↗</span></a>';
   });
-  h+='</div><div class="foot">feito com 🌱 <a href="/landing/" target="_blank" rel="noopener">dichava.app</a></div>';
+  h+='</div>';
+  var fq=faq.filter(function(f){return f&&(f.q||f.pergunta);});
+  if(fq.length){
+    h+='<div class="faq"><div class="faq-h">Perguntas frequentes</div>'+
+      fq.map(function(f){return '<details class="fq"><summary>'+esc(f.q||f.pergunta)+'</summary><div class="fa">'+esc(f.a||f.resposta||'')+'</div></details>';}).join('')+
+    '</div>';
+  }
+  h+='<div class="foot">feito com 🌱 <a href="/landing/" target="_blank" rel="noopener">dichava.app</a></div>';
   document.getElementById('app').innerHTML=h;
 }
 // folhas
@@ -86,7 +105,9 @@ if(PREVIEW){
 }else{
   var SB=null; try{ SB=supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
   (async function(){
-    var cfg={nome:'Dichavando',subtitulo:'Redução de danos, sem julgamento 🌱',tema:'verde',links:[{icone:'📸',titulo:'Instagram',url:'@dichavandoard',destaque:true},{icone:'🌱',titulo:'Conhecer o dichava.app',url:'https://dichava.app/landing/'}]};
+    var cfg={nome:'Dichavando',subtitulo:'Redução de danos, sem julgamento 🌱',tema:'verde',
+      links:[{icone:'📸',titulo:'Instagram',url:'@dichavandoard',destaque:true},{icone:'🌱',titulo:'Conhecer o dichava.app',url:'https://dichava.app/landing/'}],
+      faq:[{q:'O que é redução de danos?',a:'É uma abordagem de cuidado que encontra a pessoa onde ela está, sem exigir a abstinência como porta de entrada.'},{q:'O dichava.app é gratuito?',a:'Sim, o app para quem usa é 100% gratuito.'}]};
     try{ if(SB){ var r=await SB.from('bio_site').select('dados').eq('id',1).maybeSingle(); if(r.data&&r.data.dados&&Object.keys(r.data.dados).length)cfg=r.data.dados; } }catch(e){}
     render(cfg);
   })();
