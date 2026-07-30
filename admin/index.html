@@ -707,7 +707,9 @@ function renderGrowth(rows){
   }).join('')+'</div>';
 }
 function renderFiltros(){
-  const fs=[['todos','Todos'],['pendente','Pendentes'],['ativo','Ativos'],['expirado','Expirados'],['rejeitado','Rejeitados']];
+  const nPag=PROFS.filter(p=>statusInfo(p).ativo && !ehTrial(p)).length;
+  const nTeste=PROFS.filter(p=>ehTrial(p)).length;
+  const fs=[['todos','Todos'],['pagantes','💳 Pagantes'+(nPag?' ('+nPag+')':'')],['teste','🎁 Em teste'+(nTeste?' ('+nTeste+')':'')],['pendente','Pendentes'],['expirado','Expirados'],['rejeitado','Rejeitados']];
   $('#filters').innerHTML=fs.map(([k,l])=>`<button class="ft ${_filtro===k?'on':''}" onclick="setFiltro('${k}')">${l}</button>`).join('');
 }
 function setFiltro(f){ _filtro=f; renderFiltros(); renderProfs(); }
@@ -789,6 +791,8 @@ function renderProfs(){
   list=list.filter(p=>{
     const {ativo,expirado}=statusInfo(p);
     if(_filtro==='todos')return true;
+    if(_filtro==='pagantes')return ativo && !ehTrial(p);
+    if(_filtro==='teste')return ehTrial(p);
     if(_filtro==='pendente')return (p.status||'pendente')==='pendente' && !ativo;
     if(_filtro==='ativo')return ativo;
     if(_filtro==='expirado')return expirado;
