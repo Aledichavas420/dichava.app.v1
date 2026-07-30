@@ -2798,9 +2798,8 @@ a{color:inherit;text-decoration:none}
   <div id="pro-area" style="display:none">
     <div class="cfgsec" style="border:2px solid var(--roxo);margin:0 18px 11px">
       <div class="cfgsect" style="color:var(--roxo);border-color:var(--roxof)">🩺 Área do profissional</div>
-      <div class="cfgi" onclick="toast('Painel de pacientes — em breve 💚')"><div class="cfgic">👥</div><div class="cfgb"><div class="cfgn">Pacientes encaminhados</div><div class="cfgd" id="pro-pac">Nenhum encaminhamento ainda</div></div><div class="cfgar">›</div></div>
-      <div class="cfgi" onclick="toast('Edição de perfil público — em breve 💚')"><div class="cfgic">🪪</div><div class="cfgb"><div class="cfgn">Meu perfil na rede</div><div class="cfgd" id="pro-reg-show">—</div></div><div class="cfgar">›</div></div>
-      <div class="cfgi" onclick="toast('Agenda de disponibilidade — em breve 💚')"><div class="cfgic">🗓️</div><div class="cfgb"><div class="cfgn">Disponibilidade</div><div class="cfgd">Defina seus horários de atendimento</div></div><div class="cfgar">›</div></div>
+      <div class="cfgi" onclick="abrirPainelProf()"><div class="cfgic">🩺</div><div class="cfgb"><div class="cfgn">Abrir Painel da Clínica</div><div class="cfgd">Agenda, pacientes, prontuários, perfil e disponibilidade</div></div><div class="cfgar">›</div></div>
+      <div class="cfgi" onclick="abrirProfs()"><div class="cfgic">👥</div><div class="cfgb"><div class="cfgn">Ver a rede de profissionais</div><div class="cfgd" id="pro-reg-show">—</div></div><div class="cfgar">›</div></div>
     </div>
   </div>
   <a class="wppc" href="#" style="display:none" onclick="event.preventDefault();abrirProfs()"><div class="wppci"><svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="#2FA35F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v5a4 4 0 0 0 8 0V3"/><path d="M4 3h1.6M12.4 3H14M9 16v1a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="13.4" r="2.4"/></svg></div><div class="wppcb"><div class="wppct">Fale com um profissional</div><div class="wppcs">Rede de psicólogos e psiquiatras alinhados à redução de danos</div><div class="wppcl">Ver profissionais →</div></div></a>
