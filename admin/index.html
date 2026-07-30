@@ -161,6 +161,20 @@ a{color:var(--ve)}
       <div id="cm-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
     </div>
 
+    <div class="sec">📰 Notícias / banner do app</div>
+    <div class="card" style="padding:16px">
+      <div style="font-size:13.5px;color:var(--txs);margin-bottom:10px">Aparecem como banner rotativo na home do app. Ideal pra matérias do Cannabis Monitor e parceiros — o link abre no site deles.</div>
+      <input id="nt-manchete" placeholder="Manchete (título da matéria)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
+      <input id="nt-link" placeholder="Link (https://cannabismonitor.com.br/...)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
+      <div style="display:flex;gap:8px">
+        <input id="nt-fonte" value="Cannabis Monitor" placeholder="Fonte" style="flex:1;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px">
+        <input id="nt-img" placeholder="Imagem (URL, opcional)" style="flex:1.4;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px">
+      </div>
+      <button class="btn sm" onclick="addNoticia()" style="margin-top:10px">Adicionar ao banner</button>
+      <div id="nt-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
+      <div id="nt-list" style="margin-top:12px"></div>
+    </div>
+
     <div class="sec">🔎 Buscar / gerenciar usuário</div>
     <div class="card" style="padding:16px">
       <div style="display:flex;gap:8px">
@@ -300,6 +314,7 @@ async function carregar(){
   carregarSuporte();
   carregarNewsletterCount();
   carregarAvaliacoesAdmin();
+  carregarNoticias();
 }
 // ===== NEWSLETTER (contador) =====
 async function carregarNewsletterCount(){
@@ -370,6 +385,40 @@ async function removerAvaliacao(id){
   if(!confirm('Remover esta avaliação?')) return;
   try{ const {error}=await SB.rpc('admin_avaliacao_remover',{p_id:id}); if(error)throw error; toast('Avaliação removida'); carregarAvaliacoesAdmin(); }
   catch(e){ toast(e.message||'Erro',1); }
+}
+/* ===== NOTÍCIAS / BANNER DO APP ===== */
+async function carregarNoticias(){
+  const box=document.getElementById('nt-list'); if(!box||!SB)return;
+  let rows=[];
+  try{ const {data,error}=await SB.from('noticias').select('*').order('ordem',{ascending:true}).order('criado_em',{ascending:false}); if(error)throw error; rows=data||[]; }
+  catch(e){ box.innerHTML='<div style="font-size:12.5px;color:var(--txm)">Não consegui carregar. Rodou o <b>noticias-setup.sql</b>? ('+esc(e.message||'')+')</div>'; return; }
+  if(!rows.length){ box.innerHTML='<div style="font-size:12.5px;color:var(--txm)">Nenhuma notícia ainda. Adicione a primeira acima.</div>'; return; }
+  box.innerHTML=rows.map(n=>`<div style="border-top:1px solid var(--line);padding:9px 0;display:flex;gap:10px;align-items:flex-start">
+    <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13.5px${n.ativo?'':';opacity:.5'}">${esc(n.manchete)}</div>
+    <div style="font-size:11.5px;color:var(--txm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(n.fonte||'')}${n.fonte?' · ':''}<a href="${esc(n.link)}" target="_blank" rel="noopener" style="color:var(--v)">${esc(n.link)}</a></div></div>
+    <button class="btn ghost sm" onclick="toggleNoticia('${n.id}',${n.ativo?'false':'true'})">${n.ativo?'Ocultar':'Mostrar'}</button>
+    <button class="btn dg sm" onclick="removerNoticia('${n.id}')">Excluir</button></div>`).join('');
+}
+async function addNoticia(){
+  const man=(document.getElementById('nt-manchete').value||'').trim();
+  const link=(document.getElementById('nt-link').value||'').trim();
+  const fonte=(document.getElementById('nt-fonte').value||'').trim();
+  const img=(document.getElementById('nt-img').value||'').trim();
+  const st=document.getElementById('nt-status');
+  if(!man){ st.textContent='Escreva a manchete.'; return; }
+  if(!/^https?:\/\//i.test(link)){ st.textContent='O link precisa começar com http:// ou https://'; return; }
+  st.textContent='Salvando…';
+  try{ const {error}=await SB.from('noticias').insert({manchete:man,link:link,fonte:fonte||null,imagem:img||null,ativo:true}); if(error)throw error;
+    document.getElementById('nt-manchete').value=''; document.getElementById('nt-link').value=''; document.getElementById('nt-img').value='';
+    st.textContent='✓ Adicionada ao banner.'; carregarNoticias();
+  }catch(e){ st.textContent='Erro: '+(e.message||'')+(/(policy|denied|permission)/i.test(e.message||'')?' — você está logado como admin?':''); }
+}
+async function toggleNoticia(id,ativo){
+  try{ const {error}=await SB.from('noticias').update({ativo:ativo}).eq('id',id); if(error)throw error; carregarNoticias(); }catch(e){ toast(e.message||'Erro',1); }
+}
+async function removerNoticia(id){
+  if(!confirm('Excluir esta notícia do banner?')) return;
+  try{ const {error}=await SB.from('noticias').delete().eq('id',id); if(error)throw error; toast('Notícia excluída'); carregarNoticias(); }catch(e){ toast(e.message||'Erro',1); }
 }
 let WL=[], _wlFiltro='pendente';
 async function carregarWaitlist(){
