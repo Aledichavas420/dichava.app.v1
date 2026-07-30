@@ -9079,6 +9079,7 @@ async function carregarPlano(){
 }
 // mostra a tela de boas-vindas ao premium UMA ÚNICA VEZ (quando a pessoa vira premium)
 function checkPremWelcome(){
+  return; // LANÇAMENTO: premium oculto/gratuito — não mostra a tela de "bem-vindo ao premium"
   if(!isPremium())return;
   var k='dr_premwelcome_'+uid();
   try{if(localStorage.getItem(k))return;}catch(e){}
