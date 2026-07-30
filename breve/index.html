@@ -1,0 +1,126 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dichava.app — chega dia 5 🌱</title>
+<meta name=description content="O dichava.app, app gratuito de autocuidado e redução de danos, chega dia 5 de agosto. Faça parte da comunidade.">
+<meta property="og:title" content="dichava.app — chega dia 5 de agosto 🌱">
+<meta property="og:description" content="8 anos de comunidade viram app. Autocuidado e redução de danos, sem julgamento.">
+<meta property="og:image" content="/og-image.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--am:#FFCF87}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;min-height:100vh;color:#f4f0e6;overflow-x:hidden;
+  background:radial-gradient(1100px 600px at 50% -10%,#3f7857 0%,transparent 58%),linear-gradient(165deg,#123A24 0%,#0c2a19 55%,#081c12 100%)}
+.leaves{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.leaf{position:absolute;top:-8%;fill:none;stroke:rgba(255,255,255,.28);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;opacity:0;animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(0) translateX(0) rotate(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(112vh) translateX(var(--dx,20px)) rotate(var(--rot,240deg));opacity:0}}
+.wrap{position:relative;z-index:2;max-width:940px;margin:0 auto;padding:32px 22px 60px;min-height:100vh;display:flex;flex-direction:column;align-items:center;text-align:center}
+.logo{display:flex;align-items:center;gap:11px;font-family:'Bagel Fat One',system-ui;font-size:27px;letter-spacing:.5px;color:#f4f0e6;text-shadow:0 3px 14px rgba(20,45,30,.5)}
+.logo span{color:var(--am)}
+.logo .lf{width:34px;height:34px;color:#8FE06B}
+.kick{margin-top:26px;font-size:12.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8FE0A6;background:rgba(143,224,166,.1);border:1px solid rgba(143,224,166,.28);padding:7px 16px;border-radius:30px}
+h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:clamp(34px,8vw,58px);line-height:1.05;margin:20px 0 10px;letter-spacing:.5px}
+h1 span{color:var(--am)}
+.sub{font-size:clamp(15px,3.6vw,18px);color:#cfe0d2;max-width:540px;line-height:1.55}
+.cd{display:flex;gap:10px;margin:30px 0 6px}
+.cd .u{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:14px 8px;min-width:74px;backdrop-filter:blur(6px)}
+.cd .n{font-family:'Bagel Fat One',system-ui;font-size:clamp(28px,7vw,40px);line-height:1;color:#fff}
+.cd .l{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9fc0a8;margin-top:7px}
+.when{font-size:14px;color:#9fc0a8;margin-top:6px}
+.phone{width:min(240px,62vw);margin:30px auto 6px;border-radius:38px;padding:11px;background:#0b0f0b;box-shadow:0 50px 90px rgba(0,0,0,.55),0 0 0 2px rgba(255,255,255,.06) inset;position:relative;transition:transform .12s ease-out}
+.phone::before{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:33%;height:18px;background:#0b0f0b;border-radius:0 0 13px 13px;z-index:3}
+.phone img{width:100%;display:block;border-radius:28px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:800;font-size:15px;padding:14px 22px;border-radius:30px;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn-p{background:#4CAF5A;color:#08210f;box-shadow:0 12px 26px rgba(76,175,90,.3)}
+.btn-g{background:rgba(255,255,255,.09);color:#eaf3ee;border:1px solid rgba(255,255,255,.16)}
+.notify{margin:34px auto 0;width:100%;max-width:420px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:20px 18px}
+.notify b{font-size:16px}.notify p{font-size:13px;color:#9fc0a8;margin:5px 0 14px;line-height:1.5}
+.nf{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.nf input{flex:1;min-width:180px;background:#0d160e;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:13px 15px;color:#eaf3ee;font-size:15px;font-family:inherit}
+.nf input:focus{outline:none;border-color:#4CAF5A}
+.nf button{background:#FFCF87;color:#231a08;border:none;border-radius:12px;padding:13px 20px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit}
+.nmsg{font-size:12.5px;margin-top:10px;min-height:16px}
+.consent{display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:11.5px;color:#8fa393;margin-top:12px;line-height:1.5;cursor:pointer}
+.consent input{margin-top:2px;flex:none}
+.foot{margin-top:auto;padding-top:34px;font-size:12.5px;color:#7f9a86}
+.foot a{color:#8FE0A6;text-decoration:none;font-weight:700}
+</style></head>
+<body>
+<div class="leaves" id="leaves"></div>
+<div class="wrap">
+  <div class="logo"><span class="lf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></span>dichava<span>.app</span></div>
+
+  <div class="kick">8 anos de comunidade · redução de danos</div>
+  <h1>Falta pouco pra<br><span>cuidar de si</span> 🌱</h1>
+  <p class="sub">O app gratuito de autocuidado e redução de danos que nasceu da nossa comunidade chega <b>dia 5 de agosto</b>. Sem julgamento, no seu tempo.</p>
+
+  <div class="cd" id="cd" aria-label="contagem regressiva">
+    <div class="u"><div class="n" id="cd-d">–</div><div class="l">dias</div></div>
+    <div class="u"><div class="n" id="cd-h">–</div><div class="l">horas</div></div>
+    <div class="u"><div class="n" id="cd-m">–</div><div class="l">min</div></div>
+    <div class="u"><div class="n" id="cd-s">–</div><div class="l">seg</div></div>
+  </div>
+  <div class="when" id="when">5 de agosto de 2026</div>
+
+  <div class="phone" id="phone"><img src="/guia-assets/inicio.png" alt="Prévia do app dichava"></div>
+
+  <div class="ctas">
+    <a class="btn btn-p" href="/landing/">Conheça o projeto</a>
+    <a class="btn btn-g" href="/landing/rede.html">A rede de profissionais</a>
+    <a class="btn btn-g" href="https://instagram.com/dichavandoard" target="_blank" rel="noopener">Seguir @dichavandoard</a>
+  </div>
+
+  <div class="notify">
+    <b>Quero ser avisado 💌</b>
+    <p>Deixe seu e-mail e a gente te chama assim que o app abrir, no dia 5.</p>
+    <form class="nf" id="nform" onsubmit="return avisar(event)">
+      <input id="n-email" type="email" required placeholder="seu@email.com" autocomplete="email" inputmode="email">
+      <button id="n-btn" type="submit">Avise-me</button>
+    </form>
+    <label class="consent"><input id="n-consent" type="checkbox" required><span>Aceito receber e-mails do dichava.app e concordo com a <a href="/landing/privacidade.html" style="color:#8FE0A6">Política de Privacidade</a>. Posso sair quando quiser.</span></label>
+    <div class="nmsg" id="n-msg"></div>
+  </div>
+
+  <div class="foot">É profissional de saúde? <a href="/landing/profissionais.html">Faça parte da rede →</a></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var ALVO=new Date('2026-08-05T00:00:00-03:00').getTime();
+function tick(){
+  var d=ALVO-Date.now();
+  if(d<=0){ document.getElementById('cd').innerHTML='<div class="u" style="min-width:auto;padding:16px 22px"><div class="n">Chegou! 🎉</div></div>';
+    document.getElementById('when').innerHTML='<a href="/" class="btn btn-p" style="margin-top:10px">Abrir o app →</a>'; return; }
+  var s=Math.floor(d/1000), dd=Math.floor(s/86400), hh=Math.floor(s%86400/3600), mm=Math.floor(s%3600/60), ss=s%60;
+  var z=function(n){return (n<10?'0':'')+n;};
+  document.getElementById('cd-d').textContent=dd;
+  document.getElementById('cd-h').textContent=z(hh);
+  document.getElementById('cd-m').textContent=z(mm);
+  document.getElementById('cd-s').textContent=z(ss);
+  requestAnimationFrame(function(){setTimeout(tick,1000);});
+}
+tick();
+// folhas caindo (densidade proporcional à largura)
+(function(){var box=document.getElementById('leaves');var leaf='<path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/>';var n=Math.max(16,Math.min(52,Math.round(16*(innerWidth/430))));var h='';
+  for(var i=0;i<n;i++){var sz=(24+Math.random()*38)|0,left=(Math.random()*100).toFixed(1),dur=(7+Math.random()*6),del=(-(Math.random()*dur)).toFixed(1),dx=((Math.random()*120-60)|0),rot=((Math.random()*360+150)|0);
+    h+='<svg class="leaf" viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" style="left:'+left+'%;--dx:'+dx+'px;--rot:'+rot+'deg;animation-duration:'+dur.toFixed(1)+'s;animation-delay:'+del+'s">'+leaf+'</svg>';}
+  box.innerHTML=h;})();
+// parallax leve no celular (desktop)
+document.addEventListener('mousemove',function(e){var ph=document.getElementById('phone');if(!ph)return;var x=(e.clientX/innerWidth-.5),y=(e.clientY/innerHeight-.5);ph.style.transform='rotateY('+(x*7).toFixed(1)+'deg) rotateX('+(-y*7).toFixed(1)+'deg) translateY('+(y*-6).toFixed(0)+'px)';});
+// newsletter
+var SB=null; try{ SB=supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
+async function avisar(ev){ev.preventDefault();
+  var email=(document.getElementById('n-email').value||'').trim(), ok=document.getElementById('n-consent').checked, msg=document.getElementById('n-msg'), btn=document.getElementById('n-btn');
+  if(!email||!ok){msg.style.color='#FFB4A8';msg.textContent='Preencha o e-mail e marque o aceite.';return false;}
+  btn.disabled=true;var old=btn.textContent;btn.textContent='Enviando…';
+  try{ if(!SB)throw new Error('x'); var r=await SB.rpc('newsletter_add',{p_email:email,p_consent:true,p_origem:'breve'}); if(r.error)throw r.error;
+    msg.style.color='#8FE0A6';msg.textContent='Pronto! Te avisamos no lançamento 💚';document.getElementById('nform').reset();
+  }catch(e){ msg.style.color='#FFB4A8';msg.textContent='Não consegui agora. Tente de novo em instantes.'; }
+  btn.disabled=false;btn.textContent=old;return false;
+}
+</script>
+</body></html>
