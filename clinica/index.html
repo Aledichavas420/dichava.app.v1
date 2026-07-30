@@ -2125,6 +2125,7 @@ function viewEquipe(){
     ${ehDono?`<button class="btn sm" onclick="renomearClinica()">Salvar nome</button>`:'<p style="color:var(--txm);font-size:13px">Só o responsável pode renomear a clínica.</p>'}
     <div style="height:14px"></div>
     <button class="btn danger ghost sm" onclick="sairClinica()">${ehDono?'Sair (e transferir depois)':'Sair desta clínica'}</button>
+    <p style="font-size:12.5px;color:var(--txs);margin-top:16px;border-top:1px solid var(--line);padding-top:14px">Faz parte da equipe de outra clínica? <a href="#" onclick="event.preventDefault();joinClinicaCodigo()" style="color:var(--v);font-weight:700">Entrar com um código →</a></p>
   </div>`;
 }
 function copiarCodigo(){ try{ navigator.clipboard.writeText(CLINICA.codigo); toast('Código copiado'); }catch(e){ toast(CLINICA.codigo); } }
@@ -3398,18 +3399,44 @@ async function bootClinica(){
   try{
     const {data:mem,error} = await _SB.from('clinica_membros').select('clinica_id,papel').eq('user_id',AUTH.id);
     if(error) throw error;
-    if(!mem || !mem.length){ mostrarClinicOnboarding(); return; }
-    await carregarClinica(mem[0].clinica_id, mem[0].papel);
+    if(!mem || !mem.length){ await autoCriarClinica(); return; } // solo: cria o espaço de trabalho sem pedir nada
+    let pick=mem[0];
+    try{ const pref=localStorage.getItem('dichava_clin_'+AUTH.id); if(pref){ const m=mem.find(x=>x.clinica_id===pref); if(m)pick=m; } }catch(e){}
+    await carregarClinica(pick.clinica_id, pick.papel);
   }catch(e){
     // tabelas ainda não configuradas → modo local pra não travar
     load(); startApp();
   }
+}
+// Cria automaticamente o espaço de trabalho do profissional solo (sem a tela "Sua clínica").
+async function autoCriarClinica(){
+  try{
+    const cid=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():('cl-'+Date.now()+'-'+Math.random().toString(16).slice(2));
+    const codigo=genCodigo();
+    const {error}=await _SB.from('clinicas').insert({id:cid,nome:'Meu consultório',dono_id:AUTH.id,codigo,dados:emptyDB()});
+    if(error) throw error;
+    const {error:e2}=await _SB.from('clinica_membros').insert({clinica_id:cid,user_id:AUTH.id,nome:AUTH.nome,papel:'dono'});
+    if(e2) throw e2;
+    try{localStorage.setItem('dichava_clin_'+AUTH.id,cid);}catch(_){}
+    await carregarClinica(cid,'dono');
+  }catch(e){ mostrarClinicOnboarding(); } // se algo falhar, cai na tela manual
+}
+// Entrar numa clínica/equipe existente com código (plano Clínica) — opção em Equipe.
+async function joinClinicaCodigo(){
+  const codigo=prompt('Código da clínica/equipe que te convidou:'); if(!codigo)return;
+  try{
+    const {data:cid,error}=await _SB.rpc('entrar_clinica',{p_codigo:codigo.trim().toUpperCase(),p_nome:AUTH.nome});
+    if(error) throw error; if(!cid) throw new Error('código não encontrado');
+    try{localStorage.setItem('dichava_clin_'+AUTH.id,cid);}catch(_){}
+    toast('Entrou na clínica! Recarregando…'); setTimeout(()=>location.reload(),800);
+  }catch(e){ toast('Erro: '+((e&&e.message)||'código não encontrado'),1); }
 }
 async function carregarClinica(cid,papel){
   try{
     const {data:c} = await _SB.from('clinicas').select('*').eq('id',cid).maybeSingle();
     if(!c){ mostrarClinicOnboarding(); return; }
     CLINICA={id:c.id,nome:c.nome,codigo:c.codigo,papel:papel||'membro',dono_id:c.dono_id};
+    try{if(AUTH)localStorage.setItem('dichava_clin_'+AUTH.id,c.id);}catch(_){}
     normalizeDB(c.dados);
     const {data:membros}= await _SB.from('clinica_membros').select('*').eq('clinica_id',cid);
     MEMBROS=membros||[];
