@@ -1,0 +1,122 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>Rede dichava — profissionais de redução de danos</title>
+<meta name=description content="Conheça a Rede dichava: profissionais de saúde alinhados à redução de danos, com curadoria, que você encontra dentro do app.">
+<meta name=robots content="index,follow">
+<meta property="og:title" content="Rede dichava — profissionais alinhados à redução de danos">
+<meta property="og:description" content="Uma rede curada de profissionais de saúde que atuam na perspectiva da redução de danos.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ve:#2E7D32;--v:#4CAF5A;--am:#F2B705;--txs:#5E7062;--line:#E2ECE3}
+*{box-sizing:border-box}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#1B2A1C;line-height:1.6;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 60% at 80% -5%,#DFF3E4 0%,transparent 55%),radial-gradient(90% 50% at 0% 5%,#E7EEFB 0%,transparent 50%),#F6FAF6}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 20px 70px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.logo{font-weight:800;font-size:20px;color:#1B2A1C;text-decoration:none}.logo span{color:#2E7D32}
+.back{font-size:14px;color:#2E7D32;text-decoration:none;font-weight:700}
+.hero{text-align:center;padding:26px 0 8px;max-width:760px;margin:0 auto}
+.kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#2E7D32;background:#E4F5E8;border:1px solid #C8E9D0;padding:6px 14px;border-radius:20px}
+h1{font-size:40px;line-height:1.1;margin:18px 0 12px;font-weight:800;letter-spacing:-.8px}
+h1 span{color:#2E7D32}
+.lead{font-size:17.5px;color:#3f5a45;max-width:660px;margin:0 auto}
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:32px 0 8px}
+.why-c{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(30,60,35,.04)}
+.why-c .i{font-size:24px}.why-c b{display:block;font-size:15.5px;margin:8px 0 3px}.why-c small{font-size:13.5px;color:var(--txs)}
+.sec{font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--txs);margin:40px 4px 4px;text-align:center}
+.sec-sub{text-align:center;color:var(--txs);font-size:14px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.pc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 22px rgba(30,60,35,.05);transition:transform .16s,box-shadow .16s;position:relative}
+.pc:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(30,60,35,.1)}
+.pc-h{display:flex;gap:13px;align-items:center}
+.pc-av{width:56px;height:56px;border-radius:50%;flex:none;background:linear-gradient(135deg,#DDeeE3,#EBE4FB);display:grid;place-items:center;font-weight:800;font-size:19px;color:#2E7D32;overflow:hidden}
+.pc-av img{width:100%;height:100%;object-fit:cover}
+.pc-nome{font-weight:800;font-size:16.5px;line-height:1.15}
+.pc-tipo{font-size:13px;color:#2E7D32;font-weight:700}
+.pc-reg{font-size:11.5px;color:var(--txs)}
+.destaque{display:inline-block;font-size:10px;font-weight:800;color:#B26A00;background:linear-gradient(135deg,#FFE7A8,#FFD066);border-radius:20px;padding:1px 8px;margin-left:5px;vertical-align:middle}
+.pc-bio{font-size:13.5px;color:#41564a;margin:12px 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.pc-tg{font-size:11.5px;background:#EEF6F0;color:#356b45;border-radius:20px;padding:3px 10px;font-weight:600}
+.pc-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.pc-mi{font-size:12px;color:var(--txs);background:#F4F8F5;border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-weight:600}
+.empty,.loading{text-align:center;color:var(--txs);padding:40px 20px;font-size:15px;grid-column:1/-1}
+.spin{width:26px;height:26px;border:3px solid #cfe0d4;border-top-color:#2E7D32;border-radius:50%;display:inline-block;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.cta-band{margin-top:44px;background:linear-gradient(150deg,#123A24,#0C2A19);color:#fff;border-radius:22px;padding:38px 28px;text-align:center}
+.cta-band h2{font-size:26px;margin:0 0 8px;font-weight:800}
+.cta-band p{color:#cfe0d2;font-size:15.5px;max-width:520px;margin:0 auto 20px}
+.cta-btn{display:inline-block;background:#4CAF5A;color:#08210f;font-weight:800;font-size:16px;text-decoration:none;padding:14px 28px;border-radius:30px}
+.cta-2{display:inline-block;margin-left:10px;color:#cfe0d2;font-weight:700;text-decoration:none;font-size:15px;padding:14px 8px}
+.foot{text-align:center;color:var(--txs);font-size:13px;margin-top:34px}
+.foot a{color:#2E7D32;font-weight:700;text-decoration:none}
+@media(max-width:720px){.why{grid-template-columns:1fr}h1{font-size:32px}.cta-2{display:block;margin:10px 0 0}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="logo" href="/landing/">dichava<span>.app</span></a>
+    <a class="back" href="/landing/">← voltar</a>
+  </div>
+
+  <div class="hero">
+    <span class="kick">Rede dichava</span>
+    <h1>Uma rede de cuidado <span>alinhada à redução de danos</span>.</h1>
+    <p class="lead">A Rede dichava reúne profissionais de saúde — psicólogos, psiquiatras e outros — que atuam na perspectiva da redução de danos: acolhem sem julgamento, respeitam o tempo de cada pessoa e não exigem a abstinência como porta de entrada. Dentro do app, quem busca cuidado encontra esses profissionais.</p>
+  </div>
+
+  <div class="why">
+    <div class="why-c"><span class="i">🌱</span><b>Curada, não aberta</b><small>Cada profissional passa por curadoria da nossa equipe. Priorizamos quem realmente atua com redução de danos.</small></div>
+    <div class="why-c"><span class="i">🤝</span><b>Mesma linguagem</b><small>Ética, respaldo em política pública de saúde e base científica — um cuidado que fala a língua da comunidade.</small></div>
+    <div class="why-c"><span class="i">📱</span><b>Fácil de encontrar</b><small>No app, a pessoa busca por especialidade, cidade ou modalidade e fala direto com o profissional.</small></div>
+  </div>
+
+  <div class="sec">Profissionais da rede</div>
+  <div class="sec-sub" id="rede-count">Carregando…</div>
+  <div class="grid" id="rede-grid"><div class="loading"><span class="spin"></span></div></div>
+
+  <div class="cta-band">
+    <h2>Você é profissional de saúde?</h2>
+    <p>Se você atua na perspectiva da redução de danos, venha fazer parte. Crie sua conta e organize sua prática num só lugar.</p>
+    <a class="cta-btn" href="/landing/profissionais.html">Faça parte da rede →</a>
+    <a class="cta-2" href="/clinica/?criar">Criar minha conta</a>
+  </div>
+
+  <div class="foot">
+    Rede dichava · <a href="/landing/">sobre o app</a> · <a href="/landing/seguranca.html">segurança e privacidade</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SB=null;
+try{ SB = supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+function ini(n){n=(n||'').trim();if(!n)return'?';var p=n.split(/\s+/);return((p[0][0]||'')+(p.length>1?p[p.length-1][0]:'')).toUpperCase();}
+function modtag(m){m=m||'';if(m.includes('online')&&m.includes('presencial'))return'💻📍 Online e presencial';if(m.includes('online'))return'💻 Online';if(m.includes('presencial'))return'📍 Presencial';return'';}
+async function carregar(){
+  var grid=document.getElementById('rede-grid'), cnt=document.getElementById('rede-count');
+  if(!SB){ grid.innerHTML='<div class="empty">Não consegui carregar agora. Veja a rede completa direto no app.</div>'; cnt.textContent=''; return; }
+  var profs=[];
+  try{ var r=await SB.from('profissionais').select('id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,foto,destaque,ativo,em_teste,status').eq('status','aprovado'); profs=r.data||[]; }catch(e){ profs=[]; }
+  var list=profs.filter(function(p){return p.ativo!==false && p.em_teste!==true;})
+    .sort(function(a,b){return (b.destaque?1:0)-(a.destaque?1:0) || String(a.nome||'').localeCompare(String(b.nome||''));});
+  cnt.textContent = list.length ? (list.length+' profissio'+(list.length===1?'nal':'nais')+' na rede') : '';
+  if(!list.length){ grid.innerHTML='<div class="empty">Em breve os primeiros profissionais da rede aparecem por aqui. 🌱</div>'; return; }
+  grid.innerHTML = list.map(function(p){
+    var tags=(p.especialidades||'').split(',').map(function(t){return t.trim();}).filter(Boolean).slice(0,4);
+    var mt=modtag(p.modalidade);
+    return '<div class="pc">'+
+      '<div class="pc-h"><div class="pc-av">'+(p.foto?'<img src="'+esc(p.foto)+'" alt="">':ini(p.nome))+'</div>'+
+        '<div><div class="pc-nome">'+esc(p.nome)+(p.destaque?' <span class="destaque">★ Destaque</span>':'')+'</div>'+
+        '<div class="pc-tipo">'+esc(p.tipo_prof||'')+'</div>'+(p.reg?'<div class="pc-reg">'+esc(p.reg)+'</div>':'')+'</div></div>'+
+      (p.bio?'<div class="pc-bio">'+esc(p.bio)+'</div>':'')+
+      (tags.length?'<div class="pc-tags">'+tags.map(function(t){return '<span class="pc-tg">'+esc(t)+'</span>';}).join('')+'</div>':'')+
+      '<div class="pc-meta">'+(mt?'<span class="pc-mi">'+mt+'</span>':'')+(p.cidade?'<span class="pc-mi">📍 '+esc(p.cidade)+'</span>':'')+(p.valor?'<span class="pc-mi">'+esc(p.valor)+'</span>':'')+'</div>'+
+    '</div>';
+  }).join('');
+}
+carregar();
+</script>
+</body></html>

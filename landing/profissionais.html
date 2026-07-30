@@ -1,9 +1,9 @@
 <!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1">
 <title>Para profissionais da saúde — dichava.app</title>
-<meta name=description content="Seja um profissional parceiro do dichava.app: apareça para quem já busca cuidado e capte novos pacientes. Entre na lista de espera.">
+<meta name=description content="Seja um profissional parceiro do dichava.app: apareça para quem já busca cuidado e capte novos pacientes. Crie sua conta agora.">
 <meta name=robots content="index,follow">
 <meta property="og:title" content="dichava.app para profissionais da saúde">
-<meta property="og:description" content="Apareça para quem já busca cuidado e capte novos pacientes. Entre na lista de espera.">
+<meta property="og:description" content="Apareça para quem já busca cuidado e capte novos pacientes. Crie sua conta agora.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -102,7 +102,7 @@ footer a{color:#2E7D32;text-decoration:none}
     <h1>Faça parte da <span>maior comunidade de redução de danos do Brasil</span>.</h1>
     <p class="lead">O dichava.app reúne pessoas que decidiram olhar pra própria relação com o uso — com dados, sem julgamento. Seja um <b>profissional parceiro</b>, apareça pra elas na hora certa e organize sua prática num só lugar.</p>
     <div class="mag-band">+143 mil na comunidade @dichavandoard · redução de danos com base científica e política pública de saúde</div>
-    <a class="hero-cta" href="#lista">Entrar na lista de espera →</a>
+    <a class="hero-cta" href="/clinica/?criar">Criar minha conta →</a>
   </div>
 
   <!-- PREVIEW DO PERFIL NO APP -->
@@ -279,7 +279,7 @@ footer a{color:#2E7D32;text-decoration:none}
       </ul>
     </div>
   </div>
-  <div class="note">Valores de lançamento, sujeitos a ajuste. A cobrança começa só quando a área de profissionais for ativada.</div>
+  <div class="note">Valores de lançamento, sujeitos a ajuste. A rede está no ar — crie sua conta e teste com 7 dias grátis.</div>
 
   <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:26px 0 6px">
     <span style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:700;color:#2b3b2d">🔒 Conexão criptografada (SSL/TLS)</span>
@@ -289,37 +289,12 @@ footer a{color:#2E7D32;text-decoration:none}
   </div>
   <div style="text-align:center;font-size:13px;color:#7d8f80;margin-bottom:8px">Saiba como protegemos os dados em <a href="/landing/seguranca.html" style="color:#2E7D32;font-weight:700">Segurança e Privacidade</a> · <a href="/landing/profissional-lgpd.html" style="color:#2E7D32;font-weight:700">Termo de Operador (LGPD)</a></div>
 
-  <div class="form" id="lista">
-    <h3>Entre na lista de espera</h3>
-    <p class="fd">Estamos abrindo as vagas de profissionais parceiros aos poucos. Deixe seus dados e avisamos <b>você primeiro</b> quando abrir — sem compromisso.</p>
-    <form id="wl-form" onsubmit="return enviar(event)">
-      <label>Nome completo <span class="req">*</span></label>
-      <input id="f-nome" required maxlength="80" placeholder="Como assina profissionalmente">
-      <div class="row">
-        <div><label>Registro profissional (CRP / CRM…) <span class="req">*</span></label><input id="f-reg" required maxlength="30" placeholder="ex: CRP 16/7696"></div>
-        <div><label>Especialidade <span class="req">*</span></label><input id="f-esp" required maxlength="50" placeholder="ex: Psicologia clínica"></div>
-      </div>
-      <div class="row">
-        <div><label>Cidade / UF</label><input id="f-cidade" maxlength="50" placeholder="ex: Recife / PE"></div>
-        <div><label>Atendimento</label><select id="f-atend"><option>Online</option><option>Presencial</option><option>Online e presencial</option></select></div>
-      </div>
-      <div class="row">
-        <div><label>E-mail <span class="req">*</span></label><input id="f-email" type="email" required placeholder="seu@email.com"></div>
-        <div><label>WhatsApp <span class="req">*</span></label><input id="f-wpp" required maxlength="20" placeholder="(00) 00000-0000"></div>
-      </div>
-      <label>Plano de interesse</label>
-      <select id="f-plano"><option>Ainda estou decidindo</option><option>Essencial (R$ 79,90/mês)</option><option>Profissional (R$ 179,90/mês)</option><option>Clínica / coletivo (R$ 299,90/mês)</option></select>
-      <label>Algo que queira contar? (opcional)</label>
-      <textarea id="f-msg" rows="3" maxlength="400" placeholder="Sua abordagem, dúvidas, expectativas…"></textarea>
-      <button class="btn" id="wl-btn" type="submit">Quero ser avisado(a) 💚</button>
-      <div class="err" id="wl-err"></div>
-      <div class="note" style="margin-top:14px">Ao enviar, você concorda que a gente entre em contato sobre a parceria. Seus dados não são compartilhados com terceiros.</div>
-    </form>
-    <div class="ok" id="wl-ok">
-      <div class="em">🌱</div>
-      <h3>Recebemos! Você está na lista.</h3>
-      <p>Assim que as vagas abrirem, a gente te chama primeiro. Obrigado por querer caminhar junto. 💚</p>
-    </div>
+  <div class="form" id="lista" style="text-align:center">
+    <div style="font-size:40px;line-height:1;margin-bottom:6px">🌱</div>
+    <h3>Crie sua conta e comece</h3>
+    <p class="fd">A rede está aberta. Crie sua conta agora e explore o painel completo com <b>7 dias grátis</b> — sem cadastrar cartão e sem pagar nada antes. Como a rede é curada, seu perfil passa por uma aprovação rápida antes de aparecer pros pacientes.</p>
+    <a class="btn" href="/clinica/?criar" style="display:inline-block;text-decoration:none;margin-top:6px">Criar minha conta →</a>
+    <div class="note" style="margin-top:14px">Já tem conta? <a href="/clinica/" style="color:#2E7D32;font-weight:700">Entrar no painel</a></div>
   </div>
 
   <footer>dichava.app · redução de danos, sem julgamento · <a href="mailto:contato@dichava.app">contato@dichava.app</a><br>
