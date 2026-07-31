@@ -841,6 +841,7 @@ function renderProfs(){
     if(p.plano)chips.push('<span class="chip b">'+esc(planoNome(p.plano))+(planoPreco(p.plano)?' · '+esc(planoPreco(p.plano)):'')+'</span>');
     if(ehRecorrente(p))chips.push('<span class="chip b">♻️ Recorrente</span>');
     if(ehTrial(p))chips.push('<span class="chip a">🎁 Teste grátis</span>');
+    if(p.oculto_diretorio)chips.push('<span class="chip e">🙈 Oculto no diretório</span>');
     if(p.acesso_ate)chips.push('<span class="chip b">até '+fmtData(p.acesso_ate)+'</span>');
     if(p.tem_comprovante)chips.push('<span class="chip v">📎 comprovante</span>');
     if(p.n_aval)chips.push('<span class="chip">'+(p.media_aval||'—')+' ★ ('+p.n_aval+')</span>');
@@ -850,6 +851,7 @@ function renderProfs(){
     if(!ativo)acts.push(`<button class="btn ghost sm" onclick="liberarTrial('${p.id}')">🎁 Teste 7 dias</button>`);
     if(p.status==='reaprovar')acts.push(`<button class="btn wv sm" onclick="acao('${p.id}','aprovar')">✓ Aprovar edição</button>`);
     else if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
+    acts.push(`<button class="btn ghost sm" onclick="toggleOculto('${p.id}',${p.oculto_diretorio?'true':'false'})">${p.oculto_diretorio?'👁 Mostrar no diretório':'🙈 Ocultar do diretório'}</button>`);
     if(ativo)acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','bloquear')">Bloquear</button>`);
     if(p.status!=='rejeitado')acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>`);
     if(p.tem_comprovante)acts.push(`<button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>`);
@@ -961,6 +963,22 @@ async function enviarBoasVindas(p,trial){
     if(data&&data.erro){ throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro)); }
     toast('✉️ E-mail de boas-vindas enviado');
   }catch(e){ toast('Liberado, mas o e-mail falhou: '+(e.message||''),1); }
+}
+// Oculta/mostra o profissional no diretório público (não mexe no acesso ao painel).
+async function toggleOculto(id,atual){
+  const novo=!atual;
+  const p=PROFS.find(x=>x.id===id);
+  if(novo && !confirm('Ocultar '+((p&&p.nome)||'este profissional')+' do diretório?\n\nDeixa de aparecer para os pacientes. O acesso ao painel continua igual.')) return;
+  try{
+    const{error}=await SB.from('profissionais').update({oculto_diretorio:novo}).eq('id',id);
+    if(error)throw error;
+    toast(novo?'🙈 Ocultado do diretório':'👁 Visível no diretório');
+    carregar();
+  }catch(e){
+    const m=(e&&e.message)||'';
+    if(/oculto_diretorio/.test(m)) toast('Rode o SQL "ocultar-diretorio-setup.sql" primeiro.',5000);
+    else toast('Erro: '+m,1);
+  }
 }
 async function acao(id,tipo,meses,obs){
   const labels={aprovar:'Aprovar perfil deste profissional?',rejeitar:'Rejeitar este profissional? Ele perde o acesso.',bloquear:'Bloquear o acesso deste profissional?'};

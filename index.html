@@ -6761,6 +6761,7 @@ async function renderProfs(){
   const list=profs.filter(p=>{
     if(p.ativo===false)return false; // só profissionais com acesso liberado (pagantes)
     if(p.em_teste===true)return false; // em teste grátis ainda não aparece no diretório
+    if(p.oculto_diretorio===true)return false; // profissional escolheu ocultar o perfil
     if(_pfFilt.mod&&!(p.modalidade||'').includes(_pfFilt.mod))return false;
     if(q){const hay=(p.nome+' '+p.tipo_prof+' '+(p.cidade||'')+' '+(p.especialidades||'')).toLowerCase();if(!hay.includes(q))return false;}
     return true;

@@ -136,12 +136,12 @@ async function carregar(){
   if(!SB){ grid.innerHTML='<div class="empty">Não consegui carregar agora. Veja a rede completa direto no app.</div>'; cnt.textContent=''; return; }
   var profs=[];
   try{
-    var cols='id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,disponibilidade,publicos,idiomas,foto,link,telefone,agenda_codigo,destaque,ativo,em_teste,status';
+    var cols='id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,disponibilidade,publicos,idiomas,foto,link,telefone,agenda_codigo,destaque,ativo,em_teste,oculto_diretorio,status';
     var r=await SB.from('profissionais').select(cols).eq('status','aprovado');
     if(r.error){ r=await SB.from('profissionais').select('*').eq('status','aprovado'); } // fallback se alguma coluna faltar
     profs=r.data||[];
   }catch(e){ profs=[]; }
-  var list=profs.filter(function(p){return p.ativo!==false && p.em_teste!==true;})
+  var list=profs.filter(function(p){return p.ativo!==false && p.em_teste!==true && p.oculto_diretorio!==true;})
     .sort(function(a,b){return (b.destaque?1:0)-(a.destaque?1:0) || String(a.nome||'').localeCompare(String(b.nome||''));});
   BYID={}; list.forEach(function(p){BYID[p.id]=p;});
   cnt.textContent = list.length ? (list.length+' profissio'+(list.length===1?'nal':'nais')+' na rede') : '';

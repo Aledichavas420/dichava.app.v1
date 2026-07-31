@@ -1889,6 +1889,15 @@ async function carregarPerfil(){
       </div>
       <button class="btn" style="margin-top:16px" onclick="editarPerfilPanel()">✏️ Editar perfil público</button>
       <p style="font-size:12px;color:var(--txm);margin-top:10px">Alterações no perfil público passam por <b>nova aprovação</b> da equipe. A <b>disponibilidade de agendamento</b> você define em <b>Configurações</b>.</p>
+      <div style="margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--cin)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:14px">${p.oculto_diretorio?'🙈 Perfil oculto no diretório':'👁 Perfil visível no diretório'}</div>
+            <div style="font-size:12.5px;color:var(--txs);margin-top:3px">${p.oculto_diretorio?'Seu perfil <b>não aparece</b> para os pacientes. Você continua com acesso normal ao painel.':'Seu perfil aparece na rede para os pacientes. Você pode ocultá-lo e continuar usando o painel normalmente.'}</div>
+          </div>
+          <button class="btn ${p.oculto_diretorio?'':'ghost'} sm" style="white-space:nowrap" onclick="toggleOcultoDiretorio(${p.oculto_diretorio?'true':'false'})">${p.oculto_diretorio?'Mostrar no diretório':'Ocultar do diretório'}</button>
+        </div>
+      </div>
     </div>
     <div class="card jornada-card" style="padding:22px;max-width:620px;margin-top:16px">
       <div class="sec-title" style="margin-top:0">Como o paciente te vê 👀</div>
@@ -2087,6 +2096,23 @@ async function salvarPerfilPanel(){
     if(r.error)throw r.error;
     toast('✓ Perfil enviado para aprovação');closeModal();carregarPerfil();
   }catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}
+}
+// Oculta/mostra o perfil no diretório público SEM mudar o status (não passa por
+// reaprovação) e sem mexer no acesso ao painel.
+async function toggleOcultoDiretorio(atual){
+  if(!_SB||!AUTH){toast('Sem conexão',1);return;}
+  const novo=!atual;
+  if(novo && !confirm('Ocultar seu perfil do diretório?\n\nOs pacientes deixam de ver você na rede. Seu acesso ao painel continua igual. Você pode reativar quando quiser.')) return;
+  try{
+    const{error}=await _SB.from('profissionais').update({oculto_diretorio:novo}).eq('id',AUTH.id);
+    if(error)throw error;
+    toast(novo?'🙈 Perfil ocultado do diretório':'👁 Perfil visível no diretório');
+    carregarPerfil();
+  }catch(e){
+    const m=(e&&e.message)||'';
+    if(/oculto_diretorio/.test(m)) toast('Rode o SQL "ocultar-diretorio-setup.sql" primeiro.',5000);
+    else toast('Erro: '+m,5000);
+  }
 }
 
 /* =============== EQUIPE (clínica compartilhada) =============== */
