@@ -882,7 +882,7 @@ async function liberarTrial(id){
   _libPlano=null;
 }
 function fecharModal(){ $('#modalRoot').innerHTML=''; }
-let _libPlano=null;
+let _libPlano=null,_skipBoasVindas=false;
 function ehRecorrente(p){ return /♻️|recorrente/i.test((p&&p.obs_admin)||''); }
 function libTipoChange(){
   const rec=$('#m-tipo').value==='recorrente';
@@ -908,6 +908,7 @@ async function confirmarMensalidade(id){
   if(!confirm('Confirmar que a mensalidade recorrente do plano '+planoNome(p.plano)+' caiu no PagBank e renovar +1 mês de acesso?')) return;
   _libPlano=p.plano||null;
   const obs='♻️ Recorrente ('+planoNome(p.plano)+') · última confirmação '+new Date().toLocaleDateString('pt-BR');
+  _skipBoasVindas=true; // renovação mensal não reenvia boas-vindas
   await acao(id,'liberar',1,obs);
   _libPlano=null;
 }
@@ -920,14 +921,28 @@ async function verComprovante(id){
     if(w) w.document.write('<title>Comprovante</title><body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+data+'" style="max-width:100%;max-height:100vh"></body>');
   }catch(e){ toast('Erro: '+(e.message||''),1); }
 }
+// Dispara o e-mail de boas-vindas (Edge Function email-boasvindas).
+// Silencioso: se falhar, não trava a liberação — só avisa discreto.
+async function enviarBoasVindas(p,trial){
+  if(!p||!p.email) return;
+  try{
+    const {data,error}=await SB.functions.invoke('email-boasvindas',{body:{to:p.email,nome:p.nome||'',trial:!!trial}});
+    if(error){ let det=''; try{const b=await error.context.json(); det=b&&(b.erro||b.motivo||'');}catch(_){}; throw new Error(det||error.message||'erro'); }
+    if(data&&data.erro){ throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro)); }
+    toast('✉️ E-mail de boas-vindas enviado');
+  }catch(e){ toast('Liberado, mas o e-mail falhou: '+(e.message||''),1); }
+}
 async function acao(id,tipo,meses,obs){
   const labels={aprovar:'Aprovar perfil deste profissional?',rejeitar:'Rejeitar este profissional? Ele perde o acesso.',bloquear:'Bloquear o acesso deste profissional?'};
   if(labels[tipo] && !confirm(labels[tipo])) return;
+  const p=PROFS.find(x=>x.id===id);
   try{
     const {error}=await SB.rpc('admin_prof_acao',{p_id:id,p_acao:tipo,p_meses:meses??null,p_obs:obs??null,p_plano:_libPlano??null});
     if(error) throw error;
     const msgs={aprovar:'Perfil aprovado',rejeitar:'Profissional rejeitado',liberar:'Acesso liberado!',trial:'Teste de 7 dias liberado! 🎁',bloquear:'Acesso bloqueado'};
     toast(msgs[tipo]||'Feito');
+    if((tipo==='liberar'||tipo==='trial') && !_skipBoasVindas) enviarBoasVindas(p,tipo==='trial');
+    _skipBoasVindas=false;
     carregar();
   }catch(e){ toast('Erro: '+(e.message||''),1); }
 }
