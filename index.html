@@ -3187,6 +3187,7 @@ a{color:inherit;text-decoration:none}
   <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="showV('vapp');goPg('p-cfg')">←</button><div class="ptb-tit">🛡️ Admin · Profissionais</div></div>
   <div class="adm-tabs">
     <button class="adm-tab on" data-s="pendente" onclick="admTab('pendente',this)">Pendentes</button>
+    <button class="adm-tab" data-s="reaprovar" onclick="admTab('reaprovar',this)">🔄 Diretório</button>
     <button class="adm-tab" data-s="aprovado" onclick="admTab('aprovado',this)">Aprovados</button>
     <button class="adm-tab" data-s="rejeitado" onclick="admTab('rejeitado',this)">Reprovados</button>
   </div>
@@ -6589,7 +6590,7 @@ async function renderAdmin(){
   let profs=[];
   try{const{data,error}=await _SB.from('profissionais').select('*').eq('status',_admStatus);if(error)throw error;profs=(data||[]).sort((a,b)=>String(b.criado_em||b.created_at||'').localeCompare(String(a.criado_em||a.created_at||'')));}
   catch(e){c.innerHTML='<div class="adm-empty">Erro ao carregar: '+esc(e.message||'')+'</div>';return;}
-  if(!profs.length){c.innerHTML='<div class="adm-empty">Nenhum profissional '+({pendente:'pendente',aprovado:'aprovado',rejeitado:'reprovado'}[_admStatus])+'.</div>';return;}
+  if(!profs.length){c.innerHTML='<div class="adm-empty">Nenhum profissional '+({pendente:'pendente',reaprovar:'com edicao pendente',aprovado:'aprovado',rejeitado:'reprovado'}[_admStatus])+'.</div>';return;}
   _admProfs={}; profs.forEach(p=>{_admProfs[p.id]=p;});
   const modLabel=m=>{const s=m||'';return s.includes('online')&&s.includes('presencial')?'💻📍 Online e presencial':s.includes('online')?'💻 Online':s.includes('presencial')?'📍 Presencial':'—';};
   c.innerHTML=profs.map(p=>{
@@ -6600,7 +6601,7 @@ async function renderAdmin(){
       : `<button class="adm-ap" onclick="admSet('${p.id}','aprovado')">✓ Aprovar</button><button class="adm-rj" onclick="admSet('${p.id}','rejeitado')">Reprovar</button>`;
     // sinaliza: cadastro inicial vs alteração (com diff)
     let sinal='';
-    if(_admStatus==='pendente'){
+    if(_admStatus==='pendente'||_admStatus==='reaprovar'){
       const snap=p.snapshot_aprovado;
       if(!snap){ sinal='<div class="ac-badge novo">📋 Cadastro inicial — primeira aprovação</div>'; }
       else{

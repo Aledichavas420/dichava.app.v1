@@ -1876,7 +1876,7 @@ async function carregarPerfil(){
     const{data:p}=await _SB.from('profissionais').select('*').eq('id',AUTH.id).maybeSingle();
     if(!p){ v.innerHTML='<div class="card" style="padding:22px;max-width:560px"><b>Você ainda não tem um perfil público.</b><p style="color:var(--txs);font-size:13.5px;margin-top:8px">Crie seu perfil profissional no <b>app dichava</b> (área do profissional) para aparecer na rede e receber pacientes.</p></div>'; return; }
     const mod=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'Online e presencial':(p.modalidade||'').includes('online')?'Online':'Presencial';
-    const st={pendente:'Em análise',aprovado:'Aprovado',rejeitado:'Reprovado'}[p.status]||p.status||'—';
+    const st={pendente:'Em análise',aprovado:'Aprovado',rejeitado:'Reprovado',reaprovar:'Em análise (edição)'}[p.status]||p.status||'—';
     v.innerHTML=`<div class="card" style="padding:22px;max-width:620px">
       <div class="cell-user" style="margin-bottom:14px"><div class="avatar" style="width:54px;height:54px;font-size:19px">${initials(p.nome)}</div><div><b style="font-size:17px">${esc(p.nome)}</b><div style="color:var(--txs);font-size:13px">${esc(p.tipo_prof||'')}${p.reg?' · '+esc(p.reg):''}</div><span class="chip ${p.status==='aprovado'?'v':(p.status==='rejeitado'?'e':'a')}" style="margin-top:4px">${st}</span></div></div>
       ${p.bio?`<div class="pro-field"><div class="lbl">Bio</div><div class="val">${esc(p.bio)}</div></div>`:''}
@@ -2069,15 +2069,19 @@ async function salvarPerfilPanel(){
   const tipo=g('pf-tipo'),bio=g('pf-bio'),mod=g('pf-mod');
   if(!tipo||bio.length<20||!mod){toast('Preencha tipo, bio (mín. 20 caracteres) e modalidade.',3500);return;}
   const insta=g('pf-insta'), site=g('pf-site');
+  // Se o perfil já estava APROVADO e o profissional editou, marcamos como
+  // 'reaprovar' (não 'pendente') pra o admin separar essas pendências de diretório.
+  let novoStatus='pendente';
+  try{ const{data:cur}=await _SB.from('profissionais').select('status').eq('id',AUTH.id).maybeSingle(); if(cur&&cur.status==='aprovado')novoStatus='reaprovar'; }catch(_){}
   const payload={tipo_prof:tipo,bio,especialidades:g('pf-esp'),modalidade:mod,cidade:g('pf-cidade'),valor:g('pf-valor'),duracao:g('pf-dur'),disponibilidade:g('pf-disp'),telefone:g('pf-tel'),
     link:(insta||site||''), reg:(g('pf-reg')||AUTH.reg||null), estado:g('pf-estado').toUpperCase(), instituicao:g('pf-inst'), ano_formacao:g('pf-ano'), especializacao:g('pf-espz'), publicos:g('pf-pub'), idiomas:g('pf-idiomas'), instagram:insta, site:site, linkedin:g('pf-linkedin'),
-    foto:_pfFoto||null,capa:_pfCapa||'verde',status:'pendente'};
+    foto:_pfFoto||null,capa:_pfCapa||'verde',status:novoStatus};
   try{
     const full=Object.assign({id:AUTH.id,nome:AUTH.nome},payload);
     let r=await _SB.from('profissionais').upsert(full);
     if(r.error){
       // alguma coluna nova ainda não existe (SQL não rodado) → salva o essencial e não trava
-      const base={id:AUTH.id,nome:AUTH.nome,reg:full.reg,tipo_prof:full.tipo_prof,bio:full.bio,especialidades:full.especialidades,modalidade:full.modalidade,cidade:full.cidade,valor:full.valor,duracao:full.duracao,disponibilidade:full.disponibilidade,telefone:full.telefone,status:'pendente'};
+      const base={id:AUTH.id,nome:AUTH.nome,reg:full.reg,tipo_prof:full.tipo_prof,bio:full.bio,especialidades:full.especialidades,modalidade:full.modalidade,cidade:full.cidade,valor:full.valor,duracao:full.duracao,disponibilidade:full.disponibilidade,telefone:full.telefone,status:novoStatus};
       r=await _SB.from('profissionais').upsert(base);
     }
     if(r.error)throw r.error;

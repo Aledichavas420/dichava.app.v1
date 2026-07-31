@@ -153,6 +153,11 @@ a{color:var(--ve)}
 
     <!-- ══ PROFISSIONAIS ══ -->
     <div class="apane" id="ap-profs">
+    <div id="reap-wrap" style="display:none">
+      <div class="sec">🔄 Pendência do diretório <span id="reap-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
+      <div style="font-size:12.5px;color:var(--txs);margin:-4px 0 8px">Profissionais já aprovados que <b>editaram o perfil</b> e precisam de nova aprovação. Enquanto isso, ficam fora do diretório.</div>
+      <div class="plist" id="reap-list"></div>
+    </div>
     <div class="sec">Profissionais</div>
     <div class="filters" id="filters"></div>
     <div class="plist" id="plist"><div class="spin"></div></div>
@@ -377,7 +382,7 @@ async function carregar(){
   try{
     const {data,error}=await SB.rpc('admin_profissionais');
     if(error) throw error;
-    PROFS=data||[]; renderProfs(); renderFinanceiro(); renderComprovantes(); renderVencer();
+    PROFS=data||[]; renderProfs(); renderReaprovar(); renderFinanceiro(); renderComprovantes(); renderVencer();
   }catch(e){ $('#plist').innerHTML='<div class="empty">Não consegui carregar os profissionais.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small></div>'; }
   carregarWaitlist();
   carregarSuporte();
@@ -706,10 +711,12 @@ function renderGrowth(rows){
     return `<div class="bar"><div class="bn">${r.n||0}</div><div class="col" style="height:${h}%"></div><div class="bl">${meses[mi]||''}</div></div>`;
   }).join('')+'</div>';
 }
+function ehReaprovar(p){ return p && p.status==='reaprovar'; }
 function renderFiltros(){
   const nPag=PROFS.filter(p=>statusInfo(p).ativo && !ehTrial(p)).length;
   const nTeste=PROFS.filter(p=>ehTrial(p)).length;
-  const fs=[['todos','Todos'],['pagantes','💳 Pagantes'+(nPag?' ('+nPag+')':'')],['teste','🎁 Em teste'+(nTeste?' ('+nTeste+')':'')],['pendente','Pendentes'],['expirado','Expirados'],['rejeitado','Rejeitados']];
+  const nReap=PROFS.filter(ehReaprovar).length;
+  const fs=[['todos','Todos'],['reaprovar','🔄 Pendência diretório'+(nReap?' ('+nReap+')':'')],['pagantes','💳 Pagantes'+(nPag?' ('+nPag+')':'')],['teste','🎁 Em teste'+(nTeste?' ('+nTeste+')':'')],['pendente','Pendentes'],['expirado','Expirados'],['rejeitado','Rejeitados']];
   $('#filters').innerHTML=fs.map(([k,l])=>`<button class="ft ${_filtro===k?'on':''}" onclick="setFiltro('${k}')">${l}</button>`).join('');
 }
 function setFiltro(f){ _filtro=f; renderFiltros(); renderProfs(); }
@@ -742,7 +749,8 @@ function renderComprovantes(){
   const box=$('#comp-list'); if(!box)return;
   const list=PROFS.filter(p=>p.tem_comprovante && !statusInfo(p).ativo);
   const c=$('#comp-count'); if(c)c.textContent=list.length?('· '+list.length+' aguardando'):'';
-  try{ setTb('tb-profs', list.length); }catch(e){}
+  const nReap=PROFS.filter(ehReaprovar).length;
+  try{ setTb('tb-profs', list.length+nReap); }catch(e){}
   if(!list.length){ box.innerHTML='<div class="empty" style="padding:16px">Nenhum comprovante aguardando conferência 👍</div>'; return; }
   box.innerHTML=list.map(p=>{
     const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
@@ -752,6 +760,25 @@ function renderComprovantes(){
       <div class="pacts">
         <button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>
         <button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Conferir e liberar</button>${wa}
+      </div></div>`;
+  }).join('');
+}
+// ===== PENDÊNCIA DO DIRETÓRIO (perfil aprovado que foi editado) =====
+function renderReaprovar(){
+  const wrap=$('#reap-wrap'), box=$('#reap-list'); if(!box)return;
+  const list=PROFS.filter(ehReaprovar);
+  const c=$('#reap-count'); if(c)c.textContent=list.length?('· '+list.length+' aguardando'):'';
+  if(!list.length){ if(wrap)wrap.style.display='none'; box.innerHTML=''; return; }
+  if(wrap)wrap.style.display='block';
+  box.innerHTML=list.map(p=>{
+    const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
+    return `<div class="pcard pend"><div class="phead"><div class="pav">${initials(p.nome)}</div>
+      <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')}</div>
+      <div class="pmeta">${esc(p.tipo_prof||'')}${p.cidade?' · '+esc(p.cidade):''}</div>
+      <div class="chips"><span class="chip a">🔄 Editou o perfil — reaprovar</span></div></div></div>
+      <div class="pacts">
+        <button class="btn wv sm" onclick="acao('${p.id}','aprovar')">✓ Aprovar edição</button>
+        <button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>${wa}
       </div></div>`;
   }).join('');
 }
@@ -793,6 +820,7 @@ function renderProfs(){
     if(_filtro==='todos')return true;
     if(_filtro==='pagantes')return ativo && !ehTrial(p);
     if(_filtro==='teste')return ehTrial(p);
+    if(_filtro==='reaprovar')return p.status==='reaprovar';
     if(_filtro==='pendente')return (p.status||'pendente')==='pendente' && !ativo;
     if(_filtro==='ativo')return ativo;
     if(_filtro==='expirado')return expirado;
@@ -808,6 +836,7 @@ function renderProfs(){
     else chips.push('<span class="chip a">Aguardando liberação</span>');
     if(p.status==='aprovado')chips.push('<span class="chip v">Perfil aprovado</span>');
     else if(p.status==='rejeitado')chips.push('<span class="chip e">Rejeitado</span>');
+    else if(p.status==='reaprovar')chips.push('<span class="chip a">🔄 Editou o perfil — reaprovar</span>');
     else chips.push('<span class="chip a">Perfil pendente</span>');
     if(p.plano)chips.push('<span class="chip b">'+esc(planoNome(p.plano))+(planoPreco(p.plano)?' · '+esc(planoPreco(p.plano)):'')+'</span>');
     if(ehRecorrente(p))chips.push('<span class="chip b">♻️ Recorrente</span>');
@@ -819,7 +848,8 @@ function renderProfs(){
     if(!ativo)acts.push(`<button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Liberar acesso</button>`);
     else acts.push(`<button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar / editar</button>`);
     if(!ativo)acts.push(`<button class="btn ghost sm" onclick="liberarTrial('${p.id}')">🎁 Teste 7 dias</button>`);
-    if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
+    if(p.status==='reaprovar')acts.push(`<button class="btn wv sm" onclick="acao('${p.id}','aprovar')">✓ Aprovar edição</button>`);
+    else if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
     if(ativo)acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','bloquear')">Bloquear</button>`);
     if(p.status!=='rejeitado')acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>`);
     if(p.tem_comprovante)acts.push(`<button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>`);
