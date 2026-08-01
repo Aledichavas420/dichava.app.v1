@@ -876,9 +876,16 @@ function renderProfs(){
     if(ativo)acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','bloquear')">Bloquear</button>`);
     if(p.status!=='rejeitado')acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>`);
     if(p.tem_comprovante)acts.push(`<button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>`);
-    // Quem já tem acesso (testando ou ativo) → WhatsApp abre com o check-in de feedback.
-    const waTxt=(ativo||ehTrial(p))?('?text='+encodeURIComponent(profMsgCheckin(p))):'';
+    // Quem já tem acesso (testando ou ativo) → contato abre com o check-in de feedback.
+    const temAcesso=ativo||ehTrial(p);
+    const checkTxt=temAcesso?profMsgCheckin(p):'';
+    const waTxt=checkTxt?('?text='+encodeURIComponent(checkTxt)):'';
     const wa = p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+waTxt+'" target="_blank" rel="noopener">💬 WhatsApp</a>'):'';
+    // Todo profissional tem e-mail (é o login) → botão de e-mail sempre disponível,
+    // útil pra contatar quem não cadastrou telefone. Já vem com o check-in escrito.
+    const mailAssunto=temAcesso?'Como está sendo o painel pra você? 💚':'Rede Dichava 💚';
+    const mailBody=checkTxt?('&body='+encodeURIComponent(checkTxt.replace(/\*/g,''))):'';
+    const mail = p.email?('<a class="btn ghost sm" href="mailto:'+esc(p.email)+'?subject='+encodeURIComponent(mailAssunto)+mailBody+'">✉️ E-mail</a>'):'';
     return `<div class="pcard ${!ativo&&!expirado?'pend':''}">
       <div class="phead">
         <div class="pav">${initials(p.nome)}</div>
@@ -890,7 +897,7 @@ function renderProfs(){
         </div>
       </div>
       ${p.obs_admin?`<div class="obs">📝 ${esc(p.obs_admin)}</div>`:''}
-      <div class="pacts">${acts.join('')}${wa}</div>
+      <div class="pacts">${acts.join('')}${wa}${mail}</div>
     </div>`;
   }).join('');
 }
