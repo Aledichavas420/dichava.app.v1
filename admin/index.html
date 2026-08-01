@@ -586,15 +586,36 @@ function wlMsg(w){
     +'O *lançamento oficial será no dia 5 de agosto*, uma data muito especial para nós: a *Dichavando completa 8 anos*. Depois de todos esses anos produzindo conteúdo e construindo uma comunidade, esse aplicativo é o presente que queremos entregar para quem acompanha nosso trabalho — uma ferramenta pensada para fortalecer uma clínica mais ética, humana e alinhada à redução de danos.\n\n'
     +'Vai ser *muito bom ter você com a gente* nessa nova jornada. 💚';
 }
+// Reengajar quem entrou na lista de espera e não respondeu (status pendente)
+function wlMsgReengajar(w){
+  const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
+  return oi+' Aqui é o Alexandre, do dichava 🌱\n\n'
+    +'Você entrou na nossa lista de espera da rede de profissionais há um tempo e eu não quis deixar passar sem te dar um retorno de verdade.\n\n'
+    +'A gente está abrindo acesso aos poucos, com curadoria, pra montar uma rede realmente alinhada à redução de danos — e o seu perfil faz sentido aqui.\n\n'
+    +'Ainda tem interesse em participar? Se sim, te explico rapidinho como funciona e já te libero pra testar, sem compromisso. Se não for o momento, tudo bem também — é só me avisar 💚';
+}
+// Check-in com profissional que já está usando o painel (testando ou ativo)
+function profMsgCheckin(p){
+  const nm=wlFirst(p.nome); const oi = nm ? ('Oi, '+nm+'!') : 'Oi!';
+  return oi+' Tudo em paz? 🙌\n\n'
+    +'Faz um tempinho que você está com acesso ao painel e eu queria muito saber como está sendo pra você. Conseguiu dar uma explorada? Teve alguma dificuldade, algo que travou ou que você sentiu falta?\n\n'
+    +'Seu retorno agora vale ouro — é com base nele que a gente ajusta as coisas antes do lançamento oficial (dia *5 de agosto*). Pode ser bem sincero, viu? Crítica me ajuda mais que elogio 😄\n\n'
+    +'E se quiser uma mãozinha com qualquer parte (agenda, prontuário, perfil), é só me chamar por aqui. Abraço 💚';
+}
 function renderWaitlist(){
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
   if(!list.length){ $('#wl-list').innerHTML='<div class="empty">Nenhum cadastro '+(_wlFiltro==='todos'?'':'“'+(WL_ST[_wlFiltro]?WL_ST[_wlFiltro].l.toLowerCase():_wlFiltro)+'”')+' por aqui.</div>'; return; }
   $('#wl-list').innerHTML=list.map(w=>{
     const st=WL_ST[w.status||'pendente']||WL_ST.pendente;
-    const msgWa=encodeURIComponent(wlMsg(w));                    // com *negrito* do WhatsApp
-    const msgMail=encodeURIComponent(wlMsg(w).replace(/\*/g,'')); // sem asteriscos no e-mail
+    // Quem ainda está "pendente" (não respondeu) recebe a mensagem de reengajamento;
+    // quem já está em contato/liberado mantém o convite completo com os links demo.
+    const ehPend=(w.status||'pendente')==='pendente';
+    const txt=ehPend?wlMsgReengajar(w):wlMsg(w);
+    const assunto=ehPend?'Seu lugar na rede dichava ainda está guardado 🌱':'Seu acesso à Rede Dichava 💚';
+    const msgWa=encodeURIComponent(txt);                    // com *negrito* do WhatsApp
+    const msgMail=encodeURIComponent(txt.replace(/\*/g,'')); // sem asteriscos no e-mail
     const wa=w.whatsapp?('<a class="btn wa sm" href="https://wa.me/55'+String(w.whatsapp).replace(/\D/g,'')+'?text='+msgWa+'" target="_blank" rel="noopener" onclick="wlTocado(\''+w.id+'\')">💬 WhatsApp</a>'):'';
-    const mail=w.email?('<a class="btn ghost sm" href="mailto:'+esc(w.email)+'?subject='+encodeURIComponent('Seu acesso à Rede Dichava 💚')+'&body='+msgMail+'" onclick="wlTocado(\''+w.id+'\')">✉️ E-mail</a>'):'';
+    const mail=w.email?('<a class="btn ghost sm" href="mailto:'+esc(w.email)+'?subject='+encodeURIComponent(assunto)+'&body='+msgMail+'" onclick="wlTocado(\''+w.id+'\')">✉️ E-mail</a>'):'';
     const chips=[`<span class="chip ${st.c}">${st.l}</span>`];
     if(w.plano)chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
     if(w.cidade)chips.push('<span class="chip">'+esc(w.cidade)+'</span>');
@@ -855,7 +876,9 @@ function renderProfs(){
     if(ativo)acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','bloquear')">Bloquear</button>`);
     if(p.status!=='rejeitado')acts.push(`<button class="btn dg sm" onclick="acao('${p.id}','rejeitar')">Rejeitar</button>`);
     if(p.tem_comprovante)acts.push(`<button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>`);
-    const wa = p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
+    // Quem já tem acesso (testando ou ativo) → WhatsApp abre com o check-in de feedback.
+    const waTxt=(ativo||ehTrial(p))?('?text='+encodeURIComponent(profMsgCheckin(p))):'';
+    const wa = p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+waTxt+'" target="_blank" rel="noopener">💬 WhatsApp</a>'):'';
     return `<div class="pcard ${!ativo&&!expirado?'pend':''}">
       <div class="phead">
         <div class="pav">${initials(p.nome)}</div>
