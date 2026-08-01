@@ -94,7 +94,10 @@ var ALVO=new Date('2026-08-05T00:00:00-03:00').getTime();
 function tick(){
   var d=ALVO-Date.now();
   if(d<=0){ document.getElementById('cd').innerHTML='<div class="u" style="min-width:auto;padding:16px 22px"><div class="n">Chegou! 🎉</div></div>';
-    document.getElementById('when').innerHTML='<a href="/" class="btn btn-p" style="margin-top:10px">Abrir o app →</a>'; return; }
+    document.getElementById('when').innerHTML='<a href="/" class="btn btn-p" style="margin-top:10px">Abrir o app →</a>';
+    // lançou: abre o app sozinho depois de 2,5s (o botão fica de reserva)
+    if(!window._lanc){ window._lanc=1; setTimeout(function(){ location.replace('/'); }, 2500); }
+    return; }
   var s=Math.floor(d/1000), dd=Math.floor(s/86400), hh=Math.floor(s%86400/3600), mm=Math.floor(s%3600/60), ss=s%60;
   var z=function(n){return (n<10?'0':'')+n;};
   document.getElementById('cd-d').textContent=dd;
