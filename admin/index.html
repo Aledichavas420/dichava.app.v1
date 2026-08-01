@@ -198,7 +198,9 @@ a{color:var(--ve)}
     <div class="apane" id="ap-conteudo">
     <div class="sec">📣 Enviar comunicado</div>
     <div class="card" style="padding:16px">
-      <div style="font-size:13.5px;color:var(--txs);margin-bottom:10px">Inscritos na newsletter: <b id="nl-count">—</b></div>
+      <div style="font-size:13.5px;color:var(--txs);margin-bottom:4px">Inscritos na newsletter: <b id="nl-count">—</b></div>
+      <div id="nl-origem" style="font-size:12px;color:var(--txm);margin-bottom:10px"></div>
+      <div style="margin-bottom:8px"><button class="btn ghost sm" onclick="modeloLancamento()">🚀 Usar modelo de lançamento</button></div>
       <input id="cm-subject" placeholder="Assunto do e-mail" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
       <textarea id="cm-html" rows="4" placeholder="Mensagem (texto ou HTML simples)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;font-family:inherit"></textarea>
       <div class="pacts" style="margin-top:10px">
@@ -398,6 +400,28 @@ async function carregarNewsletterCount(){
   const el=$('#nl-count'); if(!el)return;
   try{ const {data,error}=await SB.rpc('admin_newsletter_count'); if(error)throw error; el.textContent=(data??0)+' inscrito(s)'; }
   catch(e){ el.textContent='— (rode o admin-extras-setup.sql)'; }
+  const ol=$('#nl-origem'); if(!ol)return;
+  try{
+    const {data,error}=await SB.rpc('admin_newsletter_por_origem'); if(error)throw error;
+    const nomes={landing:'site (landing)',breve:'tela de contagem (/breve)'};
+    ol.innerHTML=(data&&data.length)?('Por origem: '+data.map(o=>(nomes[o.origem]||o.origem)+': <b>'+o.n+'</b>').join(' · ')):'';
+  }catch(e){ ol.textContent=''; }
+}
+// Preenche o comunicado com o e-mail pronto de lançamento (pra revisar e enviar).
+function modeloLancamento(){
+  const P=t=>'<p style="margin:0 0 14px">'+t+'</p>';
+  const btn='<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px auto"><tr><td style="border-radius:12px;background:#2f7a4d"><a href="https://dichava.app" style="display:inline-block;padding:14px 32px;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px">Abrir o dichava.app</a></td></tr></table>';
+  const html=emailShell('Autocuidado, sem julgamento',
+    '<div style="font-size:21px;font-weight:800;color:#1f3d2b;margin-bottom:12px">Chegou o dia 🌱</div>'
+    +P('Depois de <b>8 anos</b> construindo a comunidade Dichavando, hoje a gente coloca no ar o presente que sonhamos pra você: o <b>dichava.app</b>.')
+    +P('Um app <b>gratuito</b> de autocuidado e redução de danos — pra repensar sua relação com o uso, no seu tempo, com privacidade e <b>sem julgamento</b>.')
+    +P('Dentro dele você encontra registro do dia a dia, conteúdo com base científica, um modo de apoio pra momentos difíceis e uma rede de profissionais alinhados à redução de danos.')
+    +btn
+    +P('Obrigado por caminhar com a gente até aqui. Isso é nosso. 💚')
+    +'<div style="font-size:13px;color:#8a9a86;margin-top:6px">— Alexandre e a equipe dichava</div>');
+  const s=$('#cm-subject'); if(s)s.value='Chegou: o dichava.app está no ar 🌱';
+  const t=$('#cm-html'); if(t)t.value=html;
+  const st=$('#cm-status'); if(st){ st.style.color='var(--txm)'; st.textContent='Modelo carregado. Revise e clique em "Enviar teste" antes de enviar pra todos.'; }
 }
 // ===== ENVIAR COMUNICADO (via Edge Function newsletter-enviar) =====
 async function enviarComunicado(teste){
