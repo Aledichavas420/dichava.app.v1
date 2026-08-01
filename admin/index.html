@@ -680,7 +680,8 @@ async function enviarLembreteLancamento(){
     const{data,error}=await SB.functions.invoke('admin-email',{body:{messages}});
     if(error){ throw new Error(await _fxErr(error)); }
     if(data&&data.erro)throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro));
-    toast('✓ '+((data&&data.enviados)??list.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s)'):''));
+    if(data&&data.falhas_emails&&data.falhas_emails.length)console.warn('Falharam:',data.falhas_emails);
+    toast('✓ '+((data&&data.enviados)??list.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s) (ver console)'):''));
   }catch(e){ toast('Erro: '+(e.message||''),1); }
 }
 async function moverQuemCriouConta(){
@@ -713,7 +714,8 @@ async function enviarCheckinTodosTeste(){
     const{data,error}=await SB.functions.invoke('admin-email',{body:{messages}});
     if(error){ throw new Error(await _fxErr(error)); }
     if(data&&data.erro)throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro));
-    toast('✓ '+((data&&data.enviados)??list.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s)'):''));
+    if(data&&data.falhas_emails&&data.falhas_emails.length)console.warn('Falharam:',data.falhas_emails);
+    toast('✓ '+((data&&data.enviados)??list.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s) (ver console)'):''));
   }catch(e){ toast('Erro: '+(e.message||''),1); }
 }
 function renderWaitlist(){
