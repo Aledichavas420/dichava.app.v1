@@ -544,6 +544,7 @@ body.has-demo-banner{padding-bottom:64px}
       <div style="margin-bottom:12px"><a href="#" onclick="event.preventDefault();gateShowLogin()" style="font-size:13.5px;color:#4a7856;font-weight:700;text-decoration:none">← Voltar ao login</a></div>
       <div class="field"><label>Nome completo</label><input id="s-nome" type="text" autocomplete="name" placeholder="Como você atende (ex: Dra. Ana Lima)"></div>
       <div class="field"><label>Registro profissional</label><input id="s-reg" type="text" autocomplete="off" placeholder="ex: CRP 06/1234, CRM, CRESS…"></div>
+      <div class="field"><label>WhatsApp / telefone</label><input id="s-tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="(00) 00000-0000"></div>
       <div class="field"><label>Plano desejado</label><select id="s-plano"></select></div>
       <div class="field"><label>E-mail</label><input id="s-email" type="email" autocomplete="off" placeholder="voce@email.com" onfocus="this.setAttribute('autocomplete','email')"></div>
       <div class="field"><label>Senha</label><div class="pw-wrap"><input id="s-pw" type="text" autocomplete="off" placeholder="Crie uma senha segura" style="-webkit-text-security:disc" onfocus="pwFocus(this,'new-password')" oninput="checarSenha(this.value)"><button type="button" class="pw-eye" aria-label="Mostrar senha" onclick="togPwClin('s-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
@@ -3143,7 +3144,7 @@ async function checarAcesso(){
     let {data:p,error}=await _SB.from('profissionais').select('ativo,acesso_ate,nome,plano,obs_admin').eq('id',AUTH.id).maybeSingle();
     if(error && /column .*(ativo|acesso_ate|plano)/i.test(error.message||'')) return {ok:true}; // SQL ainda não rodou
     if(!p){
-      try{ await _SB.from('profissionais').upsert({id:AUTH.id,nome:AUTH.nome,reg:AUTH.reg||null,plano:AUTH.plano||null,status:'pendente',ativo:false}); }catch(_){}
+      try{ await _SB.from('profissionais').upsert({id:AUTH.id,nome:AUTH.nome,reg:AUTH.reg||null,telefone:AUTH.telefone||null,plano:AUTH.plano||null,status:'pendente',ativo:false}); }catch(_){}
       return {ok:false, plano:AUTH.plano};
     }
     _meuPlano=p.plano||AUTH.plano||null;
@@ -3237,15 +3238,17 @@ async function sairECriarPro(){ try{ if(_SB) await _SB.auth.signOut(); }catch(e)
 async function gateSignup(){
   gateErr('');
   const nome=$('#s-nome').value.trim(), reg=$('#s-reg').value.trim(), email=$('#s-email').value.trim(), pw=$('#s-pw').value;
+  const tel=$('#s-tel').value.trim();
   const plano=($('#s-plano')&&$('#s-plano').value)||null;
   if(!nome){ gateErr('Informe seu nome.'); return; }
   if(!reg){ gateErr('Informe seu registro profissional.'); return; }
+  if((tel.replace(/\D/g,'')).length<10){ gateErr('Informe um WhatsApp/telefone válido com DDD.'); return; }
   if(!email||!/.+@.+\..+/.test(email)){ gateErr('Informe um e-mail válido.'); return; }
   if(!senhaValida(pw)){ gateErr('A senha precisa ter 8+ caracteres, com maiúscula, minúscula, número e símbolo.'); checarSenha(pw); return; }
   if(!_SB){ gateErr('Sem conexão com o servidor.'); return; }
   const btn=$('#s-btn'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Criando…';
   try{
-    const{data,error}=await _SB.auth.signUp({email,password:pw,options:{data:{nome,tipo:'pro',reg,plano},emailRedirectTo:'https://dichava.app/clinica/'}});
+    const{data,error}=await _SB.auth.signUp({email,password:pw,options:{data:{nome,tipo:'pro',reg,plano,telefone:tel},emailRedirectTo:'https://dichava.app/clinica/'}});
     if(error){
       const m=error.message||'';
       if(/already|registered|exist/i.test(m)) gateErr('Este e-mail já tem uma conta no dichava.app. Se você já usa como paciente, use OUTRO e-mail para a conta profissional — ou faça login.');
@@ -3297,7 +3300,7 @@ function sairDemo(){
 
 function metaFrom(user){
   const m=(user&&user.user_metadata)||{};
-  return {id:user.id,nome:m.nome||user.email||'Profissional',email:user.email||'',tipo:m.tipo||'user',reg:m.reg||'',plano:m.plano||null};
+  return {id:user.id,nome:m.nome||user.email||'Profissional',email:user.email||'',tipo:m.tipo||'user',reg:m.reg||'',plano:m.plano||null,telefone:m.telefone||''};
 }
 
 async function bootAuth(){
