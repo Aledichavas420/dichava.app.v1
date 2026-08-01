@@ -825,8 +825,8 @@ function renderComprovantes(){
   if(!list.length){ box.innerHTML='<div class="empty" style="padding:16px">Nenhum comprovante aguardando conferência 👍</div>'; return; }
   box.innerHTML=list.map(p=>{
     const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
-    return `<div class="pcard pend"><div class="phead"><div class="pav">${initials(p.nome)}</div>
-      <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')}</div>
+    return `<div class="pcard pend"><div class="phead" onclick="abrirDetalheProf('${p.id}')" style="cursor:pointer" title="Ver ficha completa"><div class="pav">${initials(p.nome)}</div>
+      <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')} <span style="color:var(--txs);font-weight:600;font-size:12px">· ver ficha ›</span></div>
       <div class="pmeta">${esc(p.email||'')}${p.plano?' · '+esc(planoNome(p.plano)):''}</div></div></div>
       <div class="pacts">
         <button class="btn ghost sm" onclick="verComprovante('${p.id}')">📎 Ver comprovante</button>
@@ -843,8 +843,8 @@ function renderReaprovar(){
   if(wrap)wrap.style.display='block';
   box.innerHTML=list.map(p=>{
     const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>'):'';
-    return `<div class="pcard pend"><div class="phead"><div class="pav">${initials(p.nome)}</div>
-      <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')}</div>
+    return `<div class="pcard pend"><div class="phead" onclick="abrirDetalheProf('${p.id}')" style="cursor:pointer" title="Ver ficha completa"><div class="pav">${initials(p.nome)}</div>
+      <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')} <span style="color:var(--txs);font-weight:600;font-size:12px">· ver ficha ›</span></div>
       <div class="pmeta">${esc(p.tipo_prof||'')}${p.cidade?' · '+esc(p.cidade):''}</div>
       <div class="chips"><span class="chip a">🔄 Editou o perfil — reaprovar</span></div></div></div>
       <div class="pacts">
@@ -941,10 +941,10 @@ function renderProfs(){
     // Envio direto pelo Resend (não abre o app de e-mail) — só pra quem já usa o painel.
     const checkinBtn = (temAcesso&&p.email)?('<button class="btn ghost sm" onclick="enviarCheckinEmail(\''+p.id+'\')">📧 Check-in</button>'):'';
     return `<div class="pcard ${!ativo&&!expirado?'pend':''}">
-      <div class="phead">
+      <div class="phead" onclick="abrirDetalheProf('${p.id}')" style="cursor:pointer" title="Ver ficha completa">
         <div class="pav">${initials(p.nome)}</div>
         <div style="flex:1;min-width:0">
-          <div class="pn">${esc(p.nome||'Sem nome')}</div>
+          <div class="pn">${esc(p.nome||'Sem nome')} <span style="color:var(--txs);font-weight:600;font-size:12px">· ver ficha ›</span></div>
           <div class="pmeta">${esc(p.tipo_prof||'Profissional')}${p.reg?' · '+esc(p.reg):''}${p.cidade?' · '+esc(p.cidade):''}</div>
           <div class="pmeta">${esc(p.email||'')}${p.telefone?' · '+esc(p.telefone):''}</div>
           <div class="chips">${chips.join('')}</div>
@@ -1047,6 +1047,47 @@ async function enviarBoasVindas(p,trial){
     if(data&&data.erro){ throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro)); }
     toast('✉️ E-mail de boas-vindas enviado');
   }catch(e){ toast('Liberado, mas o e-mail falhou: '+(e.message||''),1); }
+}
+// Ficha completa do profissional (curadoria). Busca a linha inteira (admin tem RLS).
+// Nunca mostra senha — senhas ficam no auth do Supabase, nem chegam ao cliente.
+async function abrirDetalheProf(id){
+  $('#modalRoot').innerHTML='<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal" style="max-width:560px;max-height:88vh;overflow:auto"><div style="text-align:center;padding:26px"><span class="spin"></span></div></div></div>';
+  const base=PROFS.find(x=>x.id===id)||{};
+  let p=base;
+  try{ const{data,error}=await SB.from('profissionais').select('*').eq('id',id).maybeSingle(); if(!error&&data)p=Object.assign({},base,data); }catch(e){}
+  const {ativo,expirado}=statusInfo(p);
+  const S=v=>esc(String(v));
+  const row=(l,v)=>(v!==undefined&&v!==null&&String(v).trim()!=='')?('<div style="display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line)"><div style="min-width:118px;color:var(--txs);font-size:12.5px">'+l+'</div><div style="flex:1;font-size:13.5px">'+S(v)+'</div></div>'):'';
+  const sec=t=>'<div style="font-weight:800;font-size:12px;color:var(--v);margin:16px 0 2px;text-transform:uppercase;letter-spacing:.6px">'+t+'</div>';
+  const lnk=v=>v?('<a href="'+(/^https?:/.test(v)?esc(v):'https://'+esc(v))+'" target="_blank" rel="noopener" style="color:var(--v);word-break:break-all">'+S(v)+'</a>'):'';
+  const lrow=(l,v)=>v?('<div style="display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line)"><div style="min-width:118px;color:var(--txs);font-size:12.5px">'+l+'</div><div style="flex:1;font-size:13.5px">'+lnk(v)+'</div></div>'):'';
+  const chips=[];
+  if(ativo)chips.push('<span class="chip v">● Ativo</span>'); else if(expirado)chips.push('<span class="chip e">Expirado</span>'); else chips.push('<span class="chip a">Aguardando liberação</span>');
+  if(p.status==='aprovado')chips.push('<span class="chip v">Perfil aprovado</span>'); else if(p.status==='rejeitado')chips.push('<span class="chip e">Rejeitado</span>'); else if(p.status==='reaprovar')chips.push('<span class="chip a">🔄 Reaprovar</span>'); else chips.push('<span class="chip a">Perfil pendente</span>');
+  if(ehTrial(p))chips.push('<span class="chip a">🎁 Teste</span>');
+  if(p.oculto_diretorio)chips.push('<span class="chip e">🙈 Oculto</span>');
+  const foto=p.foto?('<img src="'+esc(p.foto)+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;flex-shrink:0">'):('<div class="pav" style="width:60px;height:60px;flex-shrink:0">'+initials(p.nome)+'</div>');
+  const acts=[];
+  if(p.status==='reaprovar')acts.push('<button class="btn wv sm" onclick="acao(\''+p.id+'\',\'aprovar\')">✓ Aprovar edição</button>');
+  else if((p.status||'pendente')!=='aprovado')acts.push('<button class="btn wv sm" onclick="acao(\''+p.id+'\',\'aprovar\')">✓ Aprovar perfil</button>');
+  if(!ativo)acts.push('<button class="btn sm" onclick="abrirLiberar(\''+p.id+'\')">Liberar acesso</button>');
+  if(!ativo)acts.push('<button class="btn ghost sm" onclick="liberarTrial(\''+p.id+'\')">🎁 Teste 7 dias</button>');
+  acts.push('<button class="btn ghost sm" onclick="toggleOculto(\''+p.id+'\','+(p.oculto_diretorio?'true':'false')+')">'+(p.oculto_diretorio?'👁 Mostrar':'🙈 Ocultar')+'</button>');
+  if(ativo)acts.push('<button class="btn dg sm" onclick="acao(\''+p.id+'\',\'bloquear\')">Bloquear</button>');
+  if(p.status!=='rejeitado')acts.push('<button class="btn dg sm" onclick="acao(\''+p.id+'\',\'rejeitar\')">Rejeitar</button>');
+  const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">💬 WhatsApp</a>'):'';
+  const temLink=p.instagram||p.site||p.linkedin||p.link;
+  const html='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px"><h3 style="margin:0">Ficha do profissional</h3><button class="btn ghost sm" onclick="fecharModal()">✕</button></div>'
+    +'<div style="display:flex;gap:12px;align-items:center;margin:8px 0 4px">'+foto+'<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:17px">'+S(p.nome||'Sem nome')+'</div><div style="color:var(--txs);font-size:13px">'+S(p.tipo_prof||'Profissional')+'</div><div class="chips" style="margin-top:5px;display:flex;flex-wrap:wrap;gap:5px">'+chips.join('')+'</div></div></div>'
+    +sec('Registro & contato')+row('Registro', [p.reg,p.estado].filter(Boolean).join(' · '))+row('E-mail', p.email)+row('WhatsApp/telefone', p.telefone)+row('Cidade', p.cidade)
+    +sec('Formação')+row('Instituição', p.instituicao)+row('Ano de formação', p.ano_formacao)+row('Especialização', p.especializacao)
+    +sec('Atuação')+row('Especialidades', p.especialidades)+row('Modalidade', p.modalidade)+row('Públicos', p.publicos)+row('Idiomas', p.idiomas)+row('Valor', p.valor)+row('Duração', p.duracao)+row('Disponibilidade', p.disponibilidade)
+    +(p.bio?(sec('Bio')+'<div style="font-size:13.5px;line-height:1.6;padding:8px 0;white-space:pre-wrap">'+S(p.bio)+'</div>'):'')
+    +(temLink?(sec('Links')+lrow('Instagram',p.instagram)+lrow('Site',p.site)+lrow('LinkedIn',p.linkedin)+((!p.instagram&&!p.site&&!p.linkedin)?lrow('Link',p.link):'')):'')
+    +sec('Plano & acesso')+row('Plano', p.plano?planoNome(p.plano):'')+row('Liberado em', p.liberado_em?fmtData(p.liberado_em):'')+row('Acesso até', p.acesso_ate?fmtData(p.acesso_ate):'')+row('Avaliações', base.n_aval?((base.media_aval||'—')+' ★ ('+base.n_aval+')'):'')
+    +(base.obs_admin?(sec('Suas anotações')+'<div style="font-size:13px;padding:8px 0;white-space:pre-wrap;color:var(--txs)">'+S(base.obs_admin)+'</div>'):'')
+    +'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;border-top:1px solid var(--line);padding-top:14px">'+acts.join('')+wa+'</div>';
+  $('#modalRoot').innerHTML='<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal" style="max-width:560px;max-height:88vh;overflow:auto">'+html+'</div></div>';
 }
 // Oculta/mostra o profissional no diretório público (não mexe no acesso ao painel).
 async function toggleOculto(id,atual){
