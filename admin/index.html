@@ -172,6 +172,7 @@ a{color:var(--ve)}
     <div class="sec">Lista de espera <span id="wl-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
     <div id="wl-funnel" class="kpis" style="margin-bottom:10px"></div>
     <div class="filters" id="wl-filters"></div>
+    <div id="wl-bulk" style="margin:2px 0 10px;display:flex;flex-wrap:wrap;gap:8px"></div>
     <div class="plist" id="wl-list"><div class="spin"></div></div>
     </div>
 
@@ -628,6 +629,69 @@ function checkinHtml(nome){
     +P('Um abraço,<br><b>Alexandre</b> — dichava.app 💚'));
 }
 function _fxErr(error){ let det=''; try{ return error.context.json().then(b=>(b&&(b.erro||b.motivo))||error.message||'erro'); }catch(_){ } return Promise.resolve(error.message||'erro'); }
+// ===== LEMBRETE DE LANÇAMENTO (lista de espera "em contato" sem conta) =====
+const _LANC=new Date('2026-08-05T00:00:00-03:00');
+function diasPraLancamento(){ return Math.ceil((_LANC-new Date())/864e5); }
+// True se já existe conta de profissional com o mesmo e-mail (ou telefone) da pessoa da lista.
+function wlTemConta(w){
+  const em=(w.email||'').trim().toLowerCase();
+  const tel=(w.whatsapp||'').replace(/\D/g,'');
+  return (PROFS||[]).some(p=>{
+    const pe=(p.email||'').trim().toLowerCase();
+    const pt=(p.telefone||'').replace(/\D/g,'');
+    if(em&&pe&&pe===em) return true;
+    if(tel.length>=10&&pt.length>=10&&pt.slice(-11)===tel.slice(-11)) return true;
+    return false;
+  });
+}
+function wlLancAssunto(){ const d=diasPraLancamento(); return d>1?('Faltam '+d+' dias pro lançamento do dichava 🌱'):(d===1?'É amanhã o lançamento do dichava 🌱':(d===0?'É hoje: dichava.app no ar 🌱':'O dichava.app já está no ar 🌱')); }
+function wlMsgLancamento(w){
+  const oi=wlFirst(w.nome)?('Oi, '+wlFirst(w.nome)+'!'):'Oi!';
+  const d=diasPraLancamento();
+  const quando=d>1?('Faltam *'+d+' dias* pro lançamento'):(d===1?'É *amanhã* o lançamento':(d===0?'É *hoje* o lançamento':'O lançamento já começou'));
+  return oi+' Aqui é o Alexandre, do dichava 🌱\n\n'
+    +quando+' oficial do dichava.app — dia *5 de agosto*, quando a Dichavando completa *8 anos*.\n\n'
+    +'A gente já se falou por aqui e seu perfil combina demais com a rede. Falta só um passo: *criar sua conta no painel* pra você já entrar com a gente na largada.\n\n'
+    +'👉 https://dichava.app/clinica/?criar\n\n'
+    +'São *7 dias grátis* pra testar tudo, sem cadastrar cartão. Qualquer dúvida, é só me chamar por aqui. Bora? 💚';
+}
+function lembreteLancamentoHtml(nome){
+  const nm=wlFirst(nome); const oi=nm?('Oi, '+nm+'!'):'Oi!';
+  const d=diasPraLancamento();
+  const quando=d>1?('Faltam <b>'+d+' dias</b> pro lançamento'):(d===1?'É <b>amanhã</b> o lançamento':(d===0?'É <b>hoje</b> o lançamento':'O lançamento já começou'));
+  const P=t=>'<p style="margin:0 0 14px">'+t+'</p>';
+  const btn='<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px auto"><tr><td style="border-radius:12px;background:#2f7a4d"><a href="https://dichava.app/clinica/?criar" style="display:inline-block;padding:14px 30px;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px">Criar minha conta</a></td></tr></table>';
+  return emailShell('Rede de profissionais',
+    '<div style="font-size:20px;font-weight:800;color:#1f3d2b;margin-bottom:14px">'+oi+'</div>'
+    +P(quando+' oficial do <b>dichava.app</b> — dia <b>5 de agosto</b>, quando a Dichavando completa 8 anos.')
+    +P('A gente já se falou e seu perfil combina demais com a rede. Falta só um passo: criar sua conta no painel pra você já entrar com a gente na largada.')
+    +P('São <b>7 dias grátis</b> pra testar tudo, sem cadastrar cartão.')
+    +btn
+    +P('Qualquer dúvida, é só responder este e-mail. Um abraço,<br><b>Alexandre</b> — dichava.app 💚'));
+}
+async function enviarLembreteLancamento(){
+  const list=WL.filter(w=>(w.status||'pendente')==='contato' && w.email && !wlTemConta(w));
+  if(!list.length){toast('Ninguém "em contato" sem conta e com e-mail.',0);return;}
+  if(!confirm('Enviar o lembrete de lançamento por e-mail para '+list.length+' pessoa(s) da aba "Em contato" que ainda NÃO criaram conta?\n\nAs respostas caem no seu e-mail.'))return;
+  toast('Enviando '+list.length+' e-mails…');
+  try{
+    const assunto=wlLancAssunto();
+    const messages=list.map(w=>({to:w.email,subject:assunto,html:lembreteLancamentoHtml(w.nome)}));
+    const{data,error}=await SB.functions.invoke('admin-email',{body:{messages}});
+    if(error){ throw new Error(await _fxErr(error)); }
+    if(data&&data.erro)throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro));
+    toast('✓ '+((data&&data.enviados)??list.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s)'):''));
+  }catch(e){ toast('Erro: '+(e.message||''),1); }
+}
+async function moverQuemCriouConta(){
+  const alvo=WL.filter(w=>['contato','pendente'].includes(w.status||'pendente') && wlTemConta(w));
+  if(!alvo.length){toast('Ninguém em contato/pendente já com conta criada 👍',0);return;}
+  if(!confirm(alvo.length+' pessoa(s) da lista já criaram conta. Mover para "Liberados"?'))return;
+  let ok=0;
+  for(const w of alvo){ try{ const{error}=await SB.rpc('admin_waitlist_status',{p_id:w.id,p_status:'liberado'}); if(!error){w.status='liberado';ok++;} }catch(e){} }
+  renderWlFiltros(); renderWaitlist(); renderWlFunnel();
+  toast('✓ '+ok+' movido(s) para Liberados');
+}
 async function enviarCheckinEmail(id){
   const p=PROFS.find(x=>x.id===id); if(!p||!p.email){toast('Este profissional não tem e-mail.',1);return;}
   if(!confirm('Enviar o e-mail de check-in para '+(p.nome||'este profissional')+'?\n\n'+p.email+'\n\nAs respostas caem no seu e-mail.'))return;
@@ -653,20 +717,30 @@ async function enviarCheckinTodosTeste(){
   }catch(e){ toast('Erro: '+(e.message||''),1); }
 }
 function renderWaitlist(){
+  // barra de ações em massa
+  const semConta=WL.filter(w=>(w.status||'pendente')==='contato'&&w.email&&!wlTemConta(w)).length;
+  const comConta=WL.filter(w=>['contato','pendente'].includes(w.status||'pendente')&&wlTemConta(w)).length;
+  const wb=$('#wl-bulk'); if(wb){ let b=''; if(comConta)b+='<button class="btn ghost sm" onclick="moverQuemCriouConta()">🔎 Já criaram conta → Liberados ('+comConta+')</button>'; if(semConta)b+='<button class="btn ghost sm" onclick="enviarLembreteLancamento()">📧 Lembrete de lançamento (em contato, sem conta) ('+semConta+')</button>'; wb.innerHTML=b; }
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
   if(!list.length){ $('#wl-list').innerHTML='<div class="empty">Nenhum cadastro '+(_wlFiltro==='todos'?'':'“'+(WL_ST[_wlFiltro]?WL_ST[_wlFiltro].l.toLowerCase():_wlFiltro)+'”')+' por aqui.</div>'; return; }
   $('#wl-list').innerHTML=list.map(w=>{
     const st=WL_ST[w.status||'pendente']||WL_ST.pendente;
-    // Quem ainda está "pendente" (não respondeu) recebe a mensagem de reengajamento;
-    // quem já está em contato/liberado mantém o convite completo com os links demo.
-    const ehPend=(w.status||'pendente')==='pendente';
-    const txt=ehPend?wlMsgReengajar(w):wlMsg(w);
-    const assunto=ehPend?'Seu lugar na rede dichava ainda está guardado 🌱':'Seu acesso à Rede Dichava 💚';
+    const stw=w.status||'pendente';
+    const temConta=wlTemConta(w);
+    // Mensagem certa por situação:
+    //  • pendente (não respondeu) → reengajamento
+    //  • em contato e ainda SEM conta → lembrete de lançamento (criar conta)
+    //  • demais → convite completo com links de demonstração
+    let txt, assunto;
+    if(stw==='pendente'){ txt=wlMsgReengajar(w); assunto='Seu lugar na rede dichava ainda está guardado 🌱'; }
+    else if(stw==='contato' && !temConta){ txt=wlMsgLancamento(w); assunto=wlLancAssunto(); }
+    else { txt=wlMsg(w); assunto='Seu acesso à Rede Dichava 💚'; }
     const msgWa=encodeURIComponent(txt);                    // com *negrito* do WhatsApp
     const msgMail=encodeURIComponent(txt.replace(/\*/g,'')); // sem asteriscos no e-mail
     const wa=w.whatsapp?('<a class="btn wa sm" href="https://wa.me/55'+String(w.whatsapp).replace(/\D/g,'')+'?text='+msgWa+'" target="_blank" rel="noopener" onclick="wlTocado(\''+w.id+'\')">💬 WhatsApp</a>'):'';
     const mail=w.email?('<a class="btn ghost sm" href="mailto:'+esc(w.email)+'?subject='+encodeURIComponent(assunto)+'&body='+msgMail+'" onclick="wlTocado(\''+w.id+'\')">✉️ E-mail</a>'):'';
     const chips=[`<span class="chip ${st.c}">${st.l}</span>`];
+    if(temConta)chips.push('<span class="chip v">✅ já criou conta</span>');
     if(w.plano)chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
     if(w.cidade)chips.push('<span class="chip">'+esc(w.cidade)+'</span>');
     if(w.atendimento)chips.push('<span class="chip">'+esc(w.atendimento)+'</span>');
