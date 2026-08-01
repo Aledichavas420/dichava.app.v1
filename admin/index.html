@@ -670,9 +670,10 @@ function lembreteLancamentoHtml(nome){
     +P('Qualquer dúvida, é só responder este e-mail. Um abraço,<br><b>Alexandre</b> — dichava.app 💚'));
 }
 async function enviarLembreteLancamento(){
-  const list=WL.filter(w=>(w.status||'pendente')==='contato' && w.email && !wlTemConta(w));
-  if(!list.length){toast('Ninguém "em contato" sem conta e com e-mail.',0);return;}
-  if(!confirm('Enviar o lembrete de lançamento por e-mail para '+list.length+' pessoa(s) da aba "Em contato" que ainda NÃO criaram conta?\n\nAs respostas caem no seu e-mail.'))return;
+  // só quem está em contato, sem conta e que AINDA NÃO recebeu o lembrete
+  const list=WL.filter(w=>(w.status||'pendente')==='contato' && w.email && !wlTemConta(w) && !w.lembrete_em);
+  if(!list.length){toast('Ninguém pendente de lembrete 👍 (todos já receberam ou já criaram conta).',0);return;}
+  if(!confirm('Enviar o lembrete de lançamento por e-mail para '+list.length+' pessoa(s) que ainda NÃO receberam?\n\nAs respostas caem no seu e-mail.'))return;
   toast('Enviando '+list.length+' e-mails…');
   try{
     const assunto=wlLancAssunto();
@@ -680,8 +681,13 @@ async function enviarLembreteLancamento(){
     const{data,error}=await SB.functions.invoke('admin-email',{body:{messages}});
     if(error){ throw new Error(await _fxErr(error)); }
     if(data&&data.erro)throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro));
-    if(data&&data.falhas_emails&&data.falhas_emails.length)console.warn('Falharam:',data.falhas_emails);
-    toast('✓ '+((data&&data.enviados)??list.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s) (ver console)'):''));
+    const falhou=(data&&data.falhas_emails)||[];
+    if(falhou.length)console.warn('Falharam:',falhou);
+    // marca como "lembrete enviado" só quem NÃO falhou (assim reenviar pega só quem faltou)
+    const okList=list.filter(w=>!falhou.includes(w.email));
+    if(okList.length){ try{ await SB.rpc('admin_waitlist_lembrete',{p_ids:okList.map(w=>w.id),p_marcar:true}); const agora=new Date().toISOString(); okList.forEach(w=>w.lembrete_em=agora); }catch(e){ console.warn('Não marquei o lembrete (rodou o waitlist-lembrete-setup.sql?):',e.message||e); } }
+    renderWlFiltros(); renderWaitlist(); renderWlFunnel();
+    toast('✓ '+((data&&data.enviados)??okList.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s) (ver console)'):''));
   }catch(e){ toast('Erro: '+(e.message||''),1); }
 }
 async function moverQuemCriouConta(){
@@ -720,7 +726,7 @@ async function enviarCheckinTodosTeste(){
 }
 function renderWaitlist(){
   // barra de ações em massa
-  const semConta=WL.filter(w=>(w.status||'pendente')==='contato'&&w.email&&!wlTemConta(w)).length;
+  const semConta=WL.filter(w=>(w.status||'pendente')==='contato'&&w.email&&!wlTemConta(w)&&!w.lembrete_em).length;
   const comConta=WL.filter(w=>['contato','pendente'].includes(w.status||'pendente')&&wlTemConta(w)).length;
   const wb=$('#wl-bulk'); if(wb){ let b=''; if(comConta)b+='<button class="btn ghost sm" onclick="moverQuemCriouConta()">🔎 Já criaram conta → Liberados ('+comConta+')</button>'; if(semConta)b+='<button class="btn ghost sm" onclick="enviarLembreteLancamento()">📧 Lembrete de lançamento (em contato, sem conta) ('+semConta+')</button>'; wb.innerHTML=b; }
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
@@ -743,6 +749,7 @@ function renderWaitlist(){
     const mail=w.email?('<a class="btn ghost sm" href="mailto:'+esc(w.email)+'?subject='+encodeURIComponent(assunto)+'&body='+msgMail+'" onclick="wlTocado(\''+w.id+'\')">✉️ E-mail</a>'):'';
     const chips=[`<span class="chip ${st.c}">${st.l}</span>`];
     if(temConta)chips.push('<span class="chip v">✅ já criou conta</span>');
+    if(w.lembrete_em)chips.push('<span class="chip b">📧 lembrete '+fmtData(w.lembrete_em)+'</span>');
     if(w.plano)chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
     if(w.cidade)chips.push('<span class="chip">'+esc(w.cidade)+'</span>');
     if(w.atendimento)chips.push('<span class="chip">'+esc(w.atendimento)+'</span>');
