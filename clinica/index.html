@@ -710,10 +710,10 @@ let AUTH=null;     // {id,nome,email,reg} do profissional logado
 let _DEMO=false;   // modo demonstração: painel completo com dados fictícios, sem conta
 let CLINICA=null;  // {id,nome,codigo,papel,dono_id} — clínica ativa
 let MEMBROS=[];    // membros da clínica
-function emptyDB(){ return {config:{clinica:'Minha Clínica',profissional:'',especialidade:''},pacientes:[],agendamentos:[],prontuarios:[],financeiro:[],documentos:[],avaliacoes:[]}; }
+function emptyDB(){ return {config:{clinica:'Minha Clínica',profissional:'',especialidade:''},pacientes:[],agendamentos:[],prontuarios:[],financeiro:[],documentos:[],avaliacoes:[],lixeira:[],auditoria:[]}; }
 function normalizeDB(d){
   DB = (d && typeof d==='object') ? d : {};
-  DB.pacientes ||= []; DB.agendamentos ||= []; DB.prontuarios ||= []; DB.financeiro ||= []; DB.documentos ||= []; DB.avaliacoes ||= [];
+  DB.pacientes ||= []; DB.agendamentos ||= []; DB.prontuarios ||= []; DB.financeiro ||= []; DB.documentos ||= []; DB.avaliacoes ||= []; DB.lixeira ||= []; DB.auditoria ||= [];
   DB.config ||= {clinica:'Minha Clínica',profissional:'',especialidade:''};
   if(CLINICA && CLINICA.nome) DB.config.clinica=CLINICA.nome;
 }
@@ -1217,8 +1217,10 @@ function viewPacientes(){
     </tr>`;
   }).join('');
 
+  const nLix=(DB.lixeira||[]).length;
   return `<div class="toolbar">
       <div class="search"><span class="si">⌕</span><input placeholder="Buscar paciente..." value="${esc(filtroPaciente)}" oninput="filtroPaciente=this.value;debouncedPac()"></div>
+      ${nLix?`<button class="btn ghost" onclick="abrirLixeira()">🗑️ Lixeira (${nLix})</button>`:''}
       <button class="btn" onclick="formPaciente()">＋ Paciente</button>
     </div>
     ${list.length?`<div class="card"><div class="tbl-wrap"><table>
@@ -2238,12 +2240,69 @@ function savePaciente(id){
     emergNome:$('#f-emnome').value.trim(),emergTel:$('#f-emtel').value.trim(),emergParen:$('#f-empar').value.trim(),
     valorSessao:$('#f-valorsess').value!==''?(+$('#f-valorsess').value||0):'',cobranca:$('#f-cobranca').value,formaPagamento:$('#f-formapg').value,frequencia:$('#f-freq').value,
     tags:$('#f-tags').value.split(',').map(s=>s.trim()).filter(Boolean)};
-  if(id){ Object.assign(pac(id),data); } else { DB.pacientes.push({id:uid(),...data,criadoEm:now()}); }
+  if(id){ Object.assign(pac(id),data); logAudit('paciente_editado','Paciente: '+nome); } else { DB.pacientes.push({id:uid(),...data,criadoEm:now()}); logAudit('paciente_criado','Paciente: '+nome); }
   save(); closeModal(); toast('Paciente salvo'); render();
 }
+// Registro de auditoria (quem alterou o quê e quando) — guardado no próprio DB da clínica.
+function logAudit(acao,detalhe){
+  try{
+    DB.auditoria=DB.auditoria||[];
+    const quem=(AUTH&&(AUTH.nome||AUTH.email))||'—';
+    DB.auditoria.push({ts:new Date().toISOString(),quem,acao,detalhe:detalhe||''});
+    if(DB.auditoria.length>500) DB.auditoria=DB.auditoria.slice(-500);
+  }catch(e){}
+}
+// SOFT DELETE: em vez de apagar, move o paciente pra lixeira (recuperável).
 function delPaciente(id){
-  if(!confirm('Excluir este paciente? Agendamentos e prontuários dele NÃO serão apagados, mas ficarão sem vínculo.')) return;
-  DB.pacientes=DB.pacientes.filter(p=>p.id!==id); save(); closeModal(); if(prontSelPaciente===id)prontSelPaciente=null; toast('Paciente excluído'); render();
+  const p=pac(id); if(!p)return;
+  if(!confirm('Mover "'+(p.nome||'este paciente')+'" para a lixeira?\n\nEle sai da lista, mas continua recuperável por lá. Agendamentos e prontuários não são apagados.')) return;
+  p.arquivadoEm=new Date().toISOString();
+  DB.lixeira=DB.lixeira||[]; DB.lixeira.push(p);
+  DB.pacientes=DB.pacientes.filter(x=>x.id!==id);
+  logAudit('paciente_arquivado','Paciente: '+(p.nome||id));
+  save(); closeModal(); if(prontSelPaciente===id)prontSelPaciente=null; toast('Movido para a lixeira'); render();
+}
+function abrirLixeira(){
+  const lix=(DB.lixeira||[]).slice().sort((a,b)=>String(b.arquivadoEm||'').localeCompare(String(a.arquivadoEm||'')));
+  const linhas=lix.length?lix.map(p=>`<div class="pcard" style="display:flex;align-items:center;gap:10px;padding:11px 12px">
+      <div class="avatar">${initials(p.nome)}</div>
+      <div style="flex:1;min-width:0"><b>${esc(p.nome||'Sem nome')}</b><div style="font-size:12px;color:var(--txs)">${esc(p.telefone||'sem telefone')}${p.arquivadoEm?' · na lixeira desde '+fmtDate(p.arquivadoEm.slice(0,10)):''}</div></div>
+      <button class="btn ghost sm" onclick="restaurarPaciente('${p.id}')">↩︎ Restaurar</button>
+      <button class="btn danger ghost sm" onclick="excluirDefinitivo('${p.id}')">Excluir</button>
+    </div>`).join(''):'<div class="empty" style="padding:20px">A lixeira está vazia 🌱</div>';
+  openModal(`<div class="modal"><div class="modal-head"><h3>🗑️ Lixeira de pacientes</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="font-size:12.5px;color:var(--txs);margin-bottom:10px">Pacientes movidos pra cá saem das listas mas continuam recuperáveis. "Excluir" apaga de vez.</div>
+      ${linhas}
+      <div style="margin-top:12px;text-align:center"><a href="#" onclick="event.preventDefault();abrirAuditoria()" style="font-size:13px;color:var(--v);font-weight:700;text-decoration:none">Ver histórico de alterações →</a></div>
+    </div></div>`);
+}
+function restaurarPaciente(id){
+  const i=(DB.lixeira||[]).findIndex(x=>x.id===id); if(i<0)return;
+  const p=DB.lixeira[i]; delete p.arquivadoEm;
+  DB.lixeira.splice(i,1); DB.pacientes.push(p);
+  logAudit('paciente_restaurado','Paciente: '+(p.nome||id));
+  save(); toast('Paciente restaurado'); render(); abrirLixeira();
+}
+function excluirDefinitivo(id){
+  const p=(DB.lixeira||[]).find(x=>x.id===id); if(!p)return;
+  if(!confirm('Excluir DEFINITIVAMENTE "'+(p.nome||'este paciente')+'"?\n\nEssa ação NÃO tem volta. Os prontuários e agendamentos ligados a ele ficarão sem vínculo.')) return;
+  DB.lixeira=DB.lixeira.filter(x=>x.id!==id);
+  logAudit('paciente_excluido_definitivo','Paciente: '+(p.nome||id));
+  save(); toast('Excluído definitivamente'); abrirLixeira();
+}
+function abrirAuditoria(){
+  const AC={paciente_criado:'✚ Paciente criado',paciente_editado:'✎ Paciente editado',paciente_arquivado:'🗑️ Movido pra lixeira',paciente_restaurado:'↩︎ Restaurado',paciente_excluido_definitivo:'⨯ Excluído definitivo'};
+  const log=(DB.auditoria||[]).slice().reverse();
+  const linhas=log.length?log.map(a=>{
+    const d=new Date(a.ts); const quando=isNaN(d)?a.ts:d.toLocaleString('pt-BR');
+    return `<div style="padding:9px 0;border-top:1px solid var(--line)"><div style="font-size:13.5px"><b>${esc(AC[a.acao]||a.acao)}</b></div><div style="font-size:12px;color:var(--txs)">${esc(a.detalhe||'')}</div><div style="font-size:11px;color:var(--txm)">${esc(a.quem||'—')} · ${esc(quando)}</div></div>`;
+  }).join(''):'<div class="empty" style="padding:20px">Sem registros ainda.</div>';
+  openModal(`<div class="modal"><div class="modal-head"><h3>📋 Histórico de alterações</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" style="max-height:70vh;overflow:auto">
+      <div style="font-size:12.5px;color:var(--txs);margin-bottom:4px">Últimas alterações em pacientes (quem, o quê e quando).</div>
+      ${linhas}
+    </div></div>`);
 }
 function openPaciente(id){
   const p=pac(id);
