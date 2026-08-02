@@ -1,14 +1,33 @@
 # Dependências
 node_modules/
+
 # Ambiente / segredos (NUNCA commitar)
 .env
 .env.*
 *.key
 *.pem
 secrets.*
+
+# Dados de PACIENTES / clínicos — NUNCA commitar (dado sensível de saúde)
+# Exportações do painel, importações de prontuário, backups do app.
+*.csv
+prontuario*.*
+pacientes*.*
+backup*.json
+*-backup.json
+export*.json
+dados-clinica*.json
+
+# Supabase CLI (arquivos locais)
+.branches/
+.supabase/
+supabase/.temp/
+
 # Sistema
 .DS_Store
 Thumbs.db
+
 # Temp
 *.log
 tmp/
+scratchpad/
