@@ -115,7 +115,7 @@ if(PREVIEW){
   (async function(){
     if(!CODIGO||!SB){fail();return;}
     try{
-      const{data:profs}=await SB.from('profissionais').select('id,nome,tipo_prof,reg,bio,foto,link,telefone,capa,agenda_config,bio_links,bio_config').eq('agenda_codigo',CODIGO).eq('status','aprovado');
+      const{data:profs}=await SB.from('profissionais_pub').select('id,nome,tipo_prof,reg,bio,foto,link,telefone,capa,agenda_config,bio_links,bio_config').eq('agenda_codigo',CODIGO).eq('status','aprovado');
       const p=(profs&&profs[0]); if(!p){fail();return;}
       let avg=0,n=0; try{const{data:av}=await SB.from('avaliacoes_prof').select('nota').eq('prof_id',p.id);if(av&&av.length){n=av.length;avg=av.reduce((s,a)=>s+a.nota,0)/n;}}catch(e){}
       let cfg=p.bio_config||{}; if(!cfg.fundo&&p.capa)cfg.fundo={tipo:'preset',v:p.capa};

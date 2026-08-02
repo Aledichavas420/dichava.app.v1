@@ -81,7 +81,7 @@ function gerarSlots(cfg){
 (async function(){
   if(!CODIGO||!SB){render(null);return;}
   try{
-    const{data:profs}=await SB.from('profissionais').select('id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,foto,link,capa,agenda_config').eq('agenda_codigo',CODIGO).eq('status','aprovado');
+    const{data:profs}=await SB.from('profissionais_pub').select('id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,foto,link,capa,agenda_config').eq('agenda_codigo',CODIGO).eq('status','aprovado');
     PROF=(profs&&profs[0])||null;
     if(PROF){
       DIAS=gerarSlots(PROF.agenda_config);

@@ -6751,7 +6751,7 @@ async function renderProfs(){
   const c=document.getElementById('pf-list');
   c.innerHTML='<div style="text-align:center;padding:40px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
   let profs=[];
-  if(_SB){try{const q=_SB.from('profissionais').select('*').eq('status','aprovado');const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);profs=data||[];}catch(e){profs=[];}}
+  if(_SB){try{const q=_SB.from('profissionais_pub').select('*').eq('status','aprovado');const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);profs=data||[];}catch(e){profs=[];}}
   profs.forEach(p=>{_profsById[p.id]=p; if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random();});
   // médias de avaliação (1 query pra todos)
   let avMap={};
@@ -7281,7 +7281,7 @@ async function renderMinhasConversas(){
     const convs=data||[];
     // busca tipo/foto dos profissionais (1 query) p/ enriquecer os cards
     let profMap={};
-    if(convs.length){try{const ids=[...new Set(convs.map(c=>c.prof_id).filter(Boolean))];if(ids.length){const{data:ps}=await _SB.from('profissionais').select('id,tipo_prof,foto').in('id',ids);(ps||[]).forEach(p=>{profMap[p.id]=p;});}}catch(e){}}
+    if(convs.length){try{const ids=[...new Set(convs.map(c=>c.prof_id).filter(Boolean))];if(ids.length){const{data:ps}=await _SB.from('profissionais_pub').select('id,tipo_prof,foto').in('id',ids);(ps||[]).forEach(p=>{profMap[p.id]=p;});}}catch(e){}}
     const convsHTML=convs.length
       ? '<div class="pd-sec" style="margin:16px 2px 8px">Conversas</div>'+(()=>{let nu=0;const h=convs.map(c=>{const nova=convNaoLida(c,false);if(nova)nu++;const p=profMap[c.prof_id]||{};const av=p.foto?`<img src="${p.foto}" alt="">`:ini2(c.prof_nome||'?');return `<div class="conv-item${nova?' nova':''}" onclick='abrirChatUser(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
         <div class="av">${av}</div>
@@ -7327,7 +7327,7 @@ async function confirmarPresenca(id){
 }
 async function abrirChatUser(c){
   let tel='',info='';
-  try{const{data:p}=await _SB.from('profissionais').select('telefone,tipo_prof').eq('id',c.prof_id).maybeSingle();if(p){tel=p.telefone||'';info=p.tipo_prof||'';}}catch(e){}
+  try{const{data:p}=await _SB.from('profissionais_pub').select('telefone,tipo_prof').eq('id',c.prof_id).maybeSingle();if(p){tel=p.telefone||'';info=p.tipo_prof||'';}}catch(e){}
   abrirChat(c,false,c.prof_nome||'Profissional',tel,'vprofs',info,'');
 }
 function abrirConversasUser(){ abrirProfs(); setTimeout(()=>{try{pfTab('convs');}catch(e){}},60); }
