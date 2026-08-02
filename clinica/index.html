@@ -784,6 +784,8 @@ let route='dash';
 let agendaDay=todayISO();
 let agendaView='dia';
 let filtroPaciente='';
+let _pacStatus='todos';
+function setPacStatus(s){ _pacStatus=s; render(); }
 let prontSelPaciente=null;
 
 function go(r){
@@ -1009,7 +1011,7 @@ function viewDash(){
   const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&f.data.startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
   const saidasMes=DB.financeiro.filter(f=>f.tipo==='saida'&&f.data.startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
   const aReceber=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago).reduce((s,a)=>s+ +a.valor,0);
-  const ativos=DB.pacientes.length;
+  const ativos=DB.pacientes.filter(p=>(p.status||'ativo')!=='inativo').length;
 
   let kpis=`<div class="grid kpis">
     <div class="card kpi"><div class="ic-bg">◷</div><div class="lbl">Consultas hoje</div><div class="val">${hoje.length}</div><div class="dl">${hoje.filter(a=>a.status==='atendido').length} atendida(s)</div></div>
@@ -1203,19 +1205,27 @@ function shiftDay(n){ agendaDay=addDaysISO(agendaDay,n); render(); }
 /* =============== PACIENTES =============== */
 function viewPacientes(){
   const q=filtroPaciente.toLowerCase();
-  const list=DB.pacientes.filter(p=>!q||p.nome.toLowerCase().includes(q)||(p.telefone||'').includes(q)||(p.email||'').toLowerCase().includes(q))
+  const ehInativo=p=>(p.status||'ativo')==='inativo';
+  const nAtivos=DB.pacientes.filter(p=>!ehInativo(p)).length;
+  const nInativos=DB.pacientes.filter(ehInativo).length;
+  const list=DB.pacientes
+    .filter(p=>_pacStatus==='todos'?true:(_pacStatus==='inativo'?ehInativo(p):!ehInativo(p)))
+    .filter(p=>!q||p.nome.toLowerCase().includes(q)||(p.telefone||'').includes(q)||(p.email||'').toLowerCase().includes(q))
     .sort((a,b)=>a.nome.localeCompare(b.nome));
   let rows=list.map(p=>{
     const ultima=DB.agendamentos.filter(a=>a.pacienteId===p.id&&a.status==='atendido').sort((a,b)=>b.data.localeCompare(a.data))[0];
     const prox=DB.agendamentos.filter(a=>a.pacienteId===p.id&&a.data>=todayISO()&&a.status!=='cancelado').sort((a,b)=>a.data.localeCompare(b.data))[0];
     const a=idade(p.nascimento);
-    return `<tr onclick="openPaciente('${p.id}')" style="cursor:pointer">
+    const sit=ehInativo(p)?'<span class="chip g">Inativo</span>':'<span class="chip v">● Ativo</span>';
+    return `<tr onclick="openPaciente('${p.id}')" style="cursor:pointer${ehInativo(p)?';opacity:.62':''}">
       <td><div class="cell-user"><div class="avatar">${initials(p.nome)}</div><div><b>${esc(p.nome)}</b><small>${a!=null?a+' anos · ':''}${esc(p.telefone||'sem telefone')}</small></div></div></td>
       <td>${ultima?fmtDate(ultima.data):'—'}</td>
       <td>${prox?`<span class="chip s">${fmtDate(prox.data)} ${prox.hora}</span>`:'<span class="chip g">—</span>'}</td>
-      <td style="text-align:right">${(p.tags||[]).map(t=>`<span class="chip v">${esc(t)}</span>`).join(' ')}</td>
+      <td style="text-align:right">${sit} ${(p.tags||[]).map(t=>`<span class="chip v">${esc(t)}</span>`).join(' ')}</td>
     </tr>`;
   }).join('');
+  const chip=(k,l)=>`<button class="btn ${_pacStatus===k?'':'ghost'} sm" onclick="setPacStatus('${k}')">${l}</button>`;
+  const filtros=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">${chip('todos','Todos ('+(nAtivos+nInativos)+')')}${chip('ativo','● Ativos ('+nAtivos+')')}${chip('inativo','Inativos ('+nInativos+')')}</div>`;
 
   const nLix=(DB.lixeira||[]).length;
   return `<div class="toolbar">
@@ -1223,6 +1233,7 @@ function viewPacientes(){
       ${nLix?`<button class="btn ghost" onclick="abrirLixeira()">🗑️ Lixeira (${nLix})</button>`:''}
       <button class="btn" onclick="formPaciente()">＋ Paciente</button>
     </div>
+    ${filtros}
     ${list.length?`<div class="card"><div class="tbl-wrap"><table>
       <thead><tr><th>Paciente</th><th>Última consulta</th><th>Próxima</th><th style="text-align:right">Tags</th></tr></thead>
       <tbody>${rows}</tbody></table></div></div>`
@@ -2209,6 +2220,10 @@ function formPaciente(id){
         <div class="field"><label>Parentesco/vínculo</label><input id="f-empar" value="${esc(p.emergParen||'')}" placeholder="Ex.: mãe, cônjuge"></div>
       </div>
       <div class="sec-title" style="font-size:13px;margin:8px 0 6px">Atendimento e financeiro</div>
+      <div class="field"><label>Situação</label><select id="f-status">
+        <option value="ativo" ${(p.status||'ativo')!=='inativo'?'selected':''}>● Ativo (em acompanhamento)</option>
+        <option value="inativo" ${(p.status||'ativo')==='inativo'?'selected':''}>Inativo (fora de acompanhamento)</option>
+      </select></div>
       <div class="row2">
         <div class="field"><label>Frequência</label><select id="f-freq">
           ${[['','—'],['semanal','Semanal'],['quinzenal','Quinzenal'],['mensal','Mensal'],['avulsa','Avulsa / sob demanda']].map(([k,v])=>`<option value="${k}" ${k===(p.frequencia||'')?'selected':''}>${v}</option>`).join('')}
@@ -2239,6 +2254,7 @@ function savePaciente(id){
     cpf:$('#f-cpf').value.trim(),endereco:$('#f-end').value.trim(),obs:$('#f-obs').value.trim(),
     emergNome:$('#f-emnome').value.trim(),emergTel:$('#f-emtel').value.trim(),emergParen:$('#f-empar').value.trim(),
     valorSessao:$('#f-valorsess').value!==''?(+$('#f-valorsess').value||0):'',cobranca:$('#f-cobranca').value,formaPagamento:$('#f-formapg').value,frequencia:$('#f-freq').value,
+    status:($('#f-status')&&$('#f-status').value)||'ativo',
     tags:$('#f-tags').value.split(',').map(s=>s.trim()).filter(Boolean)};
   if(id){ Object.assign(pac(id),data); logAudit('paciente_editado','Paciente: '+nome); } else { DB.pacientes.push({id:uid(),...data,criadoEm:now()}); logAudit('paciente_criado','Paciente: '+nome); }
   save(); closeModal(); toast('Paciente salvo'); render();
@@ -2292,7 +2308,7 @@ function excluirDefinitivo(id){
   save(); toast('Excluído definitivamente'); abrirLixeira();
 }
 function abrirAuditoria(){
-  const AC={paciente_criado:'✚ Paciente criado',paciente_editado:'✎ Paciente editado',paciente_arquivado:'🗑️ Movido pra lixeira',paciente_restaurado:'↩︎ Restaurado',paciente_excluido_definitivo:'⨯ Excluído definitivo'};
+  const AC={paciente_criado:'✚ Paciente criado',paciente_editado:'✎ Paciente editado',paciente_arquivado:'🗑️ Movido pra lixeira',paciente_restaurado:'↩︎ Restaurado',paciente_excluido_definitivo:'⨯ Excluído definitivo',paciente_inativado:'● Marcado inativo',paciente_reativado:'● Reativado'};
   const log=(DB.auditoria||[]).slice().reverse();
   const linhas=log.length?log.map(a=>{
     const d=new Date(a.ts); const quando=isNaN(d)?a.ts:d.toLocaleString('pt-BR');
@@ -2304,6 +2320,13 @@ function abrirAuditoria(){
       ${linhas}
     </div></div>`);
 }
+function togglePacStatus(id){
+  const p=pac(id); if(!p)return;
+  const novo=(p.status||'ativo')==='inativo'?'ativo':'inativo';
+  p.status=novo;
+  logAudit(novo==='inativo'?'paciente_inativado':'paciente_reativado','Paciente: '+(p.nome||id));
+  save(); toast(novo==='inativo'?'Paciente marcado como inativo':'Paciente reativado'); closeModal(); render();
+}
 function openPaciente(id){
   const p=pac(id);
   const ags=DB.agendamentos.filter(a=>a.pacienteId===id).sort((a,b)=>(b.data+b.hora).localeCompare(a.data+a.hora));
@@ -2311,7 +2334,8 @@ function openPaciente(id){
   const a=idade(p.nascimento);
   openModal(`<div class="modal wide"><div class="modal-head">
       <div class="avatar" style="width:42px;height:42px;font-size:16px">${initials(p.nome)}</div>
-      <div style="flex:1"><h3 style="margin:0">${esc(p.nome)}</h3><div class="sub" style="color:var(--txs);font-size:12.5px">${a!=null?a+' anos · ':''}${esc(p.telefone||'sem telefone')}</div></div>
+      <div style="flex:1"><h3 style="margin:0">${esc(p.nome)} ${(p.status||'ativo')==='inativo'?'<span class="chip g" style="vertical-align:middle">Inativo</span>':'<span class="chip v" style="vertical-align:middle">● Ativo</span>'}</h3><div class="sub" style="color:var(--txs);font-size:12.5px">${a!=null?a+' anos · ':''}${esc(p.telefone||'sem telefone')}</div></div>
+      <button class="btn ghost sm" onclick="togglePacStatus('${id}')">${(p.status||'ativo')==='inativo'?'Reativar':'Marcar inativo'}</button>
       <button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="info-grid" style="margin-bottom:16px">
