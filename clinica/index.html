@@ -2556,8 +2556,52 @@ function delProntuario(rid){
   DB.prontuarios=DB.prontuarios.filter(r=>r.id!==rid); save(); closeModal(); toast('Registro excluído'); render();
 }
 /* ===== IA: organiza o rascunho nos campos do prontuário ===== */
+// ===== CONSENTIMENTO LGPD PARA USO DE IA =====
+function iaConsentAceito(){
+  try{ if(DB&&DB.config&&DB.config.iaConsent&&AUTH&&DB.config.iaConsent[AUTH.id]) return true; }catch(e){}
+  try{ if(AUTH&&localStorage.getItem('dr_ia_consent_'+AUTH.id)==='1') return true; }catch(e){}
+  return false;
+}
+function salvarIaConsent(){
+  try{ DB.config=DB.config||{}; DB.config.iaConsent=DB.config.iaConsent||{}; if(AUTH) DB.config.iaConsent[AUTH.id]={em:new Date().toISOString(),versao:1}; save(); }catch(e){}
+  try{ if(AUTH) localStorage.setItem('dr_ia_consent_'+AUTH.id,'1'); }catch(e){}
+  try{ logAudit('ia_consentimento','Aceitou o uso de IA (LGPD)'); }catch(e){}
+}
+let _iaConsentCb=null;
+function iaChkTog(chk){ const b=document.getElementById('ia-consent-ok'); if(b){ b.disabled=!chk.checked; b.style.opacity=chk.checked?'':'.55'; } }
+function _confirmarIaConsent(){ salvarIaConsent(); closeModal(); const cb=_iaConsentCb; _iaConsentCb=null; if(cb)cb(); }
+function modalConsentIA(onConfirm){
+  _iaConsentCb=onConfirm;
+  const rox='#6C4BD1';
+  const svgCpu='<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="'+rox+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2.5"/><path d="M9.5 3v2M14.5 3v2M9.5 19v2M14.5 19v2M3 9.5h2M3 14.5h2M19 9.5h2M19 14.5h2"/><path d="M10.5 10.5l1.5 1.5-1.5 1.5M13.5 13.5h-1"/></svg>';
+  const svgShield='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="'+rox+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.4-7 8.9-4-1.5-7-4.5-7-8.9V6l7-3z"/><rect x="9.3" y="11" width="5.4" height="4.2" rx="1"/><path d="M10.4 11v-1a1.6 1.6 0 0 1 3.2 0v1"/></svg>';
+  const svgDoc='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="'+rox+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h6.5L18 7.5V17a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M13 3v5h5"/><rect x="8.7" y="11.6" width="5.6" height="4" rx="1"/><path d="M9.8 11.6v-1a1.7 1.7 0 0 1 3.4 0v1"/></svg>';
+  const bull=(icon,txt)=>'<div style="display:flex;gap:11px;margin:13px 0"><div style="flex:none;width:38px;height:38px;border-radius:10px;background:#EFEAFB;display:grid;place-items:center">'+icon+'</div><div style="font-size:13px;color:var(--txs);line-height:1.55">'+txt+'</div></div>';
+  openModal(`<div class="modal" style="max-width:460px;max-height:92vh;overflow:auto">
+    <div style="text-align:center;padding:2px 0 0">
+      <div style="width:62px;height:62px;border-radius:50%;background:#EFEAFB;display:grid;place-items:center;margin:0 auto 10px">${svgCpu}</div>
+      <h3 style="margin:0;font-size:19px">Uso de Inteligência Artificial</h3>
+      <div style="width:46px;height:3px;background:${rox};border-radius:3px;margin:9px auto 2px"></div>
+    </div>
+    <div class="modal-body" style="padding-top:12px">
+      <p style="font-size:14px;color:var(--txs);line-height:1.6;margin:0 0 4px">Ao marcar a caixa abaixo, você permite que usemos inteligência artificial para <b style="color:var(--tx)">gerar conteúdos como textos, resumos e sugestões</b> a partir do que você escrever no prontuário.</p>
+      ${bull(svgShield,'O conteúdo do registro pode ser processado por provedores e modelos de IA, inclusive em servidores <b style="color:var(--tx)">no Brasil ou no exterior</b>, apenas para viabilizar essa organização. <b style="color:var(--tx)">Não enviamos o nome nem dados que identifiquem o paciente</b> — só o texto clínico.')}
+      ${bull(svgDoc,'O tratamento dos dados segue a <b style="color:var(--tx)">LGPD (Lei nº 13.709/2018)</b> e a nossa Política de Privacidade. Seu consentimento fica registrado com data e hora.')}
+      <label style="display:flex;gap:10px;align-items:flex-start;background:var(--cin);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;margin-top:6px">
+        <input type="checkbox" id="ia-consent-chk" onchange="iaChkTog(this)" style="margin-top:2px;width:18px;height:18px;flex:none;accent-color:${rox}">
+        <span style="font-size:13px;line-height:1.5">Li, compreendi e <b>concordo</b> com o uso de inteligência artificial conforme descrito, e autorizo o processamento do conteúdo clínico que eu fornecer.</span>
+      </label>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn" id="ia-consent-ok" disabled style="background:linear-gradient(135deg,#7B54D3,#5C8DE3);opacity:.55" onclick="_confirmarIaConsent()">Confirmar e continuar</button>
+    </div>
+  </div>`);
+}
 async function organizarComIA(){
   if(!meusCaps().ia && !_DEMO){ upsellPro('Assistente de IA no prontuário','A IA organiza seu rascunho nos campos do prontuário — queixa, objetivos, intervenções, plano — em segundos. Você escreve solto e ela estrutura pra você.'); return; }
+  // Consentimento LGPD antes do primeiro uso da IA (fica registrado; roda 1x)
+  if(!_DEMO && !iaConsentAceito()){ modalConsentIA(organizarComIA); return; }
   const btn=$('#ia-btn'), tx=$('#ia-btn-tx');
   const g=id=>{const el=$('#'+id);return el?el.value.trim():'';};
   // fonte = o rascunho principal; se vazio, junta o que já estiver preenchido
