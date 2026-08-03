@@ -981,6 +981,23 @@ async function enviarSuporteProf(){
   catch(e){ toast('Erro ao enviar',1); inp.value=t; }
 }
 async function marcarSuppLidas(){ try{ await _SB.from('suporte_mensagens').update({lida_prof:true}).eq('prof_id',AUTH.id).eq('remetente','suporte'); }catch(e){} }
+// Blindagem anti-autofill: nenhum campo do painel deve ser preenchido pelo
+// gerenciador de senha do navegador (evita expor a senha em campos de texto).
+// Não toca na tela de login, que já tem a própria proteção.
+function blindarInput(el){
+  if(!el || el.dataset.af) return;
+  const ty=(el.type||'text').toLowerCase();
+  if(ty==='password'||ty==='checkbox'||ty==='radio'||ty==='file'||ty==='range'||ty==='color'||ty==='date'||ty==='datetime-local'||ty==='time'||ty==='month'||ty==='week') return;
+  if(el.list) return; // campos com datalist têm autocomplete próprio
+  el.dataset.af='1';
+  el.setAttribute('autocomplete','off'); el.setAttribute('autocorrect','off');
+  el.setAttribute('autocapitalize','off'); el.setAttribute('spellcheck','false');
+  el.setAttribute('data-lpignore','true'); el.setAttribute('data-1p-ignore','');
+  el.setAttribute('readonly',''); // bloqueia o autofill no load; libera ao focar/clicar
+  const off=()=>{ el.removeAttribute('readonly'); el.removeEventListener('focus',off); el.removeEventListener('pointerdown',off); };
+  el.addEventListener('focus',off); el.addEventListener('pointerdown',off);
+}
+function blindarAutofill(root){ try{ (root||document.getElementById('view')||document).querySelectorAll('input:not([data-af])').forEach(blindarInput); }catch(e){} }
 function render(){
   const [t,s]=TITLES[route]||['',''];
   $('#pg-title').textContent=t; $('#pg-sub').textContent=s;
@@ -997,6 +1014,7 @@ function render(){
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
   else if(route==='equipe') v.innerHTML=viewEquipe();
   else if(route==='config') { v.innerHTML=viewConfig(); try{initAssinPad();}catch(e){} try{atualizarPushBtn();}catch(e){} }
+  try{blindarAutofill(v);}catch(e){}
   updateBadges();
 }
 function updateBadges(){
@@ -1993,6 +2011,7 @@ async function carregarPerfil(){
     _bioProf=p; _bioCfg=(p.bio_config&&typeof p.bio_config==='object')?p.bio_config:{}; _bioLinks=Array.isArray(p.bio_links)?p.bio_links.slice():[];
     if(!_bioCfg.fundo&&p.capa)_bioCfg.fundo={tipo:'preset',v:p.capa};
     bbInit();
+    try{blindarAutofill(v);}catch(e){}
   }catch(e){ v.innerHTML='<div class="card empty">Não consegui carregar o perfil.</div>'; }
 }
 let _bioProf=null,_bioCfg={},_bioLinks=[],_bioAvg=0,_bioN=0;
@@ -2219,7 +2238,7 @@ async function sairClinica(){
 }
 
 /* =============== MODAIS / FORMS =============== */
-function openModal(html){ $('#overlay').innerHTML=html; $('#overlay').classList.add('on'); }
+function openModal(html){ $('#overlay').innerHTML=html; $('#overlay').classList.add('on'); try{blindarAutofill($('#overlay'));}catch(e){} }
 function closeModal(){ $('#overlay').classList.remove('on'); $('#overlay').innerHTML=''; }
 $('#overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeModal(); });
 
