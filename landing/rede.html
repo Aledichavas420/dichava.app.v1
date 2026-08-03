@@ -155,7 +155,7 @@ async function carregar(){
         '<div class="pc-tipo">'+esc(p.tipo_prof||'')+'</div>'+(p.reg?'<div class="pc-reg">'+esc(p.reg)+'</div>':'')+'</div></div>'+
       (p.bio?'<div class="pc-bio">'+esc(p.bio)+'</div>':'')+
       (tags.length?'<div class="pc-tags">'+tags.map(function(t){return '<span class="pc-tg">'+esc(t)+'</span>';}).join('')+'</div>':'')+
-      '<div class="pc-meta">'+(mt?'<span class="pc-mi">'+mt+'</span>':'')+(p.cidade?'<span class="pc-mi">'+esc(p.cidade)+'</span>':'')+(p.valor?'<span class="pc-mi">'+esc(p.valor)+'</span>':'')+'</div>'+
+      '<div class="pc-meta">'+(mt?'<span class="pc-mi">'+mt+'</span>':'')+(p.cidade?'<span class="pc-mi">'+esc(p.cidade)+'</span>':'')+'</div>'+
       '<div class="pc-ver">Ver perfil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></div>'+
     '</div>';
   }).join('');

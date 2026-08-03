@@ -6780,7 +6780,7 @@ async function renderProfs(){
       </div>
       ${p.bio?`<div class="pc-bio">${esc(p.bio)}</div>${p.bio.length>170?`<div class="pc-bio-more">ler mais →</div>`:''}`:''}
       <div class="pc-meta">
-        ${p.valor?`<div class="pc-mi"><span class="ic" data-icon="pf-valor"></span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
+        
         ${p.duracao?`<div class="pc-mi"><span class="ic" data-icon="pf-duracao"></span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
         ${p.cidade?`<div class="pc-mi"><span class="ic" data-icon="pf-local"></span><span class="tx"><span class="k">Local</span><span class="v">${esc(p.cidade)}</span></span></div>`:''}
         ${(p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length)?`<div class="pc-mi"><span class="ic" data-icon="pf-agenda"></span><span class="tx"><span class="k">Agendamento</span><span class="v" style="color:var(--ve)">Online</span></span></div>`:''}
