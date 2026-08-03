@@ -1029,6 +1029,7 @@ function renderProfs(){
     if(!ativo)acts.push(`<button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Liberar acesso</button>`);
     else acts.push(`<button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar / editar</button>`);
     if(!ativo)acts.push(`<button class="btn ghost sm" onclick="liberarTrial('${p.id}')">🎁 Teste 7 dias</button>`);
+    if(ehTrial(p))acts.push(`<button class="btn ghost sm" onclick="estenderTeste('${p.id}')">⏳ Estender teste</button>`);
     if(p.status==='reaprovar')acts.push(`<button class="btn wv sm" onclick="acao('${p.id}','aprovar')">✓ Aprovar edição</button>`);
     else if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
     acts.push(`<button class="btn ghost sm" onclick="toggleOculto('${p.id}',${p.oculto_diretorio?'true':'false'})">${p.oculto_diretorio?'👁 Mostrar no diretório':'🙈 Ocultar do diretório'}</button>`);
@@ -1102,6 +1103,20 @@ async function liberarTrial(id){
   const ate=new Date(Date.now()+7*864e5).toLocaleDateString('pt-BR');
   const obs='🎁 Teste grátis 7 dias ('+planoNome(plano)+') · até '+ate;
   await acao(id,'trial',7,obs);
+  _libPlano=null;
+}
+// Estende o teste grátis por +N dias (a partir de hoje). Não reenvia boas-vindas.
+async function estenderTeste(id){
+  const p=PROFS.find(x=>x.id===id); if(!p)return;
+  const raw=prompt('Estender o teste de '+(p.nome||'este profissional')+' por quantos dias (a partir de hoje)?','7');
+  if(raw===null)return;
+  const dias=parseInt(raw,10)||0;
+  if(dias<=0){ toast('Informe um número de dias válido.',1); return; }
+  const plano=p.plano||'essencial';
+  const ate=new Date(Date.now()+dias*864e5).toLocaleDateString('pt-BR');
+  const obs='🎁 Teste grátis ('+planoNome(plano)+') · até '+ate;
+  _libPlano=plano; _skipBoasVindas=true; // extensão não reenvia boas-vindas
+  await acao(id,'trial',dias,obs);
   _libPlano=null;
 }
 function fecharModal(){ $('#modalRoot').innerHTML=''; }
