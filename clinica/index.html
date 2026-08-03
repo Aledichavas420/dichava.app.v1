@@ -1707,10 +1707,15 @@ function viewConfig(){
     </div>
   </div>`;
 }
-function salvarConfig(){
-  DB.config.clinica=$('#cf-clin').value.trim()||'Minha Clínica';
+async function salvarConfig(){
+  const nome=$('#cf-clin').value.trim()||'Minha Clínica';
+  DB.config.clinica=nome;
   DB.config.profissional=$('#cf-prof').value.trim()||'Profissional';
   DB.config.especialidade=$('#cf-esp').value.trim();
+  // grava o nome também na coluna clinicas.nome (fonte do sidebar/cabeçalho)
+  if(CLINICA && _SB && !_DEMO){
+    try{ const{error}=await _SB.from('clinicas').update({nome}).eq('id',CLINICA.id); if(!error) CLINICA.nome=nome; }catch(e){}
+  }
   save(); syncHeader(); toast('Configurações salvas'); render();
 }
 function syncHeader(){ $('#side-prof').textContent=(AUTH&&AUTH.nome)||DB.config.profissional||'Profissional'; $('#side-clin').textContent=(CLINICA&&CLINICA.nome)||DB.config.clinica||'Minha Clínica'; }
