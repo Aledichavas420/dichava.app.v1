@@ -1009,9 +1009,9 @@ function viewDash(){
   const t=todayISO();
   const hoje=DB.agendamentos.filter(a=>a.data===t&&a.status!=='cancelado').sort((a,b)=>a.hora.localeCompare(b.hora));
   const mes=t.slice(0,7);
-  const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&f.data.startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
-  const saidasMes=DB.financeiro.filter(f=>f.tipo==='saida'&&f.data.startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
-  const aReceber=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago).reduce((s,a)=>s+ +a.valor,0);
+  const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&f.data.startsWith(mes)&&meuReg(f)).reduce((s,f)=>s+ +f.valor,0);
+  const saidasMes=DB.financeiro.filter(f=>f.tipo==='saida'&&f.data.startsWith(mes)&&meuReg(f)).reduce((s,f)=>s+ +f.valor,0);
+  const aReceber=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago&&meuReg(a)).reduce((s,a)=>s+ +a.valor,0);
   const ativos=DB.pacientes.filter(p=>(p.status||'ativo')!=='inativo').length;
 
   let kpis=`<div class="grid kpis">
@@ -1248,13 +1248,17 @@ let _pacT; function debouncedPac(){ clearTimeout(_pacT); _pacT=setTimeout(()=>{ 
 // (sigilo clínico/LGPD). Sozinho (1 membro) vê tudo. Registros antigos sem autor
 // ficam com o responsável (dono) da clínica.
 function ehEquipe(){ return !!(MEMBROS && MEMBROS.length>1); }
-function meuPront(r){
+// Um registro é "meu"? Em equipe, dados privados (prontuário, escala, financeiro)
+// só são visíveis a quem os criou (profId). Sozinho, vê tudo. Registro antigo sem
+// autor fica com o responsável (dono). Agenda e pacientes NÃO usam isto (compartilhados).
+function meuReg(o){
   if(!ehEquipe()) return true;
   const meu=AUTH&&AUTH.id;
-  if(r&&r.profId) return r.profId===meu;
-  return !!(CLINICA&&CLINICA.papel==='dono'); // legado sem autor → só o responsável
+  if(o&&o.profId) return o.profId===meu;
+  return !!(CLINICA&&CLINICA.papel==='dono');
 }
-function prontsDoPac(pid){ return DB.prontuarios.filter(r=>r.pacienteId===pid&&meuPront(r)); }
+function meuPront(r){ return meuReg(r); }
+function prontsDoPac(pid){ return DB.prontuarios.filter(r=>r.pacienteId===pid&&meuReg(r)); }
 function viewProntuarios(){
   // lista de pacientes com contagem de registros; seleção abre a linha do tempo
   if(prontSelPaciente && pac(prontSelPaciente)) return viewProntuarioPaciente(prontSelPaciente);
@@ -1316,7 +1320,7 @@ function exportarProntuario(pid){
     <div class="meta">${cli?esc(cli)+' · ':''}${prof?'Prof.: '+esc(prof)+' · ':''}${idade(p.nascimento)!=null?idade(p.nascimento)+' anos · ':''}${esc(p.telefone||'')}${p.emergNome?' · Emergência: '+esc(p.emergNome)+' '+esc(p.emergTel||''):''}</div>
     ${regs.length?regs.map(r=>`<div class="reg"><h3>${fmtDate(r.data)} <span class="tag">${TIPO[r.tipo]||r.tipo}</span>${r.sessao?' <span class="tag">Sessão '+esc(r.sessao)+'</span>':''}</h3>
       ${linha('Queixa/Foco',r.queixa)}${linha('Objetivos trabalhados',r.objetivos)}${linha('Evolução',r.texto)}${linha('Intervenções/Condutas',r.intervencoes)}${linha('Recursos usados',r.recursos)}${linha('Pontos de atenção',r.pontos)}${linha('Plano p/ próxima sessão',r.plano||r.conduta)}</div>`).join(''):'<p>Sem registros.</p>'}
-    ${(function(){const avs=(DB.avaliacoes||[]).filter(a=>a.pacienteId===pid).sort((a,b)=>a.data.localeCompare(b.data));if(!avs.length)return '';return '<h2 style="font-size:16px;margin:22px 0 8px">Escalas aplicadas</h2><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="text-align:left;color:#5D7060"><th style="padding:4px 8px;border-bottom:1px solid #ddd">Data</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escala</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escore</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Interpretação</th></tr>'+avs.map(a=>'<tr><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+fmtDate(a.data)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+(ESCALAS[a.escala]?ESCALAS[a.escala].nome:a.escala)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0"><b>'+a.score+'/'+escMax(a.escala)+'</b></td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+escInterpret(a).rotulo+'</td></tr>').join('')+'</table>';})()}
+    ${(function(){const avs=(DB.avaliacoes||[]).filter(a=>a.pacienteId===pid&&meuReg(a)).sort((a,b)=>a.data.localeCompare(b.data));if(!avs.length)return '';return '<h2 style="font-size:16px;margin:22px 0 8px">Escalas aplicadas</h2><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="text-align:left;color:#5D7060"><th style="padding:4px 8px;border-bottom:1px solid #ddd">Data</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escala</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Escore</th><th style="padding:4px 8px;border-bottom:1px solid #ddd">Interpretação</th></tr>'+avs.map(a=>'<tr><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+fmtDate(a.data)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+(ESCALAS[a.escala]?ESCALAS[a.escala].nome:a.escala)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0"><b>'+a.score+'/'+escMax(a.escala)+'</b></td><td style="padding:4px 8px;border-bottom:1px solid #f0f0f0">'+escInterpret(a).rotulo+'</td></tr>').join('')+'</table>';})()}
     <div class="disc">Documento gerado pelo dichava.app como ferramenta de apoio. Não substitui o prontuário oficial exigido pelo conselho profissional. Gerado em ${fmtDate(todayISO())}.</div>
     </body></html>`;
   const w=window.open('','_blank');
@@ -1414,7 +1418,7 @@ function escMax(esc){const E=ESCALAS[esc];if(E.simnao)return E.itens.length;if(E
 function escColor(esc,score){const max=escMax(esc),r=score/max;return r<0.25?'#2E7D32':r<0.5?'#EA8B0C':r<0.75?'#E8590C':'#C62828';}
 // seção de escalas no prontuário do paciente
 function escalasSecao(pid){
-  const avs=(DB.avaliacoes||[]).filter(a=>a.pacienteId===pid).sort((a,b)=>b.data.localeCompare(a.data)||(b.criadoEm||0)-(a.criadoEm||0));
+  const avs=(DB.avaliacoes||[]).filter(a=>a.pacienteId===pid&&meuReg(a)).sort((a,b)=>b.data.localeCompare(a.data)||(b.criadoEm||0)-(a.criadoEm||0));
   if(!avs.length)return `<div class="card" style="padding:14px 16px;margin-bottom:14px"><div style="display:flex;align-items:center;gap:8px"><b style="font-size:14px">Escalas clínicas</b><span class="grow" style="flex:1"></span><button class="btn sm" onclick="escolherEscala('${pid}')">Aplicar escala</button></div><div style="font-size:12.5px;color:var(--txs);margin-top:6px">Aplique AUDIT, PHQ-9, GAD-7 ou DAST-10 — pontuação automática e evolução no tempo.</div></div>`;
   // agrupa por escala p/ sparkline
   const porEsc={}; avs.forEach(a=>{(porEsc[a.escala]=porEsc[a.escala]||[]).push(a);});
@@ -1471,7 +1475,7 @@ function salvarEscala(pid,ek){
   for(let i=0;i<itens.length;i++){const sel=document.querySelector('#esc-form input[name="q'+i+'"]:checked');if(!sel){faltou=true;break;}const v=+sel.value;score+=v;respostas.push(v);}
   if(faltou){toast('Responda todas as perguntas',1);return;}
   const subs=E.assist?($('#esc-subs')?.value||''):'';
-  const av={id:uid(),pacienteId:pid,escala:ek,score,respostas,subs,data:$('#esc-data').value||todayISO(),criadoEm:now()};
+  const av={id:uid(),pacienteId:pid,escala:ek,score,respostas,subs,data:$('#esc-data').value||todayISO(),profId:(AUTH&&AUTH.id)||null,profNome:(AUTH&&AUTH.nome)||'',criadoEm:now()};
   DB.avaliacoes.push(av);save();closeModal();render();
   setTimeout(()=>toast(E.nome+(subs?' ('+subs+')':'')+': '+score+' — '+escInterpret(av).rotulo),100);
 }
@@ -1491,10 +1495,10 @@ function delEscala(id){if(!confirm('Excluir esta avaliação?'))return;DB.avalia
 /* =============== CAIXA =============== */
 let caixaMes=todayISO().slice(0,7);
 function viewCaixa(){
-  const movs=DB.financeiro.filter(f=>f.data.startsWith(caixaMes)).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
+  const movs=DB.financeiro.filter(f=>f.data.startsWith(caixaMes)&&meuReg(f)).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
   const entradas=movs.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+ +f.valor,0);
   const saidas=movs.filter(f=>f.tipo==='saida').reduce((s,f)=>s+ +f.valor,0);
-  const aReceber=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago).reduce((s,a)=>s+ +a.valor,0);
+  const aReceber=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago&&meuReg(a)).reduce((s,a)=>s+ +a.valor,0);
   // por forma de pagamento (entradas)
   const porForma={};
   movs.filter(f=>f.tipo==='entrada').forEach(f=>{porForma[f.formaPagamento||'']=(porForma[f.formaPagamento||'']||0)+ +f.valor;});
@@ -1532,6 +1536,7 @@ function viewCaixa(){
       <button class="btn ghost sm" onclick="formFinanceiro('saida')">＋ Saída</button>
       <button class="btn" onclick="formFinanceiro('entrada')">＋ Entrada</button>
     </div>
+    ${ehEquipe()?`<div style="display:flex;align-items:center;gap:7px;background:var(--cin);border-radius:10px;padding:8px 12px;margin:2px 0 10px;font-size:12.5px;color:var(--txs)"><span>🔒</span><span>Seu caixa é <b>privado</b> — cada profissional vê só o próprio financeiro. A agenda e os pacientes são compartilhados com a equipe.</span></div>`:''}
     ${kpis}${formas}
     ${relatorioFinanceiro()}
     <div class="sec-title">Movimentações</div>
@@ -1549,12 +1554,12 @@ function relatorioFinanceiro(){
       <a class="btn" href="/assinar/" target="_blank" rel="noopener" style="text-decoration:none">Liberar no Profissional →</a></div>`;
   const [y,m]=caixaMes.split('-').map(Number);
   const meses=[]; for(let i=5;i>=0;i--){const d=new Date(y,m-1-i,1);meses.push(d.toISOString().slice(0,7));}
-  const fat=meses.map(mm=>({mm,v:DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mm)).reduce((s,f)=>s+ +f.valor,0)}));
+  const fat=meses.map(mm=>({mm,v:DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mm)&&meuReg(f)).reduce((s,f)=>s+ +f.valor,0)}));
   const maxFat=Math.max(...fat.map(x=>x.v),1);
-  const pagasMes=DB.agendamentos.filter(a=>a.pago&&(a.data||'').startsWith(caixaMes)&&+a.valor>0);
+  const pagasMes=DB.agendamentos.filter(a=>a.pago&&(a.data||'').startsWith(caixaMes)&&+a.valor>0&&meuReg(a));
   const ticket=pagasMes.length?pagasMes.reduce((s,a)=>s+ +a.valor,0)/pagasMes.length:0;
-  const atendidos=DB.agendamentos.filter(a=>a.status==='atendido'&&(a.data||'').startsWith(caixaMes)).length;
-  const marcados=DB.agendamentos.filter(a=>(a.data||'').startsWith(caixaMes)&&a.status!=='cancelado').length;
+  const atendidos=DB.agendamentos.filter(a=>a.status==='atendido'&&(a.data||'').startsWith(caixaMes)&&meuReg(a)).length;
+  const marcados=DB.agendamentos.filter(a=>(a.data||'').startsWith(caixaMes)&&a.status!=='cancelado'&&meuReg(a)).length;
   const compar=marcados?Math.round(atendidos/marcados*100):0;
   const total6=fat.reduce((s,x)=>s+x.v,0);
   return `<div class="sec-title">Relatório</div>
@@ -2513,7 +2518,8 @@ function sincronizarCaixa(ag){
   if(deveLancar && !existente){
     DB.financeiro.push({id:uid(),tipo:'entrada',categoria:ag.tipo||'Consulta',
       descricao:`${ag.tipo||'Consulta'} — ${pacNome(ag.pacienteId)}`,valor:+ag.valor,data:ag.data,
-      formaPagamento:ag.formaPagamento||'',pacienteId:ag.pacienteId,agendamentoId:ag.id,criadoEm:now()});
+      formaPagamento:ag.formaPagamento||'',pacienteId:ag.pacienteId,agendamentoId:ag.id,
+      profId:ag.profId||(AUTH&&AUTH.id)||null,profNome:ag.profNome||(AUTH&&AUTH.nome)||'',criadoEm:now()});
   } else if(existente){
     if(!deveLancar){ DB.financeiro=DB.financeiro.filter(f=>f!==existente); }
     else { existente.valor=+ag.valor; existente.data=ag.data; existente.formaPagamento=ag.formaPagamento||''; existente.descricao=`${ag.tipo||'Consulta'} — ${pacNome(ag.pacienteId)}`; }
@@ -2686,12 +2692,12 @@ function calcProjecao(){
 
   // realidade
   const mes=todayISO().slice(0,7);
-  const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mes)).reduce((s,f)=>s+ +f.valor,0);
+  const entradasMes=DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(mes)&&meuReg(f)).reduce((s,f)=>s+ +f.valor,0);
   const pct=alvo>0?Math.min(100,Math.round(entradasMes/alvo*100)):0;
   const falta=Math.max(0,alvo-entradasMes);
   const pacAtuais=DB.pacientes.length;
   const gapPac=Math.max(0,pacientes-pacAtuais);
-  const atend=DB.agendamentos.filter(a=>a.status==='atendido'&&+a.valor>0);
+  const atend=DB.agendamentos.filter(a=>a.status==='atendido'&&+a.valor>0&&meuReg(a));
   const ticketReal=atend.length?Math.round(atend.reduce((s,a)=>s+ +a.valor,0)/atend.length):0;
   const precoNec=pacAtuais>0?Math.ceil(alvo/(pacAtuais*freq)):0;
 
@@ -2861,7 +2867,7 @@ function saveFinanceiro(tipo){
   const cat=$('#f-cat').value;
   DB.financeiro.push({id:uid(),tipo,categoria:cat,descricao:$('#f-desc').value.trim()||cat,valor,
     data:$('#f-data').value,formaPagamento:$('#f-forma').value,pacienteId:tipo==='entrada'?($('#f-pac')?.value||null):null,
-    agendamentoId:null,criadoEm:now()});
+    agendamentoId:null,profId:(AUTH&&AUTH.id)||null,profNome:(AUTH&&AUTH.nome)||'',criadoEm:now()});
   // ajusta o mês exibido para o lançamento
   caixaMes=$('#f-data').value.slice(0,7);
   save(); closeModal(); toast('Lançamento registrado'); render();
