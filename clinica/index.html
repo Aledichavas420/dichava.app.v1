@@ -2059,7 +2059,7 @@ function editarPerfilPanel(){
       <div class="field"><label>Bio * <span style="color:var(--txm);font-weight:400">(como trabalha com uso de substâncias)</span></label><textarea id="pf-bio" style="min-height:90px" placeholder="Ex.: Atendo sem impor abstinência…">${esc(p.bio||'')}</textarea></div>
       <div class="field"><label>Especialidades <span style="color:var(--txm);font-weight:400">(separadas por vírgula)</span></label><input id="pf-esp" value="${esc(p.especialidades||'')}" placeholder="Redução de danos, Ansiedade…"></div>
       <div class="row2"><div class="field"><label>Modalidade *</label><select id="pf-mod"><option value="online" ${mod==='online'?'selected':''}>Online</option><option value="presencial" ${mod==='presencial'?'selected':''}>Presencial</option><option value="online,presencial" ${(mod.includes('online')&&mod.includes('presencial'))?'selected':''}>Online e presencial</option></select></div><div class="field"><label>Cidade / região</label><input id="pf-cidade" value="${esc(p.cidade||'')}"></div></div>
-      <div class="row2"><div class="field"><label>Valor médio <span style="color:var(--txm);font-weight:400">(opcional)</span></label><input id="pf-valor" value="${esc(p.valor||'')}" placeholder="Deixe em branco se preferir não exibir"><div style="font-size:11.5px;color:var(--txs);margin-top:4px">Não aparece no diretório público. Fica visível só na sua ficha, quando o paciente abre seu perfil. Se preferir, deixe em branco.</div></div><div class="field"><label>Duração</label><input id="pf-dur" value="${esc(p.duracao||'')}" placeholder="50 min"></div></div>
+      <div class="row2"><div class="field"><label>Valor médio da sessão (R$) *</label><input id="pf-valor" value="${esc(p.valor||'')}" placeholder="Ex.: R$ 150"><div style="font-size:11.5px;color:var(--txs);margin-top:4px">Obrigatório. Não aparece no diretório nem no perfil público, só na hora de agendar. Serve também pra nossa curadoria.</div></div><div class="field"><label>Duração</label><input id="pf-dur" value="${esc(p.duracao||'')}" placeholder="50 min"></div></div>
       <div class="field"><label>Disponibilidade (texto na ficha)</label><input id="pf-disp" value="${esc(p.disponibilidade||'')}" placeholder="Ex.: Seg, Qua e Sex · tarde"></div>
       <div class="field"><label>WhatsApp</label><input id="pf-tel" value="${esc(p.telefone||'')}" placeholder="(00) 00000-0000"></div>
 
@@ -2090,8 +2090,9 @@ function pfCapaActive(){document.querySelectorAll('#pf-capas .bb-sw').forEach(s=
 async function salvarPerfilPanel(){
   if(!_SB||!AUTH){toast('Sem conexão',1);return;}
   const g=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
-  const tipo=g('pf-tipo'),bio=g('pf-bio'),mod=g('pf-mod');
+  const tipo=g('pf-tipo'),bio=g('pf-bio'),mod=g('pf-mod'),valorPf=g('pf-valor');
   if(!tipo||bio.length<20||!mod){toast('Preencha tipo, bio (mín. 20 caracteres) e modalidade.',3500);return;}
+  if(!valorPf){toast('Informe o valor médio da sessão (não aparece no diretório, só no agendamento).',4000);return;}
   const insta=g('pf-insta'), site=g('pf-site');
   // Se o perfil já estava APROVADO e o profissional editou, marcamos como
   // 'reaprovar' (não 'pendente') pra o admin separar essas pendências de diretório.

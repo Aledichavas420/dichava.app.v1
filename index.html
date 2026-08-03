@@ -6815,7 +6815,7 @@ function abrirPerfilProf(id){
       <div class="pd-sec">Atendimento</div>
       <div class="pd-meta">
         <div class="pd-mi"><span class="ic" data-icon="${(p.modalidade||'').includes('presencial')&&!(p.modalidade||'').includes('online')?'pf-local':'pf-online'}"></span><span class="tx"><span class="k">Modalidade</span><span class="v">${modLabel.replace(/^[^ ]+ /,'')}</span></span></div>
-        ${p.valor?`<div class="pd-mi"><span class="ic" data-icon="pf-valor"></span><span class="tx"><span class="k">Valor médio</span><span class="v">${esc(p.valor)}</span></span></div>`:''}
+        
         ${p.duracao?`<div class="pd-mi"><span class="ic" data-icon="pf-duracao"></span><span class="tx"><span class="k">Duração</span><span class="v">${esc(p.duracao)}</span></span></div>`:''}
         ${(p.cidade||p.estado)?`<div class="pd-mi"><span class="ic" data-icon="pf-local"></span><span class="tx"><span class="k">Local</span><span class="v">${esc([p.cidade,p.estado].filter(Boolean).join(' · '))}</span></span></div>`:''}
         ${p.publicos?`<div class="pd-mi" style="grid-column:1/-1"><span class="ic" data-icon="pf-online"></span><span class="tx"><span class="k">Públicos atendidos</span><span class="v">${esc(p.publicos)}</span></span></div>`:''}
@@ -6943,7 +6943,7 @@ function renderAgenda(idx){
   const p=_profsById[_slotProf]||{};
   const head=`<div class="agd-head">
       <div class="agd-av">${p.foto?`<img src="${p.foto}" alt="">`:ini(p.nome||'?')}</div>
-      <div style="min-width:0"><div class="agd-nome">${esc(p.nome||'Profissional')}</div><div class="agd-tipo">${esc(p.tipo_prof||'')}</div></div>
+      <div style="min-width:0"><div class="agd-nome">${esc(p.nome||'Profissional')}</div><div class="agd-tipo">${esc(p.tipo_prof||'')}${p.valor?' · '+esc(p.valor)+'/sessão':''}</div></div>
     </div>`;
   if(!_slotDias.length){
     body.innerHTML=head+`<div class="agd-empty"><div style="font-size:34px;margin-bottom:8px">🗓️</div><b>Sem horários livres agora</b><div style="font-size:13.5px;color:var(--txm);margin-top:5px;line-height:1.5">Toque em <b>Conversar</b> pra combinar um horário direto com o profissional.</div></div>
@@ -7480,7 +7480,7 @@ async function entrarPro(){
       <div class="pro-field"><div class="lbl">Especialidades</div><div class="val">${tags||'—'}</div></div>
       <div class="pro-field"><div class="lbl">Modalidade</div><div class="val">${modLabel}</div></div>
       ${prof.cidade?`<div class="pro-field"><div class="lbl">Cidade/região</div><div class="val">${esc(prof.cidade)}</div></div>`:''}
-      ${prof.valor?`<div class="pro-field"><div class="lbl">Valor médio</div><div class="val">${esc(prof.valor)}</div></div>`:''}
+      
       ${prof.duracao?`<div class="pro-field"><div class="lbl">Duração</div><div class="val">${esc(prof.duracao)}</div></div>`:''}
       ${prof.disponibilidade?`<div class="pro-field"><div class="lbl">Disponibilidade</div><div class="val">${esc(prof.disponibilidade)}</div></div>`:''}
     </div>
