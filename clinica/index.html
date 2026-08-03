@@ -259,14 +259,16 @@ tbody tr:hover{background:var(--cin)}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--txs)}
 .field input,.field select,.field textarea{
-  width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);
+  width:100%;max-width:100%;min-width:0;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);
   background:var(--bg);transition:.15s;
 }
+.field input[type=date],.field input[type=time]{-webkit-appearance:none;appearance:none}
 :root[data-theme="dark"] .field input,:root[data-theme="dark"] .field select,:root[data-theme="dark"] .field textarea{background:var(--cin)}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--v);background:var(--card)}
 .field textarea{resize:vertical;min-height:80px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.row2>*,.row3>*{min-width:0}
 
 /* modal */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto}
@@ -276,7 +278,7 @@ tbody tr:hover{background:var(--cin)}
 @keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
 .modal-head{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);flex-shrink:0}
 .modal-head h3{font-size:17px;font-weight:800;flex:1}
-.modal-body{padding:20px 22px;overflow-y:auto;min-height:0;flex:1 1 auto}
+.modal-body{padding:20px 22px;overflow-y:auto;overflow-x:hidden;min-height:0;flex:1 1 auto}
 .modal-foot{padding:16px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
 /* agenda: seletor de visão + grades semana/mês */
 .seg{display:inline-flex;background:var(--cin);border-radius:12px;padding:3px}
