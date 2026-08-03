@@ -410,18 +410,23 @@ async function carregarNewsletterCount(){
 // Preenche o comunicado com o e-mail pronto de lançamento (pra revisar e enviar).
 function modeloLancamento(){
   const P=t=>'<p style="margin:0 0 14px">'+t+'</p>';
-  const btn='<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px auto"><tr><td style="border-radius:12px;background:#2f7a4d"><a href="https://dichava.app" style="display:inline-block;padding:14px 32px;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px">Abrir o dichava.app</a></td></tr></table>';
-  const html=emailShell('Autocuidado, sem julgamento',
-    '<div style="font-size:21px;font-weight:800;color:#1f3d2b;margin-bottom:12px">Chegou o dia 🌱</div>'
-    +P('Depois de <b>8 anos</b> construindo a comunidade Dichavando, hoje a gente coloca no ar o presente que sonhamos pra você: o <b>dichava.app</b>.')
-    +P('Um app <b>gratuito</b> de autocuidado e redução de danos — pra repensar sua relação com o uso, no seu tempo, com privacidade e <b>sem julgamento</b>.')
-    +P('Dentro dele você encontra registro do dia a dia, conteúdo com base científica, um modo de apoio pra momentos difíceis e uma rede de profissionais alinhados à redução de danos.')
+  const d=(typeof diasPraLancamento==='function')?diasPraLancamento():2;
+  const quando=d>1?('em '+d+' dias'):(d===1?'amanhã':'hoje');
+  const btn='<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px auto"><tr><td style="border-radius:12px;background:#2f7a4d"><a href="https://dichava.app" style="display:inline-block;padding:14px 32px;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px">Ver o que vem por aí</a></td></tr></table>';
+  const chip='<div style="text-align:center;margin:2px 0 18px"><span style="display:inline-block;background:#eaf5ee;color:#2f7a4d;font-weight:800;font-size:13px;letter-spacing:.3px;padding:8px 16px;border-radius:999px">🗓️ Lançamento: 5 de agosto</span></div>';
+  const html=emailShell('Contagem regressiva',
+    '<div style="font-size:22px;font-weight:800;color:#1f3d2b;margin-bottom:6px">Falta pouco 🌱</div>'
+    +'<div style="font-size:15px;color:#5a6b58;margin-bottom:16px">O <b>dichava.app</b> chega <b>'+quando+'</b>.</div>'
+    +chip
+    +P('Depois de <b>8 anos</b> construindo a comunidade Dichavando, está quase no ar o presente que sonhamos pra você: o <b>dichava.app</b>.')
+    +P('Mais do que um app, é a <b>Rede dichava</b> — uma rede de cuidado alinhada à redução de danos que <b>conecta você a profissionais</b> que acolhem sem julgamento, e te dá ferramentas pra cuidar de si no seu tempo: diário do dia a dia, modo de apoio pra momentos difíceis e conteúdo com base científica.')
+    +P('Guarda a data: <b>5 de agosto</b>. Quando abrir, você será um dos primeiros a entrar. 💚')
     +btn
-    +P('Obrigado por caminhar com a gente até aqui. Isso é nosso. 💚')
+    +P('Obrigado por caminhar com a gente até aqui. Isso é nosso.')
     +'<div style="font-size:13px;color:#8a9a86;margin-top:6px">— Alexandre e a equipe dichava</div>');
-  const s=$('#cm-subject'); if(s)s.value='Chegou: o dichava.app está no ar 🌱';
+  const s=$('#cm-subject'); if(s)s.value=(typeof wlLancAssunto==='function'?wlLancAssunto():'Falta pouco pro lançamento do dichava 🌱');
   const t=$('#cm-html'); if(t)t.value=html;
-  const st=$('#cm-status'); if(st){ st.style.color='var(--txm)'; st.textContent='Modelo carregado. Revise e clique em "Enviar teste" antes de enviar pra todos.'; }
+  const st=$('#cm-status'); if(st){ st.style.color='var(--txm)'; st.textContent='Modelo de contagem regressiva carregado. Revise e clique em "Enviar teste" antes de enviar pra todos.'; }
 }
 // ===== ENVIAR COMUNICADO (via Edge Function newsletter-enviar) =====
 async function enviarComunicado(teste){
