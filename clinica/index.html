@@ -1243,10 +1243,22 @@ function viewPacientes(){
 let _pacT; function debouncedPac(){ clearTimeout(_pacT); _pacT=setTimeout(()=>{ if(route==='pacientes') render(); },200); }
 
 /* =============== PRONTUÁRIOS =============== */
+// ── Prontuários privados por profissional (plano Clínica em equipe) ──
+// Com 2+ profissionais na clínica, cada prontuário é visível SÓ para quem o criou
+// (sigilo clínico/LGPD). Sozinho (1 membro) vê tudo. Registros antigos sem autor
+// ficam com o responsável (dono) da clínica.
+function ehEquipe(){ return !!(MEMBROS && MEMBROS.length>1); }
+function meuPront(r){
+  if(!ehEquipe()) return true;
+  const meu=AUTH&&AUTH.id;
+  if(r&&r.profId) return r.profId===meu;
+  return !!(CLINICA&&CLINICA.papel==='dono'); // legado sem autor → só o responsável
+}
+function prontsDoPac(pid){ return DB.prontuarios.filter(r=>r.pacienteId===pid&&meuPront(r)); }
 function viewProntuarios(){
   // lista de pacientes com contagem de registros; seleção abre a linha do tempo
   if(prontSelPaciente && pac(prontSelPaciente)) return viewProntuarioPaciente(prontSelPaciente);
-  const list=DB.pacientes.map(p=>({p,n:DB.prontuarios.filter(r=>r.pacienteId===p.id).length}))
+  const list=DB.pacientes.map(p=>({p,n:prontsDoPac(p.id).length}))
     .sort((a,b)=>a.p.nome.localeCompare(b.p.nome));
   return `<div class="toolbar"><div class="sub" style="color:var(--txs);font-weight:600">Selecione um paciente para ver e escrever registros clínicos.</div></div>
     ${list.length?`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
@@ -1257,7 +1269,7 @@ function viewProntuarios(){
 }
 function viewProntuarioPaciente(pid){
   const p=pac(pid);
-  const regs=DB.prontuarios.filter(r=>r.pacienteId===pid).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
+  const regs=prontsDoPac(pid).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
   const TIPO={anamnese:'Anamnese',evolucao:'Evolução',consulta:'Consulta',conduta:'Conduta / Prescrição',nota:'Nota',avaliacao:'Avaliação'};
   const bloco=(rot,val,cor)=>val?`<div style="background:${cor||'var(--cin)'};border-radius:10px;padding:8px 11px;margin-top:6px;font-size:13.5px"><b style="color:var(--txs)">${rot}:</b> ${esc(val)}</div>`:'';
   return `<div class="toolbar">
@@ -1268,6 +1280,7 @@ function viewProntuarioPaciente(pid){
       <button class="btn sm ghost" onclick="exportarProntuario('${pid}')">↓ Exportar</button>
       <button class="btn" onclick="formProntuario('${pid}')">＋ Registro</button>
     </div>
+    ${ehEquipe()?`<div style="display:flex;align-items:center;gap:7px;background:var(--cin);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:12.5px;color:var(--txs)"><span>🔒</span><span>Estes registros são <b>privados</b> — só você vê os prontuários que escreve. A agenda e o cadastro do paciente são compartilhados com a equipe.</span></div>`:''}
     ${escalasSecao(pid)}
     ${regs.length?`<div class="card" style="padding:22px"><div class="tl">
       ${regs.map(r=>`<div class="tl-item">
@@ -1287,7 +1300,7 @@ function viewProntuarioPaciente(pid){
 // exporta o prontuário do paciente em página imprimível (salvar como PDF)
 function exportarProntuario(pid){
   const p=pac(pid); if(!p)return;
-  const regs=DB.prontuarios.filter(r=>r.pacienteId===pid).sort((a,b)=>a.data.localeCompare(b.data)||a.criadoEm-b.criadoEm);
+  const regs=prontsDoPac(pid).sort((a,b)=>a.data.localeCompare(b.data)||a.criadoEm-b.criadoEm);
   const TIPO={anamnese:'Anamnese',evolucao:'Evolução',consulta:'Consulta',conduta:'Conduta / Prescrição',nota:'Nota',avaliacao:'Avaliação'};
   const linha=(rot,val)=>val?`<p style="margin:4px 0"><b>${rot}:</b> ${esc(val).replace(/\n/g,'<br>')}</p>`:'';
   const cli=(CLINICA&&CLINICA.nome)||DB.config.clinica||'';
@@ -1312,13 +1325,13 @@ function exportarProntuario(pid){
 }
 // exporta TODOS os prontuários (todos os pacientes) num PDF só
 function exportarTodosProntuarios(){
-  const comReg=DB.pacientes.filter(p=>DB.prontuarios.some(r=>r.pacienteId===p.id));
+  const comReg=DB.pacientes.filter(p=>prontsDoPac(p.id).length);
   if(!comReg.length){toast('Nenhum prontuário para exportar ainda.',1);return;}
   const TIPO={anamnese:'Anamnese',evolucao:'Evolução',consulta:'Consulta',conduta:'Conduta / Prescrição',nota:'Nota',avaliacao:'Avaliação'};
   const linha=(rot,val)=>val?`<p style="margin:4px 0"><b>${rot}:</b> ${esc(val).replace(/\n/g,'<br>')}</p>`:'';
   const cli=(CLINICA&&CLINICA.nome)||DB.config.clinica||'';const prof=(AUTH&&AUTH.nome)||DB.config.profissional||'';
   const secoes=comReg.map(p=>{
-    const regs=DB.prontuarios.filter(r=>r.pacienteId===p.id).sort((a,b)=>a.data.localeCompare(b.data)||a.criadoEm-b.criadoEm);
+    const regs=prontsDoPac(p.id).sort((a,b)=>a.data.localeCompare(b.data)||a.criadoEm-b.criadoEm);
     return `<section style="page-break-before:always"><h1>${esc(p.nome)}</h1>
       <div class="meta">${idade(p.nascimento)!=null?idade(p.nascimento)+' anos · ':''}${esc(p.telefone||'')} · ${regs.length} registro(s)</div>
       ${regs.map(r=>`<div class="reg"><h3>${fmtDate(r.data)} <span class="tag">${TIPO[r.tipo]||r.tipo}</span>${r.sessao?' <span class="tag">Sessão '+esc(r.sessao)+'</span>':''}</h3>
@@ -2332,7 +2345,7 @@ function togglePacStatus(id){
 function openPaciente(id){
   const p=pac(id);
   const ags=DB.agendamentos.filter(a=>a.pacienteId===id).sort((a,b)=>(b.data+b.hora).localeCompare(a.data+a.hora));
-  const regs=DB.prontuarios.filter(r=>r.pacienteId===id).length;
+  const regs=prontsDoPac(id).length;
   const a=idade(p.nascimento);
   openModal(`<div class="modal wide"><div class="modal-head">
       <div class="avatar" style="width:42px;height:42px;font-size:16px">${initials(p.nome)}</div>
@@ -2511,7 +2524,7 @@ function sincronizarCaixa(ag){
 const PRONT_TIPOS=[['anamnese','Anamnese'],['avaliacao','Avaliação'],['evolucao','Evolução'],['consulta','Consulta'],['conduta','Conduta / Prescrição'],['nota','Nota']];
 function formProntuario(pid,rid){
   let proxSessao='';
-  if(!rid){ const nums=DB.prontuarios.filter(x=>x.pacienteId===pid&&x.sessao).map(x=>parseInt(x.sessao,10)).filter(n=>!isNaN(n)); if(nums.length)proxSessao=Math.max.apply(null,nums)+1; }
+  if(!rid){ const nums=prontsDoPac(pid).filter(x=>x.sessao).map(x=>parseInt(x.sessao,10)).filter(n=>!isNaN(n)); if(nums.length)proxSessao=Math.max.apply(null,nums)+1; }
   const r=rid?DB.prontuarios.find(x=>x.id===rid):{pacienteId:pid,data:todayISO(),tipo:'evolucao',sessao:proxSessao};
   openModal(`<div class="modal wide"><div class="modal-head"><h3>${rid?'Editar':'Novo'} registro — ${esc(pacNome(pid))}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
@@ -2550,7 +2563,7 @@ function saveProntuario(pid,rid){
     recursos:g('f-recursos'),pontos:g('f-pontos'),plano:g('f-plano'),conduta:g('f-plano')};
   if(!data.texto && !data.queixa && !data.objetivos){ toast('Escreva ao menos a queixa, objetivos ou o registro',1); return; }
   if(rid){ Object.assign(DB.prontuarios.find(x=>x.id===rid),data); }
-  else { DB.prontuarios.push({id:uid(),...data,agendamentoId:null,criadoEm:now()}); prontSelPaciente=pid; }
+  else { DB.prontuarios.push({id:uid(),...data,agendamentoId:null,profId:(AUTH&&AUTH.id)||null,profNome:(AUTH&&AUTH.nome)||'',criadoEm:now()}); prontSelPaciente=pid; }
   save(); closeModal(); toast('Registro salvo'); render();
 }
 function delProntuario(rid){
@@ -3151,7 +3164,7 @@ function confirmarImportProntuarios(){
   st.recs.forEach(r=>{ const pid=resolved[_normH(r._nome)]; if(!pid)return;
     if(existe(pid,r)){ ja++; return; }
     const{_nome,...rest}=r;
-    DB.prontuarios.push({id:uid(),pacienteId:pid,agendamentoId:null,conduta:rest.plano||'',...rest,criadoEm:now()});
+    DB.prontuarios.push({id:uid(),pacienteId:pid,agendamentoId:null,conduta:rest.plano||'',...rest,profId:(AUTH&&AUTH.id)||null,profNome:(AUTH&&AUTH.nome)||'',criadoEm:now()});
     add++;
   });
   _impProntState=null;
