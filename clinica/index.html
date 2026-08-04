@@ -800,7 +800,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],contratos:['Contratos','Contrato terapêutico e aceite do paciente'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],contratos:['Contratos','Contrato terapêutico e aceite do paciente'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],divulgacao:['Divulgação','Materiais pra indicar o app'],config:['Configurações','']};
 /* ===== ÍCONES SVG DO PAINEL (estilo gradiente do app) ===== */
 const CIC={
   dash:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-dash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="8" height="8" rx="2.2" fill="url(#cic-dash)"/><rect x="13" y="3" width="8" height="5" rx="2.2" fill="url(#cic-dash)" opacity=".65"/><rect x="13" y="10" width="8" height="11" rx="2.2" fill="url(#cic-dash)"/><rect x="3" y="13" width="8" height="8" rx="2.2" fill="url(#cic-dash)" opacity=".65"/></svg>`,
@@ -814,7 +814,8 @@ const CIC={
   equipe:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-eq" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><circle cx="8.5" cy="8.5" r="3.4" fill="url(#cic-eq)"/><circle cx="16" cy="9.5" r="2.8" fill="url(#cic-eq)" opacity=".7"/><path d="M2.5 19.5c0-3.3 2.7-5.3 6-5.3s6 2 6 5.3Z" fill="url(#cic-eq)"/><path d="M14.5 19.5c.1-2.4 1-3.9 2.6-4.6 2.4 0 4.4 1.8 4.4 4.6Z" fill="url(#cic-eq)" opacity=".7"/></svg>`,
   config:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-cfg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#AEB7C2"/><stop offset="1" stop-color="#5B6672"/></linearGradient></defs><path d="M19.4 13c.04-.32.06-.66.06-1s-.02-.68-.07-1l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.3 7.3 0 0 0-1.73-1l-.38-2.65A.49.49 0 0 0 14 2h-4a.49.49 0 0 0-.49.42l-.38 2.65a7.3 7.3 0 0 0-1.73 1l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64L4.6 11c-.05.32-.07.66-.07 1s.02.68.07 1l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1a7.3 7.3 0 0 0 1.73 1l.38 2.65c.04.24.25.42.49.42h4c.24 0 .45-.18.49-.42l.38-2.65a7.3 7.3 0 0 0 1.73-1l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64L19.4 13Z" fill="url(#cic-cfg)"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>`,
   contratos:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-ctr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFA98A"/><stop offset="1" stop-color="#E5605A"/></linearGradient></defs><path d="M6 3h8l4 4v9.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="url(#cic-ctr)"/><path d="M14 3v4h4" fill="#fff" opacity=".38"/><g stroke="#fff" stroke-width="1.4" stroke-linecap="round"><path d="M8 9.8h6M8 12.3h6"/></g><path d="M7.5 16.6c1.1-1.5 1.9-1.5 2.9 0 .8 1.2 1.6 1.2 2.4 0 .7-1 1.4-1.1 2.2-.3" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  projecao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-prj" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="3.2" fill="url(#cic-prj)"/><path d="M6.5 15.5l3.4-3.4 3 2.5 4.6-5.2" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.8 9h2.9v2.9" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  projecao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-prj" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="3.2" fill="url(#cic-prj)"/><path d="M6.5 15.5l3.4-3.4 3 2.5 4.6-5.2" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.8 9h2.9v2.9" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  divulgacao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-div" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB27A"/><stop offset="1" stop-color="#F2663B"/></linearGradient></defs><path d="M3 10v4a1 1 0 0 0 1 1h2l9 4V5L6 9H4a1 1 0 0 0-1 1Z" fill="url(#cic-div)"/><path d="M18 8.5a4 4 0 0 1 0 7" fill="none" stroke="url(#cic-div)" stroke-width="1.8" stroke-linecap="round"/></svg>`
 };
 // Dá um id de gradiente ÚNICO a cada inserção do ícone. Sem isso, o mesmo
 // id ("cic-pr" etc.) se repete no DOM (sidebar oculta + barra + "Mais") e o
@@ -829,7 +830,7 @@ function pintarIconesClinica(){
 }
 // menu "Mais" (mobile) — funções que não cabem na barra inferior
 function abrirMaisMenu(){
-  const items=[['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  const items=[['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
   const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
@@ -837,6 +838,51 @@ function abrirMaisMenu(){
       <button class="mais-item" onclick="closeModal();abrirSuporteProf()"><span class="mais-ic">${cicUniq(supIc)}</span><span>Suporte <span class="badge" id="badge-sup-m" style="display:none"></span></span></button>
     </div></div></div>`);
 }
+// ===== DIVULGAÇÃO: materiais prontos pro profissional indicar o app =====
+let _DIVUL={};
+function viewDivulgacao(){
+  const cod=CLINICA?CLINICA.codigo:'';
+  const linkAgenda=cod?('https://dichava.app/agendar/?c='+cod):'https://dichava.app';
+  _DIVUL={
+    paciente:'Oi! Queria te indicar um app que pode te acompanhar entre as nossas sessões. Chama dichava, é gratuito e foi feito na lógica da redução de danos, sem julgamento. Tem diário do dia a dia, um modo de apoio pras horas difíceis e conteúdo com base científica. Se quiser experimentar, baixa aqui: https://dichava.app',
+    agendamento:'Oi! Pra marcar sua consulta comigo é por aqui, é só escolher o melhor horário: '+linkAgenda,
+    leg1:'Agora faço parte da Rede dichava 💚\nÉ um app gratuito de redução de danos, sem julgamento, pra quem quer repensar a relação com o uso no próprio tempo. Além das ferramentas de autocuidado, ele conecta quem precisa a profissionais que acolhem de verdade.\nSe você procura acompanhamento sem moralismo, me chama ou baixa o app em dichava.app.',
+    leg2:'Agora você me encontra também no dichava.app 🌱\nUm app de redução de danos, gratuito e sem julgamento. Baixa lá e me chama pra gente conversar.',
+    leg3:'Cuidar da relação com o uso começa de onde você está, no seu tempo, sem exigir que você pare de tudo de uma vez. Foi por isso que entrei pra Rede dichava. O app é gratuito e você me encontra por lá: dichava.app.',
+    reels1:'Ideia: conte em 20 a 30 segundos por que você indica o dichava aos seus pacientes. Fale simples, como faria no consultório. Sugestão de fala: "Muita gente acha que redução de danos é só parar. Eu indico o dichava porque ele acompanha a pessoa no dia a dia, sem julgamento, e é gratuito." Mostre a tela do app no fim e chame pra baixar.',
+    reels2:'Ideia: mostre rápido o que tem no app. Abra o diário de uso, o modo de apoio pros momentos difíceis e o conteúdo. Diga em uma frase pra que serve cada parte. Feche com "baixa em dichava.app e me chama se quiser conversar".',
+    reels3:'Ideia: escolha um mito comum sobre uso de substâncias, explique em uma frase por que ele não se sustenta e conecte com a ideia de cuidar sem cobrança. No fim, indique o app e o seu contato.'
+  };
+  const bloco=(titulo,chave,texto,dica)=>`
+    <div class="card" style="padding:16px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <b style="font-size:14px">${titulo}</b><span style="flex:1"></span>
+        <button class="btn sm ghost cp" onclick="copiarModelo('${chave}')">Copiar</button>
+      </div>
+      <div style="white-space:pre-wrap;font-size:13.5px;color:var(--txs);line-height:1.55;background:var(--cin);border-radius:10px;padding:11px 13px">${esc(texto)}</div>
+      ${dica?`<div style="font-size:12px;color:var(--txm);margin-top:6px">${dica}</div>`:''}
+    </div>`;
+  return `
+    <div class="card" style="padding:16px;margin-bottom:14px;background:var(--vf)">
+      <p style="font-size:13.5px;color:var(--txs);line-height:1.55;margin:0">Textos prontos pra você convidar seus pacientes e falar do app nas redes. Toque em copiar, ajuste com as suas palavras e compartilhe. O que soa como você funciona melhor que texto pronto.</p>
+    </div>
+    <div class="sec-title" style="margin-top:0">Convidar pacientes</div>
+    ${bloco('Mensagem pra mandar no WhatsApp','paciente',_DIVUL.paciente)}
+    ${bloco('Link de agendamento','agendamento',_DIVUL.agendamento,'Esse link abre a sua página de horários.')}
+    ${cod?`<div class="card" style="padding:16px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px"><b style="font-size:14px">Presentear premium</b><span style="flex:1"></span><button class="btn sm ghost" onclick="abrirCodigosPremium()">Ver meus códigos</button></div>
+      <div style="font-size:12.5px;color:var(--txs);margin-top:8px;line-height:1.5">Se o seu plano inclui códigos premium, você pode dar 1 ano de premium de presente pros seus pacientes. Cada código vale uma vez.</div>
+    </div>`:''}
+    <div class="sec-title">Postar nas redes</div>
+    ${bloco('Legenda de apresentação','leg1',_DIVUL.leg1)}
+    ${bloco('Legenda curta pros stories','leg2',_DIVUL.leg2)}
+    ${bloco('Legenda com um toque educativo','leg3',_DIVUL.leg3)}
+    <div class="sec-title">Ideias de Reels e vídeo</div>
+    ${bloco('Por que eu indico o dichava','reels1',_DIVUL.reels1)}
+    ${bloco('O que tem dentro do app','reels2',_DIVUL.reels2)}
+    ${bloco('Mito e realidade sobre uso','reels3',_DIVUL.reels3)}`;
+}
+function copiarModelo(k){ const t=_DIVUL[k]; if(!t){ toast('Nada pra copiar',1); return; } try{ navigator.clipboard.writeText(t); toast('Copiado'); }catch(e){ toast('Copie o texto manualmente',1); } }
 /* ===== CÓDIGOS PREMIUM (presentear pacientes) ===== */
 async function abrirCodigosPremium(){
   const caps=meusCaps();
@@ -1016,6 +1062,7 @@ function render(){
   else if(route==='caixa') v.innerHTML=viewCaixa();
   else if(route==='projecao') { v.innerHTML=viewProjecao(); }
   else if(route==='documentos') v.innerHTML=viewDocumentos();
+  else if(route==='divulgacao') v.innerHTML=viewDivulgacao();
   else if(route==='contratos') { v.innerHTML=viewContratos(); carregarContratos(); }
   else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
