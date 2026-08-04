@@ -413,7 +413,7 @@ body.has-demo-banner{padding-bottom:64px}
 .hide{display:none!important}
 
 /* ============ LOGIN / GATE ============ */
-#gate,#clinicgate{position:fixed;inset:0;z-index:400;background:linear-gradient(160deg,var(--dk),#132013);display:none;align-items:center;justify-content:center;padding:24px;padding-top:calc(24px + var(--st))}
+#gate,#clinicgate{position:fixed;inset:0;z-index:400;background:linear-gradient(160deg,var(--dk),#132013);display:none;align-items:flex-start;justify-content:center;padding:24px;padding-top:calc(24px + var(--st));padding-bottom:calc(56px + var(--sb,0px));overflow-y:auto;-webkit-overflow-scrolling:touch}
 #gate.on,#clinicgate.on{display:flex}
 .cl-tabs{display:flex;gap:6px;background:var(--cin);border-radius:12px;padding:4px;margin:4px 0 16px}
 .cl-tab{flex:1;padding:9px;border-radius:9px;font-weight:700;font-size:13.5px;color:var(--txs);background:none}
@@ -426,7 +426,7 @@ body.has-demo-banner{padding-bottom:64px}
 .eq-mem:last-child{border-bottom:none}
 .eq-mem .papel{margin-left:auto;font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:20px;background:var(--ams);color:var(--lrj)}
 .eq-mem .papel.dono{background:var(--vf);color:var(--ve)}
-.gate-card{width:100%;max-width:400px;background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh2);padding:30px 26px;animation:pop .25s}
+.gate-card{width:100%;max-width:400px;margin:auto;background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh2);padding:30px 26px;animation:pop .25s}
 .gate-logo{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,var(--v),var(--sa));display:grid;place-items:center;font-weight:800;color:#fff;font-size:26px;margin:0 auto 14px}
 .gate-logo svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .gate-card h2{text-align:center;font-size:21px;font-weight:800;letter-spacing:-.4px}
