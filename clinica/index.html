@@ -910,6 +910,47 @@ async function instalarApp(){
     <div class="modal-foot"><button class="btn" onclick="closeModal()">Entendi</button></div>
   </div>`);
 }
+// ===== EXCLUIR CONTA (self-service, com dupla confirmação e motivo) =====
+function abrirExcluirConta(){
+  if(_DEMO){ toast('Não disponível na demonstração.',1); return; }
+  if(!_SB||!AUTH){ toast('Sem conexão.',1); return; }
+  openModal(`<div class="modal"><div class="modal-head"><h3 style="color:var(--er,#C62828)">Excluir minha conta</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" style="font-size:14px;line-height:1.6;color:var(--txs)">
+      <div style="background:#FFF0F0;border:1px solid #f2c7c7;border-radius:12px;padding:12px 14px;margin-bottom:14px;color:#8a2b2b">
+        <b>Esta ação é permanente e não pode ser desfeita.</b><br>
+        Vamos apagar <b>tudo</b>: sua conta, seu perfil público, sua agenda, seus pacientes, prontuários, financeiro e documentos.
+      </div>
+      <p style="margin-bottom:8px">Antes de continuar, baixe uma cópia dos seus dados. Você também faz isso em Configurações, em "Backup e exportação".</p>
+      <button class="btn ghost sm" onclick="exportar()" style="margin-bottom:16px">↓ Baixar backup completo (JSON)</button>
+      <div class="field"><label>Por que você está saindo? (obrigatório)</label><textarea id="exc-motivo" style="min-height:80px" placeholder="Seu retorno ajuda a melhorar o dichava"></textarea></div>
+      <div class="field"><label>Digite EXCLUIR para confirmar</label><input id="exc-word" placeholder="EXCLUIR" autocomplete="off"></div>
+      <label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-size:13.5px"><input type="checkbox" id="exc-chk" style="margin-top:3px;flex-shrink:0"><span>Entendo que minha conta e todos os meus dados serão apagados para sempre.</span></label>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn danger" id="exc-btn" onclick="confirmarExcluirConta()">Excluir minha conta</button></div>
+  </div>`);
+}
+async function confirmarExcluirConta(){
+  const motivo=(document.getElementById('exc-motivo')?.value||'').trim();
+  const word=(document.getElementById('exc-word')?.value||'').trim().toUpperCase();
+  const chk=document.getElementById('exc-chk');
+  if(!motivo){ toast('Conte rapidamente o motivo.',1); return; }
+  if(word!=='EXCLUIR'){ toast('Digite EXCLUIR (em maiúsculas) para confirmar.',1); return; }
+  if(!chk||!chk.checked){ toast('Marque a caixa de confirmação.',1); return; }
+  // segunda confirmação, nativa, pra evitar exclusão sem querer
+  if(!confirm('Tem certeza absoluta? Isso apaga sua conta e TODOS os dados agora, sem como recuperar.')) return;
+  const btn=document.getElementById('exc-btn'); if(btn){ btn.disabled=true; btn.textContent='Excluindo…'; }
+  try{
+    const {error}=await _SB.rpc('excluir_minha_conta',{p_motivo:motivo});
+    if(error) throw error;
+    try{ await _SB.auth.signOut(); }catch(e){}
+    try{ localStorage.clear(); }catch(e){}
+    alert('Sua conta foi excluída. Sentimos muito pela sua saída. 💚');
+    location.href='/';
+  }catch(e){
+    if(btn){ btn.disabled=false; btn.textContent='Excluir minha conta'; }
+    toast('Erro ao excluir: '+((e&&e.message)||'tente de novo'),5000);
+  }
+}
 /* ===== CÓDIGOS PREMIUM (presentear pacientes) ===== */
 async function abrirCodigosPremium(){
   const caps=meusCaps();
@@ -1799,6 +1840,11 @@ function viewConfig(){
       <button class="btn ghost sm" onclick="tutStart()">↻ Rever tutorial</button>
       <button class="btn danger ghost sm" onclick="gateLogout()">Sair da conta</button>
     </div>
+    ${_DEMO?'':`<div style="border-top:1px solid var(--line);margin-top:16px;padding-top:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--er,#C62828);margin-bottom:4px">Excluir minha conta</div>
+      <p style="color:var(--txs);font-size:12.5px;line-height:1.5;margin-bottom:10px">Apaga em definitivo sua conta e todos os dados: perfil, agenda, pacientes, prontuários, financeiro e documentos. Não dá pra desfazer. Baixe um backup antes, em "Backup e exportação" acima.</p>
+      <button class="btn danger sm" onclick="abrirExcluirConta()">Excluir minha conta</button>
+    </div>`}
   </div>
   <div class="card" style="padding:22px;max-width:560px;margin-top:16px">
     <div class="sec-title" style="margin-top:0">Privacidade e termos</div>
