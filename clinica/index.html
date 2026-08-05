@@ -663,6 +663,7 @@ body.has-demo-banner{padding-bottom:64px}
       </div>
       <button class="beta-chip" onclick="abrirSuporteProf()" title="Enviar feedback">Beta</button>
       <span id="save-dot"></span>
+      <a id="assinar-top" href="/assinar/" target="_blank" rel="noopener" title="Assinar um plano" style="display:none;align-items:center;gap:5px;background:linear-gradient(135deg,#F5A623,#E8890B);color:#fff;font-weight:800;font-size:13px;padding:8px 13px;border-radius:12px;text-decoration:none;white-space:nowrap;flex-shrink:0;box-shadow:0 6px 14px -6px rgba(232,137,11,.7)">✨ Assinar</a>
       <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
       <button class="btn" id="quick-add">＋ Novo</button>
     </div>
@@ -3724,6 +3725,8 @@ async function iniciarApp(){
 }
 // Banner de contagem regressiva do teste grátis (some quando não é trial)
 function mostrarBannerTrial(){
+  // botão "Assinar" no topo: aparece só pra quem está no período de teste
+  const at=document.getElementById('assinar-top'); if(at) at.style.display=(_meuAcesso&&_meuAcesso.trial)?'inline-flex':'none';
   const b=document.getElementById('trial-banner'); if(!b)return;
   if(!_meuAcesso||!_meuAcesso.trial||!_meuAcesso.ate){ b.style.display='none'; b.innerHTML=''; return; }
   const ms=new Date(_meuAcesso.ate).getTime()-Date.now();
