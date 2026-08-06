@@ -699,7 +699,9 @@ const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
 const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const brl = n=>(n<0?'-':'')+'R$ '+Math.abs(+n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const todayISO = ()=>new Date().toISOString().slice(0,10);
+// data de HOJE no fuso LOCAL (não em UTC). Sem isto, à noite no Brasil o
+// toISOString já aponta pro dia seguinte e a agenda mostra o dia errado.
+const todayISO = ()=>{ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
 const now = ()=>Date.now();
 function fmtDate(iso){ if(!iso) return '—'; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
 function fmtDateLong(iso){ const dt=new Date(iso+'T12:00'); return dt.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); }

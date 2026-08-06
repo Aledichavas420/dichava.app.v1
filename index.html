@@ -7298,7 +7298,7 @@ async function renderMinhasConversas(){
 async function carregarConsultasUser(){
   const box=document.getElementById('mc-consultas'); if(!box||!_SB||!U||U.id==='demo')return;
   let rows=[];
-  const hoje=new Date().toISOString().slice(0,10);
+  const hoje=isoLocal(new Date());
   try{const{data}=await _SB.from('solicitacoes').select('*').eq('user_id',U.id).gte('data_pref',hoje).order('data_pref',{ascending:true});rows=data||[];}catch(e){return;}
   rows=rows.filter(r=>r.status==='nova'||r.status==='confirmada');
   if(!rows.length){box.innerHTML='';return;}
