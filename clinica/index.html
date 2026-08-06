@@ -991,7 +991,7 @@ function compartilharCodigo(cod){
   else { try{ navigator.clipboard.writeText(msg); toast('Mensagem copiada'); }catch(e){ toast(cod); } }
 }
 /* ===== SUPORTE (lado do profissional) ===== */
-let _supPollP=null;
+let _supPollP=null, _supSig=undefined, _supN=0;
 // ===== FAQ / Pré-atendimento — perguntas e respostas por ferramenta do painel =====
 const SUP_FAQ=[
   {t:'Conta, plano e pagamento', ic:'💳', q:[
@@ -1086,7 +1086,7 @@ function supChatHumano(){
   root.innerHTML=`<button class="sup-back" style="margin:12px 0 0 16px" onclick="supHome()">← Central de ajuda</button>
     <div id="supp-scroll" style="height:46vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--cin);padding:14px;margin-top:10px"></div>
     <div class="modal-foot" style="gap:8px"><textarea id="supp-input" rows="1" placeholder="Descreva sua dúvida pro atendente…" style="flex:1;resize:none;max-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;background:var(--bg)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarSuporteProf();}"></textarea><button class="btn" onclick="enviarSuporteProf()">Enviar</button></div>`;
-  carregarSuppMsgs(true); marcarSuppLidas();
+  _supSig=undefined; _supN=0; carregarSuppMsgs(true); marcarSuppLidas();
   clearInterval(_supPollP); _supPollP=setInterval(()=>carregarSuppMsgs(false),4000);
 }
 async function carregarSuppMsgs(scroll){
@@ -1094,8 +1094,13 @@ async function carregarSuppMsgs(scroll){
   try{
     const {data}=await _SB.from('suporte_mensagens').select('*').eq('prof_id',AUTH.id).order('criado_em',{ascending:true});
     const sc=document.getElementById('supp-scroll'); if(!sc)return;
-    sc.innerHTML=(data||[]).map(m=>{const mine=m.remetente==='prof';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px;text-align:center;padding:0 20px">Escreva sua dúvida que um atendente responde por aqui. 🧡</div>';
-    if(scroll) sc.scrollTop=sc.scrollHeight;
+    const arr=data||[]; const sig=arr.length+'|'+(arr.length?arr[arr.length-1].criado_em:'');
+    if(!scroll && sig===_supSig) return; // polling sem novidade: não mexe na leitura
+    const novaMsg=_supSig!==undefined && sig!==_supSig && arr.length>_supN;
+    const perto=(sc.scrollHeight - sc.scrollTop - sc.clientHeight) < 80;
+    const prevTop=sc.scrollTop; _supSig=sig; _supN=arr.length;
+    sc.innerHTML=arr.map(m=>{const mine=m.remetente==='prof';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px;text-align:center;padding:0 20px">Escreva sua dúvida que um atendente responde por aqui. 🧡</div>';
+    if(scroll || (novaMsg && perto)) sc.scrollTop=sc.scrollHeight; else sc.scrollTop=prevTop;
   }catch(e){ const sc=document.getElementById('supp-scroll'); if(sc)sc.innerHTML='<div style="margin:auto;color:var(--txm);font-size:13px">Suporte indisponível. Rode o suporte-setup.sql.</div>'; }
 }
 async function enviarSuporteProf(){
@@ -2017,7 +2022,7 @@ function imprimirDocumento(id){
 }
 
 /* =============== MENSAGENS (chat com pacientes) =============== */
-let PCONVS=[], _pconv=null, _ppoll=null;
+let PCONVS=[], _pconv=null, _ppoll=null, _pchatSig=undefined, _pchatN=0;
 function viewMensagens(){ return '<div style="max-width:640px">'+solicitacoesBanner()+'<div class="sec-title" style="margin-top:4px">Conversas</div><div id="conv-list"><div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div></div>'; }
 async function carregarConversas(){
   const box=document.getElementById('conv-list'); if(!box||!_SB||!AUTH)return;
@@ -2037,7 +2042,7 @@ function abrirConversaPanel(id){
     <div id="pchat-scroll" style="height:54vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--cin);padding:16px"></div>
     <div class="modal-foot" style="gap:8px"><textarea id="pchat-input" rows="1" placeholder="Escreva uma mensagem…" style="flex:1;resize:none;max-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;background:var(--bg)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMsgPanel();}"></textarea><button class="btn" onclick="enviarMsgPanel()">Enviar</button></div>
   </div>`);
-  carregarMsgsPanel(true); clearInterval(_ppoll); _ppoll=setInterval(()=>carregarMsgsPanel(false),4000); marcarLidaPanel();
+  _pchatSig=undefined; _pchatN=0; carregarMsgsPanel(true); clearInterval(_ppoll); _ppoll=setInterval(()=>carregarMsgsPanel(false),4000); marcarLidaPanel();
 }
 function fecharConversaPanel(){ clearInterval(_ppoll); closeModal(); carregarConversas(); }
 async function carregarMsgsPanel(scroll){
@@ -2045,8 +2050,17 @@ async function carregarMsgsPanel(scroll){
   try{
     const{data}=await _SB.from('mensagens').select('*').eq('conversa_id',_pconv.id).order('criado_em',{ascending:true});
     const msgs=data||[]; const sc=document.getElementById('pchat-scroll'); if(!sc)return;
+    const sig=msgs.length+'|'+(msgs.length?msgs[msgs.length-1].criado_em:'');
+    // atualização automática (polling) sem novidade: não mexe na tela, deixa a leitura em paz
+    if(!scroll && sig===_pchatSig) return;
+    const novaMsg = _pchatSig!==undefined && sig!==_pchatSig && msgs.length>_pchatN;
+    const perto = (sc.scrollHeight - sc.scrollTop - sc.clientHeight) < 80; // já estava no fim?
+    const prevTop=sc.scrollTop;
+    _pchatSig=sig; _pchatN=msgs.length;
     sc.innerHTML=msgs.map(m=>{const mine=m.de_id===AUTH.id;const hora=new Date(m.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});return `<div style="max-width:78%;padding:9px 13px;border-radius:15px;font-size:14px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:var(--sh);${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px':'align-self:flex-start;background:var(--card);border-bottom-left-radius:5px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${hora}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px">Sem mensagens ainda. Diga um oi <svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><path d="M13 3.5a1.4 1.4 0 0 1 2.7.5v6l1.2-3.3a1.4 1.4 0 0 1 2.6 1l-1.6 5.2A6.5 6.5 0 0 1 5.6 12l-1.5-3a1.4 1.4 0 0 1 2.4-1.4l1 1.6-2-4.2a1.4 1.4 0 0 1 2.5-1.2l1.4 3-.9-4.3A1.4 1.4 0 0 1 11 1.9l1 4.6V3.5Z" fill="#F4B740"/></svg></div>';
-    sc.scrollTop=sc.scrollHeight;
+    // rola pro fim só ao abrir/enviar (scroll=true) ou quando chega msg nova e ela já estava no fim; senão preserva a posição de leitura
+    if(scroll || (novaMsg && perto)) sc.scrollTop=sc.scrollHeight;
+    else sc.scrollTop=prevTop;
   }catch(e){}
 }
 async function enviarMsgPanel(){
