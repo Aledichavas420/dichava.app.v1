@@ -9617,6 +9617,10 @@ setTimeout(function(){
     const sess=ls('dr_session');
     if(sess&&sess.id) U=sess;
   }
+  // ?demo=1 tem prioridade: abre a demonstracao do usuario mesmo se a pessoa
+  // ja estiver logada (ex.: profissional). Sem isto, cairia na conta dela.
+  let _demoReq=false; try{ _demoReq=new URLSearchParams(location.search).get('demo')==='1'; }catch(e){}
+  if(_demoReq){ try{applyTheme();}catch(e){} entrarDemoApp(); return; }
   if(U){
     const t=ls('dr_termo_'+U.id);
     if(!t){showV('vapp');document.getElementById('bnav').classList.remove('on');abrirTermoConsentimento();}
