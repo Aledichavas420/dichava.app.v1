@@ -2999,7 +2999,7 @@ a{color:inherit;text-decoration:none}
 .rel-empty{font-size:13px;color:var(--txm);padding:6px 2px}
 </style>
 <div class="V" id="vrelatorios">
-  <div class="ptb" style="background:var(--roxo)"><button class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit">📊 Relatórios avançados</div></div>
+  <div class="ptb" style="background:var(--roxo)"><button class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit"><svg viewBox="0 0 24 24" style="width:24px;height:24px;display:inline-block;vertical-align:-5px;margin-right:8px" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11"/><path d="M12 20V4"/><path d="M18 20v-7"/></svg>Relatórios avançados</div></div>
   <div class="sc" style="padding:14px 0 40px">
     <div class="rel-periods" id="rel-periods">
       <button class="relchip on" data-d="30" onclick="relSet(30)">30 dias</button>
@@ -3008,7 +3008,7 @@ a{color:inherit;text-decoration:none}
       <button class="relchip" data-d="9999" onclick="relSet(9999)">Tudo</button>
     </div>
     <div id="rel-body"></div>
-    <div style="padding:6px 18px 0"><button class="btn bv bfull" onclick="exportarRelatorioPDF()">📄 Exportar em PDF</button></div>
+    <div style="padding:6px 18px 0"><button class="btn bv bfull" onclick="exportarRelatorioPDF()"><svg viewBox="0 0 24 24" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;margin-right:7px" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M13 3v5h5"/><path d="M9.5 13.5h5M9.5 16.5h3"/></svg>Exportar em PDF</button></div>
     <div style="text-align:center;font-size:11px;color:var(--txm);padding:10px 24px 0">Ótimo pra guardar ou compartilhar com seu terapeuta 💚</div>
   </div>
 </div>
@@ -7930,27 +7930,28 @@ function relHeatmap(regs){
   for(let d=0;d<7;d++){h+=`<div class="hd">${wd[d]}</div>`+m[d].map(c=>{const o=c/max;const bg=c?`background:rgba(124,58,237,${(0.16+o*0.8).toFixed(2)})`:'background:var(--cin)';return `<div class="hc" style="${bg}">${c||''}</div>`;}).join('');}
   return h+'</div>';
 }
+const RIC={resumo:`<svg viewBox="0 0 24 24" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;margin-right:7px" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ric-ch" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#B692F6"/><stop offset="1" stop-color="#7B54D3"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5" fill="url(#ric-ch)"/><g fill="#fff"><rect x="6.4" y="12" width="2.6" height="5.6" rx="1"/><rect x="10.7" y="9" width="2.6" height="8.6" rx="1"/><rect x="15" y="6.5" width="2.6" height="11.1" rx="1"/></g></svg>`,trend:`<svg viewBox="0 0 24 24" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;margin-right:7px" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ric-tr" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2DA257"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5" fill="url(#ric-tr)"/><path d="M6 15.4l3.6-3.6 3 2.5 4.9-5.4" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.2 7.9h2.9v2.9" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,cal:`<svg viewBox="0 0 24 24" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;margin-right:7px" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ric-cal" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#6FC3FF"/><stop offset="1" stop-color="#3E7BF0"/></linearGradient></defs><rect x="3.5" y="5" width="17" height="15.5" rx="3.5" fill="url(#ric-cal)"/><path d="M3.5 9.3h17" stroke="#fff" stroke-width="1.1" opacity=".6"/><path d="M8 3.3v3.4M16 3.3v3.4" stroke="url(#ric-cal)" stroke-width="2" stroke-linecap="round"/><g fill="#fff"><circle cx="8" cy="13" r="1.1"/><circle cx="12" cy="13" r="1.1"/><circle cx="16" cy="13" r="1.1"/><circle cx="8" cy="16.6" r="1.1"/><circle cx="12" cy="16.6" r="1.1"/></g></svg>`,target:`<svg viewBox="0 0 24 24" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;margin-right:7px" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ric-tg" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFA98A"/><stop offset="1" stop-color="#E5605A"/></linearGradient></defs><circle cx="12" cy="12" r="9.2" fill="url(#ric-tg)"/><circle cx="12" cy="12" r="5.6" fill="#fff" opacity=".3"/><circle cx="12" cy="12" r="2.5" fill="#fff"/></svg>`,money:`<svg viewBox="0 0 24 24" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;margin-right:7px" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ric-mn" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFD86B"/><stop offset="1" stop-color="#E7A400"/></linearGradient></defs><circle cx="12" cy="12" r="9.2" fill="url(#ric-mn)"/><path d="M12 6.6v10.8M14.6 9.2c-.7-.8-1.7-1.1-2.7-1.1-1.6 0-2.8.8-2.8 2s1.2 1.7 2.8 2 2.8.9 2.8 2.1-1.2 2-2.9 2c-1.1 0-2.1-.4-2.8-1.2" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,shield:`<svg viewBox="0 0 24 24" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;margin-right:7px" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ric-sh" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 3l7.5 2.6v5.4c0 4.6-3.1 8-7.5 9.2-4.4-1.2-7.5-4.6-7.5-9.2V5.6L12 3Z" fill="url(#ric-sh)"/><path d="M8.7 12.2l2.2 2.2 4.3-4.6" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`};
 function renderRelatorio(){
   const hj=hoje();const dias=_relDias>=9999?3650:_relDias;const iniCur=isoNAgo(dias-1);
   const cur=relStats(iniCur,hj);const showCmp=_relDias<9999;
   let prev={usos:0,gasto:0,resist:0,eco:0};if(showCmp)prev=relStats(isoNAgo(2*dias-1),isoNAgo(dias));
   let html='';
   const cmpLbl=showCmp?`<div style="font-size:11px;color:var(--txs);margin-top:9px">vs. os ${dias} dias anteriores</div>`:'';
-  html+=`<div class="rel-card"><div class="rel-ct">📊 Resumo do período</div><div class="rel-cmp">
+  html+=`<div class="rel-card"><div class="rel-ct">${RIC.resumo}Resumo do período</div><div class="rel-cmp">
     <div class="rel-metric"><div class="rm-v">${cur.usos}${showCmp?relDelta(cur.usos,prev.usos,true):''}</div><div class="rm-l">registros de uso</div></div>
     <div class="rel-metric"><div class="rm-v">${cur.resist}${showCmp?relDelta(cur.resist,prev.resist,false):''}</div><div class="rm-l">resistências</div></div>
     <div class="rel-metric"><div class="rm-v">${brl(cur.gasto)}${showCmp?relDelta(cur.gasto,prev.gasto,true):''}</div><div class="rm-l">gasto</div></div>
     <div class="rel-metric"><div class="rm-v">${brl(cur.eco)}${showCmp?relDelta(cur.eco,prev.eco,false):''}</div><div class="rm-l">economia</div></div>
   </div>${cmpLbl}</div>`;
-  html+=`<div class="rel-card"><div class="rel-ct">📈 Tendência de uso</div>${cur.usos?relTrendSVG(cur.regs,iniCur,dias):'<div class="rel-empty">Sem registros no período.</div>'}</div>`;
-  html+=`<div class="rel-card"><div class="rel-ct">🗓️ Quando você mais usa</div>${cur.usos?relHeatmap(cur.regs):'<div class="rel-empty">Sem registros no período.</div>'}</div>`;
-  html+=`<div class="rel-card"><div class="rel-ct">🎯 Substâncias</div>${relBars(cur.regs.map(r=>r.substancia))}</div>`;
-  html+=`<div class="rel-card"><div class="rel-ct">💰 Financeiro</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">${RIC.trend}Tendência de uso</div>${cur.usos?relTrendSVG(cur.regs,iniCur,dias):'<div class="rel-empty">Sem registros no período.</div>'}</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">${RIC.cal}Quando você mais usa</div>${cur.usos?relHeatmap(cur.regs):'<div class="rel-empty">Sem registros no período.</div>'}</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">${RIC.target}Substâncias</div>${relBars(cur.regs.map(r=>r.substancia))}</div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">${RIC.money}Financeiro</div>`;
   if(cur.compras.length){const bySub={};cur.compras.forEach(c=>{const k=c.substancia||c.item||'Outro';bySub[k]=(bySub[k]||0)+parseBRL(c.valor);});html+=relBarsVals(bySub)+`<div style="font-size:12.5px;color:var(--txs);margin-top:9px">Gasto total: <b style="color:var(--dk)">${brl(cur.gasto)}</b> · Economia: <b style="color:#2DA257">${brl(cur.eco)}</b></div>`;}
   else html+='<div class="rel-empty">Nenhuma compra registrada no período.</div>';
   html+=`</div>`;
   const total=cur.usos+cur.resist;const taxa=total?Math.round(cur.resist/total*100):0;
-  html+=`<div class="rel-card"><div class="rel-ct">💪 Resistências</div><div style="font-size:13.5px;color:var(--txs);line-height:1.55">Você resistiu <b style="color:var(--dk)">${cur.resist}</b> vez(es) no período. Taxa de resistência: <b style="color:#6B43D6">${taxa}%</b> das vezes em que a vontade apareceu.</div></div>`;
+  html+=`<div class="rel-card"><div class="rel-ct">${RIC.shield}Resistências</div><div style="font-size:13.5px;color:var(--txs);line-height:1.55">Você resistiu <b style="color:var(--dk)">${cur.resist}</b> vez(es) no período. Taxa de resistência: <b style="color:#6B43D6">${taxa}%</b> das vezes em que a vontade apareceu.</div></div>`;
   document.getElementById('rel-body').innerHTML=html;
 }
 function exportarRelatorioPDF(){
