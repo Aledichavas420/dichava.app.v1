@@ -909,7 +909,7 @@ async function carregarSupMsgs(scroll){
   try{
     const {data}=await SB.from('suporte_mensagens').select('*').eq('prof_id',_supProf).order('criado_em',{ascending:true});
     const sc=$('#sup-scroll'); if(!sc)return;
-    sc.innerHTML=(data||[]).map(m=>{const mine=m.remetente==='suporte';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.4;${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:4px':'align-self:flex-start;background:#1b2822;border-bottom-left-radius:4px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px">Sem mensagens.</div>';
+    sc.innerHTML=(data||[]).map(m=>{const mine=m.remetente==='suporte';const h=new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return `<div style="max-width:80%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;${mine?'align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:4px':'align-self:flex-start;background:#1b2822;border-bottom-left-radius:4px'}">${esc(m.texto)}<div style="font-size:10px;opacity:.6;text-align:right;margin-top:3px">${h}</div></div>`;}).join('')||'<div style="margin:auto;color:var(--txm);font-size:13px">Sem mensagens.</div>';
     if(scroll) sc.scrollTop=sc.scrollHeight;
   }catch(e){}
 }
