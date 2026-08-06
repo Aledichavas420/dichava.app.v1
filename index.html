@@ -9602,6 +9602,8 @@ setTimeout(function(){
   }catch(e){try{showV('va');}catch(_){}}
 },7000);
 (async function init(){
+  // ?demo=1 tem prioridade absoluta: entra na demonstracao na hora, mesmo logado
+  try{ if(new URLSearchParams(location.search).get('demo')==='1'){ try{applyTheme();}catch(e){} entrarDemoApp(); return; } }catch(e){}
   let session=null;
   if(_SB){try{const gs=_SB.auth.getSession();const r=await Promise.race([gs,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),6000))]);session=r?.data?.session||null;}catch(e){session=null;}}
   if(session?.user){
@@ -9617,10 +9619,6 @@ setTimeout(function(){
     const sess=ls('dr_session');
     if(sess&&sess.id) U=sess;
   }
-  // ?demo=1 tem prioridade: abre a demonstracao do usuario mesmo se a pessoa
-  // ja estiver logada (ex.: profissional). Sem isto, cairia na conta dela.
-  let _demoReq=false; try{ _demoReq=new URLSearchParams(location.search).get('demo')==='1'; }catch(e){}
-  if(_demoReq){ try{applyTheme();}catch(e){} entrarDemoApp(); return; }
   if(U){
     const t=ls('dr_termo_'+U.id);
     if(!t){showV('vapp');document.getElementById('bnav').classList.remove('on');abrirTermoConsentimento();}
