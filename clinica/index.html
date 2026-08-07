@@ -1214,7 +1214,7 @@ async function renderChecklist(){
   const passos=[
     {ok:perfilOk, t:'Complete seu perfil público', d:'Foto, bio, especialidades e valor', act:"go('perfil')", cta:'Completar'},
     {ok:dispOk,  t:'Defina sua disponibilidade', d:'Os horários que o paciente pode escolher', act:"go('config')", cta:'Definir'},
-    {ok:linkOk,  t:'Compartilhe seu link de agendamento', d:'Na bio do Instagram, WhatsApp…', act:"go('equipe')", cta:'Compartilhar'},
+    {ok:linkOk,  t:'Compartilhe seu link de agendamento', d:'Na bio do Instagram, WhatsApp…', act:"compartilharMeuLink()", cta:'Compartilhar'},
     {ok:notifOk, t:'Ative as notificações', d:'Avisos de agendamento e mensagem', act:"go('config')", cta:'Ativar'},
   ];
   const feitos=passos.filter(p=>p.ok).length;
@@ -1386,7 +1386,7 @@ function viewPacientes(){
     ${list.length?`<div class="card"><div class="tbl-wrap"><table>
       <thead><tr><th>Paciente</th><th>Última consulta</th><th>Próxima</th><th style="text-align:right">Tags</th></tr></thead>
       <tbody>${rows}</tbody></table></div></div>`
-    :`<div class="card empty"><div class="big">${CIC.pacientes}</div><b>${filtroPaciente?'Nenhum resultado':'Seus pacientes aparecem aqui 🌱'}</b>${filtroPaciente?'Tente outro termo.':'Cadastre o primeiro ou compartilhe seu link de agendamento pra começar a receber solicitações.'}${filtroPaciente?'':`<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap"><button class="btn sm" onclick="formPaciente()">＋ Cadastrar paciente</button>${CLINICA?`<button class="btn ghost sm" onclick="go('equipe')">Compartilhar meu link</button>`:''}</div>`}</div>`}`;
+    :`<div class="card empty"><div class="big">${CIC.pacientes}</div><b>${filtroPaciente?'Nenhum resultado':'Seus pacientes aparecem aqui 🌱'}</b>${filtroPaciente?'Tente outro termo.':'Cadastre o primeiro ou compartilhe seu link de agendamento pra começar a receber solicitações.'}${filtroPaciente?'':`<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap"><button class="btn sm" onclick="formPaciente()">＋ Cadastrar paciente</button>${CLINICA?`<button class="btn ghost sm" onclick="compartilharMeuLink()">Compartilhar meu link</button>`:''}</div>`}</div>`}`;
 }
 let _pacT; function debouncedPac(){ clearTimeout(_pacT); _pacT=setTimeout(()=>{ if(route==='pacientes') render(); },200); }
 
@@ -2373,6 +2373,29 @@ function viewEquipe(){
 }
 function copiarCodigo(){ try{ navigator.clipboard.writeText(CLINICA.codigo); toast('Código copiado'); }catch(e){ toast(CLINICA.codigo); } }
 function copiarLinkAgenda(){ const url='https://dichava.app/agendar/?c='+CLINICA.codigo; try{localStorage.setItem('dr_link_shared_'+(AUTH?AUTH.id:''),'1');}catch(e){} try{ navigator.clipboard.writeText(url); toast('Link copiado'); }catch(e){ toast(url); } }
+// Compartilhar o PRÓPRIO link (agendamento + bio) num modal limpo, sem a tela de equipe.
+function compartilharUrl(u){ if(navigator.share){ navigator.share({url:u}).catch(()=>{}); } else { try{ navigator.clipboard.writeText(u); toast('Link copiado'); }catch(e){ toast(u); } } }
+function compartilharMeuLink(){
+  if(!CLINICA){ toast('Estamos preparando seu espaço, tente em instantes.',1); return; }
+  try{localStorage.setItem('dr_link_shared_'+(AUTH?AUTH.id:''),'1');}catch(e){}
+  const cod=CLINICA.codigo;
+  const linkAg='https://dichava.app/agendar/?c='+cod;
+  const linkBio='https://dichava.app/bio/?c='+cod;
+  const temAg=(meusCaps().agendaOnline||_DEMO);
+  const bloco=(titulo,url,copiar,qr)=>`<div class="field" style="margin-top:14px"><label>${titulo}</label>
+    <div class="eq-code" style="border-style:solid"><span style="flex:1;word-break:break-all;font-size:13px;font-weight:700">${url}</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn sm" onclick="compartilharUrl('${url}')">Compartilhar</button>
+      <button class="btn ghost sm" onclick="${copiar}">Copiar</button>
+      <button class="btn ghost sm" onclick="${qr}">QR code</button>
+    </div></div>`;
+  openModal(`<div class="modal"><div class="modal-head"><h3>Meu link</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <p style="color:var(--txs);font-size:13.5px;margin:0">Compartilhe na bio do Instagram, no WhatsApp ou onde quiser. Os pacientes te encontram e solicitam horário.</p>
+      ${temAg?bloco('Link de agendamento',linkAg,'copiarLinkAgenda()','qrAgenda()'):''}
+      ${bloco('Sua página (link na bio)',linkBio,'copiarLinkBio()','qrBio()')}
+    </div></div>`);
+}
 async function renomearClinica(){
   const nome=($('#eq-nome').value||'').trim(); if(!nome){toast('Informe um nome',1);return;}
   try{ const{error}=await _SB.from('clinicas').update({nome}).eq('id',CLINICA.id); if(error)throw error;
