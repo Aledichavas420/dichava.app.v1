@@ -2294,6 +2294,7 @@ async function salvarPerfilPanel(){
   const payload={tipo_prof:tipo,bio,especialidades:g('pf-esp'),modalidade:mod,cidade:g('pf-cidade'),valor:g('pf-valor'),duracao:g('pf-dur'),disponibilidade:g('pf-disp'),telefone:g('pf-tel'),
     link:(insta||site||''), reg:(g('pf-reg')||AUTH.reg||null), estado:g('pf-estado').toUpperCase(), instituicao:g('pf-inst'), ano_formacao:g('pf-ano'), especializacao:g('pf-espz'), publicos:g('pf-pub'), idiomas:g('pf-idiomas'), instagram:insta, site:site, linkedin:g('pf-linkedin'),
     foto:_pfFoto||null,capa:_pfCapa||'verde',status:novoStatus};
+  if(CLINICA&&CLINICA.codigo) payload.agenda_codigo=CLINICA.codigo; // garante que o link da bio/agenda funcione
   try{
     const full=Object.assign({id:AUTH.id,nome:nomePf},payload);
     let r=await _SB.from('profissionais').upsert(full);
