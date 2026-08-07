@@ -1107,6 +1107,9 @@ function renderProfs(){
     const mail = p.email?('<a class="btn ghost sm" href="mailto:'+esc(p.email)+'?subject='+encodeURIComponent(mailAssunto)+mailBody+'">✉️ E-mail</a>'):'';
     // Envio direto pelo Resend (não abre o app de e-mail) — só pra quem já usa o painel.
     const checkinBtn = (temAcesso&&p.email)?('<button class="btn ghost sm" onclick="enviarCheckinEmail(\''+p.id+'\')">📧 Check-in</button>'):'';
+    // Convite pro grupo de WhatsApp da Rede — só pra quem já está no app (ativo/teste).
+    const _pn=wlFirst(p.nome); const grupoMsg='Oi'+(_pn?(', '+_pn):'')+'! Criei um grupo no WhatsApp só pros profissionais da Rede dichava, um espaço aberto pra trocar ideias, propostas e pedidos (tipo divulgação). Como você já faz parte, seu lugar é lá 💚\n\nEntra aqui: https://chat.whatsapp.com/JDvGNyCW0Vu5Zj7WuNYznt';
+    const grupoBtn = (temAcesso&&p.telefone)?('<a class="btn wv sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'?text='+encodeURIComponent(grupoMsg)+'" target="_blank" rel="noopener">👥 Convidar pro grupo</a>'):'';
     return `<div class="pcard ${!ativo&&!expirado?'pend':''}">
       <div class="phead" onclick="abrirDetalheProf('${p.id}')" style="cursor:pointer" title="Ver ficha completa">
         <div class="pav">${initials(p.nome)}</div>
@@ -1118,7 +1121,7 @@ function renderProfs(){
         </div>
       </div>
       ${p.obs_admin?`<div class="obs">📝 ${esc(p.obs_admin)}</div>`:''}
-      <div class="pacts">${acts.join('')}${wa}${mail}${checkinBtn}</div>
+      <div class="pacts">${acts.join('')}${wa}${grupoBtn}${mail}${checkinBtn}</div>
     </div>`;
   }).join('');
 }
