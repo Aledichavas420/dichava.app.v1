@@ -1234,11 +1234,19 @@ async function enviarBoasVindas(p,trial){
 }
 // Ficha completa do profissional (curadoria). Busca a linha inteira (admin tem RLS).
 // Nunca mostra senha — senhas ficam no auth do Supabase, nem chegam ao cliente.
+function baixarFotoAtual(){
+  const f=window._detFoto; if(!f){ toast('Este profissional não tem foto.'); return; }
+  let ext='jpg'; const m=/^data:image\/([a-z0-9]+)/i.exec(f); if(m) ext=(m[1]==='jpeg'?'jpg':m[1]);
+  const nome=(window._detNome||'profissional').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/(^-|-$)/g,'').toLowerCase()||'profissional';
+  const a=document.createElement('a'); a.href=f; a.download='dichava-'+nome+'.'+ext;
+  document.body.appendChild(a); a.click(); a.remove();
+}
 async function abrirDetalheProf(id){
   $('#modalRoot').innerHTML='<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal" style="max-width:560px;max-height:88vh;overflow:auto"><div style="text-align:center;padding:26px"><span class="spin"></span></div></div></div>';
   const base=PROFS.find(x=>x.id===id)||{};
   let p=base;
   try{ const{data,error}=await SB.from('profissionais').select('*').eq('id',id).maybeSingle(); if(!error&&data)p=Object.assign({},base,data); }catch(e){}
+  window._detFoto=p.foto||null; window._detNome=p.nome||'';
   const {ativo,expirado}=statusInfo(p);
   const S=v=>esc(String(v));
   const row=(l,v)=>(v!==undefined&&v!==null&&String(v).trim()!=='')?('<div style="display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line)"><div style="min-width:118px;color:var(--txs);font-size:12.5px">'+l+'</div><div style="flex:1;font-size:13.5px">'+S(v)+'</div></div>'):'';
@@ -1259,6 +1267,7 @@ async function abrirDetalheProf(id){
   acts.push('<button class="btn ghost sm" onclick="toggleOculto(\''+p.id+'\','+(p.oculto_diretorio?'true':'false')+')">'+(p.oculto_diretorio?'👁 Mostrar':'🙈 Ocultar')+'</button>');
   if(ativo)acts.push('<button class="btn dg sm" onclick="acao(\''+p.id+'\',\'bloquear\')">Bloquear</button>');
   if(p.status!=='rejeitado')acts.push('<button class="btn dg sm" onclick="acao(\''+p.id+'\',\'rejeitar\')">Rejeitar</button>');
+  if(p.foto)acts.push('<button class="btn ghost sm" onclick="baixarFotoAtual()">⬇️ Baixar foto</button>');
   const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">💬 WhatsApp</a>'):'';
   const temLink=p.instagram||p.site||p.linkedin||p.link;
   const html='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px"><h3 style="margin:0">Ficha do profissional</h3><button class="btn ghost sm" onclick="fecharModal()">✕</button></div>'
