@@ -949,11 +949,19 @@ function renderGrowth(rows){
   }).join('')+'</div>';
 }
 function ehReaprovar(p){ return p && p.status==='reaprovar'; }
+// Casa o plano do profissional (essencial/profissional/clinica), tolerando variações.
+function ehPlano(p,plano){ const pl=(p&&p.plano||'').toLowerCase();
+  if(plano==='essencial') return pl.indexOf('essencial')>=0;
+  if(plano==='profissional') return pl.indexOf('profiss')>=0||pl==='pro';
+  if(plano==='clinica') return pl.indexOf('clinic')>=0||pl.indexOf('clínic')>=0;
+  return false; }
 function renderFiltros(){
   const nPag=PROFS.filter(p=>statusInfo(p).ativo && !ehTrial(p)).length;
   const nTeste=PROFS.filter(p=>ehTrial(p)).length;
   const nReap=PROFS.filter(ehReaprovar).length;
-  const fs=[['todos','Todos'],['reaprovar','🔄 Pendência diretório'+(nReap?' ('+nReap+')':'')],['pagantes','💳 Pagantes'+(nPag?' ('+nPag+')':'')],['teste','🎁 Em teste'+(nTeste?' ('+nTeste+')':'')],['pendente','Pendentes'],['expirado','Expirados'],['rejeitado','Rejeitados']];
+  const _pgPlano=x=>PROFS.filter(p=>statusInfo(p).ativo && !ehTrial(p) && ehPlano(p,x)).length;
+  const nEss=_pgPlano('essencial'), nPro=_pgPlano('profissional'), nCli=_pgPlano('clinica');
+  const fs=[['todos','Todos'],['reaprovar','🔄 Pendência diretório'+(nReap?' ('+nReap+')':'')],['pagantes','💳 Pagantes'+(nPag?' ('+nPag+')':'')],['plano-essencial','Essencial'+(nEss?' ('+nEss+')':'')],['plano-profissional','Profissional'+(nPro?' ('+nPro+')':'')],['plano-clinica','Clínica'+(nCli?' ('+nCli+')':'')],['teste','🎁 Em teste'+(nTeste?' ('+nTeste+')':'')],['pendente','Pendentes'],['expirado','Expirados'],['rejeitado','Rejeitados']];
   $('#filters').innerHTML=fs.map(([k,l])=>`<button class="ft ${_filtro===k?'on':''}" onclick="setFiltro('${k}')">${l}</button>`).join('');
 }
 function setFiltro(f){ _filtro=f; renderFiltros(); renderProfs(); }
@@ -1058,6 +1066,9 @@ function renderProfs(){
     const {ativo,expirado}=statusInfo(p);
     if(_filtro==='todos')return true;
     if(_filtro==='pagantes')return ativo && !ehTrial(p);
+    if(_filtro==='plano-essencial')return ativo && !ehTrial(p) && ehPlano(p,'essencial');
+    if(_filtro==='plano-profissional')return ativo && !ehTrial(p) && ehPlano(p,'profissional');
+    if(_filtro==='plano-clinica')return ativo && !ehTrial(p) && ehPlano(p,'clinica');
     if(_filtro==='teste')return ehTrial(p);
     if(_filtro==='reaprovar')return p.status==='reaprovar';
     if(_filtro==='pendente')return (p.status||'pendente')==='pendente' && !ativo;
