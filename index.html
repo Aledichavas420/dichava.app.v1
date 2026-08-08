@@ -7031,7 +7031,17 @@ async function contatarProf(id){
     }
     if(!conv){ throw new Error('não consegui abrir a conversa'); }
     const prefill='Olá! Vi seu perfil no dichava.app e gostaria de conversar sobre seus atendimentos. Você tem disponibilidade?';
-    abrirChat(conv,false,p.nome||conv.prof_nome||'Profissional',p.telefone||'','vprofs',p.tipo_prof||'',prefill);
+    // Conversa nova/vazia: já ENVIA essa mensagem, pra o profissional receber uma
+    // solicitação de contato de verdade (e não uma conversa vazia só com o nome).
+    if(conv && !conv.ultima_msg){
+      try{
+        const _ag=new Date().toISOString();
+        await _SB.from('mensagens').insert({conversa_id:conv.id,de_id:U.id,texto:prefill});
+        await _SB.from('conversas').update({ultima_msg:prefill.slice(0,120),atualizado_em:_ag,user_lida_em:_ag}).eq('id',conv.id);
+        conv.ultima_msg=prefill;
+      }catch(_){}
+    }
+    abrirChat(conv,false,p.nome||conv.prof_nome||'Profissional',p.telefone||'','vprofs',p.tipo_prof||'','');
   }catch(e){
     const m=(e&&e.message)||'';
     if(/login_required/.test(m)){ toast('Entre na sua conta novamente para conversar 💚',4000); }
