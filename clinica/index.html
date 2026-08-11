@@ -566,6 +566,29 @@ body.has-demo-banner{padding-bottom:64px}
 .livro-sobre{margin-top:16px;background:var(--cin);border-radius:12px;padding:14px 16px}
 .livro-sobre-h{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--txs);margin-bottom:6px}
 .livro-sobre p{margin:0;font-size:14px;line-height:1.6;color:var(--tx)}
+.biblio-hero{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--vf),var(--card));border:1px solid var(--vc);border-radius:16px;padding:15px 18px;margin-bottom:14px}
+.biblio-hero-ic{font-size:30px;line-height:1}
+.biblio-hero-t{font-size:17px;font-weight:800;color:var(--tx)}
+.biblio-hero-s{font-size:12.5px;color:var(--txs);line-height:1.5;margin-top:3px}
+.biblio-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;-webkit-overflow-scrolling:touch}
+.biblio-chips::-webkit-scrollbar{height:0}
+.bchip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--txs);font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.15s}
+.bchip.on{background:var(--tx);border-color:var(--tx);color:#fff}
+.estante-shelf{position:relative}
+.estante-shelf::after{content:"";position:absolute;left:6px;right:6px;bottom:8px;height:11px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.14),transparent 78%);z-index:0}
+.estante-row{display:flex;gap:15px;overflow-x:auto;padding:6px 2px 20px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;position:relative;z-index:1}
+.livro{flex:0 0 auto;border:0;background:none;padding:0;cursor:pointer;scroll-snap-align:start;transition:transform .16s}
+.livro:hover{transform:translateY(-5px)}
+.livro-capa{position:relative;width:124px;height:185px;border-radius:4px 8px 8px 4px;display:flex;flex-direction:column;justify-content:flex-start;padding:15px 13px 13px 19px;color:#fff;text-align:left;overflow:hidden;box-shadow:0 9px 20px -9px rgba(0,0,0,.55),inset 6px 0 0 rgba(0,0,0,.18),inset 8px 0 10px -6px rgba(0,0,0,.38),inset -1px 0 0 rgba(255,255,255,.12)}
+.livro-capa::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 42%,rgba(0,0,0,.16));pointer-events:none;z-index:0}
+.livro-edge{position:absolute;top:3px;bottom:3px;right:0;width:4px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55),rgba(255,255,255,.55) 1px,rgba(0,0,0,.14) 1px,rgba(0,0,0,.14) 2px);border-radius:0 3px 3px 0;opacity:.55;z-index:1}
+.livro-t{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:14px;line-height:1.22;letter-spacing:.2px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;position:relative;z-index:1}
+.livro-rule{height:2px;width:22px;background:rgba(255,255,255,.6);border-radius:2px;margin:8px 0;position:relative;z-index:1}
+.livro-a{font-size:10px;font-weight:700;opacity:.94;text-transform:uppercase;letter-spacing:.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:auto;position:relative;z-index:1}
+.livro-lang{position:absolute;top:8px;right:9px;font-size:8.5px;font-weight:800;background:rgba(0,0,0,.3);color:#fff;padding:2px 7px;border-radius:999px;letter-spacing:.3px;z-index:2}
+.livro-capa.lg{width:160px;height:236px;margin:0 auto;display:inline-flex}
+.livro-capa.lg .livro-t{font-size:16px;-webkit-line-clamp:6}
+.livro-hero{display:flex;justify-content:center;padding:6px 0 2px}
 </style>
 </head>
 <body>
@@ -1379,15 +1402,24 @@ function viewRede(){
 }
 function setRedeTab(t){ _redeTab=t; _cursoAtual=null; _aulaAtual=null; render(); }
 
+function _capa(s,l,big){
+  const lang=l.lang?`<span class="livro-lang">${esc(l.lang)}</span>`:'';
+  return `<span class="livro-capa ${big?'lg':''}" style="background:${s.cor}"><span class="livro-edge"></span>${lang}<span class="livro-t">${esc(l.t)}</span><span class="livro-rule"></span><span class="livro-a">${esc(l.a)}</span></span>`;
+}
+let _bibTema=-1;
+function setBibTema(i){ _bibTema=i; render(); const v=document.getElementById('view'); if(v&&v.scrollIntoView)try{v.scrollIntoView({block:'start'});}catch(e){} }
 function listaBiblioteca(){
-  const intro=`<div class="card" style="padding:16px;margin-bottom:8px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Uma estante de sugestões de leitura pra se aprofundar em redução de danos e nos temas do cuidado. São indicações de livros reais, por tema. Aqui ficam só as sugestões: procure em livrarias, sebos ou bibliotecas.</p></div>`;
-  let html=intro;
+  const totLiv=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
+  const hero=`<div class="biblio-hero"><div class="biblio-hero-ic">📚</div>
+    <div><div class="biblio-hero-t">Estante dichava</div>
+    <div class="biblio-hero-s">Sugestões de leitura reais, por tema. ${ESTANTE.length} temas · ${totLiv} livros. Toque numa capa pra saber do que trata.</div></div></div>`;
+  const chips=`<div class="biblio-chips"><button class="bchip ${_bibTema<0?'on':''}" onclick="setBibTema(-1)">Todos</button>`+
+    ESTANTE.map((s,i)=>`<button class="bchip ${_bibTema===i?'on':''}" onclick="setBibTema(${i})">${esc(s.tema)}</button>`).join('')+`</div>`;
+  let html=hero+chips;
   ESTANTE.forEach((s,si)=>{
+    if(_bibTema>=0 && _bibTema!==si) return;
     html+=`<div class="estante-tema">${esc(s.tema)} <span class="estante-n">${s.livros.length}</span></div>`;
-    html+=`<div class="estante-row">`+ s.livros.map((l,li)=>`
-      <button class="livro" onclick="abrirLivro(${si},${li})" title="${esc(l.t)}">
-        <span class="livro-capa" style="background:${s.cor}"><span class="livro-t">${esc(l.t)}</span><span class="livro-a">${esc(l.a)}</span></span>
-      </button>`).join('') + `</div>`;
+    html+=`<div class="estante-shelf"><div class="estante-row">`+ s.livros.map((l,li)=>`<button class="livro" onclick="abrirLivro(${si},${li})" title="${esc(l.t)}">${_capa(s,l)}</button>`).join('') +`</div></div>`;
   });
   return html;
 }
@@ -1396,8 +1428,8 @@ function abrirLivro(si,li){
   const meta=[l.a, l.ed, l.lang].filter(Boolean).join(' · ');
   openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>Sugestão de leitura</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="livro-hero"><span class="livro-capa lg" style="background:${s.cor}"><span class="livro-t">${esc(l.t)}</span><span class="livro-a">${esc(l.a)}</span></span></div>
-      <div style="text-align:center;margin-top:14px"><b style="font-size:16px;line-height:1.25;display:block">${esc(l.t)}</b>
+      <div class="livro-hero">${_capa(s,l,true)}</div>
+      <div style="text-align:center;margin-top:16px"><b style="font-size:16px;line-height:1.25;display:block">${esc(l.t)}</b>
         <div style="font-size:13px;color:var(--txs);margin-top:5px">${esc(meta)}</div>
         <span class="livro-tag" style="background:${s.cor}">${esc(s.tema)}</span></div>
       ${l.d?`<div class="livro-sobre"><div class="livro-sobre-h">O que você encontra</div><p>${esc(l.d)}</p></div>`:''}
