@@ -534,6 +534,18 @@ body.has-demo-banner{padding-bottom:64px}
 .aula-body p{margin:0 0 12px}
 .aula-body ul{margin:0 0 12px 18px;display:flex;flex-direction:column;gap:6px}
 .mod-tt{font-size:12.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.4px;margin:22px 0 10px}
+.aula-apres{font-size:14.5px;color:var(--txs);line-height:1.6;background:var(--cin);border-radius:12px;padding:12px 14px;margin-bottom:16px;border-left:3px solid var(--vc)}
+.roteiro-box{border:1px dashed var(--cinm);border-radius:14px;padding:14px 16px;margin-bottom:8px;background:var(--card)}
+.roteiro-tag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--txm);background:var(--cin);padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.aula-video{margin-bottom:12px}
+.aula-transcri{margin-top:10px}
+.aula-transcri summary{cursor:pointer;color:var(--v);font-weight:700;font-size:13.5px}
+.refs-box{margin-top:20px;border-top:1px solid var(--line);padding-top:14px}
+.refs-box>b{font-size:12.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--txs)}
+.refs-box ul{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.refs-box li{font-size:13px;color:var(--txs);line-height:1.5}
+.refs-box a{color:var(--v);font-weight:600;text-decoration:none}
+.ref-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--txm);background:var(--cin);padding:2px 7px;border-radius:6px;margin-right:6px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -918,7 +930,7 @@ function viewDivulgacao(){
 function copiarModelo(k){ const t=_DIVUL[k]; if(!t){ toast('Nada pra copiar',1); return; } try{ navigator.clipboard.writeText(t); toast('Copiado'); }catch(e){ toast('Copie o texto manualmente',1); } }
 
 /* ============================================================
-   REDE dichava — Biblioteca + Cursos (conteúdo embutido, MVP)
+   REDE dichava · Biblioteca + Cursos (conteúdo embutido, MVP)
    Conteúdo inicial e fácil de trocar. Visível a quem está no
    painel (o gate já barra profissionais expirados).
    ============================================================ */
@@ -928,25 +940,43 @@ let _cursoAtual=null, _aulaAtual=null;
 // ----- BIBLIOTECA (materiais de apoio) -----
 const BIBLIOTECA=[
   {id:'b-rd', cat:'Redução de danos', cor:'#E8F5E9', ic:'🌱', titulo:'O que é redução de danos', desc:'Os princípios que guiam o cuidado sem exigir abstinência.', conteudo:`
-    <p>Redução de danos é um jeito de cuidar que parte de onde a pessoa está, sem exigir que ela pare de usar pra receber ajuda. O foco é reduzir os riscos e os prejuízos ligados ao uso, respeitando o tempo e as escolhas de cada um.</p>
-    <h4>Os princípios na prática</h4>
+    <p>Redução de danos é uma abordagem de cuidado que parte de onde a pessoa está, sem exigir que ela pare de usar pra receber ajuda. O foco sai do consumo em si e vai pros danos ligados a ele, que podem ser reduzidos mesmo quando o uso continua.</p>
+    <h4>Três ideias que sustentam tudo</h4>
     <ul>
-      <li><b>Sem julgamento.</b> A pessoa não precisa provar que merece cuidado.</li>
-      <li><b>Pequenos passos contam.</b> Usar menos, mais espaçado ou de forma mais segura já é ganho.</li>
-      <li><b>A pessoa no centro.</b> Quem define a meta é ela, com o seu apoio.</li>
-      <li><b>Informação no lugar de medo.</b> Dado real ajuda mais que susto.</li>
+      <li><b>Pragmatismo.</b> Trabalha com a realidade, não com o cenário ideal.</li>
+      <li><b>Direitos e autonomia.</b> A pessoa segue sujeita das próprias escolhas.</li>
+      <li><b>Baixa exigência.</b> O acesso ao cuidado não depende de estar abstinente.</li>
     </ul>
-    <p>No dichava, tudo é construído nessa lógica. Entender isso ajuda a alinhar o discurso do app com o seu acompanhamento.</p>`},
+    <p>Não é o oposto da abstinência. A abstinência é uma das metas possíveis, não a porta de entrada obrigatória.</p>`, referencias:[
+      {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos: estratégias práticas para lidar com comportamentos de alto risco. Porto Alegre: Artmed.'},
+      {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'},
+      {tipo:'organização', ref:'Plataforma Brasileira de Política de Drogas (PBPD).', url:'https://pbpd.org.br'}
+    ]},
   {id:'b-acolhe', cat:'Clínica', cor:'#E0F2F1', ic:'🤝', titulo:'Acolhimento sem julgamento', desc:'Como conduzir a primeira conversa com quem usa substâncias.', conteudo:`
     <p>A primeira conversa costuma decidir se a pessoa volta. Quem usa substâncias muitas vezes já chega esperando sermão. Quebrar essa expectativa é metade do trabalho.</p>
     <h4>O que ajuda</h4>
     <ul>
       <li>Pergunte antes de aconselhar. "Como o uso entra na sua vida hoje?" abre mais que "você quer parar?".</li>
-      <li>Nomeie o que a pessoa já faz de cuidado, por menor que seja.</li>
+      <li>Nomeie o cuidado que a pessoa já pratica, por menor que seja.</li>
       <li>Evite palavras como "viciado", "recaída" e "limpo". Elas carregam culpa.</li>
       <li>Deixe claro que o objetivo é dela, não seu.</li>
     </ul>
-    <p>Acolher não é concordar com tudo. É criar um espaço seguro o suficiente pra pessoa falar a verdade.</p>`},
+    <p>Acolher não é concordar com tudo. É criar um espaço seguro o bastante pra pessoa falar a verdade.</p>`, referencias:[
+      {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional: ajudando as pessoas a mudar. Porto Alegre: Artmed.'},
+      {tipo:'documento', ref:'Ministério da Saúde. Política de Atenção Integral a Usuários de Álcool e outras Drogas.', url:'https://bvsms.saude.gov.br'}
+    ]},
+  {id:'b-substancias', cat:'Substâncias', cor:'#FFF3E0', ic:'🧪', titulo:'Substâncias sem pânico: guia rápido', desc:'Classes, efeitos e o cuidado com misturas, pra consulta rápida.', conteudo:`
+    <p>Um resumo pra consulta rápida. Uma forma simples de organizar as substâncias é pelo efeito no sistema nervoso.</p>
+    <ul>
+      <li><b>Depressoras:</b> álcool, benzodiazepínicos, opioides. Reduzem a atividade do sistema nervoso.</li>
+      <li><b>Estimulantes:</b> cocaína, crack, anfetaminas. Aceleram.</li>
+      <li><b>Perturbadoras:</b> cannabis, alucinógenos. Alteram a percepção.</li>
+    </ul>
+    <p>Mais importante que a substância é a combinação de três fatores: a substância, a pessoa (corpo, história, expectativa) e o contexto do uso. A mesma dose muda de efeito conforme esses fatores.</p>
+    <p>Atenção especial com misturas: juntar dois depressores, como álcool e um calmante, aumenta muito o risco de overdose.</p>`, referencias:[
+      {tipo:'livro', ref:'ZINBERG, N. Drug, Set, and Setting. New Haven: Yale University Press, 1984.'},
+      {tipo:'livro', ref:'HART, Carl. Drogas para Adultos. Rio de Janeiro: Zahar.'}
+    ]},
   {id:'b-app', cat:'Uso do app', cor:'#E8F0FF', ic:'📱', titulo:'Indicando o app pro paciente', desc:'Passo a passo pra apresentar o dichava numa sessão.', conteudo:`
     <p>O dichava funciona bem como apoio entre as sessões. Vale apresentar em consulta, com o aparelho na mão da pessoa.</p>
     <h4>Passo a passo</h4>
@@ -956,193 +986,238 @@ const BIBLIOTECA=[
       <li>Explique que é gratuito, sem julgamento e sem precisar parar de usar.</li>
       <li>Se você tem agendamento online, mostre que ela pode marcar por lá.</li>
     </ul>
-    <p>Na aba Divulgação você encontra textos prontos pra mandar por mensagem depois da sessão.</p>`},
+    <p>Na aba Divulgação você encontra textos prontos pra mandar por mensagem depois da sessão.</p>`, referencias:[
+      {tipo:'organização', ref:'Centro de Convivência É de Lei: materiais e cartilhas.', url:'https://edelei.org'}
+    ]},
+  {id:'b-rede', cat:'Rede e território', cor:'#EAF3FF', ic:'🗺️', titulo:'A rede pública de cuidado (RAPS)', desc:'CAPS AD, Consultório na Rua e como pensar o encaminhamento.', conteudo:`
+    <p>Você não cuida sozinho. No Brasil, o cuidado em álcool e outras drogas se apoia na Rede de Atenção Psicossocial (RAPS).</p>
+    <ul>
+      <li><b>CAPS AD:</b> atenção especializada em álcool e outras drogas.</li>
+      <li><b>Consultório na Rua:</b> leva cuidado a quem está em situação de rua.</li>
+      <li><b>Atenção Básica / ESF:</b> a porta de entrada mais próxima da vida da pessoa.</li>
+    </ul>
+    <p>Conhecer o que existe no território do paciente amplia o que você pode oferecer. Encaminhar bem não é passar o problema adiante, é ampliar a rede de quem cuida daquela pessoa, mantendo o seu vínculo aberto.</p>`, referencias:[
+      {tipo:'documento', ref:'BRASIL. Portaria GM/MS nº 3.088/2011 (Rede de Atenção Psicossocial).'},
+      {tipo:'documento', ref:'Ministério da Saúde. Saúde mental no SUS: os CAPS.', url:'https://bvsms.saude.gov.br'}
+    ]},
   {id:'b-legal', cat:'Ética e LGPD', cor:'#F1EBFB', ic:'🔒', titulo:'Dados e sigilo no dichava', desc:'Suas responsabilidades como controlador dos dados.', conteudo:`
     <p>Ao usar o painel, você é o controlador dos dados dos seus pacientes. Isso vem com responsabilidades simples, mas importantes.</p>
     <ul>
-      <li>Registre só o necessário e trate tudo com o mesmo sigilo do prontuário de papel.</li>
+      <li>Registre só o necessário e trate tudo com o sigilo do prontuário de papel.</li>
       <li>Não compartilhe login. Cada profissional tem o seu.</li>
       <li>Prontuários e financeiro são privados, visíveis só pra você.</li>
       <li>O paciente pode pedir os dados dele ou a exclusão a qualquer momento.</li>
     </ul>
-    <p>O termo completo do profissional está em Configurações, na parte de documentos legais.</p>`}
+    <p>O termo completo do profissional está em Configurações, na parte de documentos legais.</p>`, referencias:[
+      {tipo:'lei', ref:'BRASIL. Lei nº 13.709/2018 (Lei Geral de Proteção de Dados, LGPD).'}
+    ]}
 ];
+// helper de referências (usado na biblioteca e nas aulas)
+function refsHtml(refs){ if(!refs||!refs.length) return '';
+  const li=refs.map(r=>{ const tag=r.tipo?`<span class="ref-tag">${esc(r.tipo)}</span>`:'';
+    const txt=r.url?`<a href="${r.url}" target="_blank" rel="noopener">${esc(r.ref)} ›</a>`:esc(r.ref);
+    return `<li>${tag}${txt}</li>`; }).join('');
+  return `<div class="refs-box"><b>Referências e leitura</b><ul>${li}</ul></div>`;
+}
 
 // ----- CURSOS (feitos dentro do app, com progresso salvo no aparelho) -----
+// Cada aula tem: apresentacao (fica sempre), roteiro (vira video depois),
+// video (null por enquanto; quando houver .mp4 no Storage, mostra o video)
+// e referencias (textos e livros).
 const CURSOS=[
-  {id:'c-rd', titulo:'Formação em Redução de Danos', subtitulo:'Da base histórica à prática clínica no cuidado a quem usa substâncias.', nivel:'Introdutório ao intermediário', duracao:'5 módulos · ~2h30', cor:'linear-gradient(135deg,#4CAF5A,#00897B)',
-   sobre:'Uma formação introdutória em redução de danos pensada pra quem atende: da história e dos conceitos que sustentam a abordagem até o manejo no dia a dia do consultório. Ao final, você terá base pra acolher, construir metas e acompanhar pessoas que usam substâncias sem exigir abstinência como ponto de partida.',
+  {id:'c-rd', titulo:'Formação em Redução de Danos', subtitulo:'Da base histórica à prática clínica no cuidado a quem usa substâncias.', nivel:'Introdutório ao intermediário', duracao:'5 módulos · 18 aulas', cor:'linear-gradient(135deg,#4CAF5A,#00897B)',
+   sobre:'Uma formação introdutória em redução de danos pensada pra quem atende: da história e dos conceitos que sustentam a abordagem até o manejo no dia a dia do consultório. Cada aula traz uma apresentação, o conteúdo em vídeo e referências pra se aprofundar.',
    publico:'Psicólogas, psiquiatras, assistentes sociais, terapeutas, redutores de danos e demais profissionais que acompanham pessoas que usam álcool e outras drogas.',
    referencias:[
-     {nome:'Centro de Convivência É de Lei', url:'https://edelei.org'},
-     {nome:'Curso de Atualização em RD (EPSJV/Fiocruz)', url:'https://www.epsjv.fiocruz.br'},
-     {nome:'Plataforma Brasileira de Política de Drogas (PBPD)', url:'https://pbpd.org.br'}
+     {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'},
+     {tipo:'organização', ref:'Atualização em RD (EPSJV/Fiocruz).', url:'https://www.epsjv.fiocruz.br'},
+     {tipo:'organização', ref:'Plataforma Brasileira de Política de Drogas (PBPD).', url:'https://pbpd.org.br'}
    ],
    modulos:[
      {titulo:'Módulo 1 · Bases históricas e conceituais', aulas:[
-       {titulo:'O que é redução de danos', dur:'6 min', conteudo:`
-         <p>Redução de danos é uma abordagem de cuidado que parte de onde a pessoa está, sem exigir que ela pare de usar pra receber ajuda. O foco sai do consumo em si e vai pros danos ligados a ele, que podem ser reduzidos mesmo quando o uso continua.</p>
-         <h4>Três ideias que sustentam tudo</h4>
-         <ul>
-           <li><b>Pragmatismo.</b> Trabalha com a realidade, não com o cenário ideal.</li>
-           <li><b>Direitos e autonomia.</b> A pessoa segue sujeita das próprias escolhas.</li>
-           <li><b>Baixa exigência.</b> O acesso ao cuidado não depende de estar abstinente.</li>
-         </ul>
-         <p>Não é o oposto da abstinência. A abstinência é uma das metas possíveis, não a porta de entrada obrigatória.</p>`},
-       {titulo:'Uma breve história da RD', dur:'8 min', conteudo:`
-         <p>A redução de danos nasceu fora do consultório. Nos anos 1980, diante da epidemia de HIV entre pessoas que usavam drogas injetáveis, programas de troca de seringas mostraram que dava pra salvar vidas sem exigir que ninguém parasse de usar.</p>
-         <p>No Brasil, a primeira ação de troca de seringas aconteceu em Santos, em 1989, e virou referência. Dali a abordagem cresceu, entrou nas políticas públicas de saúde mental e se ampliou pra muito além do injetável.</p>
-         <h4>O que mudou com o tempo</h4>
-         <p>De uma resposta emergencial a uma epidemia, a RD virou um campo de cuidado completo, com base científica, presente em CAPS, consultórios na rua e serviços de convivência.</p>`},
-       {titulo:'Proibicionismo e a guerra às drogas', dur:'8 min', conteudo:`
-         <p>Por quase um século, a política dominante tratou o uso de drogas como caso de polícia. A promessa era acabar com as drogas pela repressão. O resultado, medido por décadas de dados, foi outro: as drogas seguem disponíveis e os danos aumentaram.</p>
-         <h4>O que a evidência mostra</h4>
-         <ul>
-           <li>A repressão não reduziu o consumo de forma consistente.</li>
-           <li>O encarceramento recai de forma desigual sobre pessoas pobres, pretas e periféricas.</li>
-           <li>O medo e o estigma afastam as pessoas dos serviços de saúde.</li>
-         </ul>
-         <p>Entender essa crítica ajuda a enxergar por que uma pessoa que usa chega ao seu atendimento já na defensiva. O consultório pode ser um dos poucos lugares onde ela não é tratada como criminosa.</p>`},
-       {titulo:'Princípios e diretrizes na prática', dur:'6 min', conteudo:`
-         <p>Na hora de atender, a redução de danos vira um conjunto de atitudes concretas.</p>
-         <ul>
-           <li><b>Encontrar a pessoa onde ela está.</b> Sem etapa obrigatória pra merecer cuidado.</li>
-           <li><b>Reduzir dano, não necessariamente o uso.</b> Usar de forma mais segura já é progresso.</li>
-           <li><b>Passos pequenos e possíveis.</b> Mudança acontece por incrementos.</li>
-           <li><b>A pessoa decide.</b> Você oferece informação e apoio, não sentença.</li>
-         </ul>
-         <p>Esses princípios são a bússola pros módulos seguintes, que descem pra prática.</p>`}
+       {titulo:'O que é redução de danos', dur:'6 min', video:null,
+        apresentacao:'O ponto de partida: o que a redução de danos é, e o que ela não é.',
+        roteiro:`<p>Oi. Nesta primeira aula eu quero desfazer um mal-entendido comum: redução de danos não é ser contra parar de usar. É uma forma de cuidar que começa de onde a pessoa está, sem exigir abstinência como condição pra receber ajuda.</p>
+          <p>A pergunta muda. Em vez de "como faço essa pessoa parar", a gente pergunta "como reduzo os danos que o uso traz pra vida dela agora". E dá pra reduzir dano mesmo quando o uso continua.</p>
+          <p>Três ideias sustentam tudo: pragmatismo, trabalhar com a realidade e não com o cenário ideal; direitos e autonomia, a pessoa segue dona das próprias escolhas; e baixa exigência, o cuidado não depende de estar limpo pra acontecer.</p>
+          <p>Guarde isso, porque é a base de tudo que vem pela frente.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'}
+        ]},
+       {titulo:'Uma breve história da RD', dur:'7 min', video:null,
+        apresentacao:'De onde veio a redução de danos, no mundo e no Brasil.',
+        roteiro:`<p>A redução de danos não nasceu na universidade nem no consultório. Nasceu na urgência. Nos anos 80, com a epidemia de HIV, muita gente que usava drogas injetáveis estava morrendo, e a exigência de parar primeiro não salvava ninguém.</p>
+          <p>A resposta foi simples e radical pra época: distribuir seringas limpas. Não pra incentivar o uso, mas pra evitar mortes. E funcionou.</p>
+          <p>No Brasil, a primeira ação de troca de seringas aconteceu em Santos, em 1989, e virou referência. Daí a abordagem cresceu, entrou na política de saúde mental e foi muito além do injetável.</p>
+          <p>Contar essa história importa porque mostra que a redução de danos é resposta a um fracasso: o de exigir abstinência de quem ainda não pode ou não quer parar.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'ACSELRAD, G. (org.). Avessos do Prazer: drogas, aids e direitos humanos. Rio de Janeiro: Editora Fiocruz.'},
+          {tipo:'documento', ref:'Ministério da Saúde. Política de Atenção Integral a Usuários de Álcool e outras Drogas.', url:'https://bvsms.saude.gov.br'}
+        ]},
+       {titulo:'Proibicionismo e a guerra às drogas', dur:'8 min', video:null,
+        apresentacao:'Por que quase um século de repressão não reduziu os danos.',
+        roteiro:`<p>Por quase cem anos, a política dominante tratou droga como caso de polícia. A promessa era acabar com as drogas pela força. Depois de décadas, dá pra medir o resultado: as drogas continuam aí, e os danos aumentaram.</p>
+          <p>A repressão não reduziu o consumo de forma consistente. O que ela fez foi encher as prisões, e de gente muito específica: pobre, preta, da periferia. A mesma substância rende conversa pra uns e cadeia pra outros.</p>
+          <p>E tem um efeito que chega direto no seu consultório: o medo e o estigma afastam as pessoas da saúde. Quem se sente criminoso não procura ajuda, e quando procura, esconde.</p>
+          <p>Entender essa crítica ajuda a enxergar por que a pessoa chega na defensiva. O seu atendimento pode ser um dos poucos lugares onde ela não é tratada como criminosa.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'HART, Carl. Um Preço Muito Alto. Rio de Janeiro: Zahar.'},
+          {tipo:'lei', ref:'BRASIL. Lei nº 11.343/2006 (Lei de Drogas).'},
+          {tipo:'organização', ref:'Plataforma Brasileira de Política de Drogas (PBPD).', url:'https://pbpd.org.br'}
+        ]},
+       {titulo:'Princípios e diretrizes na prática', dur:'6 min', video:null,
+        apresentacao:'Como os princípios da RD viram atitude concreta no atendimento.',
+        roteiro:`<p>Beleza, e na prática? Como a redução de danos vira atitude no dia a dia?</p>
+          <p>Primeiro: encontrar a pessoa onde ela está, sem etapa obrigatória pra merecer cuidado. Segundo: mirar o dano, não necessariamente o uso. Ajudar alguém a usar de forma mais segura já é vitória. Terceiro: passos pequenos e possíveis, porque mudança acontece por incremento, não por decreto. E quarto: a pessoa decide. Você oferece informação e apoio, não sentença.</p>
+          <p>Repare que nada disso é ser permissivo ou passar a mão na cabeça. É ser realista e útil. O cinto de segurança não incentiva o acidente, ele reduz o estrago quando ele acontece.</p>
+          <p>Esses quatro princípios são a bússola pros próximos módulos, onde a gente desce pra prática de verdade.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'livro', ref:'MacRAE, E.; GORGULHO, M. (org.). Redução de danos e uso de drogas.'}
+        ]}
      ]},
      {titulo:'Módulo 2 · Substâncias e padrões de uso', aulas:[
-       {titulo:'Entender as substâncias sem pânico', dur:'8 min', conteudo:`
-         <p>Pra cuidar bem, ajuda conhecer o básico das substâncias sem alarme nem romantização. Uma divisão simples por efeito no sistema nervoso já orienta bastante.</p>
-         <ul>
-           <li><b>Depressoras</b> (álcool, benzodiazepínicos, opioides): reduzem a atividade do sistema nervoso.</li>
-           <li><b>Estimulantes</b> (cocaína, crack, anfetaminas): aceleram.</li>
-           <li><b>Perturbadoras</b> (cannabis, alucinógenos): alteram a percepção.</li>
-         </ul>
-         <h4>Não é só a substância</h4>
-         <p>O efeito depende de três coisas juntas: a substância, a pessoa (seu corpo, história e expectativa) e o contexto em que usa. A mesma dose, em situações diferentes, produz experiências diferentes. Por isso duas pessoas com o mesmo consumo podem ter riscos bem distintos.</p>`},
-       {titulo:'Do uso ocasional ao uso problemático', dur:'7 min', conteudo:`
-         <p>Usar uma substância não é a mesma coisa que ter um problema com ela. Existe um espectro, e a pessoa transita por ele nos dois sentidos ao longo da vida.</p>
-         <ul>
-           <li><b>Experimental:</b> poucas vezes, por curiosidade.</li>
-           <li><b>Recreativo ou funcional:</b> com algum controle e função na vida.</li>
-           <li><b>Problemático:</b> quando começa a trazer prejuízos concretos.</li>
-           <li><b>Dependência:</b> quando o uso se torna central e difícil de interromper.</li>
-         </ul>
-         <p>Esse mapa evita dois erros comuns: tratar todo uso como doença, e ignorar sinais reais de sofrimento. Seu trabalho é ajudar a pessoa a se localizar sem rótulo que paralisa.</p>`},
-       {titulo:'Álcool: a droga mais naturalizada', dur:'7 min', conteudo:`
-         <p>O álcool é a substância mais usada e a que mais causa danos no Brasil, e ainda assim é a mais aceita socialmente. Isso faz muita gente subestimar o próprio consumo.</p>
-         <h4>Estratégias de uso mais seguro</h4>
-         <ul>
-           <li>Comer antes e se hidratar durante.</li>
-           <li>Espaçar as doses e alternar com água.</li>
-           <li>Evitar misturar com outros depressores.</li>
-           <li>Combinar antes quem dirige ou como voltar pra casa.</li>
-         </ul>
-         <p>Oferecer essas orientações não é incentivar. É reduzir risco de quem vai beber de qualquer forma, do mesmo jeito que o cinto de segurança não incentiva o acidente.</p>`},
-       {titulo:'Cannabis, estimulantes e uso combinado', dur:'7 min', conteudo:`
-         <p>Cada classe pede cuidados específicos, e muita gente usa mais de uma substância junto, o que muda os riscos.</p>
-         <ul>
-           <li><b>Cannabis:</b> atenção ao uso muito frequente e ao início precoce; vaporizar ou evitar tabaco reduz dano respiratório.</li>
-           <li><b>Estimulantes (cocaína, crack):</b> risco cardiovascular e desgaste; hidratação, descanso e não usar sozinho ajudam.</li>
-           <li><b>Uso combinado:</b> misturar depressores potencializa o risco de overdose; misturas com álcool merecem conversa direta.</li>
-         </ul>
-         <p>O ponto não é decorar tudo, é saber perguntar e ter o que oferecer. Informação prática, no tom certo, é cuidado.</p>`}
+       {titulo:'Entender as substâncias sem pânico', dur:'8 min', video:null,
+        apresentacao:'O básico das substâncias, sem alarme e sem romantizar.',
+        roteiro:`<p>Pra cuidar bem, você não precisa virar farmacologista, mas ajuda saber o básico, sem pânico e sem romantizar.</p>
+          <p>Um jeito simples de organizar é pelo efeito no sistema nervoso. Depressoras, como álcool, benzodiazepínicos e opioides, reduzem a atividade. Estimulantes, como cocaína, crack e anfetaminas, aceleram. E perturbadoras, como a cannabis e os alucinógenos, alteram a percepção.</p>
+          <p>Mas tem uma coisa mais importante que a substância: o efeito depende de três fatores juntos. A substância, a pessoa com seu corpo, história e expectativa, e o contexto em que ela usa. É o que a literatura chama de substância, set e setting.</p>
+          <p>Por isso a mesma dose, em situações diferentes, dá experiências diferentes. E por isso duas pessoas com o mesmo consumo podem ter riscos bem distintos.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'ZINBERG, N. Drug, Set, and Setting. Yale University Press, 1984.'},
+          {tipo:'livro', ref:'HART, Carl. Drogas para Adultos. Rio de Janeiro: Zahar.'}
+        ]},
+       {titulo:'Do uso ocasional ao uso problemático', dur:'7 min', video:null,
+        apresentacao:'O espectro do uso, sem tratar todo consumo como doença.',
+        roteiro:`<p>Usar uma substância não é a mesma coisa que ter um problema com ela. Isso parece óbvio, mas muita prática clínica ainda trata todo uso como doença.</p>
+          <p>Pensa num espectro. Tem o uso experimental, poucas vezes, por curiosidade. Tem o uso recreativo ou funcional, com algum controle e até uma função na vida da pessoa. Tem o uso problemático, quando começa a trazer prejuízo concreto. E tem a dependência, quando o uso vira central e difícil de interromper.</p>
+          <p>E o mais importante: a pessoa transita por esse espectro nos dois sentidos ao longo da vida. Não é uma escada de mão única rumo ao fundo do poço.</p>
+          <p>Esse mapa evita dois erros: tratar todo uso como doença, e ignorar sinais reais de sofrimento. Seu papel é ajudar a pessoa a se localizar, sem um rótulo que paralisa.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'livro', ref:'BUCHER, R. Drogas e Drogadição no Brasil. Porto Alegre: Artes Médicas.'}
+        ]},
+       {titulo:'Álcool: a droga mais naturalizada', dur:'7 min', video:null,
+        apresentacao:'A substância mais usada e mais subestimada, e o uso mais seguro.',
+        roteiro:`<p>Se tem uma substância que a gente precisa falar sem hipocrisia, é o álcool. É a mais usada e a que mais causa dano no Brasil, e ainda assim é a mais aceita. Tanto que muita gente subestima o próprio consumo.</p>
+          <p>Como isso é socialmente liberado, o profissional às vezes nem investiga direito. Vale perguntar com a mesma seriedade que perguntaria de qualquer outra substância.</p>
+          <p>E dá pra oferecer estratégias concretas de uso mais seguro. Comer antes e se hidratar durante. Espaçar as doses, alternando com água. Evitar misturar com outros depressores. E combinar antes quem dirige ou como voltar pra casa.</p>
+          <p>Isso não é incentivar bebida. É reduzir o risco de quem vai beber de qualquer jeito. De novo: cinto de segurança, não convite pro acidente.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'documento', ref:'Ministério da Saúde. Política de Atenção Integral a Usuários de Álcool e outras Drogas.', url:'https://bvsms.saude.gov.br'}
+        ]},
+       {titulo:'Cannabis, estimulantes e uso combinado', dur:'7 min', video:null,
+        apresentacao:'Cuidados por classe e os riscos de misturar substâncias.',
+        roteiro:`<p>Cada classe pede um cuidado diferente, e muita gente usa mais de uma coisa junto, o que muda o risco.</p>
+          <p>Na cannabis, o ponto de atenção é o uso muito frequente e o início muito cedo. Vaporizar ou evitar misturar com tabaco reduz o dano respiratório.</p>
+          <p>Nos estimulantes, como cocaína e crack, o risco é cardiovascular e o desgaste físico. Hidratar, descansar e não usar sozinho já ajudam bastante.</p>
+          <p>E o uso combinado merece conversa direta. Misturar depressores, álcool com outro calmante por exemplo, aumenta muito o risco de overdose.</p>
+          <p>O ponto não é decorar tudo. É saber perguntar e ter o que oferecer. Informação prática, no tom certo, é cuidado.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'HART, Carl. Drogas para Adultos. Rio de Janeiro: Zahar.'},
+          {tipo:'organização', ref:'ABORDA: Associação Brasileira de Redutores(as) de Danos.'}
+        ]}
      ]},
      {titulo:'Módulo 3 · O cuidado na prática clínica', aulas:[
-       {titulo:'Acolhimento sem julgamento', dur:'7 min', conteudo:`
-         <p>A primeira conversa costuma decidir se a pessoa volta. Quem usa substâncias muitas vezes chega esperando sermão. Quebrar essa expectativa é metade do trabalho.</p>
-         <h4>O que ajuda</h4>
-         <ul>
-           <li>Pergunte antes de aconselhar. "Como o uso entra na sua vida hoje?" abre mais que "você quer parar?".</li>
-           <li>Nomeie o cuidado que a pessoa já pratica, por menor que seja.</li>
-           <li>Evite palavras como "viciado", "recaída" e "limpo". Elas carregam culpa.</li>
-           <li>Deixe claro que o objetivo é dela, não seu.</li>
-         </ul>
-         <p>Acolher não é concordar com tudo. É criar um espaço seguro o bastante pra pessoa falar a verdade.</p>`},
-       {titulo:'Entrevista motivacional na lógica da RD', dur:'9 min', conteudo:`
-         <p>A entrevista motivacional combina bem com redução de danos porque parte da ideia de que a pessoa já tem, dentro dela, motivos pra mudar. Seu papel é ajudar a fazer esses motivos aparecerem, não empurrar os seus.</p>
-         <h4>Quatro movimentos simples</h4>
-         <ul>
-           <li><b>Perguntar aberto:</b> convide a pessoa a se estender.</li>
-           <li><b>Afirmar:</b> reconheça forças e tentativas.</li>
-           <li><b>Refletir:</b> devolva com suas palavras o que ouviu.</li>
-           <li><b>Resumir:</b> costure o que foi dito antes de seguir.</li>
-         </ul>
-         <p>Diante da resistência, não empurre de volta. A ambivalência é normal. Quando você para de brigar com ela, a pessoa tem espaço pra pensar.</p>`},
-       {titulo:'Construindo metas com a pessoa', dur:'7 min', conteudo:`
-         <p>Depois do vínculo inicial, vale construir metas junto com a pessoa. A regra é simples: a meta é dela e precisa ser realista pra semana que vem.</p>
-         <h4>Como definir</h4>
-         <ul>
-           <li>Parta do que a pessoa já quer mudar, não do que você acha.</li>
-           <li>Quebre em passos pequenos e observáveis.</li>
-           <li>Combine como vão medir. O diário do app ajuda aqui.</li>
-           <li>Reveja sem drama se não deu. Ajustar faz parte.</li>
-         </ul>
-         <p>Metas intermediárias contam: espaçar o uso, reduzir a quantidade, não usar sozinho. Cada uma reduz dano real e mantém a pessoa no processo.</p>`},
-       {titulo:'Manejo de fissura e situações de risco', dur:'8 min', conteudo:`
-         <p>A fissura é intensa, mas passa. Ajudar a pessoa a entender isso já muda a relação com ela. A vontade sobe, chega no pico e desce, geralmente em minutos.</p>
-         <h4>Ferramentas pra oferecer</h4>
-         <ul>
-           <li><b>Surfar a onda:</b> observar a fissura sem agir, esperando ela baixar.</li>
-           <li><b>Plano pros gatilhos:</b> mapear situações de risco e combinar o que fazer antes.</li>
-           <li><b>Rede de apoio:</b> alguém pra chamar no momento difícil.</li>
-         </ul>
-         <p>Fale abertamente sobre segurança, inclusive sobre sinais de overdose e o que fazer. Informação salva vida e não afasta ninguém do cuidado.</p>`}
+       {titulo:'Acolhimento sem julgamento', dur:'7 min', video:null,
+        apresentacao:'A primeira conversa e como não repetir o sermão que a pessoa espera.',
+        roteiro:`<p>A primeira conversa costuma decidir se a pessoa volta ou não. E quem usa substâncias muitas vezes chega já esperando sermão. Quebrar essa expectativa é metade do trabalho.</p>
+          <p>Umas coisas ajudam. Pergunte antes de aconselhar. "Como o uso entra na sua vida hoje" abre muito mais que "você quer parar". Nomeie o cuidado que a pessoa já pratica, por menor que seja. Evite palavras como viciado, recaída e limpo, porque elas carregam culpa. E deixe claro, desde o começo, que o objetivo é dela, não seu.</p>
+          <p>Acolher não é concordar com tudo nem abrir mão da sua leitura clínica. É criar um espaço seguro o bastante pra pessoa falar a verdade. Porque sem verdade, não tem cuidado que funcione.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional. Porto Alegre: Artmed.'},
+          {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'}
+        ]},
+       {titulo:'Entrevista motivacional na lógica da RD', dur:'9 min', video:null,
+        apresentacao:'Como ajudar a pessoa a encontrar os próprios motivos pra mudar.',
+        roteiro:`<p>A entrevista motivacional combina muito com redução de danos, porque parte de uma ideia: a pessoa já tem, dentro dela, motivos pra mudar. Seu papel não é empurrar os seus motivos, é ajudar os dela a aparecerem.</p>
+          <p>Tem quatro movimentos simples que dá pra treinar. Perguntar de forma aberta, convidando a pessoa a se estender. Afirmar, reconhecendo forças e tentativas. Refletir, devolvendo com as suas palavras o que você ouviu. E resumir, costurando o que foi dito antes de seguir.</p>
+          <p>E tem uma regra de ouro: diante da resistência, não empurre de volta. A ambivalência é normal, querer e não querer ao mesmo tempo é humano. Quando você para de brigar com a ambivalência, a pessoa ganha espaço pra pensar. E é aí que a mudança começa.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional: ajudando as pessoas a mudar. Porto Alegre: Artmed.'}
+        ]},
+       {titulo:'Construindo metas com a pessoa', dur:'7 min', video:null,
+        apresentacao:'Metas realistas, construídas com a pessoa, no ritmo dela.',
+        roteiro:`<p>Depois que existe algum vínculo, dá pra construir metas. E aqui tem uma regra simples: a meta é da pessoa, e precisa ser realista pra semana que vem, não pra um futuro ideal.</p>
+          <p>Como fazer? Parta do que ela já quer mudar, não do que você acha que ela deveria. Quebre em passos pequenos e observáveis. Combine como vocês vão medir, e aqui o diário do app ajuda muito. E reveja sem drama se não deu certo, porque ajustar faz parte.</p>
+          <p>E não esqueça: metas intermediárias contam. Espaçar o uso, reduzir a quantidade, não usar sozinho. Cada uma reduz dano de verdade e, principalmente, mantém a pessoa no processo. Uma meta pequena cumprida vale mais que uma meta gigante abandonada.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional. Porto Alegre: Artmed.'}
+        ]},
+       {titulo:'Manejo de fissura e situações de risco', dur:'8 min', video:null,
+        apresentacao:'O que fazer com a fissura e como preparar a pessoa pros gatilhos.',
+        roteiro:`<p>A fissura assusta, mas tem uma característica que muda tudo quando a pessoa entende: ela passa. A vontade sobe, chega num pico e desce, geralmente em poucos minutos.</p>
+          <p>Dá pra oferecer ferramentas concretas. Uma é surfar a onda: observar a fissura sem agir, como quem espera uma onda baixar, em vez de lutar contra ela. Outra é o plano pros gatilhos: mapear junto as situações de risco e combinar antes o que fazer quando elas chegam. E a terceira é a rede de apoio: alguém pra chamar no momento difícil.</p>
+          <p>E fale abertamente sobre segurança, inclusive sinais de overdose e o que fazer. Isso não assusta a pessoa pra longe, pelo contrário. Informação sobre risco salva vida e mostra que você está do lado dela.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'organização', ref:'ABORDA: Associação Brasileira de Redutores(as) de Danos.'}
+        ]}
      ]},
      {titulo:'Módulo 4 · Populações, território e rede', aulas:[
-       {titulo:'Vulnerabilidades e determinantes sociais', dur:'7 min', conteudo:`
-         <p>O mesmo uso tem pesos diferentes conforme a vida da pessoa. Moradia, renda, trabalho, cor da pele e rede de apoio mudam completamente o risco e o acesso ao cuidado.</p>
-         <p>Tratar o uso isolado da vida leva a metas que não param de pé. Uma pessoa em situação de rua tem prioridades diferentes de quem tem casa e emprego, e o cuidado precisa fazer sentido pra realidade dela.</p>
-         <h4>Na prática</h4>
-         <p>Pergunte sobre a vida antes de mirar a substância. Muitas vezes o passo mais importante não é sobre o uso, é sobre dormir melhor, comer ou ter com quem contar.</p>`},
-       {titulo:'Rua, território e a rede de cuidado', dur:'8 min', conteudo:`
-         <p>Redução de danos raramente é trabalho solitário. No Brasil, ela se apoia numa rede pública de atenção psicossocial (a RAPS), que inclui equipamentos importantes.</p>
-         <ul>
-           <li><b>CAPS AD:</b> atenção especializada em álcool e outras drogas.</li>
-           <li><b>Consultório na Rua:</b> leva cuidado a quem está na rua.</li>
-           <li><b>Atenção Básica e ESF:</b> a porta de entrada mais próxima da vida.</li>
-         </ul>
-         <p>Saber o que existe no território do seu paciente amplia o que você pode oferecer. Cuidar também é conectar a pessoa à rede certa, não carregar tudo sozinho.</p>`},
-       {titulo:'Estigma, gênero, raça e classe', dur:'7 min', conteudo:`
-         <p>A guerra às drogas não atinge todo mundo igual. A mesma substância que, para uns, rende uma conversa em consultório, para outros rende prisão. Cor, classe e território pesam nessa diferença.</p>
-         <p>O estigma é, ele próprio, um dano. Ele afasta das pessoas dos serviços, corrói a autoestima e faz a pessoa esconder o que precisaria falar. Reduzir estigma é parte do cuidado, não um detalhe.</p>
-         <h4>O que você pode fazer</h4>
-         <p>Cuide da própria linguagem, questione julgamentos automáticos e reconheça que a experiência de uso é atravessada por desigualdades. Um atendimento que enxerga isso acolhe de verdade.</p>`}
+       {titulo:'Vulnerabilidades e determinantes sociais', dur:'7 min', video:null,
+        apresentacao:'Por que o mesmo uso pesa diferente conforme a vida da pessoa.',
+        roteiro:`<p>O mesmo uso não pesa igual pra todo mundo. Moradia, renda, trabalho, cor da pele, rede de apoio: tudo isso muda o risco do uso e o acesso ao cuidado.</p>
+          <p>Quando a gente trata o uso isolado da vida, cria metas que não param de pé. Uma pessoa em situação de rua tem prioridades diferentes de quem tem casa e emprego. Cobrar as duas do mesmo jeito é ignorar a realidade.</p>
+          <p>Na prática, isso vira uma atitude simples: pergunte sobre a vida antes de mirar a substância. Como está o sono, a comida, o trabalho, com quem ela pode contar. Muitas vezes o passo mais importante pro uso nem é sobre o uso. É sobre dormir melhor ou ter com quem contar.</p>
+          <p>Cuidar de gente é cuidar de contexto, não só de comportamento.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'ACSELRAD, G. (org.). Avessos do Prazer. Rio de Janeiro: Editora Fiocruz.'},
+          {tipo:'documento', ref:'Ministério da Saúde. Política de Atenção Integral a Usuários de Álcool e outras Drogas.', url:'https://bvsms.saude.gov.br'}
+        ]},
+       {titulo:'Rua, território e a rede de cuidado', dur:'8 min', video:null,
+        apresentacao:'A rede pública (RAPS) e por que você não precisa cuidar sozinho.',
+        roteiro:`<p>Redução de danos raramente é trabalho solitário. No Brasil, ela se apoia numa rede pública, a Rede de Atenção Psicossocial, a RAPS, que tem equipamentos importantes.</p>
+          <p>Tem o CAPS AD, que é a atenção especializada em álcool e outras drogas. Tem o Consultório na Rua, que leva cuidado a quem está na rua. E tem a Atenção Básica, a unidade de saúde da família, que muitas vezes é a porta mais perto da vida da pessoa.</p>
+          <p>Saber o que existe no território do seu paciente amplia o que você consegue oferecer. Às vezes o cuidado é conectar a pessoa ao serviço certo, não carregar tudo no seu consultório.</p>
+          <p>Você faz parte de uma rede. Usar essa rede é competência clínica, não é passar o problema pra frente.</p>`,
+        referencias:[
+          {tipo:'documento', ref:'BRASIL. Portaria GM/MS nº 3.088/2011 (Rede de Atenção Psicossocial).'},
+          {tipo:'documento', ref:'Ministério da Saúde. Saúde mental no SUS: os CAPS.', url:'https://bvsms.saude.gov.br'}
+        ]},
+       {titulo:'Estigma, gênero, raça e classe', dur:'7 min', video:null,
+        apresentacao:'Como as desigualdades atravessam o uso, e o estigma como dano.',
+        roteiro:`<p>A guerra às drogas não atinge todo mundo igual. A mesma substância que, pra uns, rende uma conversa no consultório, pra outros rende uma abordagem policial. Cor, classe e território pesam nessa diferença, e a gente precisa nomear isso.</p>
+          <p>E tem uma coisa importante: o estigma é, ele mesmo, um dano. Ele afasta a pessoa dos serviços, corrói a autoestima e faz com que ela esconda justamente o que precisaria falar. Reduzir estigma faz parte do cuidado, não é um detalhe simpático.</p>
+          <p>Na prática, isso começa em você. Cuidar da própria linguagem, questionar o julgamento automático que surge, e reconhecer que a experiência de uso é atravessada por desigualdades. Um atendimento que enxerga isso acolhe de verdade, e não só na intenção.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'HART, Carl. Um Preço Muito Alto. Rio de Janeiro: Zahar.'},
+          {tipo:'organização', ref:'Plataforma Brasileira de Política de Drogas (PBPD).', url:'https://pbpd.org.br'}
+        ]}
      ]},
      {titulo:'Módulo 5 · Redução de danos no dichava', aulas:[
-       {titulo:'Traduzindo a RD pro acompanhamento no app', dur:'6 min', conteudo:`
-         <p>O dichava foi desenhado na lógica da redução de danos, e o painel é a sua ponta desse cuidado entre as sessões.</p>
-         <ul>
-           <li><b>Diário de uso:</b> dá material concreto pra conversa, sem depender só da memória.</li>
-           <li><b>Metas no ritmo da pessoa:</b> acompanham os passos pequenos que você combinou.</li>
-           <li><b>Modo de apoio:</b> ajuda nos momentos de fissura, quando você não está por perto.</li>
-         </ul>
-         <p>Apresentar o app em sessão, com o aparelho na mão da pessoa, funciona melhor que só indicar. Mostre onde registrar e pra que serve cada parte.</p>`},
-       {titulo:'Ética, sigilo e LGPD', dur:'7 min', conteudo:`
-         <p>Ao usar o painel, você é o controlador dos dados dos seus pacientes. Isso vem com responsabilidades simples, mas importantes.</p>
-         <ul>
-           <li>Registre só o necessário e trate tudo com o sigilo do prontuário de papel.</li>
-           <li>Não compartilhe login. Cada profissional tem o seu.</li>
-           <li>Prontuários e financeiro são privados, visíveis só pra você.</li>
-           <li>A pessoa pode pedir os dados dela ou a exclusão a qualquer momento.</li>
-         </ul>
-         <p>O termo completo do profissional está em Configurações, na parte de documentos legais.</p>`},
-       {titulo:'Trabalho em rede e encaminhamento', dur:'6 min', conteudo:`
-         <p>Você não precisa dar conta de tudo. Boa parte do cuidado em redução de danos é saber a hora de compartilhar com outros serviços e pessoas.</p>
-         <h4>Quando pensar em encaminhar</h4>
-         <ul>
-           <li>Situações que pedem outra especialidade ou urgência clínica.</li>
-           <li>Necessidades sociais (moradia, renda, documentos) que travam o cuidado.</li>
-           <li>Momentos em que a pessoa se beneficiaria de um serviço público do território.</li>
-         </ul>
-         <p>Encaminhar bem não é passar o problema adiante, é ampliar a rede de quem cuida daquela pessoa. Sempre que der, encaminhe com o vínculo aberto, deixando a porta do seu acompanhamento no lugar.</p>`}
+       {titulo:'Traduzindo a RD pro acompanhamento no app', dur:'6 min', video:null,
+        apresentacao:'Como o dichava vira a ponta do seu cuidado entre as sessões.',
+        roteiro:`<p>Agora que a base está dada, deixa eu mostrar como isso vira prática dentro do dichava. O app foi desenhado nessa lógica, e o painel é a ponta do seu cuidado entre uma sessão e outra.</p>
+          <p>O diário de uso dá material concreto pra conversa, sem depender só da memória da pessoa. As metas acompanham aqueles passos pequenos que vocês combinaram, no ritmo dela. E o modo de apoio ajuda nos momentos de fissura, justamente quando você não está por perto.</p>
+          <p>Uma dica prática: apresente o app na sessão, com o aparelho na mão da pessoa, mostrando onde registrar e pra que serve cada parte. Funciona muito melhor que só mandar o link e torcer. Quando a pessoa entende pra que serve, ela usa.</p>`,
+        referencias:[
+          {tipo:'organização', ref:'Centro de Convivência É de Lei: materiais de RD.', url:'https://edelei.org'}
+        ]},
+       {titulo:'Ética, sigilo e LGPD', dur:'7 min', video:null,
+        apresentacao:'Suas responsabilidades com os dados dos pacientes no painel.',
+        roteiro:`<p>Usar um painel digital traz uma responsabilidade que a gente não pode tratar como detalhe: os dados dos seus pacientes.</p>
+          <p>No dichava, você é o controlador desses dados. Isso vem com regras simples. Registre só o necessário, e trate tudo com o mesmo sigilo que você trataria um prontuário de papel. Não compartilhe login, cada profissional tem o seu. Saiba que prontuário e financeiro são privados, visíveis só pra você. E lembre que a pessoa pode pedir os dados dela ou a exclusão a qualquer momento, é um direito dela pela LGPD.</p>
+          <p>O termo completo do profissional está nas Configurações, na parte de documentos legais. Vale ler com calma uma vez. Cuidar bem dos dados também é cuidar da pessoa.</p>`,
+        referencias:[
+          {tipo:'lei', ref:'BRASIL. Lei nº 13.709/2018 (LGPD).'}
+        ]},
+       {titulo:'Trabalho em rede e encaminhamento', dur:'6 min', video:null,
+        apresentacao:'Quando e como compartilhar o cuidado com outros serviços.',
+        roteiro:`<p>Pra fechar: você não precisa dar conta de tudo sozinho. Boa parte do cuidado em redução de danos é saber a hora de compartilhar.</p>
+          <p>Vale pensar em encaminhar em algumas situações. Quando o caso pede outra especialidade ou tem uma urgência clínica. Quando existem necessidades sociais, moradia, renda, documento, que estão travando o cuidado. E quando a pessoa se beneficiaria de um serviço público do território dela.</p>
+          <p>Mas repara numa coisa: encaminhar bem não é passar o problema pra frente. É ampliar a rede de quem cuida daquela pessoa. Sempre que der, encaminhe com o vínculo aberto, deixando a porta do seu acompanhamento no lugar. A pessoa não deve sentir que foi dispensada, e sim que ganhou mais gente do lado dela.</p>
+          <p>É isso. Obrigado por chegar até aqui, e bom trabalho.</p>`,
+        referencias:[
+          {tipo:'documento', ref:'BRASIL. Portaria GM/MS nº 3.088/2011 (RAPS).'},
+          {tipo:'documento', ref:'Ministério da Saúde. Saúde mental no SUS.', url:'https://bvsms.saude.gov.br'}
+        ]}
      ]}
    ]}
 ];
-
 // progresso dos cursos (por aparelho, via localStorage)
 function _progGet(){ try{ return JSON.parse(localStorage.getItem('dichava_cursos_prog')||'{}'); }catch(e){ return {}; } }
 function _progSet(o){ try{ localStorage.setItem('dichava_cursos_prog', JSON.stringify(o)); }catch(e){} }
@@ -1171,7 +1246,7 @@ function listaBiblioteca(){
   </div>`).join('');
   return intro+`<div class="biblio-grid">${cards}</div>`;
 }
-function abrirMaterial(id){ const m=BIBLIOTECA.find(x=>x.id===id); if(!m)return; openModal(`<div class="modal" style="max-width:640px"><div class="modal-head"><h3>${esc(m.titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div><div class="modal-body aula-body">${m.conteudo}</div></div>`); }
+function abrirMaterial(id){ const m=BIBLIOTECA.find(x=>x.id===id); if(!m)return; openModal(`<div class="modal" style="max-width:640px"><div class="modal-head"><h3>${esc(m.titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div><div class="modal-body aula-body">${m.conteudo}${refsHtml(m.referencias)}</div></div>`); }
 
 function listaCursos(){
   const intro=`<div class="card" style="padding:16px;margin-bottom:16px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Cursos rápidos pra fazer no seu tempo, direto aqui no painel. Seu progresso fica salvo neste aparelho.</p></div>`;
@@ -1209,7 +1284,7 @@ function viewCursoDetalhe(c){
   const emenBits=[];
   if(c.sobre) emenBits.push(`<div style="margin-bottom:10px"><b style="font-size:12.5px;color:var(--txs);text-transform:uppercase;letter-spacing:.3px">Sobre o curso</b><p style="margin:5px 0 0;font-size:13.5px;color:var(--txs);line-height:1.55">${esc(c.sobre)}</p></div>`);
   if(c.publico) emenBits.push(`<div style="margin-bottom:10px"><b style="font-size:12.5px;color:var(--txs);text-transform:uppercase;letter-spacing:.3px">Para quem é</b><p style="margin:5px 0 0;font-size:13.5px;color:var(--txs);line-height:1.55">${esc(c.publico)}</p></div>`);
-  emenBits.push(`<div><b style="font-size:12.5px;color:var(--txs);text-transform:uppercase;letter-spacing:.3px">Formato</b><p style="margin:5px 0 0;font-size:13.5px;color:var(--txs);line-height:1.55">${p.tot} aulas em texto, no seu ritmo. ${esc(c.duracao)}. Progresso salvo neste aparelho.</p></div>`);
+  emenBits.push(`<div><b style="font-size:12.5px;color:var(--txs);text-transform:uppercase;letter-spacing:.3px">Formato</b><p style="margin:5px 0 0;font-size:13.5px;color:var(--txs);line-height:1.55">${p.tot} aulas no seu ritmo, cada uma com apresentação, vídeo e referências. Os vídeos estão sendo gravados; por enquanto você acompanha pelo roteiro. Progresso salvo neste aparelho.</p></div>`);
   html+=`<div class="card" style="padding:16px;margin-bottom:18px">${emenBits.join('')}</div>`;
   // módulos e aulas
   c.modulos.forEach((m,mi)=>{
@@ -1246,10 +1321,21 @@ function viewAula(c){
             :`<button class="btn" style="flex:2;justify-content:center" onclick="marcarAula('${c.id}',${mi},${ai},1);voltarCurso('${c.id}')">Concluir curso ✓</button>`;
   nav+=`</div>`;
   const toggle=`<button class="btn ghost sm" style="margin-top:14px" onclick="toggleAula('${c.id}',${mi},${ai})">${ok?'✓ Concluída (toque pra desmarcar)':'Marcar como concluída'}</button>`;
+  const apres=a.apresentacao?`<div class="aula-apres">${esc(a.apresentacao)}</div>`:'';
+  let corpo;
+  if(a.video){
+    corpo=`<div class="aula-video"><video controls playsinline preload="metadata" src="${a.video}" style="width:100%;border-radius:14px;background:#000;display:block"></video></div>`;
+    if(a.roteiro) corpo+=`<details class="aula-transcri"><summary>Ver transcrição da aula</summary><div class="aula-body" style="margin-top:10px">${a.roteiro}</div></details>`;
+  } else {
+    corpo=`<div class="roteiro-box"><div class="roteiro-tag">🎬 Roteiro do vídeo · gravação em breve</div><div class="aula-body">${a.roteiro||''}</div></div>`;
+  }
+  const refs=refsHtml(a.referencias);
   return `<button class="btn ghost sm" onclick="voltarCurso('${c.id}')">‹ ${esc(c.titulo)}</button>
     <h2 style="font-size:21px;margin:14px 0 4px">${esc(a.titulo)}</h2>
     <div style="font-size:12.5px;color:var(--txm);margin-bottom:18px">${esc(m.titulo)} · ${esc(a.dur)}</div>
-    <div class="aula-body">${a.conteudo}</div>
+    ${apres}
+    ${corpo}
+    ${refs}
     ${toggle}
     ${nav}`;
 }
