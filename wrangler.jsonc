@@ -1,0 +1,11 @@
+{
+  // Configuração do ambiente de TESTE (Cloudflare Workers - site estático).
+  // Serve os arquivos do repositório como site. Não afeta o GitHub Pages (site real),
+  // que ignora este arquivo. Só o Cloudflare usa.
+  "name": "dichava-teste",
+  "compatibility_date": "2025-08-01",
+  "assets": {
+    "directory": "./",
+    "html_handling": "auto-trailing-slash"
+  }
+}

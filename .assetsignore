@@ -1,0 +1,14 @@
+# Arquivos que NÃO fazem parte do site — não servir no ambiente de teste.
+.git
+.gitignore
+*.sql
+*.md
+docs
+supabase
+node_modules
+wrangler.jsonc
+.assetsignore
+CNAME
+Guia_dichavard_completo.pdf
+Teste_Financas.pdf
+Kit_Grupo_de_Testes_atualizado.pdf
