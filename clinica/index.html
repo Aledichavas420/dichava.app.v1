@@ -502,6 +502,38 @@ body.has-demo-banner{padding-bottom:64px}
 .tut-dots i.on{background:var(--v);width:20px;border-radius:20px}
 .tut-foot{display:flex;gap:10px;padding:0 24px 22px}
 .tut-foot .btn{flex:1;justify-content:center}
+/* ===== REDE: biblioteca + cursos ===== */
+.rede-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.rede-tab{border:1px solid var(--line);background:var(--card);color:var(--txs);font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.rede-tab.on{background:var(--v);border-color:var(--v);color:#fff}
+.biblio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.biblio-card{background:var(--card);border:1px solid var(--line);border-radius:var(--rlg);padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:8px;transition:.15s;box-shadow:var(--sh)}
+.biblio-card:hover{border-color:var(--vc);transform:translateY(-2px)}
+.biblio-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px}
+.biblio-card b{font-size:14.5px;color:var(--tx)}
+.biblio-card .d{font-size:12.5px;color:var(--txm);line-height:1.5;flex:1}
+.biblio-card .cat{font-size:11px;font-weight:700;color:var(--txs);background:var(--cin);padding:3px 9px;border-radius:999px;align-self:flex-start}
+.curso-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.curso-card{border:1px solid var(--line);border-radius:var(--rlg);overflow:hidden;cursor:pointer;background:var(--card);box-shadow:var(--sh);transition:.15s}
+.curso-card:hover{transform:translateY(-2px)}
+.curso-capa{display:flex;align-items:flex-end;padding:12px;color:#fff}
+.curso-capa .nv{font-size:11px;font-weight:700;background:rgba(0,0,0,.22);padding:3px 9px;border-radius:999px}
+.curso-bd{padding:14px}
+.curso-bd b{font-size:15px;color:var(--tx)}
+.curso-bd .sub{font-size:12.5px;color:var(--txm);margin-top:3px;line-height:1.45}
+.curso-prog{height:6px;background:var(--cin);border-radius:6px;margin-top:12px;overflow:hidden}
+.curso-prog i{display:block;height:100%;background:var(--v);border-radius:6px;transition:.3s}
+.aula-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:14px;margin-bottom:8px;cursor:pointer;background:var(--card)}
+.aula-row:hover{border-color:var(--vc)}
+.aula-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--cinm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700}
+.aula-check.ok{background:var(--v);border-color:var(--v)}
+.aula-tt{flex:1;font-size:14px;font-weight:600;color:var(--tx)}
+.aula-tt .du{font-size:11.5px;color:var(--txm);font-weight:500;display:block;margin-top:2px}
+.aula-body{font-size:15px;line-height:1.7;color:var(--tx)}
+.aula-body h4{font-size:16px;margin:20px 0 8px;color:var(--ve)}
+.aula-body p{margin:0 0 12px}
+.aula-body ul{margin:0 0 12px 18px;display:flex;flex-direction:column;gap:6px}
+.mod-tt{font-size:12.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.4px;margin:22px 0 10px}
 </style>
 </head>
 <body>
@@ -647,6 +679,7 @@ body.has-demo-banner{padding-bottom:64px}
     <a class="nav-item" data-nav="mensagens"><span class="ic">✉</span> Mensagens <span class="badge" id="badge-msgs"></span></a>
     <a class="nav-item" data-nav="perfil"><span class="ic">☺</span> Meu perfil</a>
     <a class="nav-item" data-nav="equipe"><span class="ic">⧉</span> Equipe</a>
+    <a class="nav-item" data-nav="rede"><span class="ic">◲</span> Rede</a>
     <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
     <div class="side-foot">
       <div class="who"><b id="side-prof">Profissional</b><span id="side-clin">Minha Clínica</span></div>
@@ -803,7 +836,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],contratos:['Contratos','Contrato terapêutico e aceite do paciente'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],divulgacao:['Divulgação','Materiais pra indicar o app'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],contratos:['Contratos','Contrato terapêutico e aceite do paciente'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],divulgacao:['Divulgação','Materiais pra indicar o app'],rede:['Rede dichava','Biblioteca e cursos pra você'],config:['Configurações','']};
 /* ===== ÍCONES SVG DO PAINEL (estilo gradiente do app) ===== */
 const CIC={
   dash:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-dash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="8" height="8" rx="2.2" fill="url(#cic-dash)"/><rect x="13" y="3" width="8" height="5" rx="2.2" fill="url(#cic-dash)" opacity=".65"/><rect x="13" y="10" width="8" height="11" rx="2.2" fill="url(#cic-dash)"/><rect x="3" y="13" width="8" height="8" rx="2.2" fill="url(#cic-dash)" opacity=".65"/></svg>`,
@@ -818,7 +851,8 @@ const CIC={
   config:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-cfg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#AEB7C2"/><stop offset="1" stop-color="#5B6672"/></linearGradient></defs><path d="M19.4 13c.04-.32.06-.66.06-1s-.02-.68-.07-1l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.3 7.3 0 0 0-1.73-1l-.38-2.65A.49.49 0 0 0 14 2h-4a.49.49 0 0 0-.49.42l-.38 2.65a7.3 7.3 0 0 0-1.73 1l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64L4.6 11c-.05.32-.07.66-.07 1s.02.68.07 1l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1a7.3 7.3 0 0 0 1.73 1l.38 2.65c.04.24.25.42.49.42h4c.24 0 .45-.18.49-.42l.38-2.65a7.3 7.3 0 0 0 1.73-1l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64L19.4 13Z" fill="url(#cic-cfg)"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>`,
   contratos:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-ctr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFA98A"/><stop offset="1" stop-color="#E5605A"/></linearGradient></defs><path d="M6 3h8l4 4v9.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="url(#cic-ctr)"/><path d="M14 3v4h4" fill="#fff" opacity=".38"/><g stroke="#fff" stroke-width="1.4" stroke-linecap="round"><path d="M8 9.8h6M8 12.3h6"/></g><path d="M7.5 16.6c1.1-1.5 1.9-1.5 2.9 0 .8 1.2 1.6 1.2 2.4 0 .7-1 1.4-1.1 2.2-.3" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   projecao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-prj" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="3.2" fill="url(#cic-prj)"/><path d="M6.5 15.5l3.4-3.4 3 2.5 4.6-5.2" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.8 9h2.9v2.9" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  divulgacao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-div" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB27A"/><stop offset="1" stop-color="#F2663B"/></linearGradient></defs><path d="M3 10v4a1 1 0 0 0 1 1h2l9 4V5L6 9H4a1 1 0 0 0-1 1Z" fill="url(#cic-div)"/><path d="M18 8.5a4 4 0 0 1 0 7" fill="none" stroke="url(#cic-div)" stroke-width="1.8" stroke-linecap="round"/></svg>`
+  divulgacao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-div" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB27A"/><stop offset="1" stop-color="#F2663B"/></linearGradient></defs><path d="M3 10v4a1 1 0 0 0 1 1h2l9 4V5L6 9H4a1 1 0 0 0-1 1Z" fill="url(#cic-div)"/><path d="M18 8.5a4 4 0 0 1 0 7" fill="none" stroke="url(#cic-div)" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  rede:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-rede" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5CE3CF"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><path d="M12 3 2.5 7.5 12 12l9.5-4.5L12 3Z" fill="url(#cic-rede)"/><path d="M6 10.6V15c0 1.5 2.7 2.9 6 2.9s6-1.4 6-2.9v-4.4" fill="none" stroke="url(#cic-rede)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.5 7.7v5" fill="none" stroke="url(#cic-rede)" stroke-width="1.8" stroke-linecap="round"/></svg>`
 };
 // Dá um id de gradiente ÚNICO a cada inserção do ícone. Sem isso, o mesmo
 // id ("cic-pr" etc.) se repete no DOM (sidebar oculta + barra + "Mais") e o
@@ -833,7 +867,7 @@ function pintarIconesClinica(){
 }
 // menu "Mais" (mobile) — funções que não cabem na barra inferior
 function abrirMaisMenu(){
-  const items=[['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  const items=[['rede','Rede'],['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
   const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
@@ -882,6 +916,193 @@ function viewDivulgacao(){
     ${bloco('Mito e realidade sobre uso','reels3',_DIVUL.reels3)}`;
 }
 function copiarModelo(k){ const t=_DIVUL[k]; if(!t){ toast('Nada pra copiar',1); return; } try{ navigator.clipboard.writeText(t); toast('Copiado'); }catch(e){ toast('Copie o texto manualmente',1); } }
+
+/* ============================================================
+   REDE dichava — Biblioteca + Cursos (conteúdo embutido, MVP)
+   Conteúdo inicial e fácil de trocar. Visível a quem está no
+   painel (o gate já barra profissionais expirados).
+   ============================================================ */
+let _redeTab='biblioteca';
+let _cursoAtual=null, _aulaAtual=null;
+
+// ----- BIBLIOTECA (materiais de apoio) -----
+const BIBLIOTECA=[
+  {id:'b-rd', cat:'Redução de danos', cor:'#E8F5E9', ic:'🌱', titulo:'O que é redução de danos', desc:'Os princípios que guiam o cuidado sem exigir abstinência.', conteudo:`
+    <p>Redução de danos é um jeito de cuidar que parte de onde a pessoa está, sem exigir que ela pare de usar pra receber ajuda. O foco é reduzir os riscos e os prejuízos ligados ao uso, respeitando o tempo e as escolhas de cada um.</p>
+    <h4>Os princípios na prática</h4>
+    <ul>
+      <li><b>Sem julgamento.</b> A pessoa não precisa provar que merece cuidado.</li>
+      <li><b>Pequenos passos contam.</b> Usar menos, mais espaçado ou de forma mais segura já é ganho.</li>
+      <li><b>A pessoa no centro.</b> Quem define a meta é ela, com o seu apoio.</li>
+      <li><b>Informação no lugar de medo.</b> Dado real ajuda mais que susto.</li>
+    </ul>
+    <p>No dichava, tudo é construído nessa lógica. Entender isso ajuda a alinhar o discurso do app com o seu acompanhamento.</p>`},
+  {id:'b-acolhe', cat:'Clínica', cor:'#E0F2F1', ic:'🤝', titulo:'Acolhimento sem julgamento', desc:'Como conduzir a primeira conversa com quem usa substâncias.', conteudo:`
+    <p>A primeira conversa costuma decidir se a pessoa volta. Quem usa substâncias muitas vezes já chega esperando sermão. Quebrar essa expectativa é metade do trabalho.</p>
+    <h4>O que ajuda</h4>
+    <ul>
+      <li>Pergunte antes de aconselhar. "Como o uso entra na sua vida hoje?" abre mais que "você quer parar?".</li>
+      <li>Nomeie o que a pessoa já faz de cuidado, por menor que seja.</li>
+      <li>Evite palavras como "viciado", "recaída" e "limpo". Elas carregam culpa.</li>
+      <li>Deixe claro que o objetivo é dela, não seu.</li>
+    </ul>
+    <p>Acolher não é concordar com tudo. É criar um espaço seguro o suficiente pra pessoa falar a verdade.</p>`},
+  {id:'b-app', cat:'Uso do app', cor:'#E8F0FF', ic:'📱', titulo:'Indicando o app pro paciente', desc:'Passo a passo pra apresentar o dichava numa sessão.', conteudo:`
+    <p>O dichava funciona bem como apoio entre as sessões. Vale apresentar em consulta, com o aparelho na mão da pessoa.</p>
+    <h4>Passo a passo</h4>
+    <ul>
+      <li>Mostre o diário de uso e o registro do dia a dia.</li>
+      <li>Aponte o modo de apoio pros momentos difíceis, como fissura e impulso.</li>
+      <li>Explique que é gratuito, sem julgamento e sem precisar parar de usar.</li>
+      <li>Se você tem agendamento online, mostre que ela pode marcar por lá.</li>
+    </ul>
+    <p>Na aba Divulgação você encontra textos prontos pra mandar por mensagem depois da sessão.</p>`},
+  {id:'b-legal', cat:'Ética e LGPD', cor:'#F1EBFB', ic:'🔒', titulo:'Dados e sigilo no dichava', desc:'Suas responsabilidades como controlador dos dados.', conteudo:`
+    <p>Ao usar o painel, você é o controlador dos dados dos seus pacientes. Isso vem com responsabilidades simples, mas importantes.</p>
+    <ul>
+      <li>Registre só o necessário e trate tudo com o mesmo sigilo do prontuário de papel.</li>
+      <li>Não compartilhe login. Cada profissional tem o seu.</li>
+      <li>Prontuários e financeiro são privados, visíveis só pra você.</li>
+      <li>O paciente pode pedir os dados dele ou a exclusão a qualquer momento.</li>
+    </ul>
+    <p>O termo completo do profissional está em Configurações, na parte de documentos legais.</p>`}
+];
+
+// ----- CURSOS (feitos dentro do app, com progresso salvo no aparelho) -----
+const CURSOS=[
+  {id:'c-rd', titulo:'Introdução à Redução de Danos', subtitulo:'Base pra acompanhar quem usa substâncias no próprio tempo.', nivel:'Introdutório', duracao:'~35 min', cor:'linear-gradient(135deg,#4CAF5A,#00897B)',
+   modulos:[
+     {titulo:'Fundamentos', aulas:[
+       {titulo:'De onde vem a redução de danos', dur:'7 min', conteudo:`
+         <p>A redução de danos nasceu fora do consultório, na resposta a epidemias e mortes que a lógica da abstinência total não conseguia evitar. A ideia era direta: se a pessoa vai usar de qualquer forma, é melhor que use com menos risco.</p>
+         <p>Com o tempo, virou uma abordagem de cuidado completa, com base científica e resultados melhores que os modelos que exigem parar antes de ajudar.</p>
+         <h4>Por que isso importa pra você</h4>
+         <p>Entender a origem ajuda a defender a abordagem quando ela é questionada, e a explicar pro paciente por que você não vai cobrar dele algo impossível de um dia pro outro.</p>`},
+       {titulo:'Abstinência não é o único objetivo', dur:'6 min', conteudo:`
+         <p>Parar de usar pode ser uma meta, mas não precisa ser a primeira nem a única. Entre usar todo dia e não usar nunca existe um caminho inteiro de opções.</p>
+         <h4>Metas intermediárias válidas</h4>
+         <ul>
+           <li>Espaçar o tempo entre um uso e outro.</li>
+           <li>Reduzir a quantidade.</li>
+           <li>Trocar por uma forma de uso menos arriscada.</li>
+           <li>Não usar sozinho, ou não misturar substâncias.</li>
+         </ul>
+         <p>Cada uma dessas metas reduz dano real. Reconhecê-las como vitória mantém a pessoa no processo.</p>`}
+     ]},
+     {titulo:'Na prática do consultório', aulas:[
+       {titulo:'A primeira conversa', dur:'8 min', conteudo:`
+         <p>O primeiro encontro é sobre construir confiança, não sobre resolver tudo. A pessoa precisa sentir que pode falar sem ser punida por isso.</p>
+         <h4>Um roteiro leve</h4>
+         <ul>
+           <li>Comece pela vida, não pela substância. Trabalho, sono, relações.</li>
+           <li>Pergunte como o uso entra nesse cenário, sem tom de cobrança.</li>
+           <li>Escute mais do que fala.</li>
+           <li>Feche combinando um próximo passo pequeno e possível.</li>
+         </ul>
+         <p>Se a pessoa sair com a sensação de ter sido ouvida, você já ganhou a sessão.</p>`},
+       {titulo:'Metas possíveis com o paciente', dur:'7 min', conteudo:`
+         <p>Depois do vínculo inicial, vale construir metas junto com a pessoa. A regra é simples: a meta é dela, e precisa ser realista pra semana que vem.</p>
+         <h4>Como definir</h4>
+         <ul>
+           <li>Parta do que a pessoa já quer mudar, não do que você acha.</li>
+           <li>Quebre em passos pequenos e observáveis.</li>
+           <li>Combine como vão medir. O diário do app ajuda aqui.</li>
+           <li>Reveja sem drama se não deu. Ajustar faz parte.</li>
+         </ul>
+         <p>O dichava registra o dia a dia entre as sessões, o que dá material concreto pra essa conversa.</p>`}
+     ]}
+   ]}
+];
+
+// progresso dos cursos (por aparelho, via localStorage)
+function _progGet(){ try{ return JSON.parse(localStorage.getItem('dichava_cursos_prog')||'{}'); }catch(e){ return {}; } }
+function _progSet(o){ try{ localStorage.setItem('dichava_cursos_prog', JSON.stringify(o)); }catch(e){} }
+function aulaConcluida(cid,mi,ai){ const o=_progGet(); return !!(o[cid]&&o[cid][mi+'-'+ai]); }
+function marcarAula(cid,mi,ai,val){ const o=_progGet(); o[cid]=o[cid]||{}; if(val)o[cid][mi+'-'+ai]=1; else delete o[cid][mi+'-'+ai]; _progSet(o); }
+function cursoTotais(c){ let tot=0,done=0; c.modulos.forEach((m,mi)=>m.aulas.forEach((a,ai)=>{tot++; if(aulaConcluida(c.id,mi,ai))done++;})); return {tot,done,pct:tot?Math.round(done/tot*100):0}; }
+
+// ----- VIEWS -----
+function viewRede(){
+  if(_cursoAtual){ const c=CURSOS.find(x=>x.id===_cursoAtual); if(c) return _aulaAtual? viewAula(c) : viewCursoDetalhe(c); _cursoAtual=null; }
+  const tabs=`<div class="rede-tabs">
+    <button class="rede-tab ${_redeTab==='biblioteca'?'on':''}" onclick="setRedeTab('biblioteca')">📚 Biblioteca</button>
+    <button class="rede-tab ${_redeTab==='cursos'?'on':''}" onclick="setRedeTab('cursos')">🎓 Cursos</button></div>`;
+  return tabs + (_redeTab==='cursos'? listaCursos() : listaBiblioteca());
+}
+function setRedeTab(t){ _redeTab=t; _cursoAtual=null; _aulaAtual=null; render(); }
+
+function listaBiblioteca(){
+  const intro=`<div class="card" style="padding:16px;margin-bottom:16px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Materiais rápidos pra apoiar seu trabalho na Rede dichava. Textos curtos, direto ao ponto. Vamos adicionando mais com o tempo.</p></div>`;
+  const cards=BIBLIOTECA.map(m=>`<div class="biblio-card" onclick="abrirMaterial('${m.id}')">
+    <div class="biblio-ic" style="background:${m.cor}">${m.ic}</div>
+    <span class="cat">${esc(m.cat)}</span>
+    <b>${esc(m.titulo)}</b>
+    <div class="d">${esc(m.desc)}</div>
+    <span style="font-size:12.5px;font-weight:700;color:var(--v)">Ler ›</span>
+  </div>`).join('');
+  return intro+`<div class="biblio-grid">${cards}</div>`;
+}
+function abrirMaterial(id){ const m=BIBLIOTECA.find(x=>x.id===id); if(!m)return; openModal(`<div class="modal" style="max-width:640px"><div class="modal-head"><h3>${esc(m.titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div><div class="modal-body aula-body">${m.conteudo}</div></div>`); }
+
+function listaCursos(){
+  const intro=`<div class="card" style="padding:16px;margin-bottom:16px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Cursos rápidos pra fazer no seu tempo, direto aqui no painel. Seu progresso fica salvo neste aparelho.</p></div>`;
+  const cards=CURSOS.map(c=>{ const p=cursoTotais(c); return `<div class="curso-card" onclick="abrirCurso('${c.id}')">
+    <div class="curso-capa" style="background:${c.cor};height:96px"><span class="nv">${esc(c.nivel)}</span></div>
+    <div class="curso-bd"><b>${esc(c.titulo)}</b><div class="sub">${esc(c.subtitulo)}</div>
+      <div style="font-size:12px;color:var(--txm);margin-top:8px">${p.tot} aulas · ${esc(c.duracao)}</div>
+      <div class="curso-prog"><i style="width:${p.pct}%"></i></div>
+      <div style="font-size:11.5px;color:var(--txs);margin-top:6px">${p.done}/${p.tot} concluídas</div>
+    </div></div>`; }).join('');
+  return intro+`<div class="curso-grid">${cards}</div>`;
+}
+function abrirCurso(id){ _cursoAtual=id; _aulaAtual=null; render(); window.scrollTo(0,0); }
+function voltarRede(){ _cursoAtual=null; _aulaAtual=null; render(); window.scrollTo(0,0); }
+function voltarCurso(cid){ _cursoAtual=cid; _aulaAtual=null; render(); window.scrollTo(0,0); }
+function abrirAula(cid,mi,ai){ _cursoAtual=cid; _aulaAtual={mi:mi,ai:ai}; render(); window.scrollTo(0,0); }
+function toggleAula(cid,mi,ai){ marcarAula(cid,mi,ai,!aulaConcluida(cid,mi,ai)); render(); }
+
+function viewCursoDetalhe(c){
+  const p=cursoTotais(c);
+  let html=`<button class="btn ghost sm" onclick="voltarRede()">‹ Voltar</button>
+    <div class="card" style="padding:0;overflow:hidden;margin:12px 0 18px">
+      <div class="curso-capa" style="background:${c.cor};height:120px"><span class="nv">${esc(c.nivel)}</span></div>
+      <div style="padding:16px 18px"><h2 style="font-size:20px;margin:0 0 4px">${esc(c.titulo)}</h2>
+      <p style="color:var(--txs);font-size:13.5px;margin:0 0 12px;line-height:1.5">${esc(c.subtitulo)}</p>
+      <div class="curso-prog"><i style="width:${p.pct}%"></i></div>
+      <div style="font-size:12px;color:var(--txs);margin-top:6px">${p.done} de ${p.tot} aulas concluídas · ${p.pct}%</div></div>
+    </div>`;
+  c.modulos.forEach((m,mi)=>{
+    html+=`<div class="mod-tt">${esc(m.titulo)}</div>`;
+    m.aulas.forEach((a,ai)=>{ const ok=aulaConcluida(c.id,mi,ai);
+      html+=`<div class="aula-row" onclick="abrirAula('${c.id}',${mi},${ai})">
+        <div class="aula-check ${ok?'ok':''}">${ok?'✓':''}</div>
+        <div class="aula-tt">${esc(a.titulo)}<span class="du">${esc(a.dur)}</span></div>
+        <span style="color:var(--txm)">›</span></div>`;
+    });
+  });
+  return html;
+}
+function viewAula(c){
+  const mi=_aulaAtual.mi, ai=_aulaAtual.ai;
+  const m=c.modulos[mi]; const a=m&&m.aulas[ai];
+  if(!a){ _aulaAtual=null; return viewCursoDetalhe(c); }
+  const ok=aulaConcluida(c.id,mi,ai);
+  const flat=[]; c.modulos.forEach((mm,x)=>mm.aulas.forEach((aa,y)=>flat.push({mi:x,ai:y})));
+  const idx=flat.findIndex(f=>f.mi===mi&&f.ai===ai);
+  const prev=idx>0?flat[idx-1]:null; const next=idx<flat.length-1?flat[idx+1]:null;
+  let nav=`<div style="display:flex;gap:10px;margin-top:24px">`;
+  nav+= prev?`<button class="btn ghost" style="flex:1;justify-content:center" onclick="abrirAula('${c.id}',${prev.mi},${prev.ai})">‹ Anterior</button>`:'';
+  nav+= next?`<button class="btn" style="flex:2;justify-content:center" onclick="marcarAula('${c.id}',${mi},${ai},1);abrirAula('${c.id}',${next.mi},${next.ai})">Concluir e continuar ›</button>`
+            :`<button class="btn" style="flex:2;justify-content:center" onclick="marcarAula('${c.id}',${mi},${ai},1);voltarCurso('${c.id}')">Concluir curso ✓</button>`;
+  nav+=`</div>`;
+  const toggle=`<button class="btn ghost sm" style="margin-top:14px" onclick="toggleAula('${c.id}',${mi},${ai})">${ok?'✓ Concluída (toque pra desmarcar)':'Marcar como concluída'}</button>`;
+  return `<button class="btn ghost sm" onclick="voltarCurso('${c.id}')">‹ ${esc(c.titulo)}</button>
+    <h2 style="font-size:21px;margin:14px 0 4px">${esc(a.titulo)}</h2>
+    <div style="font-size:12.5px;color:var(--txm);margin-bottom:18px">${esc(m.titulo)} · ${esc(a.dur)}</div>
+    <div class="aula-body">${a.conteudo}</div>
+    ${toggle}
+    ${nav}`;
+}
 // ===== ADICIONAR À TELA INICIAL (instalar o PWA) =====
 let _deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); _deferredPrompt=e; });
@@ -1139,6 +1360,7 @@ function render(){
   else if(route==='projecao') { v.innerHTML=viewProjecao(); }
   else if(route==='documentos') v.innerHTML=viewDocumentos();
   else if(route==='divulgacao') v.innerHTML=viewDivulgacao();
+  else if(route==='rede') v.innerHTML=viewRede();
   else if(route==='contratos') { v.innerHTML=viewContratos(); carregarContratos(); }
   else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
