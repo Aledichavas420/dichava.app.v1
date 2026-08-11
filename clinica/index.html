@@ -549,6 +549,16 @@ body.has-demo-banner{padding-bottom:64px}
 .hat-dias{display:flex;flex-wrap:wrap;gap:7px}
 .hat-dia{border:1.5px solid var(--line);background:var(--card);color:var(--txs);font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px;cursor:pointer;min-width:44px}
 .hat-dia.on{background:var(--v);border-color:var(--v);color:#fff}
+.estante-tema{font-size:14px;font-weight:800;color:var(--tx);margin:22px 0 12px;display:flex;align-items:center;gap:8px}
+.estante-n{font-size:11px;font-weight:700;color:var(--txm);background:var(--cin);border-radius:999px;padding:2px 9px}
+.estante-row{display:flex;gap:13px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.estante-row::-webkit-scrollbar{height:6px}
+.estante-row::-webkit-scrollbar-thumb{background:var(--cinm);border-radius:6px}
+.livro{flex:0 0 auto;border:0;background:none;padding:0;cursor:pointer;scroll-snap-align:start}
+.livro-capa{width:120px;height:176px;border-radius:5px 9px 9px 5px;display:flex;flex-direction:column;justify-content:space-between;padding:14px 12px 12px 17px;color:#fff;text-align:left;overflow:hidden;box-shadow:0 7px 16px -7px rgba(0,0,0,.45),inset 5px 0 0 rgba(255,255,255,.16),inset 9px 0 11px -8px rgba(0,0,0,.35)}
+.livro-t{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:14px;line-height:1.22;letter-spacing:.2px;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.livro-a{font-size:10.5px;font-weight:600;opacity:.92;text-transform:uppercase;letter-spacing:.4px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.livro-capa.lg{width:150px;height:220px;margin:0 auto;display:inline-flex}
 </style>
 </head>
 <body>
@@ -940,82 +950,118 @@ function copiarModelo(k){ const t=_DIVUL[k]; if(!t){ toast('Nada pra copiar',1);
 let _redeTab='biblioteca';
 let _cursoAtual=null, _aulaAtual=null;
 
-// ----- BIBLIOTECA (materiais de apoio) -----
-const BIBLIOTECA=[
-  {id:'b-rd', cat:'Redução de danos', cor:'#E8F5E9', ic:'🌱', titulo:'O que é redução de danos', desc:'Os princípios que guiam o cuidado sem exigir abstinência.', conteudo:`
-    <p>Redução de danos é uma abordagem de cuidado que parte de onde a pessoa está, sem exigir que ela pare de usar pra receber ajuda. O foco sai do consumo em si e vai pros danos ligados a ele, que podem ser reduzidos mesmo quando o uso continua.</p>
-    <h4>Três ideias que sustentam tudo</h4>
-    <ul>
-      <li><b>Pragmatismo.</b> Trabalha com a realidade, não com o cenário ideal.</li>
-      <li><b>Direitos e autonomia.</b> A pessoa segue sujeita das próprias escolhas.</li>
-      <li><b>Baixa exigência.</b> O acesso ao cuidado não depende de estar abstinente.</li>
-    </ul>
-    <p>Não é o oposto da abstinência. A abstinência é uma das metas possíveis, não a porta de entrada obrigatória.</p>`, referencias:[
-      {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos: estratégias práticas para lidar com comportamentos de alto risco. Porto Alegre: Artmed.'},
-      {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'},
-      {tipo:'organização', ref:'Plataforma Brasileira de Política de Drogas (PBPD).', url:'https://pbpd.org.br'}
-    ]},
-  {id:'b-acolhe', cat:'Clínica', cor:'#E0F2F1', ic:'🤝', titulo:'Acolhimento sem julgamento', desc:'Como conduzir a primeira conversa com quem usa substâncias.', conteudo:`
-    <p>A primeira conversa costuma decidir se a pessoa volta. Quem usa substâncias muitas vezes já chega esperando sermão. Quebrar essa expectativa é metade do trabalho.</p>
-    <h4>O que ajuda</h4>
-    <ul>
-      <li>Pergunte antes de aconselhar. "Como o uso entra na sua vida hoje?" abre mais que "você quer parar?".</li>
-      <li>Nomeie o cuidado que a pessoa já pratica, por menor que seja.</li>
-      <li>Evite palavras como "viciado", "recaída" e "limpo". Elas carregam culpa.</li>
-      <li>Deixe claro que o objetivo é dela, não seu.</li>
-    </ul>
-    <p>Acolher não é concordar com tudo. É criar um espaço seguro o bastante pra pessoa falar a verdade.</p>`, referencias:[
-      {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional: ajudando as pessoas a mudar. Porto Alegre: Artmed.'},
-      {tipo:'documento', ref:'Ministério da Saúde. Política de Atenção Integral a Usuários de Álcool e outras Drogas.', url:'https://bvsms.saude.gov.br'}
-    ]},
-  {id:'b-substancias', cat:'Substâncias', cor:'#FFF3E0', ic:'🧪', titulo:'Substâncias sem pânico: guia rápido', desc:'Classes, efeitos e o cuidado com misturas, pra consulta rápida.', conteudo:`
-    <p>Um resumo pra consulta rápida. Uma forma simples de organizar as substâncias é pelo efeito no sistema nervoso.</p>
-    <ul>
-      <li><b>Depressoras:</b> álcool, benzodiazepínicos, opioides. Reduzem a atividade do sistema nervoso.</li>
-      <li><b>Estimulantes:</b> cocaína, crack, anfetaminas. Aceleram.</li>
-      <li><b>Perturbadoras:</b> cannabis, alucinógenos. Alteram a percepção.</li>
-    </ul>
-    <p>Mais importante que a substância é a combinação de três fatores: a substância, a pessoa (corpo, história, expectativa) e o contexto do uso. A mesma dose muda de efeito conforme esses fatores.</p>
-    <p>Atenção especial com misturas: juntar dois depressores, como álcool e um calmante, aumenta muito o risco de overdose.</p>`, referencias:[
-      {tipo:'livro', ref:'ZINBERG, N. Drug, Set, and Setting. New Haven: Yale University Press, 1984.'},
-      {tipo:'livro', ref:'HART, Carl. Drogas para Adultos. Rio de Janeiro: Zahar.'}
-    ]},
-  {id:'b-app', cat:'Uso do app', cor:'#E8F0FF', ic:'📱', titulo:'Indicando o app pro paciente', desc:'Passo a passo pra apresentar o dichava numa sessão.', conteudo:`
-    <p>O dichava funciona bem como apoio entre as sessões. Vale apresentar em consulta, com o aparelho na mão da pessoa.</p>
-    <h4>Passo a passo</h4>
-    <ul>
-      <li>Mostre o diário de uso e o registro do dia a dia.</li>
-      <li>Aponte o modo de apoio pros momentos difíceis, como fissura e impulso.</li>
-      <li>Explique que é gratuito, sem julgamento e sem precisar parar de usar.</li>
-      <li>Se você tem agendamento online, mostre que ela pode marcar por lá.</li>
-    </ul>
-    <p>Na aba Divulgação você encontra textos prontos pra mandar por mensagem depois da sessão.</p>`, referencias:[
-      {tipo:'organização', ref:'Centro de Convivência É de Lei: materiais e cartilhas.', url:'https://edelei.org'}
-    ]},
-  {id:'b-rede', cat:'Rede e território', cor:'#EAF3FF', ic:'🗺️', titulo:'A rede pública de cuidado (RAPS)', desc:'CAPS AD, Consultório na Rua e como pensar o encaminhamento.', conteudo:`
-    <p>Você não cuida sozinho. No Brasil, o cuidado em álcool e outras drogas se apoia na Rede de Atenção Psicossocial (RAPS).</p>
-    <ul>
-      <li><b>CAPS AD:</b> atenção especializada em álcool e outras drogas.</li>
-      <li><b>Consultório na Rua:</b> leva cuidado a quem está em situação de rua.</li>
-      <li><b>Atenção Básica / ESF:</b> a porta de entrada mais próxima da vida da pessoa.</li>
-    </ul>
-    <p>Conhecer o que existe no território do paciente amplia o que você pode oferecer. Encaminhar bem não é passar o problema adiante, é ampliar a rede de quem cuida daquela pessoa, mantendo o seu vínculo aberto.</p>`, referencias:[
-      {tipo:'documento', ref:'BRASIL. Portaria GM/MS nº 3.088/2011 (Rede de Atenção Psicossocial).'},
-      {tipo:'documento', ref:'Ministério da Saúde. Saúde mental no SUS: os CAPS.', url:'https://bvsms.saude.gov.br'}
-    ]},
-  {id:'b-legal', cat:'Ética e LGPD', cor:'#F1EBFB', ic:'🔒', titulo:'Dados e sigilo no dichava', desc:'Suas responsabilidades como controlador dos dados.', conteudo:`
-    <p>Ao usar o painel, você é o controlador dos dados dos seus pacientes. Isso vem com responsabilidades simples, mas importantes.</p>
-    <ul>
-      <li>Registre só o necessário e trate tudo com o sigilo do prontuário de papel.</li>
-      <li>Não compartilhe login. Cada profissional tem o seu.</li>
-      <li>Prontuários e financeiro são privados, visíveis só pra você.</li>
-      <li>O paciente pode pedir os dados dele ou a exclusão a qualquer momento.</li>
-    </ul>
-    <p>O termo completo do profissional está em Configurações, na parte de documentos legais.</p>`, referencias:[
-      {tipo:'lei', ref:'BRASIL. Lei nº 13.709/2018 (Lei Geral de Proteção de Dados, LGPD).'}
-    ]}
+// ----- BIBLIOTECA: estante de sugestões de leitura (livros reais, por tema) -----
+// Só indicações (título/autor/editora). Sem conteúdo dos livros e sem a imagem
+// original da capa, pra respeitar direitos autorais. As capas são estilizadas.
+const ESTANTE=[
+  {tema:'Fundamentos da Redução de Danos', cor:'linear-gradient(145deg,#2FA35F,#186b3d)', livros:[
+    {t:'Redução de Danos', a:'G. Alan Marlatt', ed:'Artmed'},
+    {t:'Na Fissura', a:'Johann Hari', ed:'Companhia das Letras'},
+    {t:'Avessos do Prazer', a:'Gilberta Acselrad (org.)', ed:'Editora Fiocruz'},
+    {t:'Drug, Set, and Setting', a:'Norman Zinberg', lang:'em inglês'},
+    {t:'Undoing Drugs', a:'Maia Szalavitz', lang:'em inglês'},
+    {t:'Toxicomanias: incidências clínicas e socioantropológicas', a:'Antônio Nery Filho (org.)', ed:'EDUFBA / CETAD'},
+    {t:'Drogas e Cultura: novas perspectivas', a:'Labate, Goulart, Fiore, MacRae e Carneiro (orgs.)', ed:'EDUFBA'},
+    {t:'Drogas e Drogadição no Brasil', a:'Richard Bucher', ed:'Artes Médicas'},
+    {t:'Drogas para Adultos', a:'Carl Hart', ed:'Zahar'},
+    {t:'No Reino dos Fantasmas Famintos', a:'Gabor Maté'}
+  ]},
+  {tema:'Política de Drogas, Proibicionismo e Justiça', cor:'linear-gradient(145deg,#C0392B,#7d241b)', livros:[
+    {t:'Drogas: a história do proibicionismo', a:'Henrique Carneiro', ed:'Autonomia Literária'},
+    {t:'Um Preço Muito Alto', a:'Carl Hart', ed:'Zahar'},
+    {t:'A Política Criminal de Drogas no Brasil', a:'Salo de Carvalho', ed:'Saraiva'},
+    {t:'Proibições, riscos, danos e enganos: as drogas tornadas ilícitas', a:'Maria Lúcia Karam', ed:'Lumen Juris'},
+    {t:'Narcotráfico: uma guerra na guerra', a:'Thiago Rodrigues', ed:'Desatino'},
+    {t:'A Nova Segregação: racismo e encarceramento em massa', a:'Michelle Alexander', ed:'Boitempo'},
+    {t:'Historia general de las drogas', a:'Antonio Escohotado', lang:'em espanhol'},
+    {t:'Acionistas do Nada: quem são os traficantes de droga', a:'Orlando Zaccone', ed:'Revan'},
+    {t:'A Face Oculta da Droga', a:'Rosa del Olmo', ed:'Revan'},
+    {t:'Drugs Without the Hot Air', a:'David Nutt', lang:'em inglês'}
+  ]},
+  {tema:'Clínica e Psicanálise das Toxicomanias', cor:'linear-gradient(145deg,#7B54D3,#4a2f8f)', livros:[
+    {t:'A Droga: drogas e toxicômanos', a:'Claude Olievenstein', ed:'Brasiliense'},
+    {t:'Destino do Toxicômano', a:'Claude Olievenstein', ed:'Almed'},
+    {t:'A Clínica do Toxicômano: a falta da falta', a:'Claude Olievenstein (org.)', ed:'Artes Médicas'},
+    {t:'Drogadição Hoje: indivíduo, família e sociedade', a:'Eduardo Kalina', ed:'Artmed'},
+    {t:'Alcoolismo, Delinquência, Toxicomania', a:'Charles Melman', ed:'Escuta'},
+    {t:'A Droga do Toxicômano', a:'Jésus Santiago', ed:'Jorge Zahar'},
+    {t:'O Prazer e o Mal: filosofia da droga', a:'Giulia Sissa', ed:'Civilização Brasileira'},
+    {t:'As Drogas na Contemporaneidade: perspectivas clínicas e culturais', a:'Antônio Nery Filho (org.)', ed:'EDUFBA'}
+  ]},
+  {tema:'Dependência, Cérebro e Ciência', cor:'linear-gradient(145deg,#2f6fd3,#1c3f80)', livros:[
+    {t:'The Biology of Desire', a:'Marc Lewis', lang:'em inglês'},
+    {t:'Unbroken Brain', a:'Maia Szalavitz', lang:'em inglês'},
+    {t:'Buzzed', a:'Cynthia Kuhn, Scott Swartzwelder e Wilkie Wilson', lang:'em inglês'},
+    {t:'Drogas Psicotrópicas: o que são e como agem', a:'E. A. Carlini e col. (CEBRID)', ed:'Unifesp'},
+    {t:'Dependência Química: prevenção, tratamento e políticas públicas', a:'Diehl, Cordeiro e Laranjeira', ed:'Artmed'},
+    {t:'O Tratamento do Usuário de Crack', a:'Marcelo Ribeiro e Ronaldo Laranjeira', ed:'Artmed'},
+    {t:'Memoirs of an Addicted Brain', a:'Marc Lewis', lang:'em inglês'},
+    {t:'Never Enough', a:'Judith Grisel', lang:'em inglês'}
+  ]},
+  {tema:'Abordagens Terapêuticas e Prevenção de Recaída', cor:'linear-gradient(145deg,#0EA5A0,#0a615e)', livros:[
+    {t:'Entrevista Motivacional: ajudando as pessoas a mudar', a:'William Miller e Stephen Rollnick', ed:'Artmed'},
+    {t:'Prevenção de Recaída', a:'G. Alan Marlatt e Dennis Donovan', ed:'Artmed'},
+    {t:'Changing for Good', a:'Prochaska, Norcross e DiClemente', lang:'em inglês'},
+    {t:'Cognitive Therapy of Substance Abuse', a:'Aaron Beck e col.', lang:'em inglês'},
+    {t:'Mindfulness-Based Relapse Prevention', a:'Bowen, Chawla e Marlatt', lang:'em inglês'},
+    {t:'Aconselhamento em Dependência Química', a:'Figlie, Bordin e Laranjeira', ed:'Roca'},
+    {t:'O Tratamento da Dependência Química e as Terapias Cognitivo-Comportamentais', a:'Zanelatto e Laranjeira', ed:'Artmed'}
+  ]},
+  {tema:'Álcool', cor:'linear-gradient(145deg,#C77D0E,#7d4f08)', livros:[
+    {t:'O Tratamento do Alcoolismo', a:'Griffith Edwards', ed:'Artmed'},
+    {t:'The Natural History of Alcoholism', a:'George Vaillant', lang:'em inglês'},
+    {t:'The Disease Concept of Alcoholism', a:'E. M. Jellinek', lang:'em inglês'},
+    {t:'Drink? The New Science of Alcohol', a:'David Nutt', lang:'em inglês'},
+    {t:'É Fácil Parar de Beber', a:'Allen Carr', ed:'Sextante'},
+    {t:'Drinking: A Love Story', a:'Caroline Knapp', lang:'em inglês'},
+    {t:'The Recovering', a:'Leslie Jamison', lang:'em inglês'},
+    {t:'Alcoólicos Anônimos (Livro Azul)', a:'Alcoólicos Anônimos'}
+  ]},
+  {tema:'Cannabis, Ayahuasca e Plantas de Poder', cor:'linear-gradient(145deg,#5a8f2f,#37611b)', livros:[
+    {t:'Rodas de Fumo: o uso da maconha entre camadas médias urbanas', a:'Edward MacRae e Júlio Assis Simões', ed:'EDUFBA'},
+    {t:'O Grande Livro da Cannabis', a:'Rowan Robinson', ed:'Jorge Zahar'},
+    {t:'Marijuana Reconsidered', a:'Lester Grinspoon', lang:'em inglês'},
+    {t:'O Uso Ritual da Ayahuasca', a:'Beatriz Labate e Wladimyr Araújo (orgs.)', ed:'Mercado de Letras'},
+    {t:'Guiado pela Lua: xamanismo e uso ritual da ayahuasca no culto do Santo Daime', a:'Edward MacRae', ed:'Brasiliense'},
+    {t:'O Uso Ritual das Plantas de Poder', a:'Beatriz Labate e Sandra Goulart (orgs.)', ed:'Mercado de Letras'},
+    {t:'A Botânica do Desejo', a:'Michael Pollan', ed:'Intrínseca'}
+  ]},
+  {tema:'Psicodélicos: ciência, terapia e cultura', cor:'linear-gradient(145deg,#6D3BD3,#b0357f)', livros:[
+    {t:'Como Mudar Sua Mente', a:'Michael Pollan', ed:'Intrínseca'},
+    {t:'As Portas da Percepção', a:'Aldous Huxley', ed:'Biblioteca Azul'},
+    {t:'LSD: Meu Filho Problemático', a:'Albert Hofmann'},
+    {t:'DMT: A Molécula do Espírito', a:'Rick Strassman'},
+    {t:'O Alimento dos Deuses', a:'Terence McKenna'},
+    {t:'Reinos do Inconsciente Humano', a:'Stanislav Grof'},
+    {t:'The Psychedelic Explorer\'s Guide', a:'James Fadiman', lang:'em inglês'},
+    {t:'The Psychedelic Experience', a:'Leary, Metzner e Alpert', lang:'em inglês'},
+    {t:'The Psychedelic Renaissance', a:'Ben Sessa', lang:'em inglês'}
+  ]},
+  {tema:'Saúde Mental e Reforma Psiquiátrica', cor:'linear-gradient(145deg,#345b74,#1f3a4d)', livros:[
+    {t:'A Instituição Negada', a:'Franco Basaglia', ed:'Graal'},
+    {t:'Loucos pela Vida: a trajetória da reforma psiquiátrica no Brasil', a:'Paulo Amarante', ed:'Editora Fiocruz'},
+    {t:'Saúde Mental e Atenção Psicossocial', a:'Paulo Amarante', ed:'Editora Fiocruz'},
+    {t:'História da Loucura', a:'Michel Foucault', ed:'Perspectiva'},
+    {t:'Manicômios, Prisões e Conventos', a:'Erving Goffman', ed:'Perspectiva'},
+    {t:'Imagens do Inconsciente', a:'Nise da Silveira'},
+    {t:'O Mito do Normal', a:'Gabor Maté', ed:'Sextante'},
+    {t:'O Corpo Guarda as Marcas', a:'Bessel van der Kolk', ed:'Sextante'},
+    {t:'Holocausto Brasileiro', a:'Daniela Arbex', ed:'Intrínseca'}
+  ]},
+  {tema:'Testemunhos, Ensaios e Literatura', cor:'linear-gradient(145deg,#4a4a55,#26262e)', livros:[
+    {t:'Confissões de um Comedor de Ópio', a:'Thomas De Quincey', ed:'L&PM'},
+    {t:'Os Paraísos Artificiais', a:'Charles Baudelaire', ed:'L&PM'},
+    {t:'Junky', a:'William S. Burroughs', ed:'Companhia das Letras'},
+    {t:'Almoço Nu', a:'William S. Burroughs', ed:'Companhia das Letras'},
+    {t:'Trainspotting', a:'Irvine Welsh', ed:'Rocco'},
+    {t:'On the Road: Pé na Estrada', a:'Jack Kerouac', ed:'L&PM'},
+    {t:'Medo e Delírio em Las Vegas', a:'Hunter S. Thompson'},
+    {t:'A Virgem dos Sicários', a:'Fernando Vallejo', ed:'Companhia das Letras'},
+    {t:'Estação Carandiru', a:'Drauzio Varella', ed:'Companhia das Letras'},
+    {t:'Réquiem para um Sonho', a:'Hubert Selby Jr.', lang:'orig. em inglês'}
+  ]}
 ];
-// helper de referências (usado na biblioteca e nas aulas)
+// helper de referências (usado nas aulas dos cursos)
 function refsHtml(refs){ if(!refs||!refs.length) return '';
   const li=refs.map(r=>{ const tag=r.tipo?`<span class="ref-tag">${esc(r.tipo)}</span>`:'';
     const txt=r.url?`<a href="${r.url}" target="_blank" rel="noopener">${esc(r.ref)} ›</a>`:esc(r.ref);
@@ -1327,17 +1373,28 @@ function viewRede(){
 function setRedeTab(t){ _redeTab=t; _cursoAtual=null; _aulaAtual=null; render(); }
 
 function listaBiblioteca(){
-  const intro=`<div class="card" style="padding:16px;margin-bottom:16px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Materiais rápidos pra apoiar seu trabalho na Rede dichava. Textos curtos, direto ao ponto. Vamos adicionando mais com o tempo.</p></div>`;
-  const cards=BIBLIOTECA.map(m=>`<div class="biblio-card" onclick="abrirMaterial('${m.id}')">
-    <div class="biblio-ic" style="background:${m.cor}">${m.ic}</div>
-    <span class="cat">${esc(m.cat)}</span>
-    <b>${esc(m.titulo)}</b>
-    <div class="d">${esc(m.desc)}</div>
-    <span style="font-size:12.5px;font-weight:700;color:var(--v)">Ler ›</span>
-  </div>`).join('');
-  return intro+`<div class="biblio-grid">${cards}</div>`;
+  const intro=`<div class="card" style="padding:16px;margin-bottom:8px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Uma estante de sugestões de leitura pra se aprofundar em redução de danos e nos temas do cuidado. São indicações de livros reais, por tema. Aqui ficam só as sugestões: procure em livrarias, sebos ou bibliotecas.</p></div>`;
+  let html=intro;
+  ESTANTE.forEach((s,si)=>{
+    html+=`<div class="estante-tema">${esc(s.tema)} <span class="estante-n">${s.livros.length}</span></div>`;
+    html+=`<div class="estante-row">`+ s.livros.map((l,li)=>`
+      <button class="livro" onclick="abrirLivro(${si},${li})" title="${esc(l.t)}">
+        <span class="livro-capa" style="background:${s.cor}"><span class="livro-t">${esc(l.t)}</span><span class="livro-a">${esc(l.a)}</span></span>
+      </button>`).join('') + `</div>`;
+  });
+  return html;
 }
-function abrirMaterial(id){ const m=BIBLIOTECA.find(x=>x.id===id); if(!m)return; openModal(`<div class="modal" style="max-width:640px"><div class="modal-head"><h3>${esc(m.titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div><div class="modal-body aula-body">${m.conteudo}${refsHtml(m.referencias)}</div></div>`); }
+function abrirLivro(si,li){
+  const s=ESTANTE[si]; const l=s&&s.livros[li]; if(!l)return;
+  const meta=[l.a, l.ed, l.lang].filter(Boolean).join(' · ');
+  openModal(`<div class="modal" style="max-width:440px"><div class="modal-head"><h3>Sugestão de leitura</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" style="text-align:center">
+      <span class="livro-capa lg" style="background:${s.cor}"><span class="livro-t">${esc(l.t)}</span><span class="livro-a">${esc(l.a)}</span></span>
+      <div style="margin-top:14px"><b style="font-size:15.5px">${esc(l.t)}</b><div style="font-size:13px;color:var(--txs);margin-top:4px">${esc(meta)}</div>
+      <div style="font-size:11.5px;color:var(--txm);margin-top:3px">${esc(s.tema)}</div></div>
+      <p style="font-size:12px;color:var(--txm);margin-top:16px;line-height:1.5">Indicação de leitura. Procure em livrarias, sebos ou bibliotecas. Respeitamos os direitos autorais: aqui ficam só as sugestões, não o conteúdo dos livros.</p>
+    </div></div>`);
+}
 
 function listaCursos(){
   const intro=`<div class="card" style="padding:16px;margin-bottom:16px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Cursos rápidos pra fazer no seu tempo, direto aqui no painel. Seu progresso fica salvo neste aparelho.</p></div>`;
