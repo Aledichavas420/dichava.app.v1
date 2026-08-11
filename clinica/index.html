@@ -559,6 +559,13 @@ body.has-demo-banner{padding-bottom:64px}
 .livro-t{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:14px;line-height:1.22;letter-spacing:.2px;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
 .livro-a{font-size:10.5px;font-weight:600;opacity:.92;text-transform:uppercase;letter-spacing:.4px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .livro-capa.lg{width:150px;height:220px;margin:0 auto;display:inline-flex}
+.livro{transition:transform .15s}
+.livro:hover{transform:translateY(-4px)}
+.livro-hero{display:flex;justify-content:center;padding:6px 0 2px}
+.livro-tag{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;color:#fff;padding:3px 12px;border-radius:999px;letter-spacing:.2px}
+.livro-sobre{margin-top:16px;background:var(--cin);border-radius:12px;padding:14px 16px}
+.livro-sobre-h{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--txs);margin-bottom:6px}
+.livro-sobre p{margin:0;font-size:14px;line-height:1.6;color:var(--tx)}
 </style>
 </head>
 <body>
@@ -951,115 +958,115 @@ let _redeTab='biblioteca';
 let _cursoAtual=null, _aulaAtual=null;
 
 // ----- BIBLIOTECA: estante de sugestões de leitura (livros reais, por tema) -----
-// Só indicações (título/autor/editora). Sem conteúdo dos livros e sem a imagem
-// original da capa, pra respeitar direitos autorais. As capas são estilizadas.
+// Só indicações (título/autor/editora/sobre). Sem conteúdo dos livros e sem a
+// imagem original da capa, pra respeitar direitos autorais. Capas estilizadas.
 const ESTANTE=[
-  {tema:'Fundamentos da Redução de Danos', cor:'linear-gradient(145deg,#2FA35F,#186b3d)', livros:[
-    {t:'Redução de Danos', a:'G. Alan Marlatt', ed:'Artmed'},
-    {t:'Na Fissura', a:'Johann Hari', ed:'Companhia das Letras'},
-    {t:'Avessos do Prazer', a:'Gilberta Acselrad (org.)', ed:'Editora Fiocruz'},
-    {t:'Drug, Set, and Setting', a:'Norman Zinberg', lang:'em inglês'},
-    {t:'Undoing Drugs', a:'Maia Szalavitz', lang:'em inglês'},
-    {t:'Toxicomanias: incidências clínicas e socioantropológicas', a:'Antônio Nery Filho (org.)', ed:'EDUFBA / CETAD'},
-    {t:'Drogas e Cultura: novas perspectivas', a:'Labate, Goulart, Fiore, MacRae e Carneiro (orgs.)', ed:'EDUFBA'},
-    {t:'Drogas e Drogadição no Brasil', a:'Richard Bucher', ed:'Artes Médicas'},
-    {t:'Drogas para Adultos', a:'Carl Hart', ed:'Zahar'},
-    {t:'No Reino dos Fantasmas Famintos', a:'Gabor Maté'}
+  {tema:"Fundamentos da Redução de Danos", cor:"linear-gradient(145deg,#2FA35F,#186b3d)", livros:[
+    {t:"Redução de Danos", a:"G. Alan Marlatt", ed:"Artmed", d:"O livro que sistematiza a redução de danos como abordagem clínica. Bom pra responder como aplicar RD na prática, com estratégias concretas pra lidar com comportamentos de alto risco."},
+    {t:"Na Fissura", a:"Johann Hari", ed:"Companhia das Letras", d:"Uma reportagem envolvente que refaz a história da guerra às drogas e mostra por que a conexão importa mais que a punição. Ótimo pra entender de onde vem o proibicionismo e o que funciona melhor."},
+    {t:"Avessos do Prazer", a:"Gilberta Acselrad (org.)", ed:"Editora Fiocruz", d:"Coletânea brasileira que cruza drogas, aids e direitos humanos. Ajuda a pensar redução de danos como política pública e questão de cidadania."},
+    {t:"Drug, Set, and Setting", a:"Norman Zinberg", lang:"em inglês", d:"O clássico que mostra que o efeito de uma droga depende da substância, da pessoa e do contexto. Base teórica pra entender por que o mesmo uso gera experiências diferentes."},
+    {t:"Undoing Drugs", a:"Maia Szalavitz", lang:"em inglês", d:"Conta a história do movimento de redução de danos pelo mundo. Bom pra entender como essas ideias nasceram e se espalharam."},
+    {t:"Toxicomanias: incidências clínicas e socioantropológicas", a:"Antônio Nery Filho (org.)", ed:"EDUFBA / CETAD", d:"Coletânea da escola baiana que junta clínica e ciências sociais. Boa porta de entrada pra literatura brasileira sobre o tema."},
+    {t:"Drogas e Cultura: novas perspectivas", a:"Labate, Goulart, Fiore, MacRae e Carneiro (orgs.)", ed:"EDUFBA", d:"Reúne pesquisadores brasileiros mostrando que o uso de drogas é também fenômeno cultural, não só médico ou criminal."},
+    {t:"Drogas e Drogadição no Brasil", a:"Richard Bucher", ed:"Artes Médicas", d:"Referência brasileira que ajuda a entender como o país construiu seu olhar sobre drogas e prevenção."},
+    {t:"Drogas para Adultos", a:"Carl Hart", ed:"Zahar", d:"O neurocientista defende que a maioria dos adultos usa drogas de forma responsável e questiona o pânico. Provocador e baseado em ciência."},
+    {t:"No Reino dos Fantasmas Famintos", a:"Gabor Maté", d:"Do trabalho com dependentes graves, Maté liga o vício ao trauma e à dor. Ajuda a olhar a pessoa por trás do uso com mais compaixão."},
   ]},
-  {tema:'Política de Drogas, Proibicionismo e Justiça', cor:'linear-gradient(145deg,#C0392B,#7d241b)', livros:[
-    {t:'Drogas: a história do proibicionismo', a:'Henrique Carneiro', ed:'Autonomia Literária'},
-    {t:'Um Preço Muito Alto', a:'Carl Hart', ed:'Zahar'},
-    {t:'A Política Criminal de Drogas no Brasil', a:'Salo de Carvalho', ed:'Saraiva'},
-    {t:'Proibições, riscos, danos e enganos: as drogas tornadas ilícitas', a:'Maria Lúcia Karam', ed:'Lumen Juris'},
-    {t:'Narcotráfico: uma guerra na guerra', a:'Thiago Rodrigues', ed:'Desatino'},
-    {t:'A Nova Segregação: racismo e encarceramento em massa', a:'Michelle Alexander', ed:'Boitempo'},
-    {t:'Historia general de las drogas', a:'Antonio Escohotado', lang:'em espanhol'},
-    {t:'Acionistas do Nada: quem são os traficantes de droga', a:'Orlando Zaccone', ed:'Revan'},
-    {t:'A Face Oculta da Droga', a:'Rosa del Olmo', ed:'Revan'},
-    {t:'Drugs Without the Hot Air', a:'David Nutt', lang:'em inglês'}
+  {tema:"Política de Drogas, Proibicionismo e Justiça", cor:"linear-gradient(145deg,#C0392B,#7d241b)", livros:[
+    {t:"Drogas: a história do proibicionismo", a:"Henrique Carneiro", ed:"Autonomia Literária", d:"O historiador brasileiro conta como certas substâncias viraram crime. Essencial pra entender que a ilegalidade é uma construção histórica, não algo natural."},
+    {t:"Um Preço Muito Alto", a:"Carl Hart", ed:"Zahar", d:"Autobiografia e ciência juntas: o autor mostra como pobreza e racismo, não a droga em si, explicam boa parte dos danos. Forte pra desmontar mitos."},
+    {t:"A Política Criminal de Drogas no Brasil", a:"Salo de Carvalho", ed:"Saraiva", d:"Análise jurídica de como a lei de drogas funciona no Brasil e a quem ela pune. Referência pra quem quer entender o lado legal."},
+    {t:"Proibições, riscos, danos e enganos: as drogas tornadas ilícitas", a:"Maria Lúcia Karam", ed:"Lumen Juris", d:"A jurista defende que a proibição causa mais dano que a própria droga. Argumento afiado sobre liberdade e direitos."},
+    {t:"Narcotráfico: uma guerra na guerra", a:"Thiago Rodrigues", ed:"Desatino", d:"Analisa a guerra às drogas como guerra política e econômica. Ajuda a enxergar os interesses por trás do combate."},
+    {t:"A Nova Segregação: racismo e encarceramento em massa", a:"Michelle Alexander", ed:"Boitempo", d:"Mostra como a guerra às drogas nos EUA virou uma forma de encarceramento em massa da população negra. Os paralelos com o Brasil são fortes."},
+    {t:"Historia general de las drogas", a:"Antonio Escohotado", lang:"em espanhol", d:"Panorama enciclopédico do uso de substâncias na história humana. Denso, mas revelador de como sempre convivemos com drogas."},
+    {t:"Acionistas do Nada: quem são os traficantes de droga", a:"Orlando Zaccone", ed:"Revan", d:"Um delegado analisa quem realmente é preso como traficante no Brasil. Desmonta a imagem do grande traficante."},
+    {t:"A Face Oculta da Droga", a:"Rosa del Olmo", ed:"Revan", d:"Clássico latino-americano sobre como o discurso do medo foi construído em torno das drogas."},
+    {t:"Drugs Without the Hot Air", a:"David Nutt", lang:"em inglês", d:"O cientista britânico compara os danos reais de cada droga, sem alarmismo. Bom pra ter uma noção de risco baseada em evidência."},
   ]},
-  {tema:'Clínica e Psicanálise das Toxicomanias', cor:'linear-gradient(145deg,#7B54D3,#4a2f8f)', livros:[
-    {t:'A Droga: drogas e toxicômanos', a:'Claude Olievenstein', ed:'Brasiliense'},
-    {t:'Destino do Toxicômano', a:'Claude Olievenstein', ed:'Almed'},
-    {t:'A Clínica do Toxicômano: a falta da falta', a:'Claude Olievenstein (org.)', ed:'Artes Médicas'},
-    {t:'Drogadição Hoje: indivíduo, família e sociedade', a:'Eduardo Kalina', ed:'Artmed'},
-    {t:'Alcoolismo, Delinquência, Toxicomania', a:'Charles Melman', ed:'Escuta'},
-    {t:'A Droga do Toxicômano', a:'Jésus Santiago', ed:'Jorge Zahar'},
-    {t:'O Prazer e o Mal: filosofia da droga', a:'Giulia Sissa', ed:'Civilização Brasileira'},
-    {t:'As Drogas na Contemporaneidade: perspectivas clínicas e culturais', a:'Antônio Nery Filho (org.)', ed:'EDUFBA'}
+  {tema:"Clínica e Psicanálise das Toxicomanias", cor:"linear-gradient(145deg,#7B54D3,#4a2f8f)", livros:[
+    {t:"A Droga: drogas e toxicômanos", a:"Claude Olievenstein", ed:"Brasiliense", d:"Do psiquiatra francês pioneiro no cuidado a toxicômanos. Ajuda a pensar o sujeito por trás do uso, para além do sintoma."},
+    {t:"Destino do Toxicômano", a:"Claude Olievenstein", ed:"Almed", d:"Reflexão clínica sobre o percurso de quem se torna dependente. Sensível e humano."},
+    {t:"A Clínica do Toxicômano: a falta da falta", a:"Claude Olievenstein (org.)", ed:"Artes Médicas", d:"Discute o manejo clínico da toxicomania a partir da ideia da falta. Pra quem quer aprofundar a escuta."},
+    {t:"Drogadição Hoje: indivíduo, família e sociedade", a:"Eduardo Kalina", ed:"Artmed", d:"Aborda a dependência considerando indivíduo, família e sociedade. Prático pra pensar o contexto do paciente."},
+    {t:"Alcoolismo, Delinquência, Toxicomania", a:"Charles Melman", ed:"Escuta", d:"Leitura psicanalítica de orientação lacaniana sobre as formas de gozo no uso. Denso, pra quem gosta de teoria."},
+    {t:"A Droga do Toxicômano", a:"Jésus Santiago", ed:"Jorge Zahar", d:"Analisa a relação do sujeito com a droga na era da ciência. Referência psicanalítica brasileira."},
+    {t:"O Prazer e o Mal: filosofia da droga", a:"Giulia Sissa", ed:"Civilização Brasileira", d:"Ensaio filosófico sobre o desejo e o prazer nas drogas. Amplia a conversa para além do olhar médico."},
+    {t:"As Drogas na Contemporaneidade: perspectivas clínicas e culturais", a:"Antônio Nery Filho (org.)", ed:"EDUFBA", d:"Junta clínica e cultura pra pensar o uso hoje. Boa síntese da escola baiana."},
   ]},
-  {tema:'Dependência, Cérebro e Ciência', cor:'linear-gradient(145deg,#2f6fd3,#1c3f80)', livros:[
-    {t:'The Biology of Desire', a:'Marc Lewis', lang:'em inglês'},
-    {t:'Unbroken Brain', a:'Maia Szalavitz', lang:'em inglês'},
-    {t:'Buzzed', a:'Cynthia Kuhn, Scott Swartzwelder e Wilkie Wilson', lang:'em inglês'},
-    {t:'Drogas Psicotrópicas: o que são e como agem', a:'E. A. Carlini e col. (CEBRID)', ed:'Unifesp'},
-    {t:'Dependência Química: prevenção, tratamento e políticas públicas', a:'Diehl, Cordeiro e Laranjeira', ed:'Artmed'},
-    {t:'O Tratamento do Usuário de Crack', a:'Marcelo Ribeiro e Ronaldo Laranjeira', ed:'Artmed'},
-    {t:'Memoirs of an Addicted Brain', a:'Marc Lewis', lang:'em inglês'},
-    {t:'Never Enough', a:'Judith Grisel', lang:'em inglês'}
+  {tema:"Dependência, Cérebro e Ciência", cor:"linear-gradient(145deg,#2f6fd3,#1c3f80)", livros:[
+    {t:"The Biology of Desire", a:"Marc Lewis", lang:"em inglês", d:"O neurocientista, ele mesmo ex-dependente, argumenta que vício é aprendizado, não doença. Muda a forma de entender a recaída."},
+    {t:"Unbroken Brain", a:"Maia Szalavitz", lang:"em inglês", d:"Defende o vício como um transtorno de desenvolvimento e aprendizagem. Bom pra questionar o modelo de doença."},
+    {t:"Buzzed", a:"Cynthia Kuhn, Scott Swartzwelder e Wilkie Wilson", lang:"em inglês", d:"Guia direto e sem pânico sobre o que cada droga faz no corpo. Ótimo de consulta rápida."},
+    {t:"Drogas Psicotrópicas: o que são e como agem", a:"E. A. Carlini e col. (CEBRID)", ed:"Unifesp", d:"Cartilha brasileira do CEBRID explicando de forma simples como cada substância age. Acessível até pra indicar a pacientes."},
+    {t:"Dependência Química: prevenção, tratamento e políticas públicas", a:"Diehl, Cordeiro e Laranjeira", ed:"Artmed", d:"Manual brasileiro completo sobre prevenção, tratamento e políticas. Referência de estante pra quem atende."},
+    {t:"O Tratamento do Usuário de Crack", a:"Marcelo Ribeiro e Ronaldo Laranjeira", ed:"Artmed", d:"Guia clínico brasileiro específico sobre crack. Prático pra manejo e trabalho em rede."},
+    {t:"Memoirs of an Addicted Brain", a:"Marc Lewis", lang:"em inglês", d:"Memória do autor cruzada com neurociência. Mostra por dentro o que a droga faz no cérebro."},
+    {t:"Never Enough", a:"Judith Grisel", lang:"em inglês", d:"A neurocientista e ex-usuária explica por que a tolerância sempre pede mais. Claro sobre o mecanismo do vício."},
   ]},
-  {tema:'Abordagens Terapêuticas e Prevenção de Recaída', cor:'linear-gradient(145deg,#0EA5A0,#0a615e)', livros:[
-    {t:'Entrevista Motivacional: ajudando as pessoas a mudar', a:'William Miller e Stephen Rollnick', ed:'Artmed'},
-    {t:'Prevenção de Recaída', a:'G. Alan Marlatt e Dennis Donovan', ed:'Artmed'},
-    {t:'Changing for Good', a:'Prochaska, Norcross e DiClemente', lang:'em inglês'},
-    {t:'Cognitive Therapy of Substance Abuse', a:'Aaron Beck e col.', lang:'em inglês'},
-    {t:'Mindfulness-Based Relapse Prevention', a:'Bowen, Chawla e Marlatt', lang:'em inglês'},
-    {t:'Aconselhamento em Dependência Química', a:'Figlie, Bordin e Laranjeira', ed:'Roca'},
-    {t:'O Tratamento da Dependência Química e as Terapias Cognitivo-Comportamentais', a:'Zanelatto e Laranjeira', ed:'Artmed'}
+  {tema:"Abordagens Terapêuticas e Prevenção de Recaída", cor:"linear-gradient(145deg,#0EA5A0,#0a615e)", livros:[
+    {t:"Entrevista Motivacional: ajudando as pessoas a mudar", a:"William Miller e Stephen Rollnick", ed:"Artmed", d:"O livro que fundou a entrevista motivacional. Pra aprender a ajudar a pessoa a encontrar os próprios motivos pra mudar."},
+    {t:"Prevenção de Recaída", a:"G. Alan Marlatt e Dennis Donovan", ed:"Artmed", d:"Manual clássico sobre como prevenir e manejar recaídas. Cheio de estratégias aplicáveis no consultório."},
+    {t:"Changing for Good", a:"Prochaska, Norcross e DiClemente", lang:"em inglês", d:"Apresenta os estágios da mudança. Útil pra entender em que ponto o paciente está e como acompanhar."},
+    {t:"Cognitive Therapy of Substance Abuse", a:"Aaron Beck e col.", lang:"em inglês", d:"Base da terapia cognitiva aplicada ao uso de substâncias. Pra quem trabalha com TCC."},
+    {t:"Mindfulness-Based Relapse Prevention", a:"Bowen, Chawla e Marlatt", lang:"em inglês", d:"Junta mindfulness e prevenção de recaída. Protocolo prático pra trabalhar a fissura."},
+    {t:"Aconselhamento em Dependência Química", a:"Figlie, Bordin e Laranjeira", ed:"Roca", d:"Manual brasileiro voltado à prática do aconselhamento. Direto ao consultório."},
+    {t:"O Tratamento da Dependência Química e as Terapias Cognitivo-Comportamentais", a:"Zanelatto e Laranjeira", ed:"Artmed", d:"Guia brasileiro de TCC aplicada à dependência. Bom pra estruturar o atendimento."},
   ]},
-  {tema:'Álcool', cor:'linear-gradient(145deg,#C77D0E,#7d4f08)', livros:[
-    {t:'O Tratamento do Alcoolismo', a:'Griffith Edwards', ed:'Artmed'},
-    {t:'The Natural History of Alcoholism', a:'George Vaillant', lang:'em inglês'},
-    {t:'The Disease Concept of Alcoholism', a:'E. M. Jellinek', lang:'em inglês'},
-    {t:'Drink? The New Science of Alcohol', a:'David Nutt', lang:'em inglês'},
-    {t:'É Fácil Parar de Beber', a:'Allen Carr', ed:'Sextante'},
-    {t:'Drinking: A Love Story', a:'Caroline Knapp', lang:'em inglês'},
-    {t:'The Recovering', a:'Leslie Jamison', lang:'em inglês'},
-    {t:'Alcoólicos Anônimos (Livro Azul)', a:'Alcoólicos Anônimos'}
+  {tema:"Álcool", cor:"linear-gradient(145deg,#C77D0E,#7d4f08)", livros:[
+    {t:"O Tratamento do Alcoolismo", a:"Griffith Edwards", ed:"Artmed", d:"Referência clínica clássica sobre como cuidar de problemas com álcool. Prática e equilibrada."},
+    {t:"The Natural History of Alcoholism", a:"George Vaillant", lang:"em inglês", d:"Estudo de décadas sobre o curso do alcoolismo ao longo da vida. Mostra que a trajetória não é linear."},
+    {t:"The Disease Concept of Alcoholism", a:"E. M. Jellinek", lang:"em inglês", d:"O texto que consolidou a ideia de alcoolismo como doença. Importante pra entender e também debater esse modelo."},
+    {t:"Drink? The New Science of Alcohol", a:"David Nutt", lang:"em inglês", d:"O cientista explica o que o álcool faz no corpo e como beber com menos risco. Baseado em evidência."},
+    {t:"É Fácil Parar de Beber", a:"Allen Carr", ed:"Sextante", d:"Método popular pra repensar a relação com o álcool. Leitura leve, voltada ao público geral."},
+    {t:"Drinking: A Love Story", a:"Caroline Knapp", lang:"em inglês", d:"Memória tocante sobre a relação de amor e destruição com a bebida. Humaniza a experiência."},
+    {t:"The Recovering", a:"Leslie Jamison", lang:"em inglês", d:"Cruza memória pessoal, literatura e reflexão sobre dependência e recuperação. Denso e bonito."},
+    {t:"Alcoólicos Anônimos (Livro Azul)", a:"Alcoólicos Anônimos", d:"O livro que fundou os AA. Útil pra conhecer a lógica dos grupos de ajuda mútua."},
   ]},
-  {tema:'Cannabis, Ayahuasca e Plantas de Poder', cor:'linear-gradient(145deg,#5a8f2f,#37611b)', livros:[
-    {t:'Rodas de Fumo: o uso da maconha entre camadas médias urbanas', a:'Edward MacRae e Júlio Assis Simões', ed:'EDUFBA'},
-    {t:'O Grande Livro da Cannabis', a:'Rowan Robinson', ed:'Jorge Zahar'},
-    {t:'Marijuana Reconsidered', a:'Lester Grinspoon', lang:'em inglês'},
-    {t:'O Uso Ritual da Ayahuasca', a:'Beatriz Labate e Wladimyr Araújo (orgs.)', ed:'Mercado de Letras'},
-    {t:'Guiado pela Lua: xamanismo e uso ritual da ayahuasca no culto do Santo Daime', a:'Edward MacRae', ed:'Brasiliense'},
-    {t:'O Uso Ritual das Plantas de Poder', a:'Beatriz Labate e Sandra Goulart (orgs.)', ed:'Mercado de Letras'},
-    {t:'A Botânica do Desejo', a:'Michael Pollan', ed:'Intrínseca'}
+  {tema:"Cannabis, Ayahuasca e Plantas de Poder", cor:"linear-gradient(145deg,#5a8f2f,#37611b)", livros:[
+    {t:"Rodas de Fumo: o uso da maconha entre camadas médias urbanas", a:"Edward MacRae e Júlio Assis Simões", ed:"EDUFBA", d:"Pesquisa brasileira sobre como usuários de maconha se autorregulam. Mostra o uso controlado na prática, longe do estereótipo."},
+    {t:"O Grande Livro da Cannabis", a:"Rowan Robinson", ed:"Jorge Zahar", d:"Panorama histórico, cultural e prático sobre a planta. Boa introdução geral."},
+    {t:"Marijuana Reconsidered", a:"Lester Grinspoon", lang:"em inglês", d:"Clássico de Harvard que reavaliou os riscos da maconha nos anos 70. Um marco na desmistificação."},
+    {t:"O Uso Ritual da Ayahuasca", a:"Beatriz Labate e Wladimyr Araújo (orgs.)", ed:"Mercado de Letras", d:"Coletânea acadêmica sobre a ayahuasca nas religiões brasileiras. Referência no tema."},
+    {t:"Guiado pela Lua: xamanismo e uso ritual da ayahuasca no culto do Santo Daime", a:"Edward MacRae", ed:"Brasiliense", d:"Estudo do uso ritual da ayahuasca no Santo Daime. Mostra como o contexto controla o uso."},
+    {t:"O Uso Ritual das Plantas de Poder", a:"Beatriz Labate e Sandra Goulart (orgs.)", ed:"Mercado de Letras", d:"Amplia a discussão para outras substâncias de uso ritual. Olhar antropológico."},
+    {t:"A Botânica do Desejo", a:"Michael Pollan", ed:"Intrínseca", d:"Conta a história de plantas que mexem com o desejo humano, a cannabis entre elas. Leitura envolvente."},
   ]},
-  {tema:'Psicodélicos: ciência, terapia e cultura', cor:'linear-gradient(145deg,#6D3BD3,#b0357f)', livros:[
-    {t:'Como Mudar Sua Mente', a:'Michael Pollan', ed:'Intrínseca'},
-    {t:'As Portas da Percepção', a:'Aldous Huxley', ed:'Biblioteca Azul'},
-    {t:'LSD: Meu Filho Problemático', a:'Albert Hofmann'},
-    {t:'DMT: A Molécula do Espírito', a:'Rick Strassman'},
-    {t:'O Alimento dos Deuses', a:'Terence McKenna'},
-    {t:'Reinos do Inconsciente Humano', a:'Stanislav Grof'},
-    {t:'The Psychedelic Explorer\'s Guide', a:'James Fadiman', lang:'em inglês'},
-    {t:'The Psychedelic Experience', a:'Leary, Metzner e Alpert', lang:'em inglês'},
-    {t:'The Psychedelic Renaissance', a:'Ben Sessa', lang:'em inglês'}
+  {tema:"Psicodélicos: ciência, terapia e cultura", cor:"linear-gradient(145deg,#6D3BD3,#b0357f)", livros:[
+    {t:"Como Mudar Sua Mente", a:"Michael Pollan", ed:"Intrínseca", d:"O renascimento científico dos psicodélicos, contado por dentro. Ótima porta de entrada ao tema."},
+    {t:"As Portas da Percepção", a:"Aldous Huxley", ed:"Biblioteca Azul", d:"O ensaio clássico sobre a experiência com mescalina. Curto e influente."},
+    {t:"LSD: Meu Filho Problemático", a:"Albert Hofmann", d:"O químico que descobriu o LSD conta a história da substância. Fascinante e pessoal."},
+    {t:"DMT: A Molécula do Espírito", a:"Rick Strassman", d:"Relata a pesquisa clínica com DMT e as experiências extremas dos voluntários. Provocador."},
+    {t:"O Alimento dos Deuses", a:"Terence McKenna", d:"Tese ousada sobre o papel das plantas psicoativas na evolução humana. Especulativo e instigante."},
+    {t:"Reinos do Inconsciente Humano", a:"Stanislav Grof", d:"Mapeia estados de consciência a partir da pesquisa com LSD. Base da psicologia transpessoal."},
+    {t:"The Psychedelic Explorer's Guide", a:"James Fadiman", lang:"em inglês", d:"Guia prático e cuidadoso sobre uso de psicodélicos, inclusive microdosagem."},
+    {t:"The Psychedelic Experience", a:"Leary, Metzner e Alpert", lang:"em inglês", d:"Manual histórico dos anos 60, inspirado no Livro Tibetano dos Mortos."},
+    {t:"The Psychedelic Renaissance", a:"Ben Sessa", lang:"em inglês", d:"Panorama do retorno dos psicodélicos à psiquiatria. Bom apanhado científico."},
   ]},
-  {tema:'Saúde Mental e Reforma Psiquiátrica', cor:'linear-gradient(145deg,#345b74,#1f3a4d)', livros:[
-    {t:'A Instituição Negada', a:'Franco Basaglia', ed:'Graal'},
-    {t:'Loucos pela Vida: a trajetória da reforma psiquiátrica no Brasil', a:'Paulo Amarante', ed:'Editora Fiocruz'},
-    {t:'Saúde Mental e Atenção Psicossocial', a:'Paulo Amarante', ed:'Editora Fiocruz'},
-    {t:'História da Loucura', a:'Michel Foucault', ed:'Perspectiva'},
-    {t:'Manicômios, Prisões e Conventos', a:'Erving Goffman', ed:'Perspectiva'},
-    {t:'Imagens do Inconsciente', a:'Nise da Silveira'},
-    {t:'O Mito do Normal', a:'Gabor Maté', ed:'Sextante'},
-    {t:'O Corpo Guarda as Marcas', a:'Bessel van der Kolk', ed:'Sextante'},
-    {t:'Holocausto Brasileiro', a:'Daniela Arbex', ed:'Intrínseca'}
+  {tema:"Saúde Mental e Reforma Psiquiátrica", cor:"linear-gradient(145deg,#345b74,#1f3a4d)", livros:[
+    {t:"A Instituição Negada", a:"Franco Basaglia", ed:"Graal", d:"O texto que inspirou a reforma psiquiátrica. Denúncia do manicômio e defesa da liberdade."},
+    {t:"Loucos pela Vida: a trajetória da reforma psiquiátrica no Brasil", a:"Paulo Amarante", ed:"Editora Fiocruz", d:"Conta a história da reforma psiquiátrica brasileira. Essencial pra entender a RAPS de hoje."},
+    {t:"Saúde Mental e Atenção Psicossocial", a:"Paulo Amarante", ed:"Editora Fiocruz", d:"Introdução didática ao campo da saúde mental no SUS. Boa base pra quem está começando."},
+    {t:"História da Loucura", a:"Michel Foucault", ed:"Perspectiva", d:"Como a sociedade passou a trancar a loucura. Clássico pra pensar exclusão e normalidade."},
+    {t:"Manicômios, Prisões e Conventos", a:"Erving Goffman", ed:"Perspectiva", d:"Estudo clássico sobre as instituições totais e o que elas fazem com as pessoas."},
+    {t:"Imagens do Inconsciente", a:"Nise da Silveira", d:"A psiquiatra brasileira mostra o cuidado pela arte, não pela contenção. Inspirador."},
+    {t:"O Mito do Normal", a:"Gabor Maté", ed:"Sextante", d:"Liga o adoecimento ao trauma e a uma cultura que adoece. Amplo e humano."},
+    {t:"O Corpo Guarda as Marcas", a:"Bessel van der Kolk", ed:"Sextante", d:"Referência sobre trauma e como ele fica registrado no corpo. Fundamental pra entender o sofrimento por trás do uso."},
+    {t:"Holocausto Brasileiro", a:"Daniela Arbex", ed:"Intrínseca", d:"Reportagem sobre o maior hospício do Brasil e suas mortes. Duro e necessário."},
   ]},
-  {tema:'Testemunhos, Ensaios e Literatura', cor:'linear-gradient(145deg,#4a4a55,#26262e)', livros:[
-    {t:'Confissões de um Comedor de Ópio', a:'Thomas De Quincey', ed:'L&PM'},
-    {t:'Os Paraísos Artificiais', a:'Charles Baudelaire', ed:'L&PM'},
-    {t:'Junky', a:'William S. Burroughs', ed:'Companhia das Letras'},
-    {t:'Almoço Nu', a:'William S. Burroughs', ed:'Companhia das Letras'},
-    {t:'Trainspotting', a:'Irvine Welsh', ed:'Rocco'},
-    {t:'On the Road: Pé na Estrada', a:'Jack Kerouac', ed:'L&PM'},
-    {t:'Medo e Delírio em Las Vegas', a:'Hunter S. Thompson'},
-    {t:'A Virgem dos Sicários', a:'Fernando Vallejo', ed:'Companhia das Letras'},
-    {t:'Estação Carandiru', a:'Drauzio Varella', ed:'Companhia das Letras'},
-    {t:'Réquiem para um Sonho', a:'Hubert Selby Jr.', lang:'orig. em inglês'}
-  ]}
+  {tema:"Testemunhos, Ensaios e Literatura", cor:"linear-gradient(145deg,#4a4a55,#26262e)", livros:[
+    {t:"Confissões de um Comedor de Ópio", a:"Thomas De Quincey", ed:"L&PM", d:"O relato fundador da literatura sobre drogas, de 1821. Prazer e tormento em primeira pessoa."},
+    {t:"Os Paraísos Artificiais", a:"Charles Baudelaire", ed:"L&PM", d:"O poeta reflete sobre haxixe e ópio. Beleza e crítica lado a lado."},
+    {t:"Junky", a:"William S. Burroughs", ed:"Companhia das Letras", d:"Relato cru e direto da vida com a heroína, sem romantismo."},
+    {t:"Almoço Nu", a:"William S. Burroughs", ed:"Companhia das Letras", d:"Romance experimental e delirante nascido do vício. Radical na forma."},
+    {t:"Trainspotting", a:"Irvine Welsh", ed:"Rocco", d:"A juventude e a heroína na Escócia dos anos 80. Ácido, cômico e trágico."},
+    {t:"On the Road: Pé na Estrada", a:"Jack Kerouac", ed:"L&PM", d:"O clássico beat da estrada, com álcool e substâncias como pano de fundo da busca."},
+    {t:"Medo e Delírio em Las Vegas", a:"Hunter S. Thompson", d:"Viagem alucinada e satírica pelo sonho americano. Jornalismo gonzo em estado puro."},
+    {t:"A Virgem dos Sicários", a:"Fernando Vallejo", ed:"Companhia das Letras", d:"Colômbia, violência e drogas num romance intenso. Cru e poético."},
+    {t:"Estação Carandiru", a:"Drauzio Varella", ed:"Companhia das Letras", d:"O médico relata o cotidiano da prisão, onde drogas e sobrevivência se cruzam. Humano e direto."},
+    {t:"Réquiem para um Sonho", a:"Hubert Selby Jr.", lang:"orig. em inglês", d:"Quatro vidas destruídas pela dependência, cada uma à sua maneira. Devastador."},
+  ]},
 ];
 // helper de referências (usado nas aulas dos cursos)
 function refsHtml(refs){ if(!refs||!refs.length) return '';
@@ -1387,12 +1394,14 @@ function listaBiblioteca(){
 function abrirLivro(si,li){
   const s=ESTANTE[si]; const l=s&&s.livros[li]; if(!l)return;
   const meta=[l.a, l.ed, l.lang].filter(Boolean).join(' · ');
-  openModal(`<div class="modal" style="max-width:440px"><div class="modal-head"><h3>Sugestão de leitura</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
-    <div class="modal-body" style="text-align:center">
-      <span class="livro-capa lg" style="background:${s.cor}"><span class="livro-t">${esc(l.t)}</span><span class="livro-a">${esc(l.a)}</span></span>
-      <div style="margin-top:14px"><b style="font-size:15.5px">${esc(l.t)}</b><div style="font-size:13px;color:var(--txs);margin-top:4px">${esc(meta)}</div>
-      <div style="font-size:11.5px;color:var(--txm);margin-top:3px">${esc(s.tema)}</div></div>
-      <p style="font-size:12px;color:var(--txm);margin-top:16px;line-height:1.5">Indicação de leitura. Procure em livrarias, sebos ou bibliotecas. Respeitamos os direitos autorais: aqui ficam só as sugestões, não o conteúdo dos livros.</p>
+  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>Sugestão de leitura</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="livro-hero"><span class="livro-capa lg" style="background:${s.cor}"><span class="livro-t">${esc(l.t)}</span><span class="livro-a">${esc(l.a)}</span></span></div>
+      <div style="text-align:center;margin-top:14px"><b style="font-size:16px;line-height:1.25;display:block">${esc(l.t)}</b>
+        <div style="font-size:13px;color:var(--txs);margin-top:5px">${esc(meta)}</div>
+        <span class="livro-tag" style="background:${s.cor}">${esc(s.tema)}</span></div>
+      ${l.d?`<div class="livro-sobre"><div class="livro-sobre-h">O que você encontra</div><p>${esc(l.d)}</p></div>`:''}
+      <p style="font-size:11.5px;color:var(--txm);margin-top:14px;line-height:1.5;text-align:center">Indicação de leitura. Procure em livrarias, sebos ou bibliotecas. Aqui ficam só as sugestões, respeitando os direitos autorais.</p>
     </div></div>`);
 }
 
