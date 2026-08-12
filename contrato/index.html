@@ -71,8 +71,19 @@ function pacField(id,label,type,ph,req){ return '<div class="field"><label>'+esc
 
 function render(c){
   if(!c){ app.innerHTML='<div class="doc"><h1>Contrato não encontrado</h1><p class="by">O link pode estar incorreto ou o contrato foi removido. Peça um novo link ao profissional.</p></div>'; return; }
+  if(c.status==='aceito'){ return renderAssinado(c); }
   if(c.dados && c.dados.tipo==='estruturado'){ return renderEstrut(c); }
   return renderSimples(c);
+}
+function renderAssinado(c){
+  var docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
+  app.innerHTML='<div class="doc" style="text-align:center">'
+    +'<div style="font-size:46px;line-height:1;color:#2E7D32">✓</div>'
+    +'<h1 style="margin-top:8px">Contrato assinado</h1>'
+    +'<p class="by">Este contrato já foi assinado eletronicamente'+(c.aceite_nome?(' por <b>'+esc(c.aceite_nome)+'</b>'):'')+(c.aceite_em?(' em '+fmt(c.aceite_em)):'')+'.</p>'
+    +'<div class="ok" style="text-align:left">Você não precisa preencher de novo. Para receber uma cópia do contrato, é só solicitar ao seu psicólogo(a) ou profissional. 💚</div>'
+    +'<div class="selo">Aceite eletrônico registrado em dichava.app · Documento nº '+docNum+'</div>'
+    +'</div>';
 }
 
 function renderSimples(c){
