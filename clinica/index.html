@@ -3898,7 +3898,13 @@ const CONTR_TPL={
   psicanalise:`CONTRATO TERAPÊUTICO — ABORDAGEM PSICANALÍTICA\n\n1. Enquadre\nAs sessões terão dia, horário e frequência combinados entre as partes. A constância do enquadre faz parte do trabalho.\n\n2. Associação livre e sigilo\nO paciente é convidado a falar livremente. Tudo é protegido por sigilo, conforme o código de ética e a LGPD, salvo risco à vida.\n\n3. Sessões reservadas\nPor se tratar de horário reservado, sessões não canceladas com a antecedência combinada poderão ser cobradas.\n\n4. Valor e pagamento\nCombinados previamente e reajustados conforme acordo.\n\n5. Duração\nO processo não tem prazo determinado e é conduzido conforme a demanda do paciente.\n\n6. Compromisso\nComparecimento regular do paciente e escuta ética e qualificada do profissional.`
 };
 function viewContratos(){
-  return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;color:var(--txs);font-size:13.5px">Crie o contrato, copie o link e envie ao paciente. Ele lê, assina o aceite e vira um documento validado. ✍️</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="formContratoEstrut()">＋ Contrato estruturado</button><button class="btn ghost" onclick="formContrato()">Texto livre</button></div></div>
+  return `<div style="margin-bottom:16px">
+      <p style="color:var(--txs);font-size:13.5px;line-height:1.55;margin:0 0 12px">Crie o contrato, copie o link e envie ao paciente. Ele lê, assina o aceite e vira um documento validado.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;max-width:420px">
+        <button class="btn" style="width:100%;justify-content:center" onclick="formContratoEstrut()">＋ Contrato estruturado</button>
+        <button class="btn ghost" style="width:100%;justify-content:center" onclick="formContrato()">Texto livre</button>
+      </div>
+    </div>
   <div id="contr-list"><div class="card empty">Carregando…</div></div>`;
 }
 async function carregarContratos(){
