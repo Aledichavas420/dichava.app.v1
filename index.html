@@ -3865,7 +3865,7 @@ a{color:inherit;text-decoration:none}
     <div class="mt c" style="margin-bottom:6px">Espalhar o cuidado</div>
     <div id="indnudge-b" style="font-size:14px;color:var(--txs);line-height:1.6;margin:0 6px 16px"></div>
   </div>
-  <button class="btn bv bfull" onclick="closeMod('mindnudge');abrirIndica(_indicaOrigem)">Indicar o dichava \U0001f49a</button>
+  <button class="btn bv bfull" onclick="closeMod('mindnudge');abrirIndica(_indicaOrigem)">Indicar o dichava 💚</button>
   <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mindnudge')">Agora não</button>
 </div></div></div>
 
@@ -6233,7 +6233,7 @@ function _refCode(){
   return ('D'+h.toString(36).toUpperCase()).slice(0,7);
 }
 function _refLink(){return 'https://dichava.app/?ref='+_refCode();}
-function indicaMsgPadrao(){return 'Tô usando um app que me ajuda a cuidar de mim no meu ritmo, com calma e sem julgamento. Acho que pode te fazer bem também. É gratuito pra começar \U0001f49a';}
+function indicaMsgPadrao(){return 'Tô usando um app que me ajuda a cuidar de mim no meu ritmo, com calma e sem julgamento. Acho que pode te fazer bem também. É gratuito pra começar 💚';}
 function indicaEnviadas(){try{return +(localStorage.getItem('dr_indica_env')||0);}catch(e){return 0;}}
 function _bumpEnviadas(){try{var n=indicaEnviadas()+1;localStorage.setItem('dr_indica_env',n);return n;}catch(e){return 0;}}
 async function indicaReais(){
@@ -6269,10 +6269,10 @@ function renderIndicaBody(origem){
   var env=indicaEnviadas(), reais=_indicaReaisN;
   var semeador=(reais!=null&&reais>=1)||env>=3;
   var impacto;
-  if(reais!=null&&reais>0){impacto='<b style="font-size:30px;color:var(--ve)">'+reais+'</b> '+(reais===1?'pessoa entrou':'pessoas entraram')+' pelo seu convite \U0001f331';}
+  if(reais!=null&&reais>0){impacto='<b style="font-size:30px;color:var(--ve)">'+reais+'</b> '+(reais===1?'pessoa entrou':'pessoas entraram')+' pelo seu convite 🌱';}
   else if(env>0){impacto='Você já enviou <b>'+env+'</b> '+(env===1?'convite':'convites')+'. Cada um pode mudar o dia de alguém.';}
   else{impacto='Ninguém precisa passar por isso sozinho. Um convite seu pode ser o começo.';}
-  var badge=semeador?'<div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--ve);background:var(--vf);border-radius:999px;padding:4px 11px;margin-top:10px">\U0001f331 Você semeia cuidado</div>':'';
+  var badge=semeador?'<div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--ve);background:var(--vf);border-radius:999px;padding:4px 11px;margin-top:10px">🌱 Você semeia cuidado</div>':'';
   var link=_refLink();
   var body=document.getElementById('indica-body');
   if(!body)return;
@@ -6291,7 +6291,7 @@ function renderIndicaBody(origem){
    +'<span style="font-size:12.5px;color:var(--txs);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(link)+'</span>'
    +'<button onclick="copiarLinkIndica()" style="border:none;background:var(--v);color:#fff;font-weight:800;font-size:12px;border-radius:9px;padding:7px 12px;cursor:pointer">Copiar</button>'
   +'</div>'
-  +'<button class="btn bv bfull" style="margin-top:16px" onclick="compartilharIndica()">Compartilhar convite \U0001f49a</button>'
+  +'<button class="btn bv bfull" style="margin-top:16px" onclick="compartilharIndica()">Compartilhar convite 💚</button>'
   +'<button class="btn bfull" style="margin-top:9px;background:#25D366;color:#fff" onclick="indicaWhats()">Enviar no WhatsApp</button>'
   +'<p style="font-size:11px;color:var(--txm);text-align:center;line-height:1.55;margin:14px 6px 2px">O convite é discreto: não revela nada sobre você nem sobre o motivo do uso. Quem entrar pelo seu link ajuda a rede a crescer.</p>';
 }
@@ -6328,7 +6328,7 @@ async function compartilharIndica(){
     var file=new File([blob],'dichava.png',{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],text:full}); }
     else if(navigator.share){ await navigator.share({title:'dichava',text:full}); }
-    else { var a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='dichava.png';a.click(); try{await navigator.clipboard.writeText(full);}catch(_){} toast('\U0001f5bc️ Imagem baixada e mensagem copiada!'); }
+    else { var a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='dichava.png';a.click(); try{await navigator.clipboard.writeText(full);}catch(_){} toast('🖼️ Imagem baixada e mensagem copiada!'); }
     _bumpEnviadas(); renderIndicaBody(_indicaOrigem);
   }catch(e){ if(e&&e.name==='AbortError')return; toast('Não consegui compartilhar agora.'); }
 }
@@ -6339,7 +6339,7 @@ function indicaWhats(){
   _bumpEnviadas(); renderIndicaBody(_indicaOrigem);
 }
 async function copiarLinkIndica(){
-  try{await navigator.clipboard.writeText(_refLink());toast('\U0001f517 Link copiado!');}
+  try{await navigator.clipboard.writeText(_refLink());toast('🔗 Link copiado!');}
   catch(e){toast('Seu link: '+_refLink());}
 }
 function _podeNudgeIndica(){
@@ -6353,7 +6353,7 @@ function nudgeIndica(origem){
   _indicaOrigem=origem||'';
   var txt=({
     resist:'Você acabou de cuidar de você. Alguém que você conhece pode estar precisando disso também.',
-    meta:'Você concluiu uma meta \U0001f331 Que tal levar essa ferramenta pra alguém que também merece esse cuidado?',
+    meta:'Você concluiu uma meta 🌱 Que tal levar essa ferramenta pra alguém que também merece esse cuidado?',
     relatorio:'Seu progresso mostra que o dichava tem te ajudado. Quem mais poderia começar hoje?'
   })[origem]||'Se o dichava te faz bem, ele pode fazer bem pra mais alguém.';
   var b=document.getElementById('indnudge-b'); if(b)b.textContent=txt;
