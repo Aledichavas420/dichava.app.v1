@@ -4066,6 +4066,57 @@ async function importarContratoPaciente(id){
   try{ if(_SB){ var nd=Object.assign({},c.dados||{},{importado:true}); await _SB.from('contratos').update({dados:nd}).eq('id',id); c.dados=nd; } }catch(e){}
   toast('✓ Dados importados pro paciente e prontuário'); renderContratos();
 }
+var CONTR_CL={
+  sigilo:'As informações compartilhadas durante o processo são protegidas pelo sigilo profissional, observados os limites previstos na legislação e nas normas profissionais aplicáveis. O profissional compromete-se a preservar a confidencialidade das informações obtidas e a utilizar somente os dados necessários para a prestação do serviço. O(a) paciente poderá solicitar acesso ao seu prontuário, observadas as normas aplicáveis.',
+  online:'Quando o atendimento ocorrer por meio digital, o(a) paciente declara estar ciente de que é recomendável buscar um ambiente que ofereça privacidade, segurança e condições adequadas para a realização da sessão. O profissional compromete-se a adotar medidas compatíveis com a proteção do sigilo no ambiente em que realiza os atendimentos.',
+  limites:'A psicoterapia é um processo construído conjuntamente entre profissional e paciente. Não existe garantia de resultados específicos ou de determinado número de sessões. O processo poderá envolver diferentes estratégias e intervenções compatíveis com a abordagem e as necessidades identificadas. A psicoterapia não substitui atendimento médico ou outros cuidados de saúde quando necessários; quando pertinente, poderão ser realizados encaminhamentos, respeitando o sigilo e os acordos estabelecidos.',
+  encerramento:'O processo poderá ser encerrado por decisão do(a) paciente, por avaliação do profissional ou por decisão conjunta. Sempre que possível, recomenda-se que o encerramento seja conversado previamente em sessão, permitindo a elaboração do término, a avaliação do processo e, quando necessário, encaminhamentos.',
+  consent:'Declaro que li e compreendi as informações apresentadas neste contrato terapêutico, tive oportunidade de esclarecer dúvidas e concordo com as condições estabelecidas para a prestação do serviço.'
+};
+function _cdt(d){ try{ return new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return d||''; } }
+function _cdata(d){ if(!d)return''; var pp=(''+d).split('-'); return pp.length===3?(pp[2]+'/'+pp[1]+'/'+pp[0]):d; }
+function imprimirContrato(id){
+  var c=CONTRATOS.find(function(x){return x.id===id;}); if(!c)return;
+  var d=c.dados||{}, pr=d.prof||{}, pac=d.pac||{}, ac=d.aceites||{}, estrut=d.tipo==='estruturado';
+  var docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
+  var aceito=c.status==='aceito';
+  var rw=function(l,v){ v=(v==null?'':(''+v)).trim(); return v?('<div class="rw"><span class="l">'+esc(l)+'</span><span class="v">'+esc(v)+'</span></div>'):''; };
+  var body='';
+  if(estrut){
+    var fq=pr.frequencia||''; if(fq==='Outra'&&pr.frequencia_outra) fq='Outra: '+pr.frequencia_outra;
+    body+='<div class="sec"><h2>Informações do atendimento</h2>'+rw('Profissional',(pr.nome||(AUTH&&AUTH.nome)||'')+((pr.reg||(AUTH&&AUTH.reg))?' — '+(pr.reg||AUTH.reg):''))
+      +rw('Modalidade',pr.modalidade)+rw('Plataforma / local',pr.plataforma)+rw('Abordagem',pr.abordagem)+rw('Duração da sessão',pr.duracao)+rw('Frequência',fq)+rw('Dia e horário',pr.dia_horario)+'</div>';
+    body+='<div class="sec"><h2>Honorários e pagamento</h2>'+rw('Valor por sessão',pr.valor?('R$ '+pr.valor):'')+rw('Forma de cobrança',pr.forma_cobranca)+rw('Forma de pagamento',pr.forma_pagamento)+rw('Data / condição',pr.cond_pagamento)+'</div>';
+    body+='<div class="sec"><h2>Cancelamentos e remarcações</h2><p>Antecedência de <b>'+esc(pr.cancel_horas||'—')+' horas</b>. Dentro do prazo, remarcação conforme disponibilidade do profissional. Fora do prazo, poderá haver cobrança, ressalvadas situações excepcionais.</p>'+rw('Regra acordada',pr.cancel_regra)+'</div>';
+    body+='<div class="sec"><h2>Identificação do(a) paciente</h2>'+rw('Nome completo',pac.nome)+rw('Nome social',pac.nome_social)+rw('Data de nascimento',_cdata(pac.nascimento))+rw('CPF',pac.cpf)+rw('E-mail',pac.email)+rw('Telefone / WhatsApp',pac.telefone)+rw('Cidade / Estado',pac.cidade)+rw('Profissão',pac.profissao)+rw('Contato de emergência',[pac.emerg_nome,pac.emerg_relacao,pac.emerg_telefone].filter(Boolean).join(' · '))+'</div>';
+    var cl=function(t,x,ok){ return '<div class="sec"><h2>'+t+'</h2><p>'+x+'</p>'+(ok!=null?('<p class="ack">'+(ok?'[X]':'[ ]')+' Ciente.</p>'):'')+'</div>'; };
+    body+=cl('Sigilo e confidencialidade',CONTR_CL.sigilo,!!ac.sigilo);
+    body+=cl('Atendimento online',CONTR_CL.online,!!ac.online);
+    body+=cl('Limites e natureza da psicoterapia',CONTR_CL.limites,!!ac.limites);
+    body+=cl('Encerramento do processo',CONTR_CL.encerramento,null);
+    body+='<div class="sec"><h2>Consentimento</h2><p>'+CONTR_CL.consent+'</p></div>';
+  } else {
+    body='<div class="sec"><h2>Contrato</h2><pre style="white-space:pre-wrap;font-family:inherit;margin:0">'+esc(c.texto||'')+'</pre></div>';
+  }
+  var stamp=aceito?('Aceito eletronicamente por <b>'+esc(c.aceite_nome||'')+'</b> em '+_cdt(c.aceite_em)+'.'):'Aguardando aceite do paciente.';
+  var html='<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><title>Contrato - '+esc(c.titulo||'')+'</title><style>'
+    +'@page{size:A4;margin:16mm}*{box-sizing:border-box}body{font-family:Georgia,serif;color:#1B2A1C;line-height:1.55;font-size:12pt;margin:0}'
+    +'h1{font-size:19pt;margin:0 0 2mm}.meta{color:#5D7060;font-size:10pt;margin-bottom:4mm}'
+    +'.sec{border-top:1px solid #E2ECE3;padding-top:4mm;margin-top:5mm;page-break-inside:avoid}'
+    +'.sec h2{font-size:11pt;text-transform:uppercase;letter-spacing:.04em;color:#2E7D32;margin:0 0 3mm}'
+    +'.sec p{margin:0 0 2mm;font-size:11pt}.rw{display:flex;gap:4mm;font-size:11pt;padding:.6mm 0}.rw .l{color:#5D7060;flex:0 0 42mm}.rw .v{font-weight:bold}'
+    +'.ack{font-weight:bold;color:#2E7D32}.stamp{margin-top:6mm;border:1px solid #BFE3C4;background:#F0F7F1;border-radius:3mm;padding:4mm;font-size:10.5pt}'
+    +'.foot{margin-top:6mm;color:#9E9E9E;font-size:9pt;border-top:1px dashed #E2ECE3;padding-top:3mm}'
+    +'</style></head><body>'
+    +'<h1>'+esc(c.titulo||'Contrato terapêutico')+'</h1>'
+    +'<div class="meta">dichava.app · Documento nº '+docNum+' · gerado em '+_cdt(c.criado_em)+(c.paciente_nome?(' · '+esc(c.paciente_nome)):'')+'</div>'
+    +body
+    +'<div class="stamp">'+stamp+'</div>'
+    +'<div class="foot">Documento gerado por dichava.app · aceite eletrônico. Cópia emitida em '+_cdt(new Date().toISOString())+'.</div>'
+    +'</body></html>';
+  var w=window.open('','_blank'); if(!w){ toast('Permita pop-ups pra abrir a cópia.',5000); return; }
+  w.document.write(html); w.document.close(); try{w.focus();}catch(e){} setTimeout(function(){ try{w.print();}catch(e){} },500);
+}
 function copiarLinkContrato(id){ const url='https://dichava.app/contrato/?id='+id; try{navigator.clipboard.writeText(url);toast('🔗 Link copiado — envie ao paciente');}catch(e){toast(url);} }
 function verContrato(id){
   const c=CONTRATOS.find(x=>x.id===id); if(!c)return;
@@ -4081,7 +4132,7 @@ function verContrato(id){
       </div>
       <div style="white-space:pre-wrap;font-size:14px;line-height:1.7;border:1px solid var(--line);border-radius:12px;padding:16px;max-height:50vh;overflow:auto">${esc(c.texto)}</div>
     </div>
-    <div class="modal-foot"><button class="btn ghost" onclick="copiarLinkContrato('${c.id}')">🔗 Copiar link</button><button class="btn" onclick="window.open('/contrato/?id=${c.id}','_blank')">Abrir página / imprimir</button></div>
+    <div class="modal-foot"><button class="btn ghost" onclick="copiarLinkContrato('${c.id}')">🔗 Copiar link</button><button class="btn" onclick="imprimirContrato('${c.id}')">🖨️ Cópia do contrato (PDF)</button></div>
   </div>`);
 }
 async function delContrato(id){
