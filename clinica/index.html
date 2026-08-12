@@ -796,7 +796,7 @@ body.has-demo-banner{padding-bottom:64px}
     <a class="nav-item" data-nav="mensagens"><span class="ic">✉</span> Mensagens <span class="badge" id="badge-msgs"></span></a>
     <a class="nav-item" data-nav="perfil"><span class="ic">☺</span> Meu perfil</a>
     <a class="nav-item" data-nav="equipe"><span class="ic">⧉</span> Equipe</a>
-    <a class="nav-item" data-nav="rede"><span class="ic">◲</span> Rede</a>
+    <a class="nav-item" data-nav="rede" style="display:none"><span class="ic">◲</span> Rede</a>
     <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
     <div class="side-foot">
       <div class="who"><b id="side-prof">Profissional</b><span id="side-clin">Minha Clínica</span></div>
@@ -984,7 +984,7 @@ function pintarIconesClinica(){
 }
 // menu "Mais" (mobile) — funções que não cabem na barra inferior
 function abrirMaisMenu(){
-  const items=[['rede','Rede'],['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  const items=[['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
   const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
