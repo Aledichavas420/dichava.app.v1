@@ -502,9 +502,155 @@ body.has-demo-banner{padding-bottom:64px}
 .tut-dots i.on{background:var(--v);width:20px;border-radius:20px}
 .tut-foot{display:flex;gap:10px;padding:0 24px 22px}
 .tut-foot .btn{flex:1;justify-content:center}
+/* ===== REDE: biblioteca + cursos ===== */
+.rede-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.rede-tab{border:1px solid var(--line);background:var(--card);color:var(--txs);font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.rede-tab.on{background:var(--v);border-color:var(--v);color:#fff}
+.biblio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.biblio-card{background:var(--card);border:1px solid var(--line);border-radius:var(--rlg);padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:8px;transition:.15s;box-shadow:var(--sh)}
+.biblio-card:hover{border-color:var(--vc);transform:translateY(-2px)}
+.biblio-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px}
+.biblio-card b{font-size:14.5px;color:var(--tx)}
+.biblio-card .d{font-size:12.5px;color:var(--txm);line-height:1.5;flex:1}
+.biblio-card .cat{font-size:11px;font-weight:700;color:var(--txs);background:var(--cin);padding:3px 9px;border-radius:999px;align-self:flex-start}
+.curso-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.curso-card{border:1px solid var(--line);border-radius:var(--rlg);overflow:hidden;cursor:pointer;background:var(--card);box-shadow:var(--sh);transition:.15s}
+.curso-card:hover{transform:translateY(-2px)}
+.curso-capa{display:flex;align-items:flex-end;padding:12px;color:#fff}
+.curso-capa .nv{font-size:11px;font-weight:700;background:rgba(0,0,0,.22);padding:3px 9px;border-radius:999px}
+.curso-bd{padding:14px}
+.curso-bd b{font-size:15px;color:var(--tx)}
+.curso-bd .sub{font-size:12.5px;color:var(--txm);margin-top:3px;line-height:1.45}
+.curso-prog{height:6px;background:var(--cin);border-radius:6px;margin-top:12px;overflow:hidden}
+.curso-prog i{display:block;height:100%;background:var(--v);border-radius:6px;transition:.3s}
+.aula-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:14px;margin-bottom:8px;cursor:pointer;background:var(--card)}
+.aula-row:hover{border-color:var(--vc)}
+.aula-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--cinm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700}
+.aula-check.ok{background:var(--v);border-color:var(--v)}
+.aula-tt{flex:1;font-size:14px;font-weight:600;color:var(--tx)}
+.aula-tt .du{font-size:11.5px;color:var(--txm);font-weight:500;display:block;margin-top:2px}
+.aula-body{font-size:15px;line-height:1.7;color:var(--tx)}
+.aula-body h4{font-size:16px;margin:20px 0 8px;color:var(--ve)}
+.aula-body p{margin:0 0 12px}
+.aula-body ul{margin:0 0 12px 18px;display:flex;flex-direction:column;gap:6px}
+.mod-tt{font-size:12.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.4px;margin:22px 0 10px}
+.aula-apres{font-size:14.5px;color:var(--txs);line-height:1.6;background:var(--cin);border-radius:12px;padding:12px 14px;margin-bottom:16px;border-left:3px solid var(--vc)}
+.roteiro-box{border:1px dashed var(--cinm);border-radius:14px;padding:14px 16px;margin-bottom:8px;background:var(--card)}
+.roteiro-tag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--txm);background:var(--cin);padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.aula-video{margin-bottom:12px}
+.aula-transcri{margin-top:10px}
+.aula-transcri summary{cursor:pointer;color:var(--v);font-weight:700;font-size:13.5px}
+.refs-box{margin-top:20px;border-top:1px solid var(--line);padding-top:14px}
+.refs-box>b{font-size:12.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--txs)}
+.refs-box ul{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.refs-box li{font-size:13px;color:var(--txs);line-height:1.5}
+.refs-box a{color:var(--v);font-weight:600;text-decoration:none}
+.ref-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--txm);background:var(--cin);padding:2px 7px;border-radius:6px;margin-right:6px;vertical-align:middle}
 .hat-dias{display:flex;flex-wrap:wrap;gap:7px}
 .hat-dia{border:1.5px solid var(--line);background:var(--card);color:var(--txs);font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px;cursor:pointer;min-width:44px}
 .hat-dia.on{background:var(--v);border-color:var(--v);color:#fff}
+.estante-tema{font-size:14px;font-weight:800;color:var(--tx);margin:22px 0 12px;display:flex;align-items:center;gap:8px}
+.estante-n{font-size:11px;font-weight:700;color:var(--txm);background:var(--cin);border-radius:999px;padding:2px 9px}
+.estante-row{display:flex;gap:13px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.estante-row::-webkit-scrollbar{height:6px}
+.estante-row::-webkit-scrollbar-thumb{background:var(--cinm);border-radius:6px}
+.livro{flex:0 0 auto;border:0;background:none;padding:0;cursor:pointer;scroll-snap-align:start}
+.livro-capa{width:120px;height:176px;border-radius:5px 9px 9px 5px;display:flex;flex-direction:column;justify-content:space-between;padding:14px 12px 12px 17px;color:#fff;text-align:left;overflow:hidden;box-shadow:0 7px 16px -7px rgba(0,0,0,.45),inset 5px 0 0 rgba(255,255,255,.16),inset 9px 0 11px -8px rgba(0,0,0,.35)}
+.livro-t{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:14px;line-height:1.22;letter-spacing:.2px;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.livro-a{font-size:10.5px;font-weight:600;opacity:.92;text-transform:uppercase;letter-spacing:.4px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.livro-capa.lg{width:150px;height:220px;margin:0 auto;display:inline-flex}
+.livro{transition:transform .15s}
+.livro:hover{transform:translateY(-4px)}
+.livro-hero{display:flex;justify-content:center;padding:6px 0 2px}
+.livro-tag{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;color:#fff;padding:3px 12px;border-radius:999px;letter-spacing:.2px}
+.livro-sobre{margin-top:16px;background:var(--cin);border-radius:12px;padding:14px 16px}
+.livro-sobre-h{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--txs);margin-bottom:6px}
+.livro-sobre p{margin:0;font-size:14px;line-height:1.6;color:var(--tx)}
+.biblio-hero{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--vf),var(--card));border:1px solid var(--vc);border-radius:16px;padding:15px 18px;margin-bottom:14px}
+.biblio-hero-ic{font-size:30px;line-height:1}
+.biblio-hero-t{font-size:17px;font-weight:800;color:var(--tx)}
+.biblio-hero-s{font-size:12.5px;color:var(--txs);line-height:1.5;margin-top:3px}
+.biblio-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;-webkit-overflow-scrolling:touch}
+.biblio-chips::-webkit-scrollbar{height:0}
+.bchip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--txs);font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.15s}
+.bchip.on{background:var(--tx);border-color:var(--tx);color:#fff}
+.estante-shelf{position:relative}
+.estante-shelf::after{content:"";position:absolute;left:6px;right:6px;bottom:8px;height:11px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.14),transparent 78%);z-index:0}
+.estante-row{display:flex;gap:15px;overflow-x:auto;padding:6px 2px 20px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;position:relative;z-index:1}
+.livro{flex:0 0 auto;border:0;background:none;padding:0;cursor:pointer;scroll-snap-align:start;transition:transform .16s}
+.livro:hover{transform:translateY(-5px)}
+.livro-capa{position:relative;width:124px;height:185px;border-radius:4px 8px 8px 4px;display:flex;flex-direction:column;justify-content:flex-start;padding:15px 13px 13px 19px;color:#fff;text-align:left;overflow:hidden;box-shadow:0 9px 20px -9px rgba(0,0,0,.55),inset 6px 0 0 rgba(0,0,0,.18),inset 8px 0 10px -6px rgba(0,0,0,.38),inset -1px 0 0 rgba(255,255,255,.12)}
+.livro-capa::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 42%,rgba(0,0,0,.16));pointer-events:none;z-index:0}
+.livro-edge{position:absolute;top:3px;bottom:3px;right:0;width:4px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55),rgba(255,255,255,.55) 1px,rgba(0,0,0,.14) 1px,rgba(0,0,0,.14) 2px);border-radius:0 3px 3px 0;opacity:.55;z-index:1}
+.livro-t{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:14px;line-height:1.22;letter-spacing:.2px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;position:relative;z-index:1}
+.livro-rule{height:2px;width:22px;background:rgba(255,255,255,.6);border-radius:2px;margin:8px 0;position:relative;z-index:1}
+.livro-a{font-size:10px;font-weight:700;opacity:.94;text-transform:uppercase;letter-spacing:.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:auto;position:relative;z-index:1}
+.livro-lang{position:absolute;top:8px;right:9px;font-size:8.5px;font-weight:800;background:rgba(0,0,0,.3);color:#fff;padding:2px 7px;border-radius:999px;letter-spacing:.3px;z-index:2}
+.livro-capa.lg{width:160px;height:236px;margin:0 auto;display:inline-flex}
+.livro-capa.lg .livro-t{font-size:16px;-webkit-line-clamp:6}
+.livro-hero{display:flex;justify-content:center;padding:6px 0 2px}
+.rico{display:inline-flex;flex:0 0 auto}
+.rico svg{width:100%;height:100%;display:block}
+.rede-hero{display:flex;align-items:center;gap:15px;background:linear-gradient(135deg,#2FA35F,#00897B);border-radius:20px;padding:22px 20px;color:#fff;box-shadow:0 14px 30px -14px rgba(0,137,123,.6);margin-bottom:6px}
+.rede-hero-mark{width:48px;height:48px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);border-radius:14px;padding:9px}
+.rede-hero-mark svg{width:100%;height:100%;display:block}
+.rede-hero-t{font-size:20px;font-weight:800;letter-spacing:.2px}
+.rede-hero-s{font-size:13px;opacity:.93;line-height:1.5;margin-top:3px}
+.rede-sec-h{font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--txs);margin:24px 2px 12px}
+.mural{display:flex;flex-direction:column;gap:11px}
+.mural-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;cursor:pointer;box-shadow:var(--sh);transition:.15s}
+.mural-card:hover{border-color:var(--vc);transform:translateY(-2px)}
+.mural-ic{width:48px;height:48px;flex:0 0 auto;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:9px}
+.mural-ic svg{width:100%;height:100%;display:block}
+.mural-ic.lg{width:66px;height:66px;padding:14px;border-radius:18px}
+.mural-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.mural-t{font-size:15px;font-weight:800;color:var(--tx)}
+.mural-d{font-size:12.5px;color:var(--txm);line-height:1.45}
+.mural-badge{flex:0 0 auto;align-self:center;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--txs);background:var(--cin);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.rede-acessos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acesso-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:7px;align-items:flex-start;box-shadow:var(--sh);transition:.15s}
+.acesso-card:hover{border-color:var(--vc);transform:translateY(-2px)}
+.acesso-ic{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.acesso-ic svg{width:100%;height:100%;display:block}
+.acesso-t{font-size:15.5px;font-weight:800;color:var(--tx)}
+.acesso-s{font-size:12px;color:var(--txm)}
+.biblio-hero-ic{width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.biblio-hero-ic svg{width:100%;height:100%;display:block}
+.roteiro-tag svg{width:14px;height:14px;display:inline-block}
+.mural-badge.on{color:var(--ve);background:var(--vf)}
+.mural-info{font-size:12.5px;color:var(--txs);line-height:1.5;background:var(--cin);border-radius:11px;padding:10px 13px;margin-top:12px;text-align:center}
+.mural-itens{display:flex;flex-direction:column;gap:9px}
+.mitem{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.mitem-data{flex:0 0 auto;width:46px;text-align:center;background:var(--cin);border-radius:9px;padding:6px 0}
+.mitem-data b{display:block;font-size:16px;font-weight:800;color:var(--tx);line-height:1}
+.mitem-data span{font-size:10px;text-transform:uppercase;color:var(--txm);font-weight:700;letter-spacing:.3px}
+.mitem-body{flex:1;min-width:0}
+.mitem-t{font-size:13.5px;font-weight:700;color:var(--tx);line-height:1.3}
+.mitem-s{font-size:12px;color:var(--txm);margin-top:2px}
+.mitem-tag{flex:0 0 auto;font-size:10px;font-weight:700;color:var(--ve);background:var(--vf);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.biblio-hero{gap:16px;align-items:center;background:linear-gradient(135deg,#7B54D3,#4A2F8F);border:0;border-radius:20px;padding:20px;margin-bottom:16px;color:#fff;box-shadow:0 16px 34px -16px rgba(74,47,143,.65);position:relative;overflow:hidden}
+.biblio-hero::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%);pointer-events:none}
+.biblio-hero-ic{width:54px;height:54px;flex:0 0 auto;background:#fff;border-radius:16px;padding:12px;box-shadow:0 8px 18px -8px rgba(0,0,0,.45);position:relative;z-index:1;display:flex;align-items:center;justify-content:center}
+.biblio-hero-ic svg{width:100%;height:100%;display:block}
+.biblio-hero-tx{position:relative;z-index:1;min-width:0}
+.biblio-hero-t{font-size:20px;font-weight:800;color:#fff;letter-spacing:.2px}
+.biblio-hero-s{font-size:12.5px;color:rgba(255,255,255,.92);line-height:1.5;margin-top:3px}
+.biblio-hero-pills{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.biblio-hero-pills span{font-size:11px;font-weight:800;background:rgba(255,255,255,.18);color:#fff;padding:4px 11px;border-radius:999px;letter-spacing:.3px}
+.mitem-cal{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--v);text-decoration:none}
+.rede-destaque{display:flex;align-items:center;gap:13px;width:100%;text-align:left;margin:8px 0 2px;background:linear-gradient(135deg,#E9F7EE,var(--card));border:1px solid var(--vc);border-radius:16px;padding:13px 15px;cursor:pointer;box-shadow:var(--sh);transition:.15s}
+.rede-destaque:hover{transform:translateY(-2px)}
+.rd-data{flex:0 0 auto;width:52px;text-align:center;background:#fff;border:1px solid var(--vc);border-radius:12px;padding:7px 0}
+.rd-data b{display:block;font-size:19px;font-weight:800;color:var(--ve);line-height:1}
+.rd-data span{font-size:10px;text-transform:uppercase;color:var(--txm);font-weight:700}
+.rd-body{flex:1;min-width:0;display:flex;flex-direction:column}
+.rd-tag{align-self:flex-start;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--ve);background:#fff;border:1px solid var(--vc);border-radius:999px;padding:2px 8px;margin-bottom:3px}
+.rd-t{font-size:14.5px;font-weight:800;color:var(--tx);line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rd-m{font-size:12px;color:var(--txs);margin-top:1px}
+.rd-go{flex:0 0 auto;color:var(--txm);font-size:20px}
+.mitem.sel{cursor:pointer;gap:11px}
+.mi-chk{width:20px;height:20px;flex:0 0 auto;accent-color:var(--v);cursor:pointer;margin:0}
+.mitem.sel:has(.mi-chk:checked){border-color:var(--v);background:var(--vf)}
 </style>
 </head>
 <body>
@@ -650,6 +796,7 @@ body.has-demo-banner{padding-bottom:64px}
     <a class="nav-item" data-nav="mensagens"><span class="ic">✉</span> Mensagens <span class="badge" id="badge-msgs"></span></a>
     <a class="nav-item" data-nav="perfil"><span class="ic">☺</span> Meu perfil</a>
     <a class="nav-item" data-nav="equipe"><span class="ic">⧉</span> Equipe</a>
+    <a class="nav-item" data-nav="rede"><span class="ic">◲</span> Rede</a>
     <a class="nav-item" data-nav="config"><span class="ic">⚙</span> Configurações</a>
     <div class="side-foot">
       <div class="who"><b id="side-prof">Profissional</b><span id="side-clin">Minha Clínica</span></div>
@@ -806,7 +953,7 @@ function go(r){
 }
 
 /* =============== RENDER PRINCIPAL =============== */
-const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],contratos:['Contratos','Contrato terapêutico e aceite do paciente'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],divulgacao:['Divulgação','Materiais pra indicar o app'],config:['Configurações','']};
+const TITLES={dash:['Visão geral','Resumo da clínica hoje'],agenda:['Agenda',''],pacientes:['Pacientes','Cadastro e histórico'],prontuarios:['Prontuários','Registros clínicos'],caixa:['Caixa','Financeiro da clínica'],projecao:['Projeção','Metas e planejamento da clínica'],documentos:['Documentos','Recibos, declarações, pareceres e relatórios'],contratos:['Contratos','Contrato terapêutico e aceite do paciente'],mensagens:['Mensagens','Conversas com pacientes'],perfil:['Meu perfil','Como você aparece no app'],equipe:['Equipe','Profissionais da clínica'],divulgacao:['Divulgação','Materiais pra indicar o app'],rede:['Rede dichava','Biblioteca e cursos pra você'],config:['Configurações','']};
 /* ===== ÍCONES SVG DO PAINEL (estilo gradiente do app) ===== */
 const CIC={
   dash:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-dash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="8" height="8" rx="2.2" fill="url(#cic-dash)"/><rect x="13" y="3" width="8" height="5" rx="2.2" fill="url(#cic-dash)" opacity=".65"/><rect x="13" y="10" width="8" height="11" rx="2.2" fill="url(#cic-dash)"/><rect x="3" y="13" width="8" height="8" rx="2.2" fill="url(#cic-dash)" opacity=".65"/></svg>`,
@@ -821,7 +968,8 @@ const CIC={
   config:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-cfg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#AEB7C2"/><stop offset="1" stop-color="#5B6672"/></linearGradient></defs><path d="M19.4 13c.04-.32.06-.66.06-1s-.02-.68-.07-1l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.3 7.3 0 0 0-1.73-1l-.38-2.65A.49.49 0 0 0 14 2h-4a.49.49 0 0 0-.49.42l-.38 2.65a7.3 7.3 0 0 0-1.73 1l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64L4.6 11c-.05.32-.07.66-.07 1s.02.68.07 1l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1a7.3 7.3 0 0 0 1.73 1l.38 2.65c.04.24.25.42.49.42h4c.24 0 .45-.18.49-.42l.38-2.65a7.3 7.3 0 0 0 1.73-1l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64L19.4 13Z" fill="url(#cic-cfg)"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>`,
   contratos:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-ctr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFA98A"/><stop offset="1" stop-color="#E5605A"/></linearGradient></defs><path d="M6 3h8l4 4v9.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="url(#cic-ctr)"/><path d="M14 3v4h4" fill="#fff" opacity=".38"/><g stroke="#fff" stroke-width="1.4" stroke-linecap="round"><path d="M8 9.8h6M8 12.3h6"/></g><path d="M7.5 16.6c1.1-1.5 1.9-1.5 2.9 0 .8 1.2 1.6 1.2 2.4 0 .7-1 1.4-1.1 2.2-.3" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   projecao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-prj" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="3.2" fill="url(#cic-prj)"/><path d="M6.5 15.5l3.4-3.4 3 2.5 4.6-5.2" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.8 9h2.9v2.9" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  divulgacao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-div" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB27A"/><stop offset="1" stop-color="#F2663B"/></linearGradient></defs><path d="M3 10v4a1 1 0 0 0 1 1h2l9 4V5L6 9H4a1 1 0 0 0-1 1Z" fill="url(#cic-div)"/><path d="M18 8.5a4 4 0 0 1 0 7" fill="none" stroke="url(#cic-div)" stroke-width="1.8" stroke-linecap="round"/></svg>`
+  divulgacao:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-div" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB27A"/><stop offset="1" stop-color="#F2663B"/></linearGradient></defs><path d="M3 10v4a1 1 0 0 0 1 1h2l9 4V5L6 9H4a1 1 0 0 0-1 1Z" fill="url(#cic-div)"/><path d="M18 8.5a4 4 0 0 1 0 7" fill="none" stroke="url(#cic-div)" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  rede:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-rede" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5CE3CF"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><path d="M12 3 2.5 7.5 12 12l9.5-4.5L12 3Z" fill="url(#cic-rede)"/><path d="M6 10.6V15c0 1.5 2.7 2.9 6 2.9s6-1.4 6-2.9v-4.4" fill="none" stroke="url(#cic-rede)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.5 7.7v5" fill="none" stroke="url(#cic-rede)" stroke-width="1.8" stroke-linecap="round"/></svg>`
 };
 // Dá um id de gradiente ÚNICO a cada inserção do ícone. Sem isso, o mesmo
 // id ("cic-pr" etc.) se repete no DOM (sidebar oculta + barra + "Mais") e o
@@ -836,7 +984,7 @@ function pintarIconesClinica(){
 }
 // menu "Mais" (mobile) — funções que não cabem na barra inferior
 function abrirMaisMenu(){
-  const items=[['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
+  const items=[['rede','Rede'],['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']];
   const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
@@ -885,6 +1033,742 @@ function viewDivulgacao(){
     ${bloco('Mito e realidade sobre uso','reels3',_DIVUL.reels3)}`;
 }
 function copiarModelo(k){ const t=_DIVUL[k]; if(!t){ toast('Nada pra copiar',1); return; } try{ navigator.clipboard.writeText(t); toast('Copiado'); }catch(e){ toast('Copie o texto manualmente',1); } }
+
+/* ============================================================
+   REDE dichava · Biblioteca + Cursos (conteúdo embutido, MVP)
+   Conteúdo inicial e fácil de trocar. Visível a quem está no
+   painel (o gate já barra profissionais expirados).
+   ============================================================ */
+let _redeTab='biblioteca';
+let _redeView='home';
+let _cursoAtual=null, _aulaAtual=null;
+
+// ----- BIBLIOTECA: estante de sugestões de leitura (livros reais, por tema) -----
+// Só indicações (título/autor/editora/sobre). Sem conteúdo dos livros e sem a
+// imagem original da capa, pra respeitar direitos autorais. Capas estilizadas.
+const ESTANTE=[
+  {tema:"Fundamentos da Redução de Danos", cor:"linear-gradient(145deg,#2FA35F,#186b3d)", livros:[
+    {t:"Redução de Danos", a:"G. Alan Marlatt", ed:"Artmed", d:"O livro que sistematiza a redução de danos como abordagem clínica. Bom pra responder como aplicar RD na prática, com estratégias concretas pra lidar com comportamentos de alto risco."},
+    {t:"Na Fissura", a:"Johann Hari", ed:"Companhia das Letras", d:"Uma reportagem envolvente que refaz a história da guerra às drogas e mostra por que a conexão importa mais que a punição. Ótimo pra entender de onde vem o proibicionismo e o que funciona melhor."},
+    {t:"Avessos do Prazer", a:"Gilberta Acselrad (org.)", ed:"Editora Fiocruz", d:"Coletânea brasileira que cruza drogas, aids e direitos humanos. Ajuda a pensar redução de danos como política pública e questão de cidadania."},
+    {t:"Drug, Set, and Setting", a:"Norman Zinberg", lang:"em inglês", d:"O clássico que mostra que o efeito de uma droga depende da substância, da pessoa e do contexto. Base teórica pra entender por que o mesmo uso gera experiências diferentes."},
+    {t:"Undoing Drugs", a:"Maia Szalavitz", lang:"em inglês", d:"Conta a história do movimento de redução de danos pelo mundo. Bom pra entender como essas ideias nasceram e se espalharam."},
+    {t:"Toxicomanias: incidências clínicas e socioantropológicas", a:"Antônio Nery Filho (org.)", ed:"EDUFBA / CETAD", d:"Coletânea da escola baiana que junta clínica e ciências sociais. Boa porta de entrada pra literatura brasileira sobre o tema."},
+    {t:"Drogas e Cultura: novas perspectivas", a:"Labate, Goulart, Fiore, MacRae e Carneiro (orgs.)", ed:"EDUFBA", d:"Reúne pesquisadores brasileiros mostrando que o uso de drogas é também fenômeno cultural, não só médico ou criminal."},
+    {t:"Drogas e Drogadição no Brasil", a:"Richard Bucher", ed:"Artes Médicas", d:"Referência brasileira que ajuda a entender como o país construiu seu olhar sobre drogas e prevenção."},
+    {t:"Drogas para Adultos", a:"Carl Hart", ed:"Zahar", d:"O neurocientista defende que a maioria dos adultos usa drogas de forma responsável e questiona o pânico. Provocador e baseado em ciência."},
+    {t:"No Reino dos Fantasmas Famintos", a:"Gabor Maté", d:"Do trabalho com dependentes graves, Maté liga o vício ao trauma e à dor. Ajuda a olhar a pessoa por trás do uso com mais compaixão."},
+  ]},
+  {tema:"Política de Drogas, Proibicionismo e Justiça", cor:"linear-gradient(145deg,#C0392B,#7d241b)", livros:[
+    {t:"Drogas: a história do proibicionismo", a:"Henrique Carneiro", ed:"Autonomia Literária", d:"O historiador brasileiro conta como certas substâncias viraram crime. Essencial pra entender que a ilegalidade é uma construção histórica, não algo natural."},
+    {t:"Um Preço Muito Alto", a:"Carl Hart", ed:"Zahar", d:"Autobiografia e ciência juntas: o autor mostra como pobreza e racismo, não a droga em si, explicam boa parte dos danos. Forte pra desmontar mitos."},
+    {t:"A Política Criminal de Drogas no Brasil", a:"Salo de Carvalho", ed:"Saraiva", d:"Análise jurídica de como a lei de drogas funciona no Brasil e a quem ela pune. Referência pra quem quer entender o lado legal."},
+    {t:"Proibições, riscos, danos e enganos: as drogas tornadas ilícitas", a:"Maria Lúcia Karam", ed:"Lumen Juris", d:"A jurista defende que a proibição causa mais dano que a própria droga. Argumento afiado sobre liberdade e direitos."},
+    {t:"Narcotráfico: uma guerra na guerra", a:"Thiago Rodrigues", ed:"Desatino", d:"Analisa a guerra às drogas como guerra política e econômica. Ajuda a enxergar os interesses por trás do combate."},
+    {t:"A Nova Segregação: racismo e encarceramento em massa", a:"Michelle Alexander", ed:"Boitempo", d:"Mostra como a guerra às drogas nos EUA virou uma forma de encarceramento em massa da população negra. Os paralelos com o Brasil são fortes."},
+    {t:"Historia general de las drogas", a:"Antonio Escohotado", lang:"em espanhol", d:"Panorama enciclopédico do uso de substâncias na história humana. Denso, mas revelador de como sempre convivemos com drogas."},
+    {t:"Acionistas do Nada: quem são os traficantes de droga", a:"Orlando Zaccone", ed:"Revan", d:"Um delegado analisa quem realmente é preso como traficante no Brasil. Desmonta a imagem do grande traficante."},
+    {t:"A Face Oculta da Droga", a:"Rosa del Olmo", ed:"Revan", d:"Clássico latino-americano sobre como o discurso do medo foi construído em torno das drogas."},
+    {t:"Drugs Without the Hot Air", a:"David Nutt", lang:"em inglês", d:"O cientista britânico compara os danos reais de cada droga, sem alarmismo. Bom pra ter uma noção de risco baseada em evidência."},
+  ]},
+  {tema:"Clínica e Psicanálise das Toxicomanias", cor:"linear-gradient(145deg,#7B54D3,#4a2f8f)", livros:[
+    {t:"A Droga: drogas e toxicômanos", a:"Claude Olievenstein", ed:"Brasiliense", d:"Do psiquiatra francês pioneiro no cuidado a toxicômanos. Ajuda a pensar o sujeito por trás do uso, para além do sintoma."},
+    {t:"Destino do Toxicômano", a:"Claude Olievenstein", ed:"Almed", d:"Reflexão clínica sobre o percurso de quem se torna dependente. Sensível e humano."},
+    {t:"A Clínica do Toxicômano: a falta da falta", a:"Claude Olievenstein (org.)", ed:"Artes Médicas", d:"Discute o manejo clínico da toxicomania a partir da ideia da falta. Pra quem quer aprofundar a escuta."},
+    {t:"Drogadição Hoje: indivíduo, família e sociedade", a:"Eduardo Kalina", ed:"Artmed", d:"Aborda a dependência considerando indivíduo, família e sociedade. Prático pra pensar o contexto do paciente."},
+    {t:"Alcoolismo, Delinquência, Toxicomania", a:"Charles Melman", ed:"Escuta", d:"Leitura psicanalítica de orientação lacaniana sobre as formas de gozo no uso. Denso, pra quem gosta de teoria."},
+    {t:"A Droga do Toxicômano", a:"Jésus Santiago", ed:"Jorge Zahar", d:"Analisa a relação do sujeito com a droga na era da ciência. Referência psicanalítica brasileira."},
+    {t:"O Prazer e o Mal: filosofia da droga", a:"Giulia Sissa", ed:"Civilização Brasileira", d:"Ensaio filosófico sobre o desejo e o prazer nas drogas. Amplia a conversa para além do olhar médico."},
+    {t:"As Drogas na Contemporaneidade: perspectivas clínicas e culturais", a:"Antônio Nery Filho (org.)", ed:"EDUFBA", d:"Junta clínica e cultura pra pensar o uso hoje. Boa síntese da escola baiana."},
+  ]},
+  {tema:"Dependência, Cérebro e Ciência", cor:"linear-gradient(145deg,#2f6fd3,#1c3f80)", livros:[
+    {t:"The Biology of Desire", a:"Marc Lewis", lang:"em inglês", d:"O neurocientista, ele mesmo ex-dependente, argumenta que vício é aprendizado, não doença. Muda a forma de entender a recaída."},
+    {t:"Unbroken Brain", a:"Maia Szalavitz", lang:"em inglês", d:"Defende o vício como um transtorno de desenvolvimento e aprendizagem. Bom pra questionar o modelo de doença."},
+    {t:"Buzzed", a:"Cynthia Kuhn, Scott Swartzwelder e Wilkie Wilson", lang:"em inglês", d:"Guia direto e sem pânico sobre o que cada droga faz no corpo. Ótimo de consulta rápida."},
+    {t:"Drogas Psicotrópicas: o que são e como agem", a:"E. A. Carlini e col. (CEBRID)", ed:"Unifesp", d:"Cartilha brasileira do CEBRID explicando de forma simples como cada substância age. Acessível até pra indicar a pacientes."},
+    {t:"Dependência Química: prevenção, tratamento e políticas públicas", a:"Diehl, Cordeiro e Laranjeira", ed:"Artmed", d:"Manual brasileiro completo sobre prevenção, tratamento e políticas. Referência de estante pra quem atende."},
+    {t:"O Tratamento do Usuário de Crack", a:"Marcelo Ribeiro e Ronaldo Laranjeira", ed:"Artmed", d:"Guia clínico brasileiro específico sobre crack. Prático pra manejo e trabalho em rede."},
+    {t:"Memoirs of an Addicted Brain", a:"Marc Lewis", lang:"em inglês", d:"Memória do autor cruzada com neurociência. Mostra por dentro o que a droga faz no cérebro."},
+    {t:"Never Enough", a:"Judith Grisel", lang:"em inglês", d:"A neurocientista e ex-usuária explica por que a tolerância sempre pede mais. Claro sobre o mecanismo do vício."},
+  ]},
+  {tema:"Abordagens Terapêuticas e Prevenção de Recaída", cor:"linear-gradient(145deg,#0EA5A0,#0a615e)", livros:[
+    {t:"Entrevista Motivacional: ajudando as pessoas a mudar", a:"William Miller e Stephen Rollnick", ed:"Artmed", d:"O livro que fundou a entrevista motivacional. Pra aprender a ajudar a pessoa a encontrar os próprios motivos pra mudar."},
+    {t:"Prevenção de Recaída", a:"G. Alan Marlatt e Dennis Donovan", ed:"Artmed", d:"Manual clássico sobre como prevenir e manejar recaídas. Cheio de estratégias aplicáveis no consultório."},
+    {t:"Changing for Good", a:"Prochaska, Norcross e DiClemente", lang:"em inglês", d:"Apresenta os estágios da mudança. Útil pra entender em que ponto o paciente está e como acompanhar."},
+    {t:"Cognitive Therapy of Substance Abuse", a:"Aaron Beck e col.", lang:"em inglês", d:"Base da terapia cognitiva aplicada ao uso de substâncias. Pra quem trabalha com TCC."},
+    {t:"Mindfulness-Based Relapse Prevention", a:"Bowen, Chawla e Marlatt", lang:"em inglês", d:"Junta mindfulness e prevenção de recaída. Protocolo prático pra trabalhar a fissura."},
+    {t:"Aconselhamento em Dependência Química", a:"Figlie, Bordin e Laranjeira", ed:"Roca", d:"Manual brasileiro voltado à prática do aconselhamento. Direto ao consultório."},
+    {t:"O Tratamento da Dependência Química e as Terapias Cognitivo-Comportamentais", a:"Zanelatto e Laranjeira", ed:"Artmed", d:"Guia brasileiro de TCC aplicada à dependência. Bom pra estruturar o atendimento."},
+  ]},
+  {tema:"Álcool", cor:"linear-gradient(145deg,#C77D0E,#7d4f08)", livros:[
+    {t:"O Tratamento do Alcoolismo", a:"Griffith Edwards", ed:"Artmed", d:"Referência clínica clássica sobre como cuidar de problemas com álcool. Prática e equilibrada."},
+    {t:"The Natural History of Alcoholism", a:"George Vaillant", lang:"em inglês", d:"Estudo de décadas sobre o curso do alcoolismo ao longo da vida. Mostra que a trajetória não é linear."},
+    {t:"The Disease Concept of Alcoholism", a:"E. M. Jellinek", lang:"em inglês", d:"O texto que consolidou a ideia de alcoolismo como doença. Importante pra entender e também debater esse modelo."},
+    {t:"Drink? The New Science of Alcohol", a:"David Nutt", lang:"em inglês", d:"O cientista explica o que o álcool faz no corpo e como beber com menos risco. Baseado em evidência."},
+    {t:"É Fácil Parar de Beber", a:"Allen Carr", ed:"Sextante", d:"Método popular pra repensar a relação com o álcool. Leitura leve, voltada ao público geral."},
+    {t:"Drinking: A Love Story", a:"Caroline Knapp", lang:"em inglês", d:"Memória tocante sobre a relação de amor e destruição com a bebida. Humaniza a experiência."},
+    {t:"The Recovering", a:"Leslie Jamison", lang:"em inglês", d:"Cruza memória pessoal, literatura e reflexão sobre dependência e recuperação. Denso e bonito."},
+    {t:"Alcoólicos Anônimos (Livro Azul)", a:"Alcoólicos Anônimos", d:"O livro que fundou os AA. Útil pra conhecer a lógica dos grupos de ajuda mútua."},
+  ]},
+  {tema:"Cannabis, Ayahuasca e Plantas de Poder", cor:"linear-gradient(145deg,#5a8f2f,#37611b)", livros:[
+    {t:"Rodas de Fumo: o uso da maconha entre camadas médias urbanas", a:"Edward MacRae e Júlio Assis Simões", ed:"EDUFBA", d:"Pesquisa brasileira sobre como usuários de maconha se autorregulam. Mostra o uso controlado na prática, longe do estereótipo."},
+    {t:"O Grande Livro da Cannabis", a:"Rowan Robinson", ed:"Jorge Zahar", d:"Panorama histórico, cultural e prático sobre a planta. Boa introdução geral."},
+    {t:"Marijuana Reconsidered", a:"Lester Grinspoon", lang:"em inglês", d:"Clássico de Harvard que reavaliou os riscos da maconha nos anos 70. Um marco na desmistificação."},
+    {t:"O Uso Ritual da Ayahuasca", a:"Beatriz Labate e Wladimyr Araújo (orgs.)", ed:"Mercado de Letras", d:"Coletânea acadêmica sobre a ayahuasca nas religiões brasileiras. Referência no tema."},
+    {t:"Guiado pela Lua: xamanismo e uso ritual da ayahuasca no culto do Santo Daime", a:"Edward MacRae", ed:"Brasiliense", d:"Estudo do uso ritual da ayahuasca no Santo Daime. Mostra como o contexto controla o uso."},
+    {t:"O Uso Ritual das Plantas de Poder", a:"Beatriz Labate e Sandra Goulart (orgs.)", ed:"Mercado de Letras", d:"Amplia a discussão para outras substâncias de uso ritual. Olhar antropológico."},
+    {t:"A Botânica do Desejo", a:"Michael Pollan", ed:"Intrínseca", d:"Conta a história de plantas que mexem com o desejo humano, a cannabis entre elas. Leitura envolvente."},
+  ]},
+  {tema:"Psicodélicos: ciência, terapia e cultura", cor:"linear-gradient(145deg,#6D3BD3,#b0357f)", livros:[
+    {t:"Como Mudar Sua Mente", a:"Michael Pollan", ed:"Intrínseca", d:"O renascimento científico dos psicodélicos, contado por dentro. Ótima porta de entrada ao tema."},
+    {t:"As Portas da Percepção", a:"Aldous Huxley", ed:"Biblioteca Azul", d:"O ensaio clássico sobre a experiência com mescalina. Curto e influente."},
+    {t:"LSD: Meu Filho Problemático", a:"Albert Hofmann", d:"O químico que descobriu o LSD conta a história da substância. Fascinante e pessoal."},
+    {t:"DMT: A Molécula do Espírito", a:"Rick Strassman", d:"Relata a pesquisa clínica com DMT e as experiências extremas dos voluntários. Provocador."},
+    {t:"O Alimento dos Deuses", a:"Terence McKenna", d:"Tese ousada sobre o papel das plantas psicoativas na evolução humana. Especulativo e instigante."},
+    {t:"Reinos do Inconsciente Humano", a:"Stanislav Grof", d:"Mapeia estados de consciência a partir da pesquisa com LSD. Base da psicologia transpessoal."},
+    {t:"The Psychedelic Explorer's Guide", a:"James Fadiman", lang:"em inglês", d:"Guia prático e cuidadoso sobre uso de psicodélicos, inclusive microdosagem."},
+    {t:"The Psychedelic Experience", a:"Leary, Metzner e Alpert", lang:"em inglês", d:"Manual histórico dos anos 60, inspirado no Livro Tibetano dos Mortos."},
+    {t:"The Psychedelic Renaissance", a:"Ben Sessa", lang:"em inglês", d:"Panorama do retorno dos psicodélicos à psiquiatria. Bom apanhado científico."},
+  ]},
+  {tema:"Saúde Mental e Reforma Psiquiátrica", cor:"linear-gradient(145deg,#345b74,#1f3a4d)", livros:[
+    {t:"A Instituição Negada", a:"Franco Basaglia", ed:"Graal", d:"O texto que inspirou a reforma psiquiátrica. Denúncia do manicômio e defesa da liberdade."},
+    {t:"Loucos pela Vida: a trajetória da reforma psiquiátrica no Brasil", a:"Paulo Amarante", ed:"Editora Fiocruz", d:"Conta a história da reforma psiquiátrica brasileira. Essencial pra entender a RAPS de hoje."},
+    {t:"Saúde Mental e Atenção Psicossocial", a:"Paulo Amarante", ed:"Editora Fiocruz", d:"Introdução didática ao campo da saúde mental no SUS. Boa base pra quem está começando."},
+    {t:"História da Loucura", a:"Michel Foucault", ed:"Perspectiva", d:"Como a sociedade passou a trancar a loucura. Clássico pra pensar exclusão e normalidade."},
+    {t:"Manicômios, Prisões e Conventos", a:"Erving Goffman", ed:"Perspectiva", d:"Estudo clássico sobre as instituições totais e o que elas fazem com as pessoas."},
+    {t:"Imagens do Inconsciente", a:"Nise da Silveira", d:"A psiquiatra brasileira mostra o cuidado pela arte, não pela contenção. Inspirador."},
+    {t:"O Mito do Normal", a:"Gabor Maté", ed:"Sextante", d:"Liga o adoecimento ao trauma e a uma cultura que adoece. Amplo e humano."},
+    {t:"O Corpo Guarda as Marcas", a:"Bessel van der Kolk", ed:"Sextante", d:"Referência sobre trauma e como ele fica registrado no corpo. Fundamental pra entender o sofrimento por trás do uso."},
+    {t:"Holocausto Brasileiro", a:"Daniela Arbex", ed:"Intrínseca", d:"Reportagem sobre o maior hospício do Brasil e suas mortes. Duro e necessário."},
+  ]},
+  {tema:"Testemunhos, Ensaios e Literatura", cor:"linear-gradient(145deg,#4a4a55,#26262e)", livros:[
+    {t:"Confissões de um Comedor de Ópio", a:"Thomas De Quincey", ed:"L&PM", d:"O relato fundador da literatura sobre drogas, de 1821. Prazer e tormento em primeira pessoa."},
+    {t:"Os Paraísos Artificiais", a:"Charles Baudelaire", ed:"L&PM", d:"O poeta reflete sobre haxixe e ópio. Beleza e crítica lado a lado."},
+    {t:"Junky", a:"William S. Burroughs", ed:"Companhia das Letras", d:"Relato cru e direto da vida com a heroína, sem romantismo."},
+    {t:"Almoço Nu", a:"William S. Burroughs", ed:"Companhia das Letras", d:"Romance experimental e delirante nascido do vício. Radical na forma."},
+    {t:"Trainspotting", a:"Irvine Welsh", ed:"Rocco", d:"A juventude e a heroína na Escócia dos anos 80. Ácido, cômico e trágico."},
+    {t:"On the Road: Pé na Estrada", a:"Jack Kerouac", ed:"L&PM", d:"O clássico beat da estrada, com álcool e substâncias como pano de fundo da busca."},
+    {t:"Medo e Delírio em Las Vegas", a:"Hunter S. Thompson", d:"Viagem alucinada e satírica pelo sonho americano. Jornalismo gonzo em estado puro."},
+    {t:"A Virgem dos Sicários", a:"Fernando Vallejo", ed:"Companhia das Letras", d:"Colômbia, violência e drogas num romance intenso. Cru e poético."},
+    {t:"Estação Carandiru", a:"Drauzio Varella", ed:"Companhia das Letras", d:"O médico relata o cotidiano da prisão, onde drogas e sobrevivência se cruzam. Humano e direto."},
+    {t:"Réquiem para um Sonho", a:"Hubert Selby Jr.", lang:"orig. em inglês", d:"Quatro vidas destruídas pela dependência, cada uma à sua maneira. Devastador."},
+  ]},
+];
+// helper de referências (usado nas aulas dos cursos)
+function refsHtml(refs){ if(!refs||!refs.length) return '';
+  const li=refs.map(r=>{ const tag=r.tipo?`<span class="ref-tag">${esc(r.tipo)}</span>`:'';
+    const txt=r.url?`<a href="${r.url}" target="_blank" rel="noopener">${esc(r.ref)} ›</a>`:esc(r.ref);
+    return `<li>${tag}${txt}</li>`; }).join('');
+  return `<div class="refs-box"><b>Referências e leitura</b><ul>${li}</ul></div>`;
+}
+
+// ----- CURSOS (feitos dentro do app, com progresso salvo no aparelho) -----
+// Cada aula tem: apresentacao (fica sempre), roteiro em formato de video com
+// slides (os subtitulos <h4> viram slides), video (null ate o .mp4 no Storage)
+// e referencias (textos e livros).
+const CURSOS=[
+  {id:'c-rd', titulo:'Introdução à Redução de Danos na Prática Clínica', subtitulo:'O essencial pra acolher e acompanhar quem usa substâncias, no próprio tempo.', nivel:'Introdutório', duracao:'3 módulos · 9 aulas', cor:'linear-gradient(135deg,#4CAF5A,#00897B)',
+   sobre:'Uma formação enxuta e prática em redução de danos, pensada pra quem atende. São 9 aulas em vídeo, de 5 a 10 minutos cada, com apresentação, conteúdo com slides e referências. O foco é sair da teoria e chegar rápido no que fazer no consultório.',
+   publico:'Psicólogas, psiquiatras, assistentes sociais, terapeutas, redutores de danos e demais profissionais que acompanham pessoas que usam álcool e outras drogas.',
+   referencias:[
+     {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'},
+     {tipo:'organização', ref:'Atualização em RD (EPSJV/Fiocruz).', url:'https://www.epsjv.fiocruz.br'},
+     {tipo:'organização', ref:'Plataforma Brasileira de Política de Drogas (PBPD).', url:'https://pbpd.org.br'}
+   ],
+   modulos:[
+     {titulo:'Módulo 1 · Fundamentos essenciais', aulas:[
+       {titulo:'O que é (e o que não é) redução de danos', dur:'7 min', video:null,
+        apresentacao:'A base de tudo: o que a redução de danos realmente é, e os mitos que atrapalham.',
+        roteiro:`<p>Oi, seja bem-vindo a esse curso. Vou começar pela pergunta mais importante de todas, porque é dela que sai tudo o que a gente vai ver: o que é, de verdade, redução de danos? E eu quero começar pelo que ela não é, porque é aí que mora a maior parte da confusão.</p>
+          <h4>Três mitos que atrapalham</h4>
+          <p>Primeiro mito: que redução de danos é ser contra a abstinência. Não é. A abstinência é uma das metas possíveis, e uma ótima meta pra muita gente. Ela só não é a única, nem a porta de entrada obrigatória.</p>
+          <p>Segundo mito: que é passar a mão na cabeça ou incentivar o uso. Também não. Reduzir dano é justamente levar o risco a sério e agir sobre ele.</p>
+          <p>Terceiro mito: que é coisa de quem desistiu do paciente. É o contrário. É continuar cuidando de quem os modelos tradicionais abandonaram, porque a pessoa não conseguiu parar.</p>
+          <h4>Então o que é?</h4>
+          <p>Redução de danos é uma abordagem de cuidado que parte de onde a pessoa está, sem exigir que ela pare de usar pra receber ajuda. O foco sai do consumo em si e vai pros danos ligados a ele, que dá pra reduzir mesmo quando o uso continua.</p>
+          <ul>
+            <li><b>Pragmatismo:</b> a gente trabalha com a realidade, não com o cenário ideal.</li>
+            <li><b>Autonomia:</b> a pessoa continua dona das próprias escolhas.</li>
+            <li><b>Baixa exigência:</b> o cuidado não depende de estar abstinente pra acontecer.</li>
+          </ul>
+          <h4>No consultório</h4>
+          <p>Imagina alguém que bebe todo dia e chega dizendo que não quer parar. No modelo antigo, essa pessoa não teria o que fazer com você até decidir parar. Na redução de danos, você tem muito a oferecer: entender o padrão, reduzir risco, cuidar do sono, da comida, das relações. O cuidado começa hoje, não quando ela parar.</p>
+          <p>Guarda essa ideia, porque ela é a espinha dorsal de todas as próximas aulas.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'}
+        ]},
+       {titulo:'Por que a abstinência não é o ponto de partida', dur:'6 min', video:null,
+        apresentacao:'Por que exigir abstinência primeiro afasta as pessoas, e o que colocar no lugar.',
+        roteiro:`<p>Nesta aula eu quero atacar de frente a maior herança do modelo antigo: a ideia de que a pessoa precisa parar de usar pra merecer cuidado. Essa exigência parece rigor, mas na prática ela afasta.</p>
+          <h4>O problema da exigência de abstinência</h4>
+          <p>Quando você coloca a abstinência como condição de entrada, acontece uma coisa simples: quem não consegue parar, não volta. A pessoa some, e some justamente no momento em que mais precisava de alguém.</p>
+          <p>E tem um efeito silencioso: a pessoa aprende a mentir. Ela diz que parou pra continuar sendo atendida, e aí você perde o dado mais importante, que é a verdade sobre o uso dela.</p>
+          <h4>O que colocar no lugar</h4>
+          <p>Em vez de exigir o fim do uso, a gente trabalha com a redução do dano. E isso abre um leque de metas que a pessoa realmente consegue perseguir.</p>
+          <ul>
+            <li>Espaçar o tempo entre um uso e outro.</li>
+            <li>Reduzir a quantidade ou a frequência.</li>
+            <li>Trocar por uma forma de uso menos arriscada.</li>
+            <li>Não usar sozinho, não misturar, se hidratar, se alimentar.</li>
+          </ul>
+          <p>Cada uma dessas metas reduz dano de verdade, e nenhuma delas exige parar. Isso mantém a pessoa perto de você.</p>
+          <h4>A abstinência continua na mesa</h4>
+          <p>E fica claro: nada disso é contra parar de usar. Se a pessoa quer a abstinência, ótimo, você caminha com ela pra isso. A diferença é que agora a abstinência é um destino possível, escolhido por ela, e não o pedágio pra receber cuidado.</p>
+          <h4>No consultório</h4>
+          <p>Uma meta pequena e cumprida vale mais que uma meta gigante e abandonada. Quando a pessoa consegue passar de todo dia pra três dias na semana, isso é sucesso clínico, e é assim que você deve tratar. Comemore o passo, porque é ele que sustenta o próximo.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional. Porto Alegre: Artmed.'}
+        ]},
+       {titulo:'O espectro do uso: do experimental à dependência', dur:'7 min', video:null,
+        apresentacao:'Nem todo uso é doença: como localizar a pessoa no espectro sem rótulo que paralisa.',
+        roteiro:`<p>Um dos erros mais comuns na clínica é tratar todo uso de substância como se fosse a mesma coisa, ou como se fosse sempre doença. Nesta aula a gente desfaz isso com uma ferramenta simples: o espectro do uso.</p>
+          <h4>Do experimental à dependência</h4>
+          <p>Pensa numa linha, com vários pontos ao longo dela.</p>
+          <ul>
+            <li><b>Uso experimental:</b> poucas vezes, por curiosidade.</li>
+            <li><b>Uso recreativo ou funcional:</b> com algum controle, e às vezes até uma função na vida da pessoa.</li>
+            <li><b>Uso problemático:</b> quando começa a trazer prejuízo concreto, no trabalho, na saúde, nas relações.</li>
+            <li><b>Dependência:</b> quando o uso vira central e fica difícil de interromper mesmo com prejuízo.</li>
+          </ul>
+          <h4>A pessoa se move nos dois sentidos</h4>
+          <p>E aqui está o ponto mais importante: isso não é uma escada de mão única rumo ao fundo do poço. A pessoa transita nesse espectro nos dois sentidos ao longo da vida. Alguém pode estar no uso problemático hoje e no uso funcional daqui a seis meses. O movimento é possível, e o seu trabalho é favorecer esse movimento.</p>
+          <h4>Cuidado com o rótulo</h4>
+          <p>Chamar todo mundo de dependente ou viciado não ajuda, e muitas vezes atrapalha. O rótulo pesado paralisa, faz a pessoa se ver como um caso perdido. Prefira descrever o padrão de uso, sem carimbar a identidade da pessoa.</p>
+          <h4>No consultório</h4>
+          <p>Uma boa pergunta de avaliação é: como esse uso está afetando a sua vida hoje? A resposta te diz muito mais sobre onde a pessoa está no espectro do que a substância em si ou a quantidade. Duas pessoas que usam a mesma coisa podem estar em pontos completamente diferentes.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'livro', ref:'BUCHER, R. Drogas e Drogadição no Brasil. Porto Alegre: Artes Médicas.'}
+        ]}
+     ]},
+     {titulo:'Módulo 2 · A clínica na prática', aulas:[
+       {titulo:'Acolhimento sem julgamento: a primeira conversa', dur:'8 min', video:null,
+        apresentacao:'A primeira conversa decide se a pessoa volta: como construir segurança e verdade.',
+        roteiro:`<p>A primeira conversa é a mais importante de todas, porque é ela que decide se vai ter uma segunda. E quem usa substâncias muitas vezes chega no seu consultório já encolhido, esperando sermão. Se você confirmar essa expectativa, perdeu. Se quebrar, ganhou a relação.</p>
+          <h4>Comece pela pessoa, não pela substância</h4>
+          <p>Antes de perguntar de droga, pergunte da vida. Como está o sono, o trabalho, as relações, o dia a dia. Isso não é enrolação, é o que mostra pra pessoa que ela é muito mais do que o uso dela.</p>
+          <h4>Pergunte antes de aconselhar</h4>
+          <p>Uma pergunta aberta abre a conversa. "Como o uso entra na sua vida hoje?" convida a pessoa a se estender. Já "você quer parar?" fecha, porque coloca a pessoa contra a parede logo de cara.</p>
+          <h4>Cuidado com as palavras</h4>
+          <p>Algumas palavras carregam culpa e afastam. Evite viciado, recaída e limpo. Elas parecem técnicas, mas soam como julgamento. Prefira falar em uso, em voltar a usar, em períodos sem usar. A linguagem que você escolhe já é parte do cuidado.</p>
+          <ul>
+            <li>Nomeie o que a pessoa já faz de cuidado, por menor que seja.</li>
+            <li>Escute mais do que fala.</li>
+            <li>Deixe claro que o objetivo é dela, não seu.</li>
+          </ul>
+          <h4>No consultório</h4>
+          <p>Acolher não é concordar com tudo, nem abrir mão da sua leitura clínica. É criar um espaço seguro o bastante pra pessoa falar a verdade. E sem verdade não existe cuidado que funcione, porque você estaria tratando uma história inventada. Se a pessoa sair sentindo que foi ouvida sem ser julgada, ela volta. E é na volta que o trabalho acontece.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional. Porto Alegre: Artmed.'},
+          {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'}
+        ]},
+       {titulo:'Entrevista motivacional na lógica da RD', dur:'9 min', video:null,
+        apresentacao:'Como ajudar a pessoa a encontrar os próprios motivos, sem empurrar os seus.',
+        roteiro:`<p>Nesta aula a gente vê uma ferramenta que combina como luva com a redução de danos: a entrevista motivacional. A ideia central é linda de simples: a pessoa já tem, dentro dela, motivos pra mudar. Seu papel não é instalar motivação de fora, é ajudar a de dentro a aparecer.</p>
+          <h4>A armadilha do convencimento</h4>
+          <p>Quando a gente tenta convencer, empurrando argumentos, acontece um efeito curioso: a pessoa defende o outro lado. Quanto mais você diz "você tem que parar", mais ela encontra razões pra continuar. A briga trava a mudança.</p>
+          <h4>Quatro movimentos que dá pra treinar</h4>
+          <ul>
+            <li><b>Perguntar aberto:</b> convide a pessoa a se estender, em vez de responder sim ou não.</li>
+            <li><b>Afirmar:</b> reconheça forças, esforços e tentativas.</li>
+            <li><b>Refletir:</b> devolva com as suas palavras o que você ouviu, pra pessoa se escutar.</li>
+            <li><b>Resumir:</b> costure o que foi dito antes de seguir, mostrando que você acompanhou.</li>
+          </ul>
+          <h4>Trabalhe a ambivalência, não brigue com ela</h4>
+          <p>Querer e não querer ao mesmo tempo é normal, é humano. A pessoa quer parar e quer continuar, tudo junto. Quando você para de brigar com essa ambivalência e ajuda a pessoa a explorar os dois lados, ela ganha espaço pra pensar. E é desse espaço que a decisão dela nasce, muito mais firme do que qualquer decisão que você tentasse impor.</p>
+          <h4>No consultório</h4>
+          <p>Preste atenção quando a própria pessoa começa a falar de mudança: "eu queria diminuir", "tô cansado disso". Isso é ouro. Em vez de atropelar com conselho, faça ela desenvolver: "me conta mais sobre isso". Você está regando o motivo que já era dela.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional: ajudando as pessoas a mudar. Porto Alegre: Artmed.'}
+        ]},
+       {titulo:'Construindo metas possíveis com a pessoa', dur:'7 min', video:null,
+        apresentacao:'Metas realistas, construídas com a pessoa, no ritmo dela e medidas de verdade.',
+        roteiro:`<p>Depois que existe vínculo e a pessoa está pensando em mudar, chega a hora das metas. E aqui tem uma regra de ouro que evita quase todo fracasso: a meta é da pessoa, e precisa ser realista pra semana que vem, não pra um futuro ideal.</p>
+          <h4>Parta do que a pessoa quer</h4>
+          <p>A tentação é definir a meta que você acha certa. Resista. Uma meta que você impõe é uma meta que a pessoa abandona. Comece do que ela já quer mudar, mesmo que pareça pouco pra você.</p>
+          <h4>Pequeno, concreto e mensurável</h4>
+          <ul>
+            <li>Quebre em passos pequenos e observáveis.</li>
+            <li>Prefira "beber só no fim de semana" a "beber menos", porque dá pra saber se cumpriu.</li>
+            <li>Combine como vocês vão medir. O diário do app ajuda muito aqui, porque tira a conversa do "eu acho" e traz o que de fato aconteceu.</li>
+          </ul>
+          <h4>Revisar sem drama</h4>
+          <p>Se a meta não deu certo, não é fracasso, é informação. Talvez ela fosse grande demais, ou o momento não era esse. Ajustar faz parte, e ajustar sem julgamento ensina a pessoa que ela pode tentar de novo sem se sentir derrotada.</p>
+          <h4>No consultório</h4>
+          <p>Comemore os passos. Quando a pessoa sai de todo dia pra três vezes na semana, isso é uma vitória clínica de verdade, e merece ser reconhecida como tal. É esse reconhecimento que dá combustível pro próximo passo. Metas intermediárias não são consolação, são o caminho.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional. Porto Alegre: Artmed.'}
+        ]},
+       {titulo:'Manejo de fissura e situações de risco', dur:'8 min', video:null,
+        apresentacao:'O que fazer com a fissura, como preparar a pessoa pros gatilhos e falar de segurança.',
+        roteiro:`<p>A fissura assusta a pessoa e às vezes assusta o profissional também. Mas ela tem uma característica que muda tudo quando a gente entende: ela passa. A vontade sobe, chega num pico e desce, geralmente em poucos minutos. Ensinar isso já é um cuidado enorme.</p>
+          <h4>Surfar a onda</h4>
+          <p>Uma imagem ajuda muito: a fissura é como uma onda. Ela cresce, quebra e baixa. Em vez de lutar contra a onda, o que cansa e assusta, a pessoa aprende a observar a vontade sem agir, esperando ela passar. Isso tem nome na literatura, surfar o impulso, e funciona.</p>
+          <h4>Plano pros gatilhos</h4>
+          <p>Fissura raramente vem do nada. Costuma ter gatilho: um lugar, uma companhia, um horário, uma emoção. Mapeie junto com a pessoa quais são os gatilhos dela e combinem, antes, o que fazer quando eles aparecem.</p>
+          <ul>
+            <li>Identificar as situações de maior risco.</li>
+            <li>Ter uma ação combinada pra cada uma.</li>
+            <li>Ter alguém pra chamar no momento difícil.</li>
+          </ul>
+          <h4>Fale de segurança sem medo</h4>
+          <p>E aqui um ponto que muita gente evita: fale abertamente sobre segurança, inclusive sobre sinais de overdose e o que fazer. Isso não empurra a pessoa pro uso, pelo contrário. Informação sobre risco salva vida e mostra que você está do lado dela, no mundo real, não num mundo ideal onde o risco não existe.</p>
+          <h4>No consultório</h4>
+          <p>Combine um plano simples pra fissura antes que ela aconteça, quando a pessoa está calma. No meio da crise é tarde pra planejar. Um plano decidido com antecedência é o que a pessoa alcança quando a onda vem.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'organização', ref:'ABORDA: Associação Brasileira de Redutores(as) de Danos.'}
+        ]}
+     ]},
+     {titulo:'Módulo 3 · Levando pro dia a dia', aulas:[
+       {titulo:'Redução de danos com o apoio do dichava', dur:'6 min', video:null,
+        apresentacao:'Como transformar tudo isso em prática entre as sessões, com o app.',
+        roteiro:`<p>Até aqui a gente falou de princípios e de clínica. Nesta aula eu quero mostrar como isso vira prática concreta entre uma sessão e outra, com o apoio do dichava. Porque o cuidado não acontece só nos cinquenta minutos do consultório, ele acontece na vida.</p>
+          <h4>O diário de uso</h4>
+          <p>O diário é onde a pessoa registra o dia a dia. Isso muda a sua conversa, porque tira o acompanhamento do campo da memória e do "eu acho" e traz o que de fato aconteceu. Você chega na sessão com material real pra trabalhar junto.</p>
+          <h4>Metas no ritmo da pessoa</h4>
+          <p>Aquelas metas pequenas que vocês combinaram ficam visíveis e acompanhadas. A pessoa vê o próprio progresso, e ver o progresso é um dos maiores combustíveis pra continuar.</p>
+          <h4>O modo de apoio</h4>
+          <p>E tem o modo de apoio, pros momentos de fissura, justamente quando você não está por perto. É a ponte entre as sessões, uma mãozinha na hora difícil.</p>
+          <h4>No consultório</h4>
+          <p>Uma dica que faz diferença: apresente o app na sessão, com o aparelho na mão da pessoa, mostrando onde registrar e pra que serve cada parte. Funciona muito melhor do que só mandar o link e torcer. Quando a pessoa entende pra que serve, ela usa. E quando ela usa, vocês dois ganham material pra um cuidado mais concreto.</p>`,
+        referencias:[
+          {tipo:'organização', ref:'Centro de Convivência É de Lei: materiais de RD.', url:'https://edelei.org'}
+        ]},
+       {titulo:'Ética, sigilo e trabalho em rede', dur:'7 min', video:null,
+        apresentacao:'Suas responsabilidades com os dados e por que você não cuida sozinho.',
+        roteiro:`<p>Pra fechar o curso, dois assuntos que sustentam tudo o que a gente viu: cuidar bem dos dados da pessoa, e saber que você não precisa cuidar sozinho.</p>
+          <h4>Sigilo e LGPD</h4>
+          <p>No painel, você é o controlador dos dados dos seus pacientes. Isso vem com regras simples, mas sérias.</p>
+          <ul>
+            <li>Registre só o necessário, e trate tudo com o mesmo sigilo do prontuário de papel.</li>
+            <li>Não compartilhe login, cada profissional tem o seu.</li>
+            <li>Prontuário e financeiro são privados, visíveis só pra você.</li>
+            <li>A pessoa pode pedir os dados dela ou a exclusão quando quiser, é um direito pela LGPD.</li>
+          </ul>
+          <h4>Você faz parte de uma rede</h4>
+          <p>Redução de danos raramente é trabalho solitário. No Brasil existe uma rede pública de cuidado, a RAPS, com o CAPS AD, o Consultório na Rua e a Atenção Básica. Conhecer o que existe no território do seu paciente amplia muito o que você pode oferecer.</p>
+          <h4>Encaminhar é ampliar, não descartar</h4>
+          <p>Encaminhar bem não é passar o problema pra frente. É colocar mais gente pra cuidar daquela pessoa. Sempre que der, encaminhe com o vínculo aberto, deixando a porta do seu acompanhamento no lugar, pra pessoa sentir que ganhou apoio, não que foi dispensada.</p>
+          <h4>No consultório</h4>
+          <p>Tenha à mão os serviços do território onde seus pacientes moram. Um bom encaminhamento, na hora certa, é competência clínica, e mostra pra pessoa que ela está cercada de cuidado, não sozinha. É assim que a gente encerra: cuidando em rede, no tempo de cada um. Obrigado por chegar até aqui, e bom trabalho.</p>`,
+        referencias:[
+          {tipo:'lei', ref:'BRASIL. Lei nº 13.709/2018 (LGPD).'},
+          {tipo:'documento', ref:'BRASIL. Portaria GM/MS nº 3.088/2011 (RAPS).'},
+          {tipo:'documento', ref:'Ministério da Saúde. Saúde mental no SUS.', url:'https://bvsms.saude.gov.br'}
+        ]}
+     ]}
+   ]},
+  {id:'c-app', titulo:'Dominando o dichava na sua prática', subtitulo:'Um tour prático pelo painel profissional e pelo app do paciente.', nivel:'Prático', duracao:'2 módulos · 7 aulas', cor:'linear-gradient(135deg,#3E7BF0,#6FC3FF)',
+   sobre:'Um guia prático pra tirar o máximo do dichava: como usar o painel profissional, o que o paciente vê no app, como recomendar pra quem você atende e como receber os relatórios que a pessoa compartilha com você. São aulas curtas, direto ao ponto.',
+   publico:'Qualquer profissional que usa ou vai usar o dichava no dia a dia.',
+   modulos:[
+     {titulo:'Módulo 1 · O painel profissional', aulas:[
+       {titulo:'Primeiros passos: perfil, diretório e horário', dur:'6 min', video:null,
+        apresentacao:'O básico pra começar: montar seu perfil, aparecer no diretório e definir seu horário.',
+        roteiro:`<p>Vamos começar do começo: o que fazer nos primeiros minutos dentro do painel pra já sair na frente. São três coisas.</p>
+          <h4>1. Monte seu perfil</h4>
+          <p>Vá em Meu perfil e preencha tipo de profissional, bio, especialidades, modalidade, cidade, foto e capa. É assim que os pacientes te veem. Capriche na bio, ela é a sua vitrine. Depois de salvar, o perfil passa por uma aprovação rápida da nossa equipe antes de ir pro ar.</p>
+          <h4>2. Apareça no diretório</h4>
+          <p>Assim que aprovado, e com um plano ativo, seu perfil entra no diretório do app, onde os pacientes procuram profissionais. Se quiser, dá pra ocultar e voltar a mostrar a qualquer momento, sem perder nada.</p>
+          <h4>3. Defina seu horário de atendimento</h4>
+          <p>Em Configurações, no card Horário de atendimento, escolha os dias e as horas que você atende. Isso vira um texto no seu perfil, tipo Segunda a sexta, das 8h às 18h. É só informativo e está disponível em todos os planos.</p>
+          <h4>Na prática</h4>
+          <p>Perfil completo, com foto e bio bem escrita, recebe muito mais contato do que perfil pela metade. Reserve dez minutos pra deixar o seu redondo logo no primeiro dia.</p>`},
+       {titulo:'Agenda e agendamento online', dur:'7 min', video:null,
+        apresentacao:'Como usar a agenda e deixar o paciente marcar sozinho pelos seus horários.',
+        roteiro:`<p>A agenda é o coração do painel. Nesta aula, como usar no dia a dia e como abrir o agendamento online.</p>
+          <h4>Sua agenda</h4>
+          <p>Em Agenda você marca consultas por horário, vê o dia inteiro e navega entre as datas. O que está marcado pra hoje aparece automaticamente na Visão geral, então você bate o olho e já sabe o dia.</p>
+          <h4>Agendamento online</h4>
+          <p>Nos planos Profissional e Clínica, você abre horários e o paciente marca sozinho, pelo seu link, sem aquele vai e vem no WhatsApp. Em Configurações, na Disponibilidade para agendamento online, você digita os horários exatos que quer abrir por dia.</p>
+          <h4>Confirmar e lembrar</h4>
+          <p>Quando alguém solicita um horário, aparece um aviso na Agenda e em Mensagens. Você confirma ou recusa com um toque. E o paciente recebe um lembrete automático um dia antes, o que reduz falta.</p>
+          <h4>Na prática</h4>
+          <p>Abra só os horários que você realmente quer preencher. Os que já têm consulta somem sozinhos da lista do paciente, então não tem risco de marcação dupla.</p>`},
+       {titulo:'Prontuário, documentos e caixa', dur:'7 min', video:null,
+        apresentacao:'Registrar a evolução, emitir documentos e organizar o financeiro.',
+        roteiro:`<p>Três ferramentas que profissionalizam a sua rotina: prontuário, documentos e caixa.</p>
+          <h4>Prontuário</h4>
+          <p>Em Prontuários você registra a evolução de cada paciente. Nos planos com IA, um assistente ajuda a organizar a evolução pra você, poupando tempo de digitação. Tudo é privado, visível só pra você.</p>
+          <h4>Documentos</h4>
+          <p>Dá pra emitir recibos, declarações, atestados e pareceres com modelos prontos. E a sua assinatura digital, que você desenha ou envia uma vez em Configurações, entra automaticamente nos documentos.</p>
+          <h4>Caixa</h4>
+          <p>No Caixa você lança entradas e saídas e acompanha o financeiro. Quem tem relatórios vê faturamento, ticket médio e comparecimento, pra entender o próprio negócio.</p>
+          <h4>Na prática</h4>
+          <p>Registre a evolução logo depois da sessão, enquanto está fresco. Dois minutos ali economizam muito na hora de retomar o caso semanas depois.</p>`},
+       {titulo:'Mensagens: conversas com pacientes', dur:'5 min', video:null,
+        apresentacao:'Como funcionam os contatos que chegam pelo app e como responder.',
+        roteiro:`<p>Quando um paciente te encontra no diretório e quer falar com você, isso chega em Mensagens. Nesta aula, como funciona.</p>
+          <h4>De onde vem a conversa</h4>
+          <p>No app do paciente, ao ver o seu perfil, a pessoa toca em Conversar. Isso abre uma conversa com você, e chega uma primeira mensagem de contato. Você responde direto pelo painel.</p>
+          <h4>Solicitações de horário</h4>
+          <p>Se você usa o agendamento online, os pedidos de horário também aparecem aqui, junto com um aviso. É o mesmo lugar pra combinar tudo.</p>
+          <h4>Na prática</h4>
+          <p>Responda rápido, mesmo que seja só pra dizer que retorna em breve. No primeiro contato, a agilidade conta muito pra pessoa decidir seguir com você. Um oi acolhedor no mesmo dia faz diferença.</p>`}
+     ]},
+     {titulo:'Módulo 2 · O app do paciente e o cuidado compartilhado', aulas:[
+       {titulo:'O que o paciente vê: diário, metas e modo de apoio', dur:'6 min', video:null,
+        apresentacao:'Conheça o app do paciente pra saber o que a pessoa tem em mãos.',
+        roteiro:`<p>Pra recomendar bem o dichava, você precisa conhecer o que o paciente vê do outro lado. É um app gratuito, na lógica da redução de danos. Vou te dar o tour.</p>
+          <h4>Diário e registros</h4>
+          <p>A pessoa registra o dia a dia: uso, humor, contexto, gatilhos. Com o tempo, isso vira um histórico e gera insights sobre o próprio padrão, tipo em que horários ou situações o uso acontece mais.</p>
+          <h4>Metas no próprio ritmo</h4>
+          <p>O paciente define metas na lógica da redução de danos, sem exigência de abstinência. Pode ser espaçar o uso, reduzir, criar uma atividade alternativa. Ele acompanha o progresso e comemora as conquistas.</p>
+          <h4>Modo de apoio</h4>
+          <p>Pros momentos difíceis, de fissura ou impulso, tem um modo de apoio, com recursos pra atravessar a hora complicada. É a mãozinha entre as sessões.</p>
+          <h4>Na prática</h4>
+          <p>Conhecer o app te ajuda a integrar ele ao seu trabalho. Quando o paciente registra durante a semana, você chega na sessão com material real pra conversar, em vez de depender só da memória dele.</p>`},
+       {titulo:'Como recomendar o dichava pro seu paciente', dur:'6 min', video:null,
+        apresentacao:'O jeito certo de apresentar o app numa sessão, com material pronto.',
+        roteiro:`<p>Recomendar bem faz toda a diferença entre o paciente só baixar, ou baixar e usar. Nesta aula, como apresentar o dichava.</p>
+          <h4>Apresente na sessão</h4>
+          <p>O melhor jeito é mostrar na hora, com o aparelho na mão da pessoa. Abra o diário, mostre o modo de apoio, aponte pra que serve cada parte. Explique que é gratuito, sem julgamento, e que ela não precisa parar de usar pra usar o app.</p>
+          <h4>Use os materiais prontos</h4>
+          <p>Na aba Divulgação do seu painel, tem textos prontos pra mandar por mensagem depois da sessão, além do seu link de agendamento. Copia, ajusta com as suas palavras e envia.</p>
+          <h4>Conecte com o acompanhamento</h4>
+          <p>Combine com a pessoa como vocês vão usar. Por exemplo, ela registra o uso durante a semana e vocês olham juntos na próxima sessão. Quando o app tem função clara no tratamento, o paciente usa de verdade.</p>
+          <h4>Na prática</h4>
+          <p>Uma frase simples funciona: eu uso esse app com meus pacientes pra acompanhar entre as sessões, é gratuito, quer que eu te mostre agora? Direto, sem pressão.</p>`},
+       {titulo:'Relatórios: o paciente exporta e compartilha com você', dur:'6 min', video:null,
+        apresentacao:'Como o paciente gera um relatório em PDF e leva pra você.',
+        roteiro:`<p>Um dos recursos mais úteis pro seu acompanhamento: o paciente pode transformar o que registrou num relatório e compartilhar com você. Nesta aula, como isso funciona.</p>
+          <h4>O relatório em PDF</h4>
+          <p>Na tela de Relatórios do app, o paciente vê o resumo do período: registros, humor, metas e conquistas. Com um toque em Exportar em PDF, ele gera um documento pra guardar ou levar pra você.</p>
+          <h4>Compartilhar com o terapeuta</h4>
+          <p>O próprio app sugere isso: o relatório é ótimo pra compartilhar com o terapeuta ou médico. A pessoa pode te mandar o PDF antes da sessão, e você chega já sabendo como foi a semana dela.</p>
+          <h4>Exportar os dados</h4>
+          <p>Além do relatório, nas configurações o paciente pode exportar todo o histórico em texto e fazer backup. Os dados dele ficam no aparelho dele, sob o controle dele, o que reforça a confiança.</p>
+          <h4>Na prática</h4>
+          <p>Combine pra ele te enviar o relatório um dia antes da consulta. Você ganha um retrato real da semana, e a sessão rende muito mais, focada no que de fato aconteceu.</p>`}
+     ]}
+   ]}
+];
+
+// progresso dos cursos (por aparelho, via localStorage)
+function _progGet(){ try{ return JSON.parse(localStorage.getItem('dichava_cursos_prog')||'{}'); }catch(e){ return {}; } }
+function _progSet(o){ try{ localStorage.setItem('dichava_cursos_prog', JSON.stringify(o)); }catch(e){} }
+function aulaConcluida(cid,mi,ai){ const o=_progGet(); return !!(o[cid]&&o[cid][mi+'-'+ai]); }
+function marcarAula(cid,mi,ai,val){ const o=_progGet(); o[cid]=o[cid]||{}; if(val)o[cid][mi+'-'+ai]=1; else delete o[cid][mi+'-'+ai]; _progSet(o); }
+function cursoTotais(c){ let tot=0,done=0; c.modulos.forEach((m,mi)=>m.aulas.forEach((a,ai)=>{tot++; if(aulaConcluida(c.id,mi,ai))done++;})); return {tot,done,pct:tot?Math.round(done/tot*100):0}; }
+
+// ----- VIEWS -----
+// ===== ÍCONES DA REDE (SVG gradiente, padrão do painel) =====
+const REDEIC={
+  biblio:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-biblio" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B692F6"/><stop offset="1" stop-color="#7B54D3"/></linearGradient></defs><rect x="3.6" y="5" width="3.6" height="15" rx="1.1" fill="url(#cic-biblio)"/><rect x="8" y="5" width="3.6" height="15" rx="1.1" fill="url(#cic-biblio)" opacity=".78"/><rect x="12.4" y="5" width="3.6" height="15" rx="1.1" fill="url(#cic-biblio)"/><rect x="15.8" y="6.4" width="3.4" height="13.6" rx="1.1" fill="url(#cic-biblio)" opacity=".78" transform="rotate(10 17.5 13)"/><rect x="3" y="20.2" width="18.4" height="1.6" rx=".8" fill="url(#cic-biblio)"/></svg>`,
+  cursos:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-cursos" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5CE3CF"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><path d="M12 4 2.6 8.1 12 12.2l9.4-4.1z" fill="url(#cic-cursos)"/><path d="M6.2 10.6V15c0 1.4 2.6 2.8 5.8 2.8s5.8-1.4 5.8-2.8v-4.4" fill="none" stroke="url(#cic-cursos)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.4 8.1v5" fill="none" stroke="url(#cic-cursos)" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  interv:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-interv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><circle cx="8" cy="8.5" r="3.1" fill="url(#cic-interv)"/><circle cx="16" cy="8.5" r="3.1" fill="url(#cic-interv)" opacity=".72"/><path d="M2.5 19c0-3.1 2.5-5.1 5.5-5.1s5.5 2 5.5 5.1z" fill="url(#cic-interv)"/><path d="M13 19c.15-2.4 1.1-3.9 3.5-4.7 3 0 5 2 5 5.1z" fill="url(#cic-interv)" opacity=".72"/></svg>`,
+  rodas:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-rodas" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6FC3FF"/><stop offset="1" stop-color="#3E7BF0"/></linearGradient></defs><path d="M2.8 7.2A2.4 2.4 0 0 1 5.2 4.8h8.8a2.4 2.4 0 0 1 2.4 2.4v4.2a2.4 2.4 0 0 1-2.4 2.4H8l-3.8 3.1V13.8h-.4a2.4 2.4 0 0 1-2.4-2.4z" fill="url(#cic-rodas)"/><g fill="#fff"><circle cx="6.6" cy="9.3" r="1.05"/><circle cx="9.6" cy="9.3" r="1.05"/><circle cx="12.6" cy="9.3" r="1.05"/></g><path d="M18.4 8.6a2.6 2.6 0 0 1 2.8 2.6v6.2l-2.9-2.4h-3.1" fill="none" stroke="url(#cic-rodas)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/></svg>`,
+  eventos:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-eventos" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="url(#cic-eventos)"/><path d="M3.5 9.4h17" stroke="#fff" stroke-width="1.1" opacity=".5"/><path d="M8 3.2v3.4M16 3.2v3.4" stroke="url(#cic-eventos)" stroke-width="2" stroke-linecap="round"/><path d="M12 12l1.05 2.13 2.35.34-1.7 1.66.4 2.34L12 17.7l-2.1 1.1.4-2.34-1.7-1.66 2.35-.34z" fill="#fff"/></svg>`,
+  roteiro:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-roteiro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#AEB7C2"/><stop offset="1" stop-color="#5B6672"/></linearGradient></defs><rect x="3" y="7.5" width="18" height="12" rx="2.4" fill="url(#cic-roteiro)"/><path d="M3.4 7.6 6 4.6l3 2.6M8.5 7.4 11 4.4l3 2.6M13.6 7.3 16 4.4l3 2.6" fill="none" stroke="url(#cic-roteiro)" stroke-width="1.4" stroke-linejoin="round"/><path d="M10.5 11.4v4.2l3.4-2.1z" fill="#fff"/></svg>`
+};
+function redeIco(k){ return cicUniq(REDEIC[k]||''); }
+const MURAL=[
+  {k:'interv', ic:'interv', t:'Grupos de intervisão', tint:'#FFF4E5',
+   d:'Encontros entre profissionais da rede pra discutir casos, trocar condutas e se apoiar na clínica. Supervisão horizontal, sem hierarquia.',
+   info:'Quinzenal, às terças, 20h · Online (Google Meet) · até 12 profissionais por grupo',
+   itens:[
+     {data:'2026-08-19', hora:'20h', titulo:'Casos de álcool na atenção primária', sub:'Facilitação: equipe clínica dichava', tag:'Online'},
+     {data:'2026-09-02', hora:'20h', titulo:'Manejo de fissura e prevenção de recaída', sub:'Grupo aberto, traga um caso', tag:'Online'},
+     {data:'2026-09-16', hora:'20h', titulo:'Adolescência e primeiros usos', sub:'Discussão de casos', tag:'Online'}
+   ]},
+  {k:'rodas', ic:'rodas', t:'Rodas de conversa', tint:'#E8F0FF',
+   d:'Conversas abertas sobre redução de danos e o cuidado no dia a dia, com troca de experiências entre quem está na prática.',
+   info:'Quinzenal, às terças, 19h · Online, ao vivo · aberta a toda a rede',
+   itens:[
+     {data:'2026-08-26', hora:'19h', titulo:'Redução de danos e maternidade', sub:'Roda aberta', tag:'Online'},
+     {data:'2026-09-09', hora:'19h', titulo:'Estigma no consultório', sub:'Com profissional convidada', tag:'Online'},
+     {data:'2026-09-23', hora:'19h', titulo:'Espiritualidade e uso de substâncias', sub:'Roda aberta', tag:'Online'}
+   ]},
+  {k:'eventos', ic:'eventos', t:'Eventos internos', tint:'#E9F7EE',
+   d:'Palestras, lançamentos e encontros da Rede dichava, online e presenciais, só pra quem faz parte.',
+   info:'Online e presenciais · avisamos com antecedência pelo painel',
+   itens:[
+     {data:'2026-08-30', hora:'10h', titulo:'Lançamento dos cursos da Rede', sub:'Aula inaugural, ao vivo', tag:'Online'},
+     {data:'2026-09-20', hora:'', titulo:'1º Encontro Presencial da Rede dichava', sub:'São Paulo, local a confirmar', tag:'Presencial'},
+     {data:'2026-10-11', hora:'19h', titulo:'Mesa: política de drogas no Brasil', sub:'Com convidados', tag:'Online'}
+   ]}
+];
+function _mesAb(m){ return ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][m]||''; }
+function fmtDMural(iso){ const d=new Date(iso+'T12:00:00'); return {dia:d.getDate(), mes:_mesAb(d.getMonth())}; }
+function muralProx(m){ let hoje; try{hoje=todayISO();}catch(e){hoje='';} const datas=(m.itens||[]).map(i=>i.data).sort();
+  const fut=datas.filter(x=>x>=hoje); return fut[0]||datas[datas.length-1]||null; }
+
+function viewRede(){
+  if(_cursoAtual){ const c=CURSOS.find(x=>x.id===_cursoAtual); if(c) return _aulaAtual? viewAula(c) : viewCursoDetalhe(c); _cursoAtual=null; }
+  if(_redeView==='biblioteca') return `<button class="btn ghost sm" style="margin-bottom:8px" onclick="irRede('home')">‹ Rede</button>`+listaBiblioteca();
+  if(_redeView==='cursos') return `<button class="btn ghost sm" style="margin-bottom:8px" onclick="irRede('home')">‹ Rede</button>`+listaCursos();
+  return redeHome();
+}
+function irRede(v){ _redeView=v; _cursoAtual=null; _aulaAtual=null; _bibTema=-1; render(); window.scrollTo(0,0); }
+function _pad2(n){ return String(n).padStart(2,'0'); }
+function gcalUrl(i, area){
+  const dur = area==='eventos'?120:90;
+  const parts=(i.data||'').split('-').map(Number); const Y=parts[0],M=parts[1],D=parts[2];
+  const enc=encodeURIComponent;
+  const text=(i.titulo||'Encontro')+' - Rede dichava';
+  const det=((i.sub?i.sub+' - ':'')+'Encontro da Rede dichava.');
+  let dates; const hm=/(\d{1,2})h(\d{0,2})/.exec(i.hora||'');
+  if(hm){ const h=+hm[1], mi=hm[2]?+hm[2]:0; const s=new Date(Y,M-1,D,h,mi); const e=new Date(s.getTime()+dur*60000);
+    const f=d=>''+d.getFullYear()+_pad2(d.getMonth()+1)+_pad2(d.getDate())+'T'+_pad2(d.getHours())+_pad2(d.getMinutes())+'00';
+    dates=f(s)+'/'+f(e);
+  } else { const f=(yy,mm,dd)=>''+yy+_pad2(mm)+_pad2(dd); const e=new Date(Y,M-1,D+1);
+    dates=f(Y,M,D)+'/'+f(e.getFullYear(),e.getMonth()+1,e.getDate()); }
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+enc(text)+'&dates='+dates+'&details='+enc(det)+'&ctz=America/Sao_Paulo';
+}
+function fmtDataExt(iso){ const d=new Date(iso+'T12:00:00'); const dias=['dom','seg','ter','qua','qui','sex','sáb'];
+  const mm=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  return dias[d.getDay()]+', '+d.getDate()+' de '+mm[d.getMonth()]; }
+function proxDestaque(){ let hoje; try{hoje=todayISO();}catch(e){hoje='';} let best=null;
+  MURAL.forEach(m=>(m.itens||[]).forEach(i=>{ if(i.data>=hoje){ if(!best||i.data<best.data) best=Object.assign({},i,{area:m.k,areaNome:m.t,ic:m.ic,tint:m.tint}); } }));
+  return best; }
+function redeHome(){
+  const heroMark=cicUniq(`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#fff" stroke-width="1.5" opacity=".92"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#fff"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>`);
+  const totC=CURSOS.length, totL=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
+  const dq=proxDestaque();
+  const destaque=dq?`<button class="rede-destaque" onclick="abrirMural('${dq.area}')">
+      <span class="rd-data"><b>${fmtDMural(dq.data).dia}</b><span>${fmtDMural(dq.data).mes}</span></span>
+      <span class="rd-body"><span class="rd-tag">Em destaque</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+esc(dq.hora):''} · ${fmtDataExt(dq.data)}</span></span>
+      <span class="rd-go">›</span></button>`:'';
+  const mural=MURAL.map(m=>{ const px=muralProx(m); const pb=px?fmtDMural(px):null;
+    const badge=pb?`<span class="mural-badge on">${pb.dia} ${pb.mes}</span>`:`<span class="mural-badge">Em breve</span>`;
+    return `<button class="mural-card" onclick="abrirMural('${m.k}')">
+      <span class="mural-ic" style="background:${m.tint}">${redeIco(m.ic)}</span>
+      <span class="mural-body"><span class="mural-t">${esc(m.t)}</span><span class="mural-d">${esc(m.d)}</span></span>
+      ${badge}</button>`; }).join('');
+  const acessos=`<div class="rede-acessos">
+      <button class="acesso-card" onclick="irRede('cursos')"><span class="acesso-ic">${redeIco('cursos')}</span><span class="acesso-t">Cursos</span><span class="acesso-s">${totC} ${totC===1?'curso':'cursos'}</span></button>
+      <button class="acesso-card" onclick="irRede('biblioteca')"><span class="acesso-ic">${redeIco('biblio')}</span><span class="acesso-t">Biblioteca</span><span class="acesso-s">${totL} livros</span></button>
+    </div>`;
+  return `<div class="rede-hero"><span class="rede-hero-mark">${heroMark}</span>
+      <div><div class="rede-hero-t">Rede dichava</div><div class="rede-hero-s">Seu espaço na rede: encontros, formação e leitura pra caminhar junto.</div></div></div>
+    ${destaque}
+    <div class="rede-sec-h">Mural</div>
+    <div class="mural">${mural}</div>
+    <div class="rede-sec-h">Formação e leitura</div>
+    ${acessos}`;
+}
+let _muralArea=null, _muralItens=[];
+function _toggleMi(el,ev){ if(ev.target.closest('a')||ev.target.classList.contains('mi-chk'))return; const c=el.querySelector('.mi-chk'); if(c)c.checked=!c.checked; }
+function abrirMural(k){
+  const m=MURAL.find(x=>x.k===k); if(!m)return;
+  const itens=(m.itens||[]).slice().sort((a,b)=>a.data.localeCompare(b.data));
+  _muralArea=k; _muralItens=itens;
+  const lista=itens.length?(`<div class="rede-sec-h" style="margin:20px 2px 8px">Escolha os encontros <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--txm)">(pode marcar mais de um)</span></div><div class="mural-itens">`+
+    itens.map((i,idx)=>{ const f=fmtDMural(i.data); return `<div class="mitem sel" onclick="_toggleMi(this,event)"><input type="checkbox" class="mi-chk" data-i="${idx}" onclick="event.stopPropagation()"><div class="mitem-data"><b>${f.dia}</b><span>${f.mes}</span></div>
+      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${i.hora?esc(i.hora)+' · ':''}${esc(i.sub||'')}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Adicionar ao Google Agenda</a></div>
+      ${i.tag?`<span class="mitem-tag">${esc(i.tag)}</span>`:''}</div>`; }).join('')+`</div>`):'';
+  const info=m.info?`<div class="mural-info">${esc(m.info)}</div>`:'';
+  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>${esc(m.t)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="display:flex;justify-content:center;margin-bottom:10px"><span class="mural-ic lg" style="background:${m.tint}">${redeIco(m.ic)}</span></div>
+      <p style="font-size:14px;line-height:1.6;color:var(--txs);text-align:center;margin:0">${esc(m.d)}</p>
+      ${info}
+      ${lista}
+      <button class="btn" style="width:100%;justify-content:center;margin-top:16px" onclick="confirmarInteresse()">Confirmar interesse</button>
+      <p style="font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px">As datas ainda são uma prévia. Marque os encontros que quer participar que a gente confirma sua vaga e te avisa.</p>
+    </div></div>`);
+}
+async function confirmarInteresse(){
+  const sel=[].slice.call(document.querySelectorAll('.mi-chk:checked')).map(c=>_muralItens[+c.dataset.i]).filter(Boolean);
+  if(!sel.length){ toast('Marque ao menos um encontro.',2500); return; }
+  closeModal();
+  const m=MURAL.find(x=>x.k===_muralArea);
+  try{
+    if(typeof _SB!=='undefined' && _SB && AUTH && AUTH.id){
+      const rows=sel.map(i=>({ area:_muralArea, area_nome:(m?m.t:_muralArea), item:i.titulo, item_data:i.data, user_id:AUTH.id, nome:(AUTH.nome||null) }));
+      await _SB.from('rede_interesses').upsert(rows, { onConflict:'user_id,area,item', ignoreDuplicates:true });
+    }
+    toast(sel.length>1?('Interesse registrado em '+sel.length+' encontros.'):'Interesse registrado. A gente te avisa.');
+  }catch(e){ toast('Interesse anotado. A gente te avisa.'); }
+}
+
+function _capa(s,l,big){
+  const lang=l.lang?`<span class="livro-lang">${esc(l.lang)}</span>`:'';
+  return `<span class="livro-capa ${big?'lg':''}" style="background:${s.cor}"><span class="livro-edge"></span>${lang}<span class="livro-t">${esc(l.t)}</span><span class="livro-rule"></span><span class="livro-a">${esc(l.a)}</span></span>`;
+}
+let _bibTema=-1;
+function setBibTema(i){ _bibTema=i; render(); const v=document.getElementById('view'); if(v&&v.scrollIntoView)try{v.scrollIntoView({block:'start'});}catch(e){} }
+
+function listaBiblioteca(){
+  const totLiv=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
+  const hero=`<div class="biblio-hero"><div class="biblio-hero-ic">${redeIco('biblio')}</div>
+    <div class="biblio-hero-tx"><div class="biblio-hero-t">Estante dichava</div>
+    <div class="biblio-hero-s">Sugestões de leitura reais pra se aprofundar no cuidado. Toque numa capa pra saber do que trata.</div>
+    <div class="biblio-hero-pills"><span>${ESTANTE.length} temas</span><span>${totLiv} livros</span></div></div></div>`;
+  const chips=`<div class="biblio-chips"><button class="bchip ${_bibTema<0?'on':''}" onclick="setBibTema(-1)">Todos</button>`+
+    ESTANTE.map((s,i)=>`<button class="bchip ${_bibTema===i?'on':''}" onclick="setBibTema(${i})">${esc(s.tema)}</button>`).join('')+`</div>`;
+  let html=hero+chips;
+  ESTANTE.forEach((s,si)=>{
+    if(_bibTema>=0 && _bibTema!==si) return;
+    html+=`<div class="estante-tema">${esc(s.tema)} <span class="estante-n">${s.livros.length}</span></div>`;
+    html+=`<div class="estante-shelf"><div class="estante-row">`+ s.livros.map((l,li)=>`<button class="livro" onclick="abrirLivro(${si},${li})" title="${esc(l.t)}">${_capa(s,l)}</button>`).join('') +`</div></div>`;
+  });
+  return html;
+}
+function abrirLivro(si,li){
+  const s=ESTANTE[si]; const l=s&&s.livros[li]; if(!l)return;
+  const meta=[l.a, l.ed, l.lang].filter(Boolean).join(' · ');
+  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>Sugestão de leitura</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="livro-hero">${_capa(s,l,true)}</div>
+      <div style="text-align:center;margin-top:16px"><b style="font-size:16px;line-height:1.25;display:block">${esc(l.t)}</b>
+        <div style="font-size:13px;color:var(--txs);margin-top:5px">${esc(meta)}</div>
+        <span class="livro-tag" style="background:${s.cor}">${esc(s.tema)}</span></div>
+      ${l.d?`<div class="livro-sobre"><div class="livro-sobre-h">O que você encontra</div><p>${esc(l.d)}</p></div>`:''}
+      <p style="font-size:11.5px;color:var(--txm);margin-top:14px;line-height:1.5;text-align:center">Indicação de leitura. Procure em livrarias, sebos ou bibliotecas. Aqui ficam só as sugestões, respeitando os direitos autorais.</p>
+    </div></div>`);
+}
+
+function listaCursos(){
+  const intro=`<div class="card" style="padding:16px;margin-bottom:16px;background:var(--vf)"><p style="margin:0;font-size:13.5px;color:var(--txs);line-height:1.55">Cursos rápidos pra fazer no seu tempo, direto aqui no painel. Seu progresso fica salvo neste aparelho.</p></div>`;
+  const cards=CURSOS.map(c=>{ const p=cursoTotais(c); return `<div class="curso-card" onclick="abrirCurso('${c.id}')">
+    <div class="curso-capa" style="background:${c.cor};height:96px"><span class="nv">${esc(c.nivel)}</span></div>
+    <div class="curso-bd"><b>${esc(c.titulo)}</b><div class="sub">${esc(c.subtitulo)}</div>
+      <div style="font-size:12px;color:var(--txm);margin-top:8px">${p.tot} aulas · ${esc(c.duracao)}</div>
+      <div class="curso-prog"><i style="width:${p.pct}%"></i></div>
+      <div style="font-size:11.5px;color:var(--txs);margin-top:6px">${p.done}/${p.tot} concluídas</div>
+    </div></div>`; }).join('');
+  return intro+`<div class="curso-grid">${cards}</div>`;
+}
+function abrirCurso(id){ _cursoAtual=id; _aulaAtual=null; render(); window.scrollTo(0,0); }
+function voltarRede(){ _cursoAtual=null; _aulaAtual=null; _redeView='cursos'; render(); window.scrollTo(0,0); }
+function voltarCurso(cid){ _cursoAtual=cid; _aulaAtual=null; render(); window.scrollTo(0,0); }
+function abrirAula(cid,mi,ai){ _cursoAtual=cid; _aulaAtual={mi:mi,ai:ai}; render(); window.scrollTo(0,0); }
+function toggleAula(cid,mi,ai){ marcarAula(cid,mi,ai,!aulaConcluida(cid,mi,ai)); render(); }
+
+function cargaCurso(c){ let min=0; (c.modulos||[]).forEach(m=>(m.aulas||[]).forEach(a=>{ const mm=parseInt(String(a.dur||'').replace(/\D/g,''),10); if(!isNaN(mm))min+=mm; }));
+  if(!min) return c.duracao||''; const h=Math.floor(min/60), r=min%60; return h?(h+'h'+(r?(' '+r+'min'):'')):(min+' min'); }
+function gerarCertificado(cid){
+  const c=CURSOS.find(x=>x.id===cid); if(!c)return;
+  const pr=cursoTotais(c);
+  if(pr.pct<100){ toast('Conclua todas as aulas pra emitir o certificado.',4000); return; }
+  const nome=(((AUTH&&AUTH.nome)||'').trim())||'Profissional';
+  const carga=cargaCurso(c);
+  const d=new Date(); const meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const dataStr=d.getDate()+' de '+meses[d.getMonth()]+' de '+d.getFullYear();
+  const cod='CERT-'+String(cid).toUpperCase().replace(/[^A-Z0-9]/g,'')+'-'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  const mods=(c.modulos||[]).map(m=>`<li>${esc(m.titulo)}</li>`).join('');
+  const mark='<svg viewBox="0 0 24 24" width="32" height="32"><g fill="none" stroke="#2FA35F" stroke-width="1.6"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#2FA35F"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>';
+  const html=`<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><title>Certificado - ${esc(c.titulo)}</title><style>
+  @page{size:A4 landscape;margin:0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,"Times New Roman",serif;color:#1B2A1C;background:#EDEFE9}
+  .sheet{width:297mm;height:210mm;padding:13mm;display:flex}
+  .frame{flex:1;border:2px solid #2FA35F;border-radius:8px;position:relative;padding:16mm 20mm;display:flex;flex-direction:column;align-items:center;text-align:center;background:#fff}
+  .frame:before{content:"";position:absolute;top:5mm;left:5mm;right:5mm;bottom:5mm;border:1px solid #A5D6A7;border-radius:5px;pointer-events:none}
+  .brand{display:flex;align-items:center;gap:8px;color:#2FA35F;font-family:Arial,Helvetica,sans-serif;font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+  .kicker{margin-top:15mm;font-family:Arial,Helvetica,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#5D7060;font-size:12px}
+  h1{font-size:30px;color:#2E7D32;margin-top:4mm;letter-spacing:.04em}
+  .lead{margin-top:7mm;color:#5D7060;font-size:15px}
+  .nome{font-size:38px;margin:3mm 0;color:#1B2A1C;border-bottom:1px solid #E4E4DF;padding-bottom:4mm;min-width:55%}
+  .curso{font-size:20px;font-weight:bold;margin-top:5mm;color:#1B2A1C}
+  .meta{margin-top:3mm;color:#5D7060;font-size:14px}
+  .mods{margin-top:5mm;max-width:82%}
+  .mods b{display:block;text-transform:uppercase;letter-spacing:.14em;font-size:10px;margin-bottom:2mm;color:#9E9E9E;font-family:Arial,Helvetica,sans-serif}
+  .mods ul{list-style:none;display:flex;flex-wrap:wrap;gap:2.5mm;justify-content:center}
+  .mods li{background:#F5F5F0;border-radius:20px;padding:2mm 4mm;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#5D7060}
+  .foot{margin-top:auto;width:100%;display:flex;justify-content:space-between;align-items:flex-end;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#9E9E9E}
+  .sig{text-align:center}.sig b{display:block;color:#1B2A1C;font-size:13px;border-top:1px solid #1B2A1C;padding-top:2mm;margin-top:12mm;min-width:55mm}
+  </style></head><body><div class="sheet"><div class="frame">
+    <div class="brand">${mark}<span>Rede dichava</span></div>
+    <div class="kicker">Certificado de Conclusão</div>
+    <h1>Certificado</h1>
+    <div class="lead">Certificamos que</div>
+    <div class="nome">${esc(nome)}</div>
+    <div class="lead">concluiu com aproveitamento o curso</div>
+    <div class="curso">${esc(c.titulo)}</div>
+    <div class="meta">Carga horária de ${esc(carga)} &middot; ${pr.tot} aulas &middot; ${esc(dataStr)}</div>
+    <div class="mods"><b>Módulos</b><ul>${mods}</ul></div>
+    <div class="foot"><div style="text-align:left">Código: ${cod}<br>Emitido em ${esc(dataStr)}</div>
+      <div class="sig"><b>Rede dichava</b>dichava.app</div>
+      <div style="text-align:right">Formação em<br>Redução de Danos</div></div>
+  </div></div></body></html>`;
+  const w=window.open('','_blank'); if(!w){ toast('Permita pop-ups pra abrir o certificado.',5000); return; }
+  w.document.write(html); w.document.close();
+  try{ w.focus(); }catch(e){}
+  setTimeout(()=>{ try{ w.print(); }catch(e){} }, 500);
+}
+function viewCursoDetalhe(c){
+  const p=cursoTotais(c);
+  const feito=p.pct===100;
+  let html=`<button class="btn ghost sm" onclick="voltarRede()">‹ Voltar</button>
+    <div class="card" style="padding:0;overflow:hidden;margin:12px 0 14px">
+      <div class="curso-capa" style="background:${c.cor};height:120px"><span class="nv">${esc(c.nivel)}</span></div>
+      <div style="padding:16px 18px"><h2 style="font-size:20px;margin:0 0 4px">${esc(c.titulo)}</h2>
+      <p style="color:var(--txs);font-size:13.5px;margin:0 0 12px;line-height:1.5">${esc(c.subtitulo)}</p>
+      <div class="curso-prog"><i style="width:${p.pct}%"></i></div>
+      <div style="font-size:12px;color:var(--txs);margin-top:6px">${p.done} de ${p.tot} aulas concluídas · ${p.pct}%</div></div>
+    </div>`;
+  if(feito) html+=`<div class="card" style="padding:16px;margin-bottom:14px;background:var(--vf);border-color:var(--vc)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="rico" style="width:32px;height:32px">${redeIco('cursos')}</span>
+        <div><b style="font-size:14.5px;color:var(--ve)">Curso concluído</b><div style="font-size:12.5px;color:var(--txs);margin-top:2px">Você completou todas as aulas. Emita seu certificado abaixo.</div></div>
+      </div>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:12px" onclick="gerarCertificado('${c.id}')">Baixar certificado</button>
+    </div>`;
+  // ementa
+  const emenBits=[];
+  if(c.sobre) emenBits.push(`<div style="margin-bottom:10px"><b style="font-size:12.5px;color:var(--txs);text-transform:uppercase;letter-spacing:.3px">Sobre o curso</b><p style="margin:5px 0 0;font-size:13.5px;color:var(--txs);line-height:1.55">${esc(c.sobre)}</p></div>`);
+  if(c.publico) emenBits.push(`<div style="margin-bottom:10px"><b style="font-size:12.5px;color:var(--txs);text-transform:uppercase;letter-spacing:.3px">Para quem é</b><p style="margin:5px 0 0;font-size:13.5px;color:var(--txs);line-height:1.55">${esc(c.publico)}</p></div>`);
+  emenBits.push(`<div><b style="font-size:12.5px;color:var(--txs);text-transform:uppercase;letter-spacing:.3px">Formato</b><p style="margin:5px 0 0;font-size:13.5px;color:var(--txs);line-height:1.55">${p.tot} aulas no seu ritmo, cada uma com apresentação, vídeo e referências. Os vídeos estão sendo gravados; por enquanto você acompanha pelo roteiro. Progresso salvo neste aparelho.</p></div>`);
+  html+=`<div class="card" style="padding:16px;margin-bottom:18px">${emenBits.join('')}</div>`;
+  // módulos e aulas
+  c.modulos.forEach((m,mi)=>{
+    html+=`<div class="mod-tt">${esc(m.titulo)}</div>`;
+    m.aulas.forEach((a,ai)=>{ const ok=aulaConcluida(c.id,mi,ai);
+      html+=`<div class="aula-row" onclick="abrirAula('${c.id}',${mi},${ai})">
+        <div class="aula-check ${ok?'ok':''}">${ok?'✓':''}</div>
+        <div class="aula-tt">${esc(a.titulo)}<span class="du">${esc(a.dur)}</span></div>
+        <span style="color:var(--txm)">›</span></div>`;
+    });
+  });
+  // referências
+  if(c.referencias&&c.referencias.length){
+    html+=`<div class="mod-tt">Para se aprofundar</div>
+      <div class="card" style="padding:14px 16px">
+      <p style="font-size:12.5px;color:var(--txm);margin:0 0 10px;line-height:1.5">Este curso é uma introdução. Pra ir além, vale conhecer o trabalho de quem é referência em redução de danos no Brasil:</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+      ${c.referencias.map(r=>`<a href="${r.url}" target="_blank" rel="noopener" style="font-size:13.5px;font-weight:600;color:var(--v);text-decoration:none">${esc(r.nome)} ›</a>`).join('')}
+      </div></div>`;
+  }
+  return html;
+}
+function viewAula(c){
+  const mi=_aulaAtual.mi, ai=_aulaAtual.ai;
+  const m=c.modulos[mi]; const a=m&&m.aulas[ai];
+  if(!a){ _aulaAtual=null; return viewCursoDetalhe(c); }
+  const ok=aulaConcluida(c.id,mi,ai);
+  const flat=[]; c.modulos.forEach((mm,x)=>mm.aulas.forEach((aa,y)=>flat.push({mi:x,ai:y})));
+  const idx=flat.findIndex(f=>f.mi===mi&&f.ai===ai);
+  const prev=idx>0?flat[idx-1]:null; const next=idx<flat.length-1?flat[idx+1]:null;
+  let nav=`<div style="display:flex;gap:10px;margin-top:24px">`;
+  nav+= prev?`<button class="btn ghost" style="flex:1;justify-content:center" onclick="abrirAula('${c.id}',${prev.mi},${prev.ai})">‹ Anterior</button>`:'';
+  nav+= next?`<button class="btn" style="flex:2;justify-content:center" onclick="marcarAula('${c.id}',${mi},${ai},1);abrirAula('${c.id}',${next.mi},${next.ai})">Concluir e continuar ›</button>`
+            :`<button class="btn" style="flex:2;justify-content:center" onclick="marcarAula('${c.id}',${mi},${ai},1);voltarCurso('${c.id}')">Concluir curso ✓</button>`;
+  nav+=`</div>`;
+  const toggle=`<button class="btn ghost sm" style="margin-top:14px" onclick="toggleAula('${c.id}',${mi},${ai})">${ok?'✓ Concluída (toque pra desmarcar)':'Marcar como concluída'}</button>`;
+  const apres=a.apresentacao?`<div class="aula-apres">${esc(a.apresentacao)}</div>`:'';
+  let corpo;
+  if(a.video){
+    corpo=`<div class="aula-video"><video controls playsinline preload="metadata" src="${a.video}" style="width:100%;border-radius:14px;background:#000;display:block"></video></div>`;
+    if(a.roteiro) corpo+=`<details class="aula-transcri"><summary>Ver transcrição da aula</summary><div class="aula-body" style="margin-top:10px">${a.roteiro}</div></details>`;
+  } else {
+    corpo=`<div class="roteiro-box"><div class="roteiro-tag">${redeIco('roteiro')}Roteiro do vídeo · gravação em breve</div><div class="aula-body">${a.roteiro||''}</div></div>`;
+  }
+  const refs=refsHtml(a.referencias);
+  return `<button class="btn ghost sm" onclick="voltarCurso('${c.id}')">‹ ${esc(c.titulo)}</button>
+    <h2 style="font-size:21px;margin:14px 0 4px">${esc(a.titulo)}</h2>
+    <div style="font-size:12.5px;color:var(--txm);margin-bottom:18px">${esc(m.titulo)} · ${esc(a.dur)}</div>
+    ${apres}
+    ${corpo}
+    ${refs}
+    ${toggle}
+    ${nav}`;
+}
 // ===== ADICIONAR À TELA INICIAL (instalar o PWA) =====
 let _deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); _deferredPrompt=e; });
@@ -1142,6 +2026,7 @@ function render(){
   else if(route==='projecao') { v.innerHTML=viewProjecao(); }
   else if(route==='documentos') v.innerHTML=viewDocumentos();
   else if(route==='divulgacao') v.innerHTML=viewDivulgacao();
+  else if(route==='rede') v.innerHTML=viewRede();
   else if(route==='contratos') { v.innerHTML=viewContratos(); carregarContratos(); }
   else if(route==='mensagens') { v.innerHTML=viewMensagens(); carregarConversas(); }
   else if(route==='perfil') { v.innerHTML='<div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; carregarPerfil(); }
@@ -3013,7 +3898,7 @@ const CONTR_TPL={
   psicanalise:`CONTRATO TERAPÊUTICO — ABORDAGEM PSICANALÍTICA\n\n1. Enquadre\nAs sessões terão dia, horário e frequência combinados entre as partes. A constância do enquadre faz parte do trabalho.\n\n2. Associação livre e sigilo\nO paciente é convidado a falar livremente. Tudo é protegido por sigilo, conforme o código de ética e a LGPD, salvo risco à vida.\n\n3. Sessões reservadas\nPor se tratar de horário reservado, sessões não canceladas com a antecedência combinada poderão ser cobradas.\n\n4. Valor e pagamento\nCombinados previamente e reajustados conforme acordo.\n\n5. Duração\nO processo não tem prazo determinado e é conduzido conforme a demanda do paciente.\n\n6. Compromisso\nComparecimento regular do paciente e escuta ética e qualificada do profissional.`
 };
 function viewContratos(){
-  return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;color:var(--txs);font-size:13.5px">Crie o contrato, copie o link e envie ao paciente. Ele lê, assina o aceite e vira um documento validado. ✍️</div><button class="btn" onclick="formContrato()">＋ Novo contrato</button></div>
+  return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;color:var(--txs);font-size:13.5px">Crie o contrato, copie o link e envie ao paciente. Ele lê, assina o aceite e vira um documento validado. ✍️</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="formContratoEstrut()">＋ Contrato estruturado</button><button class="btn ghost" onclick="formContrato()">Texto livre</button></div></div>
   <div id="contr-list"><div class="card empty">Carregando…</div></div>`;
 }
 async function carregarContratos(){
@@ -3032,13 +3917,13 @@ function renderContratos(){
     const aceito=c.status==='aceito';
     const chip=aceito?`<span class="chip v">✓ Aceito</span>`:`<span class="chip a">Aguardando aceite</span>`;
     return `<div class="card" style="padding:16px 18px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:15px">${esc(c.titulo)}</b>${chip}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:15px">${esc(c.titulo)}</b>${chip}${(c.dados&&c.dados.tipo==='estruturado')?'<span class="chip b">Estruturado</span>':''}${(c.dados&&c.dados.importado)?'<span class="chip v">Importado</span>':''}</div>
       <div style="font-size:13px;color:var(--txs);margin:4px 0 12px">${c.paciente_nome?esc(c.paciente_nome)+' · ':''}${aceito?('aceito por '+esc(c.aceite_nome)+' em '+fmtDT(c.aceite_em)):('criado em '+fmtDT(c.criado_em))}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn sm" onclick="copiarLinkContrato('${c.id}')">🔗 Copiar link</button>
         <button class="btn ghost sm" onclick="verContrato('${c.id}')">Ver / imprimir</button>
-        ${aceito?'':`<button class="btn ghost sm" onclick="formContrato('${c.id}')">Editar</button>`}
-        <button class="btn danger ghost sm" onclick="delContrato('${c.id}')">Excluir</button>
+        ${aceito?'':`<button class="btn ghost sm" onclick="${(c.dados&&c.dados.tipo==='estruturado')?'formContratoEstrut':'formContrato'}('${c.id}')">Editar</button>`}
+        ${(aceito && c.dados && c.dados.pac && c.dados.pac.nome && !c.dados.importado)?`<button class="btn sm" onclick="importarContratoPaciente('${c.id}')">＋ Importar pro paciente</button>`:''}<button class="btn danger ghost sm" onclick="delContrato('${c.id}')">Excluir</button>
       </div>
     </div>`;
   }).join('');
@@ -3072,6 +3957,114 @@ async function salvarContrato(id){
     else { const {error}=await _SB.from('contratos').insert({prof_id:AUTH.id,titulo:tit,paciente_nome:pac,texto:txt}); if(error)throw error; }
     closeModal(); toast('✓ Contrato salvo'); carregarContratos();
   }catch(e){ toast('Erro ao salvar: '+((e&&e.message)||''),5000); }
+}
+function ceOpt(opts,val){ return '<option value="">— selecione —</option>'+opts.map(function(o){return '<option '+(o===val?'selected':'')+'>'+o+'</option>';}).join(''); }
+function ceFreqTgl(){ var s=$('#ce-freq'), w=$('#ce-freq-outra-wrap'); if(s&&w) w.style.display=(s.value==='Outra')?'':'none'; }
+function formContratoEstrut(id){
+  var c=id?CONTRATOS.find(function(x){return x.id===id;}):null;
+  var d=(c&&c.dados&&c.dados.prof)||{};
+  var MOD=['Online','Presencial','Híbrida'], FREQ=['Semanal','Quinzenal','Outra'], COB=['Por sessão','Mensal','Pacote','Outro'], PAG=['Pix','Transferência','Cartão','Outro'];
+  var datal=(DB.pacientes||[]).slice().sort(function(a,b){return (a.nome||'').localeCompare(b.nome||'');}).map(function(pp){return '<option value="'+esc(pp.nome)+'">';}).join('');
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${id?'Editar':'Novo'} contrato estruturado</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="field"><label>Título</label><input id="ce-tit" value="${esc((c&&c.titulo)||'Contrato terapêutico')}"></div>
+        <div class="field"><label>Paciente (referência)</label><input id="ce-pac" list="ce-pac-list" value="${esc((c&&c.paciente_nome)||'')}" placeholder="Nome do paciente" autocomplete="off"><datalist id="ce-pac-list">${datal}</datalist></div>
+      </div>
+      <div class="sec-title" style="margin-top:14px">Atendimento</div>
+      <div class="row2">
+        <div class="field"><label>Modalidade</label><select id="ce-mod">${ceOpt(MOD,d.modalidade)}</select></div>
+        <div class="field"><label>Plataforma / local</label><input id="ce-plat" value="${esc(d.plataforma||'')}" placeholder="Ex.: Google Meet"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Abordagem / orientação</label><input id="ce-abord" value="${esc(d.abordagem||'')}"></div>
+        <div class="field"><label>Duração da sessão</label><input id="ce-dur" value="${esc(d.duracao||'')}" placeholder="Ex.: 50 min"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Frequência</label><select id="ce-freq" onchange="ceFreqTgl()">${ceOpt(FREQ,d.frequencia)}</select></div>
+        <div class="field" id="ce-freq-outra-wrap" style="display:${d.frequencia==='Outra'?'':'none'}"><label>Qual frequência?</label><input id="ce-freq-outra" value="${esc(d.frequencia_outra||'')}"></div>
+      </div>
+      <div class="field"><label>Dia e horário habitual</label><input id="ce-dh" value="${esc(d.dia_horario||'')}" placeholder="Ex.: terças, 15h"></div>
+      <div class="sec-title">Honorários e pagamento</div>
+      <div class="row2">
+        <div class="field"><label>Valor por sessão (R$)</label><input id="ce-valor" value="${esc(d.valor||'')}" placeholder="Ex.: 150"></div>
+        <div class="field"><label>Forma de cobrança</label><select id="ce-cob">${ceOpt(COB,d.forma_cobranca)}</select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Forma de pagamento</label><select id="ce-pag">${ceOpt(PAG,d.forma_pagamento)}</select></div>
+        <div class="field"><label>Data / condição de pagamento</label><input id="ce-cond" value="${esc(d.cond_pagamento||'')}" placeholder="Ex.: até o dia 5"></div>
+      </div>
+      <div class="sec-title">Cancelamentos</div>
+      <div class="row2">
+        <div class="field"><label>Antecedência (horas)</label><input id="ce-canch" value="${esc(d.cancel_horas||'')}" placeholder="Ex.: 24"></div>
+        <div class="field"><label>Regra acordada (opcional)</label><input id="ce-cancr" value="${esc(d.cancel_regra||'')}"></div>
+      </div>
+      <p style="font-size:12px;color:var(--txs);background:var(--cin);border-radius:10px;padding:10px 12px;margin-top:6px">As cláusulas de sigilo, atendimento online, limites e encerramento já vêm no contrato como texto padrão. O <b>paciente preenche a identificação dele</b> e marca os aceites na página do link.</p>
+    </div>
+    <div class="modal-foot">${id?`<button class="btn danger ghost" style="margin-right:auto" onclick="delContrato('${id}')">Excluir</button>`:''}<button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="salvarContratoEstrut('${id||''}')">Salvar</button></div>
+  </div>`);
+}
+function gerarTextoContrato(tit,pr,pacNome){
+  var L=[]; L.push((tit||'Contrato terapêutico').toUpperCase()); L.push('');
+  L.push('INFORMAÇÕES DO ATENDIMENTO');
+  L.push('Profissional: '+(pr.nome||'')+(pr.reg?' — '+pr.reg:''));
+  if(pacNome) L.push('Paciente: '+pacNome);
+  if(pr.modalidade) L.push('Modalidade: '+pr.modalidade);
+  if(pr.plataforma) L.push('Plataforma / local: '+pr.plataforma);
+  if(pr.abordagem) L.push('Abordagem: '+pr.abordagem);
+  if(pr.duracao) L.push('Duração da sessão: '+pr.duracao);
+  var fq=pr.frequencia||''; if(fq==='Outra'&&pr.frequencia_outra) fq='Outra: '+pr.frequencia_outra; if(fq) L.push('Frequência: '+fq);
+  if(pr.dia_horario) L.push('Dia e horário: '+pr.dia_horario);
+  L.push(''); L.push('HONORÁRIOS E PAGAMENTO');
+  if(pr.valor) L.push('Valor por sessão: R$ '+pr.valor);
+  if(pr.forma_cobranca) L.push('Forma de cobrança: '+pr.forma_cobranca);
+  if(pr.forma_pagamento) L.push('Forma de pagamento: '+pr.forma_pagamento);
+  if(pr.cond_pagamento) L.push('Data / condição: '+pr.cond_pagamento);
+  L.push(''); L.push('CANCELAMENTOS E REMARCAÇÕES');
+  L.push('Antecedência de '+(pr.cancel_horas||'—')+' horas.'+(pr.cancel_regra?(' '+pr.cancel_regra):''));
+  L.push(''); L.push('As cláusulas de sigilo, atendimento online, limites e encerramento, e a identificação do paciente, constam na página de aceite (link).');
+  return L.join('\n');
+}
+async function salvarContratoEstrut(id){
+  var g=function(i){ var e=$('#'+i); return (e&&e.value||'').trim(); };
+  var prof={ nome:(AUTH&&AUTH.nome)||'', reg:(AUTH&&AUTH.reg)||'', modalidade:g('ce-mod'), plataforma:g('ce-plat'), abordagem:g('ce-abord'), duracao:g('ce-dur'), frequencia:g('ce-freq'), frequencia_outra:g('ce-freq-outra'), dia_horario:g('ce-dh'), valor:g('ce-valor'), forma_cobranca:g('ce-cob'), forma_pagamento:g('ce-pag'), cond_pagamento:g('ce-cond'), cancel_horas:g('ce-canch'), cancel_regra:g('ce-cancr') };
+  var tit=g('ce-tit')||'Contrato terapêutico'; var pacNome=g('ce-pac');
+  if(!prof.modalidade){ toast('Escolha a modalidade',1); return; }
+  if(!_SB||!AUTH){ toast('Sem conexão',1); return; }
+  var old=id?CONTRATOS.find(function(x){return x.id===id;}):null;
+  var dados={ tipo:'estruturado', prof:prof, pac:(old&&old.dados&&old.dados.pac)||{}, aceites:(old&&old.dados&&old.dados.aceites)||{} };
+  var texto=gerarTextoContrato(tit,prof,pacNome);
+  try{
+    if(id){ var u=await _SB.from('contratos').update({titulo:tit,paciente_nome:pacNome,texto:texto,dados:dados}).eq('id',id); if(u.error)throw u.error; }
+    else { var ins=await _SB.from('contratos').insert({prof_id:AUTH.id,titulo:tit,paciente_nome:pacNome,texto:texto,dados:dados}); if(ins.error)throw ins.error; }
+    closeModal(); toast('✓ Contrato salvo'); carregarContratos();
+  }catch(e){ var m=(e&&e.message)||''; toast(/dados/.test(m)?'Rode o contrato-estruturado-setup.sql no Supabase primeiro.':'Erro ao salvar: '+m,5000); }
+}
+async function importarContratoPaciente(id){
+  var c=CONTRATOS.find(function(x){return x.id===id;}); if(!c)return;
+  var pac=(c.dados&&c.dados.pac)||{};
+  var nome=((pac.nome||c.aceite_nome||c.paciente_nome||'')+'').trim();
+  if(!nome){ toast('Sem dados do paciente pra importar.',3000); return; }
+  if(!confirm('Importar os dados de "'+nome+'" pro cadastro do paciente e registrar no prontuário?')) return;
+  var norm=function(s){return (s||'').trim().toLowerCase();};
+  var cpfd=function(s){return (s||'').replace(/\D/g,'');};
+  var p=DB.pacientes.find(function(x){ return norm(x.nome)===norm(nome) || (pac.cpf&&x.cpf&&cpfd(x.cpf)===cpfd(pac.cpf)); });
+  var from={ nome:nome, nascimento:pac.nascimento||'', telefone:pac.telefone||'', email:pac.email||'', cpf:pac.cpf||'', endereco:pac.cidade||'', emergNome:pac.emerg_nome||'', emergTel:pac.emerg_telefone||'', emergParen:pac.emerg_relacao||'' };
+  if(p){
+    ['nascimento','telefone','email','cpf','endereco','emergNome','emergTel','emergParen'].forEach(function(k){ if(!p[k] && from[k]) p[k]=from[k]; });
+    if(pac.profissao){ var o='Profissão: '+pac.profissao; p.obs=(p.obs?p.obs+'\n':'')+o; }
+  } else {
+    p={ id:uid(), nome:nome, nascimento:from.nascimento, telefone:from.telefone, email:from.email, cpf:from.cpf, endereco:from.endereco, emergNome:from.emergNome, emergTel:from.emergTel, emergParen:from.emergParen, obs:(pac.profissao?('Profissão: '+pac.profissao):''), tags:['contrato'], status:'ativo', criadoEm:now() };
+    DB.pacientes.push(p);
+  }
+  var docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
+  var pr=(c.dados&&c.dados.prof)||{};
+  var resumo=[pr.modalidade?('Modalidade: '+pr.modalidade):'', pr.valor?('Valor por sessão: R$ '+pr.valor):'', pr.frequencia?('Frequência: '+pr.frequencia):''].filter(Boolean).join(' · ');
+  var texto='Contrato terapêutico "'+(c.titulo||'')+'" aceito eletronicamente por '+(c.aceite_nome||nome)+' em '+fmtDT(c.aceite_em)+'. Documento nº '+docNum+'.'+(resumo?('\n'+resumo):'');
+  DB.prontuarios.push({ id:uid(), pacienteId:p.id, data:todayISO(), tipo:'Contrato', texto:texto, agendamentoId:null, profId:(AUTH&&AUTH.id)||null, profNome:(AUTH&&AUTH.nome)||'', criadoEm:now() });
+  try{ save(); }catch(e){}
+  try{ if(_SB){ var nd=Object.assign({},c.dados||{},{importado:true}); await _SB.from('contratos').update({dados:nd}).eq('id',id); c.dados=nd; } }catch(e){}
+  toast('✓ Dados importados pro paciente e prontuário'); renderContratos();
 }
 function copiarLinkContrato(id){ const url='https://dichava.app/contrato/?id='+id; try{navigator.clipboard.writeText(url);toast('🔗 Link copiado — envie ao paciente');}catch(e){toast(url);} }
 function verContrato(id){
