@@ -617,6 +617,17 @@ body.has-demo-banner{padding-bottom:64px}
 .biblio-hero-ic{width:34px;height:34px;display:flex;align-items:center;justify-content:center}
 .biblio-hero-ic svg{width:100%;height:100%;display:block}
 .roteiro-tag svg{width:14px;height:14px;display:inline-block}
+.mural-badge.on{color:var(--ve);background:var(--vf)}
+.mural-info{font-size:12.5px;color:var(--txs);line-height:1.5;background:var(--cin);border-radius:11px;padding:10px 13px;margin-top:12px;text-align:center}
+.mural-itens{display:flex;flex-direction:column;gap:9px}
+.mitem{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.mitem-data{flex:0 0 auto;width:46px;text-align:center;background:var(--cin);border-radius:9px;padding:6px 0}
+.mitem-data b{display:block;font-size:16px;font-weight:800;color:var(--tx);line-height:1}
+.mitem-data span{font-size:10px;text-transform:uppercase;color:var(--txm);font-weight:700;letter-spacing:.3px}
+.mitem-body{flex:1;min-width:0}
+.mitem-t{font-size:13.5px;font-weight:700;color:var(--tx);line-height:1.3}
+.mitem-s{font-size:12px;color:var(--txm);margin-top:2px}
+.mitem-tag{flex:0 0 auto;font-size:10px;font-weight:700;color:var(--ve);background:var(--vf);border-radius:999px;padding:3px 9px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1433,10 +1444,35 @@ const REDEIC={
 };
 function redeIco(k){ return cicUniq(REDEIC[k]||''); }
 const MURAL=[
-  {k:'interv', ic:'interv', t:'Grupos de intervisão', d:'Encontros entre profissionais da rede pra discutir casos, trocar condutas e se apoiar na clínica. Supervisão horizontal, sem hierarquia.', tint:'#FFF4E5'},
-  {k:'rodas', ic:'rodas', t:'Rodas de conversa', d:'Conversas abertas sobre redução de danos e o cuidado no dia a dia, com troca de experiências entre quem está na prática.', tint:'#E8F0FF'},
-  {k:'eventos', ic:'eventos', t:'Eventos internos', d:'Palestras, lançamentos e encontros da Rede dichava, online e presenciais, só pra quem faz parte.', tint:'#E9F7EE'}
+  {k:'interv', ic:'interv', t:'Grupos de intervisão', tint:'#FFF4E5',
+   d:'Encontros entre profissionais da rede pra discutir casos, trocar condutas e se apoiar na clínica. Supervisão horizontal, sem hierarquia.',
+   info:'Quinzenal, às terças, 20h · Online (Google Meet) · até 12 profissionais por grupo',
+   itens:[
+     {data:'2026-08-19', hora:'20h', titulo:'Casos de álcool na atenção primária', sub:'Facilitação: equipe clínica dichava', tag:'Online'},
+     {data:'2026-09-02', hora:'20h', titulo:'Manejo de fissura e prevenção de recaída', sub:'Grupo aberto, traga um caso', tag:'Online'},
+     {data:'2026-09-16', hora:'20h', titulo:'Adolescência e primeiros usos', sub:'Discussão de casos', tag:'Online'}
+   ]},
+  {k:'rodas', ic:'rodas', t:'Rodas de conversa', tint:'#E8F0FF',
+   d:'Conversas abertas sobre redução de danos e o cuidado no dia a dia, com troca de experiências entre quem está na prática.',
+   info:'Quinzenal, às terças, 19h · Online, ao vivo · aberta a toda a rede',
+   itens:[
+     {data:'2026-08-26', hora:'19h', titulo:'Redução de danos e maternidade', sub:'Roda aberta', tag:'Online'},
+     {data:'2026-09-09', hora:'19h', titulo:'Estigma no consultório', sub:'Com profissional convidada', tag:'Online'},
+     {data:'2026-09-23', hora:'19h', titulo:'Espiritualidade e uso de substâncias', sub:'Roda aberta', tag:'Online'}
+   ]},
+  {k:'eventos', ic:'eventos', t:'Eventos internos', tint:'#E9F7EE',
+   d:'Palestras, lançamentos e encontros da Rede dichava, online e presenciais, só pra quem faz parte.',
+   info:'Online e presenciais · avisamos com antecedência pelo painel',
+   itens:[
+     {data:'2026-08-30', hora:'10h', titulo:'Lançamento dos cursos da Rede', sub:'Aula inaugural, ao vivo', tag:'Online'},
+     {data:'2026-09-20', hora:'', titulo:'1º Encontro Presencial da Rede dichava', sub:'São Paulo, local a confirmar', tag:'Presencial'},
+     {data:'2026-10-11', hora:'19h', titulo:'Mesa: política de drogas no Brasil', sub:'Com convidados', tag:'Online'}
+   ]}
 ];
+function _mesAb(m){ return ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][m]||''; }
+function fmtDMural(iso){ const d=new Date(iso+'T12:00:00'); return {dia:d.getDate(), mes:_mesAb(d.getMonth())}; }
+function muralProx(m){ let hoje; try{hoje=todayISO();}catch(e){hoje='';} const datas=(m.itens||[]).map(i=>i.data).sort();
+  const fut=datas.filter(x=>x>=hoje); return fut[0]||datas[datas.length-1]||null; }
 
 function viewRede(){
   if(_cursoAtual){ const c=CURSOS.find(x=>x.id===_cursoAtual); if(c) return _aulaAtual? viewAula(c) : viewCursoDetalhe(c); _cursoAtual=null; }
@@ -1448,10 +1484,12 @@ function irRede(v){ _redeView=v; _cursoAtual=null; _aulaAtual=null; _bibTema=-1;
 function redeHome(){
   const heroMark=cicUniq(`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#fff" stroke-width="1.5" opacity=".92"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#fff"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>`);
   const totC=CURSOS.length, totL=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
-  const mural=MURAL.map(m=>`<button class="mural-card" onclick="abrirMural('${m.k}')">
+  const mural=MURAL.map(m=>{ const px=muralProx(m); const pb=px?fmtDMural(px):null;
+    const badge=pb?`<span class="mural-badge on">${pb.dia} ${pb.mes}</span>`:`<span class="mural-badge">Em breve</span>`;
+    return `<button class="mural-card" onclick="abrirMural('${m.k}')">
       <span class="mural-ic" style="background:${m.tint}">${redeIco(m.ic)}</span>
       <span class="mural-body"><span class="mural-t">${esc(m.t)}</span><span class="mural-d">${esc(m.d)}</span></span>
-      <span class="mural-badge">Em breve</span></button>`).join('');
+      ${badge}</button>`; }).join('');
   const acessos=`<div class="rede-acessos">
       <button class="acesso-card" onclick="irRede('cursos')"><span class="acesso-ic">${redeIco('cursos')}</span><span class="acesso-t">Cursos</span><span class="acesso-s">${totC} ${totC===1?'curso':'cursos'}</span></button>
       <button class="acesso-card" onclick="irRede('biblioteca')"><span class="acesso-ic">${redeIco('biblio')}</span><span class="acesso-t">Biblioteca</span><span class="acesso-s">${totL} livros</span></button>
@@ -1465,15 +1503,30 @@ function redeHome(){
 }
 function abrirMural(k){
   const m=MURAL.find(x=>x.k===k); if(!m)return;
-  openModal(`<div class="modal" style="max-width:440px"><div class="modal-head"><h3>${esc(m.t)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  const itens=(m.itens||[]).slice().sort((a,b)=>a.data.localeCompare(b.data));
+  const lista=itens.length?(`<div class="rede-sec-h" style="margin:20px 2px 10px">Próximos encontros</div><div class="mural-itens">`+
+    itens.map(i=>{ const f=fmtDMural(i.data); return `<div class="mitem"><div class="mitem-data"><b>${f.dia}</b><span>${f.mes}</span></div>
+      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${i.hora?esc(i.hora)+' · ':''}${esc(i.sub||'')}</div></div>
+      ${i.tag?`<span class="mitem-tag">${esc(i.tag)}</span>`:''}</div>`; }).join('')+`</div>`):'';
+  const info=m.info?`<div class="mural-info">${esc(m.info)}</div>`:'';
+  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>${esc(m.t)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div style="display:flex;justify-content:center;margin-bottom:8px"><span class="mural-ic lg" style="background:${m.tint}">${redeIco(m.ic)}</span></div>
+      <div style="display:flex;justify-content:center;margin-bottom:10px"><span class="mural-ic lg" style="background:${m.tint}">${redeIco(m.ic)}</span></div>
       <p style="font-size:14px;line-height:1.6;color:var(--txs);text-align:center;margin:0">${esc(m.d)}</p>
-      <p style="font-size:12.5px;color:var(--txm);text-align:center;margin-top:10px">Ainda estamos organizando os primeiros encontros. Se quiser participar, deixa seu interesse que a gente te avisa quando abrir.</p>
-      <button class="btn" style="width:100%;justify-content:center;margin-top:14px" onclick="interesseMural('${m.k}')">Tenho interesse</button>
+      ${info}
+      ${lista}
+      <button class="btn" style="width:100%;justify-content:center;margin-top:16px" onclick="interesseMural('${m.k}')">Tenho interesse</button>
+      <p style="font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px">As datas ainda são uma prévia. Toque em tenho interesse que a gente confirma sua vaga e te avisa.</p>
     </div></div>`);
 }
 function interesseMural(k){ closeModal(); toast('Anotado. A gente te avisa quando abrir.'); }
+
+function _capa(s,l,big){
+  const lang=l.lang?`<span class="livro-lang">${esc(l.lang)}</span>`:'';
+  return `<span class="livro-capa ${big?'lg':''}" style="background:${s.cor}"><span class="livro-edge"></span>${lang}<span class="livro-t">${esc(l.t)}</span><span class="livro-rule"></span><span class="livro-a">${esc(l.a)}</span></span>`;
+}
+let _bibTema=-1;
+function setBibTema(i){ _bibTema=i; render(); const v=document.getElementById('view'); if(v&&v.scrollIntoView)try{v.scrollIntoView({block:'start'});}catch(e){} }
 
 function listaBiblioteca(){
   const totLiv=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
