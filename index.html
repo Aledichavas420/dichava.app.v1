@@ -16,6 +16,8 @@ if(self!==top){try{top.location=self.location;}catch(e){document.documentElement
   }catch(e){}
   location.replace('/breve/');
 })();</script>
+<script>/* CAPTURA DE INDICAÇÃO: guarda quem indicou (?ref=CODE) pra creditar quando a conta for criada/aberta. */
+(function(){try{var q=new URLSearchParams(location.search);var r=q.get('ref');if(r){r=r.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);if(r&&!localStorage.getItem('dr_ref_by'))localStorage.setItem('dr_ref_by',r);q.delete('ref');var qs=q.toString();history.replaceState(null,'',location.pathname+(qs?'?'+qs:'')+location.hash);}}catch(e){}})();</script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://cloudflareinsights.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2805,6 +2807,7 @@ a{color:inherit;text-decoration:none}
   </div>
   <!-- DICHAVA PREMIUM -->
   <div class="prembanner" id="prem-banner" onclick="abrirPremium()"><span class="pbic">✨</span><div><div class="pbt">Seja dichava premium</div><div class="pbd">Relatórios, temas, backup e mais</div></div><span class="pbar">›</span></div>
+  <div id="indica-banner" onclick="abrirIndica('config')" style="margin:0 18px 14px;border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;background:linear-gradient(120deg,#153726,#2f7d45);color:#fff;box-shadow:0 6px 18px rgba(21,55,38,.28);position:relative;overflow:hidden"><span style="font-size:26px;flex-shrink:0">💚</span><div><div style="font-weight:800;font-size:15px;line-height:1.15">Indique o dichava</div><div style="font-size:12px;opacity:.9;margin-top:1px">Leve esse cuidado pra mais alguém</div></div><span style="margin-left:auto;font-size:22px;opacity:.85">›</span></div>
   <div class="cfgsec" style="margin:0 18px 11px">
     <div class="cfgi" onclick="premDo(abrirRelatorios)"><div class="cfgic">📊</div><div class="cfgb"><div class="cfgn">Relatórios avançados <span class="premlock">🔒 Premium</span></div><div class="cfgd">Tendências, comparações, mapa de calor e PDF</div></div><div class="cfgar">›</div></div>
     <div class="cfgi" onclick="abrirTutorial()"><div class="cfgic"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3.6 2.5 8.2 12 12.8l9.5-4.6Z" fill="#6B43D6"></path><path d="M6.3 11.4v4c0 1.5 2.6 2.7 5.7 2.7s5.7-1.2 5.7-2.7v-4" fill="none" stroke="#6B43D6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21.3 8.6v4.4" fill="none" stroke="#6B43D6" stroke-width="1.9" stroke-linecap="round"></path></svg></div><div class="cfgb"><div class="cfgn">Tutorial do app</div><div class="cfgd">Um tour rápido pelas ferramentas do app</div></div><div class="cfgar">›</div></div>
@@ -3845,6 +3848,25 @@ a{color:inherit;text-decoration:none}
   <div class="mt c" id="minfobox-t">—</div>
   <div style="font-size:14px;color:var(--tx);line-height:1.65;margin:8px 4px 4px" id="minfobox-b"></div>
   <button class="btn bout bfull" onclick="closeMod('minfobox')" style="margin-top:16px">Entendi</button>
+</div></div></div>
+
+<!-- INDIQUE O DICHAVA -->
+<div class="ov" id="mindica" onclick="if(event.target===this)closeMod('mindica')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mindica')" aria-label="Fechar">✕</button>
+  <div id="indica-body"></div>
+</div></div></div>
+
+<!-- CONVITE CONTEXTUAL (nudge) -->
+<div class="ov" id="mindnudge" onclick="if(event.target===this)closeMod('mindnudge')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="text-align:center">
+    <div style="width:64px;height:64px;margin:4px auto 12px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#9CF06B,#5CE3CF);box-shadow:0 8px 20px rgba(92,227,207,.35)"><svg viewBox="0 0 24 24" width="32" height="32" fill="#0c2a1b"><path d="M12 21s-7-4.6-9.2-8.4C1.1 9.3 2.6 5.8 6 5.8c2 0 3.2 1.2 4 2.4.8-1.2 2-2.4 4-2.4 3.4 0 4.9 3.5 3.2 6.8C19 16.4 12 21 12 21Z"/></svg></div>
+    <div class="mt c" style="margin-bottom:6px">Espalhar o cuidado</div>
+    <div id="indnudge-b" style="font-size:14px;color:var(--txs);line-height:1.6;margin:0 6px 16px"></div>
+  </div>
+  <button class="btn bv bfull" onclick="closeMod('mindnudge');abrirIndica(_indicaOrigem)">Indicar o dichava \U0001f49a</button>
+  <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mindnudge')">Agora não</button>
 </div></div></div>
 
 <!-- O QUE SIGNIFICAM (hero) -->
@@ -4936,6 +4958,7 @@ async function doSignup(){
 async function posLogin(){
   document.getElementById('va').classList.remove('on');
   await syncFromCloud();
+  try{registrarIndicacao();}catch(e){}
   const t=ls('dr_termo_'+U.id);
   if(!t){
     showV('vapp');
@@ -5879,7 +5902,7 @@ function salvFiss(){
   document.querySelectorAll('#fiss-subgrid .subbtn').forEach(b=>b.classList.remove('on'));_fissSubs=[];
   document.querySelectorAll('#fiss-emg .emb').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('#fiss-int .ib').forEach(b=>b.classList.remove('on'));
-  _eFiss=null;_fI=null;closeMod('mfiss');vib([20,40,20]);confete();try{addXP(15,'resistencia');}catch(e){}toast('🏆 Registrado! Resistir é um ato de cuidado.');renderHome();try{premNudge('resist');}catch(e){}
+  _eFiss=null;_fI=null;closeMod('mfiss');vib([20,40,20]);confete();try{addXP(15,'resistencia');}catch(e){}toast('🏆 Registrado! Resistir é um ato de cuidado.');renderHome();try{premNudge('resist');}catch(e){}try{setTimeout(function(){nudgeIndica('resist');},1600);}catch(e){}
 }
 
 /* ══ CALENDÁRIO ══ */
@@ -5966,7 +5989,7 @@ function renderMetas(){
     }
     return `<div class="mc ${m.ok?'ok':''}"><div class="mch"><div class="mct">${esc(m.titulo)}</div><span class="mcbg ${m.ok?'bok':'band'}">${m.ok?'✓ Concluída':'Manual'}</span></div><div class="pgb"><div class="pgf" style="width:${m.ok?100:0}%;background:${m.ok?'var(--v)':'var(--cinm)'}"></div></div><button class="mc-btn" onclick="togMeta(${i})">${m.ok?'↩ Desmarcar':'✓ Marcar como concluída'}</button></div>`;
   }).join('');
-  if(mudou){sM(mts);setTimeout(()=>{try{confete();vib([20,40,20]);addXP(25,'meta');toast('🎉 Meta concluída automaticamente!');}catch(e){}},300);}
+  if(mudou){sM(mts);setTimeout(()=>{try{confete();vib([20,40,20]);addXP(25,'meta');toast('🎉 Meta concluída automaticamente!');}catch(e){}try{nudgeIndica('meta');}catch(e){}},300);}
 }
 function abrirCartas(){showV('vcartas');try{renderCartas();}catch(e){}}
 function abrirPerfil(){
@@ -5990,7 +6013,7 @@ function abrirPerfil(){
   openMod('mperfil');
 }
 
-function togMeta(i){const m=gM();m[i].ok=!m[i].ok;sM(m);renderMetas();if(m[i].ok){vib([20,40,20]);confete();}toast(m[i].ok?'🎉 Meta concluída!':'Meta desmarcada.');}
+function togMeta(i){const m=gM();m[i].ok=!m[i].ok;sM(m);renderMetas();if(m[i].ok){vib([20,40,20]);confete();try{setTimeout(function(){nudgeIndica('meta');},1300);}catch(e){}}toast(m[i].ok?'🎉 Meta concluída!':'Meta desmarcada.');}
 
 function addMetaLimite(){
   const inp=document.getElementById('ml-num');const n=Math.max(0,parseInt(inp.value||'0',10)||0);
@@ -6200,6 +6223,141 @@ function responderCarta(){
   const q=document.getElementById('rcard-q').textContent;
   goPg('p-ref');
   setTimeout(()=>{const ta=document.getElementById('cmpta');if(!ta)return;ta.value=q+'\n\n';expCmp();autoR(ta);ta.focus();},80);
+}
+/* ═══════════ INDIQUE O DICHAVA (indicações / crescimento) ═══════════ */
+var _indicaOrigem='', _indicaReaisN=null;
+function _refCode(){
+  var base=(typeof U!=='undefined'&&U&&U.id&&U.id!=='demo')?U.id:null;
+  if(!base){try{base=localStorage.getItem('dr_anon');if(!base){base='anon'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('dr_anon',base);}}catch(e){base='anon';}}
+  var h=5381;for(var i=0;i<base.length;i++){h=((h<<5)+h+base.charCodeAt(i))>>>0;}
+  return ('D'+h.toString(36).toUpperCase()).slice(0,7);
+}
+function _refLink(){return 'https://dichava.app/?ref='+_refCode();}
+function indicaMsgPadrao(){return 'Tô usando um app que me ajuda a cuidar de mim no meu ritmo, com calma e sem julgamento. Acho que pode te fazer bem também. É gratuito pra começar \U0001f49a';}
+function indicaEnviadas(){try{return +(localStorage.getItem('dr_indica_env')||0);}catch(e){return 0;}}
+function _bumpEnviadas(){try{var n=indicaEnviadas()+1;localStorage.setItem('dr_indica_env',n);return n;}catch(e){return 0;}}
+async function indicaReais(){
+  try{
+    if(!_SB||typeof U==='undefined'||!U||U.id==='demo')return null;
+    var r=await _SB.rpc('indicacoes_contar',{p_code:_refCode()});
+    if(r.error)return null;
+    var d=r.data;
+    return typeof d==='number'?d:(Array.isArray(d)?(d[0]||0):(d==null?null:+d));
+  }catch(e){return null;}
+}
+async function registrarIndicacao(){
+  try{
+    if(!_SB||typeof U==='undefined'||!U||U.id==='demo')return;
+    var code=localStorage.getItem('dr_ref_by');
+    if(!code||code===_refCode())return;
+    var r=await _SB.from('indicacoes').insert({referrer_code:code});
+    if(!r.error){localStorage.removeItem('dr_ref_by');}
+    else if(/duplicate|unique|indicado_id|already/i.test(r.error.message||'')){localStorage.removeItem('dr_ref_by');}
+    /* outros erros (ex.: tabela ainda não criada) mantêm pra tentar de novo depois */
+  }catch(e){}
+}
+function abrirIndica(origem){
+  _indicaReaisN=null;
+  openMod('mindica');
+  renderIndicaBody(origem);
+  indicaReais().then(function(n){ if(n!=null){ _indicaReaisN=n; var m=document.getElementById('mindica'); if(m&&m.classList.contains('on'))renderIndicaBody(_indicaOrigem);} });
+}
+function renderIndicaBody(origem){
+  _indicaOrigem=origem||_indicaOrigem||'';
+  var prev=document.getElementById('indica-msg');
+  var msgAtual=(prev&&prev.value)?prev.value:indicaMsgPadrao();
+  var env=indicaEnviadas(), reais=_indicaReaisN;
+  var semeador=(reais!=null&&reais>=1)||env>=3;
+  var impacto;
+  if(reais!=null&&reais>0){impacto='<b style="font-size:30px;color:var(--ve)">'+reais+'</b> '+(reais===1?'pessoa entrou':'pessoas entraram')+' pelo seu convite \U0001f331';}
+  else if(env>0){impacto='Você já enviou <b>'+env+'</b> '+(env===1?'convite':'convites')+'. Cada um pode mudar o dia de alguém.';}
+  else{impacto='Ninguém precisa passar por isso sozinho. Um convite seu pode ser o começo.';}
+  var badge=semeador?'<div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--ve);background:var(--vf);border-radius:999px;padding:4px 11px;margin-top:10px">\U0001f331 Você semeia cuidado</div>':'';
+  var link=_refLink();
+  var body=document.getElementById('indica-body');
+  if(!body)return;
+  body.innerHTML=
+  '<div style="text-align:center">'
+   +'<div style="width:66px;height:66px;margin:2px auto 12px;border-radius:22px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#9CF06B,#5CE3CF);box-shadow:0 8px 20px rgba(92,227,207,.35)"><svg viewBox="0 0 24 24" width="34" height="34" fill="#0c2a1b"><path d="M12 21s-7-4.6-9.2-8.4C1.1 9.3 2.6 5.8 6 5.8c2 0 3.2 1.2 4 2.4.8-1.2 2-2.4 4-2.4 3.4 0 4.9 3.5 3.2 6.8C19 16.4 12 21 12 21Z"/></svg></div>'
+   +'<div class="mt c" style="margin-bottom:4px">Leve o dichava pra alguém</div>'
+   +'<p style="font-size:13.5px;color:var(--txs);line-height:1.6;margin:0 8px">'+impacto+'</p>'
+   +badge
+  +'</div>'
+  +'<div style="margin-top:18px">'
+   +'<label style="font-size:12px;font-weight:700;color:var(--txs);display:block;margin-bottom:6px">Sua mensagem (edite como quiser)</label>'
+   +'<textarea id="indica-msg" rows="4" oninput="this.style.height=\'auto\';this.style.height=this.scrollHeight+\'px\'" style="width:100%;box-sizing:border-box;border:1.5px solid var(--cinm);border-radius:14px;padding:12px 13px;font-family:inherit;font-size:14px;color:var(--tx);background:var(--cin);resize:none;line-height:1.5">'+esc(msgAtual)+'</textarea>'
+  +'</div>'
+  +'<div style="display:flex;align-items:center;gap:8px;margin-top:12px;background:var(--cin);border:1px dashed var(--cinm);border-radius:12px;padding:10px 12px">'
+   +'<span style="font-size:12.5px;color:var(--txs);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(link)+'</span>'
+   +'<button onclick="copiarLinkIndica()" style="border:none;background:var(--v);color:#fff;font-weight:800;font-size:12px;border-radius:9px;padding:7px 12px;cursor:pointer">Copiar</button>'
+  +'</div>'
+  +'<button class="btn bv bfull" style="margin-top:16px" onclick="compartilharIndica()">Compartilhar convite \U0001f49a</button>'
+  +'<button class="btn bfull" style="margin-top:9px;background:#25D366;color:#fff" onclick="indicaWhats()">Enviar no WhatsApp</button>'
+  +'<p style="font-size:11px;color:var(--txm);text-align:center;line-height:1.55;margin:14px 6px 2px">O convite é discreto: não revela nada sobre você nem sobre o motivo do uso. Quem entrar pelo seu link ajuda a rede a crescer.</p>';
+}
+function indicaCanvas(){
+  var W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;var x=cv.getContext('2d');
+  var G1='#9CF06B',G2='#5CE3CF',CREAM='#EAF7EE';
+  var g=x.createRadialGradient(W/2,H*0.34,80,W/2,H*0.5,H*0.85);g.addColorStop(0,'#1e5638');g.addColorStop(.55,'#123c27');g.addColorStop(1,'#0c2a1b');
+  x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.fillStyle='rgba(156,240,107,.09)';for(var i=0;i<380;i++){x.beginPath();x.arc(Math.random()*W,Math.random()*H,Math.random()*2.1,0,7);x.fill();}
+  x.strokeStyle='rgba(156,240,107,.85)';x.lineWidth=4;rrect(x,44,44,W-88,H-88,34);x.stroke();
+  x.strokeStyle='rgba(92,227,207,.28)';x.lineWidth=14;rrect(x,66,66,W-132,H-132,26);x.stroke();
+  x.textAlign='center';
+  var cx=W/2,cy=430;var eg=x.createLinearGradient(cx-110,cy-110,cx+110,cy+110);eg.addColorStop(0,G1);eg.addColorStop(1,G2);
+  x.save();x.translate(cx,cy);x.scale(11,11);x.fillStyle=eg;
+  x.beginPath();x.moveTo(0,7);x.bezierCurveTo(-1,5.6,-8,1.2,-8,-3.2);x.bezierCurveTo(-8,-6.2,-5.6,-8,-3.2,-8);x.bezierCurveTo(-1.4,-8,-.2,-6.8,0,-5.8);x.bezierCurveTo(.2,-6.8,1.4,-8,3.2,-8);x.bezierCurveTo(5.6,-8,8,-6.2,8,-3.2);x.bezierCurveTo(8,1.2,1,5.6,0,7);x.closePath();x.fill();
+  x.restore();
+  x.fillStyle=CREAM;x.font='800 62px DM Sans, sans-serif';
+  wrapText(x,'Um cuidado que cabe no seu tempo',W/2,720,W-220,76);
+  x.fillStyle='#BFE8CC';x.font='italic 36px DM Sans, sans-serif';
+  wrapText(x,'No seu ritmo, com calma e sem julgamento.',W/2,900,W-280,50);
+  x.font='800 46px DM Sans, sans-serif';
+  var label='dichava.app';var bw=Math.min(W-260,x.measureText(label).width+150),bh=98,bx=(W-bw)/2,by=H-300;
+  var bg=x.createLinearGradient(0,by,0,by+bh);bg.addColorStop(0,G1);bg.addColorStop(1,G2);x.fillStyle=bg;rrect(x,bx,by,bw,bh,49);x.fill();
+  x.fillStyle='#0c2a1b';x.textBaseline='middle';x.fillText(label,W/2,by+bh/2+2);x.textBaseline='alphabetic';
+  x.fillStyle='rgba(234,247,238,.72)';x.font='500 30px DM Sans, sans-serif';x.fillText('um convite de quem cuida de você',W/2,H-150);
+  return cv;
+}
+async function compartilharIndica(){
+  var msg=((document.getElementById('indica-msg')||{}).value||indicaMsgPadrao()).trim();
+  var full=msg+'\n\n'+_refLink();
+  try{
+    var cv=indicaCanvas();
+    var blob=await new Promise(function(res){cv.toBlob(res,'image/png');});
+    var file=new File([blob],'dichava.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],text:full}); }
+    else if(navigator.share){ await navigator.share({title:'dichava',text:full}); }
+    else { var a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='dichava.png';a.click(); try{await navigator.clipboard.writeText(full);}catch(_){} toast('\U0001f5bc️ Imagem baixada e mensagem copiada!'); }
+    _bumpEnviadas(); renderIndicaBody(_indicaOrigem);
+  }catch(e){ if(e&&e.name==='AbortError')return; toast('Não consegui compartilhar agora.'); }
+}
+function indicaWhats(){
+  var msg=((document.getElementById('indica-msg')||{}).value||indicaMsgPadrao()).trim();
+  var full=msg+'\n\n'+_refLink();
+  try{window.open('https://wa.me/?text='+encodeURIComponent(full),'_blank');}catch(e){}
+  _bumpEnviadas(); renderIndicaBody(_indicaOrigem);
+}
+async function copiarLinkIndica(){
+  try{await navigator.clipboard.writeText(_refLink());toast('\U0001f517 Link copiado!');}
+  catch(e){toast('Seu link: '+_refLink());}
+}
+function _podeNudgeIndica(){
+  try{ if(typeof U==='undefined'||!U||U.id==='demo')return false;
+    var last=+(localStorage.getItem('dr_indnudge_ts')||0);
+    return (Date.now()-last)>4*864e5; }catch(e){return false;}
+}
+function nudgeIndica(origem){
+  if(!_podeNudgeIndica())return;
+  try{localStorage.setItem('dr_indnudge_ts',Date.now());}catch(e){}
+  _indicaOrigem=origem||'';
+  var txt=({
+    resist:'Você acabou de cuidar de você. Alguém que você conhece pode estar precisando disso também.',
+    meta:'Você concluiu uma meta \U0001f331 Que tal levar essa ferramenta pra alguém que também merece esse cuidado?',
+    relatorio:'Seu progresso mostra que o dichava tem te ajudado. Quem mais poderia começar hoje?'
+  })[origem]||'Se o dichava te faz bem, ele pode fazer bem pra mais alguém.';
+  var b=document.getElementById('indnudge-b'); if(b)b.textContent=txt;
+  openMod('mindnudge');
 }
 function renderDicaRef(goal){
   const d=dica(goal);document.getElementById('dica-ref').innerHTML=`<div style="background:#fff;border-radius:16px;border:1px solid var(--cinm);padding:15px"><div style="font-size:25px;margin-bottom:7px">${d.i}</div><div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:5px">${d.t}</div><div style="font-size:13px;color:var(--txs);line-height:1.6">${d.x}</div></div>`;
@@ -7905,7 +8063,7 @@ function tutRender(){
 /* ══ RELATÓRIOS AVANÇADOS (premium) ══ */
 let _relDias=30;
 function isoNAgo(n){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n);return isoLocal(d);}
-function abrirRelatorios(){_relDias=30;showV('vrelatorios');relChips();renderRelatorio();}
+function abrirRelatorios(){_relDias=30;showV('vrelatorios');relChips();renderRelatorio();try{setTimeout(function(){nudgeIndica('relatorio');},1000);}catch(e){}}
 function relSet(d){_relDias=d;relChips();renderRelatorio();}
 function relChips(){document.querySelectorAll('#rel-periods .relchip').forEach(c=>c.classList.toggle('on',+c.dataset.d===_relDias));}
 function relStats(ini,fim){
@@ -9624,6 +9782,7 @@ setTimeout(function(){
     // restaura os dados da nuvem no init (crucial em aparelho/domínio novo,
     // senão o usuário parece "novo" e cai no onboarding sem seus dados)
     try{await syncFromCloud();}catch(e){}
+    try{registrarIndicacao();}catch(e){}
     // 1º acesso após confirmar o e-mail: reconstrói o onboarding salvo no cadastro
     try{const md=sbU.user_metadata||{};if(!gO()&&md.ob&&md.ob.goal)aplicarOnboardMeta(md.ob);}catch(e){}
   } else {
