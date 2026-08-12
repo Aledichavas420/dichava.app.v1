@@ -3917,13 +3917,13 @@ function renderContratos(){
     const aceito=c.status==='aceito';
     const chip=aceito?`<span class="chip v">✓ Aceito</span>`:`<span class="chip a">Aguardando aceite</span>`;
     return `<div class="card" style="padding:16px 18px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:15px">${esc(c.titulo)}</b>${chip}${(c.dados&&c.dados.tipo==='estruturado')?'<span class="chip b">Estruturado</span>':''}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:15px">${esc(c.titulo)}</b>${chip}${(c.dados&&c.dados.tipo==='estruturado')?'<span class="chip b">Estruturado</span>':''}${(c.dados&&c.dados.importado)?'<span class="chip v">Importado</span>':''}</div>
       <div style="font-size:13px;color:var(--txs);margin:4px 0 12px">${c.paciente_nome?esc(c.paciente_nome)+' · ':''}${aceito?('aceito por '+esc(c.aceite_nome)+' em '+fmtDT(c.aceite_em)):('criado em '+fmtDT(c.criado_em))}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn sm" onclick="copiarLinkContrato('${c.id}')">🔗 Copiar link</button>
         <button class="btn ghost sm" onclick="verContrato('${c.id}')">Ver / imprimir</button>
         ${aceito?'':`<button class="btn ghost sm" onclick="${(c.dados&&c.dados.tipo==='estruturado')?'formContratoEstrut':'formContrato'}('${c.id}')">Editar</button>`}
-        <button class="btn danger ghost sm" onclick="delContrato('${c.id}')">Excluir</button>
+        ${(aceito && c.dados && c.dados.pac && c.dados.pac.nome && !c.dados.importado)?`<button class="btn sm" onclick="importarContratoPaciente('${c.id}')">＋ Importar pro paciente</button>`:''}<button class="btn danger ghost sm" onclick="delContrato('${c.id}')">Excluir</button>
       </div>
     </div>`;
   }).join('');
@@ -4039,6 +4039,32 @@ async function salvarContratoEstrut(id){
     else { var ins=await _SB.from('contratos').insert({prof_id:AUTH.id,titulo:tit,paciente_nome:pacNome,texto:texto,dados:dados}); if(ins.error)throw ins.error; }
     closeModal(); toast('✓ Contrato salvo'); carregarContratos();
   }catch(e){ var m=(e&&e.message)||''; toast(/dados/.test(m)?'Rode o contrato-estruturado-setup.sql no Supabase primeiro.':'Erro ao salvar: '+m,5000); }
+}
+async function importarContratoPaciente(id){
+  var c=CONTRATOS.find(function(x){return x.id===id;}); if(!c)return;
+  var pac=(c.dados&&c.dados.pac)||{};
+  var nome=((pac.nome||c.aceite_nome||c.paciente_nome||'')+'').trim();
+  if(!nome){ toast('Sem dados do paciente pra importar.',3000); return; }
+  if(!confirm('Importar os dados de "'+nome+'" pro cadastro do paciente e registrar no prontuário?')) return;
+  var norm=function(s){return (s||'').trim().toLowerCase();};
+  var cpfd=function(s){return (s||'').replace(/\D/g,'');};
+  var p=DB.pacientes.find(function(x){ return norm(x.nome)===norm(nome) || (pac.cpf&&x.cpf&&cpfd(x.cpf)===cpfd(pac.cpf)); });
+  var from={ nome:nome, nascimento:pac.nascimento||'', telefone:pac.telefone||'', email:pac.email||'', cpf:pac.cpf||'', endereco:pac.cidade||'', emergNome:pac.emerg_nome||'', emergTel:pac.emerg_telefone||'', emergParen:pac.emerg_relacao||'' };
+  if(p){
+    ['nascimento','telefone','email','cpf','endereco','emergNome','emergTel','emergParen'].forEach(function(k){ if(!p[k] && from[k]) p[k]=from[k]; });
+    if(pac.profissao){ var o='Profissão: '+pac.profissao; p.obs=(p.obs?p.obs+'\n':'')+o; }
+  } else {
+    p={ id:uid(), nome:nome, nascimento:from.nascimento, telefone:from.telefone, email:from.email, cpf:from.cpf, endereco:from.endereco, emergNome:from.emergNome, emergTel:from.emergTel, emergParen:from.emergParen, obs:(pac.profissao?('Profissão: '+pac.profissao):''), tags:['contrato'], status:'ativo', criadoEm:now() };
+    DB.pacientes.push(p);
+  }
+  var docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
+  var pr=(c.dados&&c.dados.prof)||{};
+  var resumo=[pr.modalidade?('Modalidade: '+pr.modalidade):'', pr.valor?('Valor por sessão: R$ '+pr.valor):'', pr.frequencia?('Frequência: '+pr.frequencia):''].filter(Boolean).join(' · ');
+  var texto='Contrato terapêutico "'+(c.titulo||'')+'" aceito eletronicamente por '+(c.aceite_nome||nome)+' em '+fmtDT(c.aceite_em)+'. Documento nº '+docNum+'.'+(resumo?('\n'+resumo):'');
+  DB.prontuarios.push({ id:uid(), pacienteId:p.id, data:todayISO(), tipo:'Contrato', texto:texto, agendamentoId:null, profId:(AUTH&&AUTH.id)||null, profNome:(AUTH&&AUTH.nome)||'', criadoEm:now() });
+  try{ save(); }catch(e){}
+  try{ if(_SB){ var nd=Object.assign({},c.dados||{},{importado:true}); await _SB.from('contratos').update({dados:nd}).eq('id',id); c.dados=nd; } }catch(e){}
+  toast('✓ Dados importados pro paciente e prontuário'); renderContratos();
 }
 function copiarLinkContrato(id){ const url='https://dichava.app/contrato/?id='+id; try{navigator.clipboard.writeText(url);toast('🔗 Link copiado — envie ao paciente');}catch(e){toast(url);} }
 function verContrato(id){
