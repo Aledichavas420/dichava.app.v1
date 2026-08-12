@@ -2807,7 +2807,7 @@ a{color:inherit;text-decoration:none}
   </div>
   <!-- DICHAVA PREMIUM -->
   <div class="prembanner" id="prem-banner" onclick="abrirPremium()"><span class="pbic">✨</span><div><div class="pbt">Seja dichava premium</div><div class="pbd">Relatórios, temas, backup e mais</div></div><span class="pbar">›</span></div>
-  <div id="indica-banner" onclick="abrirIndica('config')" style="margin:0 18px 14px;border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;background:linear-gradient(120deg,#153726,#2f7d45);color:#fff;box-shadow:0 6px 18px rgba(21,55,38,.28);position:relative;overflow:hidden"><span style="font-size:26px;flex-shrink:0">💚</span><div><div style="font-weight:800;font-size:15px;line-height:1.15">Indique o dichava</div><div style="font-size:12px;opacity:.9;margin-top:1px">Leve esse cuidado pra mais alguém</div></div><span style="margin-left:auto;font-size:22px;opacity:.85">›</span></div>
+  <div id="indica-banner" onclick="abrirIndica('config')" style="margin:0 18px 14px;border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;background:linear-gradient(120deg,#153726,#2f7d45);color:#fff;box-shadow:0 6px 18px rgba(21,55,38,.28);position:relative;overflow:hidden"><span style="flex-shrink:0;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16)"><svg viewBox="0 0 24 24" width="22" height="22" fill="#EAF7EE"><path d="M12 21s-7-4.6-9.2-8.4C1.1 9.3 2.6 5.8 6 5.8c2 0 3.2 1.2 4 2.4.8-1.2 2-2.4 4-2.4 3.4 0 4.9 3.5 3.2 6.8C19 16.4 12 21 12 21Z"/></svg></span><div><div style="font-weight:800;font-size:15px;line-height:1.15">Indique o dichava</div><div style="font-size:12px;opacity:.9;margin-top:1px">Leve esse cuidado pra mais alguém</div></div><span style="margin-left:auto;font-size:22px;opacity:.85">›</span></div>
   <div class="cfgsec" style="margin:0 18px 11px">
     <div class="cfgi" onclick="premDo(abrirRelatorios)"><div class="cfgic">📊</div><div class="cfgb"><div class="cfgn">Relatórios avançados <span class="premlock">🔒 Premium</span></div><div class="cfgd">Tendências, comparações, mapa de calor e PDF</div></div><div class="cfgar">›</div></div>
     <div class="cfgi" onclick="abrirTutorial()"><div class="cfgic"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3.6 2.5 8.2 12 12.8l9.5-4.6Z" fill="#6B43D6"></path><path d="M6.3 11.4v4c0 1.5 2.6 2.7 5.7 2.7s5.7-1.2 5.7-2.7v-4" fill="none" stroke="#6B43D6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21.3 8.6v4.4" fill="none" stroke="#6B43D6" stroke-width="1.9" stroke-linecap="round"></path></svg></div><div class="cfgb"><div class="cfgn">Tutorial do app</div><div class="cfgd">Um tour rápido pelas ferramentas do app</div></div><div class="cfgar">›</div></div>
@@ -3865,7 +3865,7 @@ a{color:inherit;text-decoration:none}
     <div class="mt c" style="margin-bottom:6px">Espalhar o cuidado</div>
     <div id="indnudge-b" style="font-size:14px;color:var(--txs);line-height:1.6;margin:0 6px 16px"></div>
   </div>
-  <button class="btn bv bfull" onclick="closeMod('mindnudge');abrirIndica(_indicaOrigem)">Indicar o dichava 💚</button>
+  <button class="btn bv bfull" onclick="closeMod('mindnudge');abrirIndica(_indicaOrigem)">Indicar o dichava</button>
   <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mindnudge')">Agora não</button>
 </div></div></div>
 
@@ -6226,6 +6226,9 @@ function responderCarta(){
 }
 /* ═══════════ INDIQUE O DICHAVA (indicações / crescimento) ═══════════ */
 var _indicaOrigem='', _indicaReaisN=null;
+function _icoHeart(sz,fill){return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="'+(fill||'currentColor')+'" style="vertical-align:-2px"><path d="M12 21s-7-4.6-9.2-8.4C1.1 9.3 2.6 5.8 6 5.8c2 0 3.2 1.2 4 2.4.8-1.2 2-2.4 4-2.4 3.4 0 4.9 3.5 3.2 6.8C19 16.4 12 21 12 21Z"/></svg>';}
+function _icoSprout(sz){return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="currentColor" style="vertical-align:-2px"><rect x="11.1" y="11" width="1.8" height="11" rx="0.9"/><path d="M12 14c-3.3 0-6-2.7-6-6 3.3 0 6 2.7 6 6Z"/><path d="M12 12c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6Z"/></svg>';}
+function _icoWhats(sz){return '<svg viewBox="0 0 32 32" width="'+sz+'" height="'+sz+'" fill="currentColor" style="vertical-align:-3px"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.1.6 4.2 1.6 6L4 27l6.2-1.6c1.7.9 3.7 1.4 5.8 1.4 6.6 0 12-5.4 12-12S22.6 3 16 3Zm0 21.8c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4c-1-1.6-1.5-3.4-1.5-5.2C6.6 9.8 10.8 5.6 16 5.6S25.4 9.8 25.4 15 21.2 24.8 16 24.8Zm5.4-7c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.8.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.5-.3Z"/></svg>';}
 function _refCode(){
   var base=(typeof U!=='undefined'&&U&&U.id&&U.id!=='demo')?U.id:null;
   if(!base){try{base=localStorage.getItem('dr_anon');if(!base){base='anon'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('dr_anon',base);}}catch(e){base='anon';}}
@@ -6233,7 +6236,7 @@ function _refCode(){
   return ('D'+h.toString(36).toUpperCase()).slice(0,7);
 }
 function _refLink(){return 'https://dichava.app/?ref='+_refCode();}
-function indicaMsgPadrao(){return 'Tô usando um app que me ajuda a cuidar de mim no meu ritmo, com calma e sem julgamento. Acho que pode te fazer bem também. É gratuito pra começar 💚';}
+function indicaMsgPadrao(){return 'Tô usando um app que me ajuda a cuidar de mim no meu ritmo, com calma e sem julgamento. Acho que pode te fazer bem também. É gratuito pra começar.';}
 function indicaEnviadas(){try{return +(localStorage.getItem('dr_indica_env')||0);}catch(e){return 0;}}
 function _bumpEnviadas(){try{var n=indicaEnviadas()+1;localStorage.setItem('dr_indica_env',n);return n;}catch(e){return 0;}}
 async function indicaReais(){
@@ -6269,10 +6272,10 @@ function renderIndicaBody(origem){
   var env=indicaEnviadas(), reais=_indicaReaisN;
   var semeador=(reais!=null&&reais>=1)||env>=3;
   var impacto;
-  if(reais!=null&&reais>0){impacto='<b style="font-size:30px;color:var(--ve)">'+reais+'</b> '+(reais===1?'pessoa entrou':'pessoas entraram')+' pelo seu convite 🌱';}
+  if(reais!=null&&reais>0){impacto='<b style="font-size:30px;color:var(--ve)">'+reais+'</b> '+(reais===1?'pessoa entrou':'pessoas entraram')+' pelo seu convite <span style="color:var(--ve)">'+_icoSprout(15)+'</span>';}
   else if(env>0){impacto='Você já enviou <b>'+env+'</b> '+(env===1?'convite':'convites')+'. Cada um pode mudar o dia de alguém.';}
   else{impacto='Ninguém precisa passar por isso sozinho. Um convite seu pode ser o começo.';}
-  var badge=semeador?'<div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--ve);background:var(--vf);border-radius:999px;padding:4px 11px;margin-top:10px">🌱 Você semeia cuidado</div>':'';
+  var badge=semeador?'<div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--ve);background:var(--vf);border-radius:999px;padding:4px 11px;margin-top:10px">'+_icoSprout(13)+' Você semeia cuidado</div>':'';
   var link=_refLink();
   var body=document.getElementById('indica-body');
   if(!body)return;
@@ -6291,8 +6294,8 @@ function renderIndicaBody(origem){
    +'<span style="font-size:12.5px;color:var(--txs);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(link)+'</span>'
    +'<button onclick="copiarLinkIndica()" style="border:none;background:var(--v);color:#fff;font-weight:800;font-size:12px;border-radius:9px;padding:7px 12px;cursor:pointer">Copiar</button>'
   +'</div>'
-  +'<button class="btn bv bfull" style="margin-top:16px" onclick="compartilharIndica()">Compartilhar convite 💚</button>'
-  +'<button class="btn bfull" style="margin-top:9px;background:#25D366;color:#fff" onclick="indicaWhats()">Enviar no WhatsApp</button>'
+  +'<button class="btn bv bfull" style="margin-top:16px" onclick="compartilharIndica()">'+_icoHeart(16,'#fff')+' Compartilhar convite</button>'
+  +'<button class="btn bfull" style="margin-top:9px;background:#25D366;color:#fff" onclick="indicaWhats()">'+_icoWhats(18)+' Enviar no WhatsApp</button>'
   +'<p style="font-size:11px;color:var(--txm);text-align:center;line-height:1.55;margin:14px 6px 2px">O convite é discreto: não revela nada sobre você nem sobre o motivo do uso. Quem entrar pelo seu link ajuda a rede a crescer.</p>';
 }
 function indicaCanvas(){
@@ -6309,9 +6312,9 @@ function indicaCanvas(){
   x.beginPath();x.moveTo(0,7);x.bezierCurveTo(-1,5.6,-8,1.2,-8,-3.2);x.bezierCurveTo(-8,-6.2,-5.6,-8,-3.2,-8);x.bezierCurveTo(-1.4,-8,-.2,-6.8,0,-5.8);x.bezierCurveTo(.2,-6.8,1.4,-8,3.2,-8);x.bezierCurveTo(5.6,-8,8,-6.2,8,-3.2);x.bezierCurveTo(8,1.2,1,5.6,0,7);x.closePath();x.fill();
   x.restore();
   x.fillStyle=CREAM;x.font='800 62px DM Sans, sans-serif';
-  wrapText(x,'Um cuidado que cabe no seu tempo',W/2,720,W-220,76);
+  wrapText(x,'Você também merece esse cuidado',W/2,700,W-210,76);
   x.fillStyle='#BFE8CC';x.font='italic 36px DM Sans, sans-serif';
-  wrapText(x,'No seu ritmo, com calma e sem julgamento.',W/2,900,W-280,50);
+  wrapText(x,'Um espaço pra se acompanhar, no seu ritmo.',W/2,905,W-280,50);
   x.font='800 46px DM Sans, sans-serif';
   var label='dichava.app';var bw=Math.min(W-260,x.measureText(label).width+150),bh=98,bx=(W-bw)/2,by=H-300;
   var bg=x.createLinearGradient(0,by,0,by+bh);bg.addColorStop(0,G1);bg.addColorStop(1,G2);x.fillStyle=bg;rrect(x,bx,by,bw,bh,49);x.fill();
@@ -6328,7 +6331,7 @@ async function compartilharIndica(){
     var file=new File([blob],'dichava.png',{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],text:full}); }
     else if(navigator.share){ await navigator.share({title:'dichava',text:full}); }
-    else { var a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='dichava.png';a.click(); try{await navigator.clipboard.writeText(full);}catch(_){} toast('🖼️ Imagem baixada e mensagem copiada!'); }
+    else { var a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='dichava.png';a.click(); try{await navigator.clipboard.writeText(full);}catch(_){} toast('Imagem baixada e mensagem copiada!'); }
     _bumpEnviadas(); renderIndicaBody(_indicaOrigem);
   }catch(e){ if(e&&e.name==='AbortError')return; toast('Não consegui compartilhar agora.'); }
 }
@@ -6339,7 +6342,7 @@ function indicaWhats(){
   _bumpEnviadas(); renderIndicaBody(_indicaOrigem);
 }
 async function copiarLinkIndica(){
-  try{await navigator.clipboard.writeText(_refLink());toast('🔗 Link copiado!');}
+  try{await navigator.clipboard.writeText(_refLink());toast('Link copiado!');}
   catch(e){toast('Seu link: '+_refLink());}
 }
 function _podeNudgeIndica(){
@@ -6353,7 +6356,7 @@ function nudgeIndica(origem){
   _indicaOrigem=origem||'';
   var txt=({
     resist:'Você acabou de cuidar de você. Alguém que você conhece pode estar precisando disso também.',
-    meta:'Você concluiu uma meta 🌱 Que tal levar essa ferramenta pra alguém que também merece esse cuidado?',
+    meta:'Você concluiu uma meta. Que tal levar essa ferramenta pra alguém que também merece esse cuidado?',
     relatorio:'Seu progresso mostra que o dichava tem te ajudado. Quem mais poderia começar hoje?'
   })[origem]||'Se o dichava te faz bem, ele pode fazer bem pra mais alguém.';
   var b=document.getElementById('indnudge-b'); if(b)b.textContent=txt;
