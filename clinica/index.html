@@ -637,6 +637,17 @@ body.has-demo-banner{padding-bottom:64px}
 .biblio-hero-s{font-size:12.5px;color:rgba(255,255,255,.92);line-height:1.5;margin-top:3px}
 .biblio-hero-pills{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
 .biblio-hero-pills span{font-size:11px;font-weight:800;background:rgba(255,255,255,.18);color:#fff;padding:4px 11px;border-radius:999px;letter-spacing:.3px}
+.mitem-cal{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--v);text-decoration:none}
+.rede-destaque{display:flex;align-items:center;gap:13px;width:100%;text-align:left;margin:8px 0 2px;background:linear-gradient(135deg,#E9F7EE,var(--card));border:1px solid var(--vc);border-radius:16px;padding:13px 15px;cursor:pointer;box-shadow:var(--sh);transition:.15s}
+.rede-destaque:hover{transform:translateY(-2px)}
+.rd-data{flex:0 0 auto;width:52px;text-align:center;background:#fff;border:1px solid var(--vc);border-radius:12px;padding:7px 0}
+.rd-data b{display:block;font-size:19px;font-weight:800;color:var(--ve);line-height:1}
+.rd-data span{font-size:10px;text-transform:uppercase;color:var(--txm);font-weight:700}
+.rd-body{flex:1;min-width:0;display:flex;flex-direction:column}
+.rd-tag{align-self:flex-start;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--ve);background:#fff;border:1px solid var(--vc);border-radius:999px;padding:2px 8px;margin-bottom:3px}
+.rd-t{font-size:14.5px;font-weight:800;color:var(--tx);line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rd-m{font-size:12px;color:var(--txs);margin-top:1px}
+.rd-go{flex:0 0 auto;color:var(--txm);font-size:20px}
 </style>
 </head>
 <body>
@@ -1490,9 +1501,35 @@ function viewRede(){
   return redeHome();
 }
 function irRede(v){ _redeView=v; _cursoAtual=null; _aulaAtual=null; _bibTema=-1; render(); window.scrollTo(0,0); }
+function _pad2(n){ return String(n).padStart(2,'0'); }
+function gcalUrl(i, area){
+  const dur = area==='eventos'?120:90;
+  const parts=(i.data||'').split('-').map(Number); const Y=parts[0],M=parts[1],D=parts[2];
+  const enc=encodeURIComponent;
+  const text=(i.titulo||'Encontro')+' - Rede dichava';
+  const det=((i.sub?i.sub+' - ':'')+'Encontro da Rede dichava.');
+  let dates; const hm=/(\d{1,2})h(\d{0,2})/.exec(i.hora||'');
+  if(hm){ const h=+hm[1], mi=hm[2]?+hm[2]:0; const s=new Date(Y,M-1,D,h,mi); const e=new Date(s.getTime()+dur*60000);
+    const f=d=>''+d.getFullYear()+_pad2(d.getMonth()+1)+_pad2(d.getDate())+'T'+_pad2(d.getHours())+_pad2(d.getMinutes())+'00';
+    dates=f(s)+'/'+f(e);
+  } else { const f=(yy,mm,dd)=>''+yy+_pad2(mm)+_pad2(dd); const e=new Date(Y,M-1,D+1);
+    dates=f(Y,M,D)+'/'+f(e.getFullYear(),e.getMonth()+1,e.getDate()); }
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+enc(text)+'&dates='+dates+'&details='+enc(det)+'&ctz=America/Sao_Paulo';
+}
+function fmtDataExt(iso){ const d=new Date(iso+'T12:00:00'); const dias=['dom','seg','ter','qua','qui','sex','sáb'];
+  const mm=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  return dias[d.getDay()]+', '+d.getDate()+' de '+mm[d.getMonth()]; }
+function proxDestaque(){ let hoje; try{hoje=todayISO();}catch(e){hoje='';} let best=null;
+  MURAL.forEach(m=>(m.itens||[]).forEach(i=>{ if(i.data>=hoje){ if(!best||i.data<best.data) best=Object.assign({},i,{area:m.k,areaNome:m.t,ic:m.ic,tint:m.tint}); } }));
+  return best; }
 function redeHome(){
   const heroMark=cicUniq(`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#fff" stroke-width="1.5" opacity=".92"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#fff"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>`);
   const totC=CURSOS.length, totL=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
+  const dq=proxDestaque();
+  const destaque=dq?`<button class="rede-destaque" onclick="abrirMural('${dq.area}')">
+      <span class="rd-data"><b>${fmtDMural(dq.data).dia}</b><span>${fmtDMural(dq.data).mes}</span></span>
+      <span class="rd-body"><span class="rd-tag">Em destaque</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+esc(dq.hora):''} · ${fmtDataExt(dq.data)}</span></span>
+      <span class="rd-go">›</span></button>`:'';
   const mural=MURAL.map(m=>{ const px=muralProx(m); const pb=px?fmtDMural(px):null;
     const badge=pb?`<span class="mural-badge on">${pb.dia} ${pb.mes}</span>`:`<span class="mural-badge">Em breve</span>`;
     return `<button class="mural-card" onclick="abrirMural('${m.k}')">
@@ -1505,6 +1542,7 @@ function redeHome(){
     </div>`;
   return `<div class="rede-hero"><span class="rede-hero-mark">${heroMark}</span>
       <div><div class="rede-hero-t">Rede dichava</div><div class="rede-hero-s">Seu espaço na rede: encontros, formação e leitura pra caminhar junto.</div></div></div>
+    ${destaque}
     <div class="rede-sec-h">Mural</div>
     <div class="mural">${mural}</div>
     <div class="rede-sec-h">Formação e leitura</div>
@@ -1515,7 +1553,7 @@ function abrirMural(k){
   const itens=(m.itens||[]).slice().sort((a,b)=>a.data.localeCompare(b.data));
   const lista=itens.length?(`<div class="rede-sec-h" style="margin:20px 2px 10px">Próximos encontros</div><div class="mural-itens">`+
     itens.map(i=>{ const f=fmtDMural(i.data); return `<div class="mitem"><div class="mitem-data"><b>${f.dia}</b><span>${f.mes}</span></div>
-      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${i.hora?esc(i.hora)+' · ':''}${esc(i.sub||'')}</div></div>
+      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${i.hora?esc(i.hora)+' · ':''}${esc(i.sub||'')}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener">Adicionar ao Google Agenda</a></div>
       ${i.tag?`<span class="mitem-tag">${esc(i.tag)}</span>`:''}</div>`; }).join('')+`</div>`):'';
   const info=m.info?`<div class="mural-info">${esc(m.info)}</div>`:'';
   openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>${esc(m.t)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
@@ -1528,7 +1566,15 @@ function abrirMural(k){
       <p style="font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px">As datas ainda são uma prévia. Toque em tenho interesse que a gente confirma sua vaga e te avisa.</p>
     </div></div>`);
 }
-function interesseMural(k){ closeModal(); toast('Anotado. A gente te avisa quando abrir.'); }
+async function interesseMural(k){
+  const m=MURAL.find(x=>x.k===k); closeModal();
+  try{
+    if(typeof _SB!=='undefined' && _SB && AUTH && AUTH.id){
+      await _SB.from('rede_interesses').upsert({ area:k, area_nome:(m?m.t:k), user_id:AUTH.id, nome:(AUTH.nome||null) }, { onConflict:'user_id,area', ignoreDuplicates:true });
+    }
+    toast('Interesse registrado. A gente te avisa quando abrir.');
+  }catch(e){ toast('Interesse anotado. A gente te avisa quando abrir.'); }
+}
 
 function _capa(s,l,big){
   const lang=l.lang?`<span class="livro-lang">${esc(l.lang)}</span>`:'';
