@@ -59,10 +59,10 @@ function fmtData(d){ if(!d)return''; try{var p=(''+d).split('-'); return p.lengt
 var app=document.getElementById('app');
 
 var CL={
-  sigilo:'As informações compartilhadas durante o processo são protegidas pelo sigilo profissional, observados os limites previstos na legislação e nas normas profissionais aplicáveis. O profissional compromete-se a preservar a confidencialidade das informações obtidas e a utilizar somente os dados necessários para a prestação do serviço. O(a) usuário(a) poderá solicitar acesso ao seu prontuário, observadas as normas aplicáveis.',
-  online:'Quando o atendimento ocorrer por meio digital, o(a) usuário(a) declara estar ciente de que é recomendável buscar um ambiente que ofereça privacidade, segurança e condições adequadas para a realização da sessão. O profissional compromete-se a adotar medidas compatíveis com a proteção do sigilo no ambiente em que realiza os atendimentos.',
-  limites:'A psicoterapia é um processo construído conjuntamente entre profissional e usuário(a). Não existe garantia de resultados específicos ou de determinado número de sessões. O processo poderá envolver diferentes estratégias e intervenções compatíveis com a abordagem e as necessidades identificadas. A psicoterapia não substitui atendimento médico ou outros cuidados de saúde quando necessários; quando pertinente, poderão ser realizados encaminhamentos, respeitando o sigilo e os acordos estabelecidos.',
-  encerramento:'O processo poderá ser encerrado por decisão do(a) usuário(a), por avaliação do profissional ou por decisão conjunta. Sempre que possível, recomenda-se que o encerramento seja conversado previamente em sessão, permitindo a elaboração do término, a avaliação do processo e, quando necessário, encaminhamentos.',
+  sigilo:'As informações compartilhadas durante o processo são protegidas pelo sigilo profissional, observados os limites previstos na legislação e nas normas profissionais aplicáveis. O profissional compromete-se a preservar a confidencialidade das informações obtidas e a utilizar somente os dados necessários para a prestação do serviço. O(a) paciente poderá solicitar acesso ao seu prontuário, observadas as normas aplicáveis.',
+  online:'Quando o atendimento ocorrer por meio digital, o(a) paciente declara estar ciente de que é recomendável buscar um ambiente que ofereça privacidade, segurança e condições adequadas para a realização da sessão. O profissional compromete-se a adotar medidas compatíveis com a proteção do sigilo no ambiente em que realiza os atendimentos.',
+  limites:'A psicoterapia é um processo construído conjuntamente entre profissional e paciente. Não existe garantia de resultados específicos ou de determinado número de sessões. O processo poderá envolver diferentes estratégias e intervenções compatíveis com a abordagem e as necessidades identificadas. A psicoterapia não substitui atendimento médico ou outros cuidados de saúde quando necessários; quando pertinente, poderão ser realizados encaminhamentos, respeitando o sigilo e os acordos estabelecidos.',
+  encerramento:'O processo poderá ser encerrado por decisão do(a) paciente, por avaliação do profissional ou por decisão conjunta. Sempre que possível, recomenda-se que o encerramento seja conversado previamente em sessão, permitindo a elaboração do término, a avaliação do processo e, quando necessário, encaminhamentos.',
   consent:'Declaro que li e compreendi as informações apresentadas neste contrato terapêutico, tive oportunidade de esclarecer dúvidas e concordo com as condições estabelecidas para a prestação do serviço.'
 };
 
@@ -120,14 +120,14 @@ function renderEstrut(c){
   // identificação do paciente
   var ident;
   if(aceito){
-    ident='<div class="sec"><h2>Identificação do(a) usuário(a)</h2>'
+    ident='<div class="sec"><h2>Identificação do(a) paciente</h2>'
       +row('Nome completo',pac.nome)+row('Nome social',pac.nome_social)+row('Data de nascimento',fmtData(pac.nascimento))
       +row('CPF',pac.cpf)+row('E-mail',pac.email)+row('Telefone / WhatsApp',pac.telefone)+row('Cidade / Estado',pac.cidade)
       +row('Profissão / Ocupação',pac.profissao)
       +row('Contato de emergência', [pac.emerg_nome,pac.emerg_relacao,pac.emerg_telefone].filter(Boolean).join(' · '))
       +'</div>';
   }else{
-    ident='<div class="sec"><h2>Identificação do(a) usuário(a)</h2>'
+    ident='<div class="sec"><h2>Identificação do(a) paciente</h2>'
       +'<p class="clause" style="color:var(--txs);font-size:13px;margin-bottom:6px">Preencha seus dados abaixo. Eles ficam protegidos pelo sigilo profissional.</p>'
       +pacField('nome','Nome completo','text','Como no seu documento',true)
       +pacField('nome_social','Nome social','text','',false)
