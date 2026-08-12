@@ -1574,6 +1574,58 @@ function voltarCurso(cid){ _cursoAtual=cid; _aulaAtual=null; render(); window.sc
 function abrirAula(cid,mi,ai){ _cursoAtual=cid; _aulaAtual={mi:mi,ai:ai}; render(); window.scrollTo(0,0); }
 function toggleAula(cid,mi,ai){ marcarAula(cid,mi,ai,!aulaConcluida(cid,mi,ai)); render(); }
 
+function cargaCurso(c){ let min=0; (c.modulos||[]).forEach(m=>(m.aulas||[]).forEach(a=>{ const mm=parseInt(String(a.dur||'').replace(/\D/g,''),10); if(!isNaN(mm))min+=mm; }));
+  if(!min) return c.duracao||''; const h=Math.floor(min/60), r=min%60; return h?(h+'h'+(r?(' '+r+'min'):'')):(min+' min'); }
+function gerarCertificado(cid){
+  const c=CURSOS.find(x=>x.id===cid); if(!c)return;
+  const pr=cursoTotais(c);
+  if(pr.pct<100){ toast('Conclua todas as aulas pra emitir o certificado.',4000); return; }
+  const nome=(((AUTH&&AUTH.nome)||'').trim())||'Profissional';
+  const carga=cargaCurso(c);
+  const d=new Date(); const meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const dataStr=d.getDate()+' de '+meses[d.getMonth()]+' de '+d.getFullYear();
+  const cod='CERT-'+String(cid).toUpperCase().replace(/[^A-Z0-9]/g,'')+'-'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  const mods=(c.modulos||[]).map(m=>`<li>${esc(m.titulo)}</li>`).join('');
+  const mark='<svg viewBox="0 0 24 24" width="32" height="32"><g fill="none" stroke="#2FA35F" stroke-width="1.6"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#2FA35F"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>';
+  const html=`<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><title>Certificado - ${esc(c.titulo)}</title><style>
+  @page{size:A4 landscape;margin:0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,"Times New Roman",serif;color:#1B2A1C;background:#EDEFE9}
+  .sheet{width:297mm;height:210mm;padding:13mm;display:flex}
+  .frame{flex:1;border:2px solid #2FA35F;border-radius:8px;position:relative;padding:16mm 20mm;display:flex;flex-direction:column;align-items:center;text-align:center;background:#fff}
+  .frame:before{content:"";position:absolute;top:5mm;left:5mm;right:5mm;bottom:5mm;border:1px solid #A5D6A7;border-radius:5px;pointer-events:none}
+  .brand{display:flex;align-items:center;gap:8px;color:#2FA35F;font-family:Arial,Helvetica,sans-serif;font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+  .kicker{margin-top:15mm;font-family:Arial,Helvetica,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#5D7060;font-size:12px}
+  h1{font-size:30px;color:#2E7D32;margin-top:4mm;letter-spacing:.04em}
+  .lead{margin-top:7mm;color:#5D7060;font-size:15px}
+  .nome{font-size:38px;margin:3mm 0;color:#1B2A1C;border-bottom:1px solid #E4E4DF;padding-bottom:4mm;min-width:55%}
+  .curso{font-size:20px;font-weight:bold;margin-top:5mm;color:#1B2A1C}
+  .meta{margin-top:3mm;color:#5D7060;font-size:14px}
+  .mods{margin-top:5mm;max-width:82%}
+  .mods b{display:block;text-transform:uppercase;letter-spacing:.14em;font-size:10px;margin-bottom:2mm;color:#9E9E9E;font-family:Arial,Helvetica,sans-serif}
+  .mods ul{list-style:none;display:flex;flex-wrap:wrap;gap:2.5mm;justify-content:center}
+  .mods li{background:#F5F5F0;border-radius:20px;padding:2mm 4mm;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#5D7060}
+  .foot{margin-top:auto;width:100%;display:flex;justify-content:space-between;align-items:flex-end;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#9E9E9E}
+  .sig{text-align:center}.sig b{display:block;color:#1B2A1C;font-size:13px;border-top:1px solid #1B2A1C;padding-top:2mm;margin-top:12mm;min-width:55mm}
+  </style></head><body><div class="sheet"><div class="frame">
+    <div class="brand">${mark}<span>Rede dichava</span></div>
+    <div class="kicker">Certificado de Conclusão</div>
+    <h1>Certificado</h1>
+    <div class="lead">Certificamos que</div>
+    <div class="nome">${esc(nome)}</div>
+    <div class="lead">concluiu com aproveitamento o curso</div>
+    <div class="curso">${esc(c.titulo)}</div>
+    <div class="meta">Carga horária de ${esc(carga)} &middot; ${pr.tot} aulas &middot; ${esc(dataStr)}</div>
+    <div class="mods"><b>Módulos</b><ul>${mods}</ul></div>
+    <div class="foot"><div style="text-align:left">Código: ${cod}<br>Emitido em ${esc(dataStr)}</div>
+      <div class="sig"><b>Rede dichava</b>dichava.app</div>
+      <div style="text-align:right">Formação em<br>Redução de Danos</div></div>
+  </div></div></body></html>`;
+  const w=window.open('','_blank'); if(!w){ toast('Permita pop-ups pra abrir o certificado.',5000); return; }
+  w.document.write(html); w.document.close();
+  try{ w.focus(); }catch(e){}
+  setTimeout(()=>{ try{ w.print(); }catch(e){} }, 500);
+}
 function viewCursoDetalhe(c){
   const p=cursoTotais(c);
   const feito=p.pct===100;
@@ -1585,9 +1637,12 @@ function viewCursoDetalhe(c){
       <div class="curso-prog"><i style="width:${p.pct}%"></i></div>
       <div style="font-size:12px;color:var(--txs);margin-top:6px">${p.done} de ${p.tot} aulas concluídas · ${p.pct}%</div></div>
     </div>`;
-  if(feito) html+=`<div class="card" style="padding:16px;margin-bottom:14px;background:var(--vf);border-color:var(--vc);display:flex;align-items:center;gap:12px">
-      <span class="rico" style="width:32px;height:32px">${redeIco('cursos')}</span>
-      <div><b style="font-size:14.5px;color:var(--ve)">Curso concluído</b><div style="font-size:12.5px;color:var(--txs);margin-top:2px">Você completou todas as aulas. Parabéns por seguir se formando na Rede.</div></div>
+  if(feito) html+=`<div class="card" style="padding:16px;margin-bottom:14px;background:var(--vf);border-color:var(--vc)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="rico" style="width:32px;height:32px">${redeIco('cursos')}</span>
+        <div><b style="font-size:14.5px;color:var(--ve)">Curso concluído</b><div style="font-size:12.5px;color:var(--txs);margin-top:2px">Você completou todas as aulas. Emita seu certificado abaixo.</div></div>
+      </div>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:12px" onclick="gerarCertificado('${c.id}')">Baixar certificado</button>
     </div>`;
   // ementa
   const emenBits=[];
