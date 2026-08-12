@@ -6347,6 +6347,8 @@ async function copiarLinkIndica(){
 }
 function _podeNudgeIndica(){
   try{ if(typeof U==='undefined'||!U||U.id==='demo')return false;
+    var teste=false; try{teste=location.hostname.indexOf('dichava.app')===-1;}catch(e){}
+    if(teste)return true; /* no site de teste o convite aparece sempre, pra poder validar */
     var last=+(localStorage.getItem('dr_indnudge_ts')||0);
     return (Date.now()-last)>4*864e5; }catch(e){return false;}
 }
