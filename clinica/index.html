@@ -589,6 +589,34 @@ body.has-demo-banner{padding-bottom:64px}
 .livro-capa.lg{width:160px;height:236px;margin:0 auto;display:inline-flex}
 .livro-capa.lg .livro-t{font-size:16px;-webkit-line-clamp:6}
 .livro-hero{display:flex;justify-content:center;padding:6px 0 2px}
+.rico{display:inline-flex;flex:0 0 auto}
+.rico svg{width:100%;height:100%;display:block}
+.rede-hero{display:flex;align-items:center;gap:15px;background:linear-gradient(135deg,#2FA35F,#00897B);border-radius:20px;padding:22px 20px;color:#fff;box-shadow:0 14px 30px -14px rgba(0,137,123,.6);margin-bottom:6px}
+.rede-hero-mark{width:48px;height:48px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);border-radius:14px;padding:9px}
+.rede-hero-mark svg{width:100%;height:100%;display:block}
+.rede-hero-t{font-size:20px;font-weight:800;letter-spacing:.2px}
+.rede-hero-s{font-size:13px;opacity:.93;line-height:1.5;margin-top:3px}
+.rede-sec-h{font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--txs);margin:24px 2px 12px}
+.mural{display:flex;flex-direction:column;gap:11px}
+.mural-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;cursor:pointer;box-shadow:var(--sh);transition:.15s}
+.mural-card:hover{border-color:var(--vc);transform:translateY(-2px)}
+.mural-ic{width:48px;height:48px;flex:0 0 auto;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:9px}
+.mural-ic svg{width:100%;height:100%;display:block}
+.mural-ic.lg{width:66px;height:66px;padding:14px;border-radius:18px}
+.mural-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.mural-t{font-size:15px;font-weight:800;color:var(--tx)}
+.mural-d{font-size:12.5px;color:var(--txm);line-height:1.45}
+.mural-badge{flex:0 0 auto;align-self:center;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--txs);background:var(--cin);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.rede-acessos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acesso-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:7px;align-items:flex-start;box-shadow:var(--sh);transition:.15s}
+.acesso-card:hover{border-color:var(--vc);transform:translateY(-2px)}
+.acesso-ic{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.acesso-ic svg{width:100%;height:100%;display:block}
+.acesso-t{font-size:15.5px;font-weight:800;color:var(--tx)}
+.acesso-s{font-size:12px;color:var(--txm)}
+.biblio-hero-ic{width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.biblio-hero-ic svg{width:100%;height:100%;display:block}
+.roteiro-tag svg{width:14px;height:14px;display:inline-block}
 </style>
 </head>
 <body>
@@ -978,6 +1006,7 @@ function copiarModelo(k){ const t=_DIVUL[k]; if(!t){ toast('Nada pra copiar',1);
    painel (o gate já barra profissionais expirados).
    ============================================================ */
 let _redeTab='biblioteca';
+let _redeView='home';
 let _cursoAtual=null, _aulaAtual=null;
 
 // ----- BIBLIOTECA: estante de sugestões de leitura (livros reais, por tema) -----
@@ -1393,24 +1422,62 @@ function marcarAula(cid,mi,ai,val){ const o=_progGet(); o[cid]=o[cid]||{}; if(va
 function cursoTotais(c){ let tot=0,done=0; c.modulos.forEach((m,mi)=>m.aulas.forEach((a,ai)=>{tot++; if(aulaConcluida(c.id,mi,ai))done++;})); return {tot,done,pct:tot?Math.round(done/tot*100):0}; }
 
 // ----- VIEWS -----
+// ===== ÍCONES DA REDE (SVG gradiente, padrão do painel) =====
+const REDEIC={
+  biblio:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-biblio" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B692F6"/><stop offset="1" stop-color="#7B54D3"/></linearGradient></defs><rect x="3.6" y="5" width="3.6" height="15" rx="1.1" fill="url(#cic-biblio)"/><rect x="8" y="5" width="3.6" height="15" rx="1.1" fill="url(#cic-biblio)" opacity=".78"/><rect x="12.4" y="5" width="3.6" height="15" rx="1.1" fill="url(#cic-biblio)"/><rect x="15.8" y="6.4" width="3.4" height="13.6" rx="1.1" fill="url(#cic-biblio)" opacity=".78" transform="rotate(10 17.5 13)"/><rect x="3" y="20.2" width="18.4" height="1.6" rx=".8" fill="url(#cic-biblio)"/></svg>`,
+  cursos:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-cursos" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5CE3CF"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><path d="M12 4 2.6 8.1 12 12.2l9.4-4.1z" fill="url(#cic-cursos)"/><path d="M6.2 10.6V15c0 1.4 2.6 2.8 5.8 2.8s5.8-1.4 5.8-2.8v-4.4" fill="none" stroke="url(#cic-cursos)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.4 8.1v5" fill="none" stroke="url(#cic-cursos)" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  interv:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-interv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><circle cx="8" cy="8.5" r="3.1" fill="url(#cic-interv)"/><circle cx="16" cy="8.5" r="3.1" fill="url(#cic-interv)" opacity=".72"/><path d="M2.5 19c0-3.1 2.5-5.1 5.5-5.1s5.5 2 5.5 5.1z" fill="url(#cic-interv)"/><path d="M13 19c.15-2.4 1.1-3.9 3.5-4.7 3 0 5 2 5 5.1z" fill="url(#cic-interv)" opacity=".72"/></svg>`,
+  rodas:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-rodas" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6FC3FF"/><stop offset="1" stop-color="#3E7BF0"/></linearGradient></defs><path d="M2.8 7.2A2.4 2.4 0 0 1 5.2 4.8h8.8a2.4 2.4 0 0 1 2.4 2.4v4.2a2.4 2.4 0 0 1-2.4 2.4H8l-3.8 3.1V13.8h-.4a2.4 2.4 0 0 1-2.4-2.4z" fill="url(#cic-rodas)"/><g fill="#fff"><circle cx="6.6" cy="9.3" r="1.05"/><circle cx="9.6" cy="9.3" r="1.05"/><circle cx="12.6" cy="9.3" r="1.05"/></g><path d="M18.4 8.6a2.6 2.6 0 0 1 2.8 2.6v6.2l-2.9-2.4h-3.1" fill="none" stroke="url(#cic-rodas)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/></svg>`,
+  eventos:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-eventos" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE06B"/><stop offset="1" stop-color="#2FA35F"/></linearGradient></defs><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="url(#cic-eventos)"/><path d="M3.5 9.4h17" stroke="#fff" stroke-width="1.1" opacity=".5"/><path d="M8 3.2v3.4M16 3.2v3.4" stroke="url(#cic-eventos)" stroke-width="2" stroke-linecap="round"/><path d="M12 12l1.05 2.13 2.35.34-1.7 1.66.4 2.34L12 17.7l-2.1 1.1.4-2.34-1.7-1.66 2.35-.34z" fill="#fff"/></svg>`,
+  roteiro:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-roteiro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#AEB7C2"/><stop offset="1" stop-color="#5B6672"/></linearGradient></defs><rect x="3" y="7.5" width="18" height="12" rx="2.4" fill="url(#cic-roteiro)"/><path d="M3.4 7.6 6 4.6l3 2.6M8.5 7.4 11 4.4l3 2.6M13.6 7.3 16 4.4l3 2.6" fill="none" stroke="url(#cic-roteiro)" stroke-width="1.4" stroke-linejoin="round"/><path d="M10.5 11.4v4.2l3.4-2.1z" fill="#fff"/></svg>`
+};
+function redeIco(k){ return cicUniq(REDEIC[k]||''); }
+const MURAL=[
+  {k:'interv', ic:'interv', t:'Grupos de intervisão', d:'Encontros entre profissionais da rede pra discutir casos, trocar condutas e se apoiar na clínica. Supervisão horizontal, sem hierarquia.', tint:'#FFF4E5'},
+  {k:'rodas', ic:'rodas', t:'Rodas de conversa', d:'Conversas abertas sobre redução de danos e o cuidado no dia a dia, com troca de experiências entre quem está na prática.', tint:'#E8F0FF'},
+  {k:'eventos', ic:'eventos', t:'Eventos internos', d:'Palestras, lançamentos e encontros da Rede dichava, online e presenciais, só pra quem faz parte.', tint:'#E9F7EE'}
+];
+
 function viewRede(){
   if(_cursoAtual){ const c=CURSOS.find(x=>x.id===_cursoAtual); if(c) return _aulaAtual? viewAula(c) : viewCursoDetalhe(c); _cursoAtual=null; }
-  const tabs=`<div class="rede-tabs">
-    <button class="rede-tab ${_redeTab==='biblioteca'?'on':''}" onclick="setRedeTab('biblioteca')">📚 Biblioteca</button>
-    <button class="rede-tab ${_redeTab==='cursos'?'on':''}" onclick="setRedeTab('cursos')">🎓 Cursos</button></div>`;
-  return tabs + (_redeTab==='cursos'? listaCursos() : listaBiblioteca());
+  if(_redeView==='biblioteca') return `<button class="btn ghost sm" style="margin-bottom:8px" onclick="irRede('home')">‹ Rede</button>`+listaBiblioteca();
+  if(_redeView==='cursos') return `<button class="btn ghost sm" style="margin-bottom:8px" onclick="irRede('home')">‹ Rede</button>`+listaCursos();
+  return redeHome();
 }
-function setRedeTab(t){ _redeTab=t; _cursoAtual=null; _aulaAtual=null; render(); }
+function irRede(v){ _redeView=v; _cursoAtual=null; _aulaAtual=null; _bibTema=-1; render(); window.scrollTo(0,0); }
+function redeHome(){
+  const heroMark=cicUniq(`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#fff" stroke-width="1.5" opacity=".92"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#fff"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>`);
+  const totC=CURSOS.length, totL=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
+  const mural=MURAL.map(m=>`<button class="mural-card" onclick="abrirMural('${m.k}')">
+      <span class="mural-ic" style="background:${m.tint}">${redeIco(m.ic)}</span>
+      <span class="mural-body"><span class="mural-t">${esc(m.t)}</span><span class="mural-d">${esc(m.d)}</span></span>
+      <span class="mural-badge">Em breve</span></button>`).join('');
+  const acessos=`<div class="rede-acessos">
+      <button class="acesso-card" onclick="irRede('cursos')"><span class="acesso-ic">${redeIco('cursos')}</span><span class="acesso-t">Cursos</span><span class="acesso-s">${totC} ${totC===1?'curso':'cursos'}</span></button>
+      <button class="acesso-card" onclick="irRede('biblioteca')"><span class="acesso-ic">${redeIco('biblio')}</span><span class="acesso-t">Biblioteca</span><span class="acesso-s">${totL} livros</span></button>
+    </div>`;
+  return `<div class="rede-hero"><span class="rede-hero-mark">${heroMark}</span>
+      <div><div class="rede-hero-t">Rede dichava</div><div class="rede-hero-s">Seu espaço na rede: encontros, formação e leitura pra caminhar junto.</div></div></div>
+    <div class="rede-sec-h">Mural</div>
+    <div class="mural">${mural}</div>
+    <div class="rede-sec-h">Formação e leitura</div>
+    ${acessos}`;
+}
+function abrirMural(k){
+  const m=MURAL.find(x=>x.k===k); if(!m)return;
+  openModal(`<div class="modal" style="max-width:440px"><div class="modal-head"><h3>${esc(m.t)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="display:flex;justify-content:center;margin-bottom:8px"><span class="mural-ic lg" style="background:${m.tint}">${redeIco(m.ic)}</span></div>
+      <p style="font-size:14px;line-height:1.6;color:var(--txs);text-align:center;margin:0">${esc(m.d)}</p>
+      <p style="font-size:12.5px;color:var(--txm);text-align:center;margin-top:10px">Ainda estamos organizando os primeiros encontros. Se quiser participar, deixa seu interesse que a gente te avisa quando abrir.</p>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:14px" onclick="interesseMural('${m.k}')">Tenho interesse</button>
+    </div></div>`);
+}
+function interesseMural(k){ closeModal(); toast('Anotado. A gente te avisa quando abrir.'); }
 
-function _capa(s,l,big){
-  const lang=l.lang?`<span class="livro-lang">${esc(l.lang)}</span>`:'';
-  return `<span class="livro-capa ${big?'lg':''}" style="background:${s.cor}"><span class="livro-edge"></span>${lang}<span class="livro-t">${esc(l.t)}</span><span class="livro-rule"></span><span class="livro-a">${esc(l.a)}</span></span>`;
-}
-let _bibTema=-1;
-function setBibTema(i){ _bibTema=i; render(); const v=document.getElementById('view'); if(v&&v.scrollIntoView)try{v.scrollIntoView({block:'start'});}catch(e){} }
 function listaBiblioteca(){
   const totLiv=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
-  const hero=`<div class="biblio-hero"><div class="biblio-hero-ic">📚</div>
+  const hero=`<div class="biblio-hero"><div class="biblio-hero-ic">${redeIco('biblio')}</div>
     <div><div class="biblio-hero-t">Estante dichava</div>
     <div class="biblio-hero-s">Sugestões de leitura reais, por tema. ${ESTANTE.length} temas · ${totLiv} livros. Toque numa capa pra saber do que trata.</div></div></div>`;
   const chips=`<div class="biblio-chips"><button class="bchip ${_bibTema<0?'on':''}" onclick="setBibTema(-1)">Todos</button>`+
@@ -1449,7 +1516,7 @@ function listaCursos(){
   return intro+`<div class="curso-grid">${cards}</div>`;
 }
 function abrirCurso(id){ _cursoAtual=id; _aulaAtual=null; render(); window.scrollTo(0,0); }
-function voltarRede(){ _cursoAtual=null; _aulaAtual=null; render(); window.scrollTo(0,0); }
+function voltarRede(){ _cursoAtual=null; _aulaAtual=null; _redeView='cursos'; render(); window.scrollTo(0,0); }
 function voltarCurso(cid){ _cursoAtual=cid; _aulaAtual=null; render(); window.scrollTo(0,0); }
 function abrirAula(cid,mi,ai){ _cursoAtual=cid; _aulaAtual={mi:mi,ai:ai}; render(); window.scrollTo(0,0); }
 function toggleAula(cid,mi,ai){ marcarAula(cid,mi,ai,!aulaConcluida(cid,mi,ai)); render(); }
@@ -1466,7 +1533,7 @@ function viewCursoDetalhe(c){
       <div style="font-size:12px;color:var(--txs);margin-top:6px">${p.done} de ${p.tot} aulas concluídas · ${p.pct}%</div></div>
     </div>`;
   if(feito) html+=`<div class="card" style="padding:16px;margin-bottom:14px;background:var(--vf);border-color:var(--vc);display:flex;align-items:center;gap:12px">
-      <div style="font-size:26px">🎓</div>
+      <span class="rico" style="width:32px;height:32px">${redeIco('cursos')}</span>
       <div><b style="font-size:14.5px;color:var(--ve)">Curso concluído</b><div style="font-size:12.5px;color:var(--txs);margin-top:2px">Você completou todas as aulas. Parabéns por seguir se formando na Rede.</div></div>
     </div>`;
   // ementa
@@ -1516,7 +1583,7 @@ function viewAula(c){
     corpo=`<div class="aula-video"><video controls playsinline preload="metadata" src="${a.video}" style="width:100%;border-radius:14px;background:#000;display:block"></video></div>`;
     if(a.roteiro) corpo+=`<details class="aula-transcri"><summary>Ver transcrição da aula</summary><div class="aula-body" style="margin-top:10px">${a.roteiro}</div></details>`;
   } else {
-    corpo=`<div class="roteiro-box"><div class="roteiro-tag">🎬 Roteiro do vídeo · gravação em breve</div><div class="aula-body">${a.roteiro||''}</div></div>`;
+    corpo=`<div class="roteiro-box"><div class="roteiro-tag">${redeIco('roteiro')}Roteiro do vídeo · gravação em breve</div><div class="aula-body">${a.roteiro||''}</div></div>`;
   }
   const refs=refsHtml(a.referencias);
   return `<button class="btn ghost sm" onclick="voltarCurso('${c.id}')">‹ ${esc(c.titulo)}</button>
