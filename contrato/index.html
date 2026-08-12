@@ -12,19 +12,28 @@ body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#1B
 .doc{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(30,60,35,.07);padding:30px 26px;margin-top:16px}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:-.3px}
 .by{color:var(--txs);font-size:14px;margin:0 0 18px}
-.meta{color:var(--txs);font-size:14px;line-height:1.7;margin:0 0 16px}
-.texto{white-space:pre-wrap;font-size:15px;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
-.aceite-box{margin-top:22px;background:#F0F7F1;border:1px solid #CDE7D2;border-radius:14px;padding:18px}
-.aceite-box label{display:block;font-weight:700;font-size:13.5px;margin-bottom:6px}
-input[type=text]{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit;background:#fff}
-.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;cursor:pointer}
+.meta{color:var(--txs);font-size:14px;line-height:1.7;margin:0 0 8px}
+.sec{border-top:1px solid var(--line);padding-top:16px;margin-top:18px}
+.sec h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--ve);margin:0 0 10px}
+.drow{display:flex;gap:10px;font-size:14.5px;padding:3px 0}
+.drow .dl{color:var(--txs);flex:0 0 42%;max-width:42%}
+.drow .dv{font-weight:600}
+.clause{font-size:14px;line-height:1.65;color:#28382a;margin:0}
+.field{margin-top:12px}
+.field label{display:block;font-weight:700;font-size:13px;margin-bottom:5px}
+.field .hint{font-weight:400;color:var(--txs);font-size:12px}
+input,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit;background:#fff}
+.row2{display:flex;gap:10px;flex-wrap:wrap}.row2>*{flex:1;min-width:140px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13.5px;cursor:pointer}
 .chk input{margin-top:3px;flex:none;width:18px;height:18px}
+.aceite-box{margin-top:20px;background:#F0F7F1;border:1px solid #CDE7D2;border-radius:14px;padding:18px}
 .btn{width:100%;margin-top:16px;background:#2fbd6a;color:#fff;border:none;border-radius:26px;padding:15px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px rgba(47,189,106,.28)}
 .btn:disabled{opacity:.55;box-shadow:none;cursor:default}
 .btn.ghost{background:#fff;color:#2E7D32;border:1.5px solid var(--line);box-shadow:none}
 .ok{margin-top:16px;background:#E8F5E9;border:1px solid #BFE3C4;border-radius:14px;padding:16px 18px;font-size:14.5px}
 .ok b{color:#216b2c}
 .selo{display:flex;align-items:center;gap:8px;margin-top:18px;padding-top:14px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--txs)}
+.texto{white-space:pre-wrap;font-size:15px;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
 .err{color:#C62828;font-size:13.5px;margin-top:10px;display:none}
 .foot{text-align:center;color:var(--txs);font-size:12px;margin-top:26px}
 .spin{width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--v);border-radius:50%;animation:sp 1s linear infinite;margin:60px auto}
@@ -46,52 +55,155 @@ var SB=null; try{ SB=supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabas
 var ID=new URLSearchParams(location.search).get('id');
 function esc(s){return (s==null?'':''+s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function fmt(d){ if(!d)return''; try{return new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return d;} }
+function fmtData(d){ if(!d)return''; try{var p=(''+d).split('-'); return p.length===3?(p[2]+'/'+p[1]+'/'+p[0]):d;}catch(e){return d;} }
 var app=document.getElementById('app');
+
+var CL={
+  sigilo:'As informações compartilhadas durante o processo são protegidas pelo sigilo profissional, observados os limites previstos na legislação e nas normas profissionais aplicáveis. O profissional compromete-se a preservar a confidencialidade das informações obtidas e a utilizar somente os dados necessários para a prestação do serviço. O(a) usuário(a) poderá solicitar acesso ao seu prontuário, observadas as normas aplicáveis.',
+  online:'Quando o atendimento ocorrer por meio digital, o(a) usuário(a) declara estar ciente de que é recomendável buscar um ambiente que ofereça privacidade, segurança e condições adequadas para a realização da sessão. O profissional compromete-se a adotar medidas compatíveis com a proteção do sigilo no ambiente em que realiza os atendimentos.',
+  limites:'A psicoterapia é um processo construído conjuntamente entre profissional e usuário(a). Não existe garantia de resultados específicos ou de determinado número de sessões. O processo poderá envolver diferentes estratégias e intervenções compatíveis com a abordagem e as necessidades identificadas. A psicoterapia não substitui atendimento médico ou outros cuidados de saúde quando necessários; quando pertinente, poderão ser realizados encaminhamentos, respeitando o sigilo e os acordos estabelecidos.',
+  encerramento:'O processo poderá ser encerrado por decisão do(a) usuário(a), por avaliação do profissional ou por decisão conjunta. Sempre que possível, recomenda-se que o encerramento seja conversado previamente em sessão, permitindo a elaboração do término, a avaliação do processo e, quando necessário, encaminhamentos.',
+  consent:'Declaro que li e compreendi as informações apresentadas neste contrato terapêutico, tive oportunidade de esclarecer dúvidas e concordo com as condições estabelecidas para a prestação do serviço.'
+};
+
+function row(l,v){ v=(v==null?'':(''+v)).trim(); return v?'<div class="drow"><span class="dl">'+esc(l)+'</span><span class="dv">'+esc(v)+'</span></div>':''; }
+function pacField(id,label,type,ph,req){ return '<div class="field"><label>'+esc(label)+(req?'':' <span class="hint">(se houver)</span>')+'</label><input id="pac_'+id+'" type="'+(type||'text')+'" '+(ph?'placeholder="'+esc(ph)+'"':'')+'></div>'; }
 
 function render(c){
   if(!c){ app.innerHTML='<div class="doc"><h1>Contrato não encontrado</h1><p class="by">O link pode estar incorreto ou o contrato foi removido. Peça um novo link ao profissional.</p></div>'; return; }
+  if(c.dados && c.dados.tipo==='estruturado'){ return renderEstrut(c); }
+  return renderSimples(c);
+}
+
+function renderSimples(c){
   var aceito=c.status==='aceito';
   var docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
   var meta='<div>Profissional: <b>'+esc(c.prof_nome)+'</b>'+(c.prof_reg?' — '+esc(c.prof_reg):'')+(c.prof_tipo?' · '+esc(c.prof_tipo):'')+'</div>'
     +(c.paciente_nome?('<div>Paciente: <b>'+esc(c.paciente_nome)+'</b></div>'):'')
     +'<div style="font-size:12.5px;opacity:.85">Documento nº '+docNum+' · gerado em '+fmt(c.criado_em)+'</div>';
-  var doc='<div class="doc">'
-    +'<h1>'+esc(c.titulo)+'</h1>'
-    +'<div class="meta">'+meta+'</div>'
-    +'<div class="texto">'+esc(c.texto)+'</div>';
+  var doc='<div class="doc"><h1>'+esc(c.titulo)+'</h1><div class="meta">'+meta+'</div><div class="texto">'+esc(c.texto)+'</div>';
   if(aceito){
     doc+='<div class="ok">✓ <b>Aceito eletronicamente</b> por <b>'+esc(c.aceite_nome)+'</b> em '+fmt(c.aceite_em)+'.</div>'
-      +'<div class="selo">🔒 Aceite eletrônico registrado em dichava.app · Documento nº '+docNum+' — comprova a concordância com os termos acima.</div>'
-      +'</div>'
-      +'<button class="btn ghost" onclick="window.print()">🖨️ Imprimir / salvar PDF</button>';
-    app.innerHTML=doc;
+      +'<div class="selo">Aceite eletrônico registrado em dichava.app · Documento nº '+docNum+'</div></div>'
+      +'<button class="btn ghost" onclick="window.print()">Imprimir / salvar PDF</button>';
   }else{
-    doc+='<div class="aceite-box">'
-      +'<label>Seu nome completo</label>'
+    doc+='<div class="aceite-box"><label style="display:block;font-weight:700;font-size:13.5px;margin-bottom:6px">Seu nome completo</label>'
       +'<input type="text" id="nome" maxlength="90" placeholder="Como no seu documento" autocomplete="name">'
       +'<label class="chk"><input type="checkbox" id="chk"><span>Li e aceito os termos deste contrato terapêutico.</span></label>'
-      +'<button class="btn" id="btn" onclick="aceitar()">Aceitar contrato</button>'
-      +'<div class="err" id="err"></div>'
-      +'</div></div>';
-    app.innerHTML=doc;
+      +'<button class="btn" id="btn" onclick="aceitarSimples()">Aceitar contrato</button><div class="err" id="err"></div></div></div>';
   }
+  app.innerHTML=doc;
 }
-async function aceitar(){
+
+function renderEstrut(c){
+  var d=c.dados||{}, pr=d.prof||{}, pac=d.pac||{}, ac=d.aceites||{};
+  var aceito=c.status==='aceito';
+  var docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
+  var freq=pr.frequencia||''; if(freq==='Outra'&&pr.frequencia_outra) freq='Outra: '+pr.frequencia_outra;
+  var meta='<div>Profissional: <b>'+esc(c.prof_nome||pr.nome||'')+'</b>'+((c.prof_reg||pr.reg)?' — '+esc(c.prof_reg||pr.reg):'')+'</div>'
+    +'<div style="font-size:12.5px;opacity:.85">Documento nº '+docNum+' · gerado em '+fmt(c.criado_em)+'</div>';
+
+  var atend='<div class="sec"><h2>Informações do atendimento</h2>'
+    +row('Modalidade',pr.modalidade)+row('Plataforma / local',pr.plataforma)+row('Abordagem',pr.abordagem)
+    +row('Duração da sessão',pr.duracao)+row('Frequência',freq)+row('Dia e horário',pr.dia_horario)
+    +'<p class="clause" style="margin-top:8px;color:var(--txs);font-size:13px">A frequência e os horários poderão ser modificados de comum acordo, conforme as necessidades do processo e a disponibilidade das partes.</p></div>';
+
+  var hon='<div class="sec"><h2>Honorários e pagamento</h2>'
+    +row('Valor por sessão', pr.valor?('R$ '+pr.valor):'')+row('Forma de cobrança',pr.forma_cobranca)
+    +row('Forma de pagamento',pr.forma_pagamento)+row('Data / condição de pagamento',pr.cond_pagamento)
+    +'<p class="clause" style="margin-top:8px;color:var(--txs);font-size:13px">Eventuais alterações de valor ou condições deverão ser previamente comunicadas e acordadas entre as partes.</p></div>';
+
+  var canc='<div class="sec"><h2>Cancelamentos e remarcações</h2>'
+    +'<p class="clause">Cancelamentos e solicitações de remarcação deverão ser comunicados com antecedência de <b>'+esc(pr.cancel_horas||'—')+' horas</b>. Dentro do prazo, a remarcação é feita conforme a disponibilidade do profissional. Fora do prazo, poderá haver cobrança da sessão, ressalvadas situações excepcionais avaliadas pelo profissional.</p>'
+    +(pr.cancel_regra?('<div style="margin-top:8px">'+row('Regra acordada',pr.cancel_regra)+'</div>'):'')+'</div>';
+
+  // identificação do paciente
+  var ident;
+  if(aceito){
+    ident='<div class="sec"><h2>Identificação do(a) usuário(a)</h2>'
+      +row('Nome completo',pac.nome)+row('Nome social',pac.nome_social)+row('Data de nascimento',fmtData(pac.nascimento))
+      +row('CPF',pac.cpf)+row('E-mail',pac.email)+row('Telefone / WhatsApp',pac.telefone)+row('Cidade / Estado',pac.cidade)
+      +row('Profissão / Ocupação',pac.profissao)
+      +row('Contato de emergência', [pac.emerg_nome,pac.emerg_relacao,pac.emerg_telefone].filter(Boolean).join(' · '))
+      +'</div>';
+  }else{
+    ident='<div class="sec"><h2>Identificação do(a) usuário(a)</h2>'
+      +'<p class="clause" style="color:var(--txs);font-size:13px;margin-bottom:6px">Preencha seus dados abaixo. Eles ficam protegidos pelo sigilo profissional.</p>'
+      +pacField('nome','Nome completo','text','Como no seu documento',true)
+      +pacField('nome_social','Nome social','text','',false)
+      +'<div class="row2">'+pacField('nascimento','Data de nascimento','date','',false)+pacField('cpf','CPF','text','000.000.000-00',true)+'</div>'
+      +'<div class="row2">'+pacField('email','E-mail','email','',false)+pacField('telefone','Telefone / WhatsApp','text','',true)+'</div>'
+      +'<div class="row2">'+pacField('cidade','Cidade / Estado','text','',false)+pacField('profissao','Profissão / Ocupação','text','',false)+'</div>'
+      +'<label style="display:block;font-weight:700;font-size:13px;margin:14px 0 5px">Contato de referência / emergência</label>'
+      +'<div class="row2">'+pacField('emerg_nome','Nome','text','',false)+pacField('emerg_relacao','Relação','text','',false)+pacField('emerg_telefone','Telefone','text','',false)+'</div>'
+      +'</div>';
+  }
+
+  function clausula(titulo,texto,ackId,ackLabel){
+    var box='<div class="sec"><h2>'+esc(titulo)+'</h2><p class="clause">'+esc(texto)+'</p>';
+    if(ackId){ box+= aceito ? '<div class="drow" style="margin-top:8px"><span class="dv" style="color:var(--ve)">✓ '+esc(ackLabel)+'</span></div>'
+      : '<label class="chk"><input type="checkbox" id="'+ackId+'"><span>'+esc(ackLabel)+'</span></label>'; }
+    return box+'</div>';
+  }
+
+  var doc='<div class="doc"><h1>'+esc(c.titulo)+'</h1><div class="meta">'+meta+'</div>'
+    +atend+hon+canc+ident
+    +clausula('Sigilo e confidencialidade',CL.sigilo,'ack_sigilo','Declaro estar ciente das condições de sigilo e confidencialidade.')
+    +clausula('Atendimento online',CL.online,'ack_online','Estou ciente das condições relacionadas ao atendimento online.')
+    +clausula('Limites e natureza da psicoterapia',CL.limites,'ack_limites','Estou ciente da natureza e dos limites do processo psicoterapêutico.')
+    +clausula('Encerramento do processo',CL.encerramento,null,null)
+    +'<div class="sec"><h2>Consentimento</h2><p class="clause">'+esc(CL.consent)+'</p>';
+
+  if(aceito){
+    doc+='<div class="ok" style="margin-top:14px">✓ <b>Aceito eletronicamente</b> por <b>'+esc(c.aceite_nome)+'</b> em '+fmt(c.aceite_em)+'.</div>'
+      +'<div class="selo">Aceite eletrônico registrado em dichava.app · Documento nº '+docNum+' — comprova a concordância com os termos acima.</div></div></div>'
+      +'<button class="btn ghost" onclick="window.print()">Imprimir / salvar PDF</button>';
+  }else{
+    doc+='<div class="aceite-box">'
+      +'<label class="chk"><input type="checkbox" id="ack_consent"><span>Li e concordo com o contrato terapêutico.</span></label>'
+      +'<p class="clause" style="font-size:12px;color:var(--txs);margin-top:8px">A data e hora do aceite são registradas automaticamente pelo sistema no momento em que você aceitar.</p>'
+      +'<button class="btn" id="btn" onclick="aceitarEstrut()">Assinar e aceitar contrato</button><div class="err" id="err"></div>'
+      +'</div></div></div>';
+  }
+  app.innerHTML=doc;
+}
+
+function val(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+function chk(id){ var e=document.getElementById(id); return !!(e&&e.checked); }
+function showErr(m){ var e=document.getElementById('err'); if(e){e.textContent=m;e.style.display='block';} }
+
+async function aceitarSimples(){
   var nome=(document.getElementById('nome').value||'').trim();
-  var chk=document.getElementById('chk').checked;
-  var err=document.getElementById('err'), btn=document.getElementById('btn');
-  err.style.display='none';
-  if(nome.length<3){ err.textContent='Digite seu nome completo.'; err.style.display='block'; return; }
-  if(!chk){ err.textContent='Marque "Li e aceito" para continuar.'; err.style.display='block'; return; }
-  if(!SB){ err.textContent='Sem conexão. Tente novamente.'; err.style.display='block'; return; }
+  var ok=document.getElementById('chk').checked;
+  var btn=document.getElementById('btn');
+  if(nome.length<3){ showErr('Digite seu nome completo.'); return; }
+  if(!ok){ showErr('Marque "Li e aceito" para continuar.'); return; }
+  if(!SB){ showErr('Sem conexão. Tente novamente.'); return; }
+  btn.disabled=true; btn.textContent='Registrando…';
+  try{ var r=await SB.rpc('contrato_aceitar',{p_id:ID,p_nome:nome}); if(r.error)throw new Error(r.error.message); render(r.data); window.scrollTo(0,0); }
+  catch(e){ btn.disabled=false; btn.textContent='Aceitar contrato'; showErr('Não consegui registrar: '+((e&&e.message)||'tente de novo')); }
+}
+
+async function aceitarEstrut(){
+  var pac={ nome:val('pac_nome'), nome_social:val('pac_nome_social'), nascimento:val('pac_nascimento'), cpf:val('pac_cpf'),
+    email:val('pac_email'), telefone:val('pac_telefone'), cidade:val('pac_cidade'), profissao:val('pac_profissao'),
+    emerg_nome:val('pac_emerg_nome'), emerg_relacao:val('pac_emerg_relacao'), emerg_telefone:val('pac_emerg_telefone') };
+  var aceites={ sigilo:chk('ack_sigilo'), online:chk('ack_online'), limites:chk('ack_limites'), consentimento:chk('ack_consent') };
+  var btn=document.getElementById('btn');
+  if(pac.nome.length<3){ showErr('Preencha seu nome completo.'); return; }
+  if(pac.cpf.replace(/\D/g,'').length<11){ showErr('Preencha um CPF válido.'); return; }
+  if(pac.telefone.replace(/\D/g,'').length<8){ showErr('Preencha seu telefone.'); return; }
+  if(!aceites.sigilo||!aceites.online||!aceites.limites){ showErr('Marque os itens de ciência (sigilo, atendimento online e limites).'); return; }
+  if(!aceites.consentimento){ showErr('Marque "Li e concordo com o contrato terapêutico".'); return; }
+  if(!SB){ showErr('Sem conexão. Tente novamente.'); return; }
   btn.disabled=true; btn.textContent='Registrando…';
   try{
-    var r=await SB.rpc('contrato_aceitar',{p_id:ID,p_nome:nome});
-    if(r.error) throw new Error(r.error.message);
-    render(r.data);
-    window.scrollTo(0,0);
-  }catch(e){ btn.disabled=false; btn.textContent='Aceitar contrato'; err.textContent='Não consegui registrar: '+((e&&e.message)||'tente de novo'); err.style.display='block'; }
+    var r=await SB.rpc('contrato_aceitar',{p_id:ID,p_nome:pac.nome,p_dados:{pac:pac,aceites:aceites}});
+    if(r.error)throw new Error(r.error.message);
+    render(r.data); window.scrollTo(0,0);
+  }catch(e){ btn.disabled=false; btn.textContent='Assinar e aceitar contrato'; showErr('Não consegui registrar: '+((e&&e.message)||'tente de novo')); }
 }
+
 (async function(){
   if(!ID){ render(null); return; }
   if(!SB){ app.innerHTML='<div class="doc"><h1>Sem conexão</h1></div>'; return; }
