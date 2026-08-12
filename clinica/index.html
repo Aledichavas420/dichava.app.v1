@@ -648,6 +648,9 @@ body.has-demo-banner{padding-bottom:64px}
 .rd-t{font-size:14.5px;font-weight:800;color:var(--tx);line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rd-m{font-size:12px;color:var(--txs);margin-top:1px}
 .rd-go{flex:0 0 auto;color:var(--txm);font-size:20px}
+.mitem.sel{cursor:pointer;gap:11px}
+.mi-chk{width:20px;height:20px;flex:0 0 auto;accent-color:var(--v);cursor:pointer;margin:0}
+.mitem.sel:has(.mi-chk:checked){border-color:var(--v);background:var(--vf)}
 </style>
 </head>
 <body>
@@ -1548,12 +1551,15 @@ function redeHome(){
     <div class="rede-sec-h">Formação e leitura</div>
     ${acessos}`;
 }
+let _muralArea=null, _muralItens=[];
+function _toggleMi(el,ev){ if(ev.target.closest('a')||ev.target.classList.contains('mi-chk'))return; const c=el.querySelector('.mi-chk'); if(c)c.checked=!c.checked; }
 function abrirMural(k){
   const m=MURAL.find(x=>x.k===k); if(!m)return;
   const itens=(m.itens||[]).slice().sort((a,b)=>a.data.localeCompare(b.data));
-  const lista=itens.length?(`<div class="rede-sec-h" style="margin:20px 2px 10px">Próximos encontros</div><div class="mural-itens">`+
-    itens.map(i=>{ const f=fmtDMural(i.data); return `<div class="mitem"><div class="mitem-data"><b>${f.dia}</b><span>${f.mes}</span></div>
-      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${i.hora?esc(i.hora)+' · ':''}${esc(i.sub||'')}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener">Adicionar ao Google Agenda</a></div>
+  _muralArea=k; _muralItens=itens;
+  const lista=itens.length?(`<div class="rede-sec-h" style="margin:20px 2px 8px">Escolha os encontros <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--txm)">(pode marcar mais de um)</span></div><div class="mural-itens">`+
+    itens.map((i,idx)=>{ const f=fmtDMural(i.data); return `<div class="mitem sel" onclick="_toggleMi(this,event)"><input type="checkbox" class="mi-chk" data-i="${idx}" onclick="event.stopPropagation()"><div class="mitem-data"><b>${f.dia}</b><span>${f.mes}</span></div>
+      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${i.hora?esc(i.hora)+' · ':''}${esc(i.sub||'')}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Adicionar ao Google Agenda</a></div>
       ${i.tag?`<span class="mitem-tag">${esc(i.tag)}</span>`:''}</div>`; }).join('')+`</div>`):'';
   const info=m.info?`<div class="mural-info">${esc(m.info)}</div>`:'';
   openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>${esc(m.t)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
@@ -1562,18 +1568,22 @@ function abrirMural(k){
       <p style="font-size:14px;line-height:1.6;color:var(--txs);text-align:center;margin:0">${esc(m.d)}</p>
       ${info}
       ${lista}
-      <button class="btn" style="width:100%;justify-content:center;margin-top:16px" onclick="interesseMural('${m.k}')">Tenho interesse</button>
-      <p style="font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px">As datas ainda são uma prévia. Toque em tenho interesse que a gente confirma sua vaga e te avisa.</p>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:16px" onclick="confirmarInteresse()">Confirmar interesse</button>
+      <p style="font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px">As datas ainda são uma prévia. Marque os encontros que quer participar que a gente confirma sua vaga e te avisa.</p>
     </div></div>`);
 }
-async function interesseMural(k){
-  const m=MURAL.find(x=>x.k===k); closeModal();
+async function confirmarInteresse(){
+  const sel=[].slice.call(document.querySelectorAll('.mi-chk:checked')).map(c=>_muralItens[+c.dataset.i]).filter(Boolean);
+  if(!sel.length){ toast('Marque ao menos um encontro.',2500); return; }
+  closeModal();
+  const m=MURAL.find(x=>x.k===_muralArea);
   try{
     if(typeof _SB!=='undefined' && _SB && AUTH && AUTH.id){
-      await _SB.from('rede_interesses').upsert({ area:k, area_nome:(m?m.t:k), user_id:AUTH.id, nome:(AUTH.nome||null) }, { onConflict:'user_id,area', ignoreDuplicates:true });
+      const rows=sel.map(i=>({ area:_muralArea, area_nome:(m?m.t:_muralArea), item:i.titulo, item_data:i.data, user_id:AUTH.id, nome:(AUTH.nome||null) }));
+      await _SB.from('rede_interesses').upsert(rows, { onConflict:'user_id,area,item', ignoreDuplicates:true });
     }
-    toast('Interesse registrado. A gente te avisa quando abrir.');
-  }catch(e){ toast('Interesse anotado. A gente te avisa quando abrir.'); }
+    toast(sel.length>1?('Interesse registrado em '+sel.length+' encontros.'):'Interesse registrado. A gente te avisa.');
+  }catch(e){ toast('Interesse anotado. A gente te avisa.'); }
 }
 
 function _capa(s,l,big){
