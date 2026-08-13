@@ -1813,7 +1813,7 @@ a{color:inherit;text-decoration:none}
 .cmb-slot-lbl{font-size:12px;font-weight:800;color:var(--txm)}
 .cmb-slot.filled{border-style:solid;border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,#fff)}
 #shell.dkm .cmb-slot.filled{background:color-mix(in srgb,var(--c) 22%,#1D2520)}
-.cmb-slot-e{font-size:34px;line-height:1}.cmb-slot-e .subicon{width:40px;height:40px}.cmb-tile-ic .subicon{width:26px;height:26px}
+.cmb-slot-e{font-size:34px;line-height:1}.cmb-slot-e .subicon{width:40px;height:40px}.subicon-sm{width:15px;height:15px;vertical-align:-3px}.hie .subicon{width:22px;height:22px}.drie .subicon{width:20px;height:20px}.quick-card-ic .subicon{width:34px;height:34px}.cmb-tile-ic .subicon{width:26px;height:26px}
 .cmb-slot-n{font-size:12.5px;font-weight:800;color:var(--dk);text-align:center;padding:0 6px;line-height:1.15}
 #shell.dkm .cmb-slot-n{color:#E9EFE7}
 .cmb-slot-x{position:absolute;top:7px;right:9px;font-size:12px;color:var(--c);opacity:.75;font-weight:800}
@@ -4601,6 +4601,8 @@ const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 const vib=ms=>{try{if(navigator.vibrate)navigator.vibrate(ms||10)}catch{}};
 const fdt=iso=>{if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`};
 const nem=s=>{const m={Álcool:'🍺',Cannabis:'🌿',Tabaco:'🚬',Cocaína:'❄️',MDMA:'💊',LSD:'✨',Cogumelo:'🍄',Ketamina:'🌀',Crack:'🔥',Opioide:'🌸','Benzodiaz.':'💤',Ayahuasca:'🌿✨',Cafeína:'☕'};for(const k of Object.keys(m))if(s&&s.includes(k))return m[k];return'🔹'};
+function nemSvg(s){var names=['Álcool','Cannabis','Tabaco','Cocaína','MDMA','LSD','Cogumelo','Ketamina','Crack','Opioide','Benzodiaz.','Ayahuasca','Cafeína'];if(s){for(var i=0;i<names.length;i++){if(s.indexOf(names[i])>=0){var ic=(typeof subIcon==='function')?subIcon(names[i]):'';if(ic)return ic;}}}return '<svg class="subicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#B7C4B4"></circle></svg>';}
+function nemSvgSm(s){return nemSvg(s).replace('class="subicon"','class="subicon subicon-sm"');}
 const ini=n=>{if(!n)return'?';return n.trim().split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2)};
 const saud=()=>{const h=new Date().getHours();if(h<12)return'Bom dia,';if(h<18)return'Boa tarde,';return'Boa noite,'};
 const gProt=()=>ls('dr_prot_'+uid())||[];
@@ -5519,7 +5521,7 @@ function renderCompras(){
   const cnt=document.getElementById('compras-count');if(cnt)cnt.textContent=compras.length+(compras.length===1?' compra':' compras');
   let body;
   if(!compras.length)body='<div style="font-size:13px;color:var(--txm);padding:0 4px 12px">Nenhuma compra registrada ainda.</div>';
-  else body=compras.map(cp=>`<div class="hi"><div class="hie">${nem(cp.substancia||'')}</div><div class="hib"><div class="hin">${esc(cp.item||cp.substancia||'Compra')}</div><div class="him">${fdt(cp.data)}${cp.local?' · '+esc(cp.local):''}</div></div><div style="font-weight:800;color:var(--dk);white-space:nowrap;align-self:center">${brl(parseBRL(cp.valor))}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button class="dan" onclick="delCompra('${cp.id}')">🗑️ Apagar</button></div></div></div>`).join('');
+  else body=compras.map(cp=>`<div class="hi"><div class="hie">${nemSvg(cp.substancia||'')}</div><div class="hib"><div class="hin">${esc(cp.item||cp.substancia||'Compra')}</div><div class="him">${fdt(cp.data)}${cp.local?' · '+esc(cp.local):''}</div></div><div style="font-weight:800;color:var(--dk);white-space:nowrap;align-self:center">${brl(parseBRL(cp.valor))}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button class="dan" onclick="delCompra('${cp.id}')">🗑️ Apagar</button></div></div></div>`).join('');
   if(isPremium()){c.classList.remove('premgate','locked');c.innerHTML=body;}
   else{c.classList.add('premgate','locked');c.innerHTML=`<div class="premgate-body">${body}</div>`+premOverlayHTML('Registros de compra','Acompanhe seus gastos e o quanto você economiza — no premium.');}
 }
@@ -5684,7 +5686,7 @@ function renderQuick(){
   const c=document.getElementById('h-quick');if(!c)return;
   const regs=gR();if(!regs.length){c.innerHTML='';return;}
   const last=regs[regs.length-1];
-  c.innerHTML=`<button class="quickreg" onclick="registroRapido()"><span class="quickreg-ic">⚡</span><span class="quickreg-tx">Registrar igual ao último<b>${nem(last.substancia)} ${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</b></span><span class="quickreg-go">+</span></button>`;
+  c.innerHTML=`<button class="quickreg" onclick="registroRapido()"><span class="quickreg-ic">⚡</span><span class="quickreg-tx">Registrar igual ao último<b>${nemSvgSm(last.substancia)} ${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</b></span><span class="quickreg-go">+</span></button>`;
 }
 let _quickData=null;
 function limiteDia(){return gC().limD||3;}
@@ -5693,7 +5695,7 @@ function registroRapido(){
   const regs=gR();if(!regs.length){openMod('mreg');return;}
   const last=regs[regs.length-1];
   _quickData={substancia:last.substancia,substancias:regSubsArr(last),qtd:last.qtd||'',hr:periodoAgora(),ctx:last.ctx||'',emocao:last.emocao||'😐',emoLabel:last.emoLabel||'',custo:last.custo||''};
-  document.getElementById('quick-card').innerHTML=`<div class="quick-card"><div class="quick-card-ic">${nem(last.substancia)}</div><div><div class="quick-card-n">${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</div><div class="quick-card-m">${periodoAgora()} · agora</div></div></div>`;
+  document.getElementById('quick-card').innerHTML=`<div class="quick-card"><div class="quick-card-ic">${nemSvg(last.substancia)}</div><div><div class="quick-card-n">${esc(last.substancia)}${last.qtd?' · '+esc(last.qtd):''}</div><div class="quick-card-m">${periodoAgora()} · agora</div></div></div>`;
   // alertas de cuidado
   const hj=hoje();const hojeRegs=regs.filter(r=>r.data===hj);const semRegs=regs.filter(r=>r.data>=semISO(hj));const lim=limiteDia(),limS=limiteSemana();const al=[];
   if(hojeRegs.length>=lim)al.push({t:'⚠️ Limite do dia atingido',d:`Você já registrou ${hojeRegs.length}x hoje (seu limite é ${lim}). Registrar a realidade é ótimo — mas que tal uma pausa antes? 💚`});
@@ -5786,7 +5788,7 @@ function renderResumo(regs,goal){
 
 function abrirResumo(){
   const regs=gR();const sw=regs.filter(r=>r.data>=semISO(hoje()));const subs=[...new Set(sw.map(r=>r.substancia))];const mts=gM();
-  document.getElementById('mresumo-c').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px"><div class="sc2"><div class="sn">${sw.length}</div><div class="sl">registros</div></div><div class="sc2"><div class="sn v">${streak(regs)}</div><div class="sl">dias seq.</div></div><div class="sc2"><div class="sn r">${mts.filter(m=>m.ok).length}/${mts.length}</div><div class="sl">metas</div></div></div><div style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Substâncias essa semana</div><div>${subs.length?subs.map(s=>`<span style="display:inline-block;background:var(--vf);color:var(--ve);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;margin:2px">${nem(s)} ${s}</span>`).join(''):'Nenhum registro essa semana.'}</div></div>`;
+  document.getElementById('mresumo-c').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px"><div class="sc2"><div class="sn">${sw.length}</div><div class="sl">registros</div></div><div class="sc2"><div class="sn v">${streak(regs)}</div><div class="sl">dias seq.</div></div><div class="sc2"><div class="sn r">${mts.filter(m=>m.ok).length}/${mts.length}</div><div class="sl">metas</div></div></div><div style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Substâncias essa semana</div><div>${subs.length?subs.map(s=>`<span style="display:inline-block;background:var(--vf);color:var(--ve);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;margin:2px">${nemSvgSm(s)} ${s}</span>`).join(''):'Nenhum registro essa semana.'}</div></div>`;
   openMod('mresumo');
 }
 function salvResumo(){const tx=document.getElementById('resumo-prox').value.trim();if(!tx){toast('⚠️ Escreva algo.');return;}const refs=gRef();refs.push({id:'f'+Date.now(),texto:tx,emocao:'🎯',tag:'intenção',data:hoje(),criado:new Date().toISOString()});sRef(refs);blurAll();closeMod('mresumo');toast('✓ Intenção guardada!');}
@@ -5795,7 +5797,7 @@ function envResumoWPP(){const regs=gR(),sw=regs.filter(r=>r.data>=semISO(hoje())
 function renderHistMini(regs){
   const c=document.getElementById('h-hist');const ul=regs.slice(-5).reverse();
   if(!ul.length){c.innerHTML='<div style="font-size:13px;color:var(--txm);text-align:center;padding:16px 18px">Nenhum registro ainda.<br>Toque em <strong>+</strong> para começar.</div>';return;}
-  c.innerHTML=ul.map(r=>`<div class="hi" style="margin:0 18px"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${r.ctx?' · '+esc(r.ctx):''}${!fhora(r)&&r.hr?' · '+r.hr:''}</div></div><div style="font-size:19px">${r.emocao||''}</div></div>`).join('');
+  c.innerHTML=ul.map(r=>`<div class="hi" style="margin:0 18px"><div class="hie">${regSubsArr(r).map(s=>nemSvg(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${r.ctx?' · '+esc(r.ctx):''}${!fhora(r)&&r.hr?' · '+r.hr:''}</div></div><div style="font-size:19px">${r.emocao||''}</div></div>`).join('');
 }
 
 /* ══ REGISTRO ══ */
@@ -5926,7 +5928,7 @@ function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
 function calSel(iso){_calSel=iso;renderCal();}
 function renderDdet(regs){
   const det=document.getElementById('ddet');const ri=regs.filter(r=>r.data===_calSel);det.style.display='block';
-  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nem(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${fhora(r)||r.hr||''}${r.ctx?' · '+esc(r.ctx):''}${r.gatilhos?.length?' · '+esc(r.gatilhos.join(', ')):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
+  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nemSvg(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${fhora(r)||r.hr||''}${r.ctx?' · '+esc(r.ctx):''}${r.gatilhos?.length?' · '+esc(r.gatilhos.join(', ')):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
 }
 
 /* ══ PROGRESSO ══ */
@@ -6005,7 +6007,7 @@ function abrirPerfil(){
   const perf=gPerfil();const subs=(obj?.subs||[]).map(x=>x.replace(/^[^\wÀ-ú]+ /,''));
   let info='';
   info+=`<div class="perfil-row"><div class="perfil-k">🎯 Objetivo</div><div class="perfil-v">${esc(goal?.nome||'—')}</div></div>`;
-  if(subs.length)info+=`<div class="perfil-row"><div class="perfil-k">🌿 Substâncias</div><div class="perfil-v">${subs.map(s=>`<span class="perfil-chip">${nem(s)} ${esc(s)}</span>`).join('')}</div></div>`;
+  if(subs.length)info+=`<div class="perfil-row"><div class="perfil-k">🌿 Substâncias</div><div class="perfil-v">${subs.map(s=>`<span class="perfil-chip">${nemSvgSm(s)} ${esc(s)}</span>`).join('')}</div></div>`;
   const fmt=(k,ic,key)=>{const v=perf[key];if(v&&v.length)info+=`<div class="perfil-row"><div class="perfil-k">${ic} ${k}</div><div class="perfil-v">${v.map(x=>`<span class="perfil-chip">${esc(x)}</span>`).join('')}</div></div>`;};
   fmt('Motivação','💛','motivacao');fmt('Tempo de uso','⏳','tempo');fmt('Tentativas','🔁','tentativas');fmt('Desafios','🌊','desafio');
   if(obj?.data)info+=`<div class="perfil-row"><div class="perfil-k">📅 Membro desde</div><div class="perfil-v">${fdt(obj.data)}</div></div>`;
@@ -6068,7 +6070,7 @@ function renderHist(){
   const regs=gR().slice().reverse();const c=document.getElementById('hist-l');
   const cnt=document.getElementById('hist-count');if(cnt)cnt.textContent=regs.length+(regs.length===1?' registro':' registros');
   if(!regs.length){c.innerHTML='<div style="text-align:center;padding:24px 18px;color:var(--txm)"><div class="hist-empty-ic">'+icon('prog-empty')+'</div><div style="font-size:13.5px;font-weight:600">Nenhum registro ainda</div><div style="font-size:12px;margin-top:3px">Toque em <strong>+ novo</strong> para começar a registrar.</div></div>';return;}
-  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${regSubsArr(r).map(s=>nem(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${!fhora(r)&&r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
+  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${regSubsArr(r).map(s=>nemSvg(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${!fhora(r)&&r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
 }
 function delReg(id){
   if(!confirm('Excluir este registro?'))return;
@@ -8610,7 +8612,7 @@ function renderTempo(){
     const rs=regs.filter(r=>r.substancia===sb);if(!rs.length)return;
     const last=rs.map(r=>r.data).sort().pop();
     const d=Math.round((hj-new Date(last+'T12:00:00'))/864e5);
-    const ic=(typeof subIcon==='function'&&subIcon(sb))||`<span style="font-size:26px">${nem(sb)}</span>`;
+    const ic=(typeof subIcon==='function'&&subIcon(sb))||nemSvg(sb);
     html+=`<div class="tsup"><div class="tsu-ic">${ic}</div><div class="tsu-tx"><div class="tsun">${d===0?'hoje':d}</div><div class="tsul">${d===0?'último uso de':'dia'+(d>1?'s':'')+' sem'} ${esc(sb)}</div></div></div>`;
   });
   c.innerHTML=html?`<div style="padding:14px 18px 8px;font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.6px">⏳ Tempo desde o último uso</div><div class="tsu">${html}</div>`:'';
