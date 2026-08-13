@@ -7186,6 +7186,19 @@ async function confirmarAgendamento(codigo,data,hora){
 let _profsById={};
 let _chat={conv:null,otherNome:'',otherInfo:'',otherTel:'',asPro:false,from:'vprofs',prefill:'',poll:null,lastN:0};
 function ini2(n){return (n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
+async function garantirSessao(){
+  if(!_SB) return false;
+  try{
+    const g=await _SB.auth.getSession();
+    let session=g&&g.data&&g.data.session;
+    const exp=session&&session.expires_at?session.expires_at*1000:0;
+    if(!session||(exp&&exp-Date.now()<60000)){
+      const r=await _SB.auth.refreshSession();
+      session=(r&&r.data&&r.data.session)||session;
+    }
+    return !!session;
+  }catch(e){ return false; }
+}
 let _avisoConvId=null;
 async function contatarProf(id){
   try{vib(12);}catch(e){}
@@ -7200,6 +7213,7 @@ async function _abrirConversaProf(id){
   if(typeof U==='undefined'||!U){toast('Entre na sua conta para conversar.');return;}
   if(U.id==='demo'){toast('🎬 No modo demonstração o chat fica desativado. Crie sua conta grátis pra conversar com profissionais 💚',4500);return;}
   if(!_SB){toast('Sem conexão com o servidor.');return;}
+  try{ await garantirSessao(); }catch(_){}
   const p=_profsById[id]||{};
   // cria (ou recupera) a conversa via função no servidor (define user_id = você, sem erro de RLS)
   const chamar=async()=>{
@@ -7232,7 +7246,7 @@ async function _abrirConversaProf(id){
     abrirChat(conv,false,p.nome||conv.prof_nome||'Profissional',p.telefone||'','vprofs',p.tipo_prof||'','');
   }catch(e){
     const m=(e&&e.message)||'';
-    if(/login_required/.test(m)){ toast('Entre na sua conta novamente para conversar 💚',4000); }
+    if(/login_required/.test(m)){ toast('Sua sessão expirou. Faça login de novo pra conversar.',4500); try{await _SB.auth.signOut();}catch(_){} U=null; try{ls('dr_session',null);}catch(_){} try{closeMod('mavisoconv');}catch(_){} try{showV('va');}catch(_){} }
     else toast('⚠️ '+(m||'não consegui abrir a conversa'),5000);
   }
 }
