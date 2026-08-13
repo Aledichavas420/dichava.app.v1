@@ -1813,7 +1813,7 @@ a{color:inherit;text-decoration:none}
 .cmb-slot-lbl{font-size:12px;font-weight:800;color:var(--txm)}
 .cmb-slot.filled{border-style:solid;border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,#fff)}
 #shell.dkm .cmb-slot.filled{background:color-mix(in srgb,var(--c) 22%,#1D2520)}
-.cmb-slot-e{font-size:34px;line-height:1}
+.cmb-slot-e{font-size:34px;line-height:1}.cmb-slot-e .subicon{width:40px;height:40px}.cmb-tile-ic .subicon{width:26px;height:26px}
 .cmb-slot-n{font-size:12.5px;font-weight:800;color:var(--dk);text-align:center;padding:0 6px;line-height:1.15}
 #shell.dkm .cmb-slot-n{color:#E9EFE7}
 .cmb-slot-x{position:absolute;top:7px;right:9px;font-size:12px;color:var(--c);opacity:.75;font-weight:800}
@@ -8869,13 +8869,13 @@ function renderCmbSlots(){
   for(let i=0;i<2;i++){
     const el=document.getElementById('cmb-slot'+i);if(!el)continue;
     const s=_cmbPick[i];
-    if(s){const th=_cmbTheme(s);el.classList.add('filled');el.style.setProperty('--c',th.cor);el.innerHTML='<span class="cmb-slot-x">✕</span><span class="cmb-slot-e">'+th.emo+'</span><span class="cmb-slot-n">'+esc(s)+'</span>';}
+    if(s){const th=_cmbTheme(s);el.classList.add('filled');el.style.setProperty('--c',th.cor);el.innerHTML='<span class="cmb-slot-x">✕</span><span class="cmb-slot-e">'+(_doseIcon(s)||th.emo)+'</span><span class="cmb-slot-n">'+esc(s)+'</span>';}
     else{el.classList.remove('filled');el.style.removeProperty('--c');el.innerHTML='<span class="cmb-slot-q">?</span><span class="cmb-slot-lbl">'+(i===0?'1ª substância':'2ª substância')+'</span>';}
   }
 }
 function renderCmbGrid(){
   const el=document.getElementById('cmb-grid');if(!el)return;
-  el.innerHTML=CMB_SUBS.map(function(s){const th=_cmbTheme(s);const on=_cmbPick.indexOf(s)>=0;return '<button type="button" class="cmb-tile'+(on?' on':'')+'" style="--c:'+th.cor+'" onclick="cmbTileTap(\''+s.replace(/'/g,"\\'")+'\')"><span class="cmb-tile-ic">'+th.emo+'</span><span class="cmb-tile-n">'+esc(s.replace(' / Crack',''))+'</span></button>';}).join('');
+  el.innerHTML=CMB_SUBS.map(function(s){const th=_cmbTheme(s);const on=_cmbPick.indexOf(s)>=0;return '<button type="button" class="cmb-tile'+(on?' on':'')+'" style="--c:'+th.cor+'" onclick="cmbTileTap(\''+s.replace(/'/g,"\\'")+'\')"><span class="cmb-tile-ic">'+(_doseIcon(s)||th.emo)+'</span><span class="cmb-tile-n">'+esc(s.replace(' / Crack',''))+'</span></button>';}).join('');
 }
 function _cmbSync(){
   const sa=document.getElementById('cmb-a'),sb=document.getElementById('cmb-b');
