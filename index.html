@@ -6926,16 +6926,30 @@ async function salvarPerfilPro(){
 // rotearPro definida abaixo
 function setFiltro(f,v,btn){_pfFilt[f]=v;btn.parentElement.querySelectorAll('.pf-chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');renderProfs();}
 function fecharProfAviso(){ try{ var a=document.getElementById('prof-aviso'); if(a)a.style.display='none'; localStorage.setItem('dr_profaviso_x','1'); }catch(e){} }
-async function renderProfs(){
+let _profsCache=null,_profsCacheAt=0,_avMap={};
+async function _carregarProfs(force){
+  if(!_SB){ if(!_profsCache)_profsCache=[]; return; }
+  if(!force && _profsCache && (Date.now()-_profsCacheAt)<180000) return; // reusa por até 3 min
+  try{
+    // Só as colunas da listagem. A foto (data URL base64) e os JSONs de bio NÃO vêm aqui,
+    // pra não baixar megas a cada busca; a ficha aberta carrega o registro completo.
+    const cols='id,nome,tipo_prof,reg,cidade,modalidade,especialidades,bio,duracao,agenda_config,destaque,ativo,em_teste,oculto_diretorio,status,telefone';
+    const q=_SB.from('profissionais_pub').select(cols).eq('status','aprovado');
+    const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);
+    if(data){ _profsCache=data; _profsCacheAt=Date.now(); } else if(!_profsCache) _profsCache=[];
+  }catch(e){ if(!_profsCache)_profsCache=[]; }
+  (_profsCache||[]).forEach(p=>{ _profsById[p.id]=Object.assign(_profsById[p.id]||{},p); if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random(); });
+  try{
+    if(_profsCache&&_profsCache.length){ const ids=_profsCache.map(p=>p.id); const{data:avs}=await _SB.from('avaliacoes_prof').select('prof_id,nota').in('prof_id',ids); const m={}; (avs||[]).forEach(a=>{(m[a.prof_id]=m[a.prof_id]||[]).push(a.nota);}); _avMap=m; }
+  }catch(e){}
+}
+async function renderProfs(force){
   try{ if(localStorage.getItem('dr_profaviso_x')==='1'){ var _pa=document.getElementById('prof-aviso'); if(_pa)_pa.style.display='none'; } }catch(e){}
   const c=document.getElementById('pf-list');
-  c.innerHTML='<div style="text-align:center;padding:40px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
-  let profs=[];
-  if(_SB){try{const q=_SB.from('profissionais_pub').select('*').eq('status','aprovado');const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);profs=data||[];}catch(e){profs=[];}}
-  profs.forEach(p=>{_profsById[p.id]=p; if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random();});
-  // médias de avaliação (1 query pra todos)
-  let avMap={};
-  if(_SB&&profs.length){try{const ids=profs.map(p=>p.id);const{data:avs}=await _SB.from('avaliacoes_prof').select('prof_id,nota').in('prof_id',ids);(avs||[]).forEach(a=>{(avMap[a.prof_id]=avMap[a.prof_id]||[]).push(a.nota);});}catch(e){}}
+  if(!_profsCache){ c.innerHTML='<div style="text-align:center;padding:40px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>'; }
+  await _carregarProfs(force);
+  const profs=_profsCache||[];
+  const avMap=_avMap;
   const avResumo=id=>{const arr=avMap[id];if(!arr||!arr.length)return '';const m=arr.reduce((s,n)=>s+n,0)/arr.length;return `<span style="display:inline-flex;align-items:center;gap:3px"><span class="pc-star" data-icon="pf-star" style="display:inline-flex;width:14px;height:14px"></span><span style="color:#E5920A;font-weight:800;font-size:12.5px">${m.toFixed(1)}</span> <span style="color:var(--txm);font-size:11.5px">(${arr.length})</span></span>`;};
   const q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
   const list=profs.filter(p=>{
@@ -6970,8 +6984,15 @@ async function renderProfs(){
   try{aplicarIcones(c);}catch(e){}
 }
 /* ══ Perfil do profissional (detalhe) + agendamento por horários ══ */
-function abrirPerfilProf(id){
-  const p=_profsById[id]; if(!p){toast('Perfil indisponível');return;}
+async function abrirPerfilProf(id){
+  let p=_profsById[id];
+  const _body0=document.getElementById('profdet-body');
+  if(_SB && (!p || p.foto===undefined)){
+    if(_body0) _body0.innerHTML='<div style="text-align:center;padding:60px;color:var(--txm)"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div>';
+    try{ showV('vprofdet'); }catch(e){}
+    try{ const{data}=await _SB.from('profissionais_pub').select('*').eq('id',id).maybeSingle(); if(data){ p=Object.assign(_profsById[id]||{},data); _profsById[id]=p; } }catch(e){}
+  }
+  p=_profsById[id]; if(!p){toast('Perfil indisponível');return;}
   const modLabel=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'💻📍 Online e presencial':(p.modalidade||'').includes('online')?'💻 Online':'📍 Presencial';
   const temAgenda=p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length;
   const body=document.getElementById('profdet-body');
