@@ -2123,7 +2123,7 @@ async function renderChecklist(){
 function fecharChecklist(){ try{localStorage.setItem('dr_checklist_done_'+AUTH.id,'1');}catch(e){} const b=document.getElementById('checklist-box'); if(b)b.innerHTML=''; }
 
 /* =============== AGENDA =============== */
-const HORAS=[];for(let h=7;h<=20;h++){HORAS.push(String(h).padStart(2,'0')+':00');}
+const HORAS=[];for(let h=5;h<=23;h++){HORAS.push(String(h).padStart(2,'0')+':00');}
 function weekStartISO(iso){ const d=new Date(iso+'T12:00'); const wd=(d.getDay()+6)%7; return addDaysISO(iso,-wd); }
 function shiftMonthISO(iso,n){ let [y,m,d]=iso.split('-').map(Number); m=m-1+n; y+=Math.floor(m/12); m=((m%12)+12)%12; const last=new Date(y,m+1,0).getDate(); d=Math.min(d,last); return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
 function shiftAgenda(dir){ if(agendaView==='semana')agendaDay=addDaysISO(agendaDay,7*dir); else if(agendaView==='mes')agendaDay=shiftMonthISO(agendaDay,dir); else agendaDay=addDaysISO(agendaDay,dir); render(); }
