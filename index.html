@@ -2269,7 +2269,7 @@ a{color:inherit;text-decoration:none}
 .pf-tabs{display:flex;background:var(--card);border-bottom:1px solid var(--line)}
 .pf-tab{flex:1;padding:13px 0;font-size:13.5px;font-weight:700;color:var(--txm);background:none;border:none;border-bottom:2px solid transparent}
 .pf-tab.on{color:var(--tx);border-bottom-color:var(--v)}
-.pf-search{padding:14px 18px 6px;display:flex;flex-direction:column;gap:9px}
+.pf-search{padding:14px 18px 6px;display:flex;flex-direction:column;gap:9px}.prof-aviso{display:flex;gap:10px;align-items:flex-start;background:var(--vf);border:1px solid #CDE9D3;border-radius:14px;padding:11px 13px;font-size:12.5px;color:#41614A;line-height:1.55}.prof-aviso b{color:#1B2A1C}.prof-aviso svg{flex-shrink:0;margin-top:1px;color:#2E7D32}#shell.dkm .prof-aviso{background:#16301C;border-color:#2E5233;color:#C3D6C6}#shell.dkm .prof-aviso b{color:#E9EFE7}#shell.dkm .prof-aviso svg{color:#7FCB8C}
 .pf-inp{width:100%;background:#fff;border:1px solid var(--cinm);border-radius:12px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--tx);outline:none}
 #shell.dkm .pf-inp{background:#212A21;border-color:#32402F;color:#E9EFE7}
 .pf-filters{display:flex;gap:7px;overflow-x:auto;padding:2px 0;scrollbar-width:none}
@@ -3123,6 +3123,7 @@ a{color:inherit;text-decoration:none}
     <button class="pf-tab" id="pf-tab-convs" onclick="pfTab('convs')">Minhas conversas <span class="tabbadge" id="pf-convs-badge" style="display:none"></span></button>
   </div>
   <div class="pf-search" id="pf-searchbox">
+    <div class="prof-aviso"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4.5"/><path d="M12 8.2h.01"/></svg><div>Os profissionais da rede atendem por <b>agendamento</b>. Use as mensagens pra conhecer quem combina com você, tirar dúvidas sobre como cada um trabalha e marcar uma conversa. Não é um plantão de urgência: se você estiver em crise, ligue <b>188 (CVV)</b> ou <b>192 (SAMU)</b>.</div></div>
     <input class="pf-inp" id="pf-q" placeholder="Buscar por nome, especialidade ou cidade" oninput="renderProfs()">
     <div class="pf-filters" id="pf-fmod">
       <button class="pf-chip on" data-f="mod" data-v="" onclick="setFiltro('mod','',this)">Todos</button>
