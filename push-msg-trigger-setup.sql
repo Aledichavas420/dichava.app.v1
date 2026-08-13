@@ -1,14 +1,13 @@
 -- ══════════════════════════════════════════════════════════════
--- dichava.app — Gatilho de PUSH pra mensagem nova no chat
--- A cada mensagem inserida em public.mensagens, chama a Edge Function
--- push-mensagem, que descobre o destinatário e envia a notificação.
+-- dichava.app — Gatilho no banco pra disparar a função push-msg
+-- que JÁ EXISTE. Hoje a push-msg só é chamada pelo app de quem envia
+-- (client-side, "fire and forget"): se o app fechar/perder rede logo
+-- depois de enviar, o push não sai. Este gatilho roda no servidor a cada
+-- mensagem inserida, então o aviso passa a sair SEMPRE, não importa o que
+-- aconteça no aparelho de quem enviou.
 --
--- Rode DEPOIS de deployar a função:
---   supabase functions deploy push-mensagem --no-verify-jwt
--- E de garantir o secret VAPID_PRIVATE_KEY (a mesma chave do push-agenda).
---
--- Idempotente (pode rodar de novo por cima). Segue o mesmo padrão do
--- push-triggers-setup.sql (notificar_push_agenda).
+-- Não precisa deployar função nenhuma: a push-msg já está no ar.
+-- Mesmo padrão do push-agenda (push-triggers-setup.sql). Idempotente.
 -- ══════════════════════════════════════════════════════════════
 
 create extension if not exists pg_net;
@@ -17,7 +16,7 @@ create or replace function public.notificar_push_mensagem()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
   perform net.http_post(
-    url := 'https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/push-mensagem',
+    url := 'https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/push-msg',
     headers := '{"Content-Type":"application/json"}'::jsonb,
     body := jsonb_build_object('record', to_jsonb(NEW))
   );
