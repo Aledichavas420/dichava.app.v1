@@ -2979,6 +2979,43 @@ async function carregarConversas(){
 }
 function atualizarBadgeMsgs(){ const n=(PCONVS||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length+(SOLIC||[]).length; ['badge-msgs','badge-msgs-m'].forEach(id=>{const b=document.getElementById(id);if(b){b.textContent=n||'';b.style.display=n?'':'none';}}); }
 async function contarMsgsPanel(){ if(!_SB||!AUTH)return; try{ const{data}=await _SB.from('conversas').select('atualizado_em,prof_lida_em').eq('prof_id',AUTH.id); const n=(data||[]).filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em))).length+(SOLIC||[]).length; const b=document.getElementById('badge-msgs'); if(b){b.textContent=n||'';b.style.display=n?'':'none';} }catch(e){} }
+
+/* ── Vigia de mensagens (reforço): enquanto o painel está aberto, checa
+      mensagens novas a cada 20s, atualiza o badge e mostra um aviso local.
+      Complementa o push do servidor (que cobre o painel fechado). ── */
+let _msgWatchT=null, _msgSeen=null;
+async function _watchMsgs(){
+  if(!_SB||!AUTH||_DEMO)return;
+  try{
+    const{data}=await _SB.from('conversas').select('id,user_nome,ultima_msg,atualizado_em,prof_lida_em').eq('prof_id',AUTH.id);
+    const convs=data||[];
+    const naoLidas=convs.filter(c=>c.atualizado_em&&(!c.prof_lida_em||new Date(c.atualizado_em)>new Date(c.prof_lida_em)));
+    const n=naoLidas.length+((typeof SOLIC!=='undefined'&&SOLIC)?SOLIC.length:0);
+    ['badge-msgs','badge-msgs-m'].forEach(id=>{const b=document.getElementById(id);if(b){b.textContent=n||'';b.style.display=n?'':'none';}});
+    if(_msgSeen===null){ _msgSeen={}; naoLidas.forEach(c=>_msgSeen[c.id]=c.atualizado_em); return; } // 1ª passada: só memoriza
+    naoLidas.forEach(c=>{
+      const antes=_msgSeen[c.id];
+      const nova=!antes||new Date(c.atualizado_em)>new Date(antes);
+      const aberta=(typeof _pconv!=='undefined'&&_pconv&&_pconv.id===c.id);
+      if(nova&&!aberta) _notifMsgLocal(c);
+    });
+    const novo={}; naoLidas.forEach(c=>novo[c.id]=c.atualizado_em); _msgSeen=novo;
+  }catch(e){}
+}
+function _notifMsgLocal(c){
+  try{
+    if(typeof Notification==='undefined'||Notification.permission!=='granted')return;
+    // se já está olhando as mensagens com o painel na frente, não precisa de aviso de sistema
+    if(document.visibilityState==='visible'&&route==='mensagens')return;
+    const titulo=(c.user_nome||'Paciente')+' te enviou uma mensagem';
+    const corpo=(c.ultima_msg||'Nova mensagem').slice(0,120);
+    const opts={body:corpo,icon:'/clinica/icon-pro-192.png',badge:'/clinica/icon-pro-192.png',tag:'msg-'+c.id,renotify:true,data:{url:'/clinica/'}};
+    const mostrar=(reg)=>{ try{ if(reg&&reg.showNotification) reg.showNotification(titulo,opts); else if('Notification' in window) new Notification(titulo,{body:corpo}); }catch(_){} };
+    if('serviceWorker' in navigator) navigator.serviceWorker.getRegistration('/clinica/').then(reg=>mostrar(reg||_swRegClin)).catch(()=>mostrar(_swRegClin));
+    else mostrar(null);
+  }catch(e){}
+}
+function iniciarWatchMsgs(){ if(_DEMO)return; clearInterval(_msgWatchT); _msgSeen=null; _watchMsgs(); _msgWatchT=setInterval(_watchMsgs,20000); }
 function abrirConversaPanel(id){
   const c=PCONVS.find(x=>x.id===id); if(!c)return; _pconv=c;
   openModal(`<div class="modal"><div class="modal-head"><div class="avatar">${initials(c.user_nome||'?')}</div><h3 style="flex:1">${esc(c.user_nome||'Paciente')}</h3><button class="icon-btn" onclick="fecharConversaPanel()">✕</button></div>
@@ -4957,6 +4994,7 @@ function startApp(){
     try{carregarSolicitacoes();}catch(e){}
     try{carregarAgendaCfg();}catch(e){}
     try{contarMsgsPanel();}catch(e){}
+    try{iniciarWatchMsgs();}catch(e){}
   }
   if(!localStorage.getItem('dichava_clinica_tut_'+(AUTH?AUTH.id:'local'))) setTimeout(tutStart,400);
   else if(!_DEMO) setTimeout(mostrarLGPDPro,300);
