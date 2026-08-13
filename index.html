@@ -6931,11 +6931,13 @@ async function _carregarProfs(force){
   if(!_SB){ if(!_profsCache)_profsCache=[]; return; }
   if(!force && _profsCache && (Date.now()-_profsCacheAt)<180000) return; // reusa por até 3 min
   try{
-    // Só as colunas da listagem. A foto (data URL base64) e os JSONs de bio NÃO vêm aqui,
-    // pra não baixar megas a cada busca; a ficha aberta carrega o registro completo.
+    // Só as colunas da listagem + a MINIATURA leve (foto_mini). A foto cheia (data URL
+    // grande) e os JSONs de bio NÃO vêm aqui; a ficha aberta carrega o registro completo.
     const cols='id,nome,tipo_prof,reg,cidade,modalidade,especialidades,bio,duracao,agenda_config,destaque,ativo,em_teste,oculto_diretorio,status,telefone';
-    const q=_SB.from('profissionais_pub').select(cols).eq('status','aprovado');
-    const{data}=await Promise.race([q,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000))]);
+    const tmo=()=>new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000));
+    let resp=await Promise.race([_SB.from('profissionais_pub').select(cols+',foto_mini').eq('status','aprovado'),tmo()]);
+    if(resp&&resp.error){ resp=await Promise.race([_SB.from('profissionais_pub').select(cols).eq('status','aprovado'),tmo()]); } // view sem foto_mini ainda
+    const data=resp&&resp.data;
     if(data){ _profsCache=data; _profsCacheAt=Date.now(); } else if(!_profsCache) _profsCache=[];
   }catch(e){ if(!_profsCache)_profsCache=[]; }
   (_profsCache||[]).forEach(p=>{ _profsById[p.id]=Object.assign(_profsById[p.id]||{},p); if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random(); });
@@ -6967,7 +6969,7 @@ async function renderProfs(force){
     (list.length?list.map(p=>`
     <div class="pcard" onclick="abrirPerfilProf('${p.id}')" style="cursor:pointer">
       <div class="pc-head">
-        <div class="pc-av" style="background:var(--roxof)${p.foto?';padding:0;overflow:hidden':''}">${p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover">`:ini(p.nome)}</div>
+        <div class="pc-av" style="background:var(--roxof)${p.foto_mini?';padding:0;overflow:hidden':''}">${p.foto_mini?`<img src="${p.foto_mini}" style="width:100%;height:100%;object-fit:cover">`:ini(p.nome)}</div>
         <div class="pc-id"><div class="pc-nome">${esc(p.nome)}${p.destaque?' <span class="pc-destaque">★ Destaque</span>':''}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div>${avResumo(p.id)?`<div style="margin-top:2px">${avResumo(p.id)}</div>`:''}</div>
         ${modtag(p.modalidade)}
       </div>
