@@ -1059,9 +1059,29 @@ function renderVencer(){
       <div class="pacts"><button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar</button>${wa}</div></div>`;
   }).join('');
 }
+async function gerarMiniaturasAll(){
+  const btn=document.getElementById('btn-minis');
+  try{
+    const {data:profs,error}=await SB.from('profissionais').select('id,foto,foto_mini');
+    if(error) throw error;
+    const alvo=(profs||[]).filter(p=>p.foto && !p.foto_mini);
+    if(!alvo.length){ toast('Todas as fotos com miniatura já estão prontas.'); return; }
+    if(!confirm('Gerar miniatura para '+alvo.length+' foto(s)? Pode levar alguns segundos.')) return;
+    if(btn){ btn.disabled=true; }
+    const mini=(src)=>new Promise(res=>{ const img=new Image(); img.onload=()=>{ try{ const M=96; let w=img.width,h=img.height; if(w>h){if(w>M){h=Math.round(h*M/w);w=M;}}else{if(h>M){w=Math.round(w*M/h);h=M;}} const cv=document.createElement('canvas'); cv.width=w; cv.height=h; cv.getContext('2d').drawImage(img,0,0,w,h); res(cv.toDataURL('image/jpeg',0.5)); }catch(e){res(null);} }; img.onerror=()=>res(null); img.src=src; });
+    let ok=0;
+    for(let i=0;i<alvo.length;i++){
+      if(btn) btn.textContent='Gerando '+(i+1)+'/'+alvo.length+'...';
+      const m=await mini(alvo[i].foto);
+      if(m){ const{error:ue}=await SB.from('profissionais').update({foto_mini:m}).eq('id',alvo[i].id); if(!ue)ok++; }
+    }
+    if(btn){ btn.disabled=false; btn.textContent='Gerar miniaturas das fotos'; }
+    toast('Miniaturas geradas: '+ok+' de '+alvo.length);
+  }catch(e){ if(btn){btn.disabled=false;btn.textContent='Gerar miniaturas das fotos';} toast('Erro: '+((e&&e.message)||e)); }
+}
 function renderProfs(){
   const emTeste=PROFS.filter(p=>ehTrial(p)&&p.email);
-  const pb=$('#prof-bulk'); if(pb) pb.innerHTML = emTeste.length?('<button class="btn ghost sm" onclick="enviarCheckinTodosTeste()">📧 Check-in por e-mail p/ todos em teste ('+emTeste.length+')</button>'):'';
+  const pb=$('#prof-bulk'); if(pb) pb.innerHTML = '<button class="btn ghost sm" id="btn-minis" onclick="gerarMiniaturasAll()">Gerar miniaturas das fotos</button> ' + (emTeste.length?('<button class="btn ghost sm" onclick="enviarCheckinTodosTeste()">📧 Check-in por e-mail p/ todos em teste ('+emTeste.length+')</button>'):'');
   let list=PROFS.slice();
   list=list.filter(p=>{
     const {ativo,expirado}=statusInfo(p);
