@@ -3870,6 +3870,17 @@ a{color:inherit;text-decoration:none}
   <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mindnudge')">Agora não</button>
 </div></div></div>
 
+<!-- AVISO ANTES DE CONVERSAR -->
+<div class="ov" id="mavisoconv" onclick="if(event.target===this)closeMod('mavisoconv')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="width:56px;height:56px;margin:2px auto 12px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#9CF06B,#5CE3CF)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#0c2a1b" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.8-.9L3 20.5l1.5-4.4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z"/></svg></div>
+  <div class="mt c">Antes de conversar</div>
+  <p style="font-size:13.5px;color:var(--txs);line-height:1.65;margin:8px 6px 0;text-align:center">Os profissionais da rede atendem por <b style="color:var(--tx)">agendamento</b>. Use as mensagens pra conhecer quem combina com você, tirar dúvidas sobre como cada um trabalha e marcar uma conversa.</p>
+  <p style="font-size:12.5px;color:var(--txm);line-height:1.6;margin:12px 6px 0;text-align:center">Não é um plantão de urgência. Se você estiver em crise, ligue <b style="color:var(--tx)">188 (CVV)</b> ou <b style="color:var(--tx)">192 (SAMU)</b>.</p>
+  <button class="btn bv bfull" style="margin-top:18px" onclick="_avisoConvGo()">Entendi, conversar</button>
+  <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mavisoconv')">Voltar</button>
+</div></div></div>
+
 <!-- O QUE SIGNIFICAM (hero) -->
 <div class="ov" id="minfo" onclick="if(event.target===this)closeMod('minfo')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
@@ -7173,7 +7184,16 @@ async function confirmarAgendamento(codigo,data,hora){
 let _profsById={};
 let _chat={conv:null,otherNome:'',otherInfo:'',otherTel:'',asPro:false,from:'vprofs',prefill:'',poll:null,lastN:0};
 function ini2(n){return (n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
+let _avisoConvId=null;
 async function contatarProf(id){
+  try{vib(12);}catch(e){}
+  if(typeof U==='undefined'||!U){toast('Entre na sua conta para conversar.');return;}
+  if(U.id==='demo'){toast('🎬 No modo demonstração o chat fica desativado. Crie sua conta grátis pra conversar com profissionais 💚',4500);return;}
+  if(!_SB){toast('Sem conexão com o servidor.');return;}
+  _avisoConvId=id; openMod('mavisoconv');
+}
+function _avisoConvGo(){ closeMod('mavisoconv'); if(_avisoConvId) _abrirConversaProf(_avisoConvId); }
+async function _abrirConversaProf(id){
   try{vib(12);}catch(e){}
   if(typeof U==='undefined'||!U){toast('Entre na sua conta para conversar.');return;}
   if(U.id==='demo'){toast('🎬 No modo demonstração o chat fica desativado. Crie sua conta grátis pra conversar com profissionais 💚',4500);return;}
