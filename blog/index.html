@@ -16,7 +16,7 @@
 --bg:#FAF6EC;--card:#FFFFFF;--line:#EBE5D6;--cin:#F3EFE3;--tx:#18241B;--txs:#5B6B5D;--txm:#98A38F}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tx);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-a{color:inherit}
+a{color:inherit;text-decoration:none}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 .topbar{position:sticky;top:0;z-index:20;background:rgba(250,246,236,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;gap:11px;padding:13px 20px}
@@ -25,37 +25,48 @@ a{color:inherit}
 .logo .mk svg{width:21px;height:21px;fill:none;stroke:#f6f3ea;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
 .logo .wm{font-family:'Bagel Fat One',system-ui;font-size:22px;line-height:1;color:var(--vd)}
 .topbar .sub{margin-left:auto;font-size:13px;font-weight:800;color:var(--v)}
-.intro{padding:36px 0 4px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
-.intro h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:44px;letter-spacing:.01em;margin:0;line-height:1;color:var(--tx)}
-.intro p{margin:0 0 6px;color:var(--txs);font-size:16px;max-width:520px}
-.hero-carousel{position:relative;margin:22px 0 6px;border-radius:26px;overflow:hidden;background:var(--cin);box-shadow:0 26px 50px -30px rgba(24,60,34,.5)}
-.hc-track{display:flex;transition:transform .55s cubic-bezier(.4,0,.2,1)}
-.hc-slide{position:relative;flex:0 0 100%;height:420px;display:block;text-decoration:none;color:#fff}
-.hc-bg{position:absolute;inset:0;background-size:cover;background-position:center}
-.hc-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,16,10,.82),rgba(8,16,10,.15) 56%,rgba(8,16,10,.06))}
-.hc-txt{position:absolute;left:0;right:0;bottom:0;padding:34px 38px}
-.hc-tema{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:var(--v);padding:6px 13px;border-radius:999px;margin-bottom:14px}
-.hc-t{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:36px;line-height:1.06;margin:0 0 10px;max-width:80%;text-shadow:0 3px 26px rgba(0,0,0,.5)}
-.hc-by{font-size:14px;opacity:.95;font-weight:600}
-.hc-dots{position:absolute;bottom:20px;right:28px;display:flex;gap:7px}
-.hc-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);border:none;cursor:pointer;padding:0;transition:.2s}
-.hc-dot.on{background:#fff;width:22px;border-radius:999px}
-.sech{display:flex;align-items:center;gap:12px;margin:34px 0 2px}
-.sech h2{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:23px;margin:0;color:var(--tx)}
+/* masthead */
+.mast{padding:52px 0 28px}
+.mast .kick{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--v);margin-bottom:14px}
+.mast h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:52px;letter-spacing:.006em;margin:0 0 16px;line-height:1;color:var(--tx)}
+.mast p{margin:0;color:var(--txs);font-size:17px;max-width:600px;line-height:1.5}
+/* nav de temas */
+.tnav{display:flex;gap:26px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none;position:sticky;top:53px;background:rgba(250,246,236,.92);backdrop-filter:blur(8px);z-index:10}
+.tnav::-webkit-scrollbar{display:none}
+.tnav button{flex:0 0 auto;background:none;border:none;font-family:inherit;font-size:14px;font-weight:700;color:var(--txm);padding:15px 0;cursor:pointer;position:relative;white-space:nowrap;transition:color .15s}
+.tnav button:hover{color:var(--tx)}
+.tnav button.on{color:var(--tx)}
+.tnav button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2.5px;background:var(--v);border-radius:3px}
+/* cover art (reaproveitado em destaque, cards e artigo) */
+.cover{position:absolute;inset:0;background-size:cover;background-position:center;overflow:hidden}
+.cover--art::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 72% at 12% 6%,rgba(255,255,255,.30),transparent 52%),radial-gradient(85% 85% at 110% 116%,rgba(0,0,0,.36),transparent 60%)}
+.cover--art::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.6) .6px,transparent .8px);background-size:15px 15px;opacity:.10}
+.cover-mk{position:absolute;right:-8%;bottom:-16%;width:62%;max-width:310px;fill:none;stroke:#fff;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;opacity:.17;transform:rotate(-9deg)}
+.cover-vg{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,14,9,.26),transparent 42%)}
+/* destaque (manchete) */
+.feature{position:relative;display:block;margin:28px 0 8px;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--card);box-shadow:0 26px 60px -36px rgba(20,50,28,.5);transition:transform .18s,box-shadow .18s}
+.feature:hover{transform:translateY(-3px);box-shadow:0 36px 74px -36px rgba(20,50,28,.6)}
+.feature-cover{position:relative;min-height:300px}
+.feature-body{padding:36px 36px 34px;display:flex;flex-direction:column;justify-content:center;gap:13px}
+.feature-kick{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--v)}
+.feature-h{font-size:34px;font-weight:800;line-height:1.1;letter-spacing:-.02em;color:var(--tx);margin:0}
+.feature-dek{font-size:16.5px;color:var(--txs);line-height:1.55;margin:0}
+.feature-by{display:flex;align-items:center;gap:10px;margin-top:4px}
+.feature-by .pc-av{width:30px;height:30px;font-size:11px}
+.feature-more{margin-top:8px;font-weight:800;color:var(--v);font-size:14.5px;display:inline-flex;align-items:center;gap:7px}
+@media(min-width:860px){.feature{display:grid;grid-template-columns:1.02fr .98fr}.feature-cover{min-height:452px}}
+.sech{display:flex;align-items:baseline;gap:14px;margin:44px 0 4px}
+.sech h2{font-size:14px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0;color:var(--tx)}
 .sech .ln{flex:1;height:1px;background:var(--line)}
-.chips{display:flex;gap:9px;overflow-x:auto;padding:16px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--txs);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit}
-.chip.on{background:var(--v);border-color:var(--v);color:#fff}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;padding:14px 0 70px}
-.pc{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .16s,box-shadow .16s;display:flex;flex-direction:column;text-decoration:none;color:inherit;box-shadow:0 10px 26px -20px rgba(24,60,34,.4)}
-.pc:hover{transform:translateY(-4px);box-shadow:0 26px 48px -26px rgba(24,60,34,.55)}
-.pc-cap{height:190px;background-size:cover;background-position:center;position:relative}
-.pc-cap .tb{position:absolute;left:13px;top:13px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:rgba(0,0,0,.42);padding:5px 11px;border-radius:999px}
-.pc-b{padding:17px 18px 19px;display:flex;flex-direction:column;gap:9px;flex:1}
-.pc-t{font-size:19px;font-weight:800;line-height:1.24;letter-spacing:-.01em;color:var(--tx)}
-.pc-r{font-size:14px;color:var(--txs);flex:1;line-height:1.5}
-.pc-meta{font-size:12.5px;color:var(--txm);display:flex;align-items:center;gap:8px;margin-top:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:26px;padding:20px 0 84px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;transition:transform .16s,box-shadow .16s;display:flex;flex-direction:column;text-decoration:none;color:inherit;box-shadow:0 12px 30px -24px rgba(20,50,28,.5)}
+.pc:hover{transform:translateY(-4px);box-shadow:0 28px 52px -28px rgba(20,50,28,.6)}
+.pc-cap{position:relative;height:198px}
+.pc-b{padding:18px 19px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pc-kick{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--v)}
+.pc-t{font-size:20px;font-weight:800;line-height:1.22;letter-spacing:-.015em;color:var(--tx)}
+.pc-r{font-size:14px;color:var(--txs);flex:1;line-height:1.5;margin-top:2px}
+.pc-meta{font-size:12.5px;color:var(--txm);display:flex;align-items:center;gap:8px;margin-top:6px}
 .pc-av{width:24px;height:24px;border-radius:50%;background:var(--cin);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--v);overflow:hidden;flex-shrink:0}
 .pc-av img{width:100%;height:100%;object-fit:cover}
 .empty{padding:66px 20px;text-align:center;color:var(--txm)}
@@ -64,13 +75,14 @@ a{color:inherit}
 .art{padding:22px 0 76px;max-width:720px;margin:0 auto}
 .back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--v);font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;padding:8px 0;margin-bottom:2px}
 .art-tema{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--v)}
-.art h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:37px;line-height:1.08;margin:10px 0 18px;color:var(--tx)}
+.art h1{font-size:38px;font-weight:800;line-height:1.1;letter-spacing:-.02em;margin:12px 0 18px;color:var(--tx)}
 .byline{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:26px}
 .by-av{width:44px;height:44px;border-radius:50%;background:var(--cin);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--v);overflow:hidden}
 .by-av img{width:100%;height:100%;object-fit:cover}
 .by-n{font-weight:800;font-size:15px;color:var(--tx)}
 .by-d{font-size:12.5px;color:var(--txm)}
 .art-cap{width:100%;border-radius:18px;margin:0 0 26px;display:block}
+.art-cover{position:relative;height:220px;border-radius:20px;overflow:hidden;margin:6px 0 28px}
 .blocos{font-size:18.5px;line-height:1.8;color:#24322620;color:#243226}
 .blocos p{margin:0 0 20px}
 .blocos h2{font-size:25px;font-weight:800;line-height:1.28;margin:38px 0 14px;letter-spacing:-.015em;color:var(--tx)}
@@ -86,7 +98,8 @@ a{color:inherit}
 .sbtn.wa{background:#25D366;border-color:#25D366;color:#fff}
 .foot{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:var(--txm);font-size:13px;background:var(--cin)}
 .foot a{color:var(--v);font-weight:700;text-decoration:none}
-@media(max-width:560px){.intro h1{font-size:33px}.hc-slide{height:300px}.hc-t{font-size:25px;max-width:100%}.hc-txt{padding:22px}.art h1{font-size:28px}.blocos{font-size:16.5px}}
+@media(max-width:860px){.feature{grid-template-columns:1fr}.feature-cover{min-height:250px}}
+@media(max-width:560px){.mast{padding:38px 0 22px}.mast h1{font-size:37px}.feature-h{font-size:26px}.feature-body{padding:24px 22px 26px}.art h1{font-size:29px}.blocos{font-size:16.5px}.grid{grid-template-columns:1fr}.wrap{padding:0 18px}}
 </style>
 </head>
 <body>
@@ -182,32 +195,44 @@ function route(){
 }
 window.addEventListener('popstate', route);
 
-function slideBg(p){ return p.capa?`url('${esc(p.capa)}') center/cover`:grad(p.tema); }
+/* cover art reaproveitável (destaque, cards, artigo) */
+function coverArt(p){
+  if(p.capa) return `<div class="cover" style="background-image:url('${esc(p.capa)}')"><div class="cover-vg"></div></div>`;
+  return `<div class="cover cover--art" style="background:${grad(p.tema)}"><svg class="cover-mk" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg><div class="cover-vg"></div></div>`;
+}
 
 function lista(){
   const posts=(_posts||[]).filter(p=>!_tema||p.tema===_tema);
   const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
-  const destaques=(_posts||[]).slice(0,5);
-  const carrossel = (!_tema && destaques.length) ? `<div class="hero-carousel"><div class="hc-track" id="hc-track">`+
-    destaques.map(p=>`<a class="hc-slide" href="?p=${esc(p.slug)}" onclick="event.preventDefault();abrir('${esc(p.slug)}')">
-      <div class="hc-bg" style="background:${slideBg(p)}"></div><div class="hc-shade"></div>
-      <div class="hc-txt">${p.tema?`<span class="hc-tema">${esc(TEMAS[p.tema]||p.tema)}</span>`:''}<h2 class="hc-t">${esc(p.titulo)}</h2>${p.autor_nome?`<span class="hc-by">Por ${esc(p.autor_nome)}</span>`:''}</div></a>`).join('')
-    +`</div><div class="hc-dots" id="hc-dots"></div></div>` : '';
-  const chips='<div class="chips"><button class="chip'+(_tema===''?' on':'')+'" onclick="setTema(\'\')">Todos</button>'+
-    temasComPost.map(t=>`<button class="chip${_tema===t?' on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</div>';
-  const cards = posts.length ? posts.map(p=>`
+  const nav='<nav class="tnav"><button class="'+(_tema===''?'on':'')+'" onclick="setTema(\'\')">Todos</button>'+
+    temasComPost.map(t=>`<button class="${_tema===t?'on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</nav>';
+  const mast=`<header class="mast"><div class="kick">Rede dichava</div><h1>O blog da dichava</h1><p>Histórias, ideias e cuidado sem julgamento. Textos da nossa rede pra quem quer se informar e viver melhor, no seu tempo, pra você e pra quem você ama.</p></header>`;
+  if(!posts.length){ app.innerHTML=mast+nav+`<div class="empty">${_tema?'Nenhum texto neste tema ainda.':'Em breve, os primeiros textos da rede.'}</div>`; return; }
+  let html=mast+nav, rest=posts;
+  if(!_tema){
+    const f=posts[0]; rest=posts.slice(1);
+    html+=`<a class="feature" href="?p=${esc(f.slug)}" onclick="event.preventDefault();abrir('${esc(f.slug)}')">
+      <div class="feature-cover">${coverArt(f)}</div>
+      <div class="feature-body">
+        <span class="feature-kick">${f.tema?esc(TEMAS[f.tema]||f.tema):'Destaque'}</span>
+        <h2 class="feature-h">${esc(f.titulo)}</h2>
+        ${f.resumo?`<p class="feature-dek">${esc(f.resumo)}</p>`:''}
+        <div class="feature-by"><span class="pc-av">${ini(f.autor_nome)}</span><span style="font-size:13px;color:var(--txm)">${f.autor_nome?esc(f.autor_nome)+' · ':''}${fmtData(f.publicado_em||f.criado_em)}</span></div>
+        <span class="feature-more">Ler agora <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </div></a>`;
+  }
+  const cards=rest.map(p=>`
     <a class="pc" href="?p=${esc(p.slug)}" onclick="event.preventDefault();abrir('${esc(p.slug)}')">
-      <div class="pc-cap" style="background:${slideBg(p)}">${p.tema?`<span class="tb">${esc(TEMAS[p.tema]||p.tema)}</span>`:''}</div>
+      <div class="pc-cap">${coverArt(p)}</div>
       <div class="pc-b">
+        ${p.tema?`<div class="pc-kick">${esc(TEMAS[p.tema]||p.tema)}</div>`:''}
         <div class="pc-t">${esc(p.titulo)}</div>
         ${p.resumo?`<div class="pc-r">${esc(p.resumo)}</div>`:''}
         <div class="pc-meta"><span class="pc-av">${ini(p.autor_nome)}</span>${p.autor_nome?esc(p.autor_nome)+' · ':''}${fmtData(p.publicado_em||p.criado_em)}</div>
       </div>
-    </a>`).join('') : '';
-  app.innerHTML = `<div class="intro"><h1>O blog da dichava</h1><p>Histórias, ideias e cuidado sem julgamento. Textos da nossa rede pra quem quer se informar e viver melhor, no seu tempo, pra você e pra quem você ama.</p></div>`
-    + carrossel + chips
-    + (posts.length ? `<div class="sech"><h2>${_tema?esc(TEMAS[_tema]||_tema):'Últimos textos'}</h2><span class="ln"></span></div><div class="grid">${cards}</div>` : `<div class="empty">${_tema?'Nenhum texto neste tema ainda.':'Em breve, os primeiros textos da rede.'}</div>`);
-  if(carrossel) initCarousel(destaques.length);
+    </a>`).join('');
+  if(rest.length) html+=`<div class="sech"><h2>${_tema?esc(TEMAS[_tema]||_tema):'Mais recentes'}</h2><span class="ln"></span></div><div class="grid">${cards}</div>`;
+  app.innerHTML=html;
 }
 function setTema(t){ _tema=t; lista(); window.scrollTo(0,0); }
 function abrir(slug){ history.pushState(null,'','?p='+encodeURIComponent(slug)); route(); window.scrollTo(0,0); }
@@ -246,7 +271,7 @@ function verPost(p){
       <div class="by-av">${ini(p.autor_nome)}</div>
       <div><div class="by-n">${esc(p.autor_nome||'Rede dichava')}</div><div class="by-d">${fmtData(p.publicado_em||p.criado_em)}</div></div>
     </div>
-    ${p.capa?`<img class="art-cap" src="${esc(p.capa)}" alt="">`:''}
+    ${p.capa?`<img class="art-cap" src="${esc(p.capa)}" alt="">`:`<div class="art-cover">${coverArt(p)}</div>`}
     <div class="blocos">${renderBlocos(p.blocos)}</div>
     ${(p.tags&&p.tags.length)?`<div class="tags">${p.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
     <div class="share">
