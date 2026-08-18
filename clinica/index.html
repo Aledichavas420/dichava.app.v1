@@ -951,6 +951,7 @@ function go(r){
   $$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===r));
   render();
   if(r==='mensagens'||r==='agenda'){ try{carregarSolicitacoes();}catch(e){} }
+  if(r==='rede'){ try{carregarRedeEventos(true);}catch(e){} }
   $('.content').scrollTo?.(0,0); window.scrollTo(0,0);
 }
 
@@ -1535,7 +1536,7 @@ function redeHome(){
       <span class="rd-body"><span class="rd-tag">Em destaque</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+esc(dq.hora):''} · ${fmtDataExt(dq.data)}</span></span>
       <span class="rd-go">›</span></button>`:'';
   const mural=MURAL.map(m=>{ const px=muralProx(m); const pb=px?fmtDMural(px):null;
-    const badge=pb?`<span class="mural-badge on">${pb.dia} ${pb.mes}</span>`:`<span class="mural-badge">Em breve</span>`;
+    const badge=pb?`<span class="mural-badge on">${pb.dia} ${pb.mes}</span>`:((m.itens&&m.itens.length)?`<span class="mural-badge on">${m.itens.length} novo${m.itens.length>1?'s':''}</span>`:`<span class="mural-badge">Em breve</span>`);
     return `<button class="mural-card" onclick="abrirMural('${m.k}')">
       <span class="mural-ic" style="background:${m.tint}">${redeIco(m.ic)}</span>
       <span class="mural-body"><span class="mural-t">${esc(m.t)}</span><span class="mural-d">${esc(m.d)}</span></span>
