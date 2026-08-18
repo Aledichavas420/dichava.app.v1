@@ -43,3 +43,10 @@ notify pgrst, 'reload schema';
 -- Pra ver quem tem interesse em cada encontro (rode quando quiser):
 -- select area_nome, item, to_char(item_data,'DD/MM') as data, nome, criado_em
 -- from public.rede_interesses order by item_data, criado_em;
+
+-- ── Admin (você) lê TODOS os interesses, pra saber quem vai a cada encontro ──
+drop policy if exists "admin le interesses" on public.rede_interesses;
+create policy "admin le interesses" on public.rede_interesses
+  for select to authenticated using (public.eh_admin());
+
+notify pgrst, 'reload schema';

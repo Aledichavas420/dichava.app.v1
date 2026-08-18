@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Blog · dichava</title>
+<meta name="description" content="Histórias, ideias e cuidado do jeito dichava. Textos da rede sobre redução de danos, saúde e viver melhor, sem julgamento.">
+<meta property="og:title" content="Blog · dichava">
+<meta property="og:description" content="Histórias, ideias e cuidado do jeito dichava. Sem julgamento.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--v:#4CAF5A;--ve:#2E7D32;--vc:#A5D6A7;--am:#FFD600;--creme:#FBF7EC;
+--dk:#141A14;--dk2:#1B2A1C;--dk3:#22301F;--tx:#F3F7F0;--txs:#AEBDA6;--txm:#7E8E79;--line:#2A362294;--line2:#2A3622}
+*{box-sizing:border-box}
+body{margin:0;background:var(--dk);color:var(--tx);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.disp{font-family:'Bagel Fat One',system-ui;font-weight:400;letter-spacing:.01em}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(20,26,20,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line2)}
+.topbar .wrap{display:flex;align-items:center;gap:11px;padding:13px 20px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--creme)}
+.logo .mk{width:36px;height:36px;border-radius:12px;background:radial-gradient(circle at 32% 28%,#4a7856,#2f5740 80%);display:flex;align-items:center;justify-content:center}
+.logo .mk svg{width:21px;height:21px;fill:none;stroke:#f6f3ea;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.logo .wm{font-family:'Bagel Fat One',system-ui;font-size:22px;line-height:1;color:var(--creme)}
+.topbar .sub{margin-left:auto;font-size:13px;font-weight:800;color:var(--v)}
+.intro{padding:34px 0 8px}
+.intro h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:40px;letter-spacing:.01em;margin:0 0 12px;line-height:1.02;color:var(--creme)}
+.intro p{margin:0;color:var(--txs);font-size:16.5px;max-width:660px}
+.hero-carousel{position:relative;margin:22px 0 6px;border-radius:26px;overflow:hidden;background:var(--dk2)}
+.hc-track{display:flex;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.hc-slide{position:relative;flex:0 0 100%;height:400px;display:block;text-decoration:none;color:#fff}
+.hc-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.hc-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,12,8,.85),rgba(8,12,8,.15) 58%,rgba(8,12,8,.05))}
+.hc-txt{position:absolute;left:0;right:0;bottom:0;padding:32px 36px}
+.hc-tema{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.22);padding:5px 13px;border-radius:999px;margin-bottom:13px}
+.hc-t{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:34px;line-height:1.08;margin:0 0 10px;max-width:80%;text-shadow:0 3px 26px rgba(0,0,0,.55)}
+.hc-by{font-size:14px;opacity:.92;font-weight:600}
+.hc-dots{position:absolute;bottom:20px;right:28px;display:flex;gap:7px}
+.hc-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);border:none;cursor:pointer;padding:0;transition:.2s}
+.hc-dot.on{background:#fff;width:22px;border-radius:999px}
+.chips{display:flex;gap:9px;overflow-x:auto;padding:22px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line2);background:var(--dk2);color:var(--txs);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit}
+.chip.on{background:var(--creme);border-color:var(--creme);color:var(--dk)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;padding:16px 0 66px}
+.pc{background:var(--dk2);border:1px solid var(--line2);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .16s,box-shadow .16s;display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.pc:hover{transform:translateY(-4px);box-shadow:0 22px 44px -24px rgba(0,0,0,.7)}
+.pc-cap{height:186px;background-size:cover;background-position:center;position:relative}
+.pc-cap .tb{position:absolute;left:12px;top:12px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:rgba(0,0,0,.34);padding:5px 11px;border-radius:999px}
+.pc-b{padding:16px 17px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pc-t{font-size:18.5px;font-weight:800;line-height:1.24;letter-spacing:-.01em;color:var(--creme)}
+.pc-r{font-size:14px;color:var(--txs);flex:1;line-height:1.5}
+.pc-meta{font-size:12.5px;color:var(--txm);display:flex;align-items:center;gap:8px;margin-top:2px}
+.pc-av{width:24px;height:24px;border-radius:50%;background:var(--dk3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--vc);overflow:hidden;flex-shrink:0}
+.pc-av img{width:100%;height:100%;object-fit:cover}
+.empty{padding:66px 20px;text-align:center;color:var(--txm)}
+.spin{width:28px;height:28px;border:3px solid var(--line2);border-top-color:var(--v);border-radius:50%;animation:sp .8s linear infinite;margin:70px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+.art{padding:22px 0 74px;max-width:720px;margin:0 auto}
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--v);font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;padding:8px 0;margin-bottom:2px}
+.art-tema{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--v)}
+.art h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:35px;line-height:1.1;margin:10px 0 18px;color:var(--creme)}
+.byline{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);margin-bottom:26px}
+.by-av{width:44px;height:44px;border-radius:50%;background:var(--dk3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--vc);overflow:hidden}
+.by-av img{width:100%;height:100%;object-fit:cover}
+.by-n{font-weight:800;font-size:15px;color:var(--creme)}
+.by-d{font-size:12.5px;color:var(--txm)}
+.art-cap{width:100%;border-radius:18px;margin:0 0 26px;display:block}
+.blocos{font-size:18px;line-height:1.8;color:#E4EBE0}
+.blocos p{margin:0 0 20px}
+.blocos h2{font-size:24px;font-weight:800;line-height:1.28;margin:36px 0 14px;letter-spacing:-.015em;color:var(--creme)}
+.blocos figure{margin:24px 0}
+.blocos img{width:100%;border-radius:16px}
+.blocos figcaption{font-size:12.5px;color:var(--txm);text-align:center;margin-top:8px}
+.blocos blockquote{margin:28px 0;padding:6px 0 6px 20px;border-left:3px solid var(--v);font-size:21px;font-style:italic;line-height:1.5;color:var(--creme)}
+.blocos blockquote .by{display:block;font-style:normal;font-size:13.5px;color:var(--txm);margin-top:10px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:32px 0 0}
+.tag{font-size:12px;font-weight:700;color:var(--txs);background:var(--dk3);border-radius:999px;padding:6px 13px}
+.share{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0 0;padding-top:24px;border-top:1px solid var(--line2)}
+.sbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--dk2);color:var(--tx);border-radius:12px;padding:11px 17px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none}
+.sbtn.wa{background:#25D366;border-color:#25D366;color:#fff}
+.foot{border-top:1px solid var(--line2);padding:28px 0;text-align:center;color:var(--txm);font-size:13px}
+.foot a{color:var(--v);font-weight:700;text-decoration:none}
+@media(max-width:560px){.intro h1{font-size:31px}.hc-slide{height:300px}.hc-t{font-size:25px;max-width:100%}.hc-txt{padding:22px}.art h1{font-size:27px}.blocos{font-size:16.5px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap">
+  <a class="logo" href="/"><span class="mk"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></span><span class="wm">dichava</span></a>
+  <a class="sub" href="/blog/" style="text-decoration:none">Blog</a>
+</div></div>
+
+<div id="app" class="wrap"><div class="spin"></div></div>
+
+<div class="foot"><div class="wrap">Blog da rede dichava · <a href="/">ir pro app</a></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL='https://gnpwaywyexcevtzbwiyq.supabase.co';
+const SB_KEY='sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4';
+const SB = (window.supabase&&window.supabase.createClient) ? window.supabase.createClient(SB_URL,SB_KEY) : null;
+const TEMAS={rd:'Redução de danos',clinica:'Clínica e cuidado',politica:'Política de drogas',saude:'Saúde mental',familia:'Família e vínculos',ciencia:'Ciência e evidências',historias:'Histórias e vivências'};
+const TEMA_GRAD={rd:'linear-gradient(135deg,#12894e,#2fd0a0)',clinica:'linear-gradient(135deg,#0e7490,#22b8cf)',politica:'linear-gradient(135deg,#6d28d9,#db2777)',saude:'linear-gradient(135deg,#2563eb,#4f46e5)',familia:'linear-gradient(135deg,#ea580c,#f43f5e)',ciencia:'linear-gradient(135deg,#0d9488,#22c55e)',historias:'linear-gradient(135deg,#db2777,#f59e0b)'};
+const grad=t=>TEMA_GRAD[t]||'linear-gradient(135deg,#153726,#2f7d45)';
+const app=document.getElementById('app');
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ini=n=>{if(!n)return'?';return n.trim().split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);};
+function fmtData(d){ try{ return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}); }catch(e){ return ''; } }
+let _posts=null, _tema='', _hc={i:0,n:0,timer:null};
+
+async function carregar(){
+  if(!SB){ app.innerHTML='<div class="empty">Não consegui carregar o blog agora.</div>'; return; }
+  try{
+    const{data,error}=await SB.from('blog_posts').select('*').eq('status','publicado').order('publicado_em',{ascending:false});
+    if(error) throw error; _posts=data||[];
+  }catch(e){ _posts=[]; }
+  route();
+}
+function route(){
+  clearInterval(_hc.timer);
+  const p=new URLSearchParams(location.search).get('p');
+  if(p){ const post=(_posts||[]).find(x=>x.slug===p); if(post){ verPost(post); return; } }
+  lista();
+}
+window.addEventListener('popstate', route);
+
+function slideBg(p){ return p.capa?`url('${esc(p.capa)}') center/cover`:grad(p.tema); }
+
+function lista(){
+  const posts=(_posts||[]).filter(p=>!_tema||p.tema===_tema);
+  const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
+  const destaques=(_posts||[]).slice(0,5);
+  const carrossel = (!_tema && destaques.length) ? `<div class="hero-carousel"><div class="hc-track" id="hc-track">`+
+    destaques.map(p=>`<a class="hc-slide" href="?p=${esc(p.slug)}" onclick="event.preventDefault();abrir('${esc(p.slug)}')">
+      <div class="hc-bg" style="background:${slideBg(p)}"></div><div class="hc-shade"></div>
+      <div class="hc-txt">${p.tema?`<span class="hc-tema">${esc(TEMAS[p.tema]||p.tema)}</span>`:''}<h2 class="hc-t">${esc(p.titulo)}</h2>${p.autor_nome?`<span class="hc-by">Por ${esc(p.autor_nome)}</span>`:''}</div></a>`).join('')
+    +`</div><div class="hc-dots" id="hc-dots"></div></div>` : '';
+  const chips='<div class="chips"><button class="chip'+(_tema===''?' on':'')+'" onclick="setTema(\'\')">Todos</button>'+
+    temasComPost.map(t=>`<button class="chip${_tema===t?' on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</div>';
+  const cards = posts.length ? posts.map(p=>`
+    <a class="pc" href="?p=${esc(p.slug)}" onclick="event.preventDefault();abrir('${esc(p.slug)}')">
+      <div class="pc-cap" style="background:${slideBg(p)}">${p.tema?`<span class="tb">${esc(TEMAS[p.tema]||p.tema)}</span>`:''}</div>
+      <div class="pc-b">
+        <div class="pc-t">${esc(p.titulo)}</div>
+        ${p.resumo?`<div class="pc-r">${esc(p.resumo)}</div>`:''}
+        <div class="pc-meta"><span class="pc-av">${ini(p.autor_nome)}</span>${p.autor_nome?esc(p.autor_nome)+' · ':''}${fmtData(p.publicado_em||p.criado_em)}</div>
+      </div>
+    </a>`).join('') : '';
+  app.innerHTML = `<div class="intro"><h1>O blog da dichava</h1><p>Histórias, ideias e cuidado sem julgamento. Textos da nossa rede pra quem quer se informar e viver melhor, no seu tempo, pra você e pra quem você ama.</p></div>`
+    + carrossel + chips
+    + (posts.length ? `<div class="grid">${cards}</div>` : `<div class="empty">${_tema?'Nenhum texto neste tema ainda.':'Em breve, os primeiros textos da rede.'}</div>`);
+  if(carrossel) initCarousel(destaques.length);
+}
+function setTema(t){ _tema=t; lista(); window.scrollTo(0,0); }
+function abrir(slug){ history.pushState(null,'','?p='+encodeURIComponent(slug)); route(); window.scrollTo(0,0); }
+function voltar(){ history.pushState(null,'',location.pathname); lista(); window.scrollTo(0,0); }
+
+/* carrossel */
+function initCarousel(n){
+  _hc.i=0; _hc.n=n; clearInterval(_hc.timer);
+  renderDots();
+  if(n>1){ _hc.timer=setInterval(()=>goSlide(_hc.i+1),5500);
+    const tr=document.getElementById('hc-track');
+    if(tr){ let x0=null; tr.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+      tr.addEventListener('touchend',e=>{ if(x0==null)return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40)goSlide(_hc.i+(dx<0?1:-1)); x0=null; }); }
+  }
+}
+function goSlide(i){ if(_hc.n<1)return; _hc.i=(i+_hc.n)%_hc.n; const tr=document.getElementById('hc-track'); if(tr)tr.style.transform='translateX(-'+(_hc.i*100)+'%)'; renderDots(); clearInterval(_hc.timer); if(_hc.n>1)_hc.timer=setInterval(()=>goSlide(_hc.i+1),5500); }
+function renderDots(){ const d=document.getElementById('hc-dots'); if(!d)return; if(_hc.n<2){d.innerHTML='';return;} let h=''; for(let k=0;k<_hc.n;k++)h+='<button class="hc-dot'+(k===_hc.i?' on':'')+'" onclick="goSlide('+k+')" aria-label="slide '+(k+1)+'"></button>'; d.innerHTML=h; }
+
+function renderBlocos(blocos){
+  return (blocos||[]).map(b=>{
+    if(b.t==='h') return `<h2>${esc(b.x)}</h2>`;
+    if(b.t==='img') return `<figure><img src="${esc(b.url)}" alt="${esc(b.cap||'')}" loading="lazy">${b.cap?`<figcaption>${esc(b.cap)}</figcaption>`:''}</figure>`;
+    if(b.t==='quote') return `<blockquote>${esc(b.x)}${b.by?`<span class="by">${esc(b.by)}</span>`:''}</blockquote>`;
+    return `<p>${esc(b.x).replace(/\n/g,'<br>')}</p>`;
+  }).join('');
+}
+function verPost(p){
+  clearInterval(_hc.timer);
+  document.title = p.titulo+' · Blog dichava';
+  const url = location.origin+location.pathname+'?p='+encodeURIComponent(p.slug);
+  app.innerHTML = `<article class="art">
+    <button class="back" onclick="voltar()">‹ Todos os textos</button>
+    ${p.tema?`<div class="art-tema">${esc(TEMAS[p.tema]||p.tema)}</div>`:''}
+    <h1>${esc(p.titulo)}</h1>
+    <div class="byline">
+      <div class="by-av">${ini(p.autor_nome)}</div>
+      <div><div class="by-n">${esc(p.autor_nome||'Rede dichava')}</div><div class="by-d">${fmtData(p.publicado_em||p.criado_em)}</div></div>
+    </div>
+    ${p.capa?`<img class="art-cap" src="${esc(p.capa)}" alt="">`:''}
+    <div class="blocos">${renderBlocos(p.blocos)}</div>
+    ${(p.tags&&p.tags.length)?`<div class="tags">${p.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
+    <div class="share">
+      <a class="sbtn wa" href="https://wa.me/?text=${encodeURIComponent(p.titulo+' — '+url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6c-.1.2-.3.3-.1.6.1.3.7 1.1 1.4 1.8.9.8 1.7 1 2 1.2.2.1.4.1.6-.1l.6-.7c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.2.5.3 0 .2 0 .8-.2 1.4Z"/></svg>WhatsApp</a>
+      <button class="sbtn" onclick="compartilhar('${esc(p.slug)}')"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3"/></svg>Compartilhar</button>
+      <button class="sbtn" onclick="copiar('${esc(url)}')"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M10.5 6.5l1-1a3.5 3.5 0 0 1 5 5l-1 1M13.5 17.5l-1 1a3.5 3.5 0 0 1-5-5l1-1"/></svg>Copiar link</button>
+    </div>
+  </article>`;
+}
+async function compartilhar(slug){
+  const p=(_posts||[]).find(x=>x.slug===slug); if(!p)return;
+  const url=location.origin+location.pathname+'?p='+encodeURIComponent(slug);
+  if(navigator.share){ try{ await navigator.share({title:p.titulo,text:p.titulo,url}); }catch(e){} }
+  else copiar(url);
+}
+async function copiar(url){ try{ await navigator.clipboard.writeText(url); alert('Link copiado!'); }catch(e){ prompt('Copie o link:',url); } }
+carregar();
+</script>
+</body>
+</html>
