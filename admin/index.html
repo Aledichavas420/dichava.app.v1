@@ -1203,7 +1203,7 @@ async function salvarBlog(publicar){
 }
 async function despublicarBlog(id){ try{ const r=await SB.from('blog_posts').update({status:'rascunho'}).eq('id',id); if(r.error)throw r.error; carregarBlog(); }catch(e){ toast('Erro: '+((e&&e.message)||e),1); } }
 async function excluirBlog(id){ if(!confirm('Excluir este texto?'))return; try{ const r=await SB.from('blog_posts').delete().eq('id',id); if(r.error)throw r.error; toast('Excluído'); if($('#bl-id').value===id)limparBlog(); carregarBlog(); }catch(e){ toast('Erro: '+((e&&e.message)||e),1); } }
-let _redeEv=[];
+let _redeEv=[], _redeInts=[];
 const _AREA_NOME={interv:'Grupos de intervisão',rodas:'Rodas de conversa',eventos:'Eventos internos'};
 function _fmtRD(d){ try{ const[y,m,dd]=d.split('-'); return dd+'/'+m+'/'+y; }catch(_){ return d; } }
 async function carregarRedeAdmin(){
@@ -1211,22 +1211,29 @@ async function carregarRedeAdmin(){
   try{
     const{data,error}=await SB.from('rede_eventos').select('*').order('area').order('data',{ascending:true});
     if(error)throw error;
-    _redeEv=data||[]; renderRedeAdmin();
+    _redeEv=data||[];
+    try{ const r2=await SB.from('rede_interesses').select('area,item,nome,criado_em'); _redeInts=r2.data||[]; }catch(_){ _redeInts=[]; }
+    renderRedeAdmin();
   }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">'+esc(e.message||'erro')+' — rodou o rede-eventos-setup.sql?</div>'; }
 }
 function renderRedeAdmin(){
   const box=$('#re-list'); if(!box)return;
   if(!_redeEv.length){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Nenhum encontro cadastrado ainda.</div>'; return; }
-  box.innerHTML=_redeEv.map(e=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid var(--line)">
-    <div style="flex:1;min-width:0">
-      <div style="font-size:12px;color:var(--txm)">${esc(_AREA_NOME[e.area]||e.area)}${e.data?' · '+esc(_fmtRD(e.data)):''}${e.hora?' · '+esc(e.hora):''}${e.ativo?'':' · oculto'}</div>
-      <div style="font-weight:700;font-size:14px">${esc(e.titulo)}</div>
+  box.innerHTML=_redeEv.map(e=>{
+    const ints=(_redeInts||[]).filter(x=>x.area===e.area && (x.item||'')===(e.titulo||''));
+    const nomes=ints.map(x=>esc(x.nome||'sem nome')).join(', ');
+    return `<div style="padding:12px 6px;border-bottom:1px solid var(--line)">
+      <div style="font-size:12px;color:var(--txm)">${esc(_AREA_NOME[e.area]||e.area)}${e.data?' · '+esc(_fmtRD(e.data)):''}${e.hora?' · '+esc(e.hora):''}${e.ativo?'':' · <span style=\"color:#C0616B\">oculto</span>'}</div>
+      <div style="font-weight:700;font-size:14.5px">${esc(e.titulo)}</div>
       ${e.sub?`<div style="font-size:12.5px;color:var(--txs)">${esc(e.sub)}</div>`:''}
-    </div>
-    <button class="btn ghost sm" onclick="editarEventoRede('${e.id}')">Editar</button>
-    <button class="btn ghost sm" onclick="toggleEventoRede('${e.id}')">${e.ativo?'Ocultar':'Mostrar'}</button>
-    <button class="btn ghost sm" style="color:#C0616B" onclick="removerEventoRede('${e.id}')">Excluir</button>
-  </div>`).join('');
+      <div style="margin-top:6px;font-size:12.5px">${ints.length?`<span style="color:var(--v);font-weight:800">${ints.length} interessado${ints.length>1?'s':''}</span> <span style="color:var(--txs)">· ${nomes}</span>`:'<span style="color:var(--txm)">Sem interessados ainda</span>'}</div>
+      <div class="pacts" style="margin-top:9px">
+        <button class="btn ghost sm" onclick="editarEventoRede('${e.id}')">Editar</button>
+        <button class="btn ghost sm" onclick="toggleEventoRede('${e.id}')">${e.ativo?'Ocultar':'Mostrar'}</button>
+        <button class="btn ghost sm" style="color:#C0616B" onclick="removerEventoRede('${e.id}')">Excluir</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 function limparEventoRede(){ ['re-id','re-titulo','re-sub','re-data','re-hora','re-link','re-tag'].forEach(id=>{const el=$('#'+id);if(el)el.value='';}); const st=$('#re-status'); if(st)st.textContent=''; }
 async function salvarEventoRede(){
