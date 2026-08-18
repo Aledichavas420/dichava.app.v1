@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Blog · dichava</title>
+<meta name="description" content="Textos da rede dichava sobre redução de danos, cuidado e saúde, escritos por profissionais da rede.">
+<meta property="og:title" content="Blog · dichava">
+<meta property="og:description" content="Textos da rede dichava sobre redução de danos, cuidado e saúde.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--v:#2FA35F;--vd:#1B7A43;--tx:#16241A;--txs:#5A6B5E;--txm:#93A197;--bg:#F6F8F5;--card:#fff;--line:#E7ECE6;--cin:#EFF3ED}
+@media (prefers-color-scheme:dark){:root{--tx:#E9EFE7;--txs:#AEBDA9;--txm:#7C8C78;--bg:#0F140F;--card:#171E17;--line:#28331F;--cin:#1C241C}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px}
+.topbar{background:linear-gradient(150deg,#12321F,#2FA35F 70%,#49B673);color:#fff}
+.topbar .wrap{display:flex;align-items:center;gap:12px;padding:22px 20px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:800;font-size:19px}
+.logo .mk{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center}
+.topbar .sub{margin-left:auto;font-size:13px;opacity:.9}
+.hero{padding:30px 0 8px}
+.hero h1{font-size:30px;font-weight:800;margin:0 0 6px;letter-spacing:-.02em}
+.hero p{margin:0;color:var(--txs);font-size:15px;max-width:620px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:18px 0 8px;-webkit-overflow-scrolling:touch}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--txs);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit}
+.chip.on{background:var(--v);border-color:var(--v);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;padding:14px 0 60px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;display:flex;flex-direction:column}
+.pc:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(0,0,0,.35)}
+.pc-cap{aspect-ratio:16/9;background:linear-gradient(135deg,#153726,#2f7d45 62%,#3fa76a);background-size:cover;background-position:center}
+.pc-b{padding:15px 16px 17px;display:flex;flex-direction:column;gap:7px;flex:1}
+.pc-tema{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--v)}
+.pc-t{font-size:17px;font-weight:800;line-height:1.25;letter-spacing:-.01em}
+.pc-r{font-size:13.5px;color:var(--txs);flex:1}
+.pc-meta{font-size:12.5px;color:var(--txm);margin-top:2px}
+.empty{padding:60px 20px;text-align:center;color:var(--txm)}
+.spin{width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--v);border-radius:50%;animation:sp .8s linear infinite;margin:60px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* leitura do post */
+.art{padding:26px 0 70px}
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--v);font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;padding:8px 0;margin-bottom:6px}
+.art h1{font-size:30px;font-weight:800;line-height:1.2;letter-spacing:-.02em;margin:8px 0 14px}
+.art-tema{font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--v)}
+.byline{display:flex;align-items:center;gap:11px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:22px}
+.by-av{width:42px;height:42px;border-radius:50%;background:var(--cin);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--v);overflow:hidden}
+.by-av img{width:100%;height:100%;object-fit:cover}
+.by-n{font-weight:800;font-size:14.5px}
+.by-d{font-size:12.5px;color:var(--txm)}
+.art-cap{width:100%;border-radius:18px;margin:0 0 22px;display:block}
+.blocos{font-size:17px;line-height:1.75;color:var(--tx)}
+.blocos p{margin:0 0 18px}
+.blocos h2{font-size:22px;font-weight:800;line-height:1.3;margin:32px 0 12px;letter-spacing:-.01em}
+.blocos img{width:100%;border-radius:14px;margin:8px 0}
+.blocos figure{margin:20px 0}
+.blocos figcaption{font-size:12.5px;color:var(--txm);text-align:center;margin-top:7px}
+.blocos blockquote{margin:24px 0;padding:4px 0 4px 18px;border-left:3px solid var(--v);font-size:19px;font-style:italic;color:var(--tx)}
+.blocos blockquote .by{display:block;font-style:normal;font-size:13.5px;color:var(--txm);margin-top:8px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:30px 0 0}
+.tag{font-size:12px;font-weight:700;color:var(--txs);background:var(--cin);border-radius:999px;padding:5px 12px}
+.share{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 0;padding-top:22px;border-top:1px solid var(--line)}
+.sbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none}
+.sbtn.wa{background:#25D366;border-color:#25D366;color:#fff}
+.foot{border-top:1px solid var(--line);padding:26px 0;text-align:center;color:var(--txm);font-size:13px}
+.foot a{color:var(--v);font-weight:700;text-decoration:none}
+@media(max-width:560px){.hero h1{font-size:25px}.art h1{font-size:25px}.blocos{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap">
+  <a class="logo" href="/"><span class="mk"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/><circle cx="6.5" cy="7.6" r="1.7" fill="#fff"/><circle cx="17.5" cy="7.6" r="1.7" fill="#fff"/><circle cx="6.5" cy="16.4" r="1.7" fill="#fff"/><circle cx="17.5" cy="16.4" r="1.7" fill="#fff"/><circle cx="12" cy="12" r="2" fill="#fff"/></svg></span>dichava</a>
+  <span class="sub">Blog da rede</span>
+</div></div>
+
+<div id="app" class="wrap"><div class="spin"></div></div>
+
+<div class="foot"><div class="wrap">Blog da rede dichava · <a href="/">voltar ao dichava.app</a></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL='https://gnpwaywyexcevtzbwiyq.supabase.co';
+const SB_KEY='sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4';
+const SB = (window.supabase&&window.supabase.createClient) ? window.supabase.createClient(SB_URL,SB_KEY) : null;
+const TEMAS={rd:'Redução de danos',clinica:'Clínica e cuidado',politica:'Política de drogas',saude:'Saúde mental',familia:'Família e vínculos',ciencia:'Ciência e evidências',historias:'Histórias e vivências'};
+const app=document.getElementById('app');
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ini=n=>{if(!n)return'?';return n.trim().split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);};
+function fmtData(d){ try{ return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}); }catch(e){ return ''; } }
+let _posts=null, _tema='';
+
+async function carregar(){
+  if(!SB){ app.innerHTML='<div class="empty">Não consegui carregar o blog agora.</div>'; return; }
+  try{
+    const{data,error}=await SB.from('blog_posts').select('*').eq('status','publicado').order('publicado_em',{ascending:false});
+    if(error) throw error;
+    _posts=data||[];
+  }catch(e){ _posts=[]; }
+  route();
+}
+function route(){
+  const p=new URLSearchParams(location.search).get('p');
+  if(p){ const post=(_posts||[]).find(x=>x.slug===p); if(post){ verPost(post); return; } }
+  lista();
+}
+window.addEventListener('popstate', route);
+
+function lista(){
+  const posts=(_posts||[]).filter(p=>!_tema||p.tema===_tema);
+  const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
+  const chips='<div class="chips"><button class="chip'+(_tema===''?' on':'')+'" onclick="setTema(\'\')">Todos</button>'+
+    temasComPost.map(t=>`<button class="chip${_tema===t?' on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</div>';
+  const cards = posts.length ? posts.map(p=>`
+    <article class="pc" onclick="abrir('${esc(p.slug)}')">
+      <div class="pc-cap"${p.capa?` style="background-image:url('${esc(p.capa)}')"`:''}></div>
+      <div class="pc-b">
+        ${p.tema?`<span class="pc-tema">${esc(TEMAS[p.tema]||p.tema)}</span>`:''}
+        <div class="pc-t">${esc(p.titulo)}</div>
+        ${p.resumo?`<div class="pc-r">${esc(p.resumo)}</div>`:''}
+        <div class="pc-meta">${p.autor_nome?'Por '+esc(p.autor_nome)+' · ':''}${fmtData(p.publicado_em||p.criado_em)}</div>
+      </div>
+    </article>`).join('') : '';
+  app.innerHTML = `<div class="hero"><h1>Blog da rede dichava</h1><p>Textos escritos por profissionais da rede sobre redução de danos, cuidado e saúde. Sem moralismo, com base no respeito e na ciência.</p></div>`
+    + chips
+    + (posts.length ? `<div class="grid">${cards}</div>` : `<div class="empty">${_tema?'Nenhum texto neste tema ainda.':'Em breve, os primeiros textos da rede.'}</div>`);
+}
+function setTema(t){ _tema=t; lista(); window.scrollTo(0,0); }
+function abrir(slug){ history.pushState(null,'','?p='+encodeURIComponent(slug)); route(); window.scrollTo(0,0); }
+function voltar(){ history.pushState(null,'',location.pathname); _tema=_tema; lista(); window.scrollTo(0,0); }
+
+function renderBlocos(blocos){
+  return (blocos||[]).map(b=>{
+    if(b.t==='h') return `<h2>${esc(b.x)}</h2>`;
+    if(b.t==='img') return `<figure><img src="${esc(b.url)}" alt="${esc(b.cap||'')}" loading="lazy">${b.cap?`<figcaption>${esc(b.cap)}</figcaption>`:''}</figure>`;
+    if(b.t==='quote') return `<blockquote>${esc(b.x)}${b.by?`<span class="by">${esc(b.by)}</span>`:''}</blockquote>`;
+    return `<p>${esc(b.x).replace(/\n/g,'<br>')}</p>`;
+  }).join('');
+}
+function verPost(p){
+  document.title = p.titulo+' · Blog dichava';
+  const url = location.origin+location.pathname+'?p='+encodeURIComponent(p.slug);
+  app.innerHTML = `<article class="art">
+    <button class="back" onclick="voltar()">‹ Todos os textos</button>
+    ${p.tema?`<div class="art-tema">${esc(TEMAS[p.tema]||p.tema)}</div>`:''}
+    <h1>${esc(p.titulo)}</h1>
+    <div class="byline">
+      <div class="by-av">${p.autor_foto?`<img src="${esc(p.autor_foto)}" alt="">`:ini(p.autor_nome)}</div>
+      <div><div class="by-n">${esc(p.autor_nome||'Rede dichava')}</div><div class="by-d">${fmtData(p.publicado_em||p.criado_em)}</div></div>
+    </div>
+    ${p.capa?`<img class="art-cap" src="${esc(p.capa)}" alt="">`:''}
+    <div class="blocos">${renderBlocos(p.blocos)}</div>
+    ${(p.tags&&p.tags.length)?`<div class="tags">${p.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
+    <div class="share">
+      <a class="sbtn wa" href="https://wa.me/?text=${encodeURIComponent(p.titulo+' — '+url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6c-.1.2-.3.3-.1.6.1.3.7 1.1 1.4 1.8.9.8 1.7 1 2 1.2.2.1.4.1.6-.1l.6-.7c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.2.5.3 0 .2 0 .8-.2 1.4Z"/></svg>WhatsApp</a>
+      <button class="sbtn" onclick="compartilhar('${esc(p.slug)}')"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3"/></svg>Compartilhar</button>
+      <button class="sbtn" onclick="copiar('${esc(url)}',this)"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M10.5 6.5l1-1a3.5 3.5 0 0 1 5 5l-1 1M13.5 17.5l-1 1a3.5 3.5 0 0 1-5-5l1-1"/></svg>Copiar link</button>
+    </div>
+  </article>`;
+}
+async function compartilhar(slug){
+  const p=(_posts||[]).find(x=>x.slug===slug); if(!p)return;
+  const url=location.origin+location.pathname+'?p='+encodeURIComponent(slug);
+  if(navigator.share){ try{ await navigator.share({title:p.titulo,text:p.titulo,url}); }catch(e){} }
+  else copiar(url);
+}
+async function copiar(url,btn){
+  try{ await navigator.clipboard.writeText(url); if(btn){const t=btn.querySelector('*+*')?btn:null;} alert('Link copiado!'); }
+  catch(e){ prompt('Copie o link:',url); }
+}
+carregar();
+</script>
+</body>
+</html>
