@@ -1584,12 +1584,12 @@ async function confirmarInteresse(){
   closeModal();
   const m=MURAL.find(x=>x.k===_muralArea);
   try{
-    if(typeof _SB!=='undefined' && _SB && AUTH && AUTH.id){
-      const rows=sel.map(i=>({ area:_muralArea, area_nome:(m?m.t:_muralArea), item:i.titulo, item_data:i.data, user_id:AUTH.id, nome:(AUTH.nome||null) }));
-      await _SB.from('rede_interesses').upsert(rows, { onConflict:'user_id,area,item', ignoreDuplicates:true });
-    }
+    if(!(typeof _SB!=='undefined' && _SB && AUTH && AUTH.id)) throw new Error('sem sessão');
+    const rows=sel.map(i=>({ area:_muralArea, area_nome:(m?m.t:_muralArea), item:i.titulo, item_data:i.data, user_id:AUTH.id, nome:(AUTH.nome||null) }));
+    const{error}=await _SB.from('rede_interesses').upsert(rows, { onConflict:'user_id,area,item', ignoreDuplicates:true });
+    if(error) throw error;
     toast(sel.length>1?('Interesse registrado em '+sel.length+' encontros.'):'Interesse registrado. A gente te avisa.');
-  }catch(e){ toast('Interesse anotado. A gente te avisa.'); }
+  }catch(e){ console.error('rede_interesses',e); toast('Não consegui registrar agora. Tenta de novo em instantes.',3200); }
 }
 
 function _capa(s,l,big){
