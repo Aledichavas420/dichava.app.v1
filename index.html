@@ -3870,6 +3870,18 @@ a{color:inherit;text-decoration:none}
   <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mindnudge')">Agora não</button>
 </div></div></div>
 
+<!-- NUDGE: APOIO PROFISSIONAL -->
+<div class="ov" id="mnudgeprof" onclick="if(event.target===this)closeMod('mnudgeprof')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="text-align:center">
+    <div style="width:60px;height:60px;margin:2px auto 12px;border-radius:19px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#9CF06B,#5CE3CF)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#0c2a1b" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.8-.9L3 20.5l1.5-4.4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z"/></svg></div>
+    <div class="mt c" style="margin-bottom:6px">Você não precisa passar por isso sozinho</div>
+    <div id="nudgeprof-b" style="font-size:14px;color:var(--txs);line-height:1.6;margin:0 6px 16px"></div>
+  </div>
+  <button class="btn bv bfull" onclick="closeMod('mnudgeprof');abrirProfs()">Ver profissionais</button>
+  <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mnudgeprof')">Agora não</button>
+</div></div></div>
+
 <!-- AVISO ANTES DE CONVERSAR -->
 <div class="ov" id="mavisoconv" onclick="if(event.target===this)closeMod('mavisoconv')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
@@ -5872,6 +5884,15 @@ function salvReg(){
   const cfg=gC();const cH=regs.filter(r=>r.data===hoje()).length;const cS=regs.filter(r=>r.data>=semISO(hoje())).length;
   if(cfg.notif&&cH===cfg.limD)notif('⚠️','Limite diário atingido',`Você chegou a ${cH} registros hoje.`);
   else if(cfg.notif&&cS===cfg.limS)notif('📊','Limite semanal atingido',`${cS} registros essa semana.`);
+  try{
+    const _metas=(typeof gM==='function'?gM():[])||[];
+    const _lim=_metas.find(m=>m.tipo==='limite');
+    let _passou=false; if(_lim){ const _pr=metaLimiteProg(_lim); _passou=!!(_pr&&!_pr.dentro); }
+    const _negs=['😵','😰','😔']; const _rs=gR(); const _last=_rs[_rs.length-1]; const _ult=_rs.slice(-5);
+    const _dificil=_last&&_negs.includes(_last.emocao)&&_ult.filter(r=>_negs.includes(r.emocao)).length>=2;
+    if(_passou) setTimeout(function(){nudgeProf('limite');},1500);
+    else if(_dificil) setTimeout(function(){nudgeProf('humor');},1500);
+  }catch(e){}
 }
 function limparRegs(){sR([]);renderHome();toast('Registros apagados.');}
 /* ══ COMPRAS ══ */
@@ -6358,6 +6379,25 @@ function indicaWhats(){
 async function copiarLinkIndica(){
   try{await navigator.clipboard.writeText(_refLink());toast('Link copiado!');}
   catch(e){toast('Seu link: '+_refLink());}
+}
+let _profNudgeOrigem='';
+function _podeNudgeProf(){
+  try{ if(typeof U==='undefined'||!U||U.id==='demo')return false;
+    var teste=false; try{teste=location.hostname.indexOf('dichava.app')===-1;}catch(e){}
+    if(teste)return true; /* no teste aparece sempre pra validar */
+    var last=+(localStorage.getItem('dr_profnudge_ts')||0);
+    return (Date.now()-last)>6*864e5; }catch(e){return false;}
+}
+function nudgeProf(origem){
+  if(!_podeNudgeProf())return;
+  try{localStorage.setItem('dr_profnudge_ts',Date.now());}catch(e){}
+  _profNudgeOrigem=origem||'';
+  var txt=({
+    limite:'Passar do limite que você mesmo definiu acontece, e faz parte do processo. Se quiser, dá pra conversar com um profissional da rede, no seu ritmo e sem julgamento.',
+    humor:'Parece que tem sido um período mais pesado. Falar com alguém pode aliviar. Os profissionais da rede acolhem sem moralismo.'
+  })[origem]||'Se quiser um apoio a mais, a rede dichava tem profissionais alinhados à redução de danos.';
+  var b=document.getElementById('nudgeprof-b'); if(b)b.textContent=txt;
+  openMod('mnudgeprof');
 }
 function _podeNudgeIndica(){
   try{ if(typeof U==='undefined'||!U||U.id==='demo')return false;
