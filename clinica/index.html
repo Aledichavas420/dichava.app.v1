@@ -938,7 +938,7 @@ const PAG = {pix:'Pix',dinheiro:'Dinheiro',cartao:'Cartão',transferencia:'Trans
 /* =============== ESTADO DE NAVEGAÇÃO =============== */
 let route='dash';
 // Aba Rede: visível só fora do site real (teste/localhost); escondida em dichava.app.
-const REDE_VISIVEL = (function(){ try{ return location.hostname.indexOf('dichava.app')===-1; }catch(e){ return false; } })();
+const REDE_VISIVEL = true; /* Rede aberta na produção */
 let agendaDay=todayISO();
 let agendaView='dia';
 let filtroPaciente='';
