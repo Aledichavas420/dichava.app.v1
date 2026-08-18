@@ -1203,7 +1203,7 @@ async function salvarBlog(publicar){
 }
 async function despublicarBlog(id){ try{ const r=await SB.from('blog_posts').update({status:'rascunho'}).eq('id',id); if(r.error)throw r.error; carregarBlog(); }catch(e){ toast('Erro: '+((e&&e.message)||e),1); } }
 async function excluirBlog(id){ if(!confirm('Excluir este texto?'))return; try{ const r=await SB.from('blog_posts').delete().eq('id',id); if(r.error)throw r.error; toast('Excluído'); if($('#bl-id').value===id)limparBlog(); carregarBlog(); }catch(e){ toast('Erro: '+((e&&e.message)||e),1); } }
-let _redeEv=[], _redeInts=[];
+let _redeEv=[], _redeInts=[], _redeIntsErr='';
 const _AREA_NOME={interv:'Grupos de intervisão',rodas:'Rodas de conversa',eventos:'Eventos internos'};
 function _fmtRD(d){ try{ const[y,m,dd]=d.split('-'); return dd+'/'+m+'/'+y; }catch(_){ return d; } }
 async function carregarRedeAdmin(){
@@ -1212,7 +1212,7 @@ async function carregarRedeAdmin(){
     const{data,error}=await SB.from('rede_eventos').select('*').order('area').order('data',{ascending:true});
     if(error)throw error;
     _redeEv=data||[];
-    try{ const r2=await SB.from('rede_interesses').select('area,item,nome,criado_em'); _redeInts=r2.data||[]; }catch(_){ _redeInts=[]; }
+    try{ const r2=await SB.from('rede_interesses').select('area,item,area_nome,nome,criado_em'); _redeInts=r2.data||[]; _redeIntsErr=r2.error?(r2.error.message||'erro'):''; }catch(e){ _redeInts=[]; _redeIntsErr=(e&&e.message)||'erro'; }
     renderRedeAdmin();
   }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">'+esc(e.message||'erro')+' — rodou o rede-eventos-setup.sql?</div>'; }
 }
@@ -1234,6 +1234,21 @@ function renderRedeAdmin(){
       </div>
     </div>`;
   }).join('');
+  // Interesses que não casam com nenhum encontro atual (ex.: título editado depois).
+  const casados=new Set(_redeEv.map(e=>e.area+'||'+(e.titulo||'')));
+  const orfaos=(_redeInts||[]).filter(x=>!casados.has(x.area+'||'+(x.item||'')));
+  if(orfaos.length){
+    const porItem={};
+    orfaos.forEach(x=>{ const k=x.area+'||'+(x.item||''); (porItem[k]=porItem[k]||{area:x.area,item:x.item,area_nome:x.area_nome,nomes:[]}).nomes.push(x.nome||'sem nome'); });
+    box.innerHTML+='<div style="margin-top:14px;padding-top:10px;border-top:2px solid var(--line)"><div style="font-size:12px;color:var(--txm);font-weight:700;letter-spacing:.04em;text-transform:uppercase">Outros interesses</div>'+
+      Object.values(porItem).map(g=>`<div style="padding:10px 6px;border-bottom:1px solid var(--line)">
+        <div style="font-size:12px;color:var(--txm)">${esc(g.area_nome||_AREA_NOME[g.area]||g.area)}</div>
+        <div style="font-weight:700;font-size:14px">${esc(g.item||'(sem encontro)')}</div>
+        <div style="margin-top:5px;font-size:12.5px"><span style="color:var(--v);font-weight:800">${g.nomes.length} interessado${g.nomes.length>1?'s':''}</span> <span style="color:var(--txs)">· ${esc(g.nomes.join(', '))}</span></div>
+      </div>`).join('')+'</div>';
+  }
+  if(_redeIntsErr){ box.innerHTML+='<div style="margin-top:10px;font-size:12px;color:#C0616B">Não consegui ler os interesses ('+esc(_redeIntsErr)+'). Rode o rede-interesses-setup.sql (política "admin le interesses").</div>'; }
+  else if(!_redeInts.length){ box.innerHTML+='<div style="margin-top:10px;font-size:12px;color:var(--txm)">Nenhum interesse registrado ainda. Se um profissional já clicou em "Tenho interesse" e nada aparece, confira se a política "admin le interesses" do rede-interesses-setup.sql foi aplicada.</div>'; }
 }
 function limparEventoRede(){ ['re-id','re-titulo','re-sub','re-data','re-hora','re-link','re-tag'].forEach(id=>{const el=$('#'+id);if(el)el.value='';}); const st=$('#re-status'); if(st)st.textContent=''; }
 async function salvarEventoRede(){
