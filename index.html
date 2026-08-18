@@ -3879,7 +3879,7 @@ a{color:inherit;text-decoration:none}
     <div id="nudgeprof-b" style="font-size:14px;color:var(--txs);line-height:1.6;margin:0 6px 16px"></div>
   </div>
   <button class="btn bv bfull" onclick="closeMod('mnudgeprof');abrirProfs()">Ver profissionais</button>
-  <button class="btn bout bfull" style="margin-top:9px" onclick="closeMod('mnudgeprof')">Agora não</button>
+  <button onclick="closeMod('mnudgeprof')" style="display:block;width:100%;margin-top:12px;background:none;border:none;color:var(--txm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;padding:6px">Agora não</button>
 </div></div></div>
 
 <!-- AVISO ANTES DE CONVERSAR -->
@@ -6385,12 +6385,15 @@ function _podeNudgeProf(){
   try{ if(typeof U==='undefined'||!U||U.id==='demo')return false;
     var teste=false; try{teste=location.hostname.indexOf('dichava.app')===-1;}catch(e){}
     if(teste)return true; /* no teste aparece sempre pra validar */
+    try{ if((gR()||[]).length<5) return false; }catch(e){}                 /* só pra quem já usa o app */
+    var n=+(localStorage.getItem('dr_profnudge_n')||0); if(n>=4) return false; /* no máximo 4 vezes na vida toda */
     var last=+(localStorage.getItem('dr_profnudge_ts')||0);
-    return (Date.now()-last)>6*864e5; }catch(e){return false;}
+    return (Date.now()-last) > 14*864e5;                                    /* no máximo 1 a cada 14 dias */
+  }catch(e){return false;}
 }
 function nudgeProf(origem){
   if(!_podeNudgeProf())return;
-  try{localStorage.setItem('dr_profnudge_ts',Date.now());}catch(e){}
+  try{localStorage.setItem('dr_profnudge_ts',Date.now());localStorage.setItem('dr_profnudge_n',String((+(localStorage.getItem('dr_profnudge_n')||0))+1));}catch(e){}
   _profNudgeOrigem=origem||'';
   var txt=({
     limite:'Passar do limite que você mesmo definiu acontece, e faz parte do processo. Se quiser, dá pra conversar com um profissional da rede, no seu ritmo e sem julgamento.',
