@@ -113,12 +113,65 @@ const ini=n=>{if(!n)return'?';return n.trim().split(' ').map(p=>p[0]).join('').t
 function fmtData(d){ try{ return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}); }catch(e){ return ''; } }
 let _posts=null, _tema='', _hc={i:0,n:0,timer:null};
 
+/* Textos de exemplo — só aparecem enquanto não houver post publicado de verdade.
+   Servem pra ver o layout. Assim que você publicar pelo painel, eles somem sozinhos. */
+const DEMO=[
+  {slug:'demo-rd-comecar-por-onde',tema:'rd',titulo:'Redução de danos começa por onde a pessoa está',autor_nome:'Rede dichava',publicado_em:'2026-08-14',tags:['reduçãodedanos','cuidado','semjulgamento'],resumo:'Cuidar não é exigir que alguém pare de um dia pro outro. É caminhar junto, no ritmo de quem vive a história.',
+    blocos:[
+      {t:'p',x:'Muita gente ainda acha que reduzir danos é ser permissivo. Não é. É reconhecer que a pessoa é a maior especialista na própria vida, e que o cuidado real começa escutando, não julgando.'},
+      {t:'h',x:'O que muda quando a gente para de exigir'},
+      {t:'p',x:'Quando a exigência de abstinência deixa de ser a porta de entrada, mais gente entra. Alguém que teme ser julgado dificilmente pede ajuda. Alguém acolhido volta.'},
+      {t:'quote',x:'A pergunta não é "por que você ainda usa", é "como posso te ajudar a se cuidar hoje".',by:'Princípio de redução de danos'},
+      {t:'p',x:'Reduzir danos é oferecer informação honesta, vínculo e caminhos possíveis. Cada passo conta, mesmo os pequenos.'}
+    ]},
+  {slug:'demo-clinica-vinculo-antes',tema:'clinica',titulo:'O vínculo vem antes da técnica',autor_nome:'Rede dichava',publicado_em:'2026-08-11',tags:['clínica','escuta','vínculo'],resumo:'Nenhuma abordagem funciona sem confiança. E confiança se constrói na primeira conversa.',
+    blocos:[
+      {t:'p',x:'No consultório, a técnica importa. Mas ela só encontra terreno quando existe vínculo. Quem se sente visto colabora com o próprio cuidado.'},
+      {t:'h',x:'Escutar é intervenção'},
+      {t:'p',x:'A escuta atenta já é parte do tratamento. Ela organiza, acolhe e mostra à pessoa que ela não está sozinha naquilo.'},
+      {t:'quote',x:'Antes de qualquer protocolo, a pessoa precisa saber que pode falar sem medo.'}
+    ]},
+  {slug:'demo-politica-guerra-que-adoece',tema:'politica',titulo:'A guerra às drogas adoece quem deveria proteger',autor_nome:'Rede dichava',publicado_em:'2026-08-08',tags:['políticadedrogas','saúdepública'],resumo:'Tratar uso como caso de polícia empurra pessoas pra longe do cuidado. Saúde pública faz o contrário.',
+    blocos:[
+      {t:'p',x:'Décadas de política proibicionista mostraram um resultado claro: mais encarceramento, menos saúde. A criminalização não reduz uso, só afasta quem precisa de apoio.'},
+      {t:'h',x:'Cuidar custa menos que punir'},
+      {t:'p',x:'Países que trataram o uso como questão de saúde reduziram overdoses, infecções e mortes. O caminho existe e tem evidência.'}
+    ]},
+  {slug:'demo-saude-ansiedade-nao-e-frescura',tema:'saude',titulo:'Ansiedade não é frescura, é sinal',autor_nome:'Rede dichava',publicado_em:'2026-08-05',tags:['saúdemental','ansiedade'],resumo:'O corpo avisa antes da mente entender. Aprender a ler esses sinais é o primeiro cuidado.',
+    blocos:[
+      {t:'p',x:'A ansiedade é uma resposta natural, mas quando vira rotina ela pesa. Reconhecer isso sem se culpar já alivia parte da carga.'},
+      {t:'h',x:'Pequenos ajustes, grande diferença'},
+      {t:'p',x:'Respiração, sono, movimento e conversa não substituem tratamento, mas sustentam quem está no meio da tempestade. Pedir ajuda não é fraqueza.'},
+      {t:'quote',x:'Você não precisa estar no fundo do poço pra merecer cuidado.'}
+    ]},
+  {slug:'demo-familia-como-ajudar-sem-controlar',tema:'familia',titulo:'Como ajudar sem tentar controlar',autor_nome:'Rede dichava',publicado_em:'2026-08-02',tags:['família','vínculos'],resumo:'Amar alguém que usa drogas dói. E a vontade de salvar, às vezes, afasta. Existe um outro jeito.',
+    blocos:[
+      {t:'p',x:'A família sofre junto e quer resolver. Mas controle costuma virar briga, e briga vira distância. O cuidado que fica é o que respeita o tempo do outro.'},
+      {t:'h',x:'Presença que não cobra'},
+      {t:'p',x:'Estar por perto sem transformar cada conversa em cobrança mantém a porta aberta. É dessa porta que a mudança costuma entrar.'},
+      {t:'quote',x:'Ninguém muda por vergonha. As pessoas mudam quando se sentem amparadas.'}
+    ]},
+  {slug:'demo-ciencia-o-que-a-evidencia-mostra',tema:'ciencia',titulo:'O que a evidência realmente mostra sobre cannabis',autor_nome:'Rede dichava',publicado_em:'2026-07-30',tags:['ciência','evidências','cannabis'],resumo:'Entre o medo e a idealização, existe pesquisa séria. Vale conhecer antes de opinar.',
+    blocos:[
+      {t:'p',x:'A ciência avança devagar e com cautela, e é isso que a torna confiável. Sobre cannabis, há usos terapêuticos reconhecidos e também riscos reais, sobretudo no uso precoce e intenso.'},
+      {t:'h',x:'Informação reduz dano'},
+      {t:'p',x:'Saber dosagem, contexto e sinais de alerta protege. Informação de qualidade é ferramenta de cuidado, não incentivo.'}
+    ]},
+  {slug:'demo-historias-a-primeira-vez-que-pedi-ajuda',tema:'historias',titulo:'A primeira vez que pedi ajuda',autor_nome:'Rede dichava',publicado_em:'2026-07-26',tags:['histórias','vivências'],resumo:'Um relato sobre o dia em que falar em voz alta mudou tudo.',
+    blocos:[
+      {t:'p',x:'Demorei anos pra dizer que não estava bem. Achava que dar conta sozinho era prova de força. Era só cansaço acumulado.'},
+      {t:'p',x:'No dia em que falei, ninguém me julgou. Só me perguntaram como podiam ajudar. Foi ali que comecei a respirar de novo.'},
+      {t:'quote',x:'Pedir ajuda foi a coisa mais corajosa que fiz.'}
+    ]}
+];
+
 async function carregar(){
-  if(!SB){ app.innerHTML='<div class="empty">Não consegui carregar o blog agora.</div>'; return; }
+  if(!SB){ _posts=DEMO.slice(); route(); return; }
   try{
     const{data,error}=await SB.from('blog_posts').select('*').eq('status','publicado').order('publicado_em',{ascending:false});
     if(error) throw error; _posts=data||[];
   }catch(e){ _posts=[]; }
+  if(!_posts.length) _posts=DEMO.slice();  // preview enquanto não há post publicado
   route();
 }
 function route(){
