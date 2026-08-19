@@ -2105,17 +2105,20 @@ async function renderChecklist(){
   const box=document.getElementById('checklist-box'); if(!box||!AUTH)return;
   try{ if(localStorage.getItem('dr_checklist_done_'+AUTH.id)==='1'){ box.innerHTML=''; return; } }catch(e){}
   // estado de cada passo
-  let perfilOk=false;
-  try{ if(_SB){ const{data:p}=await _SB.from('profissionais').select('bio,tipo_prof,status').eq('id',AUTH.id).maybeSingle(); perfilOk=!!(p&&p.bio&&p.tipo_prof); } }catch(e){}
+  let perfilOk=false, temAgenda=meusCaps().agendaOnline;
+  try{ if(_SB){ const{data:p}=await _SB.from('profissionais').select('bio,tipo_prof,status,plano').eq('id',AUTH.id).maybeSingle(); perfilOk=!!(p&&p.bio&&p.tipo_prof); if(p&&p.plano){ temAgenda=!!(PLANO_CAPS[p.plano]||PLANO_CAPS.essencial).agendaOnline; } } }catch(e){}
   const dispOk = !!(AGENDA_CFG&&AGENDA_CFG.dias&&Object.keys(AGENDA_CFG.dias).length);
   let notifOk=false; try{ notifOk=await pushProAtivo(); }catch(e){}
   let linkOk=false; try{ linkOk=localStorage.getItem('dr_link_shared_'+AUTH.id)==='1'; }catch(e){}
+  // passos do agendamento online só aparecem em planos que têm o recurso (Profissional/Clínica)
   const passos=[
     {ok:perfilOk, t:'Complete seu perfil público', d:'Foto, bio, especialidades e valor', act:"go('perfil')", cta:'Completar'},
-    {ok:dispOk,  t:'Defina sua disponibilidade', d:'Os horários que o paciente pode escolher', act:"go('config')", cta:'Definir'},
-    {ok:linkOk,  t:'Compartilhe seu link de agendamento', d:'Na bio do Instagram, WhatsApp…', act:"compartilharMeuLink()", cta:'Compartilhar'},
-    {ok:notifOk, t:'Ative as notificações', d:'Avisos de agendamento e mensagem', act:"go('config')", cta:'Ativar'},
   ];
+  if(temAgenda){
+    passos.push({ok:dispOk, t:'Defina sua disponibilidade', d:'Os horários que o paciente pode escolher', act:"go('config')", cta:'Definir'});
+    passos.push({ok:linkOk, t:'Compartilhe seu link de agendamento', d:'Na bio do Instagram, WhatsApp…', act:"compartilharMeuLink()", cta:'Compartilhar'});
+  }
+  passos.push({ok:notifOk, t:'Ative as notificações', d:temAgenda?'Avisos de agendamento e mensagem':'Avisos de mensagem', act:"go('config')", cta:'Ativar'});
   const feitos=passos.filter(p=>p.ok).length;
   if(feitos===passos.length){ try{localStorage.setItem('dr_checklist_done_'+AUTH.id,'1');}catch(e){} box.innerHTML=''; return; }
   box.innerHTML=`<div class="card ck-card">
