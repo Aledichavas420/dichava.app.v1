@@ -4597,10 +4597,26 @@ function migrarChaves(de,para){
   });
   return moveu;
 }
+// Recuperacao robusta: junta na conta atual QUALQUER diario orfao (registros/reflexoes/resistencias)
+// que tenha ficado sob outro id no aparelho. Uniao por id, sem apagar os originais.
+function recuperarOrfaos(toId){
+  if(!toId||toId==='demo'||toId==='x')return false;const prefs=['dr_r_','dr_rf_','dr_fs_'];let moveu=false;
+  Object.keys(localStorage).forEach(function(k){
+    const pref=prefs.find(function(p){return k.indexOf(p)===0;});if(!pref)return;
+    const idPart=k.slice(pref.length);if(!idPart||idPart===toId||idPart==='demo')return;
+    const kTo=pref+toId;
+    try{const a=JSON.parse(localStorage.getItem(k));if(!Array.isArray(a)||!a.length)return;
+      const b=JSON.parse(localStorage.getItem(kTo)||'[]');const arrB=Array.isArray(b)?b:[];
+      const ids=new Set(arrB.map(function(x){return x&&x.id;}));const add=a.filter(function(x){return x&&!ids.has(x.id);});
+      if(add.length){localStorage.setItem(kTo,JSON.stringify(arrB.concat(add)));moveu=true;}
+    }catch(e){}
+  });
+  return moveu;
+}
 // Logado: junta o que estiver em 'x'/anon na conta e sobe pra nuvem. Deslogado: mantem tudo na chave anon estavel.
 function consolidarDados(){
   try{const anon=_anonId();
-    if(U&&U.id&&U.id!=='demo'&&U.id!=='x'){const m1=migrarChaves('x',U.id);const m2=migrarChaves(anon,U.id);if(m1||m2){try{syncToCloud();}catch(e){}}}
+    if(U&&U.id&&U.id!=='demo'&&U.id!=='x'){const m1=migrarChaves('x',U.id);const m2=migrarChaves(anon,U.id);const m3=recuperarOrfaos(U.id);if(m1||m2||m3){try{syncToCloud();}catch(e){}}}
     else{migrarChaves('x',anon);}
   }catch(e){}
 }
