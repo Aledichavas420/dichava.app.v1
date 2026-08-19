@@ -4582,7 +4582,28 @@ let _syncT=null;
 function syncToCloud(){if(!_SB||!U||U.id==='demo')return;clearTimeout(_syncT);_syncT=setTimeout(async()=>{try{const dados={};Object.keys(localStorage).forEach(k=>{if(k.startsWith('dr_')&&k.includes(U.id))dados[k]=localStorage.getItem(k);});const{data:ex}=await _SB.from('registros').select('id').eq('user_id',U.id).maybeSingle();if(ex)await _SB.from('registros').update({dados}).eq('user_id',U.id);else await _SB.from('registros').insert({user_id:U.id,dados});}catch(e){}},2000);}
 async function syncFromCloud(){if(!_SB||!U||U.id==='demo')return;try{const{data}=await _SB.from('registros').select('dados').eq('user_id',U.id).maybeSingle();if(data?.dados)Object.entries(data.dados).forEach(([k,v])=>{if(!localStorage.getItem(k))localStorage.setItem(k,v);});}catch(e){}}
 function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}try{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('dr_r_')||k.startsWith('dr_rf_')||k.startsWith('dr_fs_')||k.startsWith('dr_m_')||k.startsWith('dr_ct_')||k.startsWith('dr_o_')||k.startsWith('dr_cp_')||k.startsWith('dr_fin_')||k.startsWith('dr_tb_')||k.startsWith('dr_viz_')||k.startsWith('dr_wtrilha_'))syncToCloud();}catch{}}
-const uid=()=>U?.id||'x';
+function _anonId(){try{let a=localStorage.getItem('dr_anon');if(!a){a='anon'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('dr_anon',a);}return a;}catch(e){return 'anon';}}
+const uid=()=>U?.id||_anonId();
+// Migra as gavetas de dados (dr_..._<de>) para (dr_..._<para>). Junta arrays por id; nao mexe em dr_anon/dr_session.
+function migrarChaves(de,para){
+  if(!de||!para||de===para)return false;let moveu=false;const suf='_'+de;
+  Object.keys(localStorage).forEach(function(k){
+    if(k==='dr_anon'||k==='dr_session'||k.indexOf('dr_')!==0||k.slice(-suf.length)!==suf)return;
+    const kTo=k.slice(0,k.length-suf.length)+'_'+para;const vDe=localStorage.getItem(k);if(vDe==null)return;
+    const vTo=localStorage.getItem(kTo);
+    if(vTo==null){try{localStorage.setItem(kTo,vDe);moveu=true;}catch(e){}}
+    else{try{const a=JSON.parse(vDe),b=JSON.parse(vTo);if(Array.isArray(a)&&Array.isArray(b)){const ids=new Set(b.map(x=>x&&x.id));const mg=b.concat(a.filter(x=>x&&!ids.has(x.id)));if(mg.length!==b.length){localStorage.setItem(kTo,JSON.stringify(mg));moveu=true;}}}catch(e){}}
+    try{localStorage.removeItem(k);}catch(e){}
+  });
+  return moveu;
+}
+// Logado: junta o que estiver em 'x'/anon na conta e sobe pra nuvem. Deslogado: mantem tudo na chave anon estavel.
+function consolidarDados(){
+  try{const anon=_anonId();
+    if(U&&U.id&&U.id!=='demo'&&U.id!=='x'){const m1=migrarChaves('x',U.id);const m2=migrarChaves(anon,U.id);if(m1||m2){try{syncToCloud();}catch(e){}}}
+    else{migrarChaves('x',anon);}
+  }catch(e){}
+}
 const gR=()=>ls('dr_r_'+uid())||[];
 const sR=r=>ls('dr_r_'+uid(),r);
 const gRef=()=>ls('dr_rf_'+uid())||[];
@@ -4983,6 +5004,7 @@ async function doSignup(){
 }
 async function posLogin(){
   document.getElementById('va').classList.remove('on');
+  try{consolidarDados();}catch(e){}
   await syncFromCloud();
   try{registrarIndicacao();}catch(e){}
   const t=ls('dr_termo_'+U.id);
@@ -9899,6 +9921,7 @@ setTimeout(function(){
     const sess=ls('dr_session');
     if(sess&&sess.id) U=sess;
   }
+  try{consolidarDados();}catch(e){}
   if(U){
     const t=ls('dr_termo_'+U.id);
     if(!t){showV('vapp');document.getElementById('bnav').classList.remove('on');abrirTermoConsentimento();}
