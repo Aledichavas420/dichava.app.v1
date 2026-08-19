@@ -1,0 +1,12 @@
+# dichava.app
+User-agent: *
+Allow: /
+
+# Áreas logadas e de bastidor (sem valor de busca)
+Disallow: /admin/
+Disallow: /clinica/
+Disallow: /notificacoes/
+Disallow: /supabase/
+Disallow: /pagamentos/
+
+Sitemap: https://dichava.app/sitemap.xml
