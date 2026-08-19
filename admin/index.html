@@ -285,6 +285,8 @@ tbody tr:hover{background:var(--card2)}
       <input id="bl-subtitulo" placeholder="Linha fina (subtítulo da manchete, opcional)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <input id="bl-autor" placeholder="Autor (nome do profissional que assina)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <input id="bl-tags" placeholder="Tags separadas por vírgula" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
+      <div style="font-size:12px;color:var(--txm);margin:2px 0 6px">Data de publicação <span style="color:var(--txs)">(deixe em branco pra usar a de hoje)</span></div>
+      <input id="bl-data" type="date" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <div style="font-size:12px;color:var(--txm);margin:2px 0 6px">Resumo <span style="color:var(--txs)">(é a descrição que aparece no Google)</span></div>
       <textarea id="bl-resumo" rows="2" oninput="blSeoPreview()" placeholder="Frase curta que resume o texto. Aparece na lista e no Google. Ideal 120 a 160 caracteres." style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit"></textarea>
       <div id="bl-seo" style="margin:0 0 10px"></div>
@@ -1238,13 +1240,14 @@ async function _uploadBlog(file){
 function blCapaRender(){ const pv=$('#bl-capa-prev'); if(pv) pv.innerHTML=_blogCapa?`<img src="${esc(_blogCapa)}" style="max-width:260px;border-radius:10px;display:block;margin-bottom:6px">`:''; }
 async function blCapaSel(input){ const f=input.files&&input.files[0]; if(!f)return; const st=$('#bl-status'); try{ if(st)st.textContent='Enviando capa…'; _blogCapa=await _uploadBlog(f); blCapaRender(); if(st)st.textContent=''; }catch(e){ if(st)st.textContent='Erro no upload: '+((e&&e.message)||e); } input.value=''; }
 function blCapaRm(){ _blogCapa=null; blCapaRender(); }
-function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-subtitulo','bl-autor','bl-tags','bl-resumo'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; _blogBlocos=[]; const ed=$('#bl-editor'); if(ed)ed.innerHTML=''; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); const st=$('#bl-status'); if(st)st.textContent=''; try{blSeoPreview();}catch(_){} try{window.scrollTo(0,0);}catch(_){}}
+function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-subtitulo','bl-autor','bl-tags','bl-resumo','bl-data'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; _blogBlocos=[]; const ed=$('#bl-editor'); if(ed)ed.innerHTML=''; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); const st=$('#bl-status'); if(st)st.textContent=''; try{blSeoPreview();}catch(_){} try{window.scrollTo(0,0);}catch(_){}}
 function editarBlogPost(id){
   const p=_blogPosts.find(x=>x.id===id); if(!p)return;
   const s=(k,v)=>{const el=$('#'+k);if(el)el.value=v==null?'':v;};
   s('bl-id',p.id); s('bl-titulo',p.titulo); s('bl-slug',p.slug); s('bl-subtitulo',p.subtitulo); s('bl-autor',p.autor_nome); s('bl-tags',(p.tags||[]).join(', ')); s('bl-resumo',p.resumo);
   const tm=$('#bl-tema'); if(tm)tm.value=p.tema||''; const sl=$('#bl-slug'); if(sl)sl.dataset.touched='1'; try{blSeoPreview();}catch(_){}
   const ed=$('#bl-editor'); if(ed) ed.innerHTML = p.corpo_html ? p.corpo_html : blBlocosToHtml(p.blocos);
+  const dt=$('#bl-data'); if(dt) dt.value = (p.publicado_em||'').slice(0,10);
   _blogBlocos=[]; _blogCapa=p.capa||null; _blogEditPubEm=p.publicado_em||null;
   blCapaRender(); try{window.scrollTo(0,0);}catch(_){}
 }
@@ -1254,8 +1257,9 @@ async function salvarBlog(publicar){
   let slug=slugify(g('bl-slug')||titulo); if(!slug)slug='post-'+Date.now();
   const tags=g('bl-tags').split(',').map(s=>s.trim()).filter(Boolean);
   const ed=$('#bl-editor'); const corpo_html=ed?blSanitize(ed.innerHTML):'';
+  const dataPub=g('bl-data'); const dataISO=dataPub?new Date(dataPub+'T12:00:00').toISOString():null;
   const row={ titulo, slug, subtitulo:g('bl-subtitulo')||null, tema:g('bl-tema')||null, autor_nome:g('bl-autor')||null, tags, capa:_blogCapa||null, resumo:g('bl-resumo')||null, corpo_html:corpo_html||null, blocos:[], atualizado_em:new Date().toISOString() };
-  if(publicar){ row.status='publicado'; row.publicado_em=_blogEditPubEm||new Date().toISOString(); } else { row.status='rascunho'; }
+  if(publicar){ row.status='publicado'; row.publicado_em=dataISO||_blogEditPubEm||new Date().toISOString(); } else { row.status='rascunho'; if(dataISO)row.publicado_em=dataISO; }
   const id=g('bl-id');
   try{
     let r; if(id){ r=await SB.from('blog_posts').update(row).eq('id',id); } else { r=await SB.from('blog_posts').insert(row); }
