@@ -26,6 +26,10 @@ create table if not exists public.blog_posts (
 create index if not exists blog_posts_status_idx on public.blog_posts (status, publicado_em desc);
 create index if not exists blog_posts_tema_idx on public.blog_posts (tema);
 
+-- Editor de texto (campo único em HTML) e linha fina da manchete
+alter table public.blog_posts add column if not exists corpo_html text;   -- conteúdo em HTML (editor rico)
+alter table public.blog_posts add column if not exists subtitulo  text;   -- linha fina (subtítulo da manchete)
+
 alter table public.blog_posts enable row level security;
 
 -- Leitura pública só dos publicados (o /blog usa a chave anônima).

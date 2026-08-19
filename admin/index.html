@@ -282,6 +282,7 @@ tbody tr:hover{background:var(--card2)}
         <input id="bl-slug" placeholder="slug-do-post" oninput="this.dataset.touched='1';blSeoPreview()" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;flex:1;min-width:150px">
         <select id="bl-tema" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;flex:1;min-width:150px"><option value="">Tema…</option><option value="rd">Redução de danos</option><option value="clinica">Clínica e cuidado</option><option value="politica">Política de drogas</option><option value="saude">Saúde mental</option><option value="familia">Família e vínculos</option><option value="ciencia">Ciência e evidências</option><option value="historias">Histórias e vivências</option></select>
       </div>
+      <input id="bl-subtitulo" placeholder="Linha fina (subtítulo da manchete, opcional)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <input id="bl-autor" placeholder="Autor (nome do profissional que assina)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <input id="bl-tags" placeholder="Tags separadas por vírgula" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <div style="font-size:12px;color:var(--txm);margin:2px 0 6px">Resumo <span style="color:var(--txs)">(é a descrição que aparece no Google)</span></div>
@@ -291,9 +292,33 @@ tbody tr:hover{background:var(--card2)}
         <div id="bl-capa-prev"></div>
         <span class="pacts"><label class="btn ghost sm" style="cursor:pointer">Escolher capa<input type="file" accept="image/*" id="bl-capa" onchange="blCapaSel(this)" style="display:none"></label><button class="btn ghost sm" onclick="blCapaRm()">Remover capa</button></span>
       </div>
-      <div style="font-size:12px;color:var(--txm);margin:12px 0 6px">Conteúdo</div>
-      <div id="bl-blocos"></div>
-      <div class="pacts" style="margin-top:8px"><button class="btn ghost sm" onclick="addBloco('p')">+ Parágrafo</button><button class="btn ghost sm" onclick="addBloco('h')">+ Subtítulo</button><button class="btn ghost sm" onclick="addBloco('img')">+ Imagem</button><button class="btn ghost sm" onclick="addBloco('quote')">+ Citação</button></div>
+      <style>
+      #bl-editor{min-height:230px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--card2);color:var(--tx);font-size:15px;line-height:1.7;font-family:inherit}
+      #bl-editor:focus{outline:none;border-color:var(--v)}
+      #bl-editor:empty:before{content:attr(data-ph);color:var(--txm)}
+      #bl-editor p{margin:0 0 12px}
+      #bl-editor h2{font-size:19px;font-weight:800;line-height:1.3;margin:18px 0 8px}
+      #bl-editor blockquote{border-left:3px solid var(--v);margin:14px 0;padding:4px 0 4px 14px;color:var(--txs);font-style:italic}
+      #bl-editor ul,#bl-editor ol{margin:0 0 12px;padding-left:22px}
+      #bl-editor img{max-width:100%;border-radius:10px;margin:10px 0;display:block}
+      #bl-editor a{color:var(--v);text-decoration:underline}
+      .bl-tb{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 8px}
+      .bl-tb .btn{min-width:34px}
+      </style>
+      <div style="font-size:12px;color:var(--txm);margin:12px 0 0">Conteúdo</div>
+      <div class="bl-tb">
+        <button type="button" class="btn ghost sm" title="Negrito" onmousedown="event.preventDefault()" onclick="blFmt('bold')"><b>N</b></button>
+        <button type="button" class="btn ghost sm" title="Itálico" onmousedown="event.preventDefault()" onclick="blFmt('italic')"><i>I</i></button>
+        <button type="button" class="btn ghost sm" title="Subtítulo" onmousedown="event.preventDefault()" onclick="blBlock('h2')">Subtítulo</button>
+        <button type="button" class="btn ghost sm" title="Texto normal" onmousedown="event.preventDefault()" onclick="blBlock('p')">Texto</button>
+        <button type="button" class="btn ghost sm" title="Citação" onmousedown="event.preventDefault()" onclick="blBlock('blockquote')">Citação</button>
+        <button type="button" class="btn ghost sm" title="Lista" onmousedown="event.preventDefault()" onclick="blFmt('insertUnorderedList')">Lista</button>
+        <button type="button" class="btn ghost sm" title="Link" onmousedown="event.preventDefault()" onclick="blLink()">Link</button>
+        <label class="btn ghost sm" style="cursor:pointer" title="Imagem no meio do texto">Imagem<input type="file" accept="image/*" onchange="blInsertImg(this)" style="display:none"></label>
+        <button type="button" class="btn ghost sm" title="Limpar formatação" onmousedown="event.preventDefault()" onclick="blFmt('removeFormat')">Limpar</button>
+      </div>
+      <div id="bl-editor" contenteditable="true" data-ph="Escreva o texto aqui. Selecione um trecho e use os botões acima pra formatar."></div>
+      <div style="font-size:11.5px;color:var(--txm);margin-top:6px">Dica: use Subtítulo pra dividir o texto em partes. As imagens entram no meio, onde o cursor estiver.</div>
       <div class="pacts" style="margin-top:16px"><button class="btn sm" onclick="salvarBlog(false)">Salvar rascunho</button><button class="btn sm" onclick="salvarBlog(true)">Publicar</button><button class="btn ghost sm" onclick="limparBlog()">Novo / limpar</button></div>
       <div id="bl-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
     </div>
@@ -1169,24 +1194,40 @@ function renderBlogList(){
     ${p.status==='publicado'?`<button class="btn ghost sm" onclick="despublicarBlog('${p.id}')">Despublicar</button>`:''}
     <button class="btn ghost sm" style="color:#C0616B" onclick="excluirBlog('${p.id}')">Excluir</button></div>`).join('');
 }
-function renderBlogBlocos(){
-  const box=$('#bl-blocos'); if(!box)return;
-  if(!_blogBlocos.length){ box.innerHTML='<div style="color:var(--txm);font-size:12.5px;padding:6px 2px">Sem blocos ainda. Adicione abaixo.</div>'; return; }
-  const NOME={p:'Parágrafo',h:'Subtítulo',img:'Imagem',quote:'Citação'};
-  box.innerHTML=_blogBlocos.map((b,i)=>{
-    const ctrl=`<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><span style="font-size:11px;font-weight:800;color:var(--txm);text-transform:uppercase;flex:1">${NOME[b.t]||b.t}</span><button class="btn ghost sm" onclick="moverBloco(${i},-1)">↑</button><button class="btn ghost sm" onclick="moverBloco(${i},1)">↓</button><button class="btn ghost sm" style="color:#C0616B" onclick="removerBloco(${i})">✕</button></div>`;
-    let campo='';
-    if(b.t==='h') campo=`<input value="${esc(b.x||'')}" oninput="atualizarBloco(${i},'x',this.value)" placeholder="Subtítulo" style="${_INP_B}">`;
-    else if(b.t==='p') campo=`<textarea rows="3" oninput="atualizarBloco(${i},'x',this.value)" placeholder="Parágrafo" style="${_INP_B}">${esc(b.x||'')}</textarea>`;
-    else if(b.t==='quote') campo=`<textarea rows="2" oninput="atualizarBloco(${i},'x',this.value)" placeholder="Citação" style="${_INP_B}">${esc(b.x||'')}</textarea><input value="${esc(b.by||'')}" oninput="atualizarBloco(${i},'by',this.value)" placeholder="Autor da citação (opcional)" style="${_INP_B}">`;
-    else if(b.t==='img') campo=`${b.url?`<img src="${esc(b.url)}" style="max-width:200px;border-radius:8px;display:block;margin-bottom:6px">`:''}<label class="btn ghost sm" style="cursor:pointer">${b.url?'Trocar imagem':'Enviar imagem'}<input type="file" accept="image/*" onchange="blBlocoImg(${i},this)" style="display:none"></label><input value="${esc(b.cap||'')}" oninput="atualizarBloco(${i},'cap',this.value)" placeholder="Legenda (opcional)" style="${_INP_B}">`;
-    return `<div style="border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:9px">${ctrl}${campo}</div>`;
-  }).join('');
+// ── Editor de texto (contenteditable) ──
+function blFmt(cmd){ document.execCommand(cmd,false,null); const e=$('#bl-editor'); if(e)e.focus(); }
+function blBlock(tag){ document.execCommand('formatBlock',false,tag); const e=$('#bl-editor'); if(e)e.focus(); }
+function blLink(){ const u=prompt('Cole o link (URL):',''); if(u){ document.execCommand('createLink',false,u); } const e=$('#bl-editor'); if(e)e.focus(); }
+async function blInsertImg(input){ const f=input.files&&input.files[0]; if(!f)return; const st=$('#bl-status'); const e=$('#bl-editor'); if(e)e.focus();
+  try{ if(st)st.textContent='Enviando imagem…'; const url=await _uploadBlog(f); document.execCommand('insertHTML',false,'<figure><img src="'+url+'" alt=""></figure><p><br></p>'); if(st)st.textContent=''; }
+  catch(err){ if(st)st.textContent='Erro no upload: '+((err&&err.message)||err); } input.value=''; }
+// converte posts antigos (blocos) pro editor de texto
+function blBlocosToHtml(blocos){ return (blocos||[]).map(function(b){
+  if(b.t==='h') return '<h2>'+esc(b.x||'')+'</h2>';
+  if(b.t==='img') return '<figure><img src="'+esc(b.url||'')+'" alt="'+esc(b.cap||'')+'">'+(b.cap?'<figcaption>'+esc(b.cap)+'</figcaption>':'')+'</figure>';
+  if(b.t==='quote') return '<blockquote>'+esc(b.x||'')+(b.by?'<br><small>'+esc(b.by)+'</small>':'')+'</blockquote>';
+  return '<p>'+esc(b.x||'').replace(/\n/g,'<br>')+'</p>';
+}).join(''); }
+// limpa o HTML pra um conjunto seguro de tags antes de salvar
+const _BL_ALLOWED={P:[],H2:[],H3:[],BR:[],STRONG:[],B:[],EM:[],I:[],U:[],BLOCKQUOTE:[],UL:[],OL:[],LI:[],SMALL:[],A:['href','target','rel'],FIGURE:[],FIGCAPTION:[],IMG:['src','alt']};
+function blSanitize(html){
+  const doc=new DOMParser().parseFromString('<div id="__r">'+(html||'')+'</div>','text/html');
+  const root=doc.getElementById('__r');
+  (function clean(node){
+    Array.prototype.slice.call(node.childNodes).forEach(function(ch){
+      if(ch.nodeType===8){ ch.parentNode.removeChild(ch); return; }      // comentário
+      if(ch.nodeType!==1) return;                                          // texto ok
+      const tag=ch.tagName;
+      if(tag==='SCRIPT'||tag==='STYLE'){ ch.parentNode.removeChild(ch); return; }
+      if(tag==='DIV'){ const p=doc.createElement('p'); while(ch.firstChild)p.appendChild(ch.firstChild); ch.parentNode.replaceChild(p,ch); clean(p); return; }
+      if(!_BL_ALLOWED[tag]){ const parent=ch.parentNode; clean(ch); while(ch.firstChild)parent.insertBefore(ch.firstChild,ch); parent.removeChild(ch); return; }
+      Array.prototype.slice.call(ch.attributes).forEach(function(a){ if(_BL_ALLOWED[tag].indexOf(a.name.toLowerCase())<0) ch.removeAttribute(a.name); });
+      if(tag==='A'){ const h=ch.getAttribute('href')||''; if(/^\s*javascript:/i.test(h)){ ch.removeAttribute('href'); } else { ch.setAttribute('target','_blank'); ch.setAttribute('rel','noopener'); } }
+      clean(ch);
+    });
+  })(root);
+  return root.innerHTML.replace(/<p>(\s|<br>)*<\/p>/gi,'').trim();
 }
-function addBloco(t){ _blogBlocos.push(t==='quote'?{t,x:'',by:''}:(t==='img'?{t,url:'',cap:''}:{t,x:''})); renderBlogBlocos(); }
-function atualizarBloco(i,c,v){ if(_blogBlocos[i]) _blogBlocos[i][c]=v; }
-function moverBloco(i,d){ const j=i+d; if(j<0||j>=_blogBlocos.length)return; const t=_blogBlocos[i]; _blogBlocos[i]=_blogBlocos[j]; _blogBlocos[j]=t; renderBlogBlocos(); }
-function removerBloco(i){ _blogBlocos.splice(i,1); renderBlogBlocos(); }
 async function _uploadBlog(file){
   const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
   const path='posts/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
@@ -1197,22 +1238,23 @@ async function _uploadBlog(file){
 function blCapaRender(){ const pv=$('#bl-capa-prev'); if(pv) pv.innerHTML=_blogCapa?`<img src="${esc(_blogCapa)}" style="max-width:260px;border-radius:10px;display:block;margin-bottom:6px">`:''; }
 async function blCapaSel(input){ const f=input.files&&input.files[0]; if(!f)return; const st=$('#bl-status'); try{ if(st)st.textContent='Enviando capa…'; _blogCapa=await _uploadBlog(f); blCapaRender(); if(st)st.textContent=''; }catch(e){ if(st)st.textContent='Erro no upload: '+((e&&e.message)||e); } input.value=''; }
 function blCapaRm(){ _blogCapa=null; blCapaRender(); }
-async function blBlocoImg(i,input){ const f=input.files&&input.files[0]; if(!f)return; const st=$('#bl-status'); try{ if(st)st.textContent='Enviando imagem…'; const url=await _uploadBlog(f); if(_blogBlocos[i]) _blogBlocos[i].url=url; renderBlogBlocos(); if(st)st.textContent=''; }catch(e){ if(st)st.textContent='Erro no upload: '+((e&&e.message)||e); } input.value=''; }
-function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-autor','bl-tags','bl-resumo'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; _blogBlocos=[]; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); renderBlogBlocos(); const st=$('#bl-status'); if(st)st.textContent=''; try{blSeoPreview();}catch(_){} try{window.scrollTo(0,0);}catch(_){}}
+function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-subtitulo','bl-autor','bl-tags','bl-resumo'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; _blogBlocos=[]; const ed=$('#bl-editor'); if(ed)ed.innerHTML=''; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); const st=$('#bl-status'); if(st)st.textContent=''; try{blSeoPreview();}catch(_){} try{window.scrollTo(0,0);}catch(_){}}
 function editarBlogPost(id){
   const p=_blogPosts.find(x=>x.id===id); if(!p)return;
   const s=(k,v)=>{const el=$('#'+k);if(el)el.value=v==null?'':v;};
-  s('bl-id',p.id); s('bl-titulo',p.titulo); s('bl-slug',p.slug); s('bl-autor',p.autor_nome); s('bl-tags',(p.tags||[]).join(', ')); s('bl-resumo',p.resumo);
+  s('bl-id',p.id); s('bl-titulo',p.titulo); s('bl-slug',p.slug); s('bl-subtitulo',p.subtitulo); s('bl-autor',p.autor_nome); s('bl-tags',(p.tags||[]).join(', ')); s('bl-resumo',p.resumo);
   const tm=$('#bl-tema'); if(tm)tm.value=p.tema||''; const sl=$('#bl-slug'); if(sl)sl.dataset.touched='1'; try{blSeoPreview();}catch(_){}
-  _blogBlocos=Array.isArray(p.blocos)?JSON.parse(JSON.stringify(p.blocos)):[]; _blogCapa=p.capa||null; _blogEditPubEm=p.publicado_em||null;
-  blCapaRender(); renderBlogBlocos(); try{window.scrollTo(0,0);}catch(_){}
+  const ed=$('#bl-editor'); if(ed) ed.innerHTML = p.corpo_html ? p.corpo_html : blBlocosToHtml(p.blocos);
+  _blogBlocos=[]; _blogCapa=p.capa||null; _blogEditPubEm=p.publicado_em||null;
+  blCapaRender(); try{window.scrollTo(0,0);}catch(_){}
 }
 async function salvarBlog(publicar){
   const g=id=>{const e=$('#'+id);return e?e.value.trim():'';};
   const titulo=g('bl-titulo'); if(!titulo){toast('Informe o título',1);return;}
   let slug=slugify(g('bl-slug')||titulo); if(!slug)slug='post-'+Date.now();
   const tags=g('bl-tags').split(',').map(s=>s.trim()).filter(Boolean);
-  const row={ titulo, slug, tema:g('bl-tema')||null, autor_nome:g('bl-autor')||null, tags, capa:_blogCapa||null, resumo:g('bl-resumo')||null, blocos:_blogBlocos, atualizado_em:new Date().toISOString() };
+  const ed=$('#bl-editor'); const corpo_html=ed?blSanitize(ed.innerHTML):'';
+  const row={ titulo, slug, subtitulo:g('bl-subtitulo')||null, tema:g('bl-tema')||null, autor_nome:g('bl-autor')||null, tags, capa:_blogCapa||null, resumo:g('bl-resumo')||null, corpo_html:corpo_html||null, blocos:[], atualizado_em:new Date().toISOString() };
   if(publicar){ row.status='publicado'; row.publicado_em=_blogEditPubEm||new Date().toISOString(); } else { row.status='rascunho'; }
   const id=g('bl-id');
   try{

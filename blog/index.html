@@ -83,8 +83,13 @@ a{color:inherit;text-decoration:none}
 .by-d{font-size:12.5px;color:var(--txm)}
 .art-cap{width:100%;border-radius:18px;margin:0 0 26px;display:block}
 .art-cover{position:relative;height:220px;border-radius:20px;overflow:hidden;margin:6px 0 28px}
+.art-dek{font-size:20px;line-height:1.5;color:var(--txs);font-weight:500;margin:-6px 0 22px;max-width:640px}
+@media(max-width:560px){.art-dek{font-size:17px}}
 .blocos{font-size:18.5px;line-height:1.8;color:#24322620;color:#243226}
 .blocos p{margin:0 0 20px}
+.blocos ul,.blocos ol{margin:0 0 20px;padding-left:24px}.blocos li{margin:6px 0}
+.blocos a{color:var(--vd);text-decoration:underline;text-underline-offset:2px}
+.blocos small{color:var(--txm);font-size:14px}
 .blocos h2{font-size:25px;font-weight:800;line-height:1.28;margin:38px 0 14px;letter-spacing:-.015em;color:var(--tx)}
 .blocos figure{margin:24px 0}
 .blocos img{width:100%;border-radius:16px}
@@ -271,12 +276,13 @@ function verPost(p){
     <button class="back" onclick="voltar()">‹ Todos os textos</button>
     ${p.tema?`<div class="art-tema">${esc(TEMAS[p.tema]||p.tema)}</div>`:''}
     <h1>${esc(p.titulo)}</h1>
+    ${p.subtitulo?`<p class="art-dek">${esc(p.subtitulo)}</p>`:''}
     <div class="byline">
       <div class="by-av">${ini(p.autor_nome)}</div>
       <div><div class="by-n">${esc(p.autor_nome||'Rede dichava')}</div><div class="by-d">${fmtData(p.publicado_em||p.criado_em)}</div></div>
     </div>
     ${p.capa?`<img class="art-cap" src="${esc(p.capa)}" alt="">`:`<div class="art-cover">${coverArt(p)}</div>`}
-    <div class="blocos">${renderBlocos(p.blocos)}</div>
+    <div class="blocos">${p.corpo_html?p.corpo_html:renderBlocos(p.blocos)}</div>
     ${(p.tags&&p.tags.length)?`<div class="tags">${p.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
     <div class="share">
       <a class="sbtn wa" href="https://wa.me/?text=${encodeURIComponent(p.titulo+' — '+url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6c-.1.2-.3.3-.1.6.1.3.7 1.1 1.4 1.8.9.8 1.7 1 2 1.2.2.1.4.1.6-.1l.6-.7c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.2.5.3 0 .2 0 .8-.2 1.4Z"/></svg>WhatsApp</a>
