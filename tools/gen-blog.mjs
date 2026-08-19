@@ -44,6 +44,8 @@ function renderBlocos(blocos) {
 function plain(blocos) {
   return (blocos || []).filter(b => !b.t || b.t === 'p' || b.t === 'h' || b.t === 'quote').map(b => b.x || '').join(' ').replace(/\s+/g, ' ').trim();
 }
+const plainFromHtml = h => String(h || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const corpoHtml = p => p.corpo_html ? p.corpo_html : renderBlocos(p.blocos);
 
 const COVER = p => p.capa
   ? `<div class="cover" style="background-image:url('${esc(p.capa)}')"><div class="cover-vg"></div></div>`
@@ -72,8 +74,13 @@ const CSS = `*{box-sizing:border-box}body{margin:0;background:#FAF6EC;color:#182
 .cover--art::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.6) .6px,transparent .8px);background-size:15px 15px;opacity:.10}
 .cover-mk{position:absolute;right:-8%;bottom:-16%;width:62%;max-width:310px;fill:none;stroke:#fff;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;opacity:.17;transform:rotate(-9deg)}
 .cover-vg{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,14,9,.26),transparent 42%)}
+.art-dek{font-size:20px;line-height:1.5;color:#54634F;font-weight:500;margin:-6px 0 22px;max-width:640px}
+@media(max-width:560px){.art-dek{font-size:17px}}
 .blocos{font-size:18.5px;line-height:1.8;color:#243226}
 .blocos p{margin:0 0 20px}.blocos h2{font-size:25px;font-weight:800;line-height:1.28;margin:38px 0 14px;letter-spacing:-.015em}
+.blocos ul,.blocos ol{margin:0 0 20px;padding-left:24px}.blocos li{margin:6px 0}
+.blocos a{color:#1B7A43;text-decoration:underline;text-underline-offset:2px}
+.blocos small{color:#98A38F;font-size:14px}
 .blocos figure{margin:24px 0}.blocos img{width:100%;border-radius:16px}.blocos figcaption{font-size:12.5px;color:#98A38F;text-align:center;margin-top:8px}
 .blocos blockquote{margin:28px 0;padding:6px 0 6px 20px;border-left:3px solid #2FA35F;font-size:22px;font-style:italic;line-height:1.5;color:#1B7A43}
 .blocos blockquote .by{display:block;font-style:normal;font-size:13.5px;color:#98A38F;margin-top:10px}
@@ -86,7 +93,7 @@ const CSS = `*{box-sizing:border-box}body{margin:0;background:#FAF6EC;color:#182
 
 function pagina(p) {
   const canon = `${ORIGIN}/blog/p/${encodeURIComponent(p.slug)}/`;
-  const desc = (p.resumo || plain(p.blocos)).slice(0, 160);
+  const desc = (p.resumo || plainFromHtml(p.corpo_html) || plain(p.blocos)).slice(0, 160);
   const img = p.capa || OG_FALLBACK;
   const temaNome = p.tema ? (TEMAS[p.tema] || p.tema) : '';
   const pub = isoDate(p.publicado_em || p.criado_em);
@@ -134,12 +141,13 @@ function pagina(p) {
   <a class="back" href="/blog/">‹ Todos os textos</a>
   ${temaNome ? `<div class="art-tema">${esc(temaNome)}</div>` : ''}
   <h1>${esc(p.titulo)}</h1>
+  ${p.subtitulo ? `<p class="art-dek">${esc(p.subtitulo)}</p>` : ''}
   <div class="byline">
     <div class="by-av">${esc(ini(p.autor_nome))}</div>
     <div><div class="by-n">${esc(p.autor_nome || 'Rede dichava')}</div><div class="by-d">${esc(fmtData(p.publicado_em || p.criado_em))}</div></div>
   </div>
   ${p.capa ? `<img class="art-cap" src="${esc(p.capa)}" alt="" style="width:100%;border-radius:20px;margin:6px 0 28px;display:block">` : `<div class="art-cover">${COVER(p)}</div>`}
-  <div class="blocos">${renderBlocos(p.blocos)}</div>
+  <div class="blocos">${corpoHtml(p)}</div>
   ${(p.tags && p.tags.length) ? `<div class="tags">${p.tags.map(t => `<span class="tag">#${esc(t)}</span>`).join('')}</div>` : ''}
   <div class="share">
     <a class="sbtn wa" href="https://wa.me/?text=${encodeURIComponent(p.titulo + ' — ' + canon)}" target="_blank" rel="noopener">WhatsApp</a>
