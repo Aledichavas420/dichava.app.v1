@@ -1,0 +1,41 @@
+name: Blog estático (SEO)
+
+# Gera uma página HTML rastreável por post publicado (/blog/p/<slug>/) e
+# atualiza o sitemap.xml. Roda sozinho de tempos em tempos e pode ser
+# disparado na mão (aba Actions > Run workflow) logo depois de publicar.
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'   # a cada 3 horas
+  workflow_dispatch:          # botão manual
+
+permissions:
+  contents: write
+
+concurrency:
+  group: blog-static
+  cancel-in-progress: false
+
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Gerar páginas do blog
+        run: node tools/gen-blog.mjs
+      - name: Commitar se mudou
+        run: |
+          git config user.name "dichava-bot"
+          git config user.email "bot@dichava.app"
+          if [ -n "$(git status --porcelain blog/p sitemap.xml)" ]; then
+            git add blog/p sitemap.xml
+            git commit -m "Blog: regenerar páginas estáticas (SEO) [skip ci]"
+            git push origin main
+          else
+            echo "Nada mudou."
+          fi

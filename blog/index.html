@@ -179,12 +179,12 @@ const DEMO=[
 ];
 
 async function carregar(){
-  if(!SB){ _posts=DEMO.slice(); route(); return; }
+  if(!SB){ _posts=DEMO.map(function(d){return Object.assign({_demo:1},d);}); route(); return; }
   try{
     const{data,error}=await SB.from('blog_posts').select('*').eq('status','publicado').order('publicado_em',{ascending:false});
     if(error) throw error; _posts=data||[];
   }catch(e){ _posts=[]; }
-  if(!_posts.length) _posts=DEMO.slice();  // preview enquanto não há post publicado
+  if(!_posts.length) _posts=DEMO.map(function(d){return Object.assign({_demo:1},d);});  // preview enquanto não há post publicado
   route();
 }
 function route(){
@@ -202,6 +202,7 @@ function coverArt(p){
 }
 
 function lista(){
+  setCanonical(location.origin+'/blog/');
   const posts=(_posts||[]).filter(p=>!_tema||p.tema===_tema);
   const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
   const nav='<nav class="tnav"><button class="'+(_tema===''?'on':'')+'" onclick="setTema(\'\')">Todos</button>'+
@@ -237,6 +238,9 @@ function lista(){
 function setTema(t){ _tema=t; lista(); window.scrollTo(0,0); }
 function abrir(slug){ history.pushState(null,'','?p='+encodeURIComponent(slug)); route(); window.scrollTo(0,0); }
 function voltar(){ history.pushState(null,'',location.pathname); lista(); window.scrollTo(0,0); }
+/* URL canônica: post real usa página estática pré-renderizada; demo usa ?p= */
+function postUrl(p){ return (p&&p._demo) ? (location.origin+location.pathname+'?p='+encodeURIComponent(p.slug)) : (location.origin+'/blog/p/'+encodeURIComponent(p.slug)+'/'); }
+function setCanonical(href){ let l=document.querySelector('link[rel="canonical"]'); if(!l){ l=document.createElement('link'); l.rel='canonical'; document.head.appendChild(l); } l.href=href; }
 
 /* carrossel */
 function initCarousel(n){
@@ -262,7 +266,7 @@ function renderBlocos(blocos){
 function verPost(p){
   clearInterval(_hc.timer);
   document.title = p.titulo+' · Blog dichava';
-  const url = location.origin+location.pathname+'?p='+encodeURIComponent(p.slug);
+  const url = postUrl(p); setCanonical(url);
   app.innerHTML = `<article class="art">
     <button class="back" onclick="voltar()">‹ Todos os textos</button>
     ${p.tema?`<div class="art-tema">${esc(TEMAS[p.tema]||p.tema)}</div>`:''}
@@ -283,7 +287,7 @@ function verPost(p){
 }
 async function compartilhar(slug){
   const p=(_posts||[]).find(x=>x.slug===slug); if(!p)return;
-  const url=location.origin+location.pathname+'?p='+encodeURIComponent(slug);
+  const url=postUrl(p);
   if(navigator.share){ try{ await navigator.share({title:p.titulo,text:p.titulo,url}); }catch(e){} }
   else copiar(url);
 }
