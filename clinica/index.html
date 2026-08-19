@@ -591,11 +591,15 @@ body.has-demo-banner{padding-bottom:64px}
 .livro-hero{display:flex;justify-content:center;padding:6px 0 2px}
 .rico{display:inline-flex;flex:0 0 auto}
 .rico svg{width:100%;height:100%;display:block}
-.rede-hero{display:flex;align-items:center;gap:15px;background:linear-gradient(135deg,#2FA35F,#00897B);border-radius:20px;padding:22px 20px;color:#fff;box-shadow:0 14px 30px -14px rgba(0,137,123,.6);margin-bottom:6px}
-.rede-hero-mark{width:48px;height:48px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);border-radius:14px;padding:9px}
+.rede-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#1f8f5a 0%,#0e8a7d 55%,#0a6f66 100%);border-radius:22px;padding:26px 22px;color:#fff;box-shadow:0 22px 44px -22px rgba(10,111,102,.65);margin-bottom:6px}
+.rede-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 80% at 8% -10%,rgba(255,255,255,.20),transparent 55%),radial-gradient(70% 90% at 100% 120%,rgba(0,0,0,.24),transparent 60%);pointer-events:none}
+.rede-hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.5) .6px,transparent .8px);background-size:16px 16px;opacity:.07;pointer-events:none}
+.rede-hero-bg{position:absolute;top:0;right:0;height:100%;width:62%;pointer-events:none}
+.rede-hero-in{position:relative;z-index:1;display:flex;align-items:center;gap:15px}
+.rede-hero-mark{width:52px;height:52px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:15px;padding:11px;backdrop-filter:blur(4px)}
 .rede-hero-mark svg{width:100%;height:100%;display:block}
-.rede-hero-t{font-size:20px;font-weight:800;letter-spacing:.2px}
-.rede-hero-s{font-size:13px;opacity:.93;line-height:1.5;margin-top:3px}
+.rede-hero-t{font-size:23px;font-weight:800;letter-spacing:.2px;line-height:1.05}
+.rede-hero-s{font-size:13px;opacity:.94;line-height:1.5;margin-top:4px;max-width:80%}
 .rede-sec-h{font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--txs);margin:24px 2px 12px}
 .mural{display:flex;flex-direction:column;gap:11px}
 .mural-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;cursor:pointer;box-shadow:var(--sh);transition:.15s}
@@ -1549,8 +1553,14 @@ function redeHome(){
       <button class="acesso-card" onclick="toast('Cursos em breve. Estamos preparando com carinho.',3000)"><span class="acesso-ic">${redeIco('cursos')}</span><span class="acesso-t">Cursos</span><span class="acesso-s">Em breve</span></button>
       <button class="acesso-card" onclick="irRede('biblioteca')"><span class="acesso-ic">${redeIco('biblio')}</span><span class="acesso-t">Biblioteca</span><span class="acesso-s">${totL} livros</span></button>
     </div>`;
-  return `<div class="rede-hero"><span class="rede-hero-mark">${heroMark}</span>
-      <div><div class="rede-hero-t">Rede dichava</div><div class="rede-hero-s">Seu espaço na rede: encontros, formação e leitura pra caminhar junto.</div></div></div>
+  return `<div class="rede-hero">
+      <svg class="rede-hero-bg" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+        <g stroke="#fff" stroke-width="1" fill="none" opacity=".16"><path d="M42 28 L92 18 L152 44 M92 18 L120 82 M42 28 L68 96 L120 82 L172 60 M152 44 L172 60 M120 82 L96 118"/></g>
+        <g fill="#fff" opacity=".22"><circle cx="42" cy="28" r="3.2"/><circle cx="92" cy="18" r="4"/><circle cx="152" cy="44" r="3.2"/><circle cx="120" cy="82" r="4.4"/><circle cx="68" cy="96" r="3"/><circle cx="172" cy="60" r="2.6"/><circle cx="96" cy="118" r="2.4"/></g>
+      </svg>
+      <div class="rede-hero-in"><span class="rede-hero-mark">${heroMark}</span>
+        <div><div class="rede-hero-t">Rede dichava</div><div class="rede-hero-s">Seu espaço na rede: encontros, formação e leitura pra caminhar junto.</div></div>
+      </div></div>
     ${destaque}
     <div class="rede-sec-h">Mural</div>
     <div class="mural">${mural}</div>
