@@ -591,15 +591,19 @@ body.has-demo-banner{padding-bottom:64px}
 .livro-hero{display:flex;justify-content:center;padding:6px 0 2px}
 .rico{display:inline-flex;flex:0 0 auto}
 .rico svg{width:100%;height:100%;display:block}
-.rede-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#1f8f5a 0%,#0e8a7d 55%,#0a6f66 100%);border-radius:22px;padding:26px 22px;color:#fff;box-shadow:0 22px 44px -22px rgba(10,111,102,.65);margin-bottom:6px}
+.rede-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#1f8f5a 0%,#0e8a7d 55%,#0a6f66 100%);border-radius:24px;padding:34px 28px;min-height:172px;display:flex;flex-direction:column;justify-content:center;gap:18px;color:#fff;box-shadow:0 26px 50px -24px rgba(10,111,102,.7);margin-bottom:8px}
 .rede-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 80% at 8% -10%,rgba(255,255,255,.20),transparent 55%),radial-gradient(70% 90% at 100% 120%,rgba(0,0,0,.24),transparent 60%);pointer-events:none}
 .rede-hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.5) .6px,transparent .8px);background-size:16px 16px;opacity:.07;pointer-events:none}
-.rede-hero-bg{position:absolute;top:0;right:0;height:100%;width:62%;pointer-events:none}
-.rede-hero-in{position:relative;z-index:1;display:flex;align-items:center;gap:15px}
-.rede-hero-mark{width:52px;height:52px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:15px;padding:11px;backdrop-filter:blur(4px)}
+.rede-hero-bg{position:absolute;top:0;right:0;height:100%;width:60%;pointer-events:none}
+.rede-hero-in{position:relative;z-index:1;display:flex;align-items:center;gap:16px}
+.rede-hero-mark{width:58px;height:58px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:17px;padding:12px;backdrop-filter:blur(4px)}
 .rede-hero-mark svg{width:100%;height:100%;display:block}
-.rede-hero-t{font-size:23px;font-weight:800;letter-spacing:.2px;line-height:1.05}
-.rede-hero-s{font-size:13px;opacity:.94;line-height:1.5;margin-top:4px;max-width:80%}
+.rede-hero-t{font-size:27px;font-weight:800;letter-spacing:.2px;line-height:1.05}
+.rede-hero-s{font-size:13.5px;opacity:.95;line-height:1.5;margin-top:5px;max-width:88%}
+.rede-hero-tags{position:relative;z-index:1;display:flex;gap:9px;flex-wrap:wrap}
+.rede-hero-tag{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:7px 14px;backdrop-filter:blur(4px)}
+.rede-hero-tag svg{width:15px;height:15px;display:block;opacity:.95}
+@media(max-width:560px){.rede-hero{padding:26px 20px;min-height:0}.rede-hero-t{font-size:23px}.rede-hero-s{max-width:100%}}
 .rede-sec-h{font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--txs);margin:24px 2px 12px}
 .mural{display:flex;flex-direction:column;gap:11px}
 .mural-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;cursor:pointer;box-shadow:var(--sh);transition:.15s}
@@ -1560,6 +1564,11 @@ function redeHome(){
       </svg>
       <div class="rede-hero-in"><span class="rede-hero-mark">${heroMark}</span>
         <div><div class="rede-hero-t">Rede dichava</div><div class="rede-hero-s">Seu espaço na rede: encontros, formação e leitura pra caminhar junto.</div></div>
+      </div>
+      <div class="rede-hero-tags">
+        <span class="rede-hero-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Encontros</span>
+        <span class="rede-hero-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4a2 2 0 0 1 2-2h12v18H7a2 2 0 0 0-2 2z"/><path d="M5 20a2 2 0 0 1 2-2h12"/></svg>Biblioteca</span>
+        <span class="rede-hero-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 5 2 9l10 4 10-4z"/><path d="M6 11v5c0 1 2.7 2.4 6 2.4s6-1.4 6-2.4v-5"/></svg>Cursos</span>
       </div></div>
     ${destaque}
     <div class="rede-sec-h">Mural</div>
