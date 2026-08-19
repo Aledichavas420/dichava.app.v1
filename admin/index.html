@@ -277,14 +277,16 @@ tbody tr:hover{background:var(--card2)}
     <div class="sec">✍️ Novo texto / editar</div>
     <div class="card" style="padding:16px">
       <input type="hidden" id="bl-id">
-      <input id="bl-titulo" placeholder="Título" oninput="blSlugAuto()" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;font-size:16px;font-weight:700">
+      <input id="bl-titulo" placeholder="Título" oninput="blSlugAuto();blSeoPreview()" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;font-size:16px;font-weight:700">
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <input id="bl-slug" placeholder="slug-do-post" oninput="this.dataset.touched='1'" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;flex:1;min-width:150px">
+        <input id="bl-slug" placeholder="slug-do-post" oninput="this.dataset.touched='1';blSeoPreview()" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;flex:1;min-width:150px">
         <select id="bl-tema" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;flex:1;min-width:150px"><option value="">Tema…</option><option value="rd">Redução de danos</option><option value="clinica">Clínica e cuidado</option><option value="politica">Política de drogas</option><option value="saude">Saúde mental</option><option value="familia">Família e vínculos</option><option value="ciencia">Ciência e evidências</option><option value="historias">Histórias e vivências</option></select>
       </div>
       <input id="bl-autor" placeholder="Autor (nome do profissional que assina)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <input id="bl-tags" placeholder="Tags separadas por vírgula" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
-      <textarea id="bl-resumo" rows="2" placeholder="Resumo curto (aparece na lista)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit"></textarea>
+      <div style="font-size:12px;color:var(--txm);margin:2px 0 6px">Resumo <span style="color:var(--txs)">(é a descrição que aparece no Google)</span></div>
+      <textarea id="bl-resumo" rows="2" oninput="blSeoPreview()" placeholder="Frase curta que resume o texto. Aparece na lista e no Google. Ideal 120 a 160 caracteres." style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit"></textarea>
+      <div id="bl-seo" style="margin:0 0 10px"></div>
       <div style="margin:4px 0 8px"><div style="font-size:12px;color:var(--txm);margin-bottom:6px">Capa</div>
         <div id="bl-capa-prev"></div>
         <span class="pacts"><label class="btn ghost sm" style="cursor:pointer">Escolher capa<input type="file" accept="image/*" id="bl-capa" onchange="blCapaSel(this)" style="display:none"></label><button class="btn ghost sm" onclick="blCapaRm()">Remover capa</button></span>
@@ -1134,7 +1136,25 @@ const _TEMAS_ADM={rd:'Redução de danos',clinica:'Clínica e cuidado',politica:
 const _INP_B="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit";
 function slugify(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,80); }
 function blSlugAuto(){ const s=$('#bl-slug'); if(s && !s.dataset.touched) s.value=slugify($('#bl-titulo').value); }
+// Pré-visualização de como o post aparece no Google + contador da descrição
+function blSeoPreview(){
+  const box=$('#bl-seo'); if(!box) return;
+  const tit=(($('#bl-titulo')||{}).value||'').trim();
+  const slug=((($('#bl-slug')||{}).value||'').trim())||slugify(tit)||'seu-post';
+  const desc=(($('#bl-resumo')||{}).value||'').trim();
+  const n=desc.length;
+  const cor = (n>=120&&n<=160)?'#2E9E5B' : (n===0?'var(--txm)' : (n<120?'#B8860B':'#C0616B'));
+  const aviso = n===0?'escreva o resumo' : (n<120?'curta demais, tente chegar perto de 150':(n>160?'o Google corta acima de ~160':'bom tamanho'));
+  box.innerHTML =
+    `<div style="font-size:12px;color:${cor};margin-bottom:8px">Descrição: ${n} caractere${n===1?'':'s'} · ${aviso}</div>`+
+    `<div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--card2);max-width:600px">`+
+      `<div style="font-size:12px;color:#3C7A4E">dichava.app › blog › p › ${esc(slug)}</div>`+
+      `<div style="color:#1a56db;font-size:17px;line-height:1.3;margin:2px 0 3px">${esc(tit||'Título do post')} · Blog dichava</div>`+
+      `<div style="font-size:13px;color:var(--txs);line-height:1.45">${esc(desc||'A descrição aparece aqui. É o que o Google mostra embaixo do título.')}</div>`+
+    `</div>`;
+}
 async function carregarBlog(){
+  try{blSeoPreview();}catch(_){}
   const box=$('#bl-list'); if(!box)return;
   try{ const{data,error}=await SB.from('blog_posts').select('*').order('atualizado_em',{ascending:false}); if(error)throw error; _blogPosts=data||[]; renderBlogList(); }
   catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">'+esc(e.message||'erro')+' — rodou o blog-setup.sql?</div>'; }
@@ -1178,12 +1198,12 @@ function blCapaRender(){ const pv=$('#bl-capa-prev'); if(pv) pv.innerHTML=_blogC
 async function blCapaSel(input){ const f=input.files&&input.files[0]; if(!f)return; const st=$('#bl-status'); try{ if(st)st.textContent='Enviando capa…'; _blogCapa=await _uploadBlog(f); blCapaRender(); if(st)st.textContent=''; }catch(e){ if(st)st.textContent='Erro no upload: '+((e&&e.message)||e); } input.value=''; }
 function blCapaRm(){ _blogCapa=null; blCapaRender(); }
 async function blBlocoImg(i,input){ const f=input.files&&input.files[0]; if(!f)return; const st=$('#bl-status'); try{ if(st)st.textContent='Enviando imagem…'; const url=await _uploadBlog(f); if(_blogBlocos[i]) _blogBlocos[i].url=url; renderBlogBlocos(); if(st)st.textContent=''; }catch(e){ if(st)st.textContent='Erro no upload: '+((e&&e.message)||e); } input.value=''; }
-function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-autor','bl-tags','bl-resumo'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; _blogBlocos=[]; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); renderBlogBlocos(); const st=$('#bl-status'); if(st)st.textContent=''; try{window.scrollTo(0,0);}catch(_){}}
+function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-autor','bl-tags','bl-resumo'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; _blogBlocos=[]; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); renderBlogBlocos(); const st=$('#bl-status'); if(st)st.textContent=''; try{blSeoPreview();}catch(_){} try{window.scrollTo(0,0);}catch(_){}}
 function editarBlogPost(id){
   const p=_blogPosts.find(x=>x.id===id); if(!p)return;
   const s=(k,v)=>{const el=$('#'+k);if(el)el.value=v==null?'':v;};
   s('bl-id',p.id); s('bl-titulo',p.titulo); s('bl-slug',p.slug); s('bl-autor',p.autor_nome); s('bl-tags',(p.tags||[]).join(', ')); s('bl-resumo',p.resumo);
-  const tm=$('#bl-tema'); if(tm)tm.value=p.tema||''; const sl=$('#bl-slug'); if(sl)sl.dataset.touched='1';
+  const tm=$('#bl-tema'); if(tm)tm.value=p.tema||''; const sl=$('#bl-slug'); if(sl)sl.dataset.touched='1'; try{blSeoPreview();}catch(_){}
   _blogBlocos=Array.isArray(p.blocos)?JSON.parse(JSON.stringify(p.blocos)):[]; _blogCapa=p.capa||null; _blogEditPubEm=p.publicado_em||null;
   blCapaRender(); renderBlogBlocos(); try{window.scrollTo(0,0);}catch(_){}
 }
