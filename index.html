@@ -315,7 +315,7 @@ a{color:inherit;text-decoration:none}
 .hist-clear{background:none;border:none;color:var(--er);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;opacity:.8}
 #shell.dkm .hist-hd-t{color:#E9EFE7}
 
-.emg{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.emg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
 .emb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:var(--r);border:1.5px solid var(--cinm);background:var(--cin);cursor:pointer;transition:all .15s}
 .emb.on{border-color:var(--v);background:var(--vf);border-width:2px;box-shadow:0 2px 9px rgba(45,162,87,.28);transform:scale(1.04)}
 .eme{font-size:24px;line-height:1}
@@ -3965,7 +3965,7 @@ a{color:inherit;text-decoration:none}
   </div>
   <div id="reg-ctx-outro-w" style="display:none;margin-bottom:12px"><div class="lbl">Qual foi o contexto?</div><input class="inp" id="reg-ctx-outro" type="text" placeholder="Descreva a situação…" maxlength="60"></div>
   <div class="fld"><div class="lbl">Estado emocional <span class="ob">*</span></div>
-    <div class="emg" id="reg-emg"><button class="emb" onclick="selEReg(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEReg(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEReg(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEReg(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEReg(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
+    <div class="emg" id="reg-emg"><button class="emb" onclick="selEReg(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selEReg(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selEReg(this,'🙂','aliviado')"><span class="eme">🙂</span><span class="eml">aliviado</span></button><button class="emb" onclick="selEReg(this,'😃','animado')"><span class="eme">😃</span><span class="eml">animado</span></button><button class="emb" onclick="selEReg(this,'😐','neutro')"><span class="eme">😐</span><span class="eml">neutro</span></button><button class="emb" onclick="selEReg(this,'😴','cansado')"><span class="eme">😴</span><span class="eml">cansado</span></button><button class="emb" onclick="selEReg(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selEReg(this,'😣','irritado')"><span class="eme">😣</span><span class="eml">irritado</span></button><button class="emb" onclick="selEReg(this,'😵','sobrecarregado')"><span class="eme">😵</span><span class="eml">sobrecarregado</span></button><button class="emb" onclick="selEReg(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selEReg(this,'😞','pra baixo')"><span class="eme">😞</span><span class="eml">pra baixo</span></button><button class="emb" onclick="selEReg(this,'😕','confuso')"><span class="eme">😕</span><span class="eml">confuso</span></button></div>
   </div>
   <div class="fld"><div class="lbl">Gatilhos percebidos</div><div class="chips"><span class="chip" onclick="togChip(this)">Estresse</span><span class="chip" onclick="togChip(this)">Ansiedade</span><span class="chip" onclick="togChip(this)">Solidão</span><span class="chip" onclick="togChip(this)">Social</span><span class="chip" onclick="togChip(this)">Tédio</span><span class="chip" onclick="togChip(this)">Celebração</span><span class="chip" onclick="togChip(this)">Hábito</span><span class="chip" onclick="togChip(this)">Não sei</span><span class="chip" id="reg-gat-outro-chip" onclick="togGatOutro(this)">Outro</span></div><div id="reg-gat-outro-w" style="display:none;margin-top:8px"><input class="inp" id="reg-gat-outro" type="text" placeholder="Qual gatilho?" maxlength="40"></div></div>
   <div class="fld"><div class="lbl">Observação</div><textarea class="ft" id="reg-obs" rows="3" placeholder="O que quero lembrar?"></textarea></div>
@@ -4667,7 +4667,7 @@ function nemSvgSm(s){return nemSvg(s).replace('class="subicon"','class="subicon 
 const ini=n=>{if(!n)return'?';return n.trim().split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2)};
 const saud=()=>{const h=new Date().getHours();if(h<12)return'Bom dia,';if(h<18)return'Boa tarde,';return'Boa noite,'};
 const gProt=()=>ls('dr_prot_'+uid())||[];
-function streak(regs){const prot=gProt();const ds=[...new Set([...(regs||[]).map(r=>r.data),...prot])].sort().reverse();let s=0;let c=new Date();c.setHours(12,0,0,0);for(const d of ds){const dd=new Date(d+'T12:00:00');const df=Math.round((c-dd)/864e5);if(df>1)break;s++;c=dd;}return s}
+function streak(regs){const prot=gProt();const ref=(typeof gRef==='function'?gRef():[])||[];const fs=(typeof gFs==='function'?gFs():[])||[];const set=new Set([].concat((regs||[]).map(r=>r&&r.data),ref.map(r=>r&&r.data),fs.map(r=>r&&r.data),prot).filter(Boolean));try{const ck=(typeof gCK==='function'?gCK():null);if(ck&&ck.data)set.add(ck.data);}catch(e){}const ds=[...set].sort().reverse();let s=0;let c=new Date();c.setHours(12,0,0,0);for(const d of ds){const dd=new Date(d+'T12:00:00');const df=Math.round((c-dd)/864e5);if(df>1)break;s++;c=dd;}return s}
 function semanaISO(){const d=new Date();const onejan=new Date(d.getFullYear(),0,1);const w=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);return d.getFullYear()+'-'+w;}
 function getEscudo(){let e=ls('dr_escudo_'+uid());const w=semanaISO();if(!e||e.week!==w){e={n:1,week:w};ls('dr_escudo_'+uid(),e);}return e;}
 function checarEscudo(){
@@ -5733,13 +5733,13 @@ function diaGo(i){const s=diaSteps()[i];if(s&&!s.done)s.go();else if(s)s.go();}
 function renderDiaHoje(){
   const c=document.getElementById('h-missao');if(!c)return;
   const steps=diaSteps();const feitos=steps.filter(s=>s.done).length;const total=steps.length;const completo=feitos===total;
-  const st=streak(gR());const risco=!completo&&st>=2&&!steps[1].done;
+  const st=streak(gR());const risco=!completo&&st>=2&&!steps[0].done&&!steps[1].done;
   if(completo){const k='dr_dia_'+uid()+'_'+hoje();if(!localStorage.getItem(k)){localStorage.setItem(k,'1');try{addXP(15,'dia');}catch(e){}setTimeout(()=>{try{confete();}catch(e){}},250);}}
   c.innerHTML=`<div class="dia${completo?' ok':''}">
     <div class="dia-hd"><span class="dia-l">${completo?'🎉 Dia completo!':'☀️ Seu dia hoje'}</span><span class="dia-c">${feitos}/${total}</span></div>
     <div class="dia-bar"><div class="dia-bar-f" style="width:${Math.round(feitos/total*100)}%"></div></div>
     <div class="dia-steps">${steps.map((s,i)=>`<button class="dia-step${s.done?' done':''}" onclick="diaGo(${i})"><span class="dia-step-ic">${s.done?'✓':s.ic}</span><span class="dia-step-l">${s.l}</span></button>`).join('')}</div>
-    ${completo?'<div class="dia-msg">Mandou bem! Ritual de hoje cumprido · +15 XP 💚</div>':(risco?`<div class="dia-msg risco">🔥 Sua sequência de ${st} dias acaba hoje — faça um registro pra manter!</div>`:'')}
+    ${completo?'<div class="dia-msg">Mandou bem! Ritual de hoje cumprido · +15 XP 💚</div>':(risco?`<div class="dia-msg risco">🌱 Seus ${st} dias de cuidado seguem hoje. Um check-in, uma reflexão ou um registro mantém.</div>`:'')}
   </div>`;
 }
 /* ── REGISTRO RÁPIDO (1 toque) ── */
@@ -5926,7 +5926,7 @@ function salvReg(){
     const _metas=(typeof gM==='function'?gM():[])||[];
     const _lim=_metas.find(m=>m.tipo==='limite');
     let _passou=false; if(_lim){ const _pr=metaLimiteProg(_lim); _passou=!!(_pr&&!_pr.dentro); }
-    const _negs=['😵','😰','😔']; const _rs=gR(); const _last=_rs[_rs.length-1]; const _ult=_rs.slice(-5);
+    const _negs=['😵','😰','😔','😞','😣']; const _rs=gR(); const _last=_rs[_rs.length-1]; const _ult=_rs.slice(-5);
     const _dificil=_last&&_negs.includes(_last.emocao)&&_ult.filter(r=>_negs.includes(r.emocao)).length>=2;
     if(_passou) setTimeout(function(){nudgeProf('limite');},1500);
     else if(_dificil) setTimeout(function(){nudgeProf('humor');},1500);
@@ -6073,7 +6073,7 @@ function abrirPerfil(){
   const eb=document.getElementById('perfil-editav');if(eb)eb.textContent='✏️ Editar avatar';
   document.getElementById('perfil-nome').textContent=nome;
   document.getElementById('perfil-tit').textContent=cur.ic+' '+cur.t+' · '+(p.xp||0)+' XP';
-  const stats=[['🔥',streak(regs),'dias seguidos'],['📓',regs.length,'registros'],['✍️',refs.length,'reflexões'],['💪',fiss.length,'resistências']];
+  const stats=[['🔥',streak(regs),'dias de cuidado'],['📓',regs.length,'registros'],['✍️',refs.length,'reflexões'],['💪',fiss.length,'resistências']];
   document.getElementById('perfil-stats').innerHTML=stats.map(s=>`<div class="perfil-st"><div class="perfil-st-n">${s[1]}</div><div class="perfil-st-l">${s[0]} ${s[2]}</div></div>`).join('');
   const perf=gPerfil();const subs=(obj?.subs||[]).map(x=>x.replace(/^[^\wÀ-ú]+ /,''));
   let info='';
