@@ -326,7 +326,9 @@ function ageNo(){ document.querySelectorAll('#age-gate button').forEach(function
 <style>
 .pilares{background:linear-gradient(180deg,#141A14,#182219);text-align:center;overflow:hidden}
 .pilares .kicker{color:#7EDC9A;border-color:rgba(126,220,154,.4)}
-.pil-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:46px;text-align:left}
+.pil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px;text-align:left}
+@media(max-width:820px){.pil-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.pil-grid{grid-template-columns:1fr}}
 .pil{position:relative;border-radius:24px;padding:26px 24px 24px;background:var(--dk3);border:1px solid rgba(255,255,255,.08);
   transition:transform .28s,box-shadow .28s;overflow:hidden}
 .pil::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:var(--pc);opacity:.16;transition:transform .4s}

@@ -2439,7 +2439,7 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="hero-info">
         <div class="hero-num" id="hs-st">0</div>
-        <div class="hero-unit" id="hs-unit">dias seguidos</div>
+        <div class="hero-unit" id="hs-unit">dias de cuidado</div>
         <div class="hero-msg" id="hero-msg">Todo recomeço é válido 💚</div>
       </div>
     </div>
@@ -5385,7 +5385,7 @@ function renderHome(){
 const FEATURES=[
   {id:'prog',pg:'p-prog',nome:'Progresso',ic:'progresso',free:true,gate:{reg:3,dias:3},
    sub:'Seu mapa de evolução',
-   passos:['Seus registros viram gráficos e padrões fáceis de ler','Acompanhe metas, dias seguidos e conquistas','Tudo se atualiza sozinho conforme você registra']},
+   passos:['Seus registros viram gráficos e padrões fáceis de ler','Acompanhe metas, dias de cuidado e conquistas','Tudo se atualiza sozinho conforme você registra']},
   {id:'ref',pg:'p-ref',nome:'Reflexões',ic:'reflexoes',free:true,gate:{reg:6,dias:5},
    sub:'Um espaço pra olhar pra dentro',
    passos:['Cartas e perguntas que te ajudam a refletir','Escreva no seu ritmo, sem certo ou errado','Volte quando quiser reler o que sentiu']},
@@ -5598,7 +5598,7 @@ function metaDestaque(regs){
     return{num:sem,unit:sem===1?'uso esta semana':'usos esta semana',marco:0,tipo:'usos',ant};
   }
   const s=streak(regs);
-  if(goal==='rd')return{num:s,unit:s===1?'dia no cuidado':'dias no cuidado',marco:s,tipo:'streak'};
+  if(goal==='rd')return{num:s,unit:s===1?'dia de cuidado':'dias de cuidado',marco:s,tipo:'streak'};
   return{num:s,unit:s===1?'dia acompanhando':'dias acompanhando',marco:s,tipo:'streak'};
 }
 // data ISO local deslocada por N dias (para janelas semanais)
@@ -5798,8 +5798,8 @@ function fecharInstall(){localStorage.setItem('dr_install_dismiss_'+uid(),'1');r
 // são sempre livres no Modo Crise. A trilha só desbloqueia recursos de relaxamento extra.
 const HABS=[
   {id:'jogos',ic:'jogos',nome:'Jogos de foco',desc:'Ocupe as mãos e a cabeça',cond:()=>true,go:()=>{const g=document.querySelector('#p-jogos .zen-grid');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});}},
-  {id:'sons',ic:'son-floresta',nome:'Sons da natureza',desc:'Paisagens sonoras em loop',need:'3 dias seguidos',prog:()=>[streak(gR()),3],go:()=>{const s=document.getElementById('zen-sons');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
-  {id:'freq',ic:'tool-slider',nome:'Ruído & frequências',desc:'Ruído branco, 432Hz, binaural',need:'7 dias seguidos',prog:()=>[streak(gR()),7],go:()=>{const s=document.getElementById('zen-freq');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
+  {id:'sons',ic:'son-floresta',nome:'Sons da natureza',desc:'Paisagens sonoras em loop',need:'3 dias de cuidado',prog:()=>[streak(gR()),3],go:()=>{const s=document.getElementById('zen-sons');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
+  {id:'freq',ic:'tool-slider',nome:'Ruído & frequências',desc:'Ruído branco, 432Hz, binaural',need:'7 dias de cuidado',prog:()=>[streak(gR()),7],go:()=>{const s=document.getElementById('zen-freq');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}},
 ];
 /* versão de testes: trilha liberada (troque para false pra reativar o bloqueio por streak) */
 const TRILHA_LIVRE=true;
