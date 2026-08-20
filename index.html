@@ -3898,7 +3898,7 @@ a{color:inherit;text-decoration:none}
   <div class="mh"></div>
   <button class="mclose" onclick="closeMod('minfo')" aria-label="Fechar">✕</button>
   <div class="mt">O que significam? <span class="tic" data-icon="sec-insights"></span></div>
-  <p style="font-size:13px;color:var(--txs);margin-bottom:16px">Um resumo rápido do seu acompanhamento — sem cobrança, só pra te situar.</p>
+  <p style="font-size:13px;color:var(--txs);margin-bottom:16px">Um resumo rápido do seu acompanhamento, sem cobrança, só pra te situar.</p>
   <div class="infi"><div class="infi-ic" style="background:#E9F9ED">🔥</div><div><div class="infi-t" id="infi-destaque-t">Seu destaque</div><div class="infi-d" id="infi-destaque-d">O número em destaque muda conforme o <strong>seu objetivo</strong>.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:#E8F1FF" data-icon="agenda"></div><div><div class="infi-t">Esta semana</div><div class="infi-d">Número de registros que você fez nos últimos 7 dias.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:#F2EBFF" data-icon="sec-meta"></div><div><div class="infi-t">Da meta</div><div class="infi-d">Porcentagem das suas metas concluídas. Defina e gerencie suas metas na aba <strong>Progresso</strong>.</div></div></div>
@@ -5608,7 +5608,7 @@ function abrirInfoHero(){
   const d=metaDestaque(gR());
   const T={semuso:['Dias sem usar','Quantos dias seguidos você está sem registrar uso. É o número que mais importa em quem busca <strong>parar</strong> — cada dia conta, e recomeçar faz parte.'],
     usos:['Usos esta semana','Quantos registros de uso você fez nos últimos 7 dias. Pra quem quer <strong>reduzir</strong>, o alvo é essa barra descer no seu ritmo — comparada à semana anterior.'],
-    streak:['Dias seguidos','Quantos dias seguidos você registrou algo. Mede sua <strong>constância</strong> — não é sobre acertar, é sobre estar presente.']};
+    streak:['Dias de cuidado','Quantos dias seguidos você se cuidou de alguma forma: um check-in, uma reflexão, resistir a uma fissura ou um registro. Não é sobre acertar nem sobre usar menos, é sobre estar presente.']};
   const t=T[d.tipo]||T.streak;
   const et=document.getElementById('infi-destaque-t'),ed=document.getElementById('infi-destaque-d');
   if(et)et.textContent=t[0]; if(ed)ed.innerHTML=t[1];
