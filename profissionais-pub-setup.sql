@@ -18,13 +18,18 @@ drop policy if exists "ler aprova" on public.profissionais;
 -- 2) View pública com APENAS colunas seguras (nunca obs_admin, comprovante,
 --    email, plano, acesso_ate, liberado_em). A view roda como dona (bypassa
 --    o RLS da base de forma controlada) e só devolve profissionais aprovados.
+--    agenda_config (agendamento online) só é exposto pra planos que têm o
+--    recurso (Profissional/Clínica); no Essencial vem NULL, então o app não
+--    oferece "marcar sozinho" mesmo que tenha sobrado config de um teste.
 drop view if exists public.profissionais_pub;
 create view public.profissionais_pub as
 select
   id, nome, tipo_prof, reg, bio, especialidades, modalidade, cidade,
   valor, duracao, disponibilidade, publicos, idiomas, foto, link, telefone,
   agenda_codigo, destaque, ativo, em_teste, oculto_diretorio, status,
-  capa, agenda_config, bio_links, bio_config,
+  capa,
+  case when plano in ('profissional','clinica') then agenda_config else null end as agenda_config,
+  bio_links, bio_config,
   instagram, site, linkedin, estado, instituicao, ano_formacao, especializacao
 from public.profissionais
 where status = 'aprovado';
