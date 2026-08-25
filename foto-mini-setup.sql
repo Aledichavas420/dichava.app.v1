@@ -16,7 +16,9 @@ select
   id, nome, tipo_prof, reg, bio, especialidades, modalidade, cidade,
   valor, duracao, disponibilidade, publicos, idiomas, foto, foto_mini, link, telefone,
   agenda_codigo, destaque, ativo, em_teste, oculto_diretorio, status,
-  capa, agenda_config, bio_links, bio_config,
+  capa,
+  case when plano in ('profissional','clinica') then agenda_config else null end as agenda_config,
+  bio_links, bio_config,
   instagram, site, linkedin, estado, instituicao, ano_formacao, especializacao
 from public.profissionais
 where status = 'aprovado';
