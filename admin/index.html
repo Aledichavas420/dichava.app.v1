@@ -603,7 +603,7 @@ async function delUsuario(id,email){
     const {error}=await SB.rpc('admin_deletar_usuario',{p_id:id});
     if(error) throw error;
     toast('Conta removida'); buscarUsuario();
-  }catch(e){ toast(e.message||'Erro ao deletar',1); }
+  }catch(e){ toast('Não consegui deletar. Tenta de novo.',1); }
 }
 // ===== MODERAR AVALIAÇÕES =====
 async function carregarAvaliacoesAdmin(){
@@ -623,7 +623,7 @@ async function carregarAvaliacoesAdmin(){
 async function removerAvaliacao(id){
   if(!confirm('Remover esta avaliação?')) return;
   try{ const {error}=await SB.rpc('admin_avaliacao_remover',{p_id:id}); if(error)throw error; toast('Avaliação removida'); carregarAvaliacoesAdmin(); }
-  catch(e){ toast(e.message||'Erro',1); }
+  catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 /* ===== NOTÍCIAS / BANNER DO APP ===== */
 async function carregarNoticias(){
@@ -650,14 +650,14 @@ async function addNoticia(){
   try{ const {error}=await SB.from('noticias').insert({manchete:man,link:link,fonte:fonte||null,imagem:img||null,ativo:true}); if(error)throw error;
     document.getElementById('nt-manchete').value=''; document.getElementById('nt-link').value=''; document.getElementById('nt-img').value='';
     st.textContent='✓ Adicionada ao banner.'; carregarNoticias();
-  }catch(e){ st.textContent='Erro: '+(e.message||'')+(/(policy|denied|permission)/i.test(e.message||'')?' — você está logado como admin?':''); }
+  }catch(e){ st.textContent='Não consegui concluir. Tenta de novo.'+(/(policy|denied|permission)/i.test(e.message||'')?' — você está logado como admin?':''); }
 }
 async function toggleNoticia(id,ativo){
-  try{ const {error}=await SB.from('noticias').update({ativo:ativo}).eq('id',id); if(error)throw error; carregarNoticias(); }catch(e){ toast(e.message||'Erro',1); }
+  try{ const {error}=await SB.from('noticias').update({ativo:ativo}).eq('id',id); if(error)throw error; carregarNoticias(); }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 async function removerNoticia(id){
   if(!confirm('Excluir esta notícia do banner?')) return;
-  try{ const {error}=await SB.from('noticias').delete().eq('id',id); if(error)throw error; toast('Notícia excluída'); carregarNoticias(); }catch(e){ toast(e.message||'Erro',1); }
+  try{ const {error}=await SB.from('noticias').delete().eq('id',id); if(error)throw error; toast('Notícia excluída'); carregarNoticias(); }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 /* ===== LINK NA BIO (DICHAVANDO) ===== */
 let _bio={nome:'',subtitulo:'',tema:'verde',cor:'',links:[],faq:[]}, _bioReady=false;
@@ -697,7 +697,7 @@ async function carregarBioSite(){
 async function salvarBioSite(){
   bioColeta(); const st=document.getElementById('bio-status'); st.textContent='Salvando…';
   try{ const {error}=await SB.from('bio_site').upsert({id:1,dados:_bio,atualizado_em:new Date().toISOString()}); if(error)throw error; st.textContent='✓ Publicado em dichava.app/dichavando'; }
-  catch(e){ st.textContent='Erro: '+(e.message||'')+(/(policy|denied|permission)/i.test(e.message||'')?' — você está logado como admin?':''); }
+  catch(e){ st.textContent='Não consegui concluir. Tenta de novo.'+(/(policy|denied|permission)/i.test(e.message||'')?' — você está logado como admin?':''); }
 }
 function bioCopiar(){ try{ navigator.clipboard.writeText('https://dichava.app/dichavando'); toast('Link copiado'); }catch(e){ toast('https://dichava.app/dichavando'); } }
 window.addEventListener('message',function(e){ if(e.data&&e.data.type==='bio-site-ready'){ _bioReady=true; bioPush(); } });
@@ -850,7 +850,7 @@ async function enviarLembreteLancamento(){
     if(okList.length){ try{ await SB.rpc('admin_waitlist_lembrete',{p_ids:okList.map(w=>w.id),p_marcar:true}); const agora=new Date().toISOString(); okList.forEach(w=>w.lembrete_em=agora); }catch(e){ console.warn('Não marquei o lembrete (rodou o waitlist-lembrete-setup.sql?):',e.message||e); } }
     renderWlFiltros(); renderWaitlist(); renderWlFunnel();
     toast('✓ '+((data&&data.enviados)??okList.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s) (ver console)'):''));
-  }catch(e){ toast('Erro: '+(e.message||''),1); }
+  }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 async function moverQuemCriouConta(){
   const alvo=WL.filter(w=>['contato','pendente'].includes(w.status||'pendente') && wlTemConta(w));
@@ -870,7 +870,7 @@ async function enviarCheckinEmail(id){
     if(error){ throw new Error(await _fxErr(error)); }
     if(data&&data.erro)throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro));
     toast('✓ Check-in enviado por e-mail');
-  }catch(e){ toast('Erro: '+(e.message||''),1); }
+  }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 async function enviarCheckinTodosTeste(){
   const list=PROFS.filter(p=>ehTrial(p)&&p.email);
@@ -884,7 +884,7 @@ async function enviarCheckinTodosTeste(){
     if(data&&data.erro)throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro));
     if(data&&data.falhas_emails&&data.falhas_emails.length)console.warn('Falharam:',data.falhas_emails);
     toast('✓ '+((data&&data.enviados)??list.length)+' enviado(s)'+(data&&data.falhas?(' · '+data.falhas+' falha(s) (ver console)'):''));
-  }catch(e){ toast('Erro: '+(e.message||''),1); }
+  }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 function renderWaitlist(){
   // barra de ações em massa
@@ -942,7 +942,7 @@ async function wlStatus(id,status){
     if(error) throw error;
     const w=WL.find(x=>x.id===id); if(w)w.status=status;
     renderWlFiltros(); renderWaitlist(); renderWlFunnel(); toast('Atualizado');
-  }catch(e){ toast(e.message||'Erro ao atualizar',1); }
+  }catch(e){ toast('Não consegui atualizar. Tenta de novo.',1); }
 }
 // Ao clicar em WhatsApp/E-mail, marca "em contato" (só se ainda estava pendente),
 // pra você acompanhar quem já foi abordado dos 41 — sem re-renderizar na cara.
@@ -996,7 +996,7 @@ async function enviarSuporte(){
   const inp=$('#sup-input'); const t=(inp.value||'').trim(); if(!t||!_supProf)return;
   inp.value='';
   try{ await SB.from('suporte_mensagens').insert({prof_id:_supProf,remetente:'suporte',texto:t,lida_admin:true}); await carregarSupMsgs(true); }
-  catch(e){ toast('Erro ao enviar: '+(e.message||''),1); inp.value=t; }
+  catch(e){ toast('Não consegui enviar. Tenta de novo.',1); inp.value=t; }
 }
 async function marcarSupLidas(){ try{ await SB.from('suporte_mensagens').update({lida_admin:true}).eq('prof_id',_supProf).eq('remetente','prof'); }catch(e){} }
 
@@ -1156,7 +1156,7 @@ async function gerarMiniaturasAll(){
     }
     if(btn){ btn.disabled=false; btn.textContent='Gerar miniaturas das fotos'; }
     toast('Miniaturas geradas: '+ok+' de '+alvo.length);
-  }catch(e){ if(btn){btn.disabled=false;btn.textContent='Gerar miniaturas das fotos';} toast('Erro: '+((e&&e.message)||e)); }
+  }catch(e){ if(btn){btn.disabled=false;btn.textContent='Gerar miniaturas das fotos';} toast('Não consegui concluir. Tenta de novo.'); }
 }
 let _blogPosts=[], _blogBlocos=[], _blogCapa=null, _blogEditPubEm=null;
 const _TEMAS_ADM={rd:'Redução de danos',clinica:'Clínica e cuidado',politica:'Política de drogas',saude:'Saúde mental',familia:'Família e vínculos',ciencia:'Ciência e evidências',historias:'Histórias e vivências'};
@@ -1267,8 +1267,8 @@ async function salvarBlog(publicar){
     toast(publicar?'Publicado':'Rascunho salvo'); await carregarBlog(); if(!id) limparBlog();
   }catch(e){ const m=(e&&e.message)||e; toast(/duplicate|unique/i.test(m)?'Já existe um post com esse slug. Mude o slug.':'Erro: '+m,1); }
 }
-async function despublicarBlog(id){ try{ const r=await SB.from('blog_posts').update({status:'rascunho'}).eq('id',id); if(r.error)throw r.error; carregarBlog(); }catch(e){ toast('Erro: '+((e&&e.message)||e),1); } }
-async function excluirBlog(id){ if(!confirm('Excluir este texto?'))return; try{ const r=await SB.from('blog_posts').delete().eq('id',id); if(r.error)throw r.error; toast('Excluído'); if($('#bl-id').value===id)limparBlog(); carregarBlog(); }catch(e){ toast('Erro: '+((e&&e.message)||e),1); } }
+async function despublicarBlog(id){ try{ const r=await SB.from('blog_posts').update({status:'rascunho'}).eq('id',id); if(r.error)throw r.error; carregarBlog(); }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); } }
+async function excluirBlog(id){ if(!confirm('Excluir este texto?'))return; try{ const r=await SB.from('blog_posts').delete().eq('id',id); if(r.error)throw r.error; toast('Excluído'); if($('#bl-id').value===id)limparBlog(); carregarBlog(); }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); } }
 let _redeEv=[], _redeInts=[], _redeIntsErr='';
 const _AREA_NOME={interv:'Grupos de intervisão',rodas:'Rodas de conversa',eventos:'Eventos internos'};
 function _fmtRD(d){ try{ const[y,m,dd]=d.split('-'); return dd+'/'+m+'/'+y; }catch(_){ return d; } }
@@ -1326,7 +1326,7 @@ async function salvarEventoRede(){
     let r; if(id){ r=await SB.from('rede_eventos').update(row).eq('id',id); } else { r=await SB.from('rede_eventos').insert(row); }
     if(r.error)throw r.error;
     toast('Encontro salvo'); limparEventoRede(); carregarRedeAdmin();
-  }catch(e){ toast('Erro: '+((e&&e.message)||e),1); }
+  }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 function editarEventoRede(id){
   const e=_redeEv.find(x=>x.id===id); if(!e)return;
@@ -1336,11 +1336,11 @@ function editarEventoRede(id){
 }
 async function toggleEventoRede(id){
   const e=_redeEv.find(x=>x.id===id); if(!e)return;
-  try{ const r=await SB.from('rede_eventos').update({ativo:!e.ativo}).eq('id',id); if(r.error)throw r.error; carregarRedeAdmin(); }catch(err){ toast('Erro: '+((err&&err.message)||err),1); }
+  try{ const r=await SB.from('rede_eventos').update({ativo:!e.ativo}).eq('id',id); if(r.error)throw r.error; carregarRedeAdmin(); }catch(err){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 async function removerEventoRede(id){
   if(!confirm('Excluir este encontro?'))return;
-  try{ const r=await SB.from('rede_eventos').delete().eq('id',id); if(r.error)throw r.error; toast('Excluído'); carregarRedeAdmin(); }catch(e){ toast('Erro: '+((e&&e.message)||e),1); }
+  try{ const r=await SB.from('rede_eventos').delete().eq('id',id); if(r.error)throw r.error; toast('Excluído'); carregarRedeAdmin(); }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 function renderProfs(){
   const emTeste=PROFS.filter(p=>ehTrial(p)&&p.email);
@@ -1519,7 +1519,7 @@ async function verComprovante(id){
     if(!data){ toast('Sem comprovante enviado.',1); return; }
     const w=window.open('','_blank');
     if(w) w.document.write('<title>Comprovante</title><body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+data+'" style="max-width:100%;max-height:100vh"></body>');
-  }catch(e){ toast('Erro: '+(e.message||''),1); }
+  }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 // Dispara o e-mail de boas-vindas (Edge Function email-boasvindas).
 // Silencioso: se falhar, não trava a liberação — só avisa discreto.
@@ -1610,7 +1610,7 @@ async function acao(id,tipo,meses,obs){
     if((tipo==='liberar'||tipo==='trial') && !_skipBoasVindas) enviarBoasVindas(p,tipo==='trial');
     _skipBoasVindas=false;
     carregar();
-  }catch(e){ toast('Erro: '+(e.message||''),1); }
+  }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 
 $('#g-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') entrar(); });

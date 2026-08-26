@@ -6908,7 +6908,7 @@ async function admSet(id,status){
     if(error)throw error;
     toast(status==='aprovado'?'✓ Profissional aprovado':'Profissional reprovado');
     renderAdmin();atualizarBadgeAdmin();
-  }catch(e){toast('Erro: '+(e.message||''));}
+  }catch(e){toast('Não consegui concluir. Tenta de novo.');}
 }
 function salvCfg(){blurAll();sC({notif:document.getElementById('tog-n').checked,dicas:document.getElementById('tog-d').checked,ck:document.getElementById('tog-ck').checked,limD:parseInt(document.getElementById('lim-d').value)||4,limS:parseInt(document.getElementById('lim-s').value)||15,dark:document.getElementById('tog-dark').checked,discreto:document.getElementById('tog-disc').checked});}
 
@@ -7000,7 +7000,7 @@ async function salvarPerfilPro(){
   };
   const{error}=await _SB.from('profissionais').upsert(payload).catch(e=>({error:e}));
   btn.disabled=false;btn.textContent='Enviar perfil para aprovação';
-  if(error){toast('Erro ao salvar: '+error.message);return;}
+  if(error){toast('Não consegui salvar. Tenta de novo.');return;}
   // re-check status (edit case: already approved)
   const st=await checkProStatus();if(st==='aprovado'){toast('✓ Perfil atualizado!');entrarPro();}else{showV('vpro-aguarda');}
 }
@@ -7190,7 +7190,7 @@ async function salvarAvaliacao(){
   if(!_SB){toast('Sem conexão.');return;}
   const coment=(document.getElementById('av-coment')?.value||'').trim().slice(0,600);
   const{error}=await _SB.from('avaliacoes_prof').upsert({prof_id:_avProf,user_id:U.id,user_nome:U.nome||'Paciente',nota:_avNota,comentario:coment},{onConflict:'prof_id,user_id'});
-  if(error){toast('Não consegui salvar: '+(error.message||''));return;}
+  if(error){toast('Não consegui salvar. Tenta de novo.');return;}
   closeMod('mavaliar');toast('✓ Avaliação enviada. Obrigado!');carregarAvaliacoes(_avProf);
 }
 async function excluirAvaliacao(profId){
@@ -7287,7 +7287,7 @@ async function confirmarAgendamento(codigo,data,hora){
     }
     if(error)throw error;
     closeMod('magendar'); toast('✓ Solicitação enviada! O profissional confirma com você.',4000);
-  }catch(e){ toast('⚠️ '+((e&&e.message)||'não enviou'),5000); btn.disabled=false; btn.textContent='Solicitar este horário'; }
+  }catch(e){ toast('⚠️ Não consegui enviar. Tenta de novo.',5000); btn.disabled=false; btn.textContent='Solicitar este horário'; }
 }
 /* ══ CHAT usuário ↔ profissional ══ */
 let _profsById={};
@@ -7442,7 +7442,7 @@ async function enviarMsg(){
     // dispara o push pro destinatário (não bloqueia; ignora erro se a função não existir)
     try{ _SB.functions.invoke('push-msg',{body:{conversa_id:_chat.conv.id,de_id:U.id,texto:txt}}); }catch(e){}
     carregarMsgs(true);
-  }catch(e){ toast('⚠️ não enviou: '+((e&&e.message)||''),4000); el.value=txt; }
+  }catch(e){ toast('⚠️ Não consegui enviar. Tenta de novo.',4000); el.value=txt; }
 }
 function chatWhatsApp(){
   const tel=(_chat.otherTel||'').replace(/[^0-9]/g,'');
@@ -7510,14 +7510,14 @@ async function solicitarAcomp(){
     await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:t});
     await _SB.from('conversas').update({ultima_msg:t.slice(0,120),atualizado_em:new Date().toISOString()}).eq('id',_chat.conv.id);
     renderChatAcomp(); carregarMsgs(true); toast('Pedido enviado — o paciente vai ver o aviso para autorizar.');
-  }catch(e){ toast('⚠️ '+((e&&e.message)||'erro'),5000); }
+  }catch(e){ toast('⚠️ Algo deu errado. Tenta de novo.',5000); }
 }
 async function responderAcomp(ok){
   if(!_SB||!_chat.conv)return;
   try{
     if(ok){ const resumo=calcResumoPaciente();
       const{error}=await _SB.from('conversas').update({acomp:'ativo',resumo,resumo_em:new Date().toISOString()}).eq('id',_chat.conv.id);
-      if(error){ toast('⚠️ Não consegui salvar. Rode o SQL de acompanhamento. '+(error.message||''),7000); return; }
+      if(error){ toast('⚠️ Não consegui salvar agora. Tenta de novo.',7000); return; }
       _chat.conv.acomp='ativo'; _chat.conv.resumo=resumo;
       const t='✅ Autorizei o acompanhamento da minha evolução.';
       await _SB.from('mensagens').insert({conversa_id:_chat.conv.id,de_id:U.id,texto:t});
@@ -7525,7 +7525,7 @@ async function responderAcomp(ok){
       toast('Acompanhamento autorizado 💚');
     } else { await _SB.from('conversas').update({acomp:'revogado'}).eq('id',_chat.conv.id); _chat.conv.acomp='revogado'; }
     renderChatAcomp(); carregarMsgs(true);
-  }catch(e){ toast('⚠️ '+((e&&e.message)||'erro'),5000); }
+  }catch(e){ toast('⚠️ Algo deu errado. Tenta de novo.',5000); }
 }
 async function revogarAcomp(){
   if(!confirm('Revogar o acompanhamento? O profissional deixa de ver seu resumo.'))return;
@@ -7641,7 +7641,7 @@ async function carregarConsultasUser(){
 async function confirmarPresenca(id){
   if(!_SB){toast('Sem conexão');return;}
   const{error}=await _SB.from('solicitacoes').update({presenca:'confirmada'}).eq('id',id);
-  if(error){toast('Não consegui confirmar: '+(error.message||''));return;}
+  if(error){toast('Não consegui confirmar. Tenta de novo.');return;}
   try{sfx('star');}catch(e){}
   toast('✓ Presença confirmada!');carregarConsultasUser();
 }
@@ -7701,7 +7701,7 @@ async function salvarPerfilPro(){
     error=res&&res.error;
   }catch(e){error=e;}
   btn.disabled=false;btn.textContent='Enviar perfil para aprovação';
-  if(error){toast('⚠️ '+((error&&error.message)||'não consegui salvar')+' — se persistir, a tabela de profissionais pode não estar configurada.',6000);return;}
+  if(error){toast('⚠️ Não consegui salvar agora. Tenta de novo.',6000);return;}
   toast('✓ Perfil enviado para aprovação!');
   showV('vpro-aguarda');
 }
@@ -9507,7 +9507,7 @@ async function assinarPlano(){
     if(error)throw new Error('função: '+(error.message||error.name||JSON.stringify(error)).slice(0,120));
     if(!data||!data.pay_url)throw new Error('resposta: '+JSON.stringify(data||{}).slice(0,160));
     window.location.href=data.pay_url;   // vai pro checkout do PagBank
-  }catch(e){toast('⚠️ '+((e&&e.message)||e),6500);if(btn){btn.disabled=false;btn.textContent=orig;}}
+  }catch(e){toast('⚠️ Algo deu errado. Tenta de novo.',6500);if(btn){btn.disabled=false;btn.textContent=orig;}}
 }
 // Volta do checkout (?pago=1): confere o premium por alguns segundos (o webhook pode demorar)
 window.addEventListener('load',function(){
