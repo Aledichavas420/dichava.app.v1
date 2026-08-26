@@ -7008,6 +7008,9 @@ async function salvarPerfilPro(){
 function setFiltro(f,v,btn){_pfFilt[f]=v;btn.parentElement.querySelectorAll('.pf-chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');renderProfs();}
 function fecharProfAviso(){ try{ var a=document.getElementById('prof-aviso'); if(a)a.style.display='none'; localStorage.setItem('dr_profaviso_x','1'); }catch(e){} }
 let _profsCache=null,_profsCacheAt=0,_avMap={};
+function tcNome(s){ if(!s) return s; const str=String(s).trim(); if(!str||str!==str.toUpperCase()) return s;
+  const min={de:1,da:1,do:1,das:1,dos:1,e:1,di:1,du:1,della:1,van:1,von:1};
+  return str.toLowerCase().split(/\s+/).map((w,i)=>(i>0&&min[w])?w:(w.charAt(0).toUpperCase()+w.slice(1))).join(' '); }
 async function _carregarProfs(force){
   if(!_SB){ if(!_profsCache)_profsCache=[]; return; }
   if(!force && _profsCache && (Date.now()-_profsCacheAt)<180000) return; // reusa por até 3 min
@@ -7021,7 +7024,7 @@ async function _carregarProfs(force){
     const data=resp&&resp.data;
     if(data){ _profsCache=data; _profsCacheAt=Date.now(); } else if(!_profsCache) _profsCache=[];
   }catch(e){ if(!_profsCache)_profsCache=[]; }
-  (_profsCache||[]).forEach(p=>{ _profsById[p.id]=Object.assign(_profsById[p.id]||{},p); if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random(); });
+  (_profsCache||[]).forEach(p=>{ p.nome=tcNome(p.nome); _profsById[p.id]=Object.assign(_profsById[p.id]||{},p); if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random(); });
   try{
     if(_profsCache&&_profsCache.length){ const ids=_profsCache.map(p=>p.id); const{data:avs}=await _SB.from('avaliacoes_prof').select('prof_id,nota').in('prof_id',ids); const m={}; (avs||[]).forEach(a=>{(m[a.prof_id]=m[a.prof_id]||[]).push(a.nota);}); _avMap=m; }
   }catch(e){}
@@ -7075,7 +7078,7 @@ async function abrirPerfilProf(id){
     try{ showV('vprofdet'); }catch(e){}
     try{ const{data}=await _SB.from('profissionais_pub').select('*').eq('id',id).maybeSingle(); if(data){ p=Object.assign(_profsById[id]||{},data); _profsById[id]=p; } }catch(e){}
   }
-  p=_profsById[id]; if(!p){toast('Perfil indisponível');return;}
+  p=_profsById[id]; if(!p){toast('Perfil indisponível');return;} if(p.nome)p.nome=tcNome(p.nome);
   const modLabel=(p.modalidade||'').includes('online')&&(p.modalidade||'').includes('presencial')?'💻📍 Online e presencial':(p.modalidade||'').includes('online')?'💻 Online':'📍 Presencial';
   const temAgenda=p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length;
   const body=document.getElementById('profdet-body');
