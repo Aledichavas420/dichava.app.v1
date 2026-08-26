@@ -1867,7 +1867,7 @@ async function confirmarExcluirConta(){
     location.href='/';
   }catch(e){
     if(btn){ btn.disabled=false; btn.textContent='Excluir minha conta'; }
-    toast('Erro ao excluir: '+((e&&e.message)||'tente de novo'),5000);
+    toast('Não consegui excluir. Tenta de novo.',5000);
   }
 }
 /* ===== CÓDIGOS PREMIUM (presentear pacientes) ===== */
@@ -2746,7 +2746,7 @@ async function salvarDisponibilidade(){
     const{error}=await _SB.from('profissionais').update(upd).eq('id',AUTH.id);
     if(error)throw error;
     toast('Disponibilidade salva');
-  }catch(e){ toast('Erro ao salvar: '+((e&&e.message)||''),5000); }
+  }catch(e){ toast('Não consegui salvar. Tenta de novo.',5000); }
 }
 // mantém a lista pública de horários OCUPADOS sincronizada com a agenda real
 async function syncOcupados(){
@@ -3236,7 +3236,7 @@ function remBioLink(i){_bioLinks.splice(i,1);renderBioLinks();bioPreview();}
 function moveBioLink(i,d){const j=i+d;if(j<0||j>=_bioLinks.length)return;const t=_bioLinks[i];_bioLinks[i]=_bioLinks[j];_bioLinks[j]=t;renderBioLinks();bioPreview();}
 function bioPreview(){const f=document.getElementById('bio-frame');if(!f||!f.contentWindow||!_bioProf)return;const prof=Object.assign({},_bioProf,{bio_links:_bioLinks});f.contentWindow.postMessage({type:'bio-preview',prof,config:_bioCfg,avg:_bioAvg,n:_bioN},'*');}
 window.addEventListener('message',e=>{if(e.data&&e.data.type==='bio-preview-ready')bioPreview();});
-async function salvarBio(){if(!_SB||!AUTH){toast('Sem conexão',1);return;}try{const upd={bio_config:_bioCfg,bio_links:_bioLinks};if(CLINICA)upd.agenda_codigo=CLINICA.codigo;const{error}=await _SB.from('profissionais').update(upd).eq('id',AUTH.id);if(error)throw error;toast('✓ Bio publicada!');}catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}}
+async function salvarBio(){if(!_SB||!AUTH){toast('Sem conexão',1);return;}try{const upd={bio_config:_bioCfg,bio_links:_bioLinks};if(CLINICA)upd.agenda_codigo=CLINICA.codigo;const{error}=await _SB.from('profissionais').update(upd).eq('id',AUTH.id);if(error)throw error;toast('✓ Bio publicada!');}catch(e){toast('Não consegui salvar. Tenta de novo.',5000);}}
 function copiarLinkBio(){const url='https://dichava.app/bio/?c='+CLINICA.codigo;try{navigator.clipboard.writeText(url);toast('Link copiado');}catch(e){toast(url);}}
 /* ── Edição completa do perfil público (dentro do painel) ── */
 let _pfFoto=null,_pfFotoMini=null,_pfCapa='verde';
@@ -3333,7 +3333,7 @@ async function salvarPerfilPanel(){
     try{syncHeader();}catch(_){}
     try{ await _SB.auth.updateUser({data:{nome:nomePf}}); }catch(_){}
     toast('✓ Perfil enviado para aprovação');closeModal();carregarPerfil();
-  }catch(e){toast('Erro ao salvar: '+((e&&e.message)||''),5000);}
+  }catch(e){toast('Não consegui salvar. Tenta de novo.',5000);}
 }
 // Oculta/mostra o perfil no diretório público SEM mudar o status (não passa por
 // reaprovação) e sem mexer no acesso ao painel.
@@ -4050,7 +4050,7 @@ async function salvarContrato(id){
     if(id){ const {error}=await _SB.from('contratos').update({titulo:tit,paciente_nome:pac,texto:txt}).eq('id',id); if(error)throw error; }
     else { const {error}=await _SB.from('contratos').insert({prof_id:AUTH.id,titulo:tit,paciente_nome:pac,texto:txt}); if(error)throw error; }
     closeModal(); toast('✓ Contrato salvo'); carregarContratos();
-  }catch(e){ toast('Erro ao salvar: '+((e&&e.message)||''),5000); }
+  }catch(e){ toast('Não consegui salvar. Tenta de novo.',5000); }
 }
 function ceOpt(opts,val){ return '<option value="">— selecione —</option>'+opts.map(function(o){return '<option '+(o===val?'selected':'')+'>'+o+'</option>';}).join(''); }
 function ceFreqTgl(){ var s=$('#ce-freq'), w=$('#ce-freq-outra-wrap'); if(s&&w) w.style.display=(s.value==='Outra')?'':'none'; }
@@ -5008,7 +5008,7 @@ async function joinClinicaCodigo(){
     if(error) throw error; if(!cid) throw new Error('código não encontrado');
     try{localStorage.setItem('dichava_clin_'+AUTH.id,cid);}catch(_){}
     toast('Entrou na clínica! Recarregando…'); setTimeout(()=>location.reload(),800);
-  }catch(e){ toast('Erro: '+((e&&e.message)||'código não encontrado'),1); }
+  }catch(e){ toast('Código não encontrado. Confira e tenta de novo.',1); }
 }
 async function carregarClinica(cid,papel){
   try{
@@ -5088,7 +5088,7 @@ async function criarClinica(){
     const {error:e2}=await _SB.from('clinica_membros').insert({clinica_id:cid,user_id:AUTH.id,nome:AUTH.nome,papel:'dono'});
     if(e2) throw e2;
     await carregarClinica(cid,'dono');
-  }catch(e){ toast('Erro: '+((e&&e.message)||e),1); btn.disabled=false; btn.textContent='Criar clínica'; }
+  }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); btn.disabled=false; btn.textContent='Criar clínica'; }
 }
 async function entrarClinica(){
   const codigo=($('#cl-codigo').value||'').trim().toUpperCase(); if(codigo.length<4){ toast('Código inválido',1); return; }
@@ -5098,7 +5098,7 @@ async function entrarClinica(){
     if(error) throw error;
     if(!cid) throw new Error('código não encontrado');
     await carregarClinica(cid,'membro');
-  }catch(e){ toast('Erro: '+((e&&e.message)||'código não encontrado'),1); btn.disabled=false; btn.textContent='Entrar na clínica'; }
+  }catch(e){ toast('Código não encontrado. Confira e tenta de novo.',1); btn.disabled=false; btn.textContent='Entrar na clínica'; }
 }
 function clTab(t){
   $('#cl-tab-criar').classList.toggle('on',t==='criar');
