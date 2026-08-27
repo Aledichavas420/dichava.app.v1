@@ -205,6 +205,9 @@ tbody tr:hover{background:var(--card2)}
 
     <div class="sec">Crescimento de usuários</div>
     <div class="card chartcard" id="growth"><div class="spin"></div></div>
+
+    <div class="sec">👀 Visitas nas páginas públicas</div>
+    <div id="visitas-box" class="card" style="padding:14px"><div class="spin"></div></div>
     </div>
 
     <!-- ══ PROFISSIONAIS ══ -->
@@ -515,6 +518,7 @@ async function carregar(){
     if(error) throw error;
     renderKpis(data); renderGrowth(data.usuarios_por_mes||[]);
   }catch(e){ $('#kpis').innerHTML='<div class="empty">Não consegui carregar as estatísticas.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small><br><small style="color:var(--txs)">Rodou o admin-setup.sql?</small></div>'; $('#growth').innerHTML=''; }
+  try{ carregarVisitas(); }catch(e){}
   // profissionais
   try{
     const {data,error}=await SB.rpc('admin_profissionais');
@@ -1000,6 +1004,28 @@ async function enviarSuporte(){
 }
 async function marcarSupLidas(){ try{ await SB.from('suporte_mensagens').update({lida_admin:true}).eq('prof_id',_supProf).eq('remetente','prof'); }catch(e){} }
 
+async function carregarVisitas(){
+  const box=$('#visitas-box'); if(!box) return;
+  const iso=n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10);
+  const d30=iso(29), d7=iso(6), hj=iso(0);
+  try{
+    const {data,error}=await SB.from('visitas').select('path,dia,total').gte('dia',d30);
+    if(error) throw error;
+    const rows=data||[];
+    let t30=0,t7=0,thoje=0; const porPath={};
+    rows.forEach(r=>{ const n=+r.total||0; t30+=n; if(r.dia>=d7)t7+=n; if(r.dia===hj)thoje+=n; porPath[r.path]=(porPath[r.path]||0)+n; });
+    const nomes={'/':'App (início)','/index.html':'App (início)','/blog/':'Blog','/landing/':'Landing','/bio/':'Bio','/agendar/':'Agendamento'};
+    const top=Object.entries(porPath).sort((a,b)=>b[1]-a[1]).slice(0,12);
+    const kpi=(v,l,hl)=>`<div class="kpi ${hl?'hl':''}"><div class="kl">${l}</div><div class="kv">${v}</div><div class="kd"></div></div>`;
+    box.innerHTML=
+      '<div class="kpis" style="margin-bottom:12px">'
+      + kpi(t30,'Visitas (30 dias)',true) + kpi(t7,'Últimos 7 dias') + kpi(thoje,'Hoje')
+      + '</div>'
+      + '<div style="font-size:12px;color:var(--txm);margin:4px 0 6px">Por página (30 dias)</div>'
+      + (top.length ? top.map(([p,n])=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:7px 2px;border-bottom:1px solid var(--line);font-size:13px"><span style="min-width:0">${esc(nomes[p]||'Página')} <span style="color:var(--txm);word-break:break-all">${esc(p)}</span></span><b>${n}</b></div>`).join('')
+                    : '<div style="color:var(--txm);font-size:13px;padding:6px">Sem visitas ainda.</div>');
+  }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Não consegui carregar as visitas. Rodou o visitas-setup.sql?</div>'; }
+}
 function renderKpis(s){
   s=s||{};
   const cards=[
