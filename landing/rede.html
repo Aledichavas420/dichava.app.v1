@@ -6,62 +6,113 @@
 <meta property="og:title" content="Rede dichava, profissionais alinhados à redução de danos">
 <meta property="og:description" content="Uma rede curada de profissionais de saúde que atuam na perspectiva da redução de danos.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
 <style>
-:root{--ve:#2E7D32;--v:#4CAF5A;--am:#F2B705;--txs:#5E7062;--line:#E2ECE3}
+:root{
+  --ve:#1E6B3A;--v:#2E9B4F;--v2:#48B96A;--am:#F2B705;
+  --ink:#132419;--txm:#3f5a45;--txs:#647a68;
+  --line:#E4EDE6;--bg:#F5F9F5;--card:#ffffff;
+  --shadow:0 10px 30px rgba(24,58,33,.07);--shadow-h:0 18px 40px rgba(24,58,33,.13);
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:#1B2A1C;line-height:1.6;-webkit-font-smoothing:antialiased;
-  background:radial-gradient(120% 60% at 80% -5%,#DFF3E4 0%,transparent 55%),radial-gradient(90% 50% at 0% 5%,#E7EEFB 0%,transparent 50%),#F6FAF6}
-.wrap{max-width:1040px;margin:0 auto;padding:20px 20px 70px}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.logo{font-weight:800;font-size:20px;color:#1B2A1C;text-decoration:none}.logo span{color:#2E7D32}
-.back{font-size:14px;color:#2E7D32;text-decoration:none;font-weight:700}
-.hero{text-align:center;padding:26px 0 8px;max-width:760px;margin:0 auto}
-.kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#2E7D32;background:#E4F5E8;border:1px solid #C8E9D0;padding:6px 14px;border-radius:20px}
-h1{font-size:40px;line-height:1.1;margin:18px 0 12px;font-weight:800;letter-spacing:-.8px}
-h1 span{color:#2E7D32}
-.lead{font-size:17.5px;color:#3f5a45;max-width:660px;margin:0 auto}
-.why{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:32px 0 8px}
-.why-c{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(30,60,35,.04)}
-.why-c .i{width:34px;height:34px;color:#2E7D32}
-.why-c b{display:block;font-size:15.5px;margin:8px 0 3px}.why-c small{font-size:13.5px;color:var(--txs)}
-.sec{font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--txs);margin:40px 4px 4px;text-align:center}
-.sec-sub{text-align:center;color:var(--txs);font-size:14px;margin-bottom:20px}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;background:var(--bg);overflow-x:hidden}
+img{max-width:100%}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+/* ---------- NAV ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(245,249,245,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1120px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-weight:800;font-size:19px;color:var(--ink);text-decoration:none;letter-spacing:-.3px;display:inline-flex;align-items:center;gap:8px}
+.logo span{color:var(--ve)}
+.logo svg{width:22px;height:22px;color:var(--v)}
+.nav-cta{font-size:13.5px;font-weight:700;color:var(--ve);text-decoration:none;border:1.5px solid #CFE6D6;padding:8px 15px;border-radius:22px;transition:.15s;white-space:nowrap}
+.nav-cta:hover{background:#E9F6EC;border-color:var(--v2)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(120% 90% at 88% -20%,#D8F0DE 0%,transparent 55%),radial-gradient(80% 70% at -5% 0%,#E7EEFB 0%,transparent 55%)}
+.hero-in{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:38px;align-items:center;padding:54px 0 42px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--ve);background:#E4F5E8;border:1px solid #C8E9D0;padding:6px 13px;border-radius:20px}
+.eyebrow svg{width:14px;height:14px}
+h1{font-size:47px;line-height:1.04;margin:20px 0 16px;font-weight:800;letter-spacing:-1.4px}
+h1 .hl{color:var(--ve);position:relative}
+@media(min-width:861px){h1 .hl{white-space:nowrap}}
+h1 .hl::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:9px;background:rgba(72,185,106,.24);z-index:-1;border-radius:4px}
+.lead{font-size:17px;color:var(--txm);max-width:520px;margin:0}
+.hero-stats{display:flex;gap:26px;margin-top:26px;flex-wrap:wrap}
+.stat .n{font-size:26px;font-weight:800;color:var(--ink);line-height:1}
+.stat .l{font-size:12.5px;color:var(--txs);font-weight:600;margin-top:3px}
+/* painel lateral do hero */
+.hero-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+.hero-card h3{margin:0 0 4px;font-size:16px;font-weight:800}
+.hero-card p{margin:0 0 16px;font-size:13.5px;color:var(--txs)}
+.hc-row{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line)}
+.hc-row:first-of-type{border-top:none;padding-top:4px}
+.hc-ic{flex:none;width:34px;height:34px;border-radius:10px;background:#EAF6ED;color:var(--ve);display:grid;place-items:center}
+.hc-ic svg{width:19px;height:19px}
+.hc-t{font-size:14px;font-weight:700;line-height:1.25}
+.hc-t small{display:block;font-weight:500;color:var(--txs);font-size:12.5px;margin-top:2px}
+
+/* ---------- BUSCA / FILTRO ---------- */
+.tools{position:sticky;top:57px;z-index:40;background:var(--bg);padding:14px 0 12px;border-bottom:1px solid var(--line)}
+.tools-in{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.search{flex:1;min-width:220px;display:flex;align-items:center;gap:9px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:11px 15px;transition:.15s}
+.search:focus-within{border-color:var(--v2);box-shadow:0 0 0 4px rgba(72,185,106,.12)}
+.search svg{width:19px;height:19px;color:var(--txs);flex:none}
+.search input{border:none;outline:none;font:inherit;font-size:15px;width:100%;background:none;color:var(--ink)}
+.chips{display:flex;gap:8px}
+.chip{font:inherit;font-size:13.5px;font-weight:700;color:var(--txm);background:var(--card);border:1.5px solid var(--line);border-radius:22px;padding:9px 16px;cursor:pointer;transition:.15s;white-space:nowrap}
+.chip:hover{border-color:var(--v2)}
+.chip.on{background:var(--ve);border-color:var(--ve);color:#fff}
+
+/* ---------- GRID ---------- */
+.count{font-size:13.5px;color:var(--txs);font-weight:600;margin:20px 2px 14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.pc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 22px rgba(30,60,35,.05);transition:transform .16s,box-shadow .16s;position:relative;cursor:pointer}
-.pc:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(30,60,35,.1)}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);transition:transform .16s,box-shadow .16s,border-color .16s;position:relative;cursor:pointer;display:flex;flex-direction:column}
+.pc:hover{transform:translateY(-3px);box-shadow:var(--shadow-h);border-color:#CFE6D6}
 .pc-h{display:flex;gap:13px;align-items:center}
-.pc-av{width:56px;height:56px;border-radius:50%;flex:none;background:linear-gradient(135deg,#DDeeE3,#EBE4FB);display:grid;place-items:center;font-weight:800;font-size:19px;color:#2E7D32;overflow:hidden}
+.pc-av{width:58px;height:58px;border-radius:16px;flex:none;background:linear-gradient(135deg,#D9EEDF,#E7E4FA);display:grid;place-items:center;font-weight:800;font-size:19px;color:var(--ve);overflow:hidden}
 .pc-av img{width:100%;height:100%;object-fit:cover}
 .pc-nome{font-weight:800;font-size:16.5px;line-height:1.15}
-.pc-tipo{font-size:13px;color:#2E7D32;font-weight:700}
+.pc-tipo{font-size:13px;color:var(--ve);font-weight:700;margin-top:1px}
 .pc-reg{font-size:11.5px;color:var(--txs)}
-.destaque{display:inline-block;font-size:10px;font-weight:800;color:#B26A00;background:linear-gradient(135deg,#FFE7A8,#FFD066);border-radius:20px;padding:1px 8px;margin-left:5px;vertical-align:middle}
-.pc-bio{font-size:13.5px;color:#41564a;margin:12px 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.destaque{display:inline-block;font-size:10px;font-weight:800;color:#8a5a00;background:linear-gradient(135deg,#FFE7A8,#FFD066);border-radius:20px;padding:1px 8px;margin-left:5px;vertical-align:middle}
+.pc-bio{font-size:13.5px;color:var(--txm);margin:13px 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .pc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
-.pc-tg{font-size:11.5px;background:#EEF6F0;color:#356b45;border-radius:20px;padding:3px 10px;font-weight:600}
-.pc-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
-.pc-mi{font-size:12px;color:var(--txs);background:#F4F8F5;border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-weight:600}
-.pc-ver{margin-top:13px;font-size:13px;font-weight:800;color:#2E7D32}
-.empty,.loading{text-align:center;color:var(--txs);padding:40px 20px;font-size:15px;grid-column:1/-1}
-.spin{width:26px;height:26px;border:3px solid #cfe0d4;border-top-color:#2E7D32;border-radius:50%;display:inline-block;animation:sp .8s linear infinite}
+.pc-tg{font-size:11.5px;background:#EEF6F0;color:#2f6b43;border-radius:20px;padding:3px 10px;font-weight:600}
+.pc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+.pc-loc{font-size:12.5px;color:var(--txs);font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.pc-loc svg{width:14px;height:14px}
+.pc-ver{font-size:13px;font-weight:800;color:var(--ve);display:inline-flex;align-items:center;gap:4px}
+.pc-ver svg{width:15px;height:15px}
+.empty,.loading{text-align:center;color:var(--txs);padding:54px 20px;font-size:15px;grid-column:1/-1}
+.spin{width:26px;height:26px;border:3px solid #cfe0d4;border-top-color:var(--ve);border-radius:50%;display:inline-block;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.cta-band{margin-top:44px;background:linear-gradient(150deg,#123A24,#0C2A19);color:#fff;border-radius:22px;padding:38px 28px;text-align:center}
-.cta-band h2{font-size:26px;margin:0 0 8px;font-weight:800}
-.cta-band p{color:#cfe0d2;font-size:15.5px;max-width:520px;margin:0 auto 20px}
-.cta-btn{display:inline-block;background:#4CAF5A;color:#08210f;font-weight:800;font-size:16px;text-decoration:none;padding:14px 28px;border-radius:30px}
-.cta-2{display:inline-block;margin-left:10px;color:#cfe0d2;font-weight:700;text-decoration:none;font-size:15px;padding:14px 8px}
-.foot{text-align:center;color:var(--txs);font-size:13px;margin-top:34px}
-.foot a{color:#2E7D32;font-weight:700;text-decoration:none}
-/* modal perfil */
-.ov{position:fixed;inset:0;background:rgba(15,30,20,.55);backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:0}
+
+/* ---------- CTA ---------- */
+.cta-band{margin:52px 0 0;background:linear-gradient(150deg,#153E27,#0C2A19);color:#fff;border-radius:26px;padding:44px 30px;text-align:center;position:relative;overflow:hidden}
+.cta-band::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(72,185,106,.16)}
+.cta-band h2{font-size:27px;margin:0 0 10px;font-weight:800;letter-spacing:-.5px;position:relative}
+.cta-band p{color:#cfe0d2;font-size:15.5px;max-width:520px;margin:0 auto 22px;position:relative}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--v2);color:#08210f;font-weight:800;font-size:16px;text-decoration:none;padding:14px 28px;border-radius:30px;position:relative;transition:.15s}
+.cta-btn:hover{background:#5CCB7B}
+.cta-btn svg{width:18px;height:18px}
+.cta-2{display:inline-block;margin-left:6px;color:#cfe0d2;font-weight:700;text-decoration:none;font-size:15px;padding:14px 10px;position:relative}
+.foot{text-align:center;color:var(--txs);font-size:13px;margin:30px 0 60px}
+.foot a{color:var(--ve);font-weight:700;text-decoration:none}
+
+/* ---------- MODAL ---------- */
+.ov{position:fixed;inset:0;background:rgba(15,30,20,.55);backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center;z-index:100}
 .ov.on{display:flex}
 .sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;border-radius:22px 22px 0 0;overflow:hidden;display:flex;flex-direction:column;animation:up .28s ease}
 @keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:translateY(0);opacity:1}}
 @media(min-width:600px){.ov{align-items:center}.sheet{border-radius:22px}}
 .md-hero{background:linear-gradient(150deg,#2FA35F,#1e7a48);color:#fff;padding:24px 22px 20px;position:relative;text-align:center}
 .md-x{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:17px;cursor:pointer}
-.md-av{width:78px;height:78px;border-radius:50%;margin:0 auto 10px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:800;font-size:26px;overflow:hidden;border:3px solid rgba(255,255,255,.35)}
+.md-av{width:78px;height:78px;border-radius:20px;margin:0 auto 10px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:800;font-size:26px;overflow:hidden;border:3px solid rgba(255,255,255,.35)}
 .md-av img{width:100%;height:100%;object-fit:cover}
 .md-nome{font-size:21px;font-weight:800}
 .md-tipo{font-size:13.5px;opacity:.95}.md-reg{font-size:12px;opacity:.8;margin-top:2px}
@@ -70,52 +121,93 @@ h1 span{color:#2E7D32}
 .md-sec:first-child{margin-top:0}
 .md-bio{font-size:14.5px;color:#31463a;line-height:1.6}
 .md-tags{display:flex;flex-wrap:wrap;gap:7px}
-.md-tg{font-size:12.5px;background:#EEF6F0;color:#356b45;border-radius:20px;padding:4px 11px;font-weight:600}
+.md-tg{font-size:12.5px;background:#EEF6F0;color:#2f6b43;border-radius:20px;padding:4px 11px;font-weight:600}
 .md-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .md-mi{background:#F4F8F5;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.md-mi .k{font-size:11px;color:var(--txs);font-weight:700}.md-mi .v{font-size:14px;font-weight:700;color:#1B2A1C}
-.md-link{display:inline-block;margin-top:6px;color:#2E7D32;font-weight:700;font-size:13.5px;text-decoration:none}
+.md-mi .k{font-size:11px;color:var(--txs);font-weight:700}.md-mi .v{font-size:14px;font-weight:700;color:var(--ink)}
+.md-link{display:inline-block;margin-top:6px;color:var(--ve);font-weight:700;font-size:13.5px;text-decoration:none}
 .md-foot{padding:14px 22px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:flex;gap:10px;background:#fff}
 .md-btn{flex:1;border:none;border-radius:26px;padding:14px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;text-decoration:none;text-align:center;display:inline-flex;align-items:center;justify-content:center;gap:7px}
 .md-wa{background:#25D366;color:#08210f}
-.md-ag{background:#2E7D32;color:#fff}
+.md-ag{background:var(--ve);color:#fff}
 .md-none{font-size:13px;color:var(--txs);text-align:center;flex:1;align-self:center}
-@media(max-width:720px){.why{grid-template-columns:1fr}h1{font-size:32px}.cta-2{display:block;margin:10px 0 0}}
+
+@media(max-width:860px){
+  .hero-in{grid-template-columns:1fr;gap:26px;padding:38px 0 30px}
+  .hero-card{order:2}
+  h1{font-size:37px;letter-spacing:-1px}
+  h1 .hl::after{display:none}
+  .tools{top:57px}
+}
+@media(max-width:560px){
+  h1{font-size:28px;letter-spacing:-.8px}
+  h1 .hl{white-space:normal}
+  h1 .hl::after{display:none}
+  .hero-stats{gap:20px}
+  .chips{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .cta-2{display:block;margin:10px 0 0}
+}
 </style></head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <a class="logo" href="/landing/">dichava<span>.app</span></a>
-    <a class="back" href="/landing/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M20 12H5"/><path d="M11 6l-6 6 6 6"/></svg> voltar</a>
-  </div>
 
-  <div class="hero">
-    <span class="kick">Rede dichava</span>
-    <h1>Ajuda sem julgamento. <span>E sem exigir que você pare.</span></h1>
-    <p class="lead">Profissionais de saúde que trabalham com redução de danos de verdade: acolhem você como você chega, respeitam o seu tempo e não fazem da abstinência a condição pra te atender. A gente conhece cada um antes de colocar aqui. Toque num nome pra conhecer, conversar ou agendar.</p>
-  </div>
+<nav class="nav"><div class="nav-in">
+  <a class="logo" href="/landing/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>
+    dichava<span>.app</span>
+  </a>
+  <a class="nav-cta" href="/landing/profissionais.html">Sou profissional</a>
+</div></nav>
 
-  <div class="why">
-    <div class="why-c"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg><b>Curada, não aberta</b><small>Cada profissional passa por curadoria da nossa equipe. Priorizamos quem realmente atua com redução de danos.</small></div>
-    <div class="why-c"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.8-.9L3 20.5l1.5-4.4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z"/></svg><b>Mesma linguagem</b><small>Ética, respaldo em política pública de saúde e base científica, um cuidado que fala a língua da comunidade.</small></div>
-    <div class="why-c"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><b>Fácil de encontrar</b><small>Busque por especialidade, cidade ou modalidade e fale direto com o profissional.</small></div>
+<header class="hero"><div class="wrap"><div class="hero-in">
+  <div>
+    <span class="eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      Rede dichava
+    </span>
+    <h1>Ajuda sem julgamento.<br><span class="hl">E sem exigir que você pare.</span></h1>
+    <p class="lead">Profissionais de saúde que trabalham com redução de danos de verdade. Acolhem você como você chega, respeitam o seu tempo e não fazem da abstinência a condição pra te atender.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="n" id="st-prof">—</div><div class="l">profissionais na rede</div></div>
+      <div class="stat"><div class="n" id="st-cid">—</div><div class="l">cidades atendidas</div></div>
+      <div class="stat"><div class="n">Online</div><div class="l">e presencial</div></div>
+    </div>
   </div>
+  <aside class="hero-card">
+    <h3>Por que confiar na rede</h3>
+    <p>Não é uma lista aberta. Cada nome passa pela gente.</p>
+    <div class="hc-row"><div class="hc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="hc-t">A gente conhece quem entra<small>Conferimos formação e se a pessoa atua mesmo com redução de danos.</small></div></div>
+    <div class="hc-row"><div class="hc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/></svg></div><div class="hc-t">Sem moralismo<small>Cuidado com base científica e em política de saúde, sem sermão nem promessa de cura.</small></div></div>
+    <div class="hc-row"><div class="hc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg></div><div class="hc-t">Você fala direto<small>Escolha por especialidade, cidade ou modalidade e converse com quem quiser.</small></div></div>
+  </aside>
+</div></div></header>
 
-  <div class="sec">Profissionais da rede</div>
-  <div class="sec-sub" id="rede-count">Carregando…</div>
+<div class="tools"><div class="wrap"><div class="tools-in">
+  <label class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="q" type="search" placeholder="Buscar por nome, especialidade ou cidade" autocomplete="off" oninput="aplicar()">
+  </label>
+  <div class="chips" id="chips">
+    <button class="chip on" data-m="todos" onclick="setMod('todos')">Todos</button>
+    <button class="chip" data-m="online" onclick="setMod('online')">Online</button>
+    <button class="chip" data-m="presencial" onclick="setMod('presencial')">Presencial</button>
+  </div>
+</div></div></div>
+
+<main class="wrap">
+  <div class="count" id="rede-count">Carregando…</div>
   <div class="grid" id="rede-grid"><div class="loading"><span class="spin"></span></div></div>
 
-  <div class="cta-band">
+  <section class="cta-band">
     <h2>Você é profissional de saúde?</h2>
     <p>Se você atua na perspectiva da redução de danos, venha fazer parte. Crie sua conta e organize sua prática num só lugar.</p>
-    <a class="cta-btn" href="/landing/profissionais.html">Faça parte da rede <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+    <a class="cta-btn" href="/landing/profissionais.html">Faça parte da rede <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
     <a class="cta-2" href="/clinica/?criar">Criar minha conta</a>
-  </div>
+  </section>
 
   <div class="foot">
     Rede dichava · <a href="/landing/">sobre o app</a> · <a href="/landing/seguranca.html">segurança e privacidade</a>
   </div>
-</div>
+</main>
 
 <!-- MODAL PERFIL -->
 <div class="ov" id="ov" onclick="if(event.target===this)fecharPerfil()"><div class="sheet" id="sheet"></div></div>
@@ -124,10 +216,11 @@ h1 span{color:#2E7D32}
 <script>
 var SB=null;
 try{ SB = supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
-var BYID={};
+var BYID={}, LISTA=[], FMOD='todos', CARREGADO=false;
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 function ini(n){n=(n||'').trim();if(!n)return'?';var p=n.split(/\s+/);return((p[0][0]||'')+(p.length>1?p[p.length-1][0]:'')).toUpperCase();}
 function modtag(m){m=m||'';if(m.includes('online')&&m.includes('presencial'))return'Online e presencial';if(m.includes('online'))return'Online';if(m.includes('presencial'))return'Presencial';return'';}
+function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
 function waLink(tel){tel=(tel||'').replace(/\D/g,'');if(tel.length<10)return'';var num=tel.length<=11?('55'+tel):tel;return 'https://wa.me/'+num+'?text='+encodeURIComponent('Olá! Vi seu perfil na Rede dichava e gostaria de saber mais sobre atendimento. ');}
 function agLink(cod){return cod?('https://dichava.app/agendar/?c='+encodeURIComponent(cod)):'';}
 
@@ -138,16 +231,44 @@ async function carregar(){
   try{
     var cols='id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,disponibilidade,publicos,idiomas,foto,link,telefone,agenda_codigo,destaque,ativo,em_teste,oculto_diretorio,status';
     var r=await SB.from('profissionais_pub').select(cols).eq('status','aprovado');
-    if(r.error){ r=await SB.from('profissionais_pub').select('*').eq('status','aprovado'); } // fallback se alguma coluna faltar
+    if(r.error){ r=await SB.from('profissionais_pub').select('*').eq('status','aprovado'); }
     profs=r.data||[];
   }catch(e){ profs=[]; }
-  var list=profs.filter(function(p){return p.ativo!==false && p.em_teste!==true && p.oculto_diretorio!==true;})
+  LISTA=profs.filter(function(p){return p.ativo!==false && p.em_teste!==true && p.oculto_diretorio!==true;})
     .sort(function(a,b){return (b.destaque?1:0)-(a.destaque?1:0) || String(a.nome||'').localeCompare(String(b.nome||''));});
-  BYID={}; list.forEach(function(p){BYID[p.id]=p;});
-  cnt.textContent = list.length ? (list.length+' profissio'+(list.length===1?'nal':'nais')+' na rede') : '';
-  if(!list.length){ grid.innerHTML='<div class="empty">Em breve os primeiros profissionais da rede aparecem por aqui.</div>'; return; }
-  grid.innerHTML = list.map(function(p){
-    var tags=(p.especialidades||'').split(',').map(function(t){return t.trim();}).filter(Boolean).slice(0,4);
+  BYID={}; LISTA.forEach(function(p){BYID[p.id]=p;});
+  // estatísticas do hero
+  document.getElementById('st-prof').textContent = LISTA.length || '0';
+  var cid={}; LISTA.forEach(function(p){var c=(p.cidade||'').trim(); if(c)cid[norm(c)]=1;});
+  document.getElementById('st-cid').textContent = Object.keys(cid).length || '0';
+  CARREGADO=true;
+  aplicar();
+}
+
+function setMod(m){
+  FMOD=m;
+  var cs=document.querySelectorAll('#chips .chip');
+  for(var i=0;i<cs.length;i++) cs[i].classList.toggle('on', cs[i].getAttribute('data-m')===m);
+  aplicar();
+}
+
+function aplicar(){
+  var grid=document.getElementById('rede-grid'), cnt=document.getElementById('rede-count');
+  if(!CARREGADO) return; // ainda carregando
+  var termo=norm((document.getElementById('q')||{}).value||'');
+  var vis=LISTA.filter(function(p){
+    if(FMOD!=='todos'){ var m=(p.modalidade||'').toLowerCase(); if(m.indexOf(FMOD)<0) return false; }
+    if(termo){
+      var alvo=norm([p.nome,p.tipo_prof,p.especialidades,p.cidade,p.publicos].join(' '));
+      if(alvo.indexOf(termo)<0) return false;
+    }
+    return true;
+  });
+  if(!LISTA.length){ cnt.textContent=''; grid.innerHTML='<div class="empty">Em breve os primeiros profissionais da rede aparecem por aqui.</div>'; return; }
+  cnt.textContent = vis.length ? (vis.length+' profissio'+(vis.length===1?'nal':'nais')+(termo||FMOD!=='todos'?' encontrado'+(vis.length===1?'':'s'):' na rede')) : '';
+  if(!vis.length){ grid.innerHTML='<div class="empty">Nenhum profissional com esse filtro. Tente outra busca ou veja todos.</div>'; return; }
+  grid.innerHTML = vis.map(function(p){
+    var tags=(p.especialidades||'').split(',').map(function(t){return t.trim();}).filter(Boolean).slice(0,3);
     var mt=modtag(p.modalidade);
     return '<div class="pc" onclick="abrirPerfil(\''+p.id+'\')">'+
       '<div class="pc-h"><div class="pc-av">'+(p.foto?'<img src="'+esc(p.foto)+'" alt="">':ini(p.nome))+'</div>'+
@@ -155,8 +276,10 @@ async function carregar(){
         '<div class="pc-tipo">'+esc(p.tipo_prof||'')+'</div>'+(p.reg?'<div class="pc-reg">'+esc(p.reg)+'</div>':'')+'</div></div>'+
       (p.bio?'<div class="pc-bio">'+esc(p.bio)+'</div>':'')+
       (tags.length?'<div class="pc-tags">'+tags.map(function(t){return '<span class="pc-tg">'+esc(t)+'</span>';}).join('')+'</div>':'')+
-      '<div class="pc-meta">'+(mt?'<span class="pc-mi">'+mt+'</span>':'')+(p.cidade?'<span class="pc-mi">'+esc(p.cidade)+'</span>':'')+'</div>'+
-      '<div class="pc-ver">Ver perfil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></div>'+
+      '<div class="pc-foot">'+
+        '<span class="pc-loc">'+(p.cidade?('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>'+esc(p.cidade)):(mt||'&nbsp;'))+'</span>'+
+        '<span class="pc-ver">Ver perfil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span>'+
+      '</div>'+
     '</div>';
   }).join('');
 }
@@ -168,7 +291,6 @@ function abrirPerfil(id){
   var metas=[];
   if(modtag(p.modalidade))metas.push(['Modalidade',modtag(p.modalidade)]);
   if(p.cidade)metas.push(['Local',p.cidade]);
-  
   if(p.duracao)metas.push(['Duração',p.duracao]);
   if(p.publicos)metas.push(['Públicos',p.publicos]);
   if(p.idiomas)metas.push(['Idiomas',p.idiomas]);
