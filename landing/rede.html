@@ -168,8 +168,8 @@ h1 .hl::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:9px;
     <p class="lead">Profissionais de saúde que trabalham com redução de danos de verdade. Acolhem você como você chega, respeitam o seu tempo e não fazem da abstinência a condição pra te atender.</p>
     <div class="hero-stats">
       <div class="stat"><div class="n" id="st-prof">—</div><div class="l">profissionais na rede</div></div>
-      <div class="stat"><div class="n" id="st-cid">—</div><div class="l">cidades atendidas</div></div>
-      <div class="stat"><div class="n">Online</div><div class="l">e presencial</div></div>
+      <div class="stat"><div class="n" id="st-online">—</div><div class="l">atendem online</div></div>
+      <div class="stat"><div class="n" id="st-pres">—</div><div class="l">atendem presencial</div></div>
     </div>
   </div>
   <aside class="hero-card">
@@ -239,8 +239,10 @@ async function carregar(){
   BYID={}; LISTA.forEach(function(p){BYID[p.id]=p;});
   // estatísticas do hero
   document.getElementById('st-prof').textContent = LISTA.length || '0';
-  var cid={}; LISTA.forEach(function(p){var c=(p.cidade||'').trim(); if(c)cid[norm(c)]=1;});
-  document.getElementById('st-cid').textContent = Object.keys(cid).length || '0';
+  var on=0, pr=0;
+  LISTA.forEach(function(p){var m=(p.modalidade||'').toLowerCase(); if(m.indexOf('online')>=0)on++; if(m.indexOf('presencial')>=0)pr++;});
+  document.getElementById('st-online').textContent = on;
+  document.getElementById('st-pres').textContent = pr;
   CARREGADO=true;
   aplicar();
 }
