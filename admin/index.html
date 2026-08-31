@@ -410,7 +410,9 @@ tbody tr:hover{background:var(--card2)}
 <script>
 const $=s=>document.querySelector(s);
 const SB = (typeof supabase!=='undefined') ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4') : null;
-const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
+// Quem é admin é decidido no servidor (função eh_admin, olha o e-mail do login).
+// Assim o e-mail admin não fica escrito no código do navegador.
+async function ehAdminSrv(){ if(!SB) return false; try{ const {data}=await SB.rpc('eh_admin'); return data===true; }catch(_){ return false; } }
 // Planos — valores da landing de profissionais (mantenha igual ao painel da clínica)
 const PLANOS=[
   {k:'essencial',   nome:'Essencial',   preco:'R$ 79,90/mês',  anual:'R$ 799/ano'},
@@ -433,18 +435,17 @@ async function boot(){
   if(!SB){ gerr('Sem conexão com o servidor.'); return; }
   const {data}=await SB.auth.getSession();
   const u=data&&data.session&&data.session.user;
-  if(u && ADMIN_EMAILS.includes((u.email||'').toLowerCase())) await rotearMfa();
+  if(u && await ehAdminSrv()) await rotearMfa();
 }
 async function entrar(){
   gerr('');
   const email=$('#g-email').value.trim(), pw=$('#g-pw').value;
   if(!email||!pw){ gerr('Preencha e-mail e senha.'); return; }
-  if(!ADMIN_EMAILS.includes(email.toLowerCase())){ gerr('Esta conta não tem acesso admin.'); return; }
   const b=$('#g-btn'); b.disabled=true; b.textContent='Entrando…';
   try{
     const {data,error}=await SB.auth.signInWithPassword({email,password:pw});
     if(error){ gerr(/Invalid/.test(error.message)?'E-mail ou senha incorretos.':error.message); return; }
-    if(!ADMIN_EMAILS.includes((data.user.email||'').toLowerCase())){ gerr('Sem acesso admin.'); await SB.auth.signOut(); return; }
+    if(!(await ehAdminSrv())){ gerr('Sem acesso admin.'); await SB.auth.signOut(); return; }
     await rotearMfa();
   }catch(e){ gerr('Não consegui entrar agora.'); }
   finally{ b.disabled=false; b.textContent='Entrar'; }

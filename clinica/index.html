@@ -4635,8 +4635,9 @@ async function reenviarConfirmacao(){
     const m=(e&&e.message)||''; toast(/rate|seconds|limit/i.test(m)?'Aguarde um instante antes de reenviar.':('Não consegui reenviar: '+m),5000);
   }finally{ if(b){b.disabled=false;b.textContent=o;} }
 }
-const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
-function ehAdmin(){ return AUTH && ADMIN_EMAILS.includes((AUTH.email||'').toLowerCase()); }
+// Quem é admin é decidido no servidor (função eh_admin, olha o e-mail do login),
+// então o e-mail admin não precisa ficar escrito no código do navegador.
+async function ehAdmin(){ if(!_SB||!AUTH) return false; try{ const {data}=await _SB.rpc('eh_admin'); return data===true; }catch(_){ return false; } }
 // Planos — mantenha igual ao /admin/ (valores da landing de profissionais)
 const PLANOS=[
   {k:'essencial',   nome:'Essencial',   preco:'R$ 79,90/mês',  anual:'R$ 799/ano'},
@@ -4684,7 +4685,7 @@ async function enviarComprovante(file){
 // Se as colunas de acesso ainda não existem (SQL não rodado), NÃO bloqueia (compatível).
 async function checarAcesso(){
   if(!_SB||!AUTH) return {ok:true};
-  if(ehAdmin()) return {ok:true};
+  if(await ehAdmin()) return {ok:true};
   try{
     let {data:p,error}=await _SB.from('profissionais').select('ativo,acesso_ate,nome,plano,obs_admin').eq('id',AUTH.id).maybeSingle();
     if(error && /column .*(ativo|acesso_ate|plano)/i.test(error.message||'')) return {ok:true}; // SQL ainda não rodou
