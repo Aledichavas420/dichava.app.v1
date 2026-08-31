@@ -46,6 +46,10 @@ Deno.serve(async (req) => {
     if (!conv) { console.log("push-msg: conversa NÃO encontrada para id", conversa_id); return new Response("ok", { headers: cors }); }
     const dest = de_id === conv.user_id ? conv.prof_id : conv.user_id;
     const remetente = de_id === conv.user_id ? (conv.user_nome || "Paciente") : (conv.prof_nome || "Profissional");
+    // Se quem recebe é o profissional, a notificação tem que abrir o painel
+    // da clínica; se é o paciente, o app. Sem isso, o profissional tocava na
+    // notificação e caía em "/" (app do paciente), achando que não tinha nada.
+    const paraProf = dest === conv.prof_id;
     console.log("push-msg: conversa OK · user_id", conv.user_id, "prof_id", conv.prof_id, "→ destino", dest);
     if (!dest) { console.log("push-msg: destino nulo (conversa sem o outro participante)"); return new Response("ok", { headers: cors }); }
 
@@ -57,7 +61,7 @@ Deno.serve(async (req) => {
     const notif = JSON.stringify({
       title: `💬 ${remetente}`,
       body: String(texto).slice(0, 140),
-      url: "/",
+      url: paraProf ? "/clinica/" : "/",
       tag: "chat-" + conversa_id,
     });
 
