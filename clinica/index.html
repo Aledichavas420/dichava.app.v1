@@ -535,6 +535,13 @@ body.has-demo-banner{padding-bottom:64px}
 .aula-body p{margin:0 0 12px}
 .aula-body ul{margin:0 0 12px 18px;display:flex;flex-direction:column;gap:6px}
 .mod-tt{font-size:12.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.4px;margin:22px 0 10px}
+.ebook-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px dashed var(--vc);border-radius:14px;margin:4px 0 8px;background:var(--vf,#EFF6F1);text-decoration:none;transition:.15s}
+.ebook-row:hover{border-color:var(--v);background:#E7F3EA}
+.ebook-ic{width:34px;height:34px;border-radius:10px;flex-shrink:0;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ve)}
+.ebook-ic svg{width:19px;height:19px}
+.ebook-tt{flex:1;font-size:13.5px;font-weight:800;color:var(--ve)}
+.ebook-tt .du{font-size:12.5px;color:var(--tx);font-weight:600;display:block;margin-top:1px}
+.ebook-go{font-size:13px;font-weight:800;color:var(--v);white-space:nowrap}
 .aula-apres{font-size:14.5px;color:var(--txs);line-height:1.6;background:var(--cin);border-radius:12px;padding:12px 14px;margin-bottom:16px;border-left:3px solid var(--vc)}
 .roteiro-box{border:1px dashed var(--cinm);border-radius:14px;padding:14px 16px;margin-bottom:8px;background:var(--card)}
 .roteiro-tag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--txm);background:var(--cin);padding:4px 10px;border-radius:999px;margin-bottom:10px}
@@ -1378,7 +1385,7 @@ const CURSOS=[
    sobre:'Um guia prático pra tirar o máximo do dichava: como usar o painel profissional, o que o paciente vê no app, como recomendar pra quem você atende e como receber os relatórios que a pessoa compartilha com você. São aulas curtas, direto ao ponto.',
    publico:'Qualquer profissional que usa ou vai usar o dichava no dia a dia.',
    modulos:[
-     {titulo:'Módulo 1 · O painel profissional', aulas:[
+     {titulo:'Módulo 1 · O painel profissional', ebook:{titulo:'Manual do painel profissional', url:'/cursos/ebooks/manual-painel.html'}, aulas:[
        {titulo:'Primeiros passos: perfil, diretório e horário', dur:'6 min', video:null,
         apresentacao:'O básico pra começar: montar seu perfil, aparecer no diretório e definir seu horário.',
         roteiro:`<p>Vamos começar do começo: o que fazer nos primeiros minutos dentro do painel pra já sair na frente. São três coisas.</p>
@@ -1422,7 +1429,7 @@ const CURSOS=[
           <h4>Na prática</h4>
           <p>Responda rápido, mesmo que seja só pra dizer que retorna em breve. No primeiro contato, a agilidade conta muito pra pessoa decidir seguir com você. Um oi acolhedor no mesmo dia faz diferença.</p>`}
      ]},
-     {titulo:'Módulo 2 · O app do paciente e o cuidado compartilhado', aulas:[
+     {titulo:'Módulo 2 · O app do paciente e o cuidado compartilhado', ebook:{titulo:'Guia de indicação ao paciente', url:'/cursos/ebooks/guia-indicacao.html'}, aulas:[
        {titulo:'O que o paciente vê: diário, metas e modo de apoio', dur:'6 min', video:null,
         apresentacao:'Conheça o app do paciente pra saber o que a pessoa tem em mãos.',
         roteiro:`<p>Pra recomendar bem o dichava, você precisa conhecer o que o paciente vê do outro lado. É um app gratuito, na lógica da redução de danos. Vou te dar o tour.</p>
@@ -1456,6 +1463,130 @@ const CURSOS=[
           <p>Além do relatório, nas configurações o paciente pode exportar todo o histórico em texto e fazer backup. Os dados dele ficam no aparelho dele, sob o controle dele, o que reforça a confiança.</p>
           <h4>Na prática</h4>
           <p>Combine pra ele te enviar o relatório um dia antes da consulta. Você ganha um retrato real da semana, e a sessão rende muito mais, focada no que de fato aconteceu.</p>`}
+     ]}
+   ]},
+  {id:'c-redes', titulo:'Atuação psi antiproibicionista nas redes sociais', subtitulo:'Levar a redução de danos pras redes com ética, voz própria e constância.', nivel:'Intermediário', duracao:'3 módulos · 9 aulas', cor:'linear-gradient(135deg,#8E5BF0,#C77DFF)',
+   sobre:'Uma formação prática pra profissionais de saúde que querem comunicar redução de danos nas redes sociais com responsabilidade, tratando a comunicação como extensão do cuidado, não como marketing. São 9 aulas divididas em ética, voz e criação de conteúdo, cada módulo com um ebook de apoio. Usamos a página Dichavando como estudo de caso.',
+   publico:'Psicólogas, psiquiatras e demais profissionais de saúde que atuam ou querem atuar nas redes falando de álcool e outras drogas na perspectiva da redução de danos.',
+   referencias:[
+     {tipo:'organização', ref:'Conselho Federal de Psicologia (Código de Ética e resoluções).', url:'https://site.cfp.org.br'},
+     {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'},
+     {tipo:'organização', ref:'Plataforma Brasileira de Política de Drogas (PBPD).', url:'https://pbpd.org.br'}
+   ],
+   modulos:[
+     {titulo:'Módulo 1 · Ética e responsabilidade', ebook:{titulo:'Ética do psi nas redes sociais', url:'/cursos/ebooks/etica-psi-redes.html'}, aulas:[
+       {titulo:'A rede não é o consultório', dur:'7 min', video:null,
+        apresentacao:'A fronteira que evita quase todo problema: informar em público sem atender ninguém por ali.',
+        roteiro:`<p>Vou começar por uma distinção que evita quase todo problema: perfil não é consultório. Nas redes você educa, informa e aproxima. Você não avalia, não diagnostica e não conduz o caso de ninguém em público. Guardar essa fronteira protege você e protege a pessoa.</p>
+          <h4>O sigilo não tem exceção</h4>
+          <p>Não existe caso interessante o bastante pra virar post. Mesmo sem nome, mesmo disfarçado, se alguém puder se reconhecer, está fora. Cidade, profissão, um episódio marcante: detalhes pequenos remontam a identidade com facilidade.</p>
+          <h4>Comentário e DM não são atendimento</h4>
+          <p>Quando alguém desabafa pedindo conduta, o cuidado é acolher e encaminhar, nunca orientar clinicamente por ali. Tenha uma resposta pronta: validar a procura, dizer que cada caso precisa de avaliação, e mostrar como buscar atendimento.</p>
+          <h4>Na prática</h4>
+          <p>Deixe claro no perfil e nos destaques que ali é conteúdo, e que atendimento acontece em outro lugar. Isso alinha a expectativa de quem chega e te poupa de situações difíceis.</p>`,
+        referencias:[
+          {tipo:'documento', ref:'Código de Ética Profissional do Psicólogo (CFP).', url:'https://site.cfp.org.br'}
+        ]},
+       {titulo:'O que o seu conselho espera de você', dur:'7 min', video:null,
+        apresentacao:'Publicidade em saúde na prática: identificação, sem promessa de cura, sem sensacionalismo.',
+        roteiro:`<p>Cada categoria tem regras de publicidade e de conduta, mas os princípios se repetem. Conhecer isso te dá liberdade pra criar sem medo, porque você sabe onde ficam as linhas.</p>
+          <h4>Os pontos que quase todo conselho cobra</h4>
+          <p>Identifique-se com transparência, nome e registro visíveis. Você responde pelo que publica. Não prometa resultado nem cura: no nosso campo, além de vedado, é falso. Nada de sensacionalismo, de antes e depois, de explorar o desespero pra vender.</p>
+          <h4>O paciente não é conteúdo</h4>
+          <p>Depoimento, print de conversa, foto de sessão: fora, salvo regras muito específicas e consentimento formal, o que raramente compensa o risco. A relação de cuidado é assimétrica, e o sim do paciente pode não ser tão livre quanto parece.</p>
+          <h4>Na prática</h4>
+          <p>Antes de publicar, pergunte: se um colega do meu conselho lesse isso, eu ficaria tranquilo? Na dúvida sobre uma regra específica, pergunte ao seu conselho regional antes, não depois.</p>`,
+        referencias:[
+          {tipo:'documento', ref:'Resoluções do CFP sobre publicidade e sobre atendimento por tecnologias.', url:'https://site.cfp.org.br'},
+          {tipo:'documento', ref:'Código de Ética Médica e normas de publicidade (CFM), para a medicina.', url:'https://portal.cfm.org.br'}
+        ]},
+       {titulo:'Falar de drogas sem apologia nem moralismo', dur:'8 min', video:null,
+        apresentacao:'O fio da navalha do conteúdo antiproibicionista: informar reduzindo risco, sem incentivar nem aterrorizar.',
+        roteiro:`<p>Esse é o maior medo de quem começa, e também onde mora o conteúdo mais potente. A boa notícia: existe um caminho ético claro no meio dos dois extremos.</p>
+          <h4>Os dois extremos que a gente evita</h4>
+          <p>De um lado, glamourizar o uso, ensinar a usar melhor como quem dá dica de consumo, tratar substância como identidade. Do outro, o terror, a foto chocante, a moral do isso destrói vidas. Nenhum dos dois cuida.</p>
+          <h4>O que colocar no lugar</h4>
+          <p>Informação honesta que reduz risco: contexto, sinais de alerta, o que fazer numa emergência, e sempre a autonomia da pessoa. O foco é o cuidado, não o consumo. Três âncoras seguram o conteúdo: público adulto e responsabilidade, base em evidência, e acolhimento com limite.</p>
+          <h4>Na prática</h4>
+          <p>Sinalize 18+ quando fizer sentido, deixe explícito que a informação serve pra reduzir dano e nunca pra incentivar, e apoie toda afirmação sobre risco ou efeito numa fonte que você sustentaria numa banca.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MARLATT, G. A. Redução de Danos. Porto Alegre: Artmed.'},
+          {tipo:'organização', ref:'Centro de Convivência É de Lei.', url:'https://edelei.org'}
+        ]}
+     ]},
+     {titulo:'Módulo 2 · Voz, público e linguagem', ebook:{titulo:'Do consultório pra tela: sua voz e seu público', url:'/cursos/ebooks/voz-e-publico.html'}, aulas:[
+       {titulo:'Pra quem você fala e a dor que resolve', dur:'7 min', video:null,
+        apresentacao:'Escolher um público e falar da dor da pessoa, não da sua especialidade.',
+        roteiro:`<p>Falar pra todo mundo é o caminho mais rápido pra não falar com ninguém. Escolher um público não exclui os outros, ele organiza o seu recado e define seu tom.</p>
+          <h4>Três públicos no campo da redução de danos</h4>
+          <p>Quem usa e quer se cuidar, no próprio tempo. Familiares, muitas vezes desesperados e cheios de culpa. E outros profissionais, que querem se formar e trocar. Fale com os três, mas escolha um principal.</p>
+          <h4>Da especialidade pra dor</h4>
+          <p>Ninguém segue especialista em dependência química. Gente segue quem parece entender o que ela sente. Saia da técnica e vá pra dor: liste as cinco frases que você mais ouve de quem chega, elas são o seu melhor roteiro, porque são a dor dita nas palavras de quem sente.</p>
+          <h4>Na prática</h4>
+          <p>Imagine uma pessoa real do seu público, o que ela sente ao abrir o celular às 23h. Se você consegue vê-la, seu conteúdo vai falar com ela.</p>`,
+        referencias:[
+          {tipo:'livro', ref:'MILLER, W. R.; ROLLNICK, S. Entrevista Motivacional. Porto Alegre: Artmed.'}
+        ]},
+       {titulo:'Linguagem que aproxima', dur:'6 min', video:null,
+        apresentacao:'Traduzir o clínico sem empobrecer e sem infantilizar.',
+        roteiro:`<p>Traduzir não é rebaixar, é respeitar. O jargão cria distância e muitas vezes esconde insegurança. A linguagem boa é simples sem ser rasa, calorosa sem ser boba.</p>
+          <h4>Princípios que resolvem a maior parte</h4>
+          <p>Uma ideia por vez, se a frase tem três vírgulas e um outrossim, quebre. Use a palavra da pessoa, não a do manual: fissura comunica mais que craving pra maioria. E não infantilize: seu público é adulto e inteligente, só não é da área.</p>
+          <h4>Concreto ganha do abstrato</h4>
+          <p>Cuidar de si é vago. Beber água entre uma dose e outra é uma imagem que a pessoa executa. Sempre que puder, troque o conceito por uma cena.</p>
+          <h4>Na prática</h4>
+          <p>Depois de escrever, leia em voz alta. Se soar como você conversando, chegou lá. Se soar como artigo, corte pela metade e tente de novo.</p>`,
+        referencias:[
+          {tipo:'ebook', ref:'Ebook do módulo: Do consultório pra tela (Rede dichava).'}
+        ]},
+       {titulo:'O caso Dichavando', dur:'8 min', video:null,
+        apresentacao:'Como uma página de redução de danos construiu voz e confiança, e o que dá pra aprender disso.',
+        roteiro:`<p>O Dichavando nasceu de uma inquietação simples: falar de drogas com informação e sem moralismo, num país onde quase tudo sobre o tema é medo ou proibição. Vale olhar o que ele fez de propósito, pra aprender método, não só copiar.</p>
+          <h4>O que sustentou a voz</h4>
+          <p>Um posicionamento claro e repetido: redução de danos, autonomia, informação sem julgamento. Honestidade sobre risco, nem terror nem apologia. E um tom de quem está do lado, não acima, sem sermão. A pessoa que usa se sentia vista, não corrigida.</p>
+          <h4>Constância vira comunidade</h4>
+          <p>Não foi um viral, foi presença. Aparecer com regularidade e coerência é o que transforma seguidor em comunidade. E o conteúdo não terminou no post: virou porta de entrada pra algo maior, o próprio dichava.app.</p>
+          <h4>A lição transferível</h4>
+          <p>Voz forte não é ser polêmico nem estar sempre certo. É ter um ponto de vista claro, tratar o público como adulto e aparecer com constância dizendo a mesma coisa de formas novas. Autoridade se constrói na repetição coerente.</p>`,
+        referencias:[
+          {tipo:'perfil', ref:'@dichavando no Instagram, referência de comunicação de redução de danos.'}
+        ]}
+     ]},
+     {titulo:'Módulo 3 · Criar e sustentar', ebook:{titulo:'Criar e sustentar conteúdo', url:'/cursos/ebooks/criar-e-sustentar.html'}, aulas:[
+       {titulo:'Anatomia do post e design que comunica', dur:'8 min', video:null,
+        apresentacao:'A estrutura de quatro tempos de um bom post, e o design que faz a mensagem entrar sem esforço.',
+        roteiro:`<p>Ter o que dizer é metade. A outra metade é dizer de um jeito que se entende. Quase todo conteúdo que funciona segue uma estrutura de quatro tempos.</p>
+          <h4>Gancho, contexto, cuidado, chamada</h4>
+          <p>O gancho tem uma função só: fazer parar. O contexto mostra que você entende a situação. O cuidado é o miolo, o que reduz dano de verdade. E a chamada diz o que fazer com aquilo, uma só, clara. Se a primeira linha some no ver mais, trate-a como manchete.</p>
+          <h4>Design é legibilidade, não enfeite</h4>
+          <p>Uma ideia principal por tela, respiro em volta, contraste alto, e consistência de fontes e cores pra criar reconhecimento. No carrossel, uma ideia por slide.</p>
+          <h4>Acessibilidade é cuidado</h4>
+          <p>Texto alternativo nas imagens, legenda nos vídeos, contraste que qualquer um enxerga. Num trabalho de redução de danos, excluir quem tem deficiência contradiz o próprio valor de encontrar a pessoa onde ela está.</p>`,
+        referencias:[
+          {tipo:'diretriz', ref:'WCAG, princípios de acessibilidade (texto alternativo, legendas, contraste).'}
+        ]},
+       {titulo:'Formatos e planejamento editorial', dur:'7 min', video:null,
+        apresentacao:'Quando usar cada formato e como os pilares de conteúdo preenchem o calendário sozinhos.',
+        roteiro:`<p>Cada formato tem uma força. Carrossel pra ensinar passo a passo e virar referência que a pessoa salva. Reels pra alcance e pra mostrar quem você é. Imagem única pra uma frase que já entrega valor. Stories pro vínculo do dia a dia. Legenda longa quando o assunto pede profundidade.</p>
+          <h4>Pilares de conteúdo</h4>
+          <p>Sem plano, você acorda com a pergunta paralisante, o que posto hoje. A solução são três a cinco temas fixos que você reveza: informação, acolhimento, educação política e bastidores. Com os pilares, o calendário se preenche sozinho.</p>
+          <h4>Na prática</h4>
+          <p>Monte um quadro simples com dia, pilar, formato e tema. A semana inteira se organiza numa página, e a decisão diária deixa de pesar.</p>`,
+        referencias:[
+          {tipo:'ebook', ref:'Ebook do módulo: Criar e sustentar conteúdo (Rede dichava).'}
+        ]},
+       {titulo:'Constância sem burnout e medir o que importa', dur:'7 min', video:null,
+        apresentacao:'Uma rotina que você sustenta, e as métricas que dizem se o conteúdo está cuidando.',
+        roteiro:`<p>Frequência que você não sustenta é pior que frequência baixa, porque o tranco de sumir custa mais que a ausência constante. Melhor duas vezes por semana pra sempre que todo dia por um mês e depois nada.</p>
+          <h4>Como sustentar</h4>
+          <p>Produza em lote, reserve um bloco pra criar vários posts de uma vez. Reaproveite, um carrossel vira reels, vira stories, vira legenda. Tenha um banco de ideias com toda dúvida de paciente. E ponha limite: horário pra DM, dia de folga das redes.</p>
+          <h4>Medir o que importa</h4>
+          <p>Curtida é vaidade, não bússola. Olhe salvamentos e compartilhamentos, mensagens de isso me ajudou, procura real de gente chegando ao atendimento, e a constância que você mantém sem se odiar.</p>
+          <h4>Na prática</h4>
+          <p>No fim do mês, pergunte: o que eu publiquei cuidou de alguém? Essa é a métrica que sustenta o resto.</p>`,
+        referencias:[
+          {tipo:'organização', ref:'Materiais do Centro de Convivência É de Lei.', url:'https://edelei.org'}
+        ]}
      ]}
    ]}
 ];
@@ -1755,6 +1886,12 @@ function viewCursoDetalhe(c){
         <div class="aula-tt">${esc(a.titulo)}<span class="du">${esc(a.dur)}</span></div>
         <span style="color:var(--txm)">›</span></div>`;
     });
+    if(m.ebook){
+      html+=`<a class="ebook-row" href="${esc(m.ebook.url)}" target="_blank" rel="noopener">
+        <div class="ebook-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v15l-5-3-5 3V5"/><path d="M17 3h1a2 2 0 0 1 2 2v13"/></svg></div>
+        <div class="ebook-tt">Ebook do módulo<span class="du">${esc(m.ebook.titulo)}</span></div>
+        <span class="ebook-go">Abrir ›</span></a>`;
+    }
   });
   // referências
   if(c.referencias&&c.referencias.length){
