@@ -1686,7 +1686,7 @@ function redeHome(){
       <span class="mural-body"><span class="mural-t">${esc(m.t)}</span><span class="mural-d">${esc(m.d)}</span></span>
       ${badge}</button>`; }).join('');
   const acessos=`<div class="rede-acessos">
-      <button class="acesso-card" onclick="toast('Cursos em breve. Estamos preparando com carinho.',3000)"><span class="acesso-ic">${redeIco('cursos')}</span><span class="acesso-t">Cursos</span><span class="acesso-s">Em breve</span></button>
+      <button class="acesso-card" onclick="irRede('cursos')"><span class="acesso-ic">${redeIco('cursos')}</span><span class="acesso-t">Cursos</span><span class="acesso-s">${CURSOS.length} curso${CURSOS.length>1?'s':''}</span></button>
       <button class="acesso-card" onclick="irRede('biblioteca')"><span class="acesso-ic">${redeIco('biblio')}</span><span class="acesso-t">Biblioteca</span><span class="acesso-s">${totL} livros</span></button>
     </div>`;
   return `<div class="rede-hero">
