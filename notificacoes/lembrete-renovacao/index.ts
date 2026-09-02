@@ -47,24 +47,29 @@ const pnome = (n: string) => {
   return p ? p.charAt(0).toUpperCase() + p.slice(1).toLowerCase() : "profissional";
 };
 
-function textoEmail(marco: string, nome: string) {
+function fmtData(iso: string): string {
+  const parts = spDate(iso).split("-");
+  return `${parts[2]}/${parts[1]}`;
+}
+function textoEmail(marco: string, nome: string, dias: number, iso: string) {
   const oi = `Oi, ${pnome(nome)}!`;
+  const quando = dias > 1 ? `em ${dias} dias` : (dias === 1 ? "amanhã" : "hoje");
   if (marco === "antes5") return {
-    assunto: "Sua assinatura do dichava vence em 5 dias",
+    assunto: `Sua assinatura do dichava vence ${quando}`,
     titulo: "Falta pouco pra renovar",
-    corpo: `${oi} Passando pra avisar com calma: a sua assinatura do dichava vence em <b>5 dias</b>. Renovando agora, você segue sem interrupção no diretório da Rede, no painel e no acompanhamento dos seus pacientes. Leva um minuto.`,
+    corpo: `${oi} Passando pra avisar com calma: a sua assinatura do dichava vence <b>${quando}</b>, no dia <b>${fmtData(iso)}</b>. Renovando com antecedência, você segue sem interrupção no diretório da Rede, no painel e no acompanhamento dos seus pacientes. Leva um minuto.`,
     botao: "Renovar minha assinatura",
   };
   if (marco === "dia") return {
     assunto: "Sua assinatura do dichava vence hoje",
     titulo: "Sua assinatura vence hoje",
-    corpo: `${oi} Sua assinatura do dichava vence <b>hoje</b>. Pra não perder o acesso ao painel e a sua presença na Rede, é só renovar. Se você já renovou, pode ignorar esta mensagem.`,
+    corpo: `${oi} Sua assinatura do dichava vence <b>hoje</b> (${fmtData(iso)}). Pra não perder o acesso ao painel e a sua presença na Rede, é só renovar. Se você já renovou, pode ignorar esta mensagem.`,
     botao: "Renovar agora",
   };
   return {
     assunto: "Sua assinatura venceu, mas dá pra voltar",
     titulo: "Ainda dá tempo de voltar",
-    corpo: `${oi} Sua assinatura do dichava venceu há alguns dias e o seu acesso ao painel ficou pausado. Se fez sentido pra você e pros seus pacientes, é rápido reativar e retomar de onde parou. A gente adora ter você na Rede.`,
+    corpo: `${oi} Sua assinatura do dichava venceu há alguns dias (venceu em ${fmtData(iso)}) e o seu acesso ao painel ficou pausado. Se fez sentido pra você e pros seus pacientes, é rápido reativar e retomar de onde parou. A gente adora ter você na Rede.`,
     botao: "Reativar minha assinatura",
   };
 }
@@ -94,9 +99,9 @@ async function emailDoProf(prof: any): Promise<string> {
   catch (_) { return ""; }
 }
 
-async function enviarEmail(to: string, marco: string, nome: string) {
+async function enviarEmail(to: string, marco: string, nome: string, dias: number, iso: string) {
   if (!RESEND || !to) return "sem-email";
-  const t = textoEmail(marco, nome);
+  const t = textoEmail(marco, nome, dias, iso);
   try {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -107,11 +112,11 @@ async function enviarEmail(to: string, marco: string, nome: string) {
   } catch (e) { return "email-exc"; }
 }
 
-async function enviarPush(profId: string, marco: string, nome: string) {
+async function enviarPush(profId: string, marco: string, nome: string, dias: number, iso: string) {
   if (!VAPID_PUB || !VAPID_PRIV) return "push-off";
   const { data: subs } = await sb.from("push_subs").select("endpoint,p256dh,auth").eq("user_id", profId);
   if (!subs || !subs.length) return "sem-push";
-  const t = textoEmail(marco, nome);
+  const t = textoEmail(marco, nome, dias, iso);
   const notif = JSON.stringify({ title: t.titulo, body: "Toque para renovar sua assinatura do dichava.", url: "/clinica/", tag: "renovacao-" + marco });
   await Promise.all(subs.map((s: any) =>
     webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, notif)
@@ -126,6 +131,12 @@ Deno.serve(async (req) => {
   if (CRON_SECRET && (req.headers.get("x-cron-secret") || "") !== CRON_SECRET)
     return new Response("forbidden", { status: 403 });
 
+  // modo "agora": disparo manual pra tocar TODO o ciclo atual de uma vez.
+  // Antecipa o aviso "antes5" pra quem ainda vai vencer, mesmo que falte mais
+  // de 5 dias. A régua automática (dia, depois3) segue normal depois.
+  let modo = "cron";
+  try { const b = await req.json(); if (b && b.modo) modo = String(b.modo); } catch (_) {}
+
   const { data: profs, error } = await sb.from("profissionais")
     .select("id,nome,email,plano,acesso_ate,ativo")
     .eq("ativo", true)
@@ -134,7 +145,9 @@ Deno.serve(async (req) => {
 
   const relatorio: any[] = [];
   for (const prof of (profs || [])) {
-    const marco = marcoDe(diasAte(prof.acesso_ate));
+    const dias = diasAte(prof.acesso_ate);
+    // no modo manual, qualquer um que ainda não venceu recebe o aviso "antes5"
+    const marco = (modo === "agora" && dias >= 1) ? "antes5" : marcoDe(dias);
     if (!marco) continue;
     const venc = spDate(prof.acesso_ate);
 
@@ -144,14 +157,14 @@ Deno.serve(async (req) => {
     if (ja) continue;
 
     const to = await emailDoProf(prof);
-    const rEmail = await enviarEmail(to, marco, prof.nome);
-    const rPush  = await enviarPush(prof.id, marco, prof.nome);
+    const rEmail = await enviarEmail(to, marco, prof.nome, dias, prof.acesso_ate);
+    const rPush  = await enviarPush(prof.id, marco, prof.nome, dias, prof.acesso_ate);
 
     // registra pra não repetir
     await sb.from("renovacao_lembrete").insert({ prof_id: prof.id, marco, venc });
-    relatorio.push({ prof: prof.id, marco, email: rEmail, push: rPush });
+    relatorio.push({ prof: prof.id, marco, dias, email: rEmail, push: rPush });
   }
 
-  console.log("lembrete-renovacao:", JSON.stringify(relatorio));
-  return new Response(JSON.stringify({ ok: true, enviados: relatorio.length, detalhe: relatorio }), { headers: { "Content-Type": "application/json" } });
+  console.log("lembrete-renovacao:", JSON.stringify({ modo, total: relatorio.length }));
+  return new Response(JSON.stringify({ ok: true, modo, enviados: relatorio.length, detalhe: relatorio }), { headers: { "Content-Type": "application/json" } });
 });
