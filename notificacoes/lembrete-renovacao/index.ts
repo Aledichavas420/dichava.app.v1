@@ -1,22 +1,29 @@
 // ════════════════════════════════════════════════════════════
 // dichava.app — Edge Function "lembrete-renovacao"
-// Avisa o profissional perto do vencimento da assinatura (acesso_ate),
-// por e-mail (Resend) e por push. Marcos: 5 dias antes, no dia, 3 dias depois.
-// Roda por cron (pg_cron chama uma vez por dia). Idempotente: cada marco de
-// cada ciclo (venc) é enviado uma vez só, controlado por renovacao_lembrete.
+// Avisa o profissional perto do vencimento (acesso_ate), por e-mail (Resend)
+// e push, com texto que muda conforme a cobrança (recorrente x Pix/manual).
+//
+// Três formas de rodar:
+//   1) Cron (x-cron-secret): varre todos e envia nos marcos 5 antes / no dia /
+//      3 depois. Idempotente por (prof, marco, ciclo).
+//   2) modo:"individual" (JWT de admin ou secret) + prof_id [+ tipo]:
+//      dispara pra UM profissional, na hora. Usado pelos botões do painel admin.
+//   3) modo:"agora" (secret): antecipa o aviso pra todo o ciclo atual.
 //
 // Deploy:  supabase functions deploy lembrete-renovacao --no-verify-jwt
-// Secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY,
-//          EMAIL_FROM (ex: "Rede Dichava <nao-responda@dichava.app>"),
-//          VAPID_PUB, VAPID_PRIVATE, CRON_SECRET
+// Secrets: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY,
+//          RESEND_API_KEY, EMAIL_FROM, VAPID_PUB, VAPID_PRIVATE, CRON_SECRET
 // ════════════════════════════════════════════════════════════
 import webpush from "npm:web-push@3";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const SB_URL = Deno.env.get("SUPABASE_URL")!;
+const ANON   = Deno.env.get("SUPABASE_ANON_KEY") || "";
+const sb = createClient(SB_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const RESEND = Deno.env.get("RESEND_API_KEY") || "";
 const FROM   = Deno.env.get("EMAIL_FROM") || "Rede Dichava <onboarding@resend.dev>";
 const CRON_SECRET = Deno.env.get("CRON_SECRET") || "";
+const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com").split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
 
 const urlsafe = (k: string) => (k || "").trim().replace(/\s+/g, "").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/,"");
 const VAPID_PUB  = urlsafe(Deno.env.get("VAPID_PUB")  || "");
@@ -24,52 +31,84 @@ const VAPID_PRIV = urlsafe(Deno.env.get("VAPID_PRIVATE") || "");
 try { if (VAPID_PUB && VAPID_PRIV) webpush.setVapidDetails("mailto:contato@dichava.app", VAPID_PUB, VAPID_PRIV); } catch (_) {}
 
 const ASSINAR = "https://dichava.app/assinar/";
+const cors = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cron-secret",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+const J = (o: unknown, status = 200) => new Response(JSON.stringify(o), { status, headers: { ...cors, "content-type": "application/json" } });
 
-// data no fuso de São Paulo, no formato YYYY-MM-DD
 function spDate(d: Date | string): string {
   return new Date(d).toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
 }
-// diferença em dias-calendário (SP) entre a data alvo e hoje (positivo = futuro)
 function diasAte(aISO: string): number {
   const a = new Date(spDate(aISO) + "T00:00:00Z").getTime();
   const h = new Date(spDate(new Date()) + "T00:00:00Z").getTime();
   return Math.round((a - h) / 86400000);
 }
 function marcoDe(dias: number): string | null {
-  if (dias >= 1 && dias <= 5) return "antes5";     // dentro dos próximos 5 dias
-  if (dias <= 0 && dias >= -1) return "dia";        // vence hoje (ou virou ontem)
-  if (dias <= -3 && dias >= -5) return "depois3";   // 3 a 5 dias depois de vencido
+  if (dias >= 1 && dias <= 5) return "antes5";
+  if (dias <= 0 && dias >= -1) return "dia";
+  if (dias <= -3 && dias >= -5) return "depois3";
   return null;
 }
-
+function fmtData(iso: string): string {
+  const p = spDate(iso).split("-");
+  return `${p[2]}/${p[1]}`;
+}
 const pnome = (n: string) => {
   const p = (n || "").trim().split(/\s+/)[0] || "";
   return p ? p.charAt(0).toUpperCase() + p.slice(1).toLowerCase() : "profissional";
 };
-
-function fmtData(iso: string): string {
-  const parts = spDate(iso).split("-");
-  return `${parts[2]}/${parts[1]}`;
+// tipo de cobrança: recorrente (marcado no obs_admin) x pix/manual (padrão)
+function tipoDe(prof: any, tipoPassado?: string): string {
+  if (tipoPassado === "recorrente" || tipoPassado === "pix" || tipoPassado === "outro") return tipoPassado;
+  return /♻️|recorrente/i.test((prof && prof.obs_admin) || "") ? "recorrente" : "pix";
 }
-function textoEmail(marco: string, nome: string, dias: number, iso: string) {
+
+function textoEmail(marco: string, nome: string, dias: number, iso: string, tipo: string) {
   const oi = `Oi, ${pnome(nome)}!`;
   const quando = dias > 1 ? `em ${dias} dias` : (dias === 1 ? "amanhã" : "hoje");
+  const data = fmtData(iso);
+
+  if (tipo === "recorrente") {
+    if (marco === "antes5") return {
+      assunto: `Sua assinatura do dichava renova ${quando}`,
+      titulo: "Sua renovação é automática",
+      corpo: `${oi} Sua assinatura do dichava renova automaticamente <b>${quando}</b>, no dia <b>${data}</b>. Você não precisa fazer nada. Só vale conferir se o cartão cadastrado está em dia, pra a cobrança não falhar e o seu acesso seguir sem interrupção.`,
+      botao: "Ver minha assinatura",
+    };
+    if (marco === "dia") return {
+      assunto: "Sua assinatura do dichava renova hoje",
+      titulo: "Renovação automática hoje",
+      corpo: `${oi} Hoje (${data}) é o dia da renovação automática da sua assinatura do dichava. Se estiver tudo certo com o cartão, é só seguir usando. Se a cobrança falhar, a gente te avisa.`,
+      botao: "Ver minha assinatura",
+    };
+    return {
+      assunto: "Tivemos um problema na sua renovação",
+      titulo: "A cobrança automática não passou",
+      corpo: `${oi} A renovação automática da sua assinatura do dichava (vencimento em ${data}) não foi concluída, e o seu acesso ao painel corre risco de pausar. Costuma ser algo simples no cartão. Dá pra resolver em um minuto.`,
+      botao: "Regularizar minha assinatura",
+    };
+  }
+
+  // pix / manual / outro
   if (marco === "antes5") return {
     assunto: `Sua assinatura do dichava vence ${quando}`,
     titulo: "Falta pouco pra renovar",
-    corpo: `${oi} Passando pra avisar com calma: a sua assinatura do dichava vence <b>${quando}</b>, no dia <b>${fmtData(iso)}</b>. Renovando com antecedência, você segue sem interrupção no diretório da Rede, no painel e no acompanhamento dos seus pacientes. Leva um minuto.`,
+    corpo: `${oi} Passando pra avisar com calma: a sua assinatura do dichava vence <b>${quando}</b>, no dia <b>${data}</b>. Renovando com antecedência, você segue sem interrupção no diretório da Rede, no painel e no acompanhamento dos seus pacientes. Leva um minuto.`,
     botao: "Renovar minha assinatura",
   };
   if (marco === "dia") return {
     assunto: "Sua assinatura do dichava vence hoje",
     titulo: "Sua assinatura vence hoje",
-    corpo: `${oi} Sua assinatura do dichava vence <b>hoje</b> (${fmtData(iso)}). Pra não perder o acesso ao painel e a sua presença na Rede, é só renovar. Se você já renovou, pode ignorar esta mensagem.`,
+    corpo: `${oi} Sua assinatura do dichava vence <b>hoje</b> (${data}). Pra não perder o acesso ao painel e a sua presença na Rede, é só renovar. Se você já renovou, pode ignorar esta mensagem.`,
     botao: "Renovar agora",
   };
   return {
     assunto: "Sua assinatura venceu, mas dá pra voltar",
     titulo: "Ainda dá tempo de voltar",
-    corpo: `${oi} Sua assinatura do dichava venceu há alguns dias (venceu em ${fmtData(iso)}) e o seu acesso ao painel ficou pausado. Se fez sentido pra você e pros seus pacientes, é rápido reativar e retomar de onde parou. A gente adora ter você na Rede.`,
+    corpo: `${oi} Sua assinatura do dichava venceu há alguns dias (venceu em ${data}) e o seu acesso ao painel ficou pausado. Se fez sentido pra você e pros seus pacientes, é rápido reativar e retomar de onde parou. A gente adora ter você na Rede.`,
     botao: "Reativar minha assinatura",
   };
 }
@@ -98,10 +137,9 @@ async function emailDoProf(prof: any): Promise<string> {
   try { const { data } = await sb.auth.admin.getUserById(prof.id); return (data?.user?.email || "").trim(); }
   catch (_) { return ""; }
 }
-
-async function enviarEmail(to: string, marco: string, nome: string, dias: number, iso: string) {
+async function enviarEmail(to: string, marco: string, nome: string, dias: number, iso: string, tipo: string) {
   if (!RESEND || !to) return "sem-email";
-  const t = textoEmail(marco, nome, dias, iso);
+  const t = textoEmail(marco, nome, dias, iso, tipo);
   try {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -109,62 +147,90 @@ async function enviarEmail(to: string, marco: string, nome: string, dias: number
       body: JSON.stringify({ from: FROM, to: [to], subject: t.assunto, html: shell(t.titulo, t.corpo, t.botao) }),
     });
     return r.ok ? "email-ok" : ("email-erro:" + r.status);
-  } catch (e) { return "email-exc"; }
+  } catch (_) { return "email-exc"; }
 }
-
-async function enviarPush(profId: string, marco: string, nome: string, dias: number, iso: string) {
+async function enviarPush(profId: string, marco: string, nome: string, dias: number, iso: string, tipo: string) {
   if (!VAPID_PUB || !VAPID_PRIV) return "push-off";
   const { data: subs } = await sb.from("push_subs").select("endpoint,p256dh,auth").eq("user_id", profId);
   if (!subs || !subs.length) return "sem-push";
-  const t = textoEmail(marco, nome, dias, iso);
-  const notif = JSON.stringify({ title: t.titulo, body: "Toque para renovar sua assinatura do dichava.", url: "/clinica/", tag: "renovacao-" + marco });
+  const t = textoEmail(marco, nome, dias, iso, tipo);
   await Promise.all(subs.map((s: any) =>
-    webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, notif)
+    webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
+      JSON.stringify({ title: t.titulo, body: "Toque para ver sua assinatura do dichava.", url: "/clinica/", tag: "renovacao-" + marco }))
       .then(() => "ok")
       .catch(async (err: any) => { if (err?.statusCode === 404 || err?.statusCode === 410) { try { await sb.from("push_subs").delete().eq("endpoint", s.endpoint); } catch (_) {} } return "erro"; })
   ));
   return "push-ok";
 }
 
+// envia um profissional (usado pelo modo individual e como base dos outros)
+async function processarUm(prof: any, marco: string, tipo: string, dedupe: boolean) {
+  const dias = diasAte(prof.acesso_ate);
+  const venc = spDate(prof.acesso_ate);
+  if (dedupe) {
+    const { data: ja } = await sb.from("renovacao_lembrete")
+      .select("prof_id").eq("prof_id", prof.id).eq("marco", marco).eq("venc", venc).maybeSingle();
+    if (ja) return { prof: prof.id, marco, pulado: "ja-enviado" };
+  }
+  const to = await emailDoProf(prof);
+  const rEmail = await enviarEmail(to, marco, prof.nome, dias, prof.acesso_ate, tipo);
+  const rPush  = await enviarPush(prof.id, marco, prof.nome, dias, prof.acesso_ate, tipo);
+  try { await sb.from("renovacao_lembrete").upsert({ prof_id: prof.id, marco, venc }); } catch (_) {}
+  return { prof: prof.id, marco, tipo, dias, email: rEmail, push: rPush };
+}
+
+async function ehAdmin(req: Request): Promise<boolean> {
+  const auth = req.headers.get("Authorization") || "";
+  if (!auth || !ANON) return false;
+  try {
+    const c = createClient(SB_URL, ANON, { global: { headers: { Authorization: auth } } });
+    const { data, error } = await c.auth.getUser();
+    if (error || !data?.user) return false;
+    return ADMINS.includes((data.user.email || "").toLowerCase());
+  } catch (_) { return false; }
+}
+
 Deno.serve(async (req) => {
-  // segurança: só o cron (com o segredo) roda isto
-  if (CRON_SECRET && (req.headers.get("x-cron-secret") || "") !== CRON_SECRET)
-    return new Response("forbidden", { status: 403 });
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
-  // modo "agora": disparo manual pra tocar TODO o ciclo atual de uma vez.
-  // Antecipa o aviso "antes5" pra quem ainda vai vencer, mesmo que falte mais
-  // de 5 dias. A régua automática (dia, depois3) segue normal depois.
-  let modo = "cron";
-  try { const b = await req.json(); if (b && b.modo) modo = String(b.modo); } catch (_) {}
+  let body: any = {};
+  try { body = await req.json(); } catch (_) {}
+  const modo = String(body?.modo || "cron");
 
+  const temSecret = CRON_SECRET && (req.headers.get("x-cron-secret") || "") === CRON_SECRET;
+  const admin = temSecret ? true : await ehAdmin(req);
+  if (!admin) return J({ ok: false, erro: "não autorizado" }, 403);
+
+  // ── modo individual: um profissional (botão do painel admin) ──
+  if (modo === "individual") {
+    const id = String(body?.prof_id || "");
+    if (!id) return J({ ok: false, erro: "faltou prof_id" }, 400);
+    const { data: prof, error } = await sb.from("profissionais")
+      .select("id,nome,email,plano,acesso_ate,ativo,obs_admin").eq("id", id).maybeSingle();
+    if (error || !prof) return J({ ok: false, erro: "profissional não encontrado" }, 404);
+    if (!prof.acesso_ate) return J({ ok: false, erro: "profissional sem data de vencimento (acesso_ate)" }, 400);
+    const dias = diasAte(prof.acesso_ate);
+    const marco = dias >= 1 ? "antes5" : (dias === 0 ? "dia" : "depois3");
+    const tipo = tipoDe(prof, body?.tipo);
+    const r = await processarUm(prof, marco, tipo, false); // manual não bloqueia por dedupe
+    return J({ ok: true, ...r });
+  }
+
+  // ── cron / agora: varre todos os pagantes com vencimento definido ──
   const { data: profs, error } = await sb.from("profissionais")
-    .select("id,nome,email,plano,acesso_ate,ativo")
-    .eq("ativo", true)
-    .not("acesso_ate", "is", null);
-  if (error) { console.error("lembrete-renovacao: erro ao ler profissionais", error.message); return new Response("erro", { status: 500 }); }
+    .select("id,nome,email,plano,acesso_ate,ativo,obs_admin")
+    .eq("ativo", true).not("acesso_ate", "is", null);
+  if (error) return J({ ok: false, erro: error.message }, 500);
 
   const relatorio: any[] = [];
   for (const prof of (profs || [])) {
     const dias = diasAte(prof.acesso_ate);
-    // no modo manual, qualquer um que ainda não venceu recebe o aviso "antes5"
     const marco = (modo === "agora" && dias >= 1) ? "antes5" : marcoDe(dias);
     if (!marco) continue;
-    const venc = spDate(prof.acesso_ate);
-
-    // já avisamos este marco neste ciclo (venc)?
-    const { data: ja } = await sb.from("renovacao_lembrete")
-      .select("prof_id").eq("prof_id", prof.id).eq("marco", marco).eq("venc", venc).maybeSingle();
-    if (ja) continue;
-
-    const to = await emailDoProf(prof);
-    const rEmail = await enviarEmail(to, marco, prof.nome, dias, prof.acesso_ate);
-    const rPush  = await enviarPush(prof.id, marco, prof.nome, dias, prof.acesso_ate);
-
-    // registra pra não repetir
-    await sb.from("renovacao_lembrete").insert({ prof_id: prof.id, marco, venc });
-    relatorio.push({ prof: prof.id, marco, dias, email: rEmail, push: rPush });
+    const tipo = tipoDe(prof);
+    const r = await processarUm(prof, marco, tipo, true);
+    if (!(r as any).pulado) relatorio.push(r);
   }
-
   console.log("lembrete-renovacao:", JSON.stringify({ modo, total: relatorio.length }));
-  return new Response(JSON.stringify({ ok: true, modo, enviados: relatorio.length, detalhe: relatorio }), { headers: { "Content-Type": "application/json" } });
+  return J({ ok: true, modo, enviados: relatorio.length, detalhe: relatorio });
 });
