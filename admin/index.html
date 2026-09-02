@@ -877,6 +877,22 @@ async function enviarCheckinEmail(id){
     toast('✓ Check-in enviado por e-mail');
   }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
+async function enviarLembreteRenov(id){
+  const p=PROFS.find(x=>x.id===id); if(!p){toast('Profissional não encontrado.',1);return;}
+  if(!p.acesso_ate){ toast('Este profissional não tem data de vencimento (acesso_ate).',4000); return; }
+  const tipo = ehRecorrente(p)?'recorrente':'pix';
+  const rot = tipo==='recorrente'?'renovação automática (recorrente)':'Pix / manual';
+  const d=diasAte(p.acesso_ate);
+  const quando = d>1?('vence em '+d+' dias'):(d===1?'vence amanhã':(d===0?'vence hoje':'venceu há '+(-d)+' dia(s)'));
+  if(!confirm('Enviar lembrete de renovação para '+(p.nome||'este profissional')+'?\n\nTipo: '+rot+'\nSituação: '+quando+'\nVai por e-mail e push (se tiver aparelho).'))return;
+  toast('Enviando…');
+  try{
+    const{data,error}=await SB.functions.invoke('lembrete-renovacao',{body:{modo:'individual',prof_id:id,tipo}});
+    if(error){ throw new Error(await _fxErr(error)); }
+    if(data&&data.ok===false)throw new Error(typeof data.erro==='string'?data.erro:JSON.stringify(data.erro));
+    toast('✓ Lembrete enviado ('+((data&&data.email)||'ok')+')');
+  }catch(e){ toast('Não consegui enviar. Confira se a função lembrete-renovacao está publicada.',5000); }
+}
 async function enviarCheckinTodosTeste(){
   const list=PROFS.filter(p=>ehTrial(p)&&p.email);
   if(!list.length){toast('Ninguém em teste com e-mail.',1);return;}
@@ -1429,6 +1445,9 @@ function renderProfs(){
     const mail = p.email?('<a class="btn ghost sm" href="mailto:'+esc(p.email)+'?subject='+encodeURIComponent(mailAssunto)+mailBody+'">✉️ E-mail</a>'):'';
     // Envio direto pelo Resend (não abre o app de e-mail) — só pra quem já usa o painel.
     const checkinBtn = (temAcesso&&p.email)?('<button class="btn ghost sm" onclick="enviarCheckinEmail(\''+p.id+'\')">📧 Check-in</button>'):'';
+    // Lembrete de renovação: só pra quem tem data de vencimento. O texto muda
+    // conforme a cobrança (recorrente x Pix), detectada pelo obs_admin.
+    const renovBtn = p.acesso_ate?('<button class="btn ghost sm" onclick="enviarLembreteRenov(\''+p.id+'\')">🔔 Lembrar renovação ('+(ehRecorrente(p)?'recorrente':'Pix')+')</button>'):'';
     // Convite pro grupo de WhatsApp da Rede — só pra quem já está no app (ativo/teste).
     const _pn=wlFirst(p.nome); const grupoMsg='Oi'+(_pn?(', '+_pn):'')+'! Criei um grupo no WhatsApp só pros profissionais da Rede dichava, pra ser um espaço aberto de troca: ideias, propostas e pedidos, como divulgação. Você já faz parte da rede, então esse grupo é seu também. Bora? 💚\n\nhttps://chat.whatsapp.com/JDvGNyCW0Vu5Zj7WuNYznt';
     const grupoBtn = (temAcesso&&p.telefone)?('<a class="btn wv sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'?text='+encodeURIComponent(grupoMsg)+'" target="_blank" rel="noopener">👥 Convidar pro grupo</a>'):'';
@@ -1448,7 +1467,7 @@ function renderProfs(){
         </div>
       </div>
       ${p.obs_admin?`<div class="obs">📝 ${esc(p.obs_admin)}</div>`:''}
-      <div class="pacts">${acts.join('')}${wa}${convBtn}${grupoBtn}${mail}${checkinBtn}</div>
+      <div class="pacts">${acts.join('')}${wa}${convBtn}${grupoBtn}${mail}${checkinBtn}${renovBtn}</div>
     </div>`;
   }).join('');
 }
