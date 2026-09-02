@@ -1170,7 +1170,7 @@ function renderVencer(){
         <div class="pmeta">${esc(p.email||'')}${p.plano?' · '+esc(planoNome(p.plano)):''}</div>
         <div class="pmeta" style="color:#8a6b00">Confira no PagBank se a mensalidade caiu, depois confirme. ${d<0?'<b>Sem confirmar, o acesso é cortado ao fim da carência.</b>':''}</div>
         <div class="chips"><span class="chip ${cls}">${sit}</span></div></div></div>
-        <div class="pacts"><button class="btn wv sm" onclick="confirmarMensalidade('${p.id}')">✓ Confirmar mensalidade (+1 mês)</button><button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Editar</button></div></div>`;
+        <div class="pacts"><button class="btn wv sm" onclick="confirmarMensalidade('${p.id}')">✓ Confirmar mensalidade (+1 mês)</button>${p.email?`<button class="btn ghost sm" onclick="enviarLembreteRenov('${p.id}')">🔔 Enviar lembrete</button>`:''}<button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Editar</button></div></div>`;
     }
     const msg=encodeURIComponent('Oi'+(p.nome?(', '+String(p.nome).trim().split(/\s+/)[0]):'')+'! Passando pra avisar que sua assinatura do painel dichava ('+planoNome(p.plano)+') '+quando+'. Quer renovar? Te mando o link 💚');
     const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'?text='+msg+'" target="_blank" rel="noopener">💬 Cobrar renovação</a>'):'';
@@ -1178,7 +1178,7 @@ function renderVencer(){
       <div style="flex:1;min-width:0"><div class="pn">${esc(p.nome||'Sem nome')}</div>
       <div class="pmeta">${esc(p.email||'')}${p.plano?' · '+esc(planoNome(p.plano)):''}</div>
       <div class="chips"><span class="chip ${d<=1?'e':'a'}">${quando}</span></div></div></div>
-      <div class="pacts"><button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar</button>${wa}</div></div>`;
+      <div class="pacts"><button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar</button>${wa}${p.email?`<button class="btn ghost sm" onclick="enviarLembreteRenov('${p.id}')">🔔 Enviar lembrete</button>`:''}</div></div>`;
   }).join('');
 }
 async function gerarMiniaturasAll(){
@@ -1445,9 +1445,6 @@ function renderProfs(){
     const mail = p.email?('<a class="btn ghost sm" href="mailto:'+esc(p.email)+'?subject='+encodeURIComponent(mailAssunto)+mailBody+'">✉️ E-mail</a>'):'';
     // Envio direto pelo Resend (não abre o app de e-mail) — só pra quem já usa o painel.
     const checkinBtn = (temAcesso&&p.email)?('<button class="btn ghost sm" onclick="enviarCheckinEmail(\''+p.id+'\')">📧 Check-in</button>'):'';
-    // Lembrete de renovação: só pra quem tem data de vencimento. O texto muda
-    // conforme a cobrança (recorrente x Pix), detectada pelo obs_admin.
-    const renovBtn = p.acesso_ate?('<button class="btn ghost sm" onclick="enviarLembreteRenov(\''+p.id+'\')">🔔 Lembrar renovação ('+(ehRecorrente(p)?'recorrente':'Pix')+')</button>'):'';
     // Convite pro grupo de WhatsApp da Rede — só pra quem já está no app (ativo/teste).
     const _pn=wlFirst(p.nome); const grupoMsg='Oi'+(_pn?(', '+_pn):'')+'! Criei um grupo no WhatsApp só pros profissionais da Rede dichava, pra ser um espaço aberto de troca: ideias, propostas e pedidos, como divulgação. Você já faz parte da rede, então esse grupo é seu também. Bora? 💚\n\nhttps://chat.whatsapp.com/JDvGNyCW0Vu5Zj7WuNYznt';
     const grupoBtn = (temAcesso&&p.telefone)?('<a class="btn wv sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'?text='+encodeURIComponent(grupoMsg)+'" target="_blank" rel="noopener">👥 Convidar pro grupo</a>'):'';
@@ -1467,7 +1464,7 @@ function renderProfs(){
         </div>
       </div>
       ${p.obs_admin?`<div class="obs">📝 ${esc(p.obs_admin)}</div>`:''}
-      <div class="pacts">${acts.join('')}${wa}${convBtn}${grupoBtn}${mail}${checkinBtn}${renovBtn}</div>
+      <div class="pacts">${acts.join('')}${wa}${convBtn}${grupoBtn}${mail}${checkinBtn}</div>
     </div>`;
   }).join('');
 }
