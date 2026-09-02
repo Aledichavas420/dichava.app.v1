@@ -834,6 +834,7 @@ body.has-demo-banner{padding-bottom:64px}
       <button class="btn" id="quick-add">＋ Novo</button>
     </div>
     <div id="trial-banner" style="display:none"></div>
+    <div id="renov-banner" style="display:none"></div>
     <div id="atalho-hint"></div>
     <div class="content" id="view"></div>
   </div>
@@ -4832,11 +4833,12 @@ async function checarAcesso(){
     }
     _meuPlano=p.plano||AUTH.plano||null;
     // Recorrente: 5 dias corridos de carência após o vencimento antes de cortar.
-    const grace = /♻️|recorrente/i.test(p.obs_admin||'') ? 5*864e5 : 0;
+    const rec = /♻️|recorrente/i.test(p.obs_admin||'');
+    const grace = rec ? 5*864e5 : 0;
     const fim = p.acesso_ate ? new Date(new Date(p.acesso_ate).getTime()+grace) : null;
     const liberado = p.ativo===true && (!fim || fim > new Date());
     const expirado = p.ativo===true && fim && fim <= new Date();
-    _meuAcesso={ate:p.acesso_ate||null, trial:/🎁|teste gr[aá]tis|trial/i.test(p.obs_admin||''), plano:p.plano};
+    _meuAcesso={ate:p.acesso_ate||null, trial:/🎁|teste gr[aá]tis|trial/i.test(p.obs_admin||''), plano:p.plano, recorrente:rec};
     return {ok:liberado, expirado, plano:p.plano};
   }catch(e){ return {ok:true}; } // qualquer erro de rede/coluna: não trava
 }
@@ -5092,6 +5094,7 @@ async function iniciarApp(){
   initTheme();
   if(!_DEMO) try{ mostrarAtalhoHint(); }catch(e){}
   if(!_DEMO) try{ mostrarBannerTrial(); }catch(e){}
+  if(!_DEMO) try{ mostrarBannerRenov(); }catch(e){}
   if(!_DEMO) try{ registrarSWPro(); ativarNotificacoesPro(true); }catch(e){}  // reinscreve em silêncio se já autorizado
   await bootClinica();
 }
@@ -5109,6 +5112,31 @@ function mostrarBannerTrial(){
   b.style.cssText='display:block;background:'+(urg?'linear-gradient(135deg,#FDE9D0,#FAD9AF)':'linear-gradient(135deg,#EAF7EE,#D6EFDD)')+';border-bottom:1px solid '+(urg?'#E8B872':'#B9E2C4')+';padding:9px 16px;font-size:13px;color:#3a3320;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center';
   b.innerHTML='<span>🎁 <b>Teste grátis</b> — '+label+'. Depois, garanta seu acesso pra não perder seus dados.</span>'+
     '<a href="/assinar/" target="_blank" rel="noopener" style="background:#128C4B;color:#fff;text-decoration:none;font-weight:700;padding:5px 14px;border-radius:20px;white-space:nowrap">Assinar agora →</a>';
+}
+// Aviso de vencimento na tela inicial. SÓ para renovação manual/Pix (recorrente
+// não vê, pois renova sozinho). Dá pra fechar; some por este ciclo (por 'ate').
+const _RENOV_JANELA=7; // começa a avisar faltando 7 dias
+function mostrarBannerRenov(){
+  const b=document.getElementById('renov-banner'); if(!b)return;
+  const a=_meuAcesso;
+  if(!a||!a.ate||a.recorrente||a.trial){ b.style.display='none'; b.innerHTML=''; return; }
+  const dias=Math.ceil((new Date(a.ate).getTime()-Date.now())/864e5);
+  if(dias>_RENOV_JANELA || dias<-5){ b.style.display='none'; b.innerHTML=''; return; }
+  try{ if(localStorage.getItem('dr_renovAviso_'+a.ate)==='1'){ b.style.display='none'; return; } }catch(e){}
+  let label, urg=false;
+  if(dias>1) label='Sua assinatura vence em '+dias+' dias';
+  else if(dias===1) label='Sua assinatura vence amanhã';
+  else if(dias===0){ label='Sua assinatura vence hoje'; urg=true; }
+  else { label='Sua assinatura venceu há '+(-dias)+' dia'+((-dias)>1?'s':''); urg=true; }
+  const ico='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="'+(urg?'#B4432B':'#B26A00')+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  b.style.cssText='display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:center;background:'+(urg?'linear-gradient(135deg,#FDE4DC,#F7C9BC)':'linear-gradient(135deg,#FDF1D8,#FAE3B4)')+';border-bottom:1px solid '+(urg?'#E9A48F':'#E8C877')+';padding:9px 36px 9px 16px;font-size:13px;color:#3a2f20;position:relative';
+  b.innerHTML=ico+'<span><b>'+label+'</b>. Renove pra não perder o acesso ao painel e sua presença na Rede.</span>'+
+    '<a href="/assinar/" target="_blank" rel="noopener" style="background:#128C4B;color:#fff;text-decoration:none;font-weight:700;padding:5px 14px;border-radius:20px;white-space:nowrap">Renovar →</a>'+
+    '<button onclick="fecharBannerRenov()" aria-label="Fechar" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;font-size:19px;line-height:1;color:#8a7550;cursor:pointer">&times;</button>';
+}
+function fecharBannerRenov(){
+  try{ if(_meuAcesso&&_meuAcesso.ate) localStorage.setItem('dr_renovAviso_'+_meuAcesso.ate,'1'); }catch(e){}
+  const b=document.getElementById('renov-banner'); if(b){ b.style.display='none'; b.innerHTML=''; }
 }
 // descobre a clínica do profissional (ou pede pra criar/entrar)
 async function bootClinica(){
