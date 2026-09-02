@@ -65,3 +65,11 @@ notify pgrst, 'reload schema';
 -- Testar sem esperar o cron: chame a função uma vez pela linha de comando,
 -- com o header x-cron-secret, ou dispare manualmente pelo painel da função.
 -- Ela devolve um JSON com quantos avisos foram enviados.
+--
+-- ENVIAR PARA TODO O CICLO ATUAL AGORA (este mês, mesmo quem falta mais de 5
+-- dias): chame a função uma vez com o corpo {"modo":"agora"}. Ela antecipa o
+-- aviso pra todos que ainda vão vencer; o "no dia" e o "3 dias depois" seguem
+-- saindo pelo cron normalmente. Exemplo (troque o segredo):
+--   curl -X POST 'https://gnpwaywyexcevtzbwiyq.supabase.co/functions/v1/lembrete-renovacao' \
+--        -H 'x-cron-secret: <CRON_SECRET>' -H 'Content-Type: application/json' \
+--        -d '{"modo":"agora"}'
