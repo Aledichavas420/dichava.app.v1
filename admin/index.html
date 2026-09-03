@@ -1533,6 +1533,7 @@ function libTipoChange(){
   const ms=$('#m-meses'); if(rec&&ms)ms.value='1';
 }
 async function confirmarLiberar(id){
+  const p=PROFS.find(x=>x.id===id);
   let meses=parseInt($('#m-meses').value,10)||0;
   let obs=$('#m-obs').value.trim();
   _libPlano=$('#m-plano').value||null;
@@ -1541,6 +1542,9 @@ async function confirmarLiberar(id){
     const marker='♻️ Recorrente ('+planoNome(_libPlano)+')';
     obs=obs?(marker+' · '+obs):marker;
   }
+  // Boas-vindas só na PRIMEIRA liberação. Se a pessoa já teve acesso antes
+  // (renovação manual do Pix, ou conversão de teste em pago), não reenvia.
+  _skipBoasVindas = !!(p && (p.liberado_em || p.acesso_ate || p.ativo));
   fecharModal();
   await acao(id,'liberar',meses,obs||null);
   _libPlano=null;
