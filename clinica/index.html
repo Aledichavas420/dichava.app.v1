@@ -2417,12 +2417,15 @@ function viewPacientes(){
     .filter(p=>_pacStatus==='todos'?true:(_pacStatus==='inativo'?ehInativo(p):!ehInativo(p)))
     .filter(p=>!q||p.nome.toLowerCase().includes(q)||(p.telefone||'').includes(q)||(p.email||'').toLowerCase().includes(q))
     .sort((a,b)=>a.nome.localeCompare(b.nome));
+  _pacVisIds=list.map(p=>p.id);
+  const allVis=_pacVisIds.length>0 && _pacVisIds.every(id=>_pacSel[id]);
   let rows=list.map(p=>{
     const ultima=DB.agendamentos.filter(a=>a.pacienteId===p.id&&a.status==='atendido').sort((a,b)=>b.data.localeCompare(a.data))[0];
     const prox=DB.agendamentos.filter(a=>a.pacienteId===p.id&&a.data>=todayISO()&&a.status!=='cancelado').sort((a,b)=>a.data.localeCompare(b.data))[0];
     const a=idade(p.nascimento);
     const sit=ehInativo(p)?'<span class="chip g">Inativo</span>':'<span class="chip v">● Ativo</span>';
-    return `<tr onclick="openPaciente('${p.id}')" style="cursor:pointer${ehInativo(p)?';opacity:.62':''}">
+    return `<tr onclick="${_pacSelMode?`togglePacSel('${p.id}')`:`openPaciente('${p.id}')`}" style="cursor:pointer${ehInativo(p)?';opacity:.62':''}${_pacSelMode&&_pacSel[p.id]?';background:rgba(46,155,79,.10)':''}">
+      ${_pacSelMode?`<td style="width:36px;text-align:center"><input type="checkbox" ${_pacSel[p.id]?'checked':''} onclick="event.stopPropagation();togglePacSel('${p.id}')" style="width:17px;height:17px;accent-color:#2E9B4F"></td>`:''}
       <td><div class="cell-user"><div class="avatar">${initials(p.nome)}</div><div><b>${esc(p.nome)}</b><small>${a!=null?a+' anos · ':''}${esc(p.telefone||'sem telefone')}</small></div></div></td>
       <td>${ultima?fmtDate(ultima.data):'—'}</td>
       <td>${prox?`<span class="chip s">${fmtDate(prox.data)} ${prox.hora}</span>`:'<span class="chip g">—</span>'}</td>
@@ -2436,15 +2439,43 @@ function viewPacientes(){
   return `<div class="toolbar">
       <div class="search"><span class="si">⌕</span><input placeholder="Buscar paciente..." value="${esc(filtroPaciente)}" oninput="filtroPaciente=this.value;debouncedPac()"></div>
       ${nLix?`<button class="btn ghost" onclick="abrirLixeira()">🗑️ Lixeira (${nLix})</button>`:''}
+      ${DB.pacientes.length?`<button class="btn ghost" onclick="togglePacMode()">${_pacSelMode?'✕ Cancelar':'☑ Selecionar'}</button>`:''}
       <button class="btn" onclick="formPaciente()">＋ Paciente</button>
     </div>
+    ${_pacSelMode?`<div class="card" style="display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:10px;flex-wrap:wrap">
+      <b style="font-size:13.5px">${pacSelCount()} selecionado(s)</b>
+      <button class="btn ghost sm" onclick="togglePacSelAll()">${allVis?'Limpar seleção':'Selecionar todos'}</button>
+      <span style="flex:1"></span>
+      <button class="btn danger sm" onclick="excluirPacientesSelecionados()"${pacSelCount()?'':' disabled'}>🗑️ Excluir selecionados</button>
+    </div>`:''}
     ${filtros}
     ${list.length?`<div class="card"><div class="tbl-wrap"><table>
-      <thead><tr><th>Paciente</th><th>Última consulta</th><th>Próxima</th><th style="text-align:right">Tags</th></tr></thead>
+      <thead><tr>${_pacSelMode?`<th style="width:36px;text-align:center"><input type="checkbox" ${allVis?'checked':''} onclick="togglePacSelAll()" style="width:17px;height:17px;accent-color:#2E9B4F"></th>`:''}<th>Paciente</th><th>Última consulta</th><th>Próxima</th><th style="text-align:right">Tags</th></tr></thead>
       <tbody>${rows}</tbody></table></div></div>`
     :`<div class="card empty"><div class="big">${CIC.pacientes}</div><b>${filtroPaciente?'Nenhum resultado':'Seus pacientes aparecem aqui 🌱'}</b>${filtroPaciente?'Tente outro termo.':'Cadastre o primeiro ou compartilhe seu link de agendamento pra começar a receber solicitações.'}${filtroPaciente?'':`<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap"><button class="btn sm" onclick="formPaciente()">＋ Cadastrar paciente</button>${CLINICA?`<button class="btn ghost sm" onclick="compartilharMeuLink()">Compartilhar meu link</button>`:''}</div>`}</div>`}`;
 }
 let _pacT; function debouncedPac(){ clearTimeout(_pacT); _pacT=setTimeout(()=>{ if(route==='pacientes') render(); },200); }
+// Seleção múltipla de pacientes (exclusão em massa -> lixeira)
+let _pacSelMode=false, _pacSel={}, _pacVisIds=[];
+function pacSelCount(){ return Object.keys(_pacSel).length; }
+function togglePacMode(){ _pacSelMode=!_pacSelMode; if(!_pacSelMode)_pacSel={}; render(); }
+function togglePacSel(id){ if(_pacSel[id])delete _pacSel[id]; else _pacSel[id]=1; render(); }
+function togglePacSelAll(){
+  const todosMarcados=_pacVisIds.length>0 && _pacVisIds.every(id=>_pacSel[id]);
+  if(todosMarcados){ _pacVisIds.forEach(id=>delete _pacSel[id]); }
+  else { _pacVisIds.forEach(id=>{ _pacSel[id]=1; }); }
+  render();
+}
+function excluirPacientesSelecionados(){
+  const ids=Object.keys(_pacSel); if(!ids.length){ toast('Selecione ao menos um paciente.',2500); return; }
+  if(!confirm('Mover '+ids.length+' paciente(s) para a lixeira?\n\nEles saem da lista, mas continuam recuperáveis por lá. Agendamentos e prontuários não são apagados.')) return;
+  const agora=new Date().toISOString(); DB.lixeira=DB.lixeira||[]; let n=0;
+  ids.forEach(id=>{ const p=pac(id); if(!p)return; p.arquivadoEm=agora; DB.lixeira.push(p); if(prontSelPaciente===id)prontSelPaciente=null; n++; });
+  DB.pacientes=DB.pacientes.filter(x=>!_pacSel[x.id]);
+  logAudit('pacientes_arquivados', n+' paciente(s) em massa');
+  _pacSel={}; _pacSelMode=false;
+  save(); toast(n+' paciente(s) movidos para a lixeira'); render();
+}
 
 /* =============== PRONTUÁRIOS =============== */
 // ── Prontuários privados por profissional (plano Clínica em equipe) ──
