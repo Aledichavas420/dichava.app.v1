@@ -2472,13 +2472,23 @@ function togglePacSelAll(){
 }
 function excluirPacientesSelecionados(){
   const ids=Object.keys(_pacSel); if(!ids.length){ toast('Selecione ao menos um paciente.',2500); return; }
-  if(!confirm('Mover '+ids.length+' paciente(s) para a lixeira?\n\nEles saem da lista, mas continuam recuperáveis por lá. Agendamentos e prontuários não são apagados.')) return;
+  const nomes=ids.map(id=>{const p=pac(id);return p?p.nome:null;}).filter(Boolean);
+  const amostra=nomes.slice(0,6).map(n=>`<li>${esc(n)}</li>`).join('')+(nomes.length>6?`<li>e mais ${nomes.length-6}</li>`:'');
+  openModal(`<div class="modal"><div class="modal-head"><h3>Excluir ${ids.length} paciente(s)?</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="gate-info" style="margin-bottom:10px">Os pacientes selecionados vão para a lixeira. Eles saem da lista, mas continuam recuperáveis por lá. Agendamentos e prontuários não são apagados.</div>
+      <ul style="margin:0 0 2px 18px;font-size:13.5px;color:var(--tx);line-height:1.6">${amostra}</ul>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn danger" onclick="confirmarExclusaoPacientes()">Excluir ${ids.length}</button></div></div>`);
+}
+function confirmarExclusaoPacientes(){
+  const ids=Object.keys(_pacSel); if(!ids.length){ closeModal(); return; }
   const agora=new Date().toISOString(); DB.lixeira=DB.lixeira||[]; let n=0;
   ids.forEach(id=>{ const p=pac(id); if(!p)return; p.arquivadoEm=agora; DB.lixeira.push(p); if(prontSelPaciente===id)prontSelPaciente=null; n++; });
   DB.pacientes=DB.pacientes.filter(x=>!_pacSel[x.id]);
   logAudit('pacientes_arquivados', n+' paciente(s) em massa');
   _pacSel={}; _pacSelMode=false;
-  save(); toast(n+' paciente(s) movidos para a lixeira'); render();
+  save(); closeModal(); toast(n+' paciente(s) movidos para a lixeira'); render();
 }
 
 /* =============== PRONTUÁRIOS =============== */
@@ -3707,7 +3717,7 @@ function abrirLixeira(){
       <button class="btn ghost sm" onclick="restaurarPaciente('${p.id}')">↩︎ Restaurar</button>
       <button class="btn danger ghost sm" onclick="excluirDefinitivo('${p.id}')">Excluir</button>
     </div>`).join(''):'<div class="empty" style="padding:20px">A lixeira está vazia 🌱</div>';
-  openModal(`<div class="modal"><div class="modal-head"><h3>🗑️ Lixeira de pacientes</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>🗑️ Lixeira</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="font-size:12.5px;color:var(--txs);margin-bottom:10px">Pacientes movidos pra cá saem das listas mas continuam recuperáveis. "Excluir" apaga de vez.</div>
       ${linhas}
