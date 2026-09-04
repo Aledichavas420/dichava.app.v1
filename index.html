@@ -1789,6 +1789,20 @@ a{color:inherit;text-decoration:none}
 .insct{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:2px}
 #shell.dkm .insct{color:#E8EDE6}
 .inscx{font-size:12px;color:var(--txs);line-height:1.55}
+/* insights por substância */
+.inssub-wrap{padding:2px 16px 6px}
+.inssub{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--cin)}
+.inssub:first-child{border-top:none}
+.inssub-ic{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.inssub-ic svg,.inssub-ic .appicon{width:28px;height:28px}
+.inssub-b{min-width:0;flex:1}
+.inssub-h{display:flex;align-items:baseline;gap:8px}
+.inssub-n{font-size:14px;font-weight:800;color:var(--dk)}
+#shell.dkm .inssub-n{color:#E8EDE6}
+.inssub-c{font-size:11px;color:var(--txs);font-weight:600;white-space:nowrap}
+.inssub-d{font-size:12px;color:var(--txs);margin-top:2px;line-height:1.5}
+.inssub-d strong{color:var(--dk);font-weight:700}
+#shell.dkm .inssub-d strong{color:#C9B6F0}
 
 /* ── v6: TEMPO SEM USO ── */
 .tsu{display:flex;flex-wrap:wrap;gap:10px;padding:2px 18px 14px}
@@ -8789,6 +8803,26 @@ function distBars(vals,titulo){
   const max=arr[0][1];
   return`<div class="inschart-t">${titulo}</div><div class="inschart">`+arr.map(([k,n])=>`<div class="insbar"><div class="ibl">${esc(k)}</div><div class="ibt"><div class="ibf" style="width:${Math.round(n/max*100)}%"></div></div><div class="ibn">${n}</div></div>`).join('')+`</div>`;
 }
+/* insights separados por substância (sugestão da comunidade): mostra a emoção, o contexto e o gatilho predominantes de cada substância */
+function insightsPorSub(regs){
+  const bySub={};
+  regs.forEach(r=>{const s=r.substancia;if(!s)return;(bySub[s]=bySub[s]||[]).push(r);});
+  const subs=Object.entries(bySub).filter(([,rs])=>rs.length>=2).sort((a,b)=>b[1].length-a[1].length).slice(0,6);
+  if(subs.length<2)return'';
+  const rows=subs.map(([s,rs])=>{
+    const emo=topOf(rs.map(r=>r.emoLabel));
+    const ctx=topOf(rs.map(r=>r.ctx));
+    const gat=topOf(rs.flatMap(r=>r.gatilhos||[]));
+    const ic=(typeof subIcon==='function'&&subIcon(s))||nemSvg(s);
+    const det=[];
+    if(emo)det.push(`Emoção: <strong>${esc(emo.k)}</strong>`);
+    if(ctx)det.push(`Contexto: <strong>${esc(ctx.k)}</strong>`);
+    if(gat)det.push(`Gatilho: <strong>${esc(gat.k)}</strong>`);
+    const dtx=det.length?det.join(' · '):'Registre emoção e contexto para revelar o padrão.';
+    return `<div class="inssub"><div class="inssub-ic">${ic}</div><div class="inssub-b"><div class="inssub-h"><span class="inssub-n">${esc(s)}</span><span class="inssub-c">${rs.length} registro${rs.length>1?'s':''}</span></div><div class="inssub-d">${dtx}</div></div></div>`;
+  }).join('');
+  return `<div class="inschart-t">Por substância · 30 dias</div><div class="inssub-wrap">${rows}</div>`;
+}
 function renderInsights(){
   const c=document.getElementById('insights-l');if(!c)return;
   const corte=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-30);return isoLocal(d)})();
@@ -8820,7 +8854,8 @@ function renderInsights(){
   if(fiss>0)ins.push({i:II.res,t:'Resistências no mês',x:`Você atravessou <strong>${fiss} fissura${fiss>1?'s':''}</strong> sem usar nos últimos 30 dias. Isso é capacidade real e crescente.`});
   const chart=distBars(regs.map(r=>r.substancia),'Substâncias · 30 dias')+distBars(regs.map(r=>r.emoLabel),'Emoções · 30 dias');
   const cards=ins.slice(0,5).map(n=>`<div class="insc"><div class="insci">${n.i}</div><div><div class="insct">${n.t}</div><div class="inscx">${n.x}</div></div></div>`).join('');
-  const full=chart+cards||'<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Continue registrando para gerar insights.</div>';
+  const porSub=insightsPorSub(regs);
+  const full=chart+porSub+cards||'<div style="font-size:13px;color:var(--txm);padding:0 18px 4px">Continue registrando para gerar insights.</div>';
   if(isPremium()){
     c.classList.remove('premgate','locked');c.innerHTML=full;
   }else{
