@@ -228,6 +228,14 @@ tbody tr:hover{background:var(--card2)}
     <div class="sec">⏰ Assinaturas a vencer (próximos 7 dias)</div>
     <div class="plist" id="vencer-list"><div class="empty" style="padding:16px">—</div></div>
 
+    <div class="sec">🔴 Vencidos que continuam ativos</div>
+    <div style="font-size:12.5px;color:var(--txs);margin:-4px 0 8px">Acesso já vencido (com a carência dos recorrentes) mas conta ainda liberada. Quem aparece em vermelho logou <b>depois</b> de vencer.</div>
+    <div id="vencidos-box" class="card" style="padding:14px"><div class="spin"></div></div>
+
+    <div class="sec">🗑️ Perfis excluídos pelo profissional</div>
+    <div style="font-size:12.5px;color:var(--txs);margin:-4px 0 8px">Exclusão definitiva feita pelo próprio profissional. Só resta e-mail, motivo e data.</div>
+    <div id="exclusoes-box" class="card" style="padding:14px"><div class="spin"></div></div>
+
     <div class="sec">Lista de espera <span id="wl-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
     <div id="wl-funnel" class="kpis" style="margin-bottom:10px"></div>
     <div class="filters" id="wl-filters"></div>
@@ -526,6 +534,8 @@ async function carregar(){
     if(error) throw error;
     PROFS=data||[]; renderProfs(); renderReaprovar(); renderFinanceiro(); renderComprovantes(); renderVencer();
   }catch(e){ $('#plist').innerHTML='<div class="empty">Não consegui carregar os profissionais.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small></div>'; }
+  carregarVencidos();
+  carregarExclusoes();
   carregarWaitlist();
   carregarSuporte();
   carregarNewsletterCount();
@@ -1042,6 +1052,51 @@ async function carregarVisitas(){
       + (top.length ? top.map(([p,n])=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:7px 2px;border-bottom:1px solid var(--line);font-size:13px"><span style="min-width:0">${esc(nomes[p]||'Página')} <span style="color:var(--txm);word-break:break-all">${esc(p)}</span></span><b>${n}</b></div>`).join('')
                     : '<div style="color:var(--txm);font-size:13px;padding:6px">Sem visitas ainda.</div>');
   }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Não consegui carregar as visitas. Rodou o visitas-setup.sql?</div>'; }
+}
+// ===== VENCIDOS QUE CONTINUAM ATIVOS =====
+async function carregarVencidos(){
+  const box=$('#vencidos-box'); if(!box) return;
+  try{
+    const {data,error}=await SB.rpc('admin_vencidos_ativos');
+    if(error) throw error;
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:6px">Ninguém vencido com a conta ainda ativa. 🎉</div>'; return; }
+    const usando=rows.filter(r=>r.logou_apos_vencer).length;
+    const tipoLbl={recorrente:'Recorrente',teste:'Teste','pix/avulso':'Pix/avulso'};
+    box.innerHTML=
+      `<div style="font-size:12px;color:var(--txm);margin-bottom:8px">${rows.length} vencido(s) com conta ativa · <b style="color:#C62828">${usando} logaram depois de vencer</b></div>`
+      + rows.map(r=>{
+        const on=r.logou_apos_vencer;
+        const ult=r.ultimo_login?fmtData(r.ultimo_login):'nunca logou';
+        return `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 2px;border-bottom:1px solid var(--line)">
+          <div style="min-width:0">
+            <div style="font-weight:700;font-size:13.5px">${esc(r.nome||'—')} ${on?'<span style="color:#C62828">●</span>':''}</div>
+            <div style="font-size:11.5px;color:var(--txm);word-break:break-all">${esc(r.email||'')}</div>
+            <div style="font-size:11.5px;color:var(--txs);margin-top:2px">${tipoLbl[r.tipo]||r.tipo} · venceu há ${r.dias_vencido} dia(s) · último acesso: ${ult}</div>
+          </div>
+          <button class="btn sm ghost" onclick="abrirDetalheProf('${r.id}')" style="flex-shrink:0">Abrir</button>
+        </div>`;
+      }).join('');
+  }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Não consegui carregar. Rodou o admin-consultas-setup.sql?</div>'; }
+}
+// ===== PERFIS EXCLUÍDOS PELO PROFISSIONAL =====
+async function carregarExclusoes(){
+  const box=$('#exclusoes-box'); if(!box) return;
+  try{
+    const {data,error}=await SB.rpc('admin_conta_exclusoes');
+    if(error) throw error;
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:6px">Nenhuma exclusão registrada.</div>'; return; }
+    box.innerHTML=
+      `<div style="font-size:12px;color:var(--txm);margin-bottom:8px">${rows.length} exclusão(ões) no total</div>`
+      + rows.map(r=>`<div style="padding:9px 2px;border-bottom:1px solid var(--line)">
+          <div style="display:flex;justify-content:space-between;gap:10px">
+            <b style="font-size:13.5px;word-break:break-all">${esc(r.email||'—')}</b>
+            <span style="font-size:11.5px;color:var(--txs);white-space:nowrap">${fmtData(r.criado_em)}</span>
+          </div>
+          ${r.motivo?`<div style="font-size:12.5px;color:var(--txs);margin-top:3px;white-space:pre-wrap">"${esc(r.motivo)}"</div>`:'<div style="font-size:12px;color:var(--txm);margin-top:3px">sem motivo informado</div>'}
+        </div>`).join('');
+  }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Não consegui carregar. Rodou o admin-consultas-setup.sql?</div>'; }
 }
 function renderKpis(s){
   s=s||{};
