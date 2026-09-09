@@ -1656,7 +1656,7 @@ function gcalUrl(i, area){
   const enc=encodeURIComponent;
   const text=(i.titulo||'Encontro')+' - Rede dichava';
   const det=((i.sub?i.sub+' - ':'')+'Encontro da Rede dichava.');
-  let dates; const hm=/(\d{1,2})h(\d{0,2})/.exec(i.hora||'');
+  let dates; const hm=/(\d{1,2})\s*(?:h|:)?\s*(\d{0,2})/.exec(i.hora||'');
   if(hm){ const h=+hm[1], mi=hm[2]?+hm[2]:0; const s=new Date(Y,M-1,D,h,mi); const e=new Date(s.getTime()+dur*60000);
     const f=d=>''+d.getFullYear()+_pad2(d.getMonth()+1)+_pad2(d.getDate())+'T'+_pad2(d.getHours())+_pad2(d.getMinutes())+'00';
     dates=f(s)+'/'+f(e);
@@ -1667,6 +1667,11 @@ function gcalUrl(i, area){
 function fmtDataExt(iso){ const d=new Date(iso+'T12:00:00'); const dias=['dom','seg','ter','qua','qui','sex','sáb'];
   const mm=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
   return dias[d.getDay()]+', '+d.getDate()+' de '+mm[d.getMonth()]; }
+// deixa o horário legível: "19" -> "19h", "19:00" -> "19h00", "19h" -> "19h"
+function fmtHora(h){ h=String(h||'').trim(); if(!h) return '';
+  const m=/^(\d{1,2})\s*(?:h|:)?\s*(\d{0,2})$/.exec(h);
+  if(!m) return h;
+  return m[1]+'h'+(m[2]?m[2].padStart(2,'0'):''); }
 function proxDestaque(){ let hoje; try{hoje=todayISO();}catch(e){hoje='';}
   const all=[];
   MURAL.forEach(m=>(m.itens||[]).forEach(i=>{ if(i&&i.data) all.push(Object.assign({},i,{area:m.k,areaNome:m.t,ic:m.ic,tint:m.tint})); }));
@@ -1681,7 +1686,7 @@ function redeHome(){
   const dq=proxDestaque();
   const destaque=dq?`<button class="rede-destaque" onclick="abrirMural('${dq.area}')">
       <span class="rd-data"><b>${fmtDMural(dq.data).dia}</b><span>${fmtDMural(dq.data).mes}</span></span>
-      <span class="rd-body"><span class="rd-tag">Em destaque</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+esc(dq.hora):''} · ${fmtDataExt(dq.data)}</span></span>
+      <span class="rd-body"><span class="rd-tag">Em destaque</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+fmtHora(dq.hora):''} · ${fmtDataExt(dq.data)}</span></span>
       <span class="rd-go">›</span></button>`:'';
   const mural=MURAL.map(m=>{ const px=muralProx(m); const pb=px?fmtDMural(px):null;
     const badge=pb?`<span class="mural-badge on">${pb.dia} ${pb.mes}</span>`:((m.itens&&m.itens.length)?`<span class="mural-badge on">${m.itens.length} novo${m.itens.length>1?'s':''}</span>`:`<span class="mural-badge">Em breve</span>`);
@@ -1721,7 +1726,7 @@ function abrirMural(k){
   const corpo=itens.length?(
     `<div class="rede-sec-h" style="margin:20px 2px 8px">Escolha os encontros <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--txm)">(pode marcar mais de um)</span></div><div class="mural-itens">`+
     itens.map((i,idx)=>{ const f=fmtDMural(i.data); return `<div class="mitem sel" onclick="_toggleMi(this,event)"><input type="checkbox" class="mi-chk" data-i="${idx}" onclick="event.stopPropagation()"><div class="mitem-data"><b>${f.dia}</b><span>${f.mes}</span></div>
-      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${i.hora?esc(i.hora)+' · ':''}${esc(i.sub||'')}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Adicionar ao Google Agenda</a></div>
+      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${[fmtHora(i.hora),fmtDataExt(i.data)].filter(Boolean).join(' · ')}${i.sub?' · '+esc(i.sub):''}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Adicionar ao Google Agenda</a></div>
       ${i.tag?`<span class="mitem-tag">${esc(i.tag)}</span>`:''}</div>`; }).join('')+`</div>`+
     `<button class="btn" style="width:100%;justify-content:center;margin-top:16px" onclick="confirmarInteresse()">Confirmar interesse</button>`+
     `<p style="font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px">Marque os encontros que quer participar que a gente confirma sua vaga e te avisa.</p>`
@@ -5200,7 +5205,7 @@ async function mostrarBannerEvento(){
   b.innerHTML=`<div style="position:relative">
     <div class="rede-destaque" style="margin:0" onclick="abrirMural('${dq.area}')">
       <span class="rd-data"><b>${f.dia}</b><span>${f.mes}</span></span>
-      <span class="rd-body"><span class="rd-tag">Novo na rede</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+esc(dq.hora):''} · ${fmtDataExt(dq.data)}</span><span class="ev-cta">Toque para confirmar presença</span></span>
+      <span class="rd-body"><span class="rd-tag">Novo na rede</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+fmtHora(dq.hora):''} · ${fmtDataExt(dq.data)}</span><span class="ev-cta">Toque para confirmar presença</span></span>
       <span class="rd-go">›</span>
     </div>
     <button class="ev-x" onclick="event.stopPropagation();fecharBannerEvento('${chave}')" aria-label="Fechar">&times;</button>
