@@ -1672,13 +1672,9 @@ function fmtHora(h){ h=String(h||'').trim(); if(!h) return '';
   const m=/^(\d{1,2})\s*(?:h|:)?\s*(\d{0,2})$/.exec(h);
   if(!m) return h;
   return m[1]+'h'+(m[2]?m[2].padStart(2,'0'):''); }
-function proxDestaque(){ let hoje; try{hoje=todayISO();}catch(e){hoje='';}
-  const all=[];
-  MURAL.forEach(m=>(m.itens||[]).forEach(i=>{ if(i&&i.data) all.push(Object.assign({},i,{area:m.k,areaNome:m.t,ic:m.ic,tint:m.tint})); }));
-  if(!all.length) return null;
-  all.sort((a,b)=>a.data.localeCompare(b.data));
-  const fut=all.filter(x=>x.data>=hoje);
-  return fut.length ? fut[0] : all[all.length-1]; }
+function proxDestaque(){ let hoje; try{hoje=todayISO();}catch(e){hoje='';} let best=null;
+  MURAL.forEach(m=>(m.itens||[]).forEach(i=>{ if(i.data>=hoje){ if(!best||i.data<best.data) best=Object.assign({},i,{area:m.k,areaNome:m.t,ic:m.ic,tint:m.tint}); } }));
+  return best; }
 function redeHome(){
   try{carregarRedeEventos();}catch(e){}
   const heroMark=cicUniq(`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#fff" stroke-width="1.5" opacity=".92"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#fff"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>`);
