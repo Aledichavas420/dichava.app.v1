@@ -2890,6 +2890,10 @@ a{color:inherit;text-decoration:none}
     <div class="cfgi" id="row-termos-assinatura" onclick="openDoc('assinatura')"><div class="cfgic">💳</div><div class="cfgb"><div class="cfgn">Termos da Assinatura Premium</div><div class="cfgd">Cancelamento, reembolso e arrependimento (7 dias)</div></div><div class="cfgar">›</div></div>
     <div class="cfgi" onclick="openDoc('ciencia')"><div class="cfgic">🔬</div><div class="cfgb"><div class="cfgn">Base científica e ética</div><div class="cfgd">O que embasa a construção do app</div></div><div class="cfgar">›</div></div>
   </div>
+  <div class="shr"><div class="sht">Zona de risco</div></div>
+  <div class="cfgsec">
+    <div class="cfgi dan" onclick="abrirResetar()"><div class="cfgic">🧹</div><div class="cfgb"><div class="cfgn">Resetar meus dados</div><div class="cfgd">Apaga registros, metas e histórico. Mantém sua conta.</div></div><div class="cfgar">›</div></div>
+  </div>
   <div class="avcli"><div class="avclic">🌿</div><div class="avclx"><strong>Este app é um recurso complementar.</strong> Ele apoia — mas não substitui — o acompanhamento com um profissional de saúde.</div></div>
   <div class="cfgsec" style="margin-bottom:20px"><div class="cfgi dan" onclick="logout()"><div class="cfgic" data-icon="cfg-sair"></div><div class="cfgb"><div class="cfgn">Sair da conta</div></div></div></div>
 </div>
@@ -3602,6 +3606,17 @@ a{color:inherit;text-decoration:none}
   <div class="fld"><div class="lbl">Nova senha</div><div class="pwwrap"><input class="inp" id="rec-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="rec-pw-e">Senha muito fraca.</div></div>
   <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="rec-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw2',this)"></button></div><div class="em" id="rec-pw2-e">As senhas não conferem.</div></div>
   <button class="btn bv bfull" onclick="salvarNovaSenha()" style="margin-top:6px">Salvar nova senha 💚</button>
+</div></div></div>
+
+<!-- RESETAR DADOS (mantém a conta; pede senha) -->
+<div class="ov" id="mreset" onclick="if(event.target===this)closeMod('mreset')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <div style="font-size:30px;text-align:center;margin-bottom:6px">🧹</div>
+  <div class="mt c">Resetar meus dados</div>
+  <div class="mb c" style="margin-bottom:14px">Isso apaga <b>todos os seus registros, metas, diário, finanças e histórico</b>, aqui e na nuvem. Sua conta e seu login continuam. <b>Não dá para desfazer.</b></div>
+  <button class="btn bout bfull" onclick="closeMod('mreset');backupJSON()" style="margin-bottom:12px">↓ Baixar backup antes</button>
+  <div class="fld"><div class="lbl">Digite sua senha para confirmar</div><div class="pwwrap"><input class="inp" id="reset-pw" type="password" placeholder="Sua senha" autocomplete="current-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('reset-pw',this)"></button></div><div class="em" id="reset-pw-e">Senha incorreta.</div></div>
+  <button class="btn bfull" id="reset-btn" onclick="confirmarResetar()" style="margin-top:6px;background:#C62828;color:#fff">Apagar meus dados</button>
 </div></div></div>
 
 <!-- PEDIR NOTIFICAÇÕES (primeiro acesso) -->
@@ -4578,6 +4593,34 @@ async function salvarNovaSenha(){
   }catch(err){e1.textContent='Não consegui salvar. Tente novamente.';e1.classList.add('on');}
 }
 if(_SB&&_SB.auth&&_SB.auth.onAuthStateChange){try{_SB.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY')novaSenhaFlow();});}catch(_){}}
+function abrirResetar(){
+  if(typeof U==='undefined'||!U||U.id==='demo'){toast('Disponível só na sua conta.');return;}
+  const el=document.getElementById('reset-pw'); if(el)el.value='';
+  const er=document.getElementById('reset-pw-e'); if(er)er.classList.remove('on');
+  openMod('mreset'); try{aplicarIcones(document.getElementById('mreset'));}catch(e){}
+}
+async function confirmarResetar(){
+  const pwEl=document.getElementById('reset-pw'), er=document.getElementById('reset-pw-e');
+  const pw=(pwEl&&pwEl.value)||''; if(er)er.classList.remove('on');
+  if(!pw){ if(er){er.textContent='Digite sua senha.';er.classList.add('on');} shk(pwEl); return; }
+  if(!_SB||typeof U==='undefined'||!U){ toast('Indisponível offline.'); return; }
+  const btn=document.getElementById('reset-btn'); if(btn){btn.disabled=true;btn.textContent='Verificando…';}
+  try{
+    const {error:errPw}=await _SB.auth.signInWithPassword({email:U.email,password:pw});
+    if(errPw){ if(er){er.textContent='Senha incorreta.';er.classList.add('on');} shk(pwEl); if(btn){btn.disabled=false;btn.textContent='Apagar meus dados';} return; }
+    if(btn) btn.textContent='Apagando…';
+    // esvazia o backup na nuvem (blob em registros.dados)
+    try{ await _SB.from('registros').update({dados:{}}).eq('user_id',U.id); }catch(e){}
+    // apaga os dados locais desta conta (mantém a sessão/login)
+    try{ Object.keys(localStorage).filter(k=>k.startsWith('dr_')&&k.indexOf(U.id)!==-1&&k!=='dr_session').forEach(k=>localStorage.removeItem(k)); }catch(e){}
+    closeMod('mreset'); try{vib([20,40,20]);}catch(e){}
+    toast('✓ Seus dados foram resetados. Recomeçando… 💚');
+    setTimeout(()=>{ location.href=location.pathname; }, 1000);
+  }catch(e){
+    if(er){er.textContent='Não consegui resetar agora. Tente de novo.';er.classList.add('on');}
+    if(btn){btn.disabled=false;btn.textContent='Apagar meus dados';}
+  }
+}
 
 let U=null,_eReg=null,_eFiss=null,_eCmp=null;
 let _acct='user';
