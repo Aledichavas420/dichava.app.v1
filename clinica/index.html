@@ -801,7 +801,7 @@ body.has-demo-banner{padding-bottom:64px}
   <aside class="sidebar">
     <div class="brand">
       <div class="logo"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></div>
-      <div><b>dichava</b><small>Painel da clínica</small><button class="beta-chip" onclick="abrirSuporteProf()" title="Enviar feedback">Beta</button></div>
+      <div><b>dichava</b><small>Painel da clínica</small></div>
     </div>
     <a class="nav-item" data-nav="dash"><span class="ic">◧</span> Visão geral</a>
     <a class="nav-item" data-nav="agenda"><span class="ic">◷</span> Agenda <span class="badge" id="badge-agenda"></span></a>
@@ -829,8 +829,7 @@ body.has-demo-banner{padding-bottom:64px}
         <h1 id="pg-title">Visão geral</h1>
         <div class="sub" id="pg-sub"></div>
       </div>
-      <button class="beta-chip" onclick="abrirSuporteProf()" title="Enviar feedback">Beta</button>
-      <span id="save-dot"></span>
+            <span id="save-dot"></span>
       <a id="assinar-top" href="/assinar/" target="_blank" rel="noopener" title="Assinar um plano" style="display:none;align-items:center;gap:5px;background:linear-gradient(135deg,#F5A623,#E8890B);color:#fff;font-weight:800;font-size:13px;padding:8px 13px;border-radius:12px;text-decoration:none;white-space:nowrap;flex-shrink:0;box-shadow:0 6px 14px -6px rgba(232,137,11,.7)">✨ Assinar</a>
       <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
       <button class="btn" id="quick-add">＋ Novo</button>
@@ -2274,8 +2273,10 @@ async function renderChecklist(){
   let notifOk=false; try{ notifOk=await pushProAtivo(); }catch(e){}
   let linkOk=false; try{ linkOk=localStorage.getItem('dr_link_shared_'+AUTH.id)==='1'; }catch(e){}
   // passos do agendamento online só aparecem em planos que têm o recurso (Profissional/Clínica)
+  const temPaciente = !!(typeof DB!=='undefined' && DB && Array.isArray(DB.pacientes) && DB.pacientes.length>0);
   const passos=[
     {ok:perfilOk, t:'Complete seu perfil público', d:'Foto, bio, especialidades e valor', act:"go('perfil')", cta:'Completar'},
+    {ok:temPaciente, t:'Cadastre seu primeiro paciente', d:'Comece a usar o painel no dia a dia', act:"formPaciente()", cta:'Cadastrar'},
   ];
   if(temAgenda){
     passos.push({ok:dispOk, t:'Defina sua disponibilidade', d:'Os horários que o paciente pode escolher', act:"go('config')", cta:'Definir'});
