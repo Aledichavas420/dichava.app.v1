@@ -266,6 +266,9 @@ tbody tr:hover{background:var(--cin)}
 .field input[type=date],.field input[type=time]{-webkit-appearance:none;appearance:none}
 :root[data-theme="dark"] .field input,:root[data-theme="dark"] .field select,:root[data-theme="dark"] .field textarea{background:var(--cin)}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--v);background:var(--card)}
+/* a11y: indicador de foco visível só para teclado (não afeta clique/toque) */
+:focus-visible{outline:2px solid var(--v,#1E6B3A);outline-offset:2px}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--v,#1E6B3A);outline-offset:1px}
 .field textarea{resize:vertical;min-height:80px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
@@ -831,7 +834,7 @@ body.has-demo-banner{padding-bottom:64px}
       </div>
             <span id="save-dot"></span>
       <a id="assinar-top" href="/assinar/" target="_blank" rel="noopener" title="Assinar um plano" style="display:none;align-items:center;gap:5px;background:linear-gradient(135deg,#F5A623,#E8890B);color:#fff;font-weight:800;font-size:13px;padding:8px 13px;border-radius:12px;text-decoration:none;white-space:nowrap;flex-shrink:0;box-shadow:0 6px 14px -6px rgba(232,137,11,.7)">✨ Assinar</a>
-      <button class="icon-btn" id="theme-btn" title="Tema">◐</button>
+      <button aria-label="Alternar tema" class="icon-btn" id="theme-btn" title="Tema">◐</button>
       <button class="btn" id="quick-add">＋ Novo</button>
     </div>
     <div id="trial-banner" style="display:none"></div>
@@ -1008,7 +1011,7 @@ function pintarIconesClinica(){
 function abrirMaisMenu(){
   const items=[].concat(REDE_VISIVEL?[['rede','Rede']]:[],[['divulgacao','Divulgação'],['prontuarios','Prontuários'],['documentos','Documentos'],['contratos','Contratos'],['caixa','Caixa'],['projecao','Projeção'],['equipe','Equipe'],['perfil','Meu perfil'],['config','Configurações']]);
   const supIc=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cic-sup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC463"/><stop offset="1" stop-color="#F5871F"/></linearGradient></defs><path d="M12 2.6a9 9 0 0 0-9 9v4.2a2.4 2.4 0 0 0 2.4 2.4H7v-6.6H5.2A6.8 6.8 0 0 1 18.8 12H17V18h1.2A2.4 2.4 0 0 0 21 15.6V11.6a9 9 0 0 0-9-9Z" fill="url(#cic-sup)"/><path d="M17 18v.6a2.6 2.6 0 0 1-2.6 2.6H12" fill="none" stroke="url(#cic-sup)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
-  openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>Mais</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="padding-top:8px"><div class="mais-grid">
       ${items.map(([r,nome])=>`<button class="mais-item" onclick="closeModal();go('${r}')"><span class="mais-ic">${cicUniq(CIC[r]||'')}</span><span>${nome}</span></button>`).join('')}
       <button class="mais-item" onclick="closeModal();abrirSuporteProf()"><span class="mais-ic">${cicUniq(supIc)}</span><span>Suporte <span class="badge" id="badge-sup-m" style="display:none"></span></span></button>
@@ -1729,7 +1732,7 @@ function abrirMural(k){
     `<div class="mural-info" style="text-align:center;margin-top:16px">Em breve. Assim que os próximos encontros forem marcados, aparecem aqui e a gente avisa pelo painel.</div>`
   );
   const info=m.info?`<div class="mural-info">${esc(m.info)}</div>`:'';
-  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>${esc(m.t)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>${esc(m.t)}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;justify-content:center;margin-bottom:10px"><span class="mural-ic lg" style="background:${m.tint}">${redeIco(m.ic)}</span></div>
       <p style="font-size:14px;line-height:1.6;color:var(--txs);text-align:center;margin:0">${esc(m.d)}</p>
@@ -1777,7 +1780,7 @@ function listaBiblioteca(){
 function abrirLivro(si,li){
   const s=ESTANTE[si]; const l=s&&s.livros[li]; if(!l)return;
   const meta=[l.a, l.ed, l.lang].filter(Boolean).join(' · ');
-  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>Sugestão de leitura</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal" style="max-width:460px"><div class="modal-head"><h3>Sugestão de leitura</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="livro-hero">${_capa(s,l,true)}</div>
       <div style="text-align:center;margin-top:16px"><b style="font-size:16px;line-height:1.25;display:block">${esc(l.t)}</b>
@@ -1953,7 +1956,7 @@ async function instalarApp(){
     return;
   }
   const iOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  openModal(`<div class="modal"><div class="modal-head"><h3>Adicionar à tela inicial</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>Adicionar à tela inicial</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="font-size:14px;line-height:1.6;color:var(--txs)">
       ${iOS?`<p>No iPhone, use o <b>Safari</b>. Se você abriu pelo link de dentro do WhatsApp ou Instagram, toque nos três pontos e em "Abrir no navegador".</p>
         <ol style="margin:12px 0 0 18px;padding:0;display:flex;flex-direction:column;gap:8px">
@@ -1975,7 +1978,7 @@ async function instalarApp(){
 function abrirExcluirConta(){
   if(_DEMO){ toast('Não disponível na demonstração.',1); return; }
   if(!_SB||!AUTH){ toast('Sem conexão.',1); return; }
-  openModal(`<div class="modal"><div class="modal-head"><h3 style="color:var(--er,#C62828)">Excluir minha conta</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3 style="color:var(--er,#C62828)">Excluir minha conta</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="font-size:14px;line-height:1.6;color:var(--txs)">
       <div style="background:#FFF0F0;border:1px solid #f2c7c7;border-radius:12px;padding:12px 14px;margin-bottom:14px;color:#8a2b2b">
         <b>Esta ação é permanente e não pode ser desfeita.</b><br>
@@ -2016,14 +2019,14 @@ async function confirmarExcluirConta(){
 async function abrirCodigosPremium(){
   const caps=meusCaps();
   if(!caps.codigos){
-    openModal(`<div class="modal"><div class="modal-head"><h3>Códigos premium</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    openModal(`<div class="modal"><div class="modal-head"><h3>Códigos premium</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
       <div class="modal-body"><div class="card" style="text-align:center;padding:22px">
         <div style="font-size:15px;font-weight:800;margin-bottom:8px">Recurso dos planos Profissional e Clínica ✨</div>
         <p style="color:var(--txs);font-size:13.5px">Presenteie seus pacientes com o <b>dichava premium</b>. O plano <b>Profissional</b> inclui 10 códigos e o <b>Clínica</b>, 25. Faça um upgrade pra liberar.</p>
       </div></div></div>`);
     return;
   }
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>Códigos premium</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>Códigos premium</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" id="cod-body"><div class="card empty"><span class="spin" style="border-color:var(--cinm);border-top-color:var(--v)"></span></div></div></div>`);
   try{
     const {data,error}=await _SB.rpc('gerar_codigos_premium');
@@ -2098,7 +2101,7 @@ const SUP_FAQ=[
 ];
 function abrirSuporteProf(){
   if(!_SB||!AUTH){ toast('Sem conexão',1); return; }
-  openModal(`<div class="modal"><div class="modal-head"><div class="avatar" style="background:linear-gradient(135deg,#FFC463,#F5871F);color:#fff">S</div><div style="flex:1"><h3 style="margin:0">Central de ajuda</h3><div style="font-size:12px;color:var(--txm)">dichava · pré-atendimento</div></div><button class="icon-btn" onclick="fecharSuporteProf()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><div class="avatar" style="background:linear-gradient(135deg,#FFC463,#F5871F);color:#fff">S</div><div style="flex:1"><h3 style="margin:0">Central de ajuda</h3><div style="font-size:12px;color:var(--txm)">dichava · pré-atendimento</div></div><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="fecharSuporteProf()">✕</button></div>
     <div id="sup-root"></div></div>`);
   supHome();
 }
@@ -2286,7 +2289,7 @@ async function renderChecklist(){
   const feitos=passos.filter(p=>p.ok).length;
   if(feitos===passos.length){ try{localStorage.setItem('dr_checklist_done_'+AUTH.id,'1');}catch(e){} box.innerHTML=''; return; }
   box.innerHTML=`<div class="card ck-card">
-    <div class="ck-head"><div><b>Comece por aqui 🌱</b><span>${feitos} de ${passos.length} concluídos</span></div><button class="ck-x" onclick="fecharChecklist()" title="Dispensar">✕</button></div>
+    <div class="ck-head"><div><b>Comece por aqui 🌱</b><span>${feitos} de ${passos.length} concluídos</span></div><button aria-label="Fechar" class="ck-x" onclick="fecharChecklist()" title="Dispensar">✕</button></div>
     <div class="ck-bar"><div class="ck-fill" style="width:${Math.round(feitos/passos.length*100)}%"></div></div>
     <div class="ck-list">${passos.map(p=>`<div class="ck-item ${p.ok?'done':''}">
       <span class="ck-tick">${p.ok?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg>':''}</span>
@@ -2312,9 +2315,9 @@ function viewAgenda(){
   else { label=(agendaDay===todayISO()?'Hoje, ':'')+fmtDateLong(agendaDay); }
   const toolbar=`<div class="toolbar">
       <div class="daynav">
-        <button class="icon-btn" onclick="shiftAgenda(-1)">‹</button>
+        <button aria-label="Período anterior" title="Período anterior" class="icon-btn" onclick="shiftAgenda(-1)">‹</button>
         <b>${label}</b>
-        <button class="icon-btn" onclick="shiftAgenda(1)">›</button>
+        <button aria-label="Próximo período" title="Próximo período" class="icon-btn" onclick="shiftAgenda(1)">›</button>
       </div>
       <button class="btn sm ghost" onclick="agendaDay=todayISO();render()">Hoje</button>
       <input type="date" value="${agendaDay}" onchange="agendaDay=this.value;render()" style="padding:9px 12px;border-radius:11px;border:1.5px solid var(--line);background:var(--card)">
@@ -2480,7 +2483,7 @@ function excluirPacientesSelecionados(){
   const ids=Object.keys(_pacSel); if(!ids.length){ toast('Selecione ao menos um paciente.',2500); return; }
   const nomes=ids.map(id=>{const p=pac(id);return p?p.nome:null;}).filter(Boolean);
   const amostra=nomes.slice(0,6).map(n=>`<li>${esc(n)}</li>`).join('')+(nomes.length>6?`<li>e mais ${nomes.length-6}</li>`:'');
-  openModal(`<div class="modal"><div class="modal-head"><h3>Excluir ${ids.length} paciente(s)?</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>Excluir ${ids.length} paciente(s)?</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="gate-info" style="margin-bottom:10px">Os pacientes selecionados vão para a lixeira. Eles saem da lista, mas continuam recuperáveis por lá. Agendamentos e prontuários não são apagados.</div>
       <ul style="margin:0 0 2px 18px;font-size:13.5px;color:var(--tx);line-height:1.6">${amostra}</ul>
@@ -2700,7 +2703,7 @@ function escSpark(k,arr){
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" style="margin-top:6px" preserveAspectRatio="none"><path d="${path}" fill="none" stroke="var(--v)" stroke-width="2"/>${dots}</svg>`;
 }
 function escolherEscala(pid){
-  openModal(`<div class="modal"><div class="modal-head"><h3>Escolha a escala</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>Escolha a escala</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body"><div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
       ${Object.keys(ESCALAS).map(k=>`<div class="card" style="padding:14px;cursor:pointer;border-left:3px solid var(--v)" onclick="formEscala('${pid}','${k}')"><b>${ESCALAS[k].nome}</b><div style="font-size:12px;color:var(--txs);margin-top:3px">${ESCALAS[k].sub}</div></div>`).join('')}
     </div>
@@ -2711,7 +2714,7 @@ function escolherEscala(pid){
 function escItens(ek){const E=ESCALAS[ek];return E.itens.map(it=>{ if(E.simnao)return {q:it.q,ops:[['Não',it.rev?1:0],['Sim',it.rev?0:1]]}; if(E.peritem)return {q:it.q,ops:it.ops}; return {q:it,ops:E.ops}; });}
 function formEscala(pid,ek){
   const E=ESCALAS[ek],itens=escItens(ek);
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>${esc(E.nome)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${esc(E.nome)}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="font-size:12.5px;color:var(--txs);margin-bottom:6px">${esc(E.sub)} · <b>${esc(pacNome(pid))}</b></div>
       ${E.ref?`<div style="font-size:11.5px;color:var(--txm);background:var(--cin);border-radius:10px;padding:9px 11px;margin-bottom:12px">${esc(E.ref)}</div>`:''}
@@ -2736,7 +2739,7 @@ function salvarEscala(pid,ek){
 }
 function verEscala(id){
   const av=(DB.avaliacoes||[]).find(a=>a.id===id);if(!av)return;const E=ESCALAS[av.escala];
-  openModal(`<div class="modal"><div class="modal-head"><h3>${E.nome} · ${fmtDate(av.data)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>${E.nome} · ${fmtDate(av.data)}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       ${(()=>{const it=escInterpret(av);return `<div style="text-align:center;margin-bottom:14px"><div style="font-size:34px;font-weight:800;color:${it.cor}">${av.score}<span style="font-size:15px;color:var(--txm)">/${escMax(av.escala)}</span></div><div style="font-weight:700;color:${it.cor}">${esc(it.rotulo)}</div></div>`;})()}
       <p style="font-size:12px;color:var(--txs)">Paciente: <b>${esc(pacNome(av.pacienteId))}</b></p>
@@ -2778,14 +2781,14 @@ function viewCaixa(){
     <td><b>${esc(f.descricao||f.categoria)}</b>${f.categoria&&f.descricao?`<br><small style="color:var(--txs)">${esc(f.categoria)}</small>`:''}</td>
     <td>${PAG[f.formaPagamento]||f.formaPagamento||'—'}</td>
     <td class="mono" style="text-align:right;font-weight:800;color:${f.tipo==='entrada'?'var(--ve)':'var(--er)'}">${f.tipo==='entrada'?'+':'−'}${brl(f.valor).replace('R$ ','')}</td>
-    <td style="text-align:right"><button class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;border:none;background:transparent" onclick="delFinanceiro('${f.id}')" title="Excluir"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Z" fill="#9AA3AD"/><path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 8Z" fill="#C0616B"/><g stroke="#fff" stroke-width="1.2"><path d="M10 11v7M14 11v7"/></g></svg></button></td>
+    <td style="text-align:right"><button aria-label="Excluir" class="icon-btn" style="width:32px;height:32px;font-size:14px;box-shadow:none;border:none;background:transparent" onclick="delFinanceiro('${f.id}')" title="Excluir"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Z" fill="#9AA3AD"/><path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 8Z" fill="#C0616B"/><g stroke="#fff" stroke-width="1.2"><path d="M10 11v7M14 11v7"/></g></svg></button></td>
   </tr>`).join('');
 
   return `<div class="toolbar">
       <div class="daynav">
-        <button class="icon-btn" onclick="shiftMes(-1)">‹</button>
+        <button aria-label="Mês anterior" title="Mês anterior" class="icon-btn" onclick="shiftMes(-1)">‹</button>
         <b style="min-width:150px">${label}</b>
-        <button class="icon-btn" onclick="shiftMes(1)">›</button>
+        <button aria-label="Próximo mês" title="Próximo mês" class="icon-btn" onclick="shiftMes(1)">›</button>
       </div>
       <div class="grow"></div>
       <button class="btn ghost sm" onclick="formFinanceiro('saida')">＋ Saída</button>
@@ -3124,7 +3127,7 @@ function formDocumento(tipo,id){
   else if(tipo==='atestado') campos=`<div class="row2"><div class="field"><label>Dias de afastamento</label><input id="d-dias" type="number" value="${esc(d.dias||'1')}"></div><div class="field"><label>CID (opcional)</label><input id="d-cid" value="${esc(d.cid||'')}" placeholder="vazio = sigilo"></div></div><div class="field"><label>Observação (opcional)</label><textarea id="d-obs">${esc(d.obs||'')}</textarea></div>`;
   else if(tipo==='parecer') campos=`<div class="field"><label>Modelo por especialidade <span style="color:var(--txm);font-weight:400">(opcional — preenche um texto-base)</span></label><select id="d-modelo" onchange="aplicarModeloEsp()"><option value="">— começar do zero —</option>${MODELOS_ESP.map(m=>`<option value="${m.k}">${esc(m.esp)} · ${esc(m.titulo)}</option>`).join('')}</select></div><div class="field"><label>Título</label><input id="d-titulo" value="${esc(d.titulo||'Parecer técnico')}"></div><div class="field"><label>Conteúdo</label><textarea id="d-texto" style="min-height:180px" placeholder="Descreva o parecer/relatório... ou escolha um modelo acima.">${esc(d.texto||'')}</textarea></div>`;
   else if(tipo==='encaminhamento') campos=`<div class="field"><label>Encaminhar para</label><input id="d-para" value="${esc(d.para||'')}" placeholder="Ex.: Psiquiatria, CAPS, Nutrição"></div><div class="field"><label>Motivo</label><textarea id="d-motivo">${esc(d.motivo||'')}</textarea></div>`;
-  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} — ${t.nome}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} — ${t.nome}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="row2"><div class="field"><label>Paciente</label><select id="d-pac"><option value="">— selecione —</option>${opts}</select></div><div class="field"><label>Data</label><input id="d-data" type="date" value="${d.data||todayISO()}"></div></div>
       ${campos}
@@ -3235,7 +3238,7 @@ function _notifMsgLocal(c){
 function iniciarWatchMsgs(){ if(_DEMO)return; clearInterval(_msgWatchT); _msgSeen=null; _watchMsgs(); _msgWatchT=setInterval(_watchMsgs,20000); }
 function abrirConversaPanel(id){
   const c=PCONVS.find(x=>x.id===id); if(!c)return; _pconv=c;
-  openModal(`<div class="modal"><div class="modal-head"><div class="avatar">${initials(c.user_nome||'?')}</div><h3 style="flex:1">${esc(c.user_nome||'Paciente')}</h3><button class="icon-btn" onclick="fecharConversaPanel()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><div class="avatar">${initials(c.user_nome||'?')}</div><h3 style="flex:1">${esc(c.user_nome||'Paciente')}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="fecharConversaPanel()">✕</button></div>
     <div id="pchat-scroll" style="height:54vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--cin);padding:16px"></div>
     <div class="modal-foot" style="gap:8px"><textarea id="pchat-input" rows="1" placeholder="Escreva uma mensagem…" style="flex:1;resize:none;max-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;background:var(--bg)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMsgPanel();}"></textarea><button class="btn" onclick="enviarMsgPanel()">Enviar</button></div>
   </div>`);
@@ -3347,7 +3350,7 @@ async function carregarPerfil(){
             <input id="bl-icone" placeholder="🔗" maxlength="2" style="width:50px;text-align:center;padding:9px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:15px">
             <input id="bl-titulo" placeholder="Título" style="flex:1;min-width:90px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:13px">
             <input id="bl-url" placeholder="https://..." style="flex:1;min-width:120px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:13px">
-            <button class="btn sm" onclick="addBioLink()">＋</button>
+            <button aria-label="Adicionar link" title="Adicionar link" class="btn sm" onclick="addBioLink()">＋</button>
           </div>
           <button class="btn" style="margin-top:16px;width:100%" onclick="salvarBio()">💾 Salvar e publicar</button>
         </div>
@@ -3364,7 +3367,7 @@ let _bioProf=null,_bioCfg={},_bioLinks=[],_bioAvg=0,_bioN=0;
 const BIO_FUNDOS={verde:'linear-gradient(150deg,#1B3A2A,#2FA35F 62%,#3FA76A)',oceano:'linear-gradient(150deg,#0B2E4A,#1E7FB0 60%,#37C0C9)',roxo:'linear-gradient(150deg,#2E1B48,#6B4BCE 62%,#9B5DE5)',porsol:'linear-gradient(150deg,#5A1E3A,#E0642F 58%,#F5A623)',rosa:'linear-gradient(150deg,#4A1436,#C93E77 60%,#F473A6)',grafite:'linear-gradient(150deg,#15181C,#3A424C 60%,#5B6672)',petroleo:'linear-gradient(150deg,#08201E,#0E6B63 60%,#1BA89B)',vinho:'linear-gradient(150deg,#2B0B12,#7A1F3D 60%,#C0395F)',floresta:'linear-gradient(150deg,#12240F,#2E5B1E 55%,#6FA53C)',meianoite:'linear-gradient(160deg,#0B1026,#243B7A 60%,#4F73C4)'};
 async function bbInit(){
   const fb=document.getElementById('bb-fundos');
-  if(fb)fb.innerHTML=Object.keys(BIO_FUNDOS).map(k=>`<button class="bb-sw" data-v="${k}" style="background:${BIO_FUNDOS[k]}" title="${k}" onclick="setFundoPreset('${k}',this)"></button>`).join('');
+  if(fb)fb.innerHTML=Object.keys(BIO_FUNDOS).map(k=>`<button aria-label="Escolher fundo" class="bb-sw" data-v="${k}" style="background:${BIO_FUNDOS[k]}" title="${k}" onclick="setFundoPreset('${k}',this)"></button>`).join('');
   segActive('bb-estilo',(_bioCfg.botao&&_bioCfg.botao.estilo)||'suave');
   segActive('bb-raio',String((_bioCfg.botao&&_bioCfg.botao.raio)||16));
   segActive('bb-fonte',_bioCfg.fonte||'');
@@ -3396,7 +3399,7 @@ function setFundoImg(input){
 }
 function mostrarQR(url,titulo,arquivo){
   const qr='https://api.qrserver.com/v1/create-qr-code/?size=340x340&margin=12&data='+encodeURIComponent(url);
-  openModal(`<div class="modal"><div class="modal-head"><h3>${esc(titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>${esc(titulo)}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="text-align:center">
       <img src="${qr}" alt="QR code" style="width:250px;height:250px;border-radius:14px;border:1px solid var(--line);background:#fff">
       <p style="font-size:12.5px;color:var(--txs);margin-top:12px;word-break:break-all">${esc(url)}</p>
@@ -3412,9 +3415,9 @@ function renderBioLinks(){
   el.innerHTML=_bioLinks.length?_bioLinks.map((l,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--cin);border-radius:11px;margin-bottom:6px">
     <span style="font-size:16px">${esc(l.icone||'🔗')}</span>
     <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:12.5px">${esc(l.titulo||'Link')}</div><div style="font-size:11px;color:var(--txs);word-break:break-all">${esc(l.url||'')}</div></div>
-    <button class="bbmv" onclick="moveBioLink(${i},-1)" ${i===0?'disabled':''}>↑</button>
-    <button class="bbmv" onclick="moveBioLink(${i},1)" ${i===_bioLinks.length-1?'disabled':''}>↓</button>
-    <button class="bbmv" style="color:var(--er)" onclick="remBioLink(${i})">✕</button>
+    <button aria-label="Mover para cima" title="Mover para cima" class="bbmv" onclick="moveBioLink(${i},-1)" ${i===0?'disabled':''}>↑</button>
+    <button aria-label="Mover para baixo" title="Mover para baixo" class="bbmv" onclick="moveBioLink(${i},1)" ${i===_bioLinks.length-1?'disabled':''}>↓</button>
+    <button aria-label="Remover link" title="Remover link" class="bbmv" style="color:var(--er)" onclick="remBioLink(${i})">✕</button>
   </div>`).join(''):'<div style="font-size:12px;color:var(--txm);margin-bottom:6px">Nenhum link ainda.</div>';
 }
 function addBioLink(){const ic=($('#bl-icone').value||'').trim();const t=($('#bl-titulo').value||'').trim();let u=($('#bl-url').value||'').trim();if(!t||!u){toast('Preencha título e URL',1);return;}if(!/^https?:\/\//i.test(u)&&!/^mailto:|^tel:/i.test(u))u='https://'+u;_bioLinks.push({titulo:t,url:u,icone:ic||'🔗'});$('#bl-icone').value='';$('#bl-titulo').value='';$('#bl-url').value='';renderBioLinks();bioPreview();}
@@ -3432,7 +3435,7 @@ function editarPerfilPanel(){
   const p=_bioProf||{};
   _pfFoto=p.foto||null; _pfFotoMini=p.foto_mini||null; _pfCapa=(p.capa&&PF_CAPAS[p.capa])?p.capa:'verde';
   const mod=p.modalidade||'';
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>Editar perfil público</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>Editar perfil público</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="background:#FFF4D6;color:#8A6B00;border-radius:10px;padding:10px 12px;font-size:12.5px;margin-bottom:14px">⚠️ Ao salvar, seu perfil volta para <b>análise</b> e fica temporariamente indisponível na rede até a nova aprovação.</div>
       <div class="field"><label>Foto de perfil</label>
@@ -3468,7 +3471,7 @@ function editarPerfilPanel(){
     <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn" onclick="salvarPerfilPanel()">Salvar e enviar p/ aprovação</button></div>
   </div>`);
   const cs=document.getElementById('pf-capas');
-  if(cs)cs.innerHTML=Object.keys(PF_CAPAS).map(k=>`<button class="bb-sw" data-v="${k}" style="background:${PF_CAPAS[k]}" title="${k}" onclick="pfSetCapa('${k}',this)"></button>`).join('');
+  if(cs)cs.innerHTML=Object.keys(PF_CAPAS).map(k=>`<button aria-label="Escolher capa" class="bb-sw" data-v="${k}" style="background:${PF_CAPAS[k]}" title="${k}" onclick="pfSetCapa('${k}',this)"></button>`).join('');
   pfFotoRender(); pfCapaActive();
 }
 function _miniFromDataURL(src){
@@ -3604,7 +3607,7 @@ function compartilharMeuLink(){
       <button class="btn ghost sm" onclick="${copiar}">Copiar</button>
       <button class="btn ghost sm" onclick="${qr}">QR code</button>
     </div></div>`;
-  openModal(`<div class="modal"><div class="modal-head"><h3>Meu link</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>Meu link</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <p style="color:var(--txs);font-size:13.5px;margin:0">${temAg?'Compartilhe na bio do Instagram, no WhatsApp ou onde quiser. Os pacientes te encontram e solicitam horário.':'Compartilhe sua página na bio do Instagram, no WhatsApp ou onde quiser. Os pacientes te encontram na rede e falam com você pelas mensagens.'}</p>
       ${temAg?bloco('Link de agendamento',linkAg,'copiarLinkAgenda()','qrAgenda()'):''}
@@ -3638,7 +3641,7 @@ $('#overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeMod
 /* -- Paciente -- */
 function formPaciente(id){
   const p=id?pac(id):{nome:'',nascimento:'',telefone:'',email:'',cpf:'',endereco:'',obs:'',tags:[]};
-  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} paciente</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} paciente</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="field"><label>Nome completo *</label><input id="f-nome" value="${esc(p.nome)}" placeholder="Nome do paciente"></div>
       <div class="row2">
@@ -3723,7 +3726,7 @@ function abrirLixeira(){
       <button class="btn ghost sm" onclick="restaurarPaciente('${p.id}')">↩︎ Restaurar</button>
       <button class="btn danger ghost sm" onclick="excluirDefinitivo('${p.id}')">Excluir</button>
     </div>`).join(''):'<div class="empty" style="padding:20px">A lixeira está vazia 🌱</div>';
-  openModal(`<div class="modal"><div class="modal-head"><h3>🗑️ Lixeira</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>🗑️ Lixeira</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="font-size:12.5px;color:var(--txs);margin-bottom:10px">Pacientes movidos pra cá saem das listas mas continuam recuperáveis. "Excluir" apaga de vez.</div>
       ${linhas}
@@ -3751,7 +3754,7 @@ function abrirAuditoria(){
     const d=new Date(a.ts); const quando=isNaN(d)?a.ts:d.toLocaleString('pt-BR');
     return `<div style="padding:9px 0;border-top:1px solid var(--line)"><div style="font-size:13.5px"><b>${esc(AC[a.acao]||a.acao)}</b></div><div style="font-size:12px;color:var(--txs)">${esc(a.detalhe||'')}</div><div style="font-size:11px;color:var(--txm)">${esc(a.quem||'—')} · ${esc(quando)}</div></div>`;
   }).join(''):'<div class="empty" style="padding:20px">Sem registros ainda.</div>';
-  openModal(`<div class="modal"><div class="modal-head"><h3>📋 Histórico de alterações</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>📋 Histórico de alterações</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body" style="max-height:70vh;overflow:auto">
       <div style="font-size:12.5px;color:var(--txs);margin-bottom:4px">Últimas alterações em pacientes (quem, o quê e quando).</div>
       ${linhas}
@@ -3773,7 +3776,7 @@ function openPaciente(id){
       <div class="avatar" style="width:42px;height:42px;font-size:16px">${initials(p.nome)}</div>
       <div style="flex:1"><h3 style="margin:0">${esc(p.nome)} ${(p.status||'ativo')==='inativo'?'<span class="chip g" style="vertical-align:middle">Inativo</span>':'<span class="chip v" style="vertical-align:middle">● Ativo</span>'}</h3><div class="sub" style="color:var(--txs);font-size:12.5px">${a!=null?a+' anos · ':''}${esc(p.telefone||'sem telefone')}</div></div>
       <button class="btn ghost sm" onclick="togglePacStatus('${id}')">${(p.status||'ativo')==='inativo'?'Reativar':'Marcar inativo'}</button>
-      <button class="icon-btn" onclick="closeModal()">✕</button></div>
+      <button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="info-grid" style="margin-bottom:16px">
         <div><div class="il">E-mail</div><div class="iv">${esc(p.email||'—')}</div></div>
@@ -3805,7 +3808,7 @@ function formAgendamento(id,dataDefault,pacDefault){
   const dp=(!id&&pacDefault)?pac(pacDefault):null;
   const a=id?DB.agendamentos.find(x=>x.id===id):{pacienteId:pacDefault||'',data:dataDefault||todayISO(),hora:'09:00',duracao:50,tipo:'Consulta',status:'agendado',valor:(dp&&dp.valorSessao?+dp.valorSessao:180),formaPagamento:(dp&&dp.formaPagamento)||'',pago:false,obs:''};
   const opts=DB.pacientes.sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<option value="${p.id}" ${p.id===a.pacienteId?'selected':''}>${esc(p.nome)}</option>`).join('');
-  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} agendamento</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>${id?'Editar':'Novo'} agendamento</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="field"><label>Paciente *</label><select id="f-pac" onchange="_agPacChange()"><option value="">— selecione —</option>${opts}</select>
         <button class="btn sm ghost" style="margin-top:8px" onclick="closeModal();formPaciente()">＋ Cadastrar novo paciente</button></div>
@@ -3949,7 +3952,7 @@ function formProntuario(pid,rid){
   let proxSessao='';
   if(!rid){ const nums=prontsDoPac(pid).filter(x=>x.sessao).map(x=>parseInt(x.sessao,10)).filter(n=>!isNaN(n)); if(nums.length)proxSessao=Math.max.apply(null,nums)+1; }
   const r=rid?DB.prontuarios.find(x=>x.id===rid):{pacienteId:pid,data:todayISO(),tipo:'evolucao',sessao:proxSessao};
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>${rid?'Editar':'Novo'} registro — ${esc(pacNome(pid))}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${rid?'Editar':'Novo'} registro — ${esc(pacNome(pid))}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="row3">
         <div class="field"><label>Data</label><input id="f-data" type="date" value="${r.data}"></div>
@@ -4210,7 +4213,7 @@ function renderContratos(){
 }
 function formContrato(id){
   const c=id?CONTRATOS.find(x=>x.id===id):{titulo:'Contrato terapêutico',texto:'',paciente_nome:''};
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>${id?'Editar':'Novo'} contrato</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${id?'Editar':'Novo'} contrato</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="row2">
         <div class="field"><label>Título</label><input id="ct-tit" value="${esc(c.titulo||'Contrato terapêutico')}"></div>
@@ -4245,7 +4248,7 @@ function formContratoEstrut(id){
   var d=(c&&c.dados&&c.dados.prof)||{};
   var MOD=['Online','Presencial','Híbrida'], FREQ=['Semanal','Quinzenal','Outra'], COB=['Por sessão','Mensal','Pacote','Outro'], PAG=['Pix','Transferência','Cartão','Outro'];
   var datal=(DB.pacientes||[]).slice().sort(function(a,b){return (a.nome||'').localeCompare(b.nome||'');}).map(function(pp){return '<option value="'+esc(pp.nome)+'">';}).join('');
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>${id?'Editar':'Novo'} contrato estruturado</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${id?'Editar':'Novo'} contrato estruturado</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="row2">
         <div class="field"><label>Título</label><input id="ce-tit" value="${esc((c&&c.titulo)||'Contrato terapêutico')}"></div>
@@ -4402,7 +4405,7 @@ function verContrato(id){
   const c=CONTRATOS.find(x=>x.id===id); if(!c)return;
   const aceito=c.status==='aceito';
   const docNum=(c.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>${esc(c.titulo)}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>${esc(c.titulo)}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:12px">
         Profissional: <b style="color:var(--tx)">${esc((AUTH&&AUTH.nome)||'')}</b>${AUTH&&AUTH.reg?' — '+esc(AUTH.reg):''}<br>
@@ -4425,7 +4428,7 @@ async function delContrato(id){
 function formFinanceiro(tipo){
   const cats = tipo==='entrada'?['Consulta','Avaliação','Pacote','Convênio','Outros']:['Aluguel','Materiais','Impostos','Marketing','Sistema','Contador','Outros'];
   const opts=DB.pacientes.sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join('');
-  openModal(`<div class="modal"><div class="modal-head"><h3>Nova ${tipo==='entrada'?'entrada':'saída'}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>Nova ${tipo==='entrada'?'entrada':'saída'}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="row2">
         <div class="field"><label>Valor (R$) *</label><input id="f-valor" type="number" step="0.01" placeholder="0,00"></div>
@@ -4554,7 +4557,7 @@ function importarPacientesCSV(file){
     const existe=p=>DB.pacientes.some(x=>(p.cpf&&x.cpf&&x.cpf.replace(/\D/g,'')===p.cpf.replace(/\D/g,''))||(String(x.nome||'').trim().toLowerCase()===p.nome.trim().toLowerCase()));
     const add=novos.filter(p=>!existe(p)); const ja=novos.length-add.length; _impPacBuffer=add;
     const amostra=add.slice(0,6).map(p=>`<tr><td style="padding:7px 8px">${esc(p.nome)}</td><td style="padding:7px 8px">${esc(p.telefone||'—')}</td><td style="padding:7px 8px">${esc(p.email||'—')}</td></tr>`).join('');
-    openModal(`<div class="modal"><div class="modal-head"><h3>Importar pacientes</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    openModal(`<div class="modal"><div class="modal-head"><h3>Importar pacientes</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
       <div class="modal-body">
         <div class="gate-info" style="margin-bottom:12px">Encontrei <b>${novos.length}</b> paciente(s) na planilha.<br><b>${add.length}</b> novos serão adicionados${ja?` · <b>${ja}</b> já existem (ignorados)`:''}.</div>
         ${add.length?`<div style="overflow:auto;max-height:260px;border:1px solid var(--line);border-radius:10px"><table style="width:100%;font-size:13px;border-collapse:collapse"><thead><tr style="text-align:left;color:var(--txm)"><th style="padding:7px 8px">Nome</th><th style="padding:7px 8px">Telefone</th><th style="padding:7px 8px">E-mail</th></tr></thead><tbody>${amostra}${add.length>6?`<tr><td colspan="3" style="padding:7px 8px;color:var(--txm)">…e mais ${add.length-6}</td></tr>`:''}</tbody></table></div>`:'<div class="card empty" style="padding:16px">Nada novo pra importar (todos já estão cadastrados).</div>'}
@@ -4621,7 +4624,7 @@ function importarAgendaCSV(file){
     _impAgBuffer={pacientes:novosPac, ags:agNovos};
     const jaAg=ags.length-agNovos.length;
     const amostra=agNovos.slice(0,7).map(a=>`<tr><td style="padding:6px 8px">${esc(fmtDate(a.data))}</td><td style="padding:6px 8px">${esc(a.hora)}</td><td style="padding:6px 8px">${esc(a._nome)}</td><td style="padding:6px 8px">${a.valor?brl(a.valor):'—'}</td></tr>`).join('');
-    openModal(`<div class="modal"><div class="modal-head"><h3>Importar agenda</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    openModal(`<div class="modal"><div class="modal-head"><h3>Importar agenda</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
       <div class="modal-body">
         <div class="gate-info" style="margin-bottom:12px">Encontrei <b>${ags.length}</b> sessão(ões).<br><b>${agNovos.length}</b> novas serão adicionadas${jaAg?` · <b>${jaAg}</b> já existem (ignoradas)`:''}.${novosPac.length?`<br><b>${novosPac.length}</b> novos pacientes serão criados automaticamente.`:''}</div>
         ${agNovos.length?`<div style="overflow:auto;max-height:280px;border:1px solid var(--line);border-radius:10px"><table style="width:100%;font-size:13px;border-collapse:collapse"><thead><tr style="text-align:left;color:var(--txm)"><th style="padding:6px 8px">Data</th><th style="padding:6px 8px">Hora</th><th style="padding:6px 8px">Paciente</th><th style="padding:6px 8px">Valor</th></tr></thead><tbody>${amostra}${agNovos.length>7?`<tr><td colspan="4" style="padding:6px 8px;color:var(--txm)">…e mais ${agNovos.length-7}</td></tr>`:''}</tbody></table></div>`:'<div class="card empty" style="padding:16px">Nada novo pra importar.</div>'}
@@ -4726,7 +4729,7 @@ function _renderImportProntModal(){
       <td style="padding:8px">${nm.ambiguo?'<span title="Vários pacientes parecidos — confira" style="color:#E7A400">⚠️ </span>':''}<select onchange="_impProntPick('${nm.key}',this.value)" style="width:100%;padding:7px 8px;border:1px solid ${novo?'#2FA35F':'var(--line)'};border-radius:8px;background:var(--bg);color:var(--tx);font-size:13px">${optsFor(nm)}</select></td>
     </tr>`;
   }).join('');
-  openModal(`<div class="modal wide"><div class="modal-head"><h3>Importar prontuários</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal wide"><div class="modal-head"><h3>Importar prontuários</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="gate-info" style="margin-bottom:12px"><b>${st.recs.length}</b> registro(s) clínico(s) em <b>${st.nomes.length}</b> nome(s).<br>
         <b>${nMatch}</b> vinculado(s) a pacientes já cadastrados${nNovo?` · <b>${nNovo}</b> criarão paciente novo`:''}.<br>
@@ -4839,7 +4842,7 @@ const PLANO_CAPS={
 };
 // Upsell padrão pra recursos do plano Profissional/Clínica
 function upsellPro(titulo,desc){
-  openModal(`<div class="modal"><div class="modal-head"><h3>${titulo}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><h3>${titulo}</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="text-align:center;font-size:34px;margin:6px 0 2px">✨</div>
       <p style="color:var(--txs);font-size:14px;text-align:center;line-height:1.5;margin:0 0 6px">${desc}</p>
@@ -4935,7 +4938,7 @@ function showResetForm(){
   showGate('login');
   $('#gate-login').innerHTML=`
     <div class="gate-info" style="margin-bottom:14px">Defina sua nova senha de acesso ao painel.</div>
-    <div class="field"><label>Nova senha</label><div class="pw-wrap"><input id="r-pw" type="password" placeholder="Mínimo 8 caracteres"><button type="button" class="pw-eye" onclick="togPwClin('r-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+    <div class="field"><label>Nova senha</label><div class="pw-wrap"><input id="r-pw" type="password" placeholder="Mínimo 8 caracteres"><button aria-label="Mostrar ou ocultar senha" title="Mostrar ou ocultar senha" type="button" class="pw-eye" onclick="togPwClin('r-pw',this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
     <button class="btn" onclick="salvarNovaSenha()">Salvar nova senha</button>`;
 }
 async function salvarNovaSenha(){
@@ -5120,7 +5123,7 @@ function mostrarAtalhoHint(){
   box.innerHTML=`<div class="atalho-card">
     <div class="ai">${folha}</div>
     <div style="flex:1;min-width:0"><b>Deixe o painel na sua tela inicial</b><p>Acesse como um app, com um toque. ${passos}</p></div>
-    <button class="ax" onclick="fecharAtalhoHint()" title="Dispensar">✕</button>
+    <button aria-label="Fechar" class="ax" onclick="fecharAtalhoHint()" title="Dispensar">✕</button>
   </div>`;
 }
 function fecharAtalhoHint(){ try{ localStorage.setItem('dichava_atalho_ok','1'); }catch(e){} const b=document.getElementById('atalho-hint'); if(b)b.innerHTML=''; }

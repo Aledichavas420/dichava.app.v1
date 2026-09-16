@@ -223,6 +223,9 @@ input:not([type="checkbox"]),select,textarea{-webkit-appearance:none;appearance:
 input[type="checkbox"]{width:18px;height:18px;accent-color:var(--v);cursor:pointer;flex-shrink:0}
 button{cursor:pointer}
 input:focus,select:focus,textarea:focus{outline:none}
+/* a11y: indicador de foco visível só para teclado (não afeta clique/toque) */
+:focus-visible{outline:2px solid var(--v,#2E9B4F);outline-offset:2px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--v,#2E9B4F);outline-offset:1px}
 a{color:inherit;text-decoration:none}
 
 /* APP SHELL */
@@ -2392,15 +2395,15 @@ a{color:inherit;text-decoration:none}
   <div class="atabs"><button class="atab on" onclick="authTab('login',this)">Entrar</button><button class="atab" onclick="authTab('signup',this)">Criar conta</button></div>
   <div id="alogin">
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="li-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="li-ee">E-mail inválido.</div></div>
-    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('li-pw',this)"></button></div><div class="em" id="li-pwe">E-mail ou senha incorretos.</div></div>
+    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"><button aria-label="Mostrar ou ocultar senha" title="Mostrar ou ocultar senha" type="button" class="pweye" data-icon="pw-eye" onclick="togPw('li-pw',this)"></button></div><div class="em" id="li-pwe">E-mail ou senha incorretos.</div></div>
     <div style="text-align:right;margin:-4px 0 6px"><button type="button" class="alink" onclick="esqueciSenha()">Esqueci a senha</button></div>
     <button class="btn bdk bfull" id="btn-login" onclick="doLogin()">Entrar</button>
   </div>
   <div id="asignup" style="display:none">
     <div class="fld"><div class="lbl">Como posso te chamar?</div><input class="inp" id="su-n" type="text" placeholder="Seu primeiro nome" autocomplete="given-name"><div class="em" id="su-ne">Informe seu nome.</div></div>
     <div class="fld"><div class="lbl">E-mail</div><input class="inp" id="su-e" type="email" placeholder="seu@email.com" autocomplete="email" inputmode="email"><div class="em" id="su-ee">E-mail inválido.</div></div>
-    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="su-pwe">Senha muito fraca.</div></div>
-    <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="su-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw2',this)"></button></div><div class="em" id="su-pw2e">As senhas não conferem.</div></div>
+    <div class="fld"><div class="lbl">Senha</div><div class="pwwrap"><input class="inp" id="su-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button aria-label="Mostrar ou ocultar senha" title="Mostrar ou ocultar senha" type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="su-pwe">Senha muito fraca.</div></div>
+    <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="su-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button aria-label="Mostrar ou ocultar senha" title="Mostrar ou ocultar senha" type="button" class="pweye" data-icon="pw-eye" onclick="togPw('su-pw2',this)"></button></div><div class="em" id="su-pw2e">As senhas não conferem.</div></div>
     <button class="btn bv bfull" id="btn-signup" onclick="doSignup()">Criar conta</button>
     <div class="aw-prof-hint" style="margin-top:14px;text-align:center;font-size:12.5px;color:var(--txm);line-height:1.5">É profissional de saúde? <a href="#" onclick="event.preventDefault();abrirPainelProf()" style="color:var(--v);font-weight:700;text-decoration:none">Acesse o Painel dos profissionais →</a></div>
   </div>
@@ -2480,7 +2483,7 @@ a{color:inherit;text-decoration:none}
   <div id="h-quick"></div>
   <div id="h-tempo"></div>
   <div id="h-alts"></div>
-  <div class="cks" id="ck-strip"><div class="ckst">Como estou me sentindo hoje?</div><div class="ckse"><button class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
+  <div class="cks" id="ck-strip"><div class="ckst">Como estou me sentindo hoje?</div><div class="ckse"><button aria-label="Como me sinto: tranquilo" title="Como me sinto: tranquilo" class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button aria-label="Como me sinto: bem" title="Como me sinto: bem" class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button aria-label="Como me sinto: triste" title="Como me sinto: triste" class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button aria-label="Como me sinto: ansioso" title="Como me sinto: ansioso" class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button aria-label="Como me sinto: intenso" title="Como me sinto: intenso" class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
   <div class="wk"><div class="wlb">Sua semana</div><div class="wds" id="h-wds"></div><button class="btn bv bsm" onclick="openMod('mreg')" style="font-family:'DM Sans',sans-serif;position:relative;z-index:1">+ Registrar agora</button></div>
   <!-- CRISE + FISSURA -->
   <div class="qag">
@@ -2615,7 +2618,7 @@ a{color:inherit;text-decoration:none}
     <div class="sb-ic" id="sb-ic">🌧️</div>
     <div class="sb-info"><div class="sb-t" id="sb-t">Chuva</div><div class="sb-s">tocando em loop</div></div>
     <div class="sb-timer" id="sb-timer"></div>
-    <button class="sb-stop" onclick="pararSom()" data-icon="zen-stop"></button>
+    <button aria-label="Parar som" title="Parar som" class="sb-stop" onclick="pararSom()" data-icon="zen-stop"></button>
   </div>
   </div><!-- /zen-sons -->
 
@@ -2682,7 +2685,7 @@ a{color:inherit;text-decoration:none}
 <div class="topbar"><div class="tlogo">dichava<em>.</em>app</div><div style="display:flex;align-items:center;gap:9px"><div style="cursor:pointer;font-size:21px" onclick="abrirNovo()">➕</div><div class="tav" id="tav" onclick="goPg('p-cfg')">?</div></div></div>
 <div class="sc scpad">
   <div class="calb">
-    <div class="calnr"><button class="calnb" onclick="calNav(-1)">‹</button><div class="calm" id="cal-mes">—</div><button class="calnb" onclick="calNav(1)">›</button></div>
+    <div class="calnr"><button aria-label="Mês anterior" title="Mês anterior" class="calnb" onclick="calNav(-1)">‹</button><div class="calm" id="cal-mes">—</div><button aria-label="Próximo mês" title="Próximo mês" class="calnb" onclick="calNav(1)">›</button></div>
     <div class="caldls"><div class="caldl">D</div><div class="caldl">S</div><div class="caldl">T</div><div class="caldl">Q</div><div class="caldl">Q</div><div class="caldl">S</div><div class="caldl">S</div></div>
     <div class="calg" id="calg"></div>
     <div class="cal-leg"><span><i style="background:var(--vf)"></i>algum uso</span><span><i style="background:#FFE0CC"></i>uso intenso</span><span><i style="box-shadow:inset 0 0 0 2px var(--dk)"></i>hoje</span></div>
@@ -2796,7 +2799,7 @@ a{color:inherit;text-decoration:none}
     <div class="db-tx"><div class="db-t">Meu diário</div><div class="db-s" id="diario-stat">Sem filtro, sem julgamento</div></div>
   </div>
   <div class="cmp" id="composer" onclick="focaCmp()">
-    <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
+    <div class="cmpt"><div class="cmpav" id="cmpav">?</div><textarea class="cmpta" id="cmpta" rows="2" placeholder="O que está na sua cabeça hoje?" onfocus="expCmp()" oninput="autoR(this)"></textarea><button aria-label="Ditar por voz" class="micbtn" id="micbtn" onclick="event.stopPropagation();togMic()" title="Falar em vez de digitar">🎙️</button></div>
     <div id="cmpex" style="display:none">
       <div style="font-size:11px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin:9px 0 7px">Como você está?</div>
       <div class="emg" id="cmpemg"><button class="emb" onclick="selECmp(this,'😌','tranquilo')"><span class="eme">😌</span><span class="eml">tranquilo</span></button><button class="emb" onclick="selECmp(this,'😊','bem')"><span class="eme">😊</span><span class="eml">bem</span></button><button class="emb" onclick="selECmp(this,'😰','ansioso')"><span class="eme">😰</span><span class="eml">ansioso</span></button><button class="emb" onclick="selECmp(this,'😔','triste')"><span class="eme">😔</span><span class="eml">triste</span></button><button class="emb" onclick="selECmp(this,'😵','intenso')"><span class="eme">😵</span><span class="eml">intenso</span></button></div>
@@ -2923,7 +2926,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- CRISE -->
 <div class="V" id="vcrise" style="background:var(--er)">
-<div class="ptb" style="background:var(--er)"><button class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit">Modo Crise</div></div>
+<div class="ptb" style="background:var(--er)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit">Modo Crise</div></div>
 <div class="sc" style="padding-bottom:30px">
   <div class="crh"><div class="crpu" data-icon="crise-sos"></div><div class="crt">Você não está sozinho(a)</div><div class="crs">Respira. Escolha o que precisa agora.</div></div>
   <div style="margin:0 18px 13px;background:rgba(255,255,255,.12);border-radius:15px;padding:14px">
@@ -3020,7 +3023,7 @@ a{color:inherit;text-decoration:none}
 .rel-empty{font-size:13px;color:var(--txm);padding:6px 2px}
 </style>
 <div class="V" id="vrelatorios">
-  <div class="ptb" style="background:var(--roxo)"><button class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit"><svg viewBox="0 0 24 24" style="width:24px;height:24px;display:inline-block;vertical-align:-5px;margin-right:8px" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11"/><path d="M12 20V4"/><path d="M18 20v-7"/></svg>Relatórios avançados</div></div>
+  <div class="ptb" style="background:var(--roxo)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="showV('vapp')">←</button><div class="ptb-tit"><svg viewBox="0 0 24 24" style="width:24px;height:24px;display:inline-block;vertical-align:-5px;margin-right:8px" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11"/><path d="M12 20V4"/><path d="M18 20v-7"/></svg>Relatórios avançados</div></div>
   <div class="sc" style="padding:14px 0 40px">
     <div class="rel-periods" id="rel-periods">
       <button class="relchip on" data-d="30" onclick="relSet(30)">30 dias</button>
@@ -3135,7 +3138,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- REDE DE PROFISSIONAIS -->
 <div class="V" id="vprofs">
-  <div class="ptb" style="background:linear-gradient(150deg,#1f3d2b 0%,#2f5740 60%,#4a7856 100%)"><button class="bk" onclick="fecharProfs()">←</button><span class="ptb-leaf"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></span><div class="ptb-tit">Fale com um profissional</div></div>
+  <div class="ptb" style="background:linear-gradient(150deg,#1f3d2b 0%,#2f5740 60%,#4a7856 100%)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="fecharProfs()">←</button><span class="ptb-leaf"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></span><div class="ptb-tit">Fale com um profissional</div></div>
   <div class="pf-tabs">
     <button class="pf-tab on" id="pf-tab-buscar" onclick="pfTab('buscar')">Profissionais</button>
     <button class="pf-tab" id="pf-tab-convs" onclick="pfTab('convs')">Minhas conversas <span class="tabbadge" id="pf-convs-badge" style="display:none"></span></button>
@@ -3167,7 +3170,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- PERFIL DO PROFISSIONAL (detalhe) -->
 <div class="V" id="vprofdet" style="background:var(--bg)">
-  <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="showV('vprofs')">←</button><div class="ptb-tit">Profissional</div></div>
+  <div class="ptb" style="background:var(--dk)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="showV('vprofs')">←</button><div class="ptb-tit">Profissional</div></div>
   <div class="sc" style="flex:1;overflow-y:auto"><div id="profdet-body"></div><div style="height:30px"></div></div>
 </div>
 
@@ -3179,7 +3182,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- CHAT (usuário ↔ profissional) -->
 <div class="V" id="vchat" style="background:var(--cin)">
-  <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="voltarChat()">←</button><div class="ptb-tit" id="chat-nome" style="flex:1">Conversa</div><button class="chat-wpp" id="chat-wpp" style="display:none" onclick="chatWhatsApp()">WhatsApp</button></div>
+  <div class="ptb" style="background:var(--dk)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="voltarChat()">←</button><div class="ptb-tit" id="chat-nome" style="flex:1">Conversa</div><button class="chat-wpp" id="chat-wpp" style="display:none" onclick="chatWhatsApp()">WhatsApp</button></div>
   <div id="chat-acomp"></div>
   <div class="chat-scroll" id="chat-scroll"></div>
   <div class="chat-bar">
@@ -3207,7 +3210,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- ADMIN: aprovação de profissionais -->
 <div class="V" id="vadmin">
-  <div class="ptb" style="background:var(--dk)"><button class="bk" onclick="showV('vapp');goPg('p-cfg')">←</button><div class="ptb-tit">🛡️ Admin · Profissionais</div></div>
+  <div class="ptb" style="background:var(--dk)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="showV('vapp');goPg('p-cfg')">←</button><div class="ptb-tit">🛡️ Admin · Profissionais</div></div>
   <div class="adm-tabs">
     <button class="adm-tab on" data-s="pendente" onclick="admTab('pendente',this)">Pendentes</button>
     <button class="adm-tab" data-s="reaprovar" onclick="admTab('reaprovar',this)">🔄 Diretório</button>
@@ -3310,7 +3313,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- RESPIRAÇÃO -->
 <div class="V" id="vresp" style="background:var(--dk)">
-<div class="ptb" style="background:var(--dk)"><button class="bk" onclick="pararResp(true)">←</button><div class="ptb-tit">Respiração 4-7-8</div></div>
+<div class="ptb" style="background:var(--dk)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="pararResp(true)">←</button><div class="ptb-tit">Respiração 4-7-8</div></div>
 <div class="resph">
   <div class="respci" id="respci"><div class="respin" id="respin">Toque para<br>começar</div></div>
   <div class="respf" id="respf">Pronto para começar</div>
@@ -3325,7 +3328,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- GROUNDING -->
 <div class="V" id="vgrd" style="background:var(--dk2)">
-<div class="ptb" style="background:var(--dk2)"><button class="bk" onclick="voltarTool()">←</button><div class="ptb-tit">Grounding 5-4-3-2-1</div></div>
+<div class="ptb" style="background:var(--dk2)"><button aria-label="Voltar" title="Voltar" class="bk" onclick="voltarTool()">←</button><div class="ptb-tit">Grounding 5-4-3-2-1</div></div>
 <div class="grds">
   <div class="grdn" id="grd-n">5</div>
   <div class="grdi" id="grd-i" data-icon="ref-eye"></div>
@@ -3343,7 +3346,7 @@ a{color:inherit;text-decoration:none}
     <svg class="cartas-clock cc3" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3"/><line x1="50" y1="50" x2="50" y2="24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="50" y1="50" x2="32" y2="44" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
     <span class="cartas-spark s1">✦</span><span class="cartas-spark s2">✦</span><span class="cartas-spark s3">✦</span>
   </div>
-  <div class="ptb" style="background:transparent;position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk">Cartas para mim</div></div>
+  <div class="ptb" style="background:transparent;position:relative;z-index:2"><button aria-label="Voltar" title="Voltar" class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk">Cartas para mim</div></div>
   <div class="sc" style="position:relative;z-index:2;padding-bottom:30px">
     <div class="cartas-hero">
       <div class="cartas-hero-ic" data-icon="sec-cartas"></div>
@@ -3359,7 +3362,7 @@ a{color:inherit;text-decoration:none}
 <!-- ARTIGO -->
 <!-- LISTA DE ARTIGOS -->
 <div class="V" id="varts" style="background:var(--cin)">
-<div class="ptb" style="background:var(--cin)"><button class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk">Biblioteca</div></div>
+<div class="ptb" style="background:var(--cin)"><button aria-label="Voltar" title="Voltar" class="bk dk" onclick="showV('vapp')">←</button><div class="ptb-tit dk">Biblioteca</div></div>
 <div class="sc" style="padding-bottom:30px">
   <div class="lib-hero">
     <div class="lib-hero-glow"></div>
@@ -3387,13 +3390,13 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <div class="V" id="vart" style="background:#fff">
-<div class="ptb" style="background:#fff"><button class="bk dk" onclick="showV('varts')">←</button><div class="ptb-tit dk" id="art-tit-h">Artigo</div></div>
+<div class="ptb" style="background:#fff"><button aria-label="Voltar" title="Voltar" class="bk dk" onclick="showV('varts')">←</button><div class="ptb-tit dk" id="art-tit-h">Artigo</div></div>
 <div class="sc" style="padding:0 18px calc(32px + var(--sb))"><div id="art-body"></div></div>
 </div>
 
 <!-- PLANOS (paywall) -->
 <div class="V" id="vplanos" style="background:#0e1f14">
-<div class="ptb" style="background:transparent"><button class="bk" onclick="fecharPlanos()">←</button></div>
+<div class="ptb" style="background:transparent"><button aria-label="Voltar" title="Voltar" class="bk" onclick="fecharPlanos()">←</button></div>
 <div class="sc" style="padding:0 20px calc(28px + var(--sb))">
   <div class="plns-spark">✦</div>
   <div class="plns-h1">Invista em <span>você</span><br>hoje mesmo</div>
@@ -3415,7 +3418,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- DOCUMENTO (termos, privacidade, base científica) -->
 <div class="V" id="vdoc" style="background:#fff">
-<div class="ptb" style="background:#fff"><button class="bk dk" onclick="fecharDoc()">←</button><div class="ptb-tit dk" id="doc-tit">Documento</div></div>
+<div class="ptb" style="background:#fff"><button aria-label="Voltar" title="Voltar" class="bk dk" onclick="fecharDoc()">←</button><div class="ptb-tit dk" id="doc-tit">Documento</div></div>
 <div class="sc" style="padding:0 20px calc(32px + var(--sb))"><div id="doc-body" class="docbody"></div></div>
 </div>
 
@@ -3424,7 +3427,7 @@ a{color:inherit;text-decoration:none}
 <!-- GUIA DO T-BREAK (pausa canábica) -->
 <div class="V" id="vtbreak" style="background:var(--cin)">
 <div class="tb-aurora"><div class="tb-stars-bg"></div></div>
-<div class="ptb" style="background:var(--cin);position:relative;z-index:2"><button class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Pausa de Tolerância</div><button class="tb-help-h" onclick="openMod('mtbfaq')" aria-label="Dúvidas da pausa"><span>?</span> Dúvidas</button></div>
+<div class="ptb" style="background:var(--cin);position:relative;z-index:2"><button aria-label="Voltar" title="Voltar" class="bk dk" onclick="showV('vapp');goPg('p-jogos')">←</button><div class="ptb-tit dk">Pausa de Tolerância</div><button class="tb-help-h" onclick="openMod('mtbfaq')" aria-label="Dúvidas da pausa"><span>?</span> Dúvidas</button></div>
 <div class="sc" style="padding-bottom:40px" id="tb-body"></div>
 </div>
 
@@ -3474,7 +3477,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- ONDA -->
 <div class="V" id="vonda">
-<div class="ptb" style="background:transparent;position:relative;z-index:2"><button class="bk" onclick="pararOnda()">←</button><div class="ptb-tit">Surfar a onda 🌊</div></div>
+<div class="ptb" style="background:transparent;position:relative;z-index:2"><button aria-label="Voltar" title="Voltar" class="bk" onclick="pararOnda()">←</button><div class="ptb-tit">Surfar a onda 🌊</div></div>
 <div class="ondawrap">
   <svg class="ondasvg" viewBox="0 0 400 160" preserveAspectRatio="none"><path id="ondapath" d="M0,80 Q50,40 100,80 T200,80 T300,80 T400,80 V160 H0 Z" fill="rgba(76,175,90,.35)"><animate attributeName="d" dur="4s" repeatCount="indefinite" values="M0,80 Q50,40 100,80 T200,80 T300,80 T400,80 V160 H0 Z;M0,80 Q50,120 100,80 T200,80 T300,80 T400,80 V160 H0 Z;M0,80 Q50,40 100,80 T200,80 T300,80 T400,80 V160 H0 Z"/></path></svg>
   <div class="ondatempo" id="onda-t">20:00</div>
@@ -3497,12 +3500,12 @@ a{color:inherit;text-decoration:none}
   <div class="alogo" style="font-size:28px">dichava<em>.app</em></div>
   <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:8px" id="lock-msg">Digite seu PIN</div>
   <div class="lockdots" id="lock-dots"><div class="lockdot"></div><div class="lockdot"></div><div class="lockdot"></div><div class="lockdot"></div></div>
-  <button type="button" id="lock-eye" data-icon="pw-eye" onclick="togLockShow(this)" style="background:none;border:none;cursor:pointer;margin:-16px 0 14px;padding:6px"></button>
+  <button aria-label="Mostrar ou ocultar PIN" title="Mostrar ou ocultar PIN" type="button" id="lock-eye" data-icon="pw-eye" onclick="togLockShow(this)" style="background:none;border:none;cursor:pointer;margin:-16px 0 14px;padding:6px"></button>
   <div class="lockpad">
     <button class="lockkey" onclick="lockKey(1)">1</button><button class="lockkey" onclick="lockKey(2)">2</button><button class="lockkey" onclick="lockKey(3)">3</button>
     <button class="lockkey" onclick="lockKey(4)">4</button><button class="lockkey" onclick="lockKey(5)">5</button><button class="lockkey" onclick="lockKey(6)">6</button>
     <button class="lockkey" onclick="lockKey(7)">7</button><button class="lockkey" onclick="lockKey(8)">8</button><button class="lockkey" onclick="lockKey(9)">9</button>
-    <button class="lockkey ghost"></button><button class="lockkey" onclick="lockKey(0)">0</button><button class="lockkey ghost" onclick="lockDel()">⌫</button>
+    <button aria-hidden="true" tabindex="-1" class="lockkey ghost"></button><button class="lockkey" onclick="lockKey(0)">0</button><button aria-label="Apagar dígito" title="Apagar dígito" class="lockkey ghost" onclick="lockDel()">⌫</button>
   </div>
 </div>
 </div>
@@ -3513,9 +3516,9 @@ a{color:inherit;text-decoration:none}
   <div class="mt">⚗️ Interações entre substâncias</div>
   <p style="font-size:12px;color:var(--txs);margin-bottom:14px;line-height:1.6">Referência rápida baseada em dados do <strong>TripSit</strong>. Sempre pesquise mais antes de decidir — combinações têm riscos individuais.</p>
   <div class="cmb-slots">
-    <button class="cmb-slot" id="cmb-slot0" onclick="cmbSlotTap(0)"></button>
+    <button aria-label="Escolher substância" title="Escolher substância" class="cmb-slot" id="cmb-slot0" onclick="cmbSlotTap(0)"></button>
     <div class="cmb-plus">+</div>
-    <button class="cmb-slot" id="cmb-slot1" onclick="cmbSlotTap(1)"></button>
+    <button aria-label="Escolher substância" title="Escolher substância" class="cmb-slot" id="cmb-slot1" onclick="cmbSlotTap(1)"></button>
   </div>
   <div class="cmb-grid" id="cmb-grid"></div>
   <select class="fs" id="cmb-a" onchange="calcCombo()" style="display:none"><option value="">Selecione…</option></select>
@@ -3603,8 +3606,8 @@ a{color:inherit;text-decoration:none}
   <div style="font-size:30px;text-align:center;margin-bottom:6px">🔑</div>
   <div class="mt c">Criar nova senha</div>
   <div class="mb c" style="margin-bottom:14px">Escolha uma nova senha para a sua conta.</div>
-  <div class="fld"><div class="lbl">Nova senha</div><div class="pwwrap"><input class="inp" id="rec-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="rec-pw-e">Senha muito fraca.</div></div>
-  <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="rec-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw2',this)"></button></div><div class="em" id="rec-pw2-e">As senhas não conferem.</div></div>
+  <div class="fld"><div class="lbl">Nova senha</div><div class="pwwrap"><input class="inp" id="rec-pw" type="password" placeholder="Crie uma senha forte" autocomplete="new-password"><button aria-label="Mostrar ou ocultar senha" title="Mostrar ou ocultar senha" type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw',this)"></button></div><div class="pwhint">🔒 Use <b>8+ caracteres</b> com maiúscula, minúscula, número e símbolo.</div><div class="em" id="rec-pw-e">Senha muito fraca.</div></div>
+  <div class="fld"><div class="lbl">Confirmar senha</div><div class="pwwrap"><input class="inp" id="rec-pw2" type="password" placeholder="Repita a senha" autocomplete="new-password"><button aria-label="Mostrar ou ocultar senha" title="Mostrar ou ocultar senha" type="button" class="pweye" data-icon="pw-eye" onclick="togPw('rec-pw2',this)"></button></div><div class="em" id="rec-pw2-e">As senhas não conferem.</div></div>
   <button class="btn bv bfull" onclick="salvarNovaSenha()" style="margin-top:6px">Salvar nova senha 💚</button>
 </div></div></div>
 
@@ -3615,7 +3618,7 @@ a{color:inherit;text-decoration:none}
   <div class="mt c">Resetar meus dados</div>
   <div class="mb c" style="margin-bottom:14px">Isso apaga <b>todos os seus registros, metas, diário, finanças e histórico</b>, aqui e na nuvem. Sua conta e seu login continuam. <b>Não dá para desfazer.</b></div>
   <button class="btn bout bfull" onclick="closeMod('mreset');backupJSON()" style="margin-bottom:12px">↓ Baixar backup antes</button>
-  <div class="fld"><div class="lbl">Digite sua senha para confirmar</div><div class="pwwrap"><input class="inp" id="reset-pw" type="password" placeholder="Sua senha" autocomplete="current-password"><button type="button" class="pweye" data-icon="pw-eye" onclick="togPw('reset-pw',this)"></button></div><div class="em" id="reset-pw-e">Senha incorreta.</div></div>
+  <div class="fld"><div class="lbl">Digite sua senha para confirmar</div><div class="pwwrap"><input class="inp" id="reset-pw" type="password" placeholder="Sua senha" autocomplete="current-password"><button aria-label="Mostrar ou ocultar senha" title="Mostrar ou ocultar senha" type="button" class="pweye" data-icon="pw-eye" onclick="togPw('reset-pw',this)"></button></div><div class="em" id="reset-pw-e">Senha incorreta.</div></div>
   <button class="btn bfull" id="reset-btn" onclick="confirmarResetar()" style="margin-top:6px;background:#C62828;color:#fff">Apagar meus dados</button>
 </div></div></div>
 
@@ -4112,7 +4115,7 @@ a{color:inherit;text-decoration:none}
   </div>
   <div style="display:flex;gap:8px;margin-bottom:15px">
     <input class="inp" id="nova-meta" type="text" placeholder="Ou escreva sua própria meta…" style="flex:1">
-    <button class="btn bv bsm" onclick="addMeta()">+</button>
+    <button aria-label="Adicionar meta" title="Adicionar meta" class="btn bv bsm" onclick="addMeta()">+</button>
   </div>
   <button class="btn bout bfull" onclick="closeMod('mmetas')">Fechar</button>
 </div></div></div>
@@ -4138,10 +4141,10 @@ a{color:inherit;text-decoration:none}
 <!-- CONVERSA COM O DICHAVALDO -->
 <div class="ov" id="mconv" onclick="if(event.target===this)closeMod('mconv')"><div class="sheet"><div class="sp">
   <div class="mh"></div>
-  <div class="conv-head"><img class="conv-av" id="conv-av" alt=""><div class="conv-hb"><div class="conv-name">Dichavaldo</div><div class="conv-sub">um papo pra pensar junto 🌱</div><div class="conv-dots" id="conv-dots"></div></div><button class="conv-close" onclick="closeMod('mconv')">✕</button></div>
+  <div class="conv-head"><img class="conv-av" id="conv-av" alt=""><div class="conv-hb"><div class="conv-name">Dichavaldo</div><div class="conv-sub">um papo pra pensar junto 🌱</div><div class="conv-dots" id="conv-dots"></div></div><button aria-label="Fechar" title="Fechar" class="conv-close" onclick="closeMod('mconv')">✕</button></div>
   <div class="conv-q" id="conv-q"></div>
   <textarea class="ft" id="conv-tx" rows="3" placeholder="Escreva aqui… pode ser curtinho."></textarea>
-  <div style="display:flex;gap:9px;margin-top:11px"><button class="btn bout" id="conv-back" style="flex:0 0 52px" onclick="convPrev()">←</button><button class="btn bv" style="flex:1" id="conv-next" onclick="convNext()">Próxima</button></div>
+  <div style="display:flex;gap:9px;margin-top:11px"><button aria-label="Voltar" title="Voltar" class="btn bout" id="conv-back" style="flex:0 0 52px" onclick="convPrev()">←</button><button class="btn bv" style="flex:1" id="conv-next" onclick="convNext()">Próxima</button></div>
 </div></div></div>
 
 <!-- RODA DAS EMOÇÕES -->
@@ -4212,7 +4215,7 @@ a{color:inherit;text-decoration:none}
   </div>
 </div></div></div>
 
-<div class="nb" id="nb"><div class="nbi" id="nb-i">💡</div><div class="nbb"><div class="nbt" id="nb-t">—</div><div class="nbs" id="nb-s">—</div></div><button class="nbx" onclick="fechaNB()">✕</button></div>
+<div class="nb" id="nb"><div class="nbi" id="nb-i">💡</div><div class="nbb"><div class="nbt" id="nb-t">—</div><div class="nbs" id="nb-s">—</div></div><button aria-label="Fechar" title="Fechar" class="nbx" onclick="fechaNB()">✕</button></div>
 <div id="toast"></div>
 
 <!-- TELA DE PARABÉNS (novo título) -->
@@ -5640,7 +5643,7 @@ function renderCompras(){
   const cnt=document.getElementById('compras-count');if(cnt)cnt.textContent=compras.length+(compras.length===1?' compra':' compras');
   let body;
   if(!compras.length)body='<div style="font-size:13px;color:var(--txm);padding:0 4px 12px">Nenhuma compra registrada ainda.</div>';
-  else body=compras.map(cp=>`<div class="hi"><div class="hie">${nemSvg(cp.substancia||'')}</div><div class="hib"><div class="hin">${esc(cp.item||cp.substancia||'Compra')}</div><div class="him">${fdt(cp.data)}${cp.local?' · '+esc(cp.local):''}</div></div><div style="font-weight:800;color:var(--dk);white-space:nowrap;align-self:center">${brl(parseBRL(cp.valor))}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button class="dan" onclick="delCompra('${cp.id}')">🗑️ Apagar</button></div></div></div>`).join('');
+  else body=compras.map(cp=>`<div class="hi"><div class="hie">${nemSvg(cp.substancia||'')}</div><div class="hib"><div class="hin">${esc(cp.item||cp.substancia||'Compra')}</div><div class="him">${fdt(cp.data)}${cp.local?' · '+esc(cp.local):''}</div></div><div style="font-weight:800;color:var(--dk);white-space:nowrap;align-self:center">${brl(parseBRL(cp.valor))}</div><div class="kw"><button aria-label="Mais opções" class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button class="dan" onclick="delCompra('${cp.id}')">🗑️ Apagar</button></div></div></div>`).join('');
   if(isPremium()){c.classList.remove('premgate','locked');c.innerHTML=body;}
   else{c.classList.add('premgate','locked');c.innerHTML=`<div class="premgate-body">${body}</div>`+premOverlayHTML('Registros de compra','Acompanhe seus gastos e o quanto você economiza — no premium.');}
 }
@@ -5843,7 +5846,7 @@ function renderInstall(){
   if(localStorage.getItem('dr_install_dismiss_'+uid())){c.innerHTML='';return;}
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
   if(!window._deferredPrompt&&!isIOS){c.innerHTML='';return;}
-  c.innerHTML=`<div class="installc"><div class="installc-ic">📲</div><div class="installc-b"><div class="installc-t">Tenha o dichava na tela inicial</div><div class="installc-d">${isIOS?'Toque em Compartilhar → "Adicionar à Tela de Início"':'Acesso rápido e notificações, como um app'}</div></div>${isIOS?'':'<button class="installc-go" onclick="instalarApp()">Instalar</button>'}<button class="installc-x" onclick="fecharInstall()">✕</button></div>`;
+  c.innerHTML=`<div class="installc"><div class="installc-ic">📲</div><div class="installc-b"><div class="installc-t">Tenha o dichava na tela inicial</div><div class="installc-d">${isIOS?'Toque em Compartilhar → "Adicionar à Tela de Início"':'Acesso rápido e notificações, como um app'}</div></div>${isIOS?'':'<button class="installc-go" onclick="instalarApp()">Instalar</button>'}<button aria-label="Fechar" title="Fechar" class="installc-x" onclick="fecharInstall()">✕</button></div>`;
 }
 async function instalarApp(){
   const p=window._deferredPrompt;if(!p)return;p.prompt();try{await p.userChoice;}catch(e){}window._deferredPrompt=null;renderInstall();
@@ -5878,10 +5881,10 @@ function habGo(id){const s=HABS.find(h=>h.id===id);if(s&&habUnlocked(s))s.go();}
 function renderAlts(regs){
   const c=document.getElementById('h-alts');c.innerHTML=renderD1(regs);const cfg=gC();const hj=hoje();
   const cH=regs.filter(r=>r.data===hj).length,cS=regs.filter(r=>r.data>=semISO(hj)).length;
-  if(cfg.notif&&cH>=cfg.limD)c.innerHTML+=`<div class="alt at"><div class="alti">⚠️</div><div class="altb"><div class="altt">Limite diário atingido</div><div class="altx">Você registrou ${cH} usos hoje (limite: ${cfg.limD}). Como você está?</div></div><button class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
-  if(cfg.notif&&cS>=cfg.limS)c.innerHTML+=`<div class="alt at"><div class="alti">📊</div><div class="altb"><div class="altt">Limite semanal atingido</div><div class="altx">${cS} usos essa semana (limite: ${cfg.limS}).</div></div><button class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
+  if(cfg.notif&&cH>=cfg.limD)c.innerHTML+=`<div class="alt at"><div class="alti">⚠️</div><div class="altb"><div class="altt">Limite diário atingido</div><div class="altx">Você registrou ${cH} usos hoje (limite: ${cfg.limD}). Como você está?</div></div><button aria-label="Dispensar aviso" title="Dispensar aviso" class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
+  if(cfg.notif&&cS>=cfg.limS)c.innerHTML+=`<div class="alt at"><div class="alti">📊</div><div class="altb"><div class="altt">Limite semanal atingido</div><div class="altx">${cS} usos essa semana (limite: ${cfg.limS}).</div></div><button aria-label="Dispensar aviso" title="Dispensar aviso" class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
   const st=streak(regs);
-  if(st>=3)c.innerHTML+=`<div class="alt pos"><div class="alti">🔥</div><div class="altb"><div class="altt">${st} dias de registro seguidos!</div><div class="altx">Você está construindo uma prática consistente.</div></div><button class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
+  if(st>=3)c.innerHTML+=`<div class="alt pos"><div class="alti">🔥</div><div class="altb"><div class="altt">${st} dias de registro seguidos!</div><div class="altx">Você está construindo uma prática consistente.</div></div><button aria-label="Dispensar aviso" title="Dispensar aviso" class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
 }
 
 function renderWds(regs){
@@ -5897,7 +5900,7 @@ function renderWds(regs){
 
 function renderFeed(goal){
   const d=dica(goal),p=prmp(goal),c=document.getElementById('h-feed');
-  c.innerHTML=`<div class="fc"><div class="fh"><div class="fav" style="background:var(--vf);color:var(--ve)">${d.i}</div><div style="flex:1"><div class="fn">Dica de RD</div><div class="ftm">Hoje</div></div><span class="ftag ftd">Dica</span></div><div class="ftt"><strong>${d.t}</strong><br>${d.x}</div><div class="fa"><button class="fab2" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div><div class="fc"><div class="fh"><div class="fav" style="background:var(--roxof);color:var(--roxo)">💭</div><div style="flex:1"><div class="fn">Pergunta do dia</div><div class="ftm">Para refletir</div></div><span class="ftag ftr">Reflexão</span></div><div class="ftt">${p}</div><div class="fa"><button class="fab2" onclick="goPg('p-ref');respPrm()">✍️ Responder</button></div></div>`;
+  c.innerHTML=`<div class="fc"><div class="fh"><div class="fav" style="background:var(--vf);color:var(--ve)">${d.i}</div><div style="flex:1"><div class="fn">Dica de RD</div><div class="ftm">Hoje</div></div><span class="ftag ftd">Dica</span></div><div class="ftt"><strong>${d.t}</strong><br>${d.x}</div><div class="fa"><button aria-label="Favoritar" title="Favoritar" class="fab2" onclick="this.textContent=this.textContent.includes('♡')?'♥':'♡'">♡</button></div></div><div class="fc"><div class="fh"><div class="fav" style="background:var(--roxof);color:var(--roxo)">💭</div><div style="flex:1"><div class="fn">Pergunta do dia</div><div class="ftm">Para refletir</div></div><span class="ftag ftr">Reflexão</span></div><div class="ftt">${p}</div><div class="fa"><button class="fab2" onclick="goPg('p-ref');respPrm()">✍️ Responder</button></div></div>`;
 }
 
 function renderResumo(regs,goal){
@@ -6041,7 +6044,7 @@ function renderCal(){
   const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   document.getElementById('cal-mes').textContent=meses[mes]+' '+ano;
   const limD=(gC().limD||3);const hj=hoje();let html='';
-  for(let i=0;i<new Date(ano,mes,1).getDay();i++)html+='<button class="cald out" disabled></button>';
+  for(let i=0;i<new Date(ano,mes,1).getDay();i++)html+='<button aria-hidden="true" tabindex="-1" class="cald out" disabled></button>';
   for(let d=1;d<=new Date(ano,mes+1,0).getDate();d++){
     const iso=`${ano}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const cnt=regs.filter(r=>r.data===iso).length;let cls='cald';
@@ -6056,7 +6059,7 @@ function calNav(dir){_calDt.setMonth(_calDt.getMonth()+dir);renderCal();}
 function calSel(iso){_calSel=iso;renderCal();}
 function renderDdet(regs){
   const det=document.getElementById('ddet');const ri=regs.filter(r=>r.data===_calSel);det.style.display='block';
-  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nemSvg(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${fhora(r)||r.hr||''}${r.ctx?' · '+esc(r.ctx):''}${r.gatilhos?.length?' · '+esc(r.gatilhos.join(', ')):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
+  det.innerHTML=`<div class="ddet"><div class="ddett">${fdt(_calSel)} — ${ri.length?ri.length+' registro(s)':'nenhum registro'}</div>${ri.length?ri.map(r=>`<div class="dri"><div class="drie">${nemSvg(r.substancia)}</div><div class="drib"><div class="drin">${esc(r.substancia)}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="drim">${fhora(r)||r.hr||''}${r.ctx?' · '+esc(r.ctx):''}${r.gatilhos?.length?' · '+esc(r.gatilhos.join(', ')):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button aria-label="Mais opções" class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--txm);margin-bottom:8px">Nenhum registro nesse dia.</div>'}<button class="btn bv bsm" style="margin-top:8px" onclick="openMod('mreg')">+ Adicionar registro</button></div>`;
 }
 
 /* ══ PROGRESSO ══ */
@@ -6159,7 +6162,7 @@ function openMetasMod(){
   const mts=gM();
   document.getElementById('mmetas-l').innerHTML=mts.length?mts.map((m,i)=>{
     const ic=m.tipo==='limite'?'<div style="font-size:17px">🎯</div>':`<div style="font-size:18px;cursor:pointer" onclick="togMetaMod(${i})">${m.ok?'✅':'⬜'}</div>`;
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cin);border-radius:11px">${ic}<div style="flex:1;font-size:13px;color:var(--tx)">${esc(m.titulo)}</div><button style="background:none;border:none;font-size:14px;color:var(--er);cursor:pointer" onclick="remMeta(${i})">✕</button></div>`;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cin);border-radius:11px">${ic}<div style="flex:1;font-size:13px;color:var(--tx)">${esc(m.titulo)}</div><button aria-label="Remover meta" title="Remover meta" style="background:none;border:none;font-size:14px;color:var(--er);cursor:pointer" onclick="remMeta(${i})">✕</button></div>`;
   }).join(''):'<div style="font-size:12.5px;color:var(--txm);text-align:center;padding:6px">Nenhuma meta ainda. Crie uma abaixo.</div>';
   openMod('mmetas');
 }
@@ -6198,7 +6201,7 @@ function renderHist(){
   const regs=gR().slice().reverse();const c=document.getElementById('hist-l');
   const cnt=document.getElementById('hist-count');if(cnt)cnt.textContent=regs.length+(regs.length===1?' registro':' registros');
   if(!regs.length){c.innerHTML='<div style="text-align:center;padding:24px 18px;color:var(--txm)"><div class="hist-empty-ic">'+icon('prog-empty')+'</div><div style="font-size:13.5px;font-weight:600">Nenhum registro ainda</div><div style="font-size:12px;margin-top:3px">Toque em <strong>+ novo</strong> para começar a registrar.</div></div>';return;}
-  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${regSubsArr(r).map(s=>nemSvg(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${!fhora(r)&&r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
+  c.innerHTML=regs.map(r=>`<div class="hi"><div class="hie">${regSubsArr(r).map(s=>nemSvg(s)).join('')}</div><div class="hib"><div class="hin">${esc(regSubLabel(r))}${r.qtd?' ('+esc(r.qtd)+')':''}</div><div class="him">${fdt(r.data)}${fhora(r)?' '+fhora(r):''}${!fhora(r)&&r.hr?' · '+r.hr:''}${r.ctx?' · '+esc(r.ctx):''}</div></div><div style="font-size:18px">${r.emocao||''}</div><div class="kw"><button aria-label="Mais opções" class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editReg('${r.id}')">✏️ Editar</button><button class="dan" onclick="delReg('${r.id}')">🗑️ Apagar</button></div></div></div>`).join('');
 }
 function delReg(id){
   if(!confirm('Excluir este registro?'))return;
@@ -6594,7 +6597,7 @@ function renderRefFeed(){
     const ti=refTagInfo(r.tag||'reflexão');const emo=r.emocao||'✍️';const col=emoCol(emo);
     const txt=(r.texto||'');const longo=txt.length>170||((txt.match(/\n/g)||[]).length>2);
     h+='<div class="rcard'+(r.fav?' rc-fav':'')+'"><div class="rcard-emo" style="--c:'+col+'">'+emo+'</div><div class="rcard-b">'+
-      '<div class="rcard-top"><span class="rcard-tag" style="--c:'+ti.c+'">'+ti.i+' '+ti.l+'</span><span class="rcard-dt">'+refTime(r)+'</span><div class="kw"><button class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editRef(\''+r.id+'\')">✏️ Editar</button><button class="dan" onclick="delRef(\''+r.id+'\')">🗑️ Apagar</button></div></div></div>'+
+      '<div class="rcard-top"><span class="rcard-tag" style="--c:'+ti.c+'">'+ti.i+' '+ti.l+'</span><span class="rcard-dt">'+refTime(r)+'</span><div class="kw"><button aria-label="Mais opções" class="kebab" onclick="toggleKebab(this,event)" title="Opções">⋯</button><div class="kmenu"><button onclick="editRef(\''+r.id+'\')">✏️ Editar</button><button class="dan" onclick="delRef(\''+r.id+'\')">🗑️ Apagar</button></div></div></div>'+
       (r.prompt?'<div class="rcard-q">💭 '+esc(r.prompt)+'</div>':'')+
       '<div class="rcard-tx'+(longo?' clamp':'')+'">'+esc(txt).replace(/\n/g,'<br>')+'</div>'+
       (longo?'<button class="rcard-more" onclick="refToggleMore(this)">ver mais</button>':'')+
@@ -6719,7 +6722,7 @@ function renderViz(){
   const rem=document.getElementById('viz-remind');if(rem)rem.style.display=n?'block':'none';
   const v=all.slice().reverse();
   if(!v.length){el.innerHTML='<div class="viz-empty">🏆<br><b>Seu cofre está vazio</b><span>Resistiu a uma vontade? Dormiu bem? Pediu ajuda? Isso é vitória. Guarde a primeira acima.</span></div>';return;}
-  el.innerHTML=v.map(function(x,i){const s=_vizStyle(x,i);return '<div class="viz-medal" style="--c:'+s.c+'"><span class="viz-medal-ic">'+s.e+'</span><div class="viz-medal-b"><div class="viz-medal-t">'+esc(x.t)+'</div><div class="viz-medal-d">'+fdt(x.data)+'</div></div><button class="viz-del" onclick="delViz(\''+x.id+'\')">🗑️</button></div>';}).join('');
+  el.innerHTML=v.map(function(x,i){const s=_vizStyle(x,i);return '<div class="viz-medal" style="--c:'+s.c+'"><span class="viz-medal-ic">'+s.e+'</span><div class="viz-medal-b"><div class="viz-medal-t">'+esc(x.t)+'</div><div class="viz-medal-d">'+fdt(x.data)+'</div></div><button aria-label="Excluir" title="Excluir" class="viz-del" onclick="delViz(\''+x.id+'\')">🗑️</button></div>';}).join('');
 }
 function renderVizCount(){const el=document.getElementById('viz-count');if(el){const n=gViz().length;el.textContent=n?(n+(n===1?' vitória guardada':' vitórias guardadas')):'Guarde conquistas';}}
 function vizRandom(){const v=gViz();if(!v.length){toast('Guarde uma vitória primeiro 💚');return;}const x=v[Math.floor(Math.random()*v.length)];try{vib(12);sfx('star');}catch(e){}
@@ -6747,7 +6750,7 @@ function renderTrilhaEsc(){
   const t=WTRILHAS.find(function(x){return x.k===st.k;});const feitos=st.feitos||[];const n=feitos.filter(Boolean).length;
   if(_wtWrite>=0){
     const p=t.ps[_wtWrite];const jaFeito=feitos[_wtWrite];
-    b.innerHTML='<div class="wt-wr-h" style="--c:'+t.c+';--c2:'+t.c2+'"><button class="wt-x" onclick="_wtWrite=-1;renderTrilhaEsc()">←</button><div class="wt-wr-tt"><div class="wt-wr-d">Dia '+(_wtWrite+1)+' de 7</div><div class="wt-wr-n">'+esc(t.n)+'</div></div><span class="wt-wr-e">'+t.e+'</span></div>'+
+    b.innerHTML='<div class="wt-wr-h" style="--c:'+t.c+';--c2:'+t.c2+'"><button aria-label="Voltar" title="Voltar" class="wt-x" onclick="_wtWrite=-1;renderTrilhaEsc()">←</button><div class="wt-wr-tt"><div class="wt-wr-d">Dia '+(_wtWrite+1)+' de 7</div><div class="wt-wr-n">'+esc(t.n)+'</div></div><span class="wt-wr-e">'+t.e+'</span></div>'+
       '<div class="wt-prompt2" style="--c:'+t.c+'"><span class="wt-prompt2-k">💭 Prompt do dia</span>'+esc(p)+'</div>'+
       '<textarea class="ft" id="wt-tx" rows="6" placeholder="Escreva no seu ritmo… não precisa caprichar, só ser sincero(a).">'+esc((st.txt&&st.txt[_wtWrite])||'')+'</textarea>'+
       '<button class="btn bv bfull" style="margin-top:11px;background:'+t.c+'" onclick="wtSaveDay()">'+(jaFeito?'Salvar alterações':'Guardar e concluir dia ✓')+'</button>';
@@ -6755,7 +6758,7 @@ function renderTrilhaEsc(){
     return;
   }
   let firstUndone=feitos.findIndex(function(x){return !x;});if(firstUndone<0)firstUndone=(n<7?n:-1);
-  let h='<div class="wt-jhd" style="--c:'+t.c+';--c2:'+t.c2+'"><button class="wt-jx" onclick="wtReset()">✕</button><span class="wt-je">'+t.e+'</span><div class="wt-jt"><div class="wt-jn">'+esc(t.n)+'</div><div class="wt-js">'+(n>=7?'Trilha concluída! 🏆':(n>0?n+' de 7 dias escritos':'Comece pelo dia 1'))+'</div></div>'+_wtRing(n/7,n+'/7')+'</div>';
+  let h='<div class="wt-jhd" style="--c:'+t.c+';--c2:'+t.c2+'"><button aria-label="Fechar" title="Fechar" class="wt-jx" onclick="wtReset()">✕</button><span class="wt-je">'+t.e+'</span><div class="wt-jt"><div class="wt-jn">'+esc(t.n)+'</div><div class="wt-js">'+(n>=7?'Trilha concluída! 🏆':(n>0?n+' de 7 dias escritos':'Comece pelo dia 1'))+'</div></div>'+_wtRing(n/7,n+'/7')+'</div>';
   if(n>=7)h+='<div class="wt-done">🏆<div class="wt-done-t">Você concluiu a trilha!</div><div class="wt-done-x">Reler ou reescrever qualquer dia continua liberado.</div></div>';
   h+='<div class="wt-trail">'+t.ps.map(function(p,i){const done=feitos[i];const now=(i===firstUndone);return '<button class="wt-node'+(done?' done':(now?' now':''))+'" style="--c:'+t.c+'" onclick="_wtWrite='+i+';renderTrilhaEsc()"><span class="wt-ndot">'+(done?'✓':(i+1))+'</span><span class="wt-nb"><span class="wt-nd">Dia '+(i+1)+(now?' · seu próximo':(done?' · escrito':''))+'</span><span class="wt-np">'+esc(p)+'</span></span><span class="wt-nchev">›</span></button>';}).join('')+'</div>';
   h+='<button class="btn bout bsm bfull" style="margin-top:14px" onclick="wtReset()">Trocar de tema</button>';
@@ -7789,7 +7792,7 @@ let _ppCapa='verde';
 function renderCapas(){
   const box=document.getElementById('pp-capas');if(!box)return;
   box.innerHTML=Object.keys(CAPAS).map(k=>{const c=CAPAS[k];const sel=k===_ppCapa;
-    return `<button type="button" onclick="setPpCapa('${k}')" title="${c.nome}" style="width:46px;height:46px;border-radius:12px;background:${c.grad};cursor:pointer;border:3px solid ${sel?'var(--v)':'transparent'};box-shadow:0 1px 5px rgba(0,0,0,.15);outline:${sel?'2px solid var(--v)':'none'};outline-offset:1px"></button>`;
+    return `<button aria-label="Escolher capa" type="button" onclick="setPpCapa('${k}')" title="${c.nome}" style="width:46px;height:46px;border-radius:12px;background:${c.grad};cursor:pointer;border:3px solid ${sel?'var(--v)':'transparent'};box-shadow:0 1px 5px rgba(0,0,0,.15);outline:${sel?'2px solid var(--v)':'none'};outline-offset:1px"></button>`;
   }).join('');
   const pv=document.getElementById('pp-capa-prev');if(pv)pv.style.background=(CAPAS[_ppCapa]||CAPAS.verde).grad;
 }
@@ -8827,7 +8830,7 @@ function renderD1(regs){
   const usouOntem=regs.some(r=>r.data===ontem);
   const d1=gD1();
   if(!usouOntem||d1.ref===ontem)return'';
-  return `<div class="alt inf" id="d1-card"><div class="alti">☀️</div><div class="altb"><div class="altt">Como você acordou hoje?</div><div class="altx" style="margin-bottom:8px">Você fez registros ontem. Como está o dia seguinte?</div><div style="display:flex;gap:7px"><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😣','mal')">😣</button><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😐','ok')">😐</button><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😊','bem')">😊</button><button class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('💪','ótimo')">💪</button></div></div></div>`;
+  return `<div class="alt inf" id="d1-card"><div class="alti">☀️</div><div class="altb"><div class="altt">Como você acordou hoje?</div><div class="altx" style="margin-bottom:8px">Você fez registros ontem. Como está o dia seguinte?</div><div style="display:flex;gap:7px"><button aria-label="Como acordei: mal" title="Como acordei: mal" class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😣','mal')">😣</button><button aria-label="Como acordei: ok" title="Como acordei: ok" class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😐','ok')">😐</button><button aria-label="Como acordei: bem" title="Como acordei: bem" class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('😊','bem')">😊</button><button aria-label="Como acordei: ótimo" title="Como acordei: ótimo" class="cke" style="width:40px;height:40px;font-size:19px" onclick="salvD1('💪','ótimo')">💪</button></div></div></div>`;
 }
 function salvD1(emoji,label){
   const ontem=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-1);return isoLocal(d)})();
