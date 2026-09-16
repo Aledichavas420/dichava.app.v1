@@ -24,6 +24,8 @@ a{color:var(--ve)}
 .field label{display:block;font-size:12.5px;font-weight:700;color:var(--txm);margin-bottom:6px}
 .field input,.field select{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#0b1310;color:var(--tx);font-size:15px;font-family:inherit}
 .field input:focus{outline:none;border-color:var(--v)}
+/* a11y: indicador de foco visível só para teclado */
+:focus-visible{outline:2px solid var(--v,#2FA35F);outline-offset:2px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:13px;background:var(--v);color:#fff;font-weight:800;font-size:15px;padding:13px 18px;cursor:pointer;font-family:inherit}
 .btn:disabled{opacity:.55}
 .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--tx)}
@@ -681,20 +683,20 @@ function bioColeta(){ _bio.nome=bioVal('bio-nome'); _bio.subtitulo=bioVal('bio-s
 function bioPush(){ bioColeta(); const f=document.getElementById('bio-frame'); if(f&&f.contentWindow&&_bioReady){ try{ f.contentWindow.postMessage({type:'bio-site-preview',config:_bio},'*'); }catch(e){} } }
 function bioTemasRender(){ const box=document.getElementById('bio-temas'); if(!box)return;
   const temas=[['verde','#123A24'],['floresta','#0F5132'],['roxo','#2d1f52'],['noite','#101820'],['claro','#DFF3E4']];
-  box.innerHTML=temas.map(t=>`<button type="button" title="${t[0]}" onclick="bioSetTema('${t[0]}')" class="bio-sw${_bio.tema===t[0]?' on':''}" style="background:${t[1]}"></button>`).join(''); }
+  box.innerHTML=temas.map(t=>`<button aria-label="Escolher tema" type="button" title="${t[0]}" onclick="bioSetTema('${t[0]}')" class="bio-sw${_bio.tema===t[0]?' on':''}" style="background:${t[1]}"></button>`).join(''); }
 function bioSetTema(t){ _bio.tema=t; bioTemasRender(); bioPush(); }
 function bioLinksRender(){ const box=document.getElementById('bio-links'); if(!box)return;
   box.innerHTML=(_bio.links||[]).map((l,i)=>`<div class="bio-lk">
     <input class="bio-emoji" value="${esc(l.icone||'')}" onchange="bioUpd(${i},'icone',this.value)" placeholder="🔗">
     <input class="bio-i2" value="${esc(l.titulo||'')}" oninput="bioUpd(${i},'titulo',this.value)" placeholder="Título">
     <input class="bio-i2" value="${esc(l.url||'')}" oninput="bioUpd(${i},'url',this.value)" placeholder="link ou @perfil">
-    <button class="btn dg sm" onclick="bioDel(${i})">✕</button></div>`).join(''); }
+    <button aria-label="Excluir" title="Excluir" class="btn dg sm" onclick="bioDel(${i})">✕</button></div>`).join(''); }
 function bioUpd(i,k,v){ if(_bio.links[i]){ _bio.links[i][k]=v; bioPush(); } }
 function bioAddLink(){ _bio.links.push({icone:'🔗',titulo:'',url:''}); bioLinksRender(); bioPush(); }
 function bioDel(i){ _bio.links.splice(i,1); bioLinksRender(); bioPush(); }
 function bioFaqRender(){ const box=document.getElementById('bio-faq'); if(!box)return;
   box.innerHTML=(_bio.faq||[]).map((f,i)=>`<div style="border:1px solid var(--line);border-radius:10px;padding:9px;margin-bottom:8px;background:var(--card2)">
-    <div style="display:flex;gap:6px;align-items:center"><input class="bio-i2" value="${esc(f.q||'')}" oninput="bioFaqUpd(${i},'q',this.value)" placeholder="Pergunta"><button class="btn dg sm" onclick="bioFaqDel(${i})">✕</button></div>
+    <div style="display:flex;gap:6px;align-items:center"><input class="bio-i2" value="${esc(f.q||'')}" oninput="bioFaqUpd(${i},'q',this.value)" placeholder="Pergunta"><button aria-label="Excluir" title="Excluir" class="btn dg sm" onclick="bioFaqDel(${i})">✕</button></div>
     <textarea class="bio-i2" style="margin-top:6px;min-height:56px;font-family:inherit" oninput="bioFaqUpd(${i},'a',this.value)" placeholder="Resposta">${esc(f.a||'')}</textarea></div>`).join(''); }
 function bioFaqUpd(i,k,v){ if(_bio.faq[i]){ _bio.faq[i][k]=v; bioPush(); } }
 function bioAddFaq(){ if(!Array.isArray(_bio.faq))_bio.faq=[]; _bio.faq.push({q:'',a:''}); bioFaqRender(); bioPush(); }
@@ -1672,7 +1674,7 @@ async function abrirDetalheProf(id){
   if(p.foto)acts.push('<button class="btn ghost sm" onclick="baixarFotoAtual()">⬇️ Baixar foto</button>');
   const wa=p.telefone?('<a class="btn wa sm" href="https://wa.me/55'+String(p.telefone).replace(/\D/g,'')+'" target="_blank" rel="noopener">💬 WhatsApp</a>'):'';
   const temLink=p.instagram||p.site||p.linkedin||p.link;
-  const html='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px"><h3 style="margin:0">Ficha do profissional</h3><button class="btn ghost sm" onclick="fecharModal()">✕</button></div>'
+  const html='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px"><h3 style="margin:0">Ficha do profissional</h3><button aria-label="Fechar" title="Fechar" class="btn ghost sm" onclick="fecharModal()">✕</button></div>'
     +'<div style="display:flex;gap:12px;align-items:center;margin:8px 0 4px">'+foto+'<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:17px">'+S(p.nome||'Sem nome')+'</div><div style="color:var(--txs);font-size:13px">'+S(p.tipo_prof||'Profissional')+'</div><div class="chips" style="margin-top:5px;display:flex;flex-wrap:wrap;gap:5px">'+chips.join('')+'</div></div></div>'
     +sec('Registro & contato')+row('Registro', [p.reg,p.estado].filter(Boolean).join(' · '))+row('E-mail', p.email)+row('WhatsApp/telefone', p.telefone)+row('Cidade', p.cidade)
     +sec('Formação')+row('Instituição', p.instituicao)+row('Ano de formação', p.ano_formacao)+row('Especialização', p.especializacao)
