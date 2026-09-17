@@ -105,17 +105,76 @@ a{color:inherit;text-decoration:none}
 .foot a{color:var(--v);font-weight:700;text-decoration:none}
 @media(max-width:860px){.feature{grid-template-columns:1fr}.feature-cover{min-height:250px}}
 @media(max-width:560px){.mast{padding:38px 0 22px}.mast h1{font-size:37px}.feature-h{font-size:26px}.feature-body{padding:24px 22px 26px}.art h1{font-size:29px}.blocos{font-size:16.5px}.grid{grid-template-columns:1fr}.wrap{padding:0 18px}}
+/* ===== menu de topo ===== */
+.topbar .wrap{gap:18px}
+.nav-menu{display:flex;align-items:center;gap:22px;margin-left:16px}
+.nav-menu a{font-size:14px;font-weight:700;color:var(--txs);padding:6px 0}
+.nav-menu a:hover{color:var(--tx)}
+.nav-menu a.on{color:var(--vd)}
+.nav-cta{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:var(--v);color:#fff!important;font-weight:800;font-size:13.5px;padding:9px 16px;border-radius:999px;box-shadow:0 8px 18px -8px rgba(47,163,95,.7);transition:background .15s}
+.nav-cta:hover{background:var(--vd)}
+@media(max-width:760px){.nav-menu{display:none}.nav-cta{margin-left:auto}}
+/* ===== layout com coluna lateral ===== */
+.layout{display:block}
+@media(min-width:980px){.layout{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:42px;align-items:start;padding-top:6px}.tnav{display:none}}
+.col-main{min-width:0}
+.col-main .grid{grid-template-columns:repeat(auto-fill,minmax(258px,1fr));padding:20px 0 40px}
+.col-side{display:flex;flex-direction:column;gap:18px;padding:22px 0 70px}
+@media(min-width:980px){.col-side{position:sticky;top:78px;padding-top:0}}
+.side-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px 17px 19px;box-shadow:0 14px 34px -30px rgba(20,50,28,.5)}
+.side-h{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--v);margin:0 0 13px}
+.side-search{display:flex;align-items:center;gap:9px;background:var(--cin);border:1px solid var(--line);border-radius:12px;padding:11px 13px;transition:border-color .15s,background .15s}
+.side-search:focus-within{border-color:var(--v);background:#fff}
+.side-search input{flex:1;min-width:0;border:none;background:none;outline:none;font-family:inherit;font-size:14.5px;color:var(--tx)}
+.side-search svg{flex:none;color:var(--txm)}
+.cat-list{display:flex;flex-direction:column;gap:1px}
+.cat-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--txs);padding:9px 10px;border-radius:10px;cursor:pointer;transition:background .12s,color .12s}
+.cat-item:hover{background:var(--cin);color:var(--tx)}
+.cat-item.on{background:var(--cin);color:var(--vd);font-weight:800}
+.cat-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.cat-item .n{margin-left:auto;font-size:12px;color:var(--txm);font-weight:700}
+.recent{display:flex;flex-direction:column;gap:13px}
+.recent a{display:flex;gap:12px;align-items:center}
+.recent .rc-cap{width:58px;height:58px;border-radius:12px;position:relative;overflow:hidden;flex:none}
+.recent .rc-t{font-size:13.5px;font-weight:700;line-height:1.3;color:var(--tx);display:block}
+.recent a:hover .rc-t{color:var(--vd)}
+.recent .rc-d{font-size:11.5px;color:var(--txm);margin-top:3px;display:block}
+.appcta{background:radial-gradient(130% 110% at 0% 0%,#1f7a45,#123720);border:none}
+.appcta .side-h{color:#8fe0aa}
+.appcta p{margin:0 0 15px;font-size:14px;color:rgba(255,255,255,.86);line-height:1.5}
+.appcta .b{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--ve)!important;font-weight:800;font-size:14px;padding:11px 16px;border-radius:12px}
+.res-h{display:flex;align-items:baseline;gap:12px;margin:6px 0 2px}
+.res-h h2{font-size:14px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;margin:0;color:var(--tx)}
+.res-h .ln{flex:1;height:1px;background:var(--line)}
+/* ===== rodapé ===== */
+.foot-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;text-align:left}
+.foot-in .fb{font-family:'Bagel Fat One',system-ui;font-size:19px;color:var(--vd)}
+.foot-in .fs{color:var(--txm);font-size:13px}
+.foot-in nav{margin-left:auto;display:flex;gap:20px;flex-wrap:wrap}
+.foot-in nav a{color:var(--txs);font-weight:700;font-size:13.5px}
+.foot-in nav a:hover{color:var(--vd)}
+/* ===== reduced motion ===== */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.spin{animation-duration:.8s!important;animation-iteration-count:infinite!important}}
 </style>
 </head>
 <body>
 <div class="topbar"><div class="wrap">
   <a class="logo" href="/"><span class="mk"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg></span><span class="wm">dichava</span></a>
-  <a class="sub" href="/blog/" style="text-decoration:none">Blog</a>
+  <nav class="nav-menu">
+    <a href="/">App</a>
+    <a class="on" href="/blog/">Blog</a>
+    <a href="/landing/rede.html">Rede</a>
+    <a href="/landing/">Sobre</a>
+  </nav>
+  <a class="nav-cta" href="/">Abrir o app <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </div></div>
 
 <div id="app" class="wrap"><div class="spin"></div></div>
 
-<div class="foot"><div class="wrap">Blog da rede dichava · <a href="/">ir pro app</a></div></div>
+<div class="foot"><div class="wrap foot-in">
+  <div><span class="fb">dichava</span> <span class="fs">Cuidado sem julgamento.</span></div>
+  <nav><a href="/">App</a><a href="/blog/">Blog</a><a href="/landing/rede.html">Rede</a><a href="/landing/">Sobre a rede</a></nav>
+</div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
@@ -206,16 +265,24 @@ function coverArt(p){
   return `<div class="cover cover--art" style="background:${grad(p.tema)}"><svg class="cover-mk" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg><div class="cover-vg"></div></div>`;
 }
 
-function lista(){
-  setCanonical(location.origin+'/blog/');
-  const posts=(_posts||[]).filter(p=>!_tema||p.tema===_tema);
-  const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
-  const nav='<nav class="tnav"><button class="'+(_tema===''?'on':'')+'" onclick="setTema(\'\')">Todos</button>'+
-    temasComPost.map(t=>`<button class="${_tema===t?'on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</nav>';
-  const mast=`<header class="mast"><div class="kick">Rede dichava</div><h1>O blog da dichava</h1><p>Histórias, ideias e cuidado sem julgamento. Textos da nossa rede pra quem quer se informar e viver melhor, no seu tempo, pra você e pra quem você ama.</p></header>`;
-  if(!posts.length){ app.innerHTML=mast+nav+`<div class="empty">${_tema?'Nenhum texto neste tema ainda.':'Em breve, os primeiros textos da rede.'}</div>`; return; }
-  let html=mast+nav, rest=posts;
-  if(!_tema){
+let _busca='';
+function matchBusca(p){ if(!_busca) return true; const s=((p.titulo||'')+' '+(p.resumo||'')+' '+((p.tags||[]).join(' '))).toLowerCase(); return s.indexOf(_busca)>=0; }
+function cardHTML(p){
+  return `<a class="pc" href="?p=${esc(p.slug)}" onclick="event.preventDefault();abrir('${esc(p.slug)}')">
+      <div class="pc-cap">${coverArt(p)}</div>
+      <div class="pc-b">
+        ${p.tema?`<div class="pc-kick">${esc(TEMAS[p.tema]||p.tema)}</div>`:''}
+        <div class="pc-t">${esc(p.titulo)}</div>
+        ${p.resumo?`<div class="pc-r">${esc(p.resumo)}</div>`:''}
+        <div class="pc-meta"><span class="pc-av">${ini(p.autor_nome)}</span>${p.autor_nome?esc(p.autor_nome)+' · ':''}${fmtData(p.publicado_em||p.criado_em)}</div>
+      </div>
+    </a>`;
+}
+function resultsHTML(){
+  const posts=(_posts||[]).filter(p=>(!_tema||p.tema===_tema)&&matchBusca(p));
+  if(!posts.length) return `<div class="empty">${_busca?('Nada encontrado para "'+esc(_busca)+'".'):(_tema?'Nenhum texto neste tema ainda.':'Em breve, os primeiros textos da rede.')}</div>`;
+  let html='', rest=posts;
+  if(!_tema && !_busca){
     const f=posts[0]; rest=posts.slice(1);
     html+=`<a class="feature" href="?p=${esc(f.slug)}" onclick="event.preventDefault();abrir('${esc(f.slug)}')">
       <div class="feature-cover">${coverArt(f)}</div>
@@ -227,20 +294,34 @@ function lista(){
         <span class="feature-more">Ler agora <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </div></a>`;
   }
-  const cards=rest.map(p=>`
-    <a class="pc" href="?p=${esc(p.slug)}" onclick="event.preventDefault();abrir('${esc(p.slug)}')">
-      <div class="pc-cap">${coverArt(p)}</div>
-      <div class="pc-b">
-        ${p.tema?`<div class="pc-kick">${esc(TEMAS[p.tema]||p.tema)}</div>`:''}
-        <div class="pc-t">${esc(p.titulo)}</div>
-        ${p.resumo?`<div class="pc-r">${esc(p.resumo)}</div>`:''}
-        <div class="pc-meta"><span class="pc-av">${ini(p.autor_nome)}</span>${p.autor_nome?esc(p.autor_nome)+' · ':''}${fmtData(p.publicado_em||p.criado_em)}</div>
-      </div>
-    </a>`).join('');
-  if(rest.length) html+=`<div class="sech"><h2>${_tema?esc(TEMAS[_tema]||_tema):'Mais recentes'}</h2><span class="ln"></span></div><div class="grid">${cards}</div>`;
-  app.innerHTML=html;
+  const titulo=_busca?('Resultados ('+posts.length+')'):(_tema?esc(TEMAS[_tema]||_tema):'Mais recentes');
+  if(rest.length) html+=`<div class="res-h"><h2>${titulo}</h2><span class="ln"></span></div><div class="grid">${rest.map(cardHTML).join('')}</div>`;
+  return html;
 }
-function setTema(t){ _tema=t; lista(); window.scrollTo(0,0); }
+function sidebarHTML(){
+  const all=_posts||[];
+  const temas=[...new Set(all.map(p=>p.tema).filter(Boolean))];
+  const cont=t=>all.filter(p=>p.tema===t).length;
+  const cats=`<button class="cat-item ${_tema===''?'on':''}" onclick="setTema('')"><span class="cat-dot" style="background:linear-gradient(135deg,#153726,#2f7d45)"></span>Todos<span class="n">${all.length}</span></button>`+
+    temas.map(t=>`<button class="cat-item ${_tema===t?'on':''}" onclick="setTema('${t}')"><span class="cat-dot" style="background:${grad(t)}"></span>${esc(TEMAS[t]||t)}<span class="n">${cont(t)}</span></button>`).join('');
+  const recentes=all.slice(0,4).map(p=>`<a href="?p=${esc(p.slug)}" onclick="event.preventDefault();abrir('${esc(p.slug)}')"><span class="rc-cap">${coverArt(p)}</span><span><span class="rc-t">${esc(p.titulo)}</span><span class="rc-d">${fmtData(p.publicado_em||p.criado_em)}</span></span></a>`).join('');
+  return `<aside class="col-side">
+    <div class="side-card"><div class="side-search"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="q" type="search" placeholder="Buscar no blog" value="${esc(_busca)}" oninput="setBusca(this.value)"></div></div>
+    <div class="side-card"><h3 class="side-h">Temas</h3><div class="cat-list">${cats}</div></div>
+    ${recentes?`<div class="side-card"><h3 class="side-h">Mais recentes</h3><div class="recent">${recentes}</div></div>`:''}
+    <div class="side-card appcta"><h3 class="side-h">dichava app</h3><p>Registre seu uso, entenda seus padrões e cuide-se no seu ritmo. Grátis e sem julgamento.</p><a class="b" href="/">Abrir o app <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </aside>`;
+}
+function lista(){
+  setCanonical(location.origin+'/blog/');
+  const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
+  const tnav='<nav class="tnav"><button class="'+(_tema===''?'on':'')+'" onclick="setTema(\'\')">Todos</button>'+
+    temasComPost.map(t=>`<button class="${_tema===t?'on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</nav>';
+  const mast=`<header class="mast"><div class="kick">Rede dichava</div><h1>O blog da dichava</h1><p>Histórias, ideias e cuidado sem julgamento. Textos da nossa rede pra quem quer se informar e viver melhor, no seu tempo, pra você e pra quem você ama.</p></header>`;
+  app.innerHTML=mast+tnav+`<div class="layout"><main class="col-main"><div id="results">${resultsHTML()}</div></main>${sidebarHTML()}</div>`;
+}
+function setTema(t){ _tema=t; _busca=''; lista(); window.scrollTo(0,0); }
+function setBusca(v){ _busca=(v||'').trim().toLowerCase(); const r=document.getElementById('results'); if(r) r.innerHTML=resultsHTML(); }
 function abrir(slug){ history.pushState(null,'','?p='+encodeURIComponent(slug)); route(); window.scrollTo(0,0); }
 function voltar(){ history.pushState(null,'',location.pathname); lista(); window.scrollTo(0,0); }
 /* URL canônica: post real usa página estática pré-renderizada; demo usa ?p= */
