@@ -28,8 +28,10 @@ a{color:inherit;text-decoration:none}
 /* masthead */
 .mast{padding:52px 0 28px}
 .mast .kick{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--v);margin-bottom:14px}
-.mast h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:52px;letter-spacing:.006em;margin:0 0 16px;line-height:1;color:var(--tx)}
-.mast p{margin:0;color:var(--txs);font-size:17px;max-width:600px;line-height:1.5}
+.mast h1{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:64px;letter-spacing:.004em;margin:0 0 18px;line-height:.98;color:var(--tx)}
+.mast h1 .hl{color:var(--v)}
+.mast p{margin:0;color:var(--txs);font-size:18px;max-width:600px;line-height:1.5}
+.mast p b{color:var(--tx);font-weight:700}
 /* nav de temas */
 .tnav{display:flex;gap:26px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none;position:sticky;top:53px;background:rgba(250,246,236,.92);backdrop-filter:blur(8px);z-index:10}
 .tnav::-webkit-scrollbar{display:none}
@@ -104,7 +106,7 @@ a{color:inherit;text-decoration:none}
 .foot{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:var(--txm);font-size:13px;background:var(--cin)}
 .foot a{color:var(--v);font-weight:700;text-decoration:none}
 @media(max-width:860px){.feature{grid-template-columns:1fr}.feature-cover{min-height:250px}}
-@media(max-width:560px){.mast{padding:38px 0 22px}.mast h1{font-size:37px}.feature-h{font-size:26px}.feature-body{padding:24px 22px 26px}.art h1{font-size:29px}.blocos{font-size:16.5px}.grid{grid-template-columns:1fr}.wrap{padding:0 18px}}
+@media(max-width:560px){.mast{padding:38px 0 22px}.mast h1{font-size:43px}.feature-h{font-size:26px}.feature-body{padding:24px 22px 26px}.art h1{font-size:29px}.blocos{font-size:16.5px}.grid{grid-template-columns:1fr}.wrap{padding:0 18px}}
 /* ===== menu de topo ===== */
 .topbar .wrap{gap:18px}
 .nav-menu{display:flex;align-items:center;gap:22px;margin-left:16px}
@@ -369,7 +371,7 @@ function lista(){
   const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
   const tnav='<nav class="tnav"><button class="'+(_tema===''?'on':'')+'" onclick="setTema(\'\')">Todos</button>'+
     temasComPost.map(t=>`<button class="${_tema===t?'on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</nav>';
-  const mast=`<header class="mast"><div class="kick">Rede dichava</div><h1>O blog da dichava</h1><p>Histórias, ideias e cuidado sem julgamento. Textos da nossa rede pra quem quer se informar e viver melhor, no seu tempo, pra você e pra quem você ama.</p></header>`;
+  const mast=`<header class="mast"><h1>Se informar<br>é <span class="hl">se cuidar</span>.</h1><p>Redução de danos, saúde mental e vida real. Textos <b>sem julgamento</b>, no seu tempo, pra você e pra quem você ama.</p></header>`;
   app.innerHTML=mast+bannerHTML()+tnav+`<div class="layout"><main class="col-main"><div id="results">${resultsHTML()}</div></main>${sidebarHTML()}</div>`;
   const nb=(_banners&&_banners.length)?_banners.length:BANNERS_DEFAULT.length;
   try{ initCarousel(nb); }catch(e){}
