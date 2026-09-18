@@ -360,6 +360,12 @@ tbody tr:hover{background:var(--card2)}
         <input id="bn-ordem" type="number" class="bn-inp" value="0" title="Ordem" style="width:90px;margin-bottom:0">
         <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600"><input type="checkbox" id="bn-ativo" checked> Ativo</label>
       </div>
+      <div style="margin:12px 0 4px"><div style="font-size:12px;color:var(--txm);margin-bottom:6px">Imagem do banner <span style="color:var(--txs)">(recomendado — 1600×320 px, proporção 5:1)</span></div>
+        <div id="bn-img-prev"></div>
+        <span class="pacts"><label class="btn ghost sm" style="cursor:pointer">Enviar imagem<input type="file" accept="image/*" id="bn-img" onchange="bnImgSel(this)" style="display:none"></label><button class="btn ghost sm" onclick="bnImgRm()">Remover imagem</button></span>
+      </div>
+      <input id="bn-imgurl" class="bn-inp" placeholder="ou cole a URL de uma imagem" oninput="_bnImg=this.value.trim();bnImgRender()">
+      <div style="font-size:11.5px;color:var(--txm);margin:-2px 0 4px">Com imagem, ela vira o banner inteiro (o texto acima vira reserva pra quando não houver imagem). O link continua valendo.</div>
       <div class="pacts" style="margin-top:14px"><button class="btn sm" onclick="salvarBanner()">Salvar banner</button><button class="btn ghost sm" onclick="limparBanner()">Novo / limpar</button></div>
       <div id="bn-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
     </div>
@@ -1014,8 +1020,11 @@ function wlTocado(id){
 /* ===== SUPORTE (admin) ===== */
 function setTb(id,n){var el=document.getElementById(id);if(!el)return;if(n>0){el.textContent=n;el.style.display='';}else{el.style.display='none';}}
 /* ===== Banners do blog ===== */
-let _banners=[];
+let _banners=[], _bnImg=null;
 const _BN_DOT={app:'#12894e',cuidado:'#0e7490',pro:'#6d28d9'};
+function bnImgRender(){ const pv=document.getElementById('bn-img-prev'); if(pv) pv.innerHTML=_bnImg?`<img src="${esc(_bnImg)}" style="width:100%;max-width:360px;border-radius:10px;display:block;margin-bottom:6px;aspect-ratio:1600/320;object-fit:cover">`:''; }
+async function bnImgSel(input){ const f=input.files&&input.files[0]; if(!f)return; const st=document.getElementById('bn-status'); try{ if(st)st.textContent='Enviando imagem…'; _bnImg=await _uploadBlog(f); const u=document.getElementById('bn-imgurl'); if(u)u.value=_bnImg; bnImgRender(); if(st)st.textContent=''; }catch(e){ if(st)st.textContent='Erro no upload: '+((e&&e.message)||e); } input.value=''; }
+function bnImgRm(){ _bnImg=null; const u=document.getElementById('bn-imgurl'); if(u)u.value=''; bnImgRender(); }
 async function carregarBanners(){
   const box=document.getElementById('bn-list'); if(!box||!SB)return;
   try{ const{data,error}=await SB.from('blog_banners').select('*').order('ordem',{ascending:true}); if(error)throw error; _banners=data||[]; renderBannerList(); }
@@ -1025,22 +1034,23 @@ function renderBannerList(){
   const box=document.getElementById('bn-list'); if(!box)return;
   if(!_banners.length){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Nenhum banner cadastrado. O blog está usando os banners padrão.</div>'; return; }
   box.innerHTML=_banners.map(b=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid var(--line)">
-    <span style="width:12px;height:12px;border-radius:50%;flex:none;background:${_BN_DOT[b.cor]||'#12894e'}"></span>
-    <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13.5px">${esc(b.titulo)}</div><div style="font-size:11.5px;color:var(--txm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(b.url||'')} · ${b.ativo?'ativo':'inativo'}</div></div>
+    ${b.imagem?`<img src="${esc(b.imagem)}" style="width:64px;height:32px;object-fit:cover;border-radius:6px;flex:none">`:`<span style="width:12px;height:12px;border-radius:50%;flex:none;background:${_BN_DOT[b.cor]||'#12894e'}"></span>`}
+    <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13.5px">${esc(b.titulo)}${b.imagem?' <span style="font-weight:600;color:var(--txm);font-size:11px">(imagem)</span>':''}</div><div style="font-size:11.5px;color:var(--txm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(b.url||'')} · ${b.ativo?'ativo':'inativo'}</div></div>
     <button class="btn ghost sm" onclick="editarBanner('${b.id}')">Editar</button>
     <button class="btn ghost sm" onclick="toggleBanner('${b.id}')">${b.ativo?'Desativar':'Ativar'}</button>
     <button class="btn ghost sm" style="color:#C0616B" onclick="excluirBanner('${b.id}')">Excluir</button>
   </div>`).join('');
 }
 function _bnG(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
-function limparBanner(){ ['bn-id','bn-titulo','bn-texto','bn-cta','bn-url'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';}); document.getElementById('bn-cor').value='app'; document.getElementById('bn-ordem').value='0'; document.getElementById('bn-ativo').checked=true; document.getElementById('bn-status').textContent=''; }
+function limparBanner(){ ['bn-id','bn-titulo','bn-texto','bn-cta','bn-url','bn-imgurl'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';}); document.getElementById('bn-cor').value='app'; document.getElementById('bn-ordem').value='0'; document.getElementById('bn-ativo').checked=true; document.getElementById('bn-status').textContent=''; _bnImg=null; bnImgRender(); }
 function editarBanner(id){ const b=_banners.find(x=>x.id===id); if(!b)return;
   document.getElementById('bn-id').value=b.id; document.getElementById('bn-titulo').value=b.titulo||''; document.getElementById('bn-texto').value=b.texto||'';
   document.getElementById('bn-cta').value=b.cta||''; document.getElementById('bn-url').value=b.url||''; document.getElementById('bn-cor').value=b.cor||'app';
-  document.getElementById('bn-ordem').value=b.ordem||0; document.getElementById('bn-ativo').checked=!!b.ativo; try{window.scrollTo(0,0);}catch(e){} }
+  document.getElementById('bn-ordem').value=b.ordem||0; document.getElementById('bn-ativo').checked=!!b.ativo;
+  _bnImg=b.imagem||null; const u=document.getElementById('bn-imgurl'); if(u)u.value=b.imagem||''; bnImgRender(); try{window.scrollTo(0,0);}catch(e){} }
 async function salvarBanner(){
   const st=document.getElementById('bn-status');
-  const row={ titulo:_bnG('bn-titulo'), texto:_bnG('bn-texto')||null, cta:_bnG('bn-cta')||null, url:_bnG('bn-url'), cor:_bnG('bn-cor')||'app', ordem:parseInt(_bnG('bn-ordem')||'0',10)||0, ativo:document.getElementById('bn-ativo').checked };
+  const row={ titulo:_bnG('bn-titulo'), texto:_bnG('bn-texto')||null, cta:_bnG('bn-cta')||null, url:_bnG('bn-url'), cor:_bnG('bn-cor')||'app', ordem:parseInt(_bnG('bn-ordem')||'0',10)||0, ativo:document.getElementById('bn-ativo').checked, imagem:(_bnImg||_bnG('bn-imgurl')||null) };
   if(!row.titulo||!row.url){ st.textContent='Preencha ao menos o título e o link.'; return; }
   const id=_bnG('bn-id');
   try{ st.textContent='Salvando…';

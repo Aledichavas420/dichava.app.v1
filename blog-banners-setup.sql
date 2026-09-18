@@ -11,11 +11,15 @@ create table if not exists public.blog_banners (
   texto     text,
   cta       text,
   url       text not null,
-  cor       text default 'app',   -- app | cuidado | pro
+  cor       text default 'app',   -- app | cuidado | pro (usado quando NÃO há imagem)
+  imagem    text,                 -- URL da arte do banner (1600x320); tem prioridade sobre o texto
   ordem     int  default 0,
   ativo     boolean not null default true,
   criado_em timestamptz not null default now()
 );
+
+-- Se a tabela já existia sem a coluna de imagem, adiciona:
+alter table public.blog_banners add column if not exists imagem text;
 
 alter table public.blog_banners enable row level security;
 
