@@ -153,28 +153,29 @@ a{color:inherit;text-decoration:none}
 .foot-in nav{margin-left:auto;display:flex;gap:20px;flex-wrap:wrap}
 .foot-in nav a{color:var(--txs);font-weight:700;font-size:13.5px}
 .foot-in nav a:hover{color:var(--vd)}
-/* ===== banner rotativo (propagandas dichava) ===== */
-.banner{position:relative;margin:24px 0 4px;border-radius:22px;overflow:hidden;box-shadow:0 22px 50px -30px rgba(20,50,28,.55)}
-.bn-track{display:flex;transition:transform .5s cubic-bezier(.4,.1,.2,1)}
-.bn-slide{min-width:100%;position:relative;display:flex;flex-direction:column;justify-content:center;padding:30px 34px;min-height:180px;color:#fff;text-decoration:none;overflow:hidden}
-.bn--app{background:radial-gradient(130% 140% at 100% 0%,#2fd0a0,#12894e 58%,#0e5c37)}
-.bn--cuidado{background:radial-gradient(130% 140% at 100% 0%,#22b8cf,#0e7490 58%,#0b4f63)}
-.bn--pro{background:radial-gradient(130% 140% at 100% 0%,#a78bfa,#6d28d9 58%,#4c1d95)}
-.bn-mk{position:absolute;right:-20px;bottom:-34px;width:196px;opacity:.15;pointer-events:none}
+/* ===== banner rotativo (propagandas dichava) — fino, aceita imagem ===== */
+.banner{position:relative;margin:24px 0 4px;border-radius:18px;overflow:hidden;box-shadow:0 18px 44px -28px rgba(20,50,28,.5);aspect-ratio:1600/320;background:var(--cin)}
+.bn-track{display:flex;height:100%;transition:transform .6s cubic-bezier(.4,.1,.2,1)}
+.bn-slide{min-width:100%;height:100%;position:relative;display:flex;flex-direction:column;justify-content:center;text-decoration:none;overflow:hidden;color:#fff}
+.bn-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.bn--app{background:radial-gradient(130% 160% at 100% 0%,#2fd0a0,#12894e 58%,#0e5c37)}
+.bn--cuidado{background:radial-gradient(130% 160% at 100% 0%,#22b8cf,#0e7490 58%,#0b4f63)}
+.bn--pro{background:radial-gradient(130% 160% at 100% 0%,#a78bfa,#6d28d9 58%,#4c1d95)}
+.bn-mk{position:absolute;right:-14px;bottom:-24px;width:152px;opacity:.15;pointer-events:none}
 .bn-mk svg{width:100%;fill:none;stroke:#fff;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;transform:rotate(-8deg)}
-.bn-body{position:relative;z-index:1;max-width:82%}
-.bn-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.22);padding:4px 11px;border-radius:999px;margin-bottom:11px}
-.bn-t{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:29px;line-height:1.05;margin-bottom:8px;letter-spacing:.004em}
-.bn-x{font-size:15px;line-height:1.45;color:rgba(255,255,255,.9);margin-bottom:15px;max-width:460px}
-.bn-cta{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#123720;font-weight:800;font-size:14px;padding:10px 17px;border-radius:999px;align-self:flex-start}
+.bn-body{position:relative;z-index:1;max-width:80%;padding:0 30px}
+.bn-tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:999px;margin-bottom:8px}
+.bn-t{font-family:'Bagel Fat One',system-ui;font-weight:400;font-size:23px;line-height:1.05;margin-bottom:6px}
+.bn-x{font-size:13.5px;line-height:1.4;color:rgba(255,255,255,.9);margin-bottom:11px;max-width:440px}
+.bn-cta{display:inline-flex;align-items:center;gap:7px;background:#fff;color:#123720;font-weight:800;font-size:13px;padding:8px 15px;border-radius:999px;align-self:flex-start}
 .bn--cuidado .bn-cta{color:#0b4f63}.bn--pro .bn-cta{color:#4c1d95}
-.bn-arrow{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.2);color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
-.bn-arrow:hover{background:rgba(255,255,255,.34)}
-.bn-prev{left:12px}.bn-next{right:12px}
-.bn-dots{position:absolute;bottom:13px;left:0;right:0;display:flex;justify-content:center;gap:7px;z-index:2}
-.hc-dot{width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,.5);cursor:pointer;padding:0;transition:width .2s,background .2s}
-.hc-dot.on{background:#fff;width:22px;border-radius:5px}
-@media(max-width:560px){.bn-slide{padding:24px 22px;min-height:164px}.bn-t{font-size:23px}.bn-x{font-size:14px}.bn-arrow{display:none}.bn-body{max-width:100%}}
+.bn-arrow{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.22);color:#fff;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
+.bn-arrow:hover{background:rgba(255,255,255,.36)}
+.bn-prev{left:10px}.bn-next{right:10px}
+.bn-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:2}
+.hc-dot{width:7px;height:7px;border-radius:50%;border:none;background:rgba(255,255,255,.6);cursor:pointer;padding:0;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:width .2s,background .2s}
+.hc-dot.on{background:#fff;width:20px;border-radius:4px}
+@media(max-width:560px){.bn-t{font-size:18px}.bn-x{display:none}.bn-cta{font-size:12px;padding:7px 13px}.bn-arrow{display:none}.bn-body{max-width:100%;padding:0 20px}}
 /* ===== reduced motion ===== */
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.spin{animation-duration:.8s!important;animation-iteration-count:infinite!important}}
 </style>
@@ -303,13 +304,17 @@ function bannerHTML(){
   const arrow='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
   const leaf='<svg viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg>';
   const ext=u=>/^https?:/i.test(u)?' target="_blank" rel="noopener"':'';
-  const slides=bs.map(b=>`<a class="bn-slide bn--${esc(b.cor||'app')}" href="${esc(b.url||'/')}"${ext(b.url||'')}>
+  const slides=bs.map(b=>{
+    const href=esc(b.url||'/'), e=ext(b.url||'');
+    if(b.imagem) return `<a class="bn-slide" href="${href}"${e}><img src="${esc(b.imagem)}" alt="${esc(b.titulo||'')}" loading="lazy"></a>`;
+    return `<a class="bn-slide bn--${esc(b.cor||'app')}" href="${href}"${e}>
       <div class="bn-mk">${leaf}</div>
       <div class="bn-body">${b.tag?`<span class="bn-tag">${esc(b.tag)}</span>`:''}
         <div class="bn-t">${esc(b.titulo)}</div>
         ${b.texto?`<div class="bn-x">${esc(b.texto)}</div>`:''}
         <span class="bn-cta">${esc(b.cta||'Saiba mais')} ${arrow}</span>
-      </div></a>`).join('');
+      </div></a>`;
+  }).join('');
   const nav=bs.length>1?`<button class="bn-arrow bn-prev" onclick="goSlide(_hc.i-1)" aria-label="Anterior">‹</button><button class="bn-arrow bn-next" onclick="goSlide(_hc.i+1)" aria-label="Próximo">›</button><div class="bn-dots" id="hc-dots"></div>`:'';
   return `<div class="banner"><div class="bn-track" id="hc-track">${slides}</div>${nav}</div>`;
 }
