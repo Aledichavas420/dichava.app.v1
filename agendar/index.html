@@ -118,7 +118,6 @@ function render(p){
     <div class="sec">Atendimento</div>
     <div class="meta">
       <div class="mi"><div class="k">Modalidade</div><div class="v">${modLabel}</div></div>
-      ${p.valor?`<div class="mi"><div class="k">Valor médio</div><div class="v">${esc(p.valor)}</div></div>`:''}
       ${p.duracao?`<div class="mi"><div class="k">Duração</div><div class="v">${esc(p.duracao)}</div></div>`:''}
       ${p.cidade?`<div class="mi"><div class="k">Local</div><div class="v">${esc(p.cidade)}</div></div>`:''}
     </div>
@@ -143,7 +142,7 @@ function pickTime(data,hora){ selTime={data,hora}; formStep(); }
 
 function formStep(){
   const box=PROF?$('agd'):$('bd');
-  const quando=selTime?`<div class="confirm"><div style="font-size:26px">📅</div><div style="font-weight:800;font-size:17px;margin-top:4px">Confirmar solicitação</div><div style="font-size:14px;color:var(--txs);margin-top:6px;text-transform:capitalize">${new Date(selTime.data+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} às <b>${selTime.hora}</b></div></div>`:'';
+  const quando=selTime?`<div class="confirm"><div style="font-size:26px">📅</div><div style="font-weight:800;font-size:17px;margin-top:4px">Confirmar solicitação</div><div style="font-size:14px;color:var(--txs);margin-top:6px;text-transform:capitalize">${new Date(selTime.data+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} às <b>${selTime.hora}</b></div>${(PROF&&PROF.valor)?`<div style="font-size:13.5px;color:var(--txs);margin-top:8px">Valor médio: <b>${esc(PROF.valor)}</b></div>`:''}</div></div>`:'';
   const back=selTime?`<button class="back" onclick="renderAgenda(${selIdx})">← escolher outro horário</button>`:'';
   const dtRow=selTime?'':`<div class="row"><div><label>Data preferida</label><input id="f-data" type="date"></div><div><label>Horário</label><input id="f-hora" type="time"></div></div>`;
   box.innerHTML=`${back}${quando}
