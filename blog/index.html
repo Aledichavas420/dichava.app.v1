@@ -371,7 +371,7 @@ function lista(){
   const temasComPost=[...new Set((_posts||[]).map(p=>p.tema).filter(Boolean))];
   const tnav='<nav class="tnav"><button class="'+(_tema===''?'on':'')+'" onclick="setTema(\'\')">Todos</button>'+
     temasComPost.map(t=>`<button class="${_tema===t?'on':''}" onclick="setTema('${t}')">${esc(TEMAS[t]||t)}</button>`).join('')+'</nav>';
-  const mast=`<header class="mast"><h1>Se informar<br>é <span class="hl">se cuidar</span>.</h1><p>Redução de danos, saúde mental e vida real. Textos <b>sem julgamento</b>, no seu tempo, pra você e pra quem você ama.</p></header>`;
+  const mast=`<header class="mast"><h1>Se informar<br>é <span class="hl">se cuidar</span>.</h1><p>Redução de danos, saúde mental e vida real.</p></header>`;
   app.innerHTML=mast+bannerHTML()+tnav+`<div class="layout"><main class="col-main"><div id="results">${resultsHTML()}</div></main>${sidebarHTML()}</div>`;
   const nb=(_banners&&_banners.length)?_banners.length:BANNERS_DEFAULT.length;
   try{ initCarousel(nb); }catch(e){}
