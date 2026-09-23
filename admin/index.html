@@ -1716,6 +1716,29 @@ async function enviarBoasVindas(p,trial){
     toast('✉️ E-mail de boas-vindas enviado');
   }catch(e){ toast('Liberado, mas o e-mail falhou: '+(e.message||''),1); }
 }
+// Aviso ao profissional quando o perfil (ou uma edição) é aprovado e entra no diretório.
+function perfilAprovadoHtml(nome){
+  var primeiro = nome ? esc(String(nome).trim().split(/\s+/)[0]) : '';
+  return '<div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:0 auto;color:#18241B">'
+   +'<div style="background:#1E6B3A;color:#fff;padding:22px 24px;border-radius:14px 14px 0 0">'
+     +'<div style="font-size:20px;font-weight:800">dichava</div>'
+     +'<div style="font-size:13px;color:#CFE4D4;margin-top:2px">Rede dichava</div></div>'
+   +'<div style="border:1px solid #e6ece7;border-top:none;border-radius:0 0 14px 14px;padding:24px">'
+     +'<p style="font-size:16px;font-weight:700;margin:0 0 12px">Seu perfil foi aprovado'+(primeiro?(' e está no ar, '+primeiro):' e está no ar')+'!</p>'
+     +'<p style="font-size:14px;line-height:1.6;margin:0 0 14px;color:#3a463c">Revisamos o seu perfil e ele já aparece no diretório da Rede dichava. Quem procura cuidado com redução de danos pode te encontrar por lá.</p>'
+     +'<p style="margin:0 0 20px"><a href="https://dichava.app/landing/rede.html" style="background:#2FA35F;color:#fff;text-decoration:none;font-weight:800;font-size:14px;padding:11px 18px;border-radius:10px;display:inline-block">Ver o diretório</a></p>'
+     +'<p style="font-size:13.5px;line-height:1.6;margin:0 0 4px;color:#3a463c">Qualquer ajuste, é só editar no painel: <a href="https://dichava.app/clinica/" style="color:#1E6B3A">dichava.app/clinica</a>. Toda edição passa por uma revisão rápida antes de ir ao ar.</p>'
+     +'<p style="font-size:13.5px;line-height:1.6;margin:14px 0 0;color:#3a463c">Um abraço,<br>Alexandre, Rede dichava</p>'
+   +'</div></div>';
+}
+async function enviarPerfilAprovado(p){
+  if(!p||!p.email) return;
+  try{
+    var r=await SB.functions.invoke('admin-email',{body:{to:p.email,subject:'Seu perfil foi aprovado no diretório da Rede dichava',html:perfilAprovadoHtml(p.nome)}});
+    if(r.error) throw r.error; if(r.data&&r.data.erro) throw new Error('erro');
+    toast('✉️ Aviso de aprovação enviado');
+  }catch(e){ toast('Aprovado, mas o e-mail de aviso falhou.',3500); }
+}
 // Ficha completa do profissional (curadoria). Busca a linha inteira (admin tem RLS).
 // Nunca mostra senha — senhas ficam no auth do Supabase, nem chegam ao cliente.
 function baixarFotoAtual(){
@@ -1761,7 +1784,7 @@ async function abrirDetalheProf(id){
     +sec('Atuação')+row('Especialidades', p.especialidades)+row('Modalidade', p.modalidade)+row('Públicos', p.publicos)+row('Idiomas', p.idiomas)+row('Valor', p.valor)+row('Duração', p.duracao)+row('Disponibilidade', p.disponibilidade)
     +(p.bio?(sec('Bio')+'<div style="font-size:13.5px;line-height:1.6;padding:8px 0;white-space:pre-wrap">'+S(p.bio)+'</div>'):'')
     +(temLink?(sec('Links')+lrow('Instagram',p.instagram)+lrow('Site',p.site)+lrow('LinkedIn',p.linkedin)+((!p.instagram&&!p.site&&!p.linkedin)?lrow('Link',p.link):'')):'')
-    +sec('Plano & acesso')+row('Plano', p.plano?planoNome(p.plano):'')+row('Liberado em', p.liberado_em?fmtData(p.liberado_em):'')+row('Acesso até', p.acesso_ate?fmtData(p.acesso_ate):'')+row('Avaliações', base.n_aval?((base.media_aval||'—')+' ★ ('+base.n_aval+')'):'')
+    +sec('Plano & acesso')+row('Plano', p.plano?planoNome(p.plano):'')+row('Liberado em', p.liberado_em?fmtData(p.liberado_em):'')+row('Perfil aprovado em', p.aprovado_em?fmtData(p.aprovado_em):'')+row('Acesso até', p.acesso_ate?fmtData(p.acesso_ate):'')+row('Avaliações', base.n_aval?((base.media_aval||'—')+' ★ ('+base.n_aval+')'):'')
     +(base.obs_admin?(sec('Suas anotações')+'<div style="font-size:13px;padding:8px 0;white-space:pre-wrap;color:var(--txs)">'+S(base.obs_admin)+'</div>'):'')
     +'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;border-top:1px solid var(--line);padding-top:14px">'+acts.join('')+wa+'</div>';
   $('#modalRoot').innerHTML='<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal" style="max-width:560px;max-height:88vh;overflow:auto">'+html+'</div></div>';
@@ -1792,6 +1815,7 @@ async function acao(id,tipo,meses,obs){
     const msgs={aprovar:'Perfil aprovado',rejeitar:'Profissional rejeitado',liberar:'Acesso liberado!',trial:'Teste de 7 dias liberado! 🎁',bloquear:'Acesso bloqueado'};
     toast(msgs[tipo]||'Feito');
     if((tipo==='liberar'||tipo==='trial') && !_skipBoasVindas) enviarBoasVindas(p,tipo==='trial');
+    if(tipo==='aprovar') enviarPerfilAprovado(p);
     _skipBoasVindas=false;
     carregar();
   }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
