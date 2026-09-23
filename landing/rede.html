@@ -229,7 +229,7 @@ async function carregar(){
   if(!SB){ grid.innerHTML='<div class="empty">Não consegui carregar agora. Veja a rede completa direto no app.</div>'; cnt.textContent=''; return; }
   var profs=[];
   try{
-    var cols='id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,disponibilidade,publicos,idiomas,foto,link,telefone,agenda_codigo,destaque,ativo,em_teste,oculto_diretorio,status';
+    var cols='id,nome,tipo_prof,reg,bio,especialidades,modalidade,cidade,valor,duracao,disponibilidade,publicos,idiomas,foto,link,telefone,agenda_codigo,agenda_config,destaque,ativo,em_teste,oculto_diretorio,status';
     var r=await SB.from('profissionais_pub').select(cols).eq('status','aprovado');
     if(r.error){ r=await SB.from('profissionais_pub').select('*').eq('status','aprovado'); }
     profs=r.data||[];
@@ -289,7 +289,10 @@ function aplicar(){
 function abrirPerfil(id){
   var p=BYID[id]; if(!p)return;
   var tags=(p.especialidades||'').split(',').map(function(t){return t.trim();}).filter(Boolean);
-  var wa=waLink(p.telefone), ag=agLink(p.agenda_codigo);
+  var wa=waLink(p.telefone);
+  // Agenda online só nos planos Profissional/Clínica: a view libera agenda_config apenas pra eles.
+  var temAg=!!(p.agenda_config&&p.agenda_config.dias&&Object.keys(p.agenda_config.dias).length);
+  var ag=temAg?agLink(p.agenda_codigo):'';
   var metas=[];
   if(modtag(p.modalidade))metas.push(['Modalidade',modtag(p.modalidade)]);
   if(p.cidade)metas.push(['Local',p.cidade]);

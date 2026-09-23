@@ -26,7 +26,8 @@ create view public.profissionais_pub as
 select
   id, nome, tipo_prof, reg, bio, especialidades, modalidade, cidade,
   valor, duracao, disponibilidade, publicos, idiomas, foto, foto_mini, link, telefone,
-  agenda_codigo, destaque, ativo, em_teste, oculto_diretorio, status,
+  case when plano in ('profissional','clinica') then agenda_codigo else null end as agenda_codigo,
+  destaque, ativo, em_teste, oculto_diretorio, status,
   capa,
   case when plano in ('profissional','clinica') then agenda_config else null end as agenda_config,
   bio_links, bio_config,
