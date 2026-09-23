@@ -41,6 +41,9 @@ revoke all on function public.admin_stats() from public, anon;
 grant execute on function public.admin_stats() to authenticated;
 
 -- 3) LISTA (inclui plano + comprovante)
+-- Carimbo de data da aprovação do perfil (reaprovação de edição inclusa).
+alter table public.profissionais add column if not exists aprovado_em timestamptz;
+
 create or replace function public.admin_profissionais()
 returns json language plpgsql security definer set search_path = public as $$
 declare r json;
@@ -48,7 +51,7 @@ begin
   if not public.eh_admin() then raise exception 'not authorized'; end if;
   select coalesce(json_agg(x order by x.criado desc), '[]'::json) into r from (
     select p.id, p.nome, p.tipo_prof, p.reg, p.cidade, p.telefone, p.link,
-           coalesce(p.status,'pendente') as status, p.ativo, p.acesso_ate, p.liberado_em, p.obs_admin,
+           coalesce(p.status,'pendente') as status, p.ativo, p.acesso_ate, p.liberado_em, p.aprovado_em, p.obs_admin,
            p.plano, (p.comprovante is not null) as tem_comprovante,
            coalesce(u.created_at, p.liberado_em, now()) as criado, u.email,
            (select count(*) from public.avaliacoes_prof a where a.prof_id=p.id) as n_aval,
@@ -80,12 +83,12 @@ returns void language plpgsql security definer set search_path = public as $$
 begin
   if not public.eh_admin() then raise exception 'not authorized'; end if;
   if p_acao = 'aprovar' then
-    update public.profissionais set status='aprovado' where id=p_id;
+    update public.profissionais set status='aprovado', aprovado_em=now() where id=p_id;
   elsif p_acao = 'rejeitar' then
     update public.profissionais set status='rejeitado', ativo=false where id=p_id;
   elsif p_acao = 'liberar' then
     update public.profissionais
-      set ativo=true, status='aprovado', liberado_em=now(),
+      set ativo=true, status='aprovado', liberado_em=now(), aprovado_em=now(),
           acesso_ate = case when coalesce(p_meses,0) > 0 then now() + (p_meses || ' months')::interval else null end,
           obs_admin = coalesce(p_obs, obs_admin),
           plano = coalesce(p_plano, plano)
