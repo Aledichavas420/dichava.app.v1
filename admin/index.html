@@ -397,6 +397,25 @@ tbody tr:hover{background:var(--card2)}
         <input id="nt-fonte" value="Cannabis Monitor" placeholder="Fonte" style="flex:1;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px">
         <input id="nt-img" placeholder="Imagem (URL, opcional)" style="flex:1.4;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px">
       </div>
+      <div style="margin:10px 0 2px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <label class="btn ghost sm" style="cursor:pointer">📷 Enviar imagem<input type="file" accept="image/*" id="nt-file" onchange="ntCropOpen(this)" style="display:none"></label>
+          <span style="font-size:12px;color:var(--txm)">ou cole a URL acima. Ideal: imagem larga (proporção ~2,3:1).</span>
+        </div>
+        <div id="nt-crop-wrap" style="display:none;margin-top:12px">
+          <div id="nt-crop" style="position:relative;width:340px;max-width:100%;height:147px;border-radius:12px;overflow:hidden;background:#0d130f;touch-action:none;cursor:grab;user-select:none">
+            <img id="nt-crop-img" alt="" draggable="false" style="position:absolute;left:0;top:0;pointer-events:none;max-width:none">
+            <div style="position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5);border-radius:12px;pointer-events:none"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;max-width:340px">
+            <span style="font-size:12px;color:var(--txm)">Zoom</span>
+            <input type="range" id="nt-zoom" min="1" max="3" step="0.01" value="1" style="flex:1" oninput="ntCropZoom(this.value)">
+          </div>
+          <div style="font-size:11.5px;color:var(--txm);margin-top:4px">Arraste pra posicionar e use o zoom. É assim que vai aparecer no banner.</div>
+          <div class="pacts" style="margin-top:8px"><button class="btn sm" onclick="ntCropUse()">Usar esta imagem</button><button class="btn ghost sm" onclick="ntCropCancel()">Cancelar</button></div>
+        </div>
+        <div id="nt-img-prev" style="margin-top:8px"></div>
+      </div>
       <button class="btn sm" onclick="addNoticia()" style="margin-top:10px">Adicionar ao banner</button>
       <div id="nt-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
       <div id="nt-list" style="margin-top:12px"></div>
@@ -698,8 +717,67 @@ async function addNoticia(){
   st.textContent='Salvando…';
   try{ const {error}=await SB.from('noticias').insert({manchete:man,link:link,fonte:fonte||null,imagem:img||null,ativo:true}); if(error)throw error;
     document.getElementById('nt-manchete').value=''; document.getElementById('nt-link').value=''; document.getElementById('nt-img').value='';
+    var pv=document.getElementById('nt-img-prev'); if(pv)pv.innerHTML='';
     st.textContent='✓ Adicionada ao banner.'; carregarNoticias();
   }catch(e){ st.textContent='Não consegui concluir. Tenta de novo.'+(/(policy|denied|permission)/i.test(e.message||'')?' — você está logado como admin?':''); }
+}
+/* ===== Recorte/ajuste da imagem da notícia (upload + zoom + posição) ===== */
+var _ntc={img:null,natW:0,natH:0,scale:1,base:1,x:0,y:0,W:340,H:147,drag:null};
+function ntCropOpen(input){
+  var f=input.files&&input.files[0]; if(!f){ return; }
+  var url=URL.createObjectURL(f);
+  var im=new Image();
+  im.onload=function(){
+    var frame=document.getElementById('nt-crop');
+    _ntc.img=im; _ntc.natW=im.naturalWidth; _ntc.natH=im.naturalHeight;
+    _ntc.W=frame.clientWidth||340; _ntc.H=Math.round(_ntc.W/(1200/520)); frame.style.height=_ntc.H+'px';
+    _ntc.base=Math.max(_ntc.W/_ntc.natW,_ntc.H/_ntc.natH); _ntc.scale=_ntc.base;
+    _ntc.x=(_ntc.W-_ntc.natW*_ntc.scale)/2; _ntc.y=(_ntc.H-_ntc.natH*_ntc.scale)/2;
+    var el=document.getElementById('nt-crop-img'); el.src=url;
+    document.getElementById('nt-zoom').value=1;
+    document.getElementById('nt-crop-wrap').style.display='block';
+    ntCropApply(); ntCropBind();
+  };
+  im.src=url; input.value='';
+}
+function ntCropApply(){
+  var minX=_ntc.W-_ntc.natW*_ntc.scale, minY=_ntc.H-_ntc.natH*_ntc.scale;
+  if(_ntc.x>0)_ntc.x=0; if(_ntc.x<minX)_ntc.x=minX;
+  if(_ntc.y>0)_ntc.y=0; if(_ntc.y<minY)_ntc.y=minY;
+  var el=document.getElementById('nt-crop-img');
+  el.style.width=(_ntc.natW*_ntc.scale)+'px'; el.style.height=(_ntc.natH*_ntc.scale)+'px';
+  el.style.left=_ntc.x+'px'; el.style.top=_ntc.y+'px';
+}
+function ntCropZoom(v){
+  var nv=parseFloat(v)||1, ns=_ntc.base*nv;
+  var cx=(_ntc.W/2-_ntc.x)/_ntc.scale, cy=(_ntc.H/2-_ntc.y)/_ntc.scale;
+  _ntc.scale=ns; _ntc.x=_ntc.W/2-cx*ns; _ntc.y=_ntc.H/2-cy*ns; ntCropApply();
+}
+function ntCropBind(){
+  var frame=document.getElementById('nt-crop'); if(frame._bound)return; frame._bound=1;
+  frame.addEventListener('pointerdown',function(e){ _ntc.drag={x:e.clientX,y:e.clientY,ox:_ntc.x,oy:_ntc.y}; try{frame.setPointerCapture(e.pointerId);}catch(_){}; frame.style.cursor='grabbing'; });
+  frame.addEventListener('pointermove',function(e){ if(!_ntc.drag)return; _ntc.x=_ntc.drag.ox+(e.clientX-_ntc.drag.x); _ntc.y=_ntc.drag.oy+(e.clientY-_ntc.drag.y); ntCropApply(); });
+  frame.addEventListener('pointerup',function(){ _ntc.drag=null; frame.style.cursor='grab'; });
+  frame.addEventListener('pointercancel',function(){ _ntc.drag=null; });
+}
+function ntCropCancel(){ document.getElementById('nt-crop-wrap').style.display='none'; _ntc.img=null; }
+async function ntCropUse(){
+  if(!_ntc.img){ return; }
+  var st=document.getElementById('nt-status');
+  var k=1200/_ntc.W, cw=1200, ch=Math.round(_ntc.H*k);
+  var cv=document.createElement('canvas'); cv.width=cw; cv.height=ch;
+  var ctx=cv.getContext('2d'); ctx.fillStyle='#0d130f'; ctx.fillRect(0,0,cw,ch);
+  ctx.drawImage(_ntc.img, _ntc.x*k, _ntc.y*k, _ntc.natW*_ntc.scale*k, _ntc.natH*_ntc.scale*k);
+  try{
+    st.textContent='Enviando imagem…';
+    var blob=await new Promise(function(res){ cv.toBlob(res,'image/jpeg',0.85); });
+    var file=new File([blob],'noticia-'+Date.now()+'.jpg',{type:'image/jpeg'});
+    var url=await _uploadBlog(file);
+    document.getElementById('nt-img').value=url;
+    document.getElementById('nt-img-prev').innerHTML='<img src="'+esc(url)+'" style="width:100%;max-width:340px;border-radius:10px;display:block">';
+    document.getElementById('nt-crop-wrap').style.display='none';
+    st.textContent='✓ Imagem pronta. Agora clique em "Adicionar ao banner".';
+  }catch(e){ st.textContent='Erro no upload: '+((e&&e.message)||e); }
 }
 async function toggleNoticia(id,ativo){
   try{ const {error}=await SB.from('noticias').update({ativo:ativo}).eq('id',id); if(error)throw error; carregarNoticias(); }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
