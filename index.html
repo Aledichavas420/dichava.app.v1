@@ -357,6 +357,9 @@ a{color:inherit;text-decoration:none}
 .ov{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:690;display:flex;align-items:flex-end;justify-content:center;box-sizing:border-box}
 
 .sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;max-height:92%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sheet{overflow-x:hidden}
+.fr2>*{min-width:0}
+.subgrid{min-width:0}
 .sheet.kb-lift{transition:transform .22s ease}
 .sp{padding:0 18px calc(28px + var(--sb))}
 .mh{width:36px;height:4px;background:#E0E0E0;border-radius:2px;margin:12px auto 18px}
@@ -4018,7 +4021,7 @@ a{color:inherit;text-decoration:none}
   <button class="mclose" onclick="fecharReg()" aria-label="Fechar">✕</button>
   <div class="mt">Novo registro 📓</div>
   <p style="font-size:calc(13px*var(--fz,1));color:var(--txs);margin-bottom:15px">Sem julgamento — só registre como foi.</p>
-  <div class="fr2" style="margin-bottom:12px">
+  <div class="fr2" style="margin-bottom:12px;grid-template-columns:1fr">
     <div class="fld" style="margin:0"><div class="lbl">Substância <span style="font-weight:500;color:var(--txs);font-size:calc(11px*var(--fz,1))">· opcional · pode escolher mais de uma</span></div>
       <div class="subgrid" id="reg-subgrid" data-target="reg-sub"></div><input type="hidden" id="reg-sub" value="" onchange="regSubChg()">
     </div>
