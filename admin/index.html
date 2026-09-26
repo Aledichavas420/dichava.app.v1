@@ -214,6 +214,9 @@ tbody tr:hover{background:var(--card2)}
 
     <div class="sec">👀 Visitas nas páginas públicas</div>
     <div id="visitas-box" class="card" style="padding:14px"><div class="spin"></div></div>
+
+    <div class="sec">⭐ Avaliações do app (usuários)</div>
+    <div id="aval-box" class="card" style="padding:14px"><div class="spin"></div></div>
     </div>
 
     <!-- ══ PROFISSIONAIS ══ -->
@@ -581,6 +584,7 @@ async function carregar(){
     renderKpis(data); renderGrowth(data.usuarios_por_mes||[]);
   }catch(e){ $('#kpis').innerHTML='<div class="empty">Não consegui carregar as estatísticas.<br><small style="color:var(--txs)">'+esc(e.message||'')+'</small><br><small style="color:var(--txs)">Rodou o admin-setup.sql?</small></div>'; $('#growth').innerHTML=''; }
   try{ carregarVisitas(); }catch(e){}
+  try{ carregarAvaliacoesApp(); }catch(e){}
   // profissionais
   try{
     const {data,error}=await SB.rpc('admin_profissionais');
@@ -1206,6 +1210,48 @@ async function carregarVisitas(){
       + (top.length ? top.map(([p,n])=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:7px 2px;border-bottom:1px solid var(--line);font-size:13px"><span style="min-width:0">${esc(nomes[p]||'Página')} <span style="color:var(--txm);word-break:break-all">${esc(p)}</span></span><b>${n}</b></div>`).join('')
                     : '<div style="color:var(--txm);font-size:13px;padding:6px">Sem visitas ainda.</div>');
   }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Não consegui carregar as visitas. Rodou o visitas-setup.sql?</div>'; }
+}
+// ===== AVALIAÇÕES DO APP (usuários) =====
+async function carregarAvaliacoesApp(){
+  const box=$('#aval-box'); if(!box) return;
+  try{
+    const {data,error}=await SB.from('app_avaliacoes').select('nota,comentario,atualizado_em').order('atualizado_em',{ascending:false});
+    if(error) throw error;
+    const rows=data||[];
+    const comNota=rows.filter(r=>r.nota>0);
+    if(!comNota.length){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:6px">Nenhuma avaliação ainda.</div>'; return; }
+    const soma=comNota.reduce((a,r)=>a+(+r.nota||0),0);
+    const media=(soma/comNota.length);
+    const dist=[0,0,0,0,0]; comNota.forEach(r=>{ const n=Math.min(5,Math.max(1,+r.nota||0)); dist[n-1]++; });
+    const maxD=Math.max(1,...dist);
+    const estrelas=n=>'★★★★★☆☆☆☆☆'.slice(5-n,10-n);
+    const kpi=(v,l,hl)=>`<div class="kpi ${hl?'hl':''}"><div class="kl">${l}</div><div class="kv">${v}</div><div class="kd"></div></div>`;
+    const barras=[5,4,3,2,1].map(n=>{
+      const q=dist[n-1]; const pct=Math.round(q/maxD*100);
+      return `<div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:2px 0">
+        <span style="width:44px;color:var(--txs)">${n} ★</span>
+        <div style="flex:1;height:8px;background:var(--line);border-radius:5px;overflow:hidden"><div style="height:100%;width:${pct}%;background:#F4B400;border-radius:5px"></div></div>
+        <span style="width:28px;text-align:right;color:var(--txm)">${q}</span>
+      </div>`;
+    }).join('');
+    const comentarios=comNota.filter(r=>r.comentario&&r.comentario.trim());
+    const listaCom = comentarios.length
+      ? comentarios.map(r=>`<div style="padding:9px 2px;border-bottom:1px solid var(--line)">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+            <span style="color:#F4B400;font-size:13px;letter-spacing:1px">${estrelas(Math.min(5,Math.max(1,+r.nota||0)))}</span>
+            <span style="font-size:11px;color:var(--txs)">${r.atualizado_em?fmtData(r.atualizado_em):''}</span>
+          </div>
+          <div style="font-size:13px;margin-top:3px;white-space:pre-wrap;word-break:break-word">${esc(r.comentario.trim())}</div>
+        </div>`).join('')
+      : '<div style="color:var(--txm);font-size:13px;padding:6px">Ainda sem comentários escritos.</div>';
+    box.innerHTML=
+      '<div class="kpis" style="margin-bottom:12px">'
+      + kpi(media.toFixed(1).replace('.',',')+' ★','Média',true) + kpi(comNota.length,'Avaliações') + kpi(comentarios.length,'Com comentário')
+      + '</div>'
+      + '<div style="margin:4px 0 12px">'+barras+'</div>'
+      + '<div style="font-size:12px;color:var(--txm);margin:4px 0 6px">Comentários</div>'
+      + listaCom;
+  }catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">Não consegui carregar as avaliações. Rodou o app-avaliacoes-setup.sql?</div>'; }
 }
 // ===== VENCIDOS QUE CONTINUAM ATIVOS =====
 async function carregarVencidos(){
