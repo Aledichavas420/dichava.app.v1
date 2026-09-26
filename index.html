@@ -5890,8 +5890,43 @@ function renderAlts(regs){
   if(cfg.notif&&cS>=cfg.limS)c.innerHTML+=`<div class="alt at"><div class="alti">📊</div><div class="altb"><div class="altt">Limite semanal atingido</div><div class="altx">${cS} usos essa semana (limite: ${cfg.limS}).</div></div><button aria-label="Dispensar aviso" title="Dispensar aviso" class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
   const st=streak(regs);
   if(st>=3)c.innerHTML+=`<div class="alt pos"><div class="alti">🔥</div><div class="altb"><div class="altt">${st} dias de registro seguidos!</div><div class="altx">Você está construindo uma prática consistente.</div></div><button aria-label="Dispensar aviso" title="Dispensar aviso" class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
+  try{ if(avalPodeMostrar(regs)) c.innerHTML+=avalCardHTML(); }catch(e){}
 }
 
+/* ══ AVALIAÇÃO DO APP (card na home, salva no Supabase) ══ */
+function avalPodeMostrar(regs){
+  try{
+    if(_demo||typeof U==='undefined'||!U||U.id==='demo'||!_SB) return false;
+    if(ls('dr_aval_done_'+uid())) return false;
+    var ds=ls('dr_aval_dismiss_'+uid()); if(ds && (Date.now()-ds) < 30*864e5) return false;
+    return !!(regs && regs.length>=3);
+  }catch(e){ return false; }
+}
+function avalCardHTML(){
+  var stars=[1,2,3,4,5].map(function(n){return '<button onclick="avalNota('+n+')" aria-label="'+n+(n>1?' estrelas':' estrela')+'" style="background:none;border:none;font-size:27px;cursor:pointer;padding:2px 3px;line-height:1">⭐</button>';}).join('');
+  return '<div class="alt inf" id="aval-card"><div class="alti">💚</div><div class="altb" style="flex:1"><div class="altt">Como está sendo o dichava pra você?</div><div class="altx" style="margin-bottom:8px">Sua avaliação ajuda a melhorar o app.</div><div id="aval-body"><div style="display:flex;gap:2px">'+stars+'</div></div></div><button class="altf" onclick="avalDispensar()" aria-label="Dispensar">✕</button></div>';
+}
+function avalNota(n){
+  window._avalNota=n;
+  try{ ls('dr_aval_done_'+uid(),1); }catch(e){}
+  salvarAvaliacaoApp(n,null);
+  var b=document.getElementById('aval-body');
+  if(b) b.innerHTML='<div class="altx" style="margin:2px 0 6px">Obrigado pela nota. Quer contar em uma frase? (opcional)</div><textarea id="aval-com" rows="2" placeholder="O que você achou..." style="width:100%;border:1px solid var(--cinm,#dfe6e0);border-radius:10px;padding:9px 11px;font-family:inherit;font-size:13.5px;background:#fff;color:var(--tx,#18241b)"></textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="btn bv bsm" onclick="avalEnviarComentario()">Enviar</button><button class="btn bout bsm" onclick="avalFechar()">Fechar</button></div>';
+}
+function avalEnviarComentario(){
+  var el=document.getElementById('aval-com'); var c=el?(el.value||'').trim():'';
+  if(c) salvarAvaliacaoApp(window._avalNota||null, c);
+  avalFechar(); try{ toast('Obrigado pelo retorno! 💚'); }catch(e){}
+}
+function avalFechar(){ var el=document.getElementById('aval-card'); if(el) el.remove(); }
+function avalDispensar(){ try{ ls('dr_aval_dismiss_'+uid(),Date.now()); }catch(e){} var el=document.getElementById('aval-card'); if(el) el.remove(); }
+async function salvarAvaliacaoApp(nota,comentario){
+  try{
+    if(!_SB||typeof U==='undefined'||!U) return;
+    var row={user_id:U.id, nota:nota||null}; if(comentario!=null) row.comentario=comentario;
+    await _SB.from('app_avaliacoes').upsert(row,{onConflict:'user_id'});
+  }catch(e){}
+}
 function renderWds(regs){
   const c=document.getElementById('h-wds');c.innerHTML='';
   const hj=new Date();hj.setHours(12,0,0,0);const dias=['D','S','T','Q','Q','S','S'];const cfg=gC();
