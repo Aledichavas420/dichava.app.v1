@@ -525,6 +525,10 @@ a{color:inherit;text-decoration:none}
 /* contador de finanças — versão reduzida e discreta dentro do painel hero */
 .finbox{position:relative;z-index:2;margin-top:12px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:8px 10px 8px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:background .15s}
 .finbox:active{background:rgba(0,0,0,.26)}
+/* fonte ampliada: evita label e valores se sobreporem no hero */
+#shell.fzG .finbox,#shell.fzX .finbox{flex-wrap:wrap;row-gap:7px}
+#shell.fzG .finbox .hf-lb,#shell.fzX .finbox .hf-lb{flex:1 1 100%}
+#shell.fzG .finbox .hf-vals,#shell.fzX .finbox .hf-vals{justify-content:flex-start}
 .hf-lb{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;font-size:calc(11px*var(--fz,1));font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.2px;white-space:nowrap}
 .hf-lb .tic{width:14px;height:14px}
 .hf-vals{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
