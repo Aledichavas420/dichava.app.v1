@@ -47,6 +47,18 @@ function plain(blocos) {
 const plainFromHtml = h => String(h || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 const corpoHtml = p => p.corpo_html ? p.corpo_html : renderBlocos(p.blocos);
 
+function autorBox(p) {
+  if (!p || (!p.autor_prof_id && !p.autor_foto && !p.autor_crp)) return '';
+  const meta = [p.autor_tipo, p.autor_crp, p.autor_cidade].filter(Boolean).join(' · ');
+  const av = p.autor_foto ? `<img src="${esc(p.autor_foto)}" alt="${esc(p.autor_nome || '')}" loading="lazy">` : `<span>${esc(ini(p.autor_nome))}</span>`;
+  return `<aside class="authorbox"><div class="ab-av">${av}</div><div style="min-width:0">`
+    + `<div class="ab-k">Escrito por</div>`
+    + `<div class="ab-n">${esc(p.autor_nome || '')}</div>`
+    + (meta ? `<div class="ab-m">${esc(meta)}</div>` : '')
+    + (p.autor_bio ? `<div class="ab-bio">${esc(p.autor_bio)}</div>` : '')
+    + `</div></aside>`;
+}
+
 const COVER = p => p.capa
   ? `<div class="cover" style="background-image:url('${esc(p.capa)}')"><div class="cover-vg"></div></div>`
   : `<div class="cover cover--art" style="background:${grad(p.tema)}"><svg class="cover-mk" viewBox="0 0 24 24"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg><div class="cover-vg"></div></div>`;
@@ -84,6 +96,13 @@ const CSS = `*{box-sizing:border-box}body{margin:0;background:#FAF6EC;color:#182
 .blocos figure{margin:24px 0}.blocos img{width:100%;border-radius:16px}.blocos figcaption{font-size:12.5px;color:#98A38F;text-align:center;margin-top:8px}
 .blocos blockquote{margin:28px 0;padding:6px 0 6px 20px;border-left:3px solid #2FA35F;font-size:22px;font-style:italic;line-height:1.5;color:#1B7A43}
 .blocos blockquote .by{display:block;font-style:normal;font-size:13.5px;color:#98A38F;margin-top:10px}
+.authorbox{display:flex;gap:16px;align-items:flex-start;margin:38px 0 0;padding:20px;background:#F3EFE3;border:1px solid #EBE5D6;border-radius:18px}
+.authorbox .ab-av{width:62px;height:62px;border-radius:50%;flex-shrink:0;overflow:hidden;background:#E7E0CE;display:flex;align-items:center;justify-content:center;font-weight:800;color:#2FA35F}
+.authorbox .ab-av img{width:100%;height:100%;object-fit:cover;display:block}
+.authorbox .ab-k{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#98A38F}
+.authorbox .ab-n{font-weight:800;font-size:17px;margin-top:2px;color:#18241B}
+.authorbox .ab-m{font-size:13.5px;color:#5B6B5D;margin-top:2px}
+.authorbox .ab-bio{font-size:14px;line-height:1.55;color:#5B6B5D;margin-top:9px}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin:32px 0 0}.tag{font-size:12px;font-weight:700;color:#5B6B5D;background:#F3EFE3;border-radius:999px;padding:6px 13px}
 .share{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0 0;padding-top:24px;border-top:1px solid #EBE5D6}
 .sbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid #EBE5D6;background:#fff;color:#18241B;border-radius:12px;padding:11px 17px;font-size:14px;font-weight:700}
@@ -148,6 +167,7 @@ function pagina(p) {
   </div>
   ${p.capa ? `<img class="art-cap" src="${esc(p.capa)}" alt="" style="width:100%;border-radius:20px;margin:6px 0 28px;display:block">` : `<div class="art-cover">${COVER(p)}</div>`}
   <div class="blocos">${corpoHtml(p)}</div>
+  ${autorBox(p)}
   ${(p.tags && p.tags.length) ? `<div class="tags">${p.tags.map(t => `<span class="tag">#${esc(t)}</span>`).join('')}</div>` : ''}
   <div class="share">
     <a class="sbtn wa" href="https://wa.me/?text=${encodeURIComponent(p.titulo + ' — ' + canon)}" target="_blank" rel="noopener">WhatsApp</a>

@@ -303,7 +303,11 @@ tbody tr:hover{background:var(--card2)}
         <select id="bl-tema" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit;flex:1;min-width:150px"><option value="">Tema…</option><option value="rd">Redução de danos</option><option value="clinica">Clínica e cuidado</option><option value="politica">Política de drogas</option><option value="saude">Saúde mental</option><option value="familia">Família e vínculos</option><option value="ciencia">Ciência e evidências</option><option value="historias">Histórias e vivências</option></select>
       </div>
       <input id="bl-subtitulo" placeholder="Linha fina (subtítulo da manchete, opcional)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
-      <input id="bl-autor" placeholder="Autor (nome do profissional que assina)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <select id="bl-autor-sel" onchange="blAutorSel()" style="flex:1;min-width:0;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;font-family:inherit"><option value="">Autor: escolher profissional da rede…</option></select>
+      </div>
+      <div id="bl-autor-prev" style="display:none;align-items:center;gap:11px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px"></div>
+      <input id="bl-autor" placeholder="Ou digite um nome manualmente (autor fora da rede, sem mini bio)" oninput="blAutorManual()" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <input id="bl-tags" placeholder="Tags separadas por vírgula" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
       <div style="font-size:12px;color:var(--txm);margin:2px 0 6px">Data de publicação <span style="color:var(--txs)">(deixe em branco pra usar a de hoje)</span></div>
       <input id="bl-data" type="date" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;font-family:inherit">
@@ -1478,8 +1482,49 @@ function blSeoPreview(){
       `<div style="font-size:13px;color:var(--txs);line-height:1.45">${esc(desc||'A descrição aparece aqui. É o que o Google mostra embaixo do título.')}</div>`+
     `</div>`;
 }
+// ===== AUTORES DO BLOG (profissionais da rede) =====
+var _blAutores=[]; var _blAutor=null;
+async function carregarAutoresBlog(){
+  try{
+    const {data,error}=await SB.from('profissionais').select('id,nome,foto,foto_mini,reg,tipo_prof,cidade,bio,plano,status');
+    if(error)throw error;
+    _blAutores=(data||[]).filter(p=>p.nome && (ehPlano(p,'profissional')||ehPlano(p,'clinica')))
+      .sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
+    const sel=$('#bl-autor-sel'); if(!sel)return;
+    const cur=sel.value;
+    sel.innerHTML='<option value="">Autor: escolher profissional da rede…</option>'
+      + _blAutores.map(p=>`<option value="${esc(p.id)}">${esc(p.nome)}${p.tipo_prof?' — '+esc(p.tipo_prof):''}</option>`).join('');
+    if(cur)sel.value=cur;
+  }catch(e){ /* silencioso: se a tabela não abrir, cai no nome manual */ }
+}
+function blAutorSel(){
+  const sel=$('#bl-autor-sel'); const id=sel?sel.value:'';
+  if(!id){ _blAutor=null; blAutorPrev(); return; }
+  const a=(_blAutores||[]).find(x=>x.id===id); if(!a){ _blAutor=null; blAutorPrev(); return; }
+  _blAutor={prof_id:a.id, nome:a.nome, foto:a.foto_mini||a.foto||null, crp:a.reg||null, tipo:a.tipo_prof||null, cidade:a.cidade||null, bio:(a.bio||'').trim()||null};
+  const man=$('#bl-autor'); if(man)man.value=a.nome||'';
+  blAutorPrev();
+}
+function blAutorManual(){
+  // digitar nome manual desliga o vínculo com profissional (sem mini bio)
+  const man=$('#bl-autor'); const sel=$('#bl-autor-sel');
+  if(_blAutor && man && sel){ if((man.value||'').trim()!==(_blAutor.nome||'')){ _blAutor=null; sel.value=''; blAutorPrev(); } }
+}
+function blAutorPrev(){
+  const box=$('#bl-autor-prev'); if(!box)return;
+  const a=_blAutor;
+  if(!a){ box.style.display='none'; box.innerHTML=''; return; }
+  box.style.display='flex';
+  const meta=[a.tipo,a.crp,a.cidade].filter(Boolean).join(' · ');
+  const av=a.foto?`<img src="${esc(a.foto)}" alt="" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0">`
+                 :`<div style="width:44px;height:44px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">${esc(initials(a.nome))}</div>`;
+  box.innerHTML=av+`<div style="min-width:0"><div style="font-weight:700">${esc(a.nome||'')}</div>`
+    +(meta?`<div style="font-size:12px;color:var(--txm)">${esc(meta)}</div>`:'')
+    +`<div style="font-size:11px;color:var(--v,#4CAF5A);margin-top:2px">A mini bio com foto entra automática no fim do texto.</div></div>`;
+}
 async function carregarBlog(){
   try{blSeoPreview();}catch(_){}
+  carregarAutoresBlog();
   const box=$('#bl-list'); if(!box)return;
   try{ const{data,error}=await SB.from('blog_posts').select('*').order('atualizado_em',{ascending:false}); if(error)throw error; _blogPosts=data||[]; renderBlogList(); }
   catch(e){ box.innerHTML='<div style="color:var(--txm);font-size:13px;padding:8px">'+esc(e.message||'erro')+' — rodou o blog-setup.sql?</div>'; }
@@ -1544,12 +1589,15 @@ async function _uploadBlog(file){
 function blCapaRender(){ const pv=$('#bl-capa-prev'); if(pv) pv.innerHTML=_blogCapa?`<img src="${esc(_blogCapa)}" style="max-width:260px;border-radius:10px;display:block;margin-bottom:6px">`:''; }
 async function blCapaSel(input){ const f=input.files&&input.files[0]; if(!f)return; const st=$('#bl-status'); try{ if(st)st.textContent='Enviando capa…'; _blogCapa=await _uploadBlog(f); blCapaRender(); if(st)st.textContent=''; }catch(e){ if(st)st.textContent='Erro no upload: '+((e&&e.message)||e); } input.value=''; }
 function blCapaRm(){ _blogCapa=null; blCapaRender(); }
-function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-subtitulo','bl-autor','bl-tags','bl-resumo','bl-data'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; _blogBlocos=[]; const ed=$('#bl-editor'); if(ed)ed.innerHTML=''; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); const st=$('#bl-status'); if(st)st.textContent=''; try{blSeoPreview();}catch(_){} try{window.scrollTo(0,0);}catch(_){}}
+function limparBlog(){ ['bl-id','bl-titulo','bl-slug','bl-subtitulo','bl-autor','bl-tags','bl-resumo','bl-data'].forEach(id=>{const el=$('#'+id);if(el){el.value='';el.removeAttribute&&el.removeAttribute('data-touched');}}); const tm=$('#bl-tema'); if(tm)tm.value=''; const asel=$('#bl-autor-sel'); if(asel)asel.value=''; _blAutor=null; blAutorPrev(); _blogBlocos=[]; const ed=$('#bl-editor'); if(ed)ed.innerHTML=''; _blogCapa=null; _blogEditPubEm=null; blCapaRender(); const st=$('#bl-status'); if(st)st.textContent=''; try{blSeoPreview();}catch(_){} try{window.scrollTo(0,0);}catch(_){}}
 function editarBlogPost(id){
   const p=_blogPosts.find(x=>x.id===id); if(!p)return;
   const s=(k,v)=>{const el=$('#'+k);if(el)el.value=v==null?'':v;};
   s('bl-id',p.id); s('bl-titulo',p.titulo); s('bl-slug',p.slug); s('bl-subtitulo',p.subtitulo); s('bl-autor',p.autor_nome); s('bl-tags',(p.tags||[]).join(', ')); s('bl-resumo',p.resumo);
   const tm=$('#bl-tema'); if(tm)tm.value=p.tema||''; const sl=$('#bl-slug'); if(sl)sl.dataset.touched='1'; try{blSeoPreview();}catch(_){}
+  if(p.autor_prof_id){ _blAutor={prof_id:p.autor_prof_id,nome:p.autor_nome,foto:p.autor_foto,crp:p.autor_crp,tipo:p.autor_tipo,cidade:p.autor_cidade,bio:p.autor_bio}; const asel=$('#bl-autor-sel'); if(asel)asel.value=p.autor_prof_id; }
+  else { _blAutor=null; const asel=$('#bl-autor-sel'); if(asel)asel.value=''; }
+  blAutorPrev();
   const ed=$('#bl-editor'); if(ed) ed.innerHTML = p.corpo_html ? p.corpo_html : blBlocosToHtml(p.blocos);
   const dt=$('#bl-data'); if(dt) dt.value = (p.publicado_em||'').slice(0,10);
   _blogBlocos=[]; _blogCapa=p.capa||null; _blogEditPubEm=p.publicado_em||null;
@@ -1562,7 +1610,15 @@ async function salvarBlog(publicar){
   const tags=g('bl-tags').split(',').map(s=>s.trim()).filter(Boolean);
   const ed=$('#bl-editor'); const corpo_html=ed?blSanitize(ed.innerHTML):'';
   const dataPub=g('bl-data'); const dataISO=dataPub?new Date(dataPub+'T12:00:00').toISOString():null;
-  const row={ titulo, slug, subtitulo:g('bl-subtitulo')||null, tema:g('bl-tema')||null, autor_nome:g('bl-autor')||null, tags, capa:_blogCapa||null, resumo:g('bl-resumo')||null, corpo_html:corpo_html||null, blocos:[], atualizado_em:new Date().toISOString() };
+  const row={ titulo, slug, subtitulo:g('bl-subtitulo')||null, tema:g('bl-tema')||null,
+    autor_nome:(_blAutor?_blAutor.nome:g('bl-autor'))||null,
+    autor_prof_id:_blAutor?_blAutor.prof_id:null,
+    autor_foto:_blAutor?_blAutor.foto:null,
+    autor_crp:_blAutor?_blAutor.crp:null,
+    autor_tipo:_blAutor?_blAutor.tipo:null,
+    autor_cidade:_blAutor?_blAutor.cidade:null,
+    autor_bio:_blAutor?_blAutor.bio:null,
+    tags, capa:_blogCapa||null, resumo:g('bl-resumo')||null, corpo_html:corpo_html||null, blocos:[], atualizado_em:new Date().toISOString() };
   if(publicar){ row.status='publicado'; row.publicado_em=dataISO||_blogEditPubEm||new Date().toISOString(); } else { row.status='rascunho'; if(dataISO)row.publicado_em=dataISO; }
   const id=g('bl-id');
   try{
