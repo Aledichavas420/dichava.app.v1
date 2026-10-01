@@ -412,11 +412,20 @@ function renderBlocos(blocos){
     return `<p>${esc(b.x).replace(/\n/g,'<br>')}</p>`;
   }).join('');
 }
+async function fillAutorFoto(profId){
+  if(!SB||!profId) return;
+  try{
+    const {data}=await SB.from('profissionais_pub').select('foto,foto_mini').eq('id',profId).maybeSingle();
+    const url=data&&(data.foto_mini||data.foto);
+    const slot=document.getElementById('ab-av');
+    if(url && slot){ slot.innerHTML='<img src="'+esc(url)+'" alt="" loading="lazy">'; }
+  }catch(e){}
+}
 function autorBox(p){
   if(!p || (!p.autor_prof_id && !p.autor_foto && !p.autor_crp)) return '';
   const meta=[p.autor_tipo,p.autor_crp,p.autor_cidade].filter(Boolean).join(' · ');
   const av=p.autor_foto?`<img src="${esc(p.autor_foto)}" alt="${esc(p.autor_nome||'')}" loading="lazy">`:`<span>${esc(ini(p.autor_nome))}</span>`;
-  return `<aside class="authorbox"><div class="ab-av">${av}</div><div style="min-width:0">`
+  return `<aside class="authorbox"><div class="ab-av" id="ab-av">${av}</div><div style="min-width:0">`
     +`<div class="ab-k">Escrito por</div>`
     +`<div class="ab-n">${esc(p.autor_nome||'')}</div>`
     +(meta?`<div class="ab-m">${esc(meta)}</div>`:'')
@@ -446,6 +455,7 @@ function verPost(p){
       <button class="sbtn" onclick="copiar('${esc(url)}')"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M10.5 6.5l1-1a3.5 3.5 0 0 1 5 5l-1 1M13.5 17.5l-1 1a3.5 3.5 0 0 1-5-5l1-1"/></svg>Copiar link</button>
     </div>
   </article>`;
+  if(p.autor_prof_id && !p.autor_foto){ fillAutorFoto(p.autor_prof_id); }
 }
 async function compartilhar(slug){
   const p=(_posts||[]).find(x=>x.slug===slug); if(!p)return;

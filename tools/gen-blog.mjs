@@ -201,6 +201,20 @@ async function main() {
   if (!res.ok) { console.error('Falha ao ler posts:', res.status, await res.text()); process.exit(1); }
   const posts = (await res.json()).filter(p => p && p.slug);
 
+  // Backfill da foto do autor a partir da view pública (quando o post não guardou)
+  try {
+    const falt = [...new Set(posts.filter(p => p.autor_prof_id && !p.autor_foto).map(p => p.autor_prof_id))];
+    if (falt.length) {
+      const q = `${SB_URL}/rest/v1/profissionais_pub?id=in.(${falt.join(',')})&select=id,foto,foto_mini`;
+      const r2 = await fetch(q, { headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY } });
+      if (r2.ok) {
+        const map = {};
+        (await r2.json()).forEach(x => { map[x.id] = x.foto_mini || x.foto; });
+        posts.forEach(p => { if (p.autor_prof_id && !p.autor_foto && map[p.autor_prof_id]) p.autor_foto = map[p.autor_prof_id]; });
+      }
+    }
+  } catch (e) { /* segue sem a foto se a view não abrir */ }
+
   const outDir = join(ROOT, 'blog', 'p');
   // limpa páginas de posts que não existem mais (despublicados/excluídos)
   const slugs = new Set(posts.map(p => String(p.slug)));
