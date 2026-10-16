@@ -4,10 +4,16 @@
 -- Rode no SQL Editor do Supabase. Seguro rodar de novo por cima.
 -- ══════════════════════════════════════════════════════════════
 
--- quem é admin (ajuste o e-mail se precisar de mais de um)
+-- quem é admin: consulta a tabela app_admins (criada no admin-setup.sql).
+-- Nenhum e-mail fica escrito aqui; você se cadastra como admin pelo SQL Editor.
+create table if not exists public.app_admins (
+  user_id   uuid primary key references auth.users(id) on delete cascade,
+  criado_em timestamptz not null default now()
+);
+alter table public.app_admins enable row level security;
 create or replace function public.is_dichava_admin()
 returns boolean language sql security definer stable set search_path = public, auth as $$
-  select coalesce((select lower(email) from auth.users where id = auth.uid()), '') = 'alex.mnteir@gmail.com';
+  select exists (select 1 from public.app_admins where user_id = auth.uid());
 $$;
 grant execute on function public.is_dichava_admin() to authenticated;
 

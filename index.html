@@ -6988,10 +6988,17 @@ function renderCfg(){
   const admOn=ehAdmin();
   const asec=document.getElementById('admin-sec');if(asec)asec.style.display=admOn?'block':'none';
   if(admOn)atualizarBadgeAdmin();
+  try{_checkAdmin();}catch(e){}
 }
 /* ══ ADMIN — aprovação de profissionais ══ */
-const ADMIN_EMAILS=['alex.mnteir@gmail.com'];
-function ehAdmin(){return !!(U&&U.email&&ADMIN_EMAILS.includes((U.email||'').toLowerCase().trim()));}
+let _isAdmin=false;
+function ehAdmin(){return _isAdmin;}
+async function _checkAdmin(){
+  try{ if(!_SB||typeof U==='undefined'||!U||U.id==='demo'){ _isAdmin=false; }
+       else { const r=await _SB.rpc('eh_admin'); _isAdmin=!!(r&&r.data); } }catch(e){ _isAdmin=false; }
+  try{ var asec=document.getElementById('admin-sec'); if(asec) asec.style.display=_isAdmin?'block':'none';
+       if(_isAdmin&&typeof atualizarBadgeAdmin==='function') atualizarBadgeAdmin(); }catch(e){}
+}
 let _admStatus='pendente';let _admProfs={};
 async function atualizarBadgeAdmin(){
   if(!_SB)return;

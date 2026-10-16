@@ -11,7 +11,7 @@ Envia um e-mail pra você toda vez que alguém envia um cadastro profissional.
 1. Crie conta em https://resend.com (grátis).
 2. Em **API Keys**, gere uma chave (começa com `re_...`). Guarde.
 3. Remetente:
-   - **Rápido (teste):** use `onboarding@resend.dev` como remetente. Ele só entrega para o **e-mail dono da conta Resend** — então crie a conta Resend com o **mesmo e-mail** que vai receber (alex.mnteir@gmail.com). Assim já funciona.
+   - **Rápido (teste):** use `onboarding@resend.dev` como remetente. Ele só entrega para o **e-mail dono da conta Resend** — então crie a conta Resend com o **mesmo e-mail** que vai receber (o seu e-mail de admin). Assim já funciona.
    - **Definitivo:** verifique um domínio (ex.: `dichava.app`) em **Domains** e use algo como `avisos@dichava.app`. Aí entrega pra qualquer destinatário.
 
 ## Passo 2 — Deploy da função
@@ -20,7 +20,7 @@ Deixe **Verify JWT = OFF** (o webhook chama sem sessão de usuário).
 
 Secrets (Edge Functions → Secrets):
 - `RESEND_API_KEY` = a chave `re_...`
-- `ADMIN_EMAIL` = alex.mnteir@gmail.com  (opcional; já é o padrão)
+- `ADMIN_EMAIL` = seu e-mail de admin (quem recebe as notificações)
 - `MAIL_FROM` = `dichava <onboarding@resend.dev>`  (ou seu remetente verificado)
 
 ## Passo 3 — Database Webhook

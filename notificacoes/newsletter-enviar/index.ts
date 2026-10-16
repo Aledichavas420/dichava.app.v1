@@ -35,7 +35,7 @@ const rodape = (token: string) =>
    </div>`;
 
 const ANON  = Deno.env.get("SUPABASE_ANON_KEY") || "";
-const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com")
+const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "")
   .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 
 async function ehAdmin(req: Request): Promise<{ ok: boolean; motivo?: string }> {

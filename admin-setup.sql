@@ -1,22 +1,33 @@
 -- dichava.app — Painel ADMIN (acesso restrito ao dono)
 -- Rode uma vez no SQL Editor do Supabase. Idempotente.
--- ⚠️ Ajuste o e-mail de admin abaixo se precisar (pode listar mais de um).
 
 -- ══════════════════════════════════════════════════════════════
 -- 0) QUEM É ADMIN
--- Uma função central pra decidir se o usuário logado é admin.
--- Troque/adicione e-mails na lista.
+-- Quem é admin fica numa tabela (app_admins), não escrito no código.
+-- Assim nenhum e-mail de admin aparece no repositório público.
+--
+-- >>> Pra virar admin, rode UMA vez no SQL Editor (fora do git), com o
+--     SEU e-mail no lugar do exemplo:
+--       insert into public.app_admins(user_id)
+--       select id from auth.users where lower(email) = lower('SEU_EMAIL_AQUI')
+--       on conflict do nothing;
 -- ══════════════════════════════════════════════════════════════
+create table if not exists public.app_admins (
+  user_id   uuid primary key references auth.users(id) on delete cascade,
+  criado_em timestamptz not null default now()
+);
+-- Sem policies: nenhum cliente lê/escreve direto. Só as funções abaixo
+-- (security definer) consultam, e você insere pelo SQL Editor do Supabase.
+alter table public.app_admins enable row level security;
+
+-- Função central: o usuário logado está na tabela de admins?
 create or replace function public.eh_admin()
 returns boolean
-language sql stable
+language sql stable security definer set search_path = public
 as $$
-  select coalesce(
-    (auth.jwt() ->> 'email') = any (array[
-      'alex.mnteir@gmail.com'
-    ]),
-  false);
+  select exists (select 1 from public.app_admins where user_id = auth.uid());
 $$;
+grant execute on function public.eh_admin() to authenticated;
 
 -- ══════════════════════════════════════════════════════════════
 -- 1) CONTROLE DE ACESSO PAGO DO PROFISSIONAL
