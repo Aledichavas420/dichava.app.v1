@@ -20,7 +20,7 @@ const SECRET  = Deno.env.get("WEBHOOK_SECRET") || "";
 const APP_URL = "https://dichava.app";
 const PAINEL  = APP_URL + "/clinica/";
 
-const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com")
+const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "")
   .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 
 const cors = {

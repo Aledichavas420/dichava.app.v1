@@ -36,14 +36,14 @@ drop policy if exists "dono edita" on public.profissionais;
 create policy "dono edita" on public.profissionais
   for all using (auth.uid() = id) with check (auth.uid() = id);
 
--- 6) admin (você) lê e edita TODOS
+-- 6) admin (você) lê e edita TODOS (usa a função central, sem e-mail fixo)
 drop policy if exists "admin le tudo" on public.profissionais;
 create policy "admin le tudo" on public.profissionais
-  for select using ( (auth.jwt() ->> 'email') = 'alex.mnteir@gmail.com' );
+  for select using ( public.eh_admin() );
 
 drop policy if exists "admin edita tudo" on public.profissionais;
 create policy "admin edita tudo" on public.profissionais
-  for update using ( (auth.jwt() ->> 'email') = 'alex.mnteir@gmail.com' )
+  for update using ( public.eh_admin() )
   with check ( true );
 
 -- 7) CONFERIR: ver as colunas atuais da tabela

@@ -23,7 +23,7 @@ const sb = createClient(SB_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const RESEND = Deno.env.get("RESEND_API_KEY") || "";
 const FROM   = Deno.env.get("EMAIL_FROM") || "Rede Dichava <onboarding@resend.dev>";
 const CRON_SECRET = Deno.env.get("CRON_SECRET") || "";
-const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com").split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
+const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "").split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
 
 const urlsafe = (k: string) => (k || "").trim().replace(/\s+/g, "").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/,"");
 const VAPID_PUB  = urlsafe(Deno.env.get("VAPID_PUB")  || "");

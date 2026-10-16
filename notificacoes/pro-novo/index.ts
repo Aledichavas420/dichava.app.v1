@@ -6,7 +6,7 @@
 // Secrets: RESEND_API_KEY, ADMIN_EMAIL (opcional), MAIL_FROM (opcional)
 // ════════════════════════════════════════════════════════════
 const RESEND_KEY  = Deno.env.get("RESEND_API_KEY")!;
-const ADMIN_EMAIL = Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com";
+const ADMIN_EMAIL = Deno.env.get("ADMIN_EMAIL") || "";
 const MAIL_FROM   = Deno.env.get("MAIL_FROM")   || "dichava <onboarding@resend.dev>";
 const APP_URL     = Deno.env.get("SITE_URL")    || "https://dichava.app";
 

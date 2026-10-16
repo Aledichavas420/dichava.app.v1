@@ -24,7 +24,7 @@ const ANON   = Deno.env.get("SUPABASE_ANON_KEY") || "";
 const RESEND = Deno.env.get("RESEND_API_KEY") || "";
 const FROM   = Deno.env.get("EMAIL_FROM") || "Rede Dichava <onboarding@resend.dev>";
 const SECRET = Deno.env.get("WEBHOOK_SECRET") || "";
-const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "alex.mnteir@gmail.com")
+const ADMINS = (Deno.env.get("ADMIN_EMAIL") || "")
   .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 const REPLY_DEFAULT = ADMINS[0] || "";
 
