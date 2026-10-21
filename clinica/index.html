@@ -5317,6 +5317,9 @@ async function refreshClinica(){
   if(_pendingSave){ return; } // há edição local ainda não salva → não recarrega da nuvem (senão desfaz)
   try{
     const {data:c}=await _SB.from('clinicas').select('dados').eq('id',CLINICA.id).maybeSingle();
+    // Reconfere DEPOIS da busca: se o profissional salvou algo enquanto a
+    // resposta vinha da nuvem, não podemos sobrescrever (senão perde o registro).
+    if(_pendingSave) return;
     if(c){ normalizeDB(c.dados); if(route) render(); }
   }catch(e){}
 }
