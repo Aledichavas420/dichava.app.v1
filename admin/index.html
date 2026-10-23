@@ -286,6 +286,7 @@ tbody tr:hover{background:var(--card2)}
       </div>
       <input id="re-link" placeholder="Link (Meet / inscrição) — opcional" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
       <input id="re-tag" placeholder="Tag (ex.: Online, Presencial) — opcional" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
+      <input id="re-video" placeholder="Link do vídeo no YouTube (gravação da roda) — opcional" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
       <div class="pacts" style="margin-top:4px"><button class="btn sm" onclick="salvarEventoRede()">Salvar encontro</button><button class="btn ghost sm" onclick="limparEventoRede()">Limpar</button></div>
       <div id="re-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
     </div>
@@ -1676,11 +1677,11 @@ function renderRedeAdmin(){
   if(_redeIntsErr){ box.innerHTML+='<div style="margin-top:10px;font-size:12px;color:#C0616B">Não consegui ler os interesses ('+esc(_redeIntsErr)+'). Rode o rede-interesses-setup.sql (política "admin le interesses").</div>'; }
   else if(!_redeInts.length){ box.innerHTML+='<div style="margin-top:10px;font-size:12px;color:var(--txm)">Nenhum interesse registrado ainda. Se um profissional já clicou em "Tenho interesse" e nada aparece, confira se a política "admin le interesses" do rede-interesses-setup.sql foi aplicada.</div>'; }
 }
-function limparEventoRede(){ ['re-id','re-titulo','re-sub','re-data','re-hora','re-link','re-tag'].forEach(id=>{const el=$('#'+id);if(el)el.value='';}); const st=$('#re-status'); if(st)st.textContent=''; }
+function limparEventoRede(){ ['re-id','re-titulo','re-sub','re-data','re-hora','re-link','re-tag','re-video'].forEach(id=>{const el=$('#'+id);if(el)el.value='';}); const st=$('#re-status'); if(st)st.textContent=''; }
 async function salvarEventoRede(){
   const g=id=>{const e=$('#'+id);return e?e.value.trim():'';};
   const titulo=g('re-titulo'); if(!titulo){toast('Informe o título',1);return;}
-  const row={area:g('re-area')||'eventos',titulo,sub:g('re-sub')||null,data:g('re-data')||null,hora:g('re-hora')||null,link:g('re-link')||null,tag:g('re-tag')||null};
+  const row={area:g('re-area')||'eventos',titulo,sub:g('re-sub')||null,data:g('re-data')||null,hora:g('re-hora')||null,link:g('re-link')||null,tag:g('re-tag')||null,video:g('re-video')||null};
   const id=g('re-id');
   try{
     let r; if(id){ r=await SB.from('rede_eventos').update(row).eq('id',id); } else { r=await SB.from('rede_eventos').insert(row); }
@@ -1691,7 +1692,7 @@ async function salvarEventoRede(){
 function editarEventoRede(id){
   const e=_redeEv.find(x=>x.id===id); if(!e)return;
   const s=(k,v)=>{const el=$('#'+k);if(el)el.value=v||'';};
-  s('re-id',e.id); s('re-area',e.area); s('re-titulo',e.titulo); s('re-sub',e.sub); s('re-data',e.data); s('re-hora',e.hora); s('re-link',e.link); s('re-tag',e.tag);
+  s('re-id',e.id); s('re-area',e.area); s('re-titulo',e.titulo); s('re-sub',e.sub); s('re-data',e.data); s('re-hora',e.hora); s('re-link',e.link); s('re-tag',e.tag); s('re-video',e.video);
   try{window.scrollTo(0,0);}catch(_){}
 }
 async function toggleEventoRede(id){
