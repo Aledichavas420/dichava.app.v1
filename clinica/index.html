@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex,nofollow">
 <script>/* ANTI-CLICKJACKING: se a página for aberta dentro de um <iframe>, quebra pra fora (ou esconde). */
 if(self!==top){try{top.location=self.location;}catch(e){document.documentElement.style.display='none';}}</script>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self'; manifest-src 'self'; frame-src https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <script>/* PORTÃO PRÉ-LANÇAMENTO: profissional sem acesso vai pra landing. Testers entram com ?acesso=dichava-equipe-2026 */
 (function(){var MANUTENCAO=false;if(!MANUTENCAO)return;try{
   var q=new URLSearchParams(location.search);
@@ -1647,7 +1647,7 @@ async function carregarRedeEventos(force){
   try{
     const{data}=await _SB.from('rede_eventos').select('*').eq('ativo',true).order('data',{ascending:true});
     const byArea={interv:[],rodas:[],eventos:[]};
-    (data||[]).forEach(e=>{ if(byArea[e.area]) byArea[e.area].push({data:e.data,hora:e.hora||'',titulo:e.titulo,sub:e.sub||'',tag:e.tag||'',link:e.link||''}); });
+    (data||[]).forEach(e=>{ if(byArea[e.area]) byArea[e.area].push({data:e.data,hora:e.hora||'',titulo:e.titulo,sub:e.sub||'',tag:e.tag||'',link:e.link||'',video:e.video||''}); });
     MURAL.forEach(m=>{ m.itens = byArea[m.k]||[]; });
     if(route==='rede' && _redeView!=='biblioteca' && _redeView!=='cursos' && !_cursoAtual) render();
   }catch(e){ _redeEventosLoaded=false; }
@@ -1690,6 +1690,32 @@ function fmtHora(h){ h=String(h||'').trim(); if(!h) return '';
 function proxDestaque(){ let hoje; try{hoje=todayISO();}catch(e){hoje='';} let best=null;
   MURAL.forEach(m=>(m.itens||[]).forEach(i=>{ if(i.data>=hoje){ if(!best||i.data<best.data) best=Object.assign({},i,{area:m.k,areaNome:m.t,ic:m.ic,tint:m.tint}); } }));
   return best; }
+// ── Vídeo (gravação) das rodas ──
+function ytId(u){ u=String(u||'').trim(); if(!u) return '';
+  var m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|^)([A-Za-z0-9_-]{11})(?:[?&].*)?$/);
+  if(m) return m[1];
+  m=u.match(/[?&]v=([A-Za-z0-9_-]{11})/); return m?m[1]:'';
+}
+// Última roda de conversa com vídeo (gravação), pra destacar "Assista".
+function rodaGravada(){
+  var rodas=(MURAL.find(m=>m.k==='rodas')||{}).itens||[];
+  var com=rodas.filter(i=>i.video && ytId(i.video));
+  if(!com.length) return null;
+  com.sort((a,b)=> a.data<b.data?1 : (a.data>b.data?-1:0)); // mais recente primeiro
+  return com[0];
+}
+function abrirVideoRoda(url,titulo){
+  var id=ytId(url);
+  if(!id){ toast('Vídeo indisponível'); return; }
+  var src='https://www.youtube-nocookie.com/embed/'+id+'?rel=0&modestbranding=1';
+  openModal('<div class="modal" style="max-width:760px">'
+    +'<div class="modal-head"><h3>'+esc(titulo||'Roda de conversa')+'</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div>'
+    +'<div class="modal-body" style="padding:12px"><div style="position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden">'
+    +'<iframe src="'+esc(src)+'" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+    +'</div></div></div>');
+}
+function abrirRodaGravada(){ var rg=rodaGravada(); if(rg) abrirVideoRoda(rg.video, rg.titulo); }
+function assistirMural(idx){ var i=_muralItens&&_muralItens[idx]; if(i&&i.video) abrirVideoRoda(i.video, i.titulo); }
 // Todos os eventos futuros (hoje em diante), ordenados por data. Usado no aviso da Visão geral.
 function todosDestaques(){ let hoje; try{hoje=todayISO();}catch(e){hoje='';} const out=[];
   MURAL.forEach(m=>(m.itens||[]).forEach(i=>{ if(i.data>=hoje) out.push(Object.assign({},i,{area:m.k,areaNome:m.t,ic:m.ic,tint:m.tint})); }));
@@ -1700,6 +1726,11 @@ function redeHome(){
   const heroMark=cicUniq(`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#fff" stroke-width="1.5" opacity=".92"><path d="M6.5 7.6l5.5 2.8 5.5-2.8M6.5 16.4l5.5-2.8 5.5 2.8M12 10.4v3.2"/></g><g fill="#fff"><circle cx="6.5" cy="7.6" r="2"/><circle cx="17.5" cy="7.6" r="2"/><circle cx="6.5" cy="16.4" r="2"/><circle cx="17.5" cy="16.4" r="2"/><circle cx="12" cy="12" r="2.4"/></g></svg>`);
   const totC=CURSOS.length, totL=ESTANTE.reduce((n,s)=>n+s.livros.length,0);
   const dq=proxDestaque();
+  const rg=rodaGravada();
+  const vcard=rg?`<button class="rede-destaque" style="margin-top:2px" onclick="abrirRodaGravada()">
+      <span class="rd-data" style="background:linear-gradient(135deg,#0E7490,#22B8CF);color:#fff"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      <span class="rd-body"><span class="rd-tag">Assista a roda de conversa</span><span class="rd-t">${esc(rg.titulo)}</span><span class="rd-m">Gravação${rg.data?' · '+fmtDataExt(rg.data):''}</span></span>
+      <span class="rd-go">›</span></button>`:'';
   const destaque=dq?`<button class="rede-destaque" onclick="abrirMural('${dq.area}')">
       <span class="rd-data"><b>${fmtDMural(dq.data).dia}</b><span>${fmtDMural(dq.data).mes}</span></span>
       <span class="rd-body"><span class="rd-tag">Em destaque</span><span class="rd-t">${esc(dq.titulo)}</span><span class="rd-m">${esc(dq.areaNome)}${dq.hora?' · '+fmtHora(dq.hora):''} · ${fmtDataExt(dq.data)}</span></span>
@@ -1728,6 +1759,7 @@ function redeHome(){
         <span class="rede-hero-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 5 2 9l10 4 10-4z"/><path d="M6 11v5c0 1 2.7 2.4 6 2.4s6-1.4 6-2.4v-5"/></svg>Cursos</span>
       </div></div>
     ${destaque}
+    ${vcard}
     <div class="rede-sec-h">Mural</div>
     <div class="mural">${mural}</div>
     <div class="rede-sec-h">Formação e leitura</div>
@@ -1742,7 +1774,7 @@ function abrirMural(k){
   const corpo=itens.length?(
     `<div class="rede-sec-h" style="margin:20px 2px 8px">Escolha os encontros <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--txm)">(pode marcar mais de um)</span></div><div class="mural-itens">`+
     itens.map((i,idx)=>{ const f=fmtDMural(i.data); return `<div class="mitem sel" onclick="_toggleMi(this,event)"><input type="checkbox" class="mi-chk" data-i="${idx}" onclick="event.stopPropagation()"><div class="mitem-data"><b>${f.dia}</b><span>${f.mes}</span></div>
-      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${[fmtHora(i.hora),fmtDataExt(i.data)].filter(Boolean).join(' · ')}${i.sub?' · '+esc(i.sub):''}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Adicionar ao Google Agenda</a></div>
+      <div class="mitem-body"><div class="mitem-t">${esc(i.titulo)}</div><div class="mitem-s">${[fmtHora(i.hora),fmtDataExt(i.data)].filter(Boolean).join(' · ')}${i.sub?' · '+esc(i.sub):''}</div><a class="mitem-cal" href="${gcalUrl(i,m.k)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Adicionar ao Google Agenda</a>${i.video?`<button type="button" class="mitem-cal" style="border:0;background:none;cursor:pointer;color:var(--v);font-weight:700;margin-left:12px;padding:0" onclick="event.stopPropagation();assistirMural(${idx})">▶ Assistir a gravação</button>`:''}</div>
       ${i.tag?`<span class="mitem-tag">${esc(i.tag)}</span>`:''}</div>`; }).join('')+`</div>`+
     `<button class="btn" style="width:100%;justify-content:center;margin-top:16px" onclick="confirmarInteresse()">Confirmar interesse</button>`+
     `<p style="font-size:11.5px;color:var(--txm);text-align:center;margin-top:10px">Marque os encontros que quer participar que a gente confirma sua vaga e te avisa.</p>`
