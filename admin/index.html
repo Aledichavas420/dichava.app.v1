@@ -897,8 +897,8 @@ function wlMsg(w){
 function wlMsgRecebida(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
   return oi+' Aqui é o Alexandre, fundador da Rede Dichava 🌱\n\n'
-    +'Recebi sua candidatura pra rede e queria te agradecer por contar sua trajetória com tanto cuidado.\n\n'
-    +'Estou lendo cada candidatura com calma. Assim que eu terminar a análise inicial, te dou um retorno por aqui sobre a próxima fase. 💚';
+    +'Recebi sua apresentação pra rede e queria te agradecer por contar sua trajetória com tanto cuidado.\n\n'
+    +'Estou lendo cada uma com calma e logo te chamo por aqui pra gente marcar uma conversa. 💚';
 }
 function wlMsgEntrevista(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
@@ -909,14 +909,14 @@ function wlMsgEntrevista(w){
   else if(link) agenda='Escolhe o melhor horário pra você por aqui:\n👉 '+link;
   else agenda='Me manda 2 ou 3 opções de dia e horário que funcionam pra você'+(w.disponibilidade?(' (você comentou: _'+w.disponibilidade+'_)'):'')+' e eu confirmo.';
   return oi+' Aqui é o Alexandre, fundador da Rede Dichava 🌱\n\n'
-    +'Li sua candidatura com atenção e tenho uma boa notícia: a partir da sua formação e do seu percurso, *você foi aprovado(a) para a próxima fase* do processo de entrada na rede.\n\n'
-    +'A próxima etapa é uma *entrevista* rápida por vídeo (uns 30 minutos), pra gente se conhecer, conversar sobre a sua prática e sobre como a rede funciona: o diretório, o painel, os encontros de *intervisão* e as *rodas de conversa*.\n\n'
+    +'Li sua apresentação com atenção e adorei conhecer seu caminho. Queria muito *conversar com você*!\n\n'
+    +'É um papo rápido por vídeo (uns 30 minutos), pra gente se conhecer, falar da sua prática e de como a rede funciona: os encontros de *intervisão*, as *rodas de conversa* e a plataforma.\n\n'
     +agenda+'\n\nAté breve! 💚';
 }
 function wlMsgAprovado(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
   return oi+' Que alegria 💚\n\n'
-    +'Depois da nossa conversa, é oficial: *você foi aprovado(a) para fazer parte da Rede Dichava*.\n\n'
+    +'Foi muito bom conversar com você. Com alegria, *te convido pra fazer parte da Rede Dichava*.\n\n'
     +'Agora é só criar sua conta no painel com este e-mail ('+(w.email||'o mesmo da candidatura')+') e escolher o seu plano:\n'
     +'👉 https://dichava.app/clinica/?criar\n\n'
     +'Assim que a assinatura for confirmada, seu perfil entra no diretório e você já passa a receber os convites dos encontros de intervisão e das rodas de conversa.\n\n'
@@ -925,7 +925,7 @@ function wlMsgAprovado(w){
 function wlMsgRecusa(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
   return oi+' Aqui é o Alexandre, da Rede Dichava 🌱\n\n'
-    +'Obrigado de verdade pelo interesse e pelo tempo que você dedicou à candidatura.\n\n'
+    +'Obrigado de verdade pelo interesse e pelo tempo que você dedicou à sua apresentação.\n\n'
     +'Neste momento a gente não vai seguir com a sua entrada na rede. Estamos formando um grupo pequeno e com um recorte bem específico, e isso não diz nada sobre a qualidade do seu trabalho.\n\n'
     +'Se fizer sentido, você pode se candidatar de novo mais pra frente. Desejo muito sucesso no seu caminho. 💚';
 }
@@ -1109,10 +1109,10 @@ function renderWaitlist(){
     //  • demais → convite completo com links de demonstração
     let txt, assunto;
     const cand=w.plano==='candidatura'||!!(w.formacao||w.percurso);
-    if(stw==='pendente'){ if(cand){ txt=wlMsgRecebida(w); assunto='Recebemos sua candidatura à Rede Dichava 🌱'; } else { txt=wlMsgReengajar(w); assunto='Seu lugar na rede dichava ainda está guardado 🌱'; } }
-    else if(stw==='entrevista'){ txt=wlMsgEntrevista(w); assunto='Você foi aprovado(a) para a entrevista · Rede Dichava 🌱'; }
+    if(stw==='pendente'){ if(cand){ txt=wlMsgRecebida(w); assunto='Recebemos sua apresentação à Rede Dichava 🌱'; } else { txt=wlMsgReengajar(w); assunto='Seu lugar na rede dichava ainda está guardado 🌱'; } }
+    else if(stw==='entrevista'){ txt=wlMsgEntrevista(w); assunto='Vamos conversar? · Rede Dichava 🌱'; }
     else if(stw==='aprovado'){ txt=wlMsgAprovado(w); assunto='Bem-vindo(a) à Rede Dichava 💚'; }
-    else if(stw==='recusado'){ txt=wlMsgRecusa(w); assunto='Sua candidatura à Rede Dichava'; }
+    else if(stw==='recusado'){ txt=wlMsgRecusa(w); assunto='Sua apresentação à Rede Dichava'; }
     else if(stw==='contato' && !temConta){ txt=wlMsgLancamento(w); assunto=wlLancAssunto(); }
     else { txt=wlMsg(w); assunto='Seu acesso à Rede Dichava 💚'; }
     const msgWa=encodeURIComponent(txt);                    // com *negrito* do WhatsApp
