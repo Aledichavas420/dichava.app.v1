@@ -1,9 +1,9 @@
 <!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1">
 <title>Para profissionais da saúde, dichava.app</title>
-<meta name=description content="Seja um profissional parceiro do dichava.app: apareça para quem já busca cuidado e capte novos pacientes. Crie sua conta agora.">
+<meta name=description content="Rede dichava: uma rede curada de profissionais de saúde alinhados à redução de danos. Envie sua candidatura, passe pela entrevista e participe de intervisões e rodas de conversa.">
 <meta name=robots content="index,follow">
 <meta property="og:title" content="dichava.app para profissionais da saúde">
-<meta property="og:description" content="Apareça para quem já busca cuidado e capte novos pacientes. Crie sua conta agora.">
+<meta property="og:description" content="Uma rede seleta de profissionais alinhados à redução de danos. A entrada é por candidatura e entrevista.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -82,6 +82,33 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#4CAF5A;backgr
 .ok{display:none;text-align:center;padding:20px 0}
 .ok .em{font-size:52px}.ok h3{font-size:22px;margin:10px 0 6px}.ok p{color:var(--txs);font-size:14.5px}
 .err{color:#C0392B;font-size:13px;margin-top:10px;display:none}
+.hint{font-size:12px;color:#7d8f80;margin-top:4px;line-height:1.4}
+textarea{min-height:92px;resize:vertical;line-height:1.5}
+.fsec{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#2E7D32;margin:22px 0 2px;padding-top:16px;border-top:1px solid var(--line)}
+.fsec.first{border-top:none;padding-top:0;margin-top:6px}
+.chk{display:flex;gap:9px;align-items:flex-start;font-size:13px;font-weight:500;color:#3d4d3f;margin-top:16px;line-height:1.45}
+.chk input{width:auto;margin-top:3px;flex:none}
+/* etapas */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;counter-reset:st}
+.step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 16px;position:relative;box-shadow:0 6px 18px rgba(30,60,35,.04)}
+.step .n{width:30px;height:30px;border-radius:50%;background:#DCF0DE;color:#2E7D32;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.step b.t{display:block;font-size:15px;margin-bottom:3px}
+.step small{font-size:13px;color:var(--txs);line-height:1.45;display:block}
+.sel-band{background:linear-gradient(150deg,#153E27,#0C2A19);color:#E6F2E8;border-radius:20px;padding:18px 20px;margin-top:14px;font-size:14.5px;line-height:1.55;text-align:center}
+.sel-band b{color:#fff}
+/* comunidade de prática */
+.comm{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.comm-c{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 18px;box-shadow:0 6px 18px rgba(30,60,35,.04)}
+.comm-c .tg{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:10px}
+.comm-c b{display:block;font-size:16.5px;margin-bottom:5px}
+.comm-c p{font-size:13.5px;color:var(--txs);margin:0;line-height:1.5}
+.ev-box{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin-top:14px;display:none}
+.ev-box h4{margin:0 0 8px;font-size:14px;font-weight:800}
+.ev{display:flex;gap:12px;align-items:center;padding:9px 0;border-top:1px solid #EEF3EE}
+.ev:first-child{border-top:none}
+.ev-d{flex:none;width:50px;text-align:center;background:#F0F7F1;border-radius:12px;padding:6px 0;line-height:1.1}
+.ev-d b{display:block;font-size:18px;color:#2E7D32}.ev-d span{font-size:10.5px;font-weight:800;color:#5E7062;text-transform:uppercase}
+.ev-t{font-size:14px;font-weight:700;color:#1B2A1C}.ev-s{font-size:12.5px;color:var(--txs)}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:#7d8f80;text-align:center}
 footer a{color:#2E7D32;text-decoration:none}
 .carousel{max-width:340px;margin:0 auto}
@@ -92,17 +119,18 @@ footer a{color:#2E7D32;text-decoration:none}
 .dots{display:flex;gap:7px;justify-content:center;margin-top:14px}
 .dots i{width:8px;height:8px;border-radius:50%;background:#cfe0d2;transition:.2s;cursor:pointer}
 .dots i.on{background:#2E7D32;width:22px;border-radius:20px}
+@media(max-width:760px){.steps{grid-template-columns:1fr 1fr}.comm{grid-template-columns:1fr}}
 @media(max-width:640px){.preview{grid-template-columns:1fr;padding:22px}.why,.plans,.row{grid-template-columns:1fr}h1{font-size:30px}.preview-tx{order:2}}
 </style></head><body>
 <div class="wrap">
   <div class="top"><a class="logo" href="/">dichava<span>.app</span></a><a class="back" href="/landing/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M20 12H5"/><path d="M11 6l-6 6 6 6"/></svg> voltar ao site</a></div>
 
   <div class="hero">
-    <span class="kick">para profissionais da saúde</span>
+    <span class="kick">rede com curadoria · entrada por candidatura</span>
     <h1>Faça parte da <span>maior comunidade de redução de danos do Brasil</span>.</h1>
-    <p class="lead">O dichava.app reúne pessoas que decidiram olhar pra própria relação com o uso, com dados, sem julgamento. Seja um <b>profissional parceiro</b>, apareça pra elas na hora certa e organize sua prática num só lugar.</p>
+    <p class="lead">O dichava.app reúne pessoas que decidiram olhar pra própria relação com o uso, com dados, sem julgamento. A Rede dichava é um <b>grupo seleto de profissionais</b> alinhados à redução de danos: quem entra passa por análise de formação e percurso e por uma <b>entrevista</b> com a gente. Não basta assinar, a gente quer conhecer você.</p>
     <div class="mag-band">+143 mil na comunidade @dichavandoard · redução de danos com base científica e política pública de saúde</div>
-    <a class="hero-cta" href="/clinica/?criar">Criar minha conta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+    <a class="hero-cta" href="#candidatura">Quero me candidatar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
   </div>
 
   <!-- PREVIEW DO PERFIL NO APP -->
@@ -225,8 +253,29 @@ footer a{color:#2E7D32;text-decoration:none}
     <div class="why-c"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 20s-7-4.6-7-9.5A3.4 3.4 0 0 1 12 8a3.4 3.4 0 0 1 7 2.5C19 15.4 12 20 12 20Z"/></svg></span><b>Causa alinhada</b><small>Redução de danos, ética e respaldo em política pública de saúde. Você entra numa rede séria.</small></div>
   </div>
 
+  <!-- COMO ENTRAR NA REDE -->
+  <h2 class="sec">Como é a entrada na rede</h2>
+  <div class="sub">A rede é curada. Cada pessoa que entra passa pela gente, com calma.</div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><b class="t">Candidatura</b><small>Você conta sobre sua formação, seu percurso profissional e sua relação com a redução de danos.</small></div>
+    <div class="step"><div class="n">2</div><b class="t">Análise inicial</b><small>A gente lê com atenção. Se o seu perfil seguir, você é <b>aprovado(a) para a próxima fase</b>.</small></div>
+    <div class="step"><div class="n">3</div><b class="t">Entrevista</b><small>Uma conversa online com o fundador pra nos conhecermos, alinhar valores e tirar dúvidas.</small></div>
+    <div class="step"><div class="n">4</div><b class="t">Boas-vindas</b><small>Aprovado(a) na entrevista, você recebe o convite pra criar sua conta, escolher o plano e entrar na rede.</small></div>
+  </div>
+  <div class="sel-band">Não é só quem paga que participa. A Rede dichava é um <b>grupo seleto</b>: quem chega aqui foi escolhido(a) por afinidade com a redução de danos, ética e qualidade de cuidado. É isso que dá confiança pra quem procura atendimento.</div>
+
+  <!-- COMUNIDADE DE PRÁTICA -->
+  <h2 class="sec">Mais que um diretório: uma comunidade de prática</h2>
+  <div class="sub">Quem é da rede não fica sozinho(a). Tem encontro, troca e formação contínua entre pares.</div>
+  <div class="comm">
+    <div class="comm-c"><span class="tg" style="background:#EDE4FF;color:#6D28D9">Intervisão</span><b>Casos discutidos entre pares</b><p>Encontros regulares pra discutir casos clínicos em grupo, com sigilo e cuidado, trocando olhares de diferentes abordagens sobre a clínica do uso de drogas.</p></div>
+    <div class="comm-c"><span class="tg" style="background:#DCF0DE;color:#2E7D32">Rodas de conversa</span><b>Temas que atravessam a prática</b><p>Rodas abertas aos membros sobre redução de danos, política de drogas, ética e manejo clínico. As gravações ficam disponíveis no painel pra quem não conseguiu ir ao vivo.</p></div>
+    <div class="comm-c"><span class="tg" style="background:#FFF3CD;color:#8a6d00">Rede viva</span><b>Indicações e parcerias</b><p>Contato direto com colegas de várias cidades e especialidades, pra indicar, encaminhar e construir parcerias com quem pensa a clínica como você.</p></div>
+  </div>
+  <div class="ev-box" id="ev-box"><h4>Próximos encontros da rede</h4><div id="ev-list"></div></div>
+
   <h2 class="sec">Planos pra você ou sua clínica</h2>
-  <div class="sub">Escolha na hora de contratar. Sem fidelidade, cancele quando quiser. <b>Todos incluem o Painel da Clínica.</b></div>
+  <div class="sub">A assinatura é liberada <b>depois da aprovação na entrevista</b>. Sem fidelidade, cancele quando quiser. <b>Todos incluem o Painel da Clínica e os encontros da rede.</b></div>
   <div class="plans">
     <div class="plan">
       <div class="plan-n">Essencial</div>
@@ -279,7 +328,7 @@ footer a{color:#2E7D32;text-decoration:none}
       </ul>
     </div>
   </div>
-  <div class="note">Valores de lançamento, sujeitos a ajuste. A rede está no ar, crie sua conta e teste com 7 dias grátis.</div>
+  <div class="note">Valores de lançamento, sujeitos a ajuste. A contratação acontece só depois da aprovação na entrevista.</div>
 
   <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:26px 0 6px">
     <span style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:700;color:#2b3b2d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Conexão criptografada (SSL/TLS)</span>
@@ -289,12 +338,55 @@ footer a{color:#2E7D32;text-decoration:none}
   </div>
   <div style="text-align:center;font-size:13px;color:#7d8f80;margin-bottom:8px">Saiba como protegemos os dados em <a href="/landing/seguranca.html" style="color:#2E7D32;font-weight:700">Segurança e Privacidade</a> · <a href="/landing/profissional-lgpd.html" style="color:#2E7D32;font-weight:700">Termo de Operador (LGPD)</a></div>
 
-  <div class="form" id="lista" style="text-align:center">
-    <div style="font-size:40px;line-height:1;margin-bottom:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg></div>
-    <h3>Crie sua conta e comece</h3>
-    <p class="fd">A rede está aberta. Crie sua conta agora e explore o painel completo com <b>7 dias grátis</b>, sem cadastrar cartão e sem pagar nada antes. Como a rede é curada, seu perfil passa por uma aprovação rápida antes de aparecer pros pacientes.</p>
-    <a class="btn" href="/clinica/?criar" style="display:inline-block;text-decoration:none;margin-top:6px">Criar minha conta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
-    <div class="note" style="margin-top:14px">Já tem conta? <a href="/clinica/" style="color:#2E7D32;font-weight:700">Entrar no painel</a></div>
+  <div class="form" id="candidatura">
+    <a id="lista"></a>
+    <div id="wl-form">
+      <h3>Candidatura à Rede dichava</h3>
+      <p class="fd">Conta pra gente quem você é e como chegou até aqui. A gente analisa cada candidatura com calma e, se o seu perfil seguir, você é <b>aprovado(a) para a próxima fase</b> e recebe o convite pra agendar a entrevista.</p>
+      <form onsubmit="return enviar(event)">
+        <div class="fsec first">Sobre você</div>
+        <label>Nome completo <span class="req">*</span></label><input id="f-nome" required maxlength="120" autocomplete="name">
+        <div class="row">
+          <div><label>Profissão / especialidade <span class="req">*</span></label><input id="f-esp" required maxlength="120" placeholder="Ex.: Psicóloga, Psiquiatra"></div>
+          <div><label>Registro profissional <span class="req">*</span></label><input id="f-reg" required maxlength="60" placeholder="Ex.: CRP 06/12345"></div>
+        </div>
+        <div class="row">
+          <div><label>Cidade / UF</label><input id="f-cidade" maxlength="120" placeholder="Ex.: São Paulo/SP"></div>
+          <div><label>Atendimento</label><select id="f-atend"><option value="">Selecione</option><option>Online</option><option>Presencial</option><option>Online e presencial</option></select></div>
+        </div>
+        <div class="row">
+          <div><label>E-mail <span class="req">*</span></label><input id="f-email" type="email" required maxlength="160" autocomplete="email"></div>
+          <div><label>WhatsApp <span class="req">*</span></label><input id="f-wpp" type="tel" required maxlength="40" placeholder="(11) 90000-0000" autocomplete="tel"></div>
+        </div>
+
+        <div class="fsec">Formação e percurso</div>
+        <label>Formação <span class="req">*</span></label>
+        <textarea id="f-formacao" required maxlength="3000" placeholder="Graduação, pós, especializações, formações clínicas, abordagem teórica…"></textarea>
+        <label>Percurso profissional <span class="req">*</span></label>
+        <textarea id="f-percurso" required maxlength="3000" placeholder="Onde você atuou ou atua (CAPS AD, consultório, serviços públicos, ONGs, pesquisa…), há quanto tempo e com quais públicos."></textarea>
+        <label>Sua relação com a redução de danos <span class="req">*</span></label>
+        <textarea id="f-rd" required maxlength="3000" placeholder="Como a redução de danos aparece na sua prática? Pode contar de uma experiência ou de como você entende o cuidado com quem usa drogas."></textarea>
+        <label>Por que você quer fazer parte da rede?</label>
+        <textarea id="f-motiv" maxlength="3000" placeholder="O que te atrai na rede, nos encontros de intervisão e nas rodas de conversa?"></textarea>
+        <label>Links (opcional)</label>
+        <input id="f-links" maxlength="600" placeholder="Lattes, LinkedIn, Instagram profissional, site">
+
+        <div class="fsec">Entrevista</div>
+        <label>Melhores dias e horários pra uma conversa online</label>
+        <input id="f-disp" maxlength="300" placeholder="Ex.: terças e quintas à tarde, ou sábado de manhã">
+        <div class="hint">A entrevista dura cerca de 30 minutos, por vídeo. Só marcamos depois da análise inicial.</div>
+
+        <label class="chk"><input type="checkbox" id="f-ok" required><span>Autorizo o dichava a usar estas informações para analisar minha candidatura e entrar em contato comigo (<a href="/landing/privacidade.html" style="color:#2E7D32">Privacidade</a>).</span></label>
+        <button class="btn" id="wl-btn" type="submit">Enviar candidatura</button>
+        <div class="err" id="wl-err"></div>
+      </form>
+    </div>
+    <div class="ok" id="wl-ok">
+      <div class="em" style="color:#2E7D32"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg></div>
+      <h3>Candidatura recebida</h3>
+      <p>Obrigado por contar sua história pra gente. Vamos ler com atenção e, se o seu perfil for aprovado para a próxima fase, você recebe por WhatsApp ou e-mail o convite pra agendar a entrevista.</p>
+    </div>
+    <div class="note" style="margin-top:14px">Já faz parte da rede? <a href="/clinica/" style="color:#2E7D32;font-weight:700">Entrar no painel</a></div>
   </div>
 
   <footer>dichava.app · redução de danos, sem julgamento · <a href="mailto:contato@dichava.app">contato@dichava.app</a><br>
@@ -306,15 +398,13 @@ footer a{color:#2E7D32;text-decoration:none}
 var SB=null;
 try{ SB = supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
 function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
-function sucesso(){document.getElementById('wl-form').style.display='none';document.getElementById('wl-ok').style.display='block';}
-function mailtoFallback(d){
-  var corpo='Nome: '+d.nome+'%0ARegistro: '+d.registro+'%0AEspecialidade: '+d.especialidade+'%0ACidade: '+d.cidade+'%0AAtendimento: '+d.atendimento+'%0AE-mail: '+d.email+'%0AWhatsApp: '+d.whatsapp+'%0APlano: '+d.plano+'%0AMensagem: '+encodeURIComponent(d.mensagem);
-  window.location.href='mailto:contato@dichava.app?subject='+encodeURIComponent('Waitlist profissional, '+d.nome)+'&body='+corpo;
-}
+function sucesso(){document.getElementById('wl-form').style.display='none';document.getElementById('wl-ok').style.display='block';document.getElementById('candidatura').scrollIntoView({behavior:'smooth',block:'start'});}
 function enviar(ev){
   ev.preventDefault();
-  var btn=document.getElementById('wl-btn');
-  var d={nome:val('f-nome'),registro:val('f-reg'),especialidade:val('f-esp'),cidade:val('f-cidade'),atendimento:val('f-atend'),email:val('f-email'),whatsapp:val('f-wpp'),plano:val('f-plano'),mensagem:val('f-msg')};
+  var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
+  err.style.display='none';
+  var d={nome:val('f-nome'),registro:val('f-reg'),especialidade:val('f-esp'),cidade:val('f-cidade'),atendimento:val('f-atend'),email:val('f-email'),whatsapp:val('f-wpp'),
+    formacao:val('f-formacao'),percurso:val('f-percurso'),experiencia_rd:val('f-rd'),motivacao:val('f-motiv'),links:val('f-links'),disponibilidade:val('f-disp')};
   btn.disabled=true; btn.textContent='Enviando…';
   finalizar(d);
   return false;
@@ -323,18 +413,34 @@ async function finalizar(d){
   var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
   var ok=false;
   if(SB){
-    // 1) Caminho confiável: função SECURITY DEFINER (ignora o RLS, sempre grava)
     try{
-      var r=await SB.rpc('pro_waitlist_add',{p_nome:d.nome,p_registro:d.registro,p_especialidade:d.especialidade,p_cidade:d.cidade,p_atendimento:d.atendimento,p_email:d.email,p_whatsapp:d.whatsapp,p_plano:d.plano,p_mensagem:d.mensagem});
+      var r=await SB.rpc('pro_candidatura_add',{p_nome:d.nome,p_registro:d.registro,p_especialidade:d.especialidade,p_cidade:d.cidade,p_atendimento:d.atendimento,p_email:d.email,p_whatsapp:d.whatsapp,
+        p_formacao:d.formacao,p_percurso:d.percurso,p_experiencia_rd:d.experiencia_rd,p_motivacao:d.motivacao,p_links:d.links,p_disponibilidade:d.disponibilidade});
       if(!r.error) ok=true;
     }catch(e){}
-    // 2) Fallback: insert direto (caso a função ainda não tenha sido criada)
-    if(!ok){ try{ var r2=await SB.from('pro_waitlist').insert([d]); if(!r2.error) ok=true; }catch(e){} }
   }
   if(ok){ sucesso(); return; }
-  btn.disabled=false; btn.textContent='Quero ser avisado(a) ';
-  err.textContent='Não consegui enviar agora. Confira sua conexão e toque de novo. '; err.style.display='block';
+  btn.disabled=false; btn.textContent='Enviar candidatura';
+  err.innerHTML='Não consegui enviar agora. Confira sua conexão e tente de novo, ou mande pra <a href="mailto:contato@dichava.app" style="color:#C0392B">contato@dichava.app</a>.'; err.style.display='block';
 }
+// próximos encontros da rede (intervisão, rodas) — só aparece se houver evento cadastrado
+(async function(){
+  if(!SB)return;
+  try{
+    var r=await SB.rpc('rede_eventos_pub'); var evs=(r&&r.data)||[];
+    if(r.error||!evs.length)return;
+    var AREA={interv:'Intervisão',rodas:'Roda de conversa',eventos:'Evento'};
+    var MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    var esc=function(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+    document.getElementById('ev-list').innerHTML=evs.map(function(e){
+      var dt=e.data?new Date(e.data+'T12:00:00'):null;
+      var dia=dt?('<b>'+dt.getDate()+'</b><span>'+MES[dt.getMonth()]+'</span>'):'<span>em breve</span>';
+      var sub=[AREA[e.area]||'',e.hora,e.tag].filter(Boolean).join(' · ');
+      return '<div class="ev"><div class="ev-d">'+dia+'</div><div><div class="ev-t">'+esc(e.titulo)+'</div><div class="ev-s">'+esc(sub)+'</div></div></div>';
+    }).join('');
+    document.getElementById('ev-box').style.display='block';
+  }catch(e){}
+})();
 // carrossel do painel
 (function(){
   var track=document.getElementById('carTrack'), dotsEl=document.getElementById('carDots');

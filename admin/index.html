@@ -245,7 +245,9 @@ tbody tr:hover{background:var(--card2)}
     <div style="font-size:12.5px;color:var(--txs);margin:-4px 0 8px">Exclusão definitiva feita pelo próprio profissional. Só resta e-mail, motivo e data.</div>
     <div id="exclusoes-box" class="card" style="padding:14px"><div class="spin"></div></div>
 
-    <div class="sec">Lista de espera <span id="wl-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
+    <div class="sec">Candidaturas à rede <span id="wl-count" style="font-size:13px;color:var(--txs);font-weight:600"></span></div>
+    <div style="font-size:12.5px;color:var(--txs);margin:-4px 0 8px">Fluxo: <b>Em análise</b> → <b>Entrevista</b> → <b>Aprovado</b> (recebe o link pra criar conta) → <b>Na rede</b>. Vem do formulário de /landing/profissionais.html.</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px"><input id="wl-link-entrevista" placeholder="Seu link pra agendar a entrevista (Calendly, Google Agenda…) — opcional" style="flex:1;min-width:220px" onchange="wlSalvarLinkEntrevista(this.value)"><span style="font-size:12px;color:var(--txs)">vai no convite da entrevista</span></div>
     <div id="wl-funnel" class="kpis" style="margin-bottom:10px"></div>
     <div class="filters" id="wl-filters"></div>
     <div id="wl-bulk" style="margin:2px 0 10px;display:flex;flex-wrap:wrap;gap:8px"></div>
@@ -848,26 +850,31 @@ async function carregarWaitlist(){
     $('#wl-filters').innerHTML=''; $('#wl-count').textContent='';
   }
 }
-const WL_ST={pendente:{l:'Pendente',c:'a'},contato:{l:'Em contato',c:'b'},liberado:{l:'Liberado',c:'v'},recusado:{l:'Recusado',c:'e'}};
+const WL_ST={pendente:{l:'Em análise',c:'a'},entrevista:{l:'Entrevista',c:'b'},aprovado:{l:'Aprovado',c:'v'},contato:{l:'Em contato (antigo)',c:'b'},liberado:{l:'Na rede',c:'v'},recusado:{l:'Recusado',c:'e'}};
+function wlLinkEntrevista(){ try{ return localStorage.getItem('dr_link_entrevista')||''; }catch(e){ return ''; } }
+function wlSalvarLinkEntrevista(v){ try{ localStorage.setItem('dr_link_entrevista',(v||'').trim()); }catch(e){} renderWaitlist(); toast('Link da entrevista salvo neste navegador'); }
 // ===== FUNIL DA LISTA DE ESPERA =====
 function renderWlFunnel(){
   const box=$('#wl-funnel'); if(!box)return;
   const total=WL.length; if(!total){ box.innerHTML=''; return; }
   const cont=k=>WL.filter(w=>(w.status||'pendente')===k).length;
-  const pend=cont('pendente'),ct=cont('contato'),lib=cont('liberado'),rec=cont('recusado');
+  const pend=cont('pendente'),ent=cont('entrevista'),apr=cont('aprovado'),lib=cont('liberado'),rec=cont('recusado');
   const conv=total?Math.round((lib/total)*100):0;
   const cards=[
-    {l:'Na lista (total)',v:total,d:'profissionais interessados',dot:'#4C8DF6',hl:true},
-    {l:'Pendentes',v:pend,d:'ainda não contatados',dot:'#F5A623'},
-    {l:'Em contato',v:ct,d:'conversa iniciada',dot:'#8B6FE0'},
-    {l:'Liberados',v:lib,d:conv+'% de conversão',dot:'#2FA35F',hl:true},
+    {l:'Candidaturas (total)',v:total,d:'profissionais interessados',dot:'#4C8DF6',hl:true},
+    {l:'Em análise',v:pend,d:'aguardando sua leitura',dot:'#F5A623'},
+    {l:'Entrevista',v:ent,d:'aprovados na análise inicial',dot:'#8B6FE0'},
+    {l:'Aprovados',v:apr,d:'convidados a criar conta',dot:'#2FA35F'},
+    {l:'Na rede',v:lib,d:conv+'% das candidaturas',dot:'#2FA35F',hl:true},
     {l:'Recusados',v:rec,d:'não seguiram',dot:'#E5484D'},
   ];
   box.innerHTML=cards.map(c=>`<div class="kpi ${c.hl?'hl':''}"><div class="kl"><span class="dot" style="background:${c.dot}"></span>${c.l}</div><div class="kv">${c.v}</div><div class="kd">${c.d}</div></div>`).join('');
 }
 function renderWlFiltros(){
   const cont=k=>WL.filter(w=>(w.status||'pendente')===k).length;
-  const fs=[['pendente','Pendentes ('+cont('pendente')+')'],['contato','Em contato ('+cont('contato')+')'],['liberado','Liberados ('+cont('liberado')+')'],['recusado','Recusados ('+cont('recusado')+')'],['todos','Todos ('+WL.length+')']];
+  const fs=[['pendente','Em análise ('+cont('pendente')+')'],['entrevista','Entrevista ('+cont('entrevista')+')'],['aprovado','Aprovados ('+cont('aprovado')+')'],['liberado','Na rede ('+cont('liberado')+')'],['recusado','Recusados ('+cont('recusado')+')']];
+  if(cont('contato'))fs.push(['contato','Em contato, antigo ('+cont('contato')+')']);
+  fs.push(['todos','Todos ('+WL.length+')']);
   $('#wl-filters').innerHTML=fs.map(([k,l])=>`<button class="ft ${_wlFiltro===k?'on':''}" onclick="setWlFiltro('${k}')">${l}</button>`).join('');
   $('#wl-count').textContent=WL.length?('· '+WL.length+' cadastro(s)'):'';
 }
@@ -886,6 +893,53 @@ function wlMsg(w){
     +'O *lançamento oficial será no dia 5 de agosto*, uma data muito especial para nós: a *Dichavando completa 8 anos*. Depois de todos esses anos produzindo conteúdo e construindo uma comunidade, esse aplicativo é o presente que queremos entregar para quem acompanha nosso trabalho — uma ferramenta pensada para fortalecer uma clínica mais ética, humana e alinhada à redução de danos.\n\n'
     +'Vai ser *muito bom ter você com a gente* nessa nova jornada. 💚';
 }
+// ===== Mensagens do processo seletivo (candidatura → entrevista → aprovado) =====
+function wlMsgRecebida(w){
+  const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
+  return oi+' Aqui é o Alexandre, fundador da Rede Dichava 🌱\n\n'
+    +'Recebi sua candidatura pra rede e queria te agradecer por contar sua trajetória com tanto cuidado.\n\n'
+    +'Estou lendo cada candidatura com calma. Assim que eu terminar a análise inicial, te dou um retorno por aqui sobre a próxima fase. 💚';
+}
+function wlMsgEntrevista(w){
+  const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
+  const link=wlLinkEntrevista();
+  const quando=w.entrevista_em?new Date(w.entrevista_em).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+  let agenda;
+  if(quando) agenda='Nossa conversa ficou marcada pra *'+quando+'*. Te mando o link da chamada um pouco antes. Se precisar remarcar, é só me avisar.';
+  else if(link) agenda='Escolhe o melhor horário pra você por aqui:\n👉 '+link;
+  else agenda='Me manda 2 ou 3 opções de dia e horário que funcionam pra você'+(w.disponibilidade?(' (você comentou: _'+w.disponibilidade+'_)'):'')+' e eu confirmo.';
+  return oi+' Aqui é o Alexandre, fundador da Rede Dichava 🌱\n\n'
+    +'Li sua candidatura com atenção e tenho uma boa notícia: a partir da sua formação e do seu percurso, *você foi aprovado(a) para a próxima fase* do processo de entrada na rede.\n\n'
+    +'A próxima etapa é uma *entrevista* rápida por vídeo (uns 30 minutos), pra gente se conhecer, conversar sobre a sua prática e sobre como a rede funciona: o diretório, o painel, os encontros de *intervisão* e as *rodas de conversa*.\n\n'
+    +agenda+'\n\nAté breve! 💚';
+}
+function wlMsgAprovado(w){
+  const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
+  return oi+' Que alegria 💚\n\n'
+    +'Depois da nossa conversa, é oficial: *você foi aprovado(a) para fazer parte da Rede Dichava*.\n\n'
+    +'Agora é só criar sua conta no painel com este e-mail ('+(w.email||'o mesmo da candidatura')+') e escolher o seu plano:\n'
+    +'👉 https://dichava.app/clinica/?criar\n\n'
+    +'Assim que a assinatura for confirmada, seu perfil entra no diretório e você já passa a receber os convites dos encontros de intervisão e das rodas de conversa.\n\n'
+    +'Seja muito bem-vindo(a)! Qualquer dúvida, me chama por aqui.';
+}
+function wlMsgRecusa(w){
+  const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
+  return oi+' Aqui é o Alexandre, da Rede Dichava 🌱\n\n'
+    +'Obrigado de verdade pelo interesse e pelo tempo que você dedicou à candidatura.\n\n'
+    +'Neste momento a gente não vai seguir com a sua entrada na rede. Estamos formando um grupo pequeno e com um recorte bem específico, e isso não diz nada sobre a qualidade do seu trabalho.\n\n'
+    +'Se fizer sentido, você pode se candidatar de novo mais pra frente. Desejo muito sucesso no seu caminho. 💚';
+}
+async function wlSalvarEntrevista(id){
+  const el=document.getElementById('wl-ent-'+id); if(!el)return;
+  const v=el.value; const quando=v?new Date(v).toISOString():null;
+  try{
+    const {error}=await SB.rpc('admin_waitlist_entrevista',{p_id:id,p_quando:quando});
+    if(error) throw error;
+    const w=WL.find(x=>x.id===id); if(w){ w.entrevista_em=quando; if(quando&&['pendente','contato'].includes(w.status||'pendente'))w.status='entrevista'; }
+    renderWlFiltros(); renderWaitlist(); renderWlFunnel(); toast(quando?'Entrevista marcada':'Data removida');
+  }catch(e){ toast('Não consegui salvar. Rodou o candidatura-setup.sql?',1); }
+}
+function wlDtLocal(d){ if(!d)return ''; const x=new Date(d); const z=n=>String(n).padStart(2,'0'); return x.getFullYear()+'-'+z(x.getMonth()+1)+'-'+z(x.getDate())+'T'+z(x.getHours())+':'+z(x.getMinutes()); }
 // Reengajar quem entrou na lista de espera e não respondeu (status pendente)
 function wlMsgReengajar(w){
   const oi = wlFirst(w.nome) ? ('Oi, '+wlFirst(w.nome)+'!') : 'Oi!';
@@ -951,7 +1005,7 @@ function wlMsgLancamento(w){
     +quando+' oficial do dichava.app — dia *5 de agosto*, quando a Dichavando completa *8 anos*.\n\n'
     +'A gente já se falou por aqui e seu perfil combina demais com a rede. Falta só um passo: *criar sua conta no painel* pra você já entrar com a gente na largada.\n\n'
     +'👉 https://dichava.app/clinica/?criar\n\n'
-    +'São *7 dias grátis* pra testar tudo, sem cadastrar cartão. Qualquer dúvida, é só me chamar por aqui. Bora? 💚';
+    +'Qualquer dúvida, é só me chamar por aqui. Bora? 💚';
 }
 function lembreteLancamentoHtml(nome){
   const nm=wlFirst(nome); const oi=nm?('Oi, '+nm+'!'):'Oi!';
@@ -963,7 +1017,6 @@ function lembreteLancamentoHtml(nome){
     '<div style="font-size:20px;font-weight:800;color:#1f3d2b;margin-bottom:14px">'+oi+'</div>'
     +P(quando+' oficial do <b>dichava.app</b> — dia <b>5 de agosto</b>, quando a Dichavando completa 8 anos.')
     +P('A gente já se falou e seu perfil combina demais com a rede. Falta só um passo: criar sua conta no painel pra você já entrar com a gente na largada.')
-    +P('São <b>7 dias grátis</b> pra testar tudo, sem cadastrar cartão.')
     +btn
     +P('Qualquer dúvida, é só responder este e-mail. Um abraço,<br><b>Alexandre</b> — dichava.app 💚'));
 }
@@ -989,7 +1042,7 @@ async function enviarLembreteLancamento(){
   }catch(e){ toast('Não consegui concluir. Tenta de novo.',1); }
 }
 async function moverQuemCriouConta(){
-  const alvo=WL.filter(w=>['contato','pendente'].includes(w.status||'pendente') && wlTemConta(w));
+  const alvo=WL.filter(w=>['contato','pendente','aprovado'].includes(w.status||'pendente') && wlTemConta(w));
   if(!alvo.length){toast('Ninguém em contato/pendente já com conta criada 👍',0);return;}
   if(!confirm(alvo.length+' pessoa(s) da lista já criaram conta. Mover para "Liberados"?'))return;
   let ok=0;
@@ -1041,9 +1094,10 @@ async function enviarCheckinTodosTeste(){
 function renderWaitlist(){
   // barra de ações em massa
   const semConta=WL.filter(w=>(w.status||'pendente')==='contato'&&w.email&&!wlTemConta(w)&&!w.lembrete_em).length;
-  const comConta=WL.filter(w=>['contato','pendente'].includes(w.status||'pendente')&&wlTemConta(w)).length;
+  const comConta=WL.filter(w=>['contato','pendente','aprovado'].includes(w.status||'pendente')&&wlTemConta(w)).length;
   const wb=$('#wl-bulk'); if(wb){ let b=''; if(comConta)b+='<button class="btn ghost sm" onclick="moverQuemCriouConta()">🔎 Já criaram conta → Liberados ('+comConta+')</button>'; if(semConta)b+='<button class="btn ghost sm" onclick="enviarLembreteLancamento()">📧 Lembrete de lançamento (em contato, sem conta) ('+semConta+')</button>'; wb.innerHTML=b; }
   let list=WL.filter(w=>_wlFiltro==='todos'?true:(w.status||'pendente')===_wlFiltro);
+  const li=$('#wl-link-entrevista'); if(li&&document.activeElement!==li)li.value=wlLinkEntrevista();
   if(!list.length){ $('#wl-list').innerHTML='<div class="empty">Nenhum cadastro '+(_wlFiltro==='todos'?'':'“'+(WL_ST[_wlFiltro]?WL_ST[_wlFiltro].l.toLowerCase():_wlFiltro)+'”')+' por aqui.</div>'; return; }
   $('#wl-list').innerHTML=list.map(w=>{
     const st=WL_ST[w.status||'pendente']||WL_ST.pendente;
@@ -1054,7 +1108,11 @@ function renderWaitlist(){
     //  • em contato e ainda SEM conta → lembrete de lançamento (criar conta)
     //  • demais → convite completo com links de demonstração
     let txt, assunto;
-    if(stw==='pendente'){ txt=wlMsgReengajar(w); assunto='Seu lugar na rede dichava ainda está guardado 🌱'; }
+    const cand=w.plano==='candidatura'||!!(w.formacao||w.percurso);
+    if(stw==='pendente'){ if(cand){ txt=wlMsgRecebida(w); assunto='Recebemos sua candidatura à Rede Dichava 🌱'; } else { txt=wlMsgReengajar(w); assunto='Seu lugar na rede dichava ainda está guardado 🌱'; } }
+    else if(stw==='entrevista'){ txt=wlMsgEntrevista(w); assunto='Você foi aprovado(a) para a entrevista · Rede Dichava 🌱'; }
+    else if(stw==='aprovado'){ txt=wlMsgAprovado(w); assunto='Bem-vindo(a) à Rede Dichava 💚'; }
+    else if(stw==='recusado'){ txt=wlMsgRecusa(w); assunto='Sua candidatura à Rede Dichava'; }
     else if(stw==='contato' && !temConta){ txt=wlMsgLancamento(w); assunto=wlLancAssunto(); }
     else { txt=wlMsg(w); assunto='Seu acesso à Rede Dichava 💚'; }
     const msgWa=encodeURIComponent(txt);                    // com *negrito* do WhatsApp
@@ -1064,15 +1122,21 @@ function renderWaitlist(){
     const chips=[`<span class="chip ${st.c}">${st.l}</span>`];
     if(temConta)chips.push('<span class="chip v">✅ já criou conta</span>');
     if(w.lembrete_em)chips.push('<span class="chip b">📧 lembrete '+fmtData(w.lembrete_em)+'</span>');
-    if(w.plano)chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
+    if(w.plano&&w.plano!=='candidatura')chips.push('<span class="chip b">'+esc(w.plano)+'</span>');
+    if(w.entrevista_em)chips.push('<span class="chip b">🎥 entrevista '+new Date(w.entrevista_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</span>');
     if(w.cidade)chips.push('<span class="chip">'+esc(w.cidade)+'</span>');
     if(w.atendimento)chips.push('<span class="chip">'+esc(w.atendimento)+'</span>');
     const meta=[w.registro,w.especialidade].filter(Boolean).map(esc).join(' · ');
     const acts=[];
-    if((w.status||'pendente')!=='contato')acts.push(`<button class="btn ghost sm" onclick="wlStatus('${w.id}','contato')">Marcar em contato</button>`);
-    if((w.status||'pendente')!=='liberado')acts.push(`<button class="btn wv sm" onclick="wlStatus('${w.id}','liberado')">✓ Liberado</button>`);
-    if((w.status||'pendente')!=='pendente')acts.push(`<button class="btn ghost sm" onclick="wlStatus('${w.id}','pendente')">← Pendente</button>`);
-    if((w.status||'pendente')!=='recusado')acts.push(`<button class="btn dg sm" onclick="wlStatus('${w.id}','recusado')">Recusar</button>`);
+    if(stw==='pendente'||stw==='contato')acts.push(`<button class="btn wv sm" onclick="wlStatus('${w.id}','entrevista')">✓ Aprovar para entrevista</button>`);
+    if(stw==='entrevista')acts.push(`<button class="btn wv sm" onclick="wlStatus('${w.id}','aprovado')">✓ Aprovado na entrevista</button>`);
+    if(stw==='aprovado')acts.push(`<button class="btn wv sm" onclick="wlStatus('${w.id}','liberado')">✓ Entrou na rede</button>`);
+    if(stw!=='pendente')acts.push(`<button class="btn ghost sm" onclick="wlStatus('${w.id}','pendente')">← Em análise</button>`);
+    if(stw!=='recusado')acts.push(`<button class="btn dg sm" onclick="wlStatus('${w.id}','recusado')">Recusar</button>`);
+    // respostas da candidatura (formação, percurso…) pra análise inicial
+    const campos=[['Formação',w.formacao],['Percurso profissional',w.percurso],['Relação com a redução de danos',w.experiencia_rd],['Por que quer entrar',w.motivacao],['Links',w.links],['Disponibilidade p/ entrevista',w.disponibilidade]].filter(c=>c[1]);
+    const cv=campos.length?`<details style="margin:8px 0" ${stw==='pendente'?'open':''}><summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--v)">📄 Candidatura (formação e percurso)</summary>${campos.map(c=>`<div style="margin-top:8px"><div style="font-size:11.5px;font-weight:800;color:var(--txs);text-transform:uppercase;letter-spacing:.4px">${c[0]}</div><div style="font-size:13.5px;white-space:pre-wrap;line-height:1.5">${esc(c[1])}</div></div>`).join('')}</details>`:'';
+    const ent=(stw==='entrevista'||stw==='pendente')?`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0"><span style="font-size:12.5px;color:var(--txs)">🎥 Entrevista:</span><input type="datetime-local" id="wl-ent-${w.id}" value="${wlDtLocal(w.entrevista_em)}" style="max-width:220px"><button class="btn ghost sm" onclick="wlSalvarEntrevista('${w.id}')">Salvar data</button></div>`:'';
     return `<div class="pcard">
       <div class="phead">
         <div class="pav">${initials(w.nome)}</div>
@@ -1083,6 +1147,7 @@ function renderWaitlist(){
         </div>
       </div>
       ${w.mensagem?`<div style="font-size:13.5px;color:var(--txs);background:#0f1a14;border-radius:10px;padding:9px 12px;margin:8px 0">“${esc(w.mensagem)}”</div>`:''}
+      ${cv}${ent}
       <div class="chips" style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0">${chips.join('')}</div>
       <div class="acts" style="display:flex;flex-wrap:wrap;gap:8px">${wa}${mail}${acts.join('')}</div>
     </div>`;
@@ -1101,6 +1166,7 @@ async function wlStatus(id,status){
 function wlTocado(id){
   const w=WL.find(x=>x.id===id);
   if(!w || (w.status && w.status!=='pendente')) return;
+  if(w.plano==='candidatura'||w.formacao||w.percurso) return; // candidatura segue o fluxo análise → entrevista
   w.status='contato';
   SB.rpc('admin_waitlist_status',{p_id:id,p_status:'contato'}).catch(()=>{});
 }
@@ -1743,7 +1809,6 @@ function renderProfs(){
     const acts=[];
     if(!ativo)acts.push(`<button class="btn wv sm" onclick="abrirLiberar('${p.id}')">✓ Liberar acesso</button>`);
     else acts.push(`<button class="btn ghost sm" onclick="abrirLiberar('${p.id}')">Renovar / editar</button>`);
-    if(!ativo)acts.push(`<button class="btn ghost sm" onclick="liberarTrial('${p.id}')">🎁 Teste 7 dias</button>`);
     if(ehTrial(p))acts.push(`<button class="btn ghost sm" onclick="estenderTeste('${p.id}')">⏳ Estender teste</button>`);
     if(p.status==='reaprovar')acts.push(`<button class="btn wv sm" onclick="acao('${p.id}','aprovar')">✓ Aprovar edição</button>`);
     else if((p.status||'pendente')!=='aprovado')acts.push(`<button class="btn ghost sm" onclick="acao('${p.id}','aprovar')">Aprovar perfil</button>`);
@@ -1811,9 +1876,6 @@ function abrirLiberar(id){
       <button class="btn ghost" style="flex:1" onclick="fecharModal()">Cancelar</button>
       <button class="btn" style="flex:1" onclick="confirmarLiberar('${id}')">Liberar</button>
     </div>
-    <div style="border-top:1px solid var(--line,#2a2a2a);margin:14px 0 10px"></div>
-    <button class="btn ghost" style="width:100%" onclick="liberarTrial('${id}')">🎁 Liberar teste grátis de 7 dias</button>
-    <div style="font-size:12px;color:var(--txm,#999);margin-top:7px;line-height:1.4">Dá acesso completo por 7 dias sem cobrar nada. No 7º dia o acesso é cortado até o pagamento. Usa o plano selecionado acima.</div>
   </div></div>`;
   try{libTipoChange();}catch(e){}
 }
@@ -1951,7 +2013,6 @@ async function abrirDetalheProf(id){
   if(p.status==='reaprovar')acts.push('<button class="btn wv sm" onclick="acao(\''+p.id+'\',\'aprovar\')">✓ Aprovar edição</button>');
   else if((p.status||'pendente')!=='aprovado')acts.push('<button class="btn wv sm" onclick="acao(\''+p.id+'\',\'aprovar\')">✓ Aprovar perfil</button>');
   if(!ativo)acts.push('<button class="btn sm" onclick="abrirLiberar(\''+p.id+'\')">Liberar acesso</button>');
-  if(!ativo)acts.push('<button class="btn ghost sm" onclick="liberarTrial(\''+p.id+'\')">🎁 Teste 7 dias</button>');
   acts.push('<button class="btn ghost sm" onclick="toggleOculto(\''+p.id+'\','+(p.oculto_diretorio?'true':'false')+')">'+(p.oculto_diretorio?'👁 Mostrar':'🙈 Ocultar')+'</button>');
   if(ativo)acts.push('<button class="btn dg sm" onclick="acao(\''+p.id+'\',\'bloquear\')">Bloquear</button>');
   if(p.status!=='rejeitado')acts.push('<button class="btn dg sm" onclick="acao(\''+p.id+'\',\'rejeitar\')">Rejeitar</button>');
