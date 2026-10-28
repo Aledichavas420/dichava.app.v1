@@ -108,6 +108,12 @@ textarea{min-height:92px;resize:vertical;line-height:1.5}
 .ev:first-child{border-top:none}
 .ev-d{flex:none;width:50px;text-align:center;background:#F0F7F1;border-radius:12px;padding:6px 0;line-height:1.1}
 .ev-d b{display:block;font-size:18px;color:#2E7D32}.ev-d span{font-size:10.5px;font-weight:800;color:#5E7062;text-transform:uppercase}
+.inc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.inc-c{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 18px;box-shadow:0 8px 22px rgba(30,60,35,.05)}
+.inc-c .tg{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:6px}
+.inc-c ul{list-style:none;padding:0;margin:6px 0 0}
+.inc-c li{font-size:14px;color:#2b3b2d;padding:6px 0 6px 25px;position:relative;line-height:1.4}
+.inc-c li::before{content:'';position:absolute;left:0;top:.5em;width:1em;height:1em;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234CAF5A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12.5l4.5 4.5L19 6.5'/></svg>") no-repeat center/contain}
 .ev-t{font-size:14px;font-weight:700;color:#1B2A1C}.ev-s{font-size:12.5px;color:var(--txs)}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:#7d8f80;text-align:center}
 footer a{color:#2E7D32;text-decoration:none}
@@ -119,7 +125,7 @@ footer a{color:#2E7D32;text-decoration:none}
 .dots{display:flex;gap:7px;justify-content:center;margin-top:14px}
 .dots i{width:8px;height:8px;border-radius:50%;background:#cfe0d2;transition:.2s;cursor:pointer}
 .dots i.on{background:#2E7D32;width:22px;border-radius:20px}
-@media(max-width:760px){.steps{grid-template-columns:1fr 1fr}.comm{grid-template-columns:1fr}}
+@media(max-width:760px){.steps{grid-template-columns:1fr 1fr}.comm,.inc{grid-template-columns:1fr}}
 @media(max-width:640px){.preview{grid-template-columns:1fr;padding:22px}.why,.plans,.row{grid-template-columns:1fr}h1{font-size:30px}.preview-tx{order:2}}
 </style></head><body>
 <div class="wrap">
@@ -159,7 +165,7 @@ footer a{color:#2E7D32;text-decoration:none}
     <div class="step"><div class="n">1</div><b class="t">Você se apresenta</b><small>Conta pra gente sua formação, seu caminho na clínica e como a redução de danos aparece no seu trabalho.</small></div>
     <div class="step"><div class="n">2</div><b class="t">A gente lê com cuidado</b><small>Cada apresentação é lida com calma, por gente, não por algoritmo. Depois a gente te chama pra conversar.</small></div>
     <div class="step"><div class="n">3</div><b class="t">Uma conversa</b><small>Um papo online com o fundador pra nos conhecermos, falar da sua prática e de como a rede funciona.</small></div>
-    <div class="step"><div class="n">4</div><b class="t">Boas-vindas</b><small>Fazendo sentido pros dois lados, você recebe o convite pra criar sua conta, escolher o plano e chegar nos encontros.</small></div>
+    <div class="step"><div class="n">4</div><b class="t">Boas-vindas</b><small>Fazendo sentido pros dois lados, você recebe o convite pra criar sua conta e chegar nos encontros.</small></div>
   </div>
   <div class="sel-band">A rede não se abre por assinatura, se abre por afinidade. É esse cuidado na chegada que faz dela um lugar de confiança: entre colegas e pra quem procura atendimento.</div>
 
@@ -283,62 +289,42 @@ footer a{color:#2E7D32;text-decoration:none}
   </div>
 
 
-  <h2 class="sec">Planos pra você ou sua clínica</h2>
-  <div class="sub">O plano é escolhido depois da nossa conversa. Sem fidelidade, cancele quando quiser. <b>Todos incluem os encontros da rede e o Painel da Clínica.</b></div>
-  <div class="plans">
-    <div class="plan">
-      <div class="plan-n">Essencial</div>
-      <div class="plan-de">de <s>R$ 99,90</s></div>
-      <div class="plan-p">R$ 79,90<small>/mês</small></div>
-      <div class="plan-anual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg> preço de lançamento · menos de <b>R$ 2,70 por dia</b></div>
-      <div class="plan-para">Para quem está começando ou consolidando a prática</div>
+  <!-- O QUE ESTÁ INCLUSO -->
+  <h2 class="sec">Na Rede dichava você tem acesso a</h2>
+  <div class="sub">Uma participação só, com tudo incluso. Sem planos pra escolher e sem fidelidade.</div>
+  <div class="inc">
+    <div class="inc-c">
+      <div class="inc-h"><span class="tg" style="background:#EDE4FF;color:#6D28D9">Encontros</span></div>
       <ul>
-        <li><b>Encontros da rede</b>: intervisão e rodas de conversa</li>
-        <li>Perfil de <b>membro verificado</b> da rede</li>
-        <li><b>Agenda completa</b> (dia, semana e mês) + sessões recorrentes</li>
-        <li><b>Pacientes ilimitados</b>, com prontuário completo</li>
-        <li><b>Caixa</b> e controle financeiro do mês</li>
-        <li>Recibos, declarações e contrato terapêutico</li>
-        <li>Lembretes e lista de espera</li>
-        <li class="off">Agendamento online e lembretes automáticos</li>
-        <li class="off">Assistente de IA e relatórios</li>
-        <li class="off">Destaque na rede e equipe compartilhada</li>
+        <li><b>Intervisões</b> regulares pra discutir casos entre pares</li>
+        <li><b>Rodas de conversa</b> sobre redução de danos, política de drogas, ética e manejo clínico</li>
+        <li><b>Gravações</b> dos encontros no painel, pra assistir quando puder</li>
+        <li>Mural com a agenda da rede e os próximos encontros</li>
       </ul>
     </div>
-    <div class="plan best">
-      <div class="plan-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z"/></svg> mais escolhido</div>
-      <div class="plan-n">Profissional</div>
-      <div class="plan-de">de <s>R$ 199,90</s></div>
-      <div class="plan-p">R$ 179,90<small>/mês</small></div>
-      <div class="plan-anual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg> preço de lançamento · menos de <b>R$ 6 por dia</b></div>
-      <div class="plan-para">Menos trabalho manual, mais tempo pra clínica</div>
+    <div class="inc-c">
+      <div class="inc-h"><span class="tg" style="background:#DCF0DE;color:#2E7D32">Rede</span></div>
       <ul>
-        <li>Tudo do Essencial, e mais:</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg> <b>Agendamento online</b>, o paciente marca sozinho pelos seus horários</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M6 15V10a6 6 0 0 1 12 0v5l2 2H4l2-2Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg> <b>Lembretes automáticos</b> de consulta</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/></svg> <b>Assistente de IA no prontuário</b>, organiza a evolução por você</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 20V4"/><path d="M4 20h16"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg> <b>Relatórios</b>: faturamento, ticket médio e comparecimento</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 15h6"/></svg> Pareceres e relatórios técnicos com modelos por especialidade</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z"/></svg> <b>Destaque</b> no perfil da rede</li>
+        <li>Contato com colegas de várias cidades e especialidades</li>
+        <li>Encaminhamentos e parcerias entre membros</li>
+        <li><b>Perfil de membro verificado</b>, no app e na página pública da rede</li>
+        <li>Página da sua <b>bio</b> com links, temas e contato</li>
       </ul>
     </div>
-    <div class="plan">
-      <div class="plan-n">Clínica</div>
-      <div class="plan-de">de <s>R$ 349,90</s></div>
-      <div class="plan-p">R$ 299,90<small>/mês</small></div>
-      <div class="plan-anual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg> preço de lançamento · menos de <b>R$ 10 por dia</b></div>
-      <div class="plan-para">Para clínicas e coletivos com equipe de apoio</div>
+    <div class="inc-c">
+      <div class="inc-h"><span class="tg" style="background:#FFF3CD;color:#8a6d00">Plataforma</span></div>
       <ul>
-        <li>Tudo do Profissional, e mais:</li>
-        <li><b>Até 5 profissionais</b> na mesma conta</li>
-        <li><b>Painel compartilhado</b>: agenda, caixa e pacientes da equipe</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/></svg> <b>IA e relatórios</b> pra toda a equipe</li>
-        <li>Página da <b>clínica</b> na rede</li>
-        <li><b>Suporte prioritário dedicado</b></li>
+        <li><b>Agenda</b> por dia, semana e mês, com sessões recorrentes</li>
+        <li><b>Agendamento online</b> e lembretes automáticos de consulta</li>
+        <li><b>Prontuário</b> completo, com assistente de IA na evolução</li>
+        <li>Pacientes ilimitados, lista de espera e aniversariantes</li>
+        <li><b>Caixa</b> automático, faturamento e relatórios</li>
+        <li>Recibos, declarações, pareceres e <b>contrato terapêutico</b></li>
+        <li>Login seguro, backup e conformidade com a LGPD</li>
       </ul>
     </div>
   </div>
-  <div class="note">Valores de lançamento, sujeitos a ajuste. A assinatura acontece depois da conversa de boas-vindas.</div>
+  <div class="note">O valor da participação é apresentado na nossa conversa de boas-vindas. Tem uma clínica ou coletivo com equipe? Conta pra gente na sua apresentação.</div>
 
   <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:26px 0 6px">
     <span style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:700;color:#2b3b2d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Conexão criptografada (SSL/TLS)</span>
