@@ -5,7 +5,7 @@
 <meta property="og:title" content="Rede dichava, para profissionais da saúde">
 <meta property="og:description" content="Uma comunidade de profissionais que se encontram pra pensar e praticar a redução de danos.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
 <style>
 :root{--ve:#2E7D32;--v:#4CAF5A;--am:#F2B705;--roxo:#7C3AED;--dk:#16261a;--txs:#5E7062;--line:#E2ECE3}
 *{box-sizing:border-box}
@@ -108,80 +108,56 @@ textarea{min-height:92px;resize:vertical;line-height:1.5}
 .ev:first-child{border-top:none}
 .ev-d{flex:none;width:50px;text-align:center;background:#F0F7F1;border-radius:12px;padding:6px 0;line-height:1.1}
 .ev-d b{display:block;font-size:18px;color:#2E7D32}.ev-d span{font-size:10.5px;font-weight:800;color:#5E7062;text-transform:uppercase}
-/* incluso: bento interativo */
-.inc2{background:linear-gradient(160deg,#153E27,#0C2A19);border-radius:28px;padding:18px;box-shadow:0 24px 60px rgba(20,50,30,.22);position:relative;overflow:hidden}
-.inc2::before{content:'';position:absolute;inset:-40% -10% auto auto;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(76,175,90,.28),transparent 65%);pointer-events:none}
-.tabs{position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:5px;margin-bottom:16px}
-.tabs-pill{position:absolute;top:5px;bottom:5px;left:5px;width:calc((100% - 10px)/3);border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.18);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-.tab{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;background:none;border:none;color:#CFE3D4;font:800 14.5px 'DM Sans',sans-serif;padding:12px 6px;border-radius:14px;cursor:pointer;transition:color .3s}
-.tab svg{width:18px;height:18px}
-.tab.on{color:#153E27}
-.tab:focus-visible{outline:2px solid #8FE3A6;outline-offset:2px}
-.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative}
-.bento[hidden]{display:none}
-.bt{background:#fff;border-radius:20px;padding:18px 16px;display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;animation:btIn .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*60ms)}
-.bt:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.22)}
-.bt b{font-size:15px;line-height:1.25;color:#1B2A1C;margin-top:8px}
-.bt small{font-size:13px;color:var(--txs);line-height:1.45}
-.bt-ic{width:40px;height:40px;border-radius:12px;background:#E7F4E9;color:#2E7D32;display:flex;align-items:center;justify-content:center;transition:background .25s,color .25s,transform .25s}
-.bt-ic svg{width:21px;height:21px}
-.bt:hover .bt-ic{background:#2E7D32;color:#fff;transform:rotate(-6deg) scale(1.06)}
-.bt-hero-tx{display:flex;flex-direction:column;gap:4px}
-.bt-hero{grid-column:span 2;grid-row:span 2;background:linear-gradient(165deg,#F4FBF5,#E3F3E6);padding:22px}
-.bt-hero b{font-size:21px;letter-spacing:-.3px}
-.bt-hero small{font-size:14px;max-width:340px}
-.bt-wide{grid-column:span 2}
-.sec-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.sec-chips span{font-size:11.5px;font-weight:800;color:#2E7D32;background:#E7F4E9;border-radius:20px;padding:4px 10px}
-@keyframes btIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
-.viz{margin-top:auto;padding-top:16px}
-/* encontros */
-.ve-call{background:#132a1c;border-radius:16px;padding:12px;color:#EAF3EC}
-.ve-top{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#BFE3C4;margin-bottom:10px}
-.ve-live{width:8px;height:8px;border-radius:50%;background:#FF5A5A;box-shadow:0 0 0 0 rgba(255,90,90,.6);animation:live 1.8s infinite}
-.ve-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.ve-p{height:46px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;position:relative}
-.ve-p::before{content:'';width:30px;height:30px;border-radius:50%;background:var(--c);position:absolute;opacity:.9}
-.ve-p{isolation:isolate}.ve-p::before{z-index:-1}
-.ve-talk{box-shadow:inset 0 0 0 2px #8FE3A6;animation:talk 2.4s ease-in-out infinite}
-.ve-case{margin-top:9px;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 10px;font-size:11.5px}
-.ve-case span{display:block;color:#9DBBA6;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
-.ve-case b{color:#fff;font-size:12.5px;font-weight:600;font-style:italic;margin:2px 0 0;display:block}
-@keyframes live{70%{box-shadow:0 0 0 8px rgba(255,90,90,0)}100%{box-shadow:0 0 0 0 rgba(255,90,90,0)}}
-@keyframes talk{50%{box-shadow:inset 0 0 0 2px #8FE3A6,0 0 0 4px rgba(143,227,166,.25)}}
-/* rede */
-.net{width:100%;height:auto;display:block}
-.net-l path{stroke-dasharray:5 6;animation:flow 2.6s linear infinite}
-.net-n circle:not(.net-ring){transform-box:fill-box;transform-origin:center;animation:node 3.2s ease-in-out infinite}
-.net-n circle:nth-child(2){animation-delay:.5s}.net-n circle:nth-child(3){animation-delay:1s}.net-n circle:nth-child(4){animation-delay:1.5s}.net-n circle:nth-child(5){animation-delay:2s}
-.net-ring{transform-box:fill-box;transform-origin:center;animation:ring 2.4s ease-out infinite}
-@keyframes flow{to{stroke-dashoffset:-22}}
-@keyframes node{50%{transform:scale(1.12)}}
-@keyframes ring{from{transform:scale(1);opacity:.9}to{transform:scale(1.7);opacity:0}}
-/* plataforma */
-.viz-plat{display:grid;grid-template-columns:1.3fr 1fr;gap:9px}
-.vp-card{background:#fff;border:1px solid #D7EAD9;border-radius:14px;padding:10px 11px}
-.vp-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.vp-h b{font-size:12.5px;margin:0}.vp-h span{font-size:10.5px;color:var(--txs);font-weight:700}
-.vp-row{display:flex;align-items:center;gap:7px;font-size:11.5px;padding:5px 0;border-top:1px solid #EEF3EE;animation:btIn .5s both}
-.vp-row:nth-child(3){animation-delay:.15s}.vp-row:nth-child(4){animation-delay:.3s}
-.vp-row i{font-style:normal;font-weight:800;color:#1B2A1C}.vp-row span{flex:1;color:#2b3b2d}
-.vp-row em{font-style:normal;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;background:#F1F3EF;color:#7d8f80}
-.vp-row em.ck{background:#E0F2F1;color:#00897B}.vp-row em.on{background:#F3E9FF;color:#7C3AED}
-.vp-bars{display:flex;align-items:flex-end;gap:5px;height:78px;padding-top:4px}
-.vp-bars i{flex:1;height:var(--h);border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#4CAF5A,#2E7D32);transform-origin:bottom;animation:bar .9s cubic-bezier(.2,.8,.2,1) both}
-.vp-bars i:nth-child(2){animation-delay:.08s}.vp-bars i:nth-child(3){animation-delay:.16s}.vp-bars i:nth-child(4){animation-delay:.24s}.vp-bars i:nth-child(5){animation-delay:.32s}.vp-bars i:nth-child(6){animation-delay:.4s}
-@keyframes bar{from{transform:scaleY(0)}}
+/* incluso: índice editorial */
+.ix{display:grid;grid-template-columns:270px 1fr;background:#FBF8F1;border:1px solid #E7E0CF;border-radius:6px 28px 6px 28px;overflow:hidden;box-shadow:0 1px 0 #fff inset,0 18px 40px rgba(60,50,20,.07)}
+.ix-nav{padding:26px 0 26px 26px;border-right:1px solid #E7E0CF;display:flex;flex-direction:column;gap:4px}
+.ix-t{all:unset;cursor:pointer;display:grid;grid-template-columns:30px 1fr;column-gap:6px;padding:14px 20px 14px 0;border-bottom:1px solid #EDE7D8}
+.ix-t:last-child{border-bottom:none}
+.ix-t i{font-style:normal;font:500 12px 'DM Sans',sans-serif;color:#A79E86;padding-top:9px;letter-spacing:.5px}
+.ix-t b{font:400 30px/1.1 'Fraunces',Georgia,serif;color:#9A9278;letter-spacing:-.6px;position:relative;justify-self:start;transition:color .3s}
+.ix-t small{grid-column:2;font-size:13px;color:#A79E86;margin-top:11px;transition:color .3s}
+.ix-t:hover b{color:#4d5a4f}
+.ix-t.on b{color:#153E27}
+.ix-t.on small{color:#2E7D32}
+.ix-t:focus-visible{outline:2px solid #2E7D32;outline-offset:4px;border-radius:4px}
+.ix-under{position:absolute;left:-2px;right:-4px;bottom:-7px;width:calc(100% + 6px);height:10px;overflow:visible}
+.ix-under path{fill:none;stroke:#4CAF5A;stroke-width:3.2;stroke-linecap:round;stroke-dasharray:210;stroke-dashoffset:210;transition:stroke-dashoffset .7s cubic-bezier(.6,.1,.2,1)}
+.ix-t.on .ix-under path{stroke-dashoffset:0}
+.ix-body{padding:30px 34px 30px}
+.ix-p[hidden]{display:none}
+.ix-lede{font:400 26px/1.25 'Fraunces',Georgia,serif;color:#1B2A1C;letter-spacing:-.4px;margin:0 0 18px;max-width:520px}
+.ix-lede em{font-style:italic;color:#2E7D32}
+.ix-rows{list-style:none;margin:0;padding:0;border-top:1px solid #E2DBC9}
+.ix-rows li{display:grid;grid-template-columns:190px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid #E2DBC9;animation:ixIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*55ms)}
+.ix-rows b{font-size:15px;color:#1B2A1C}
+.ix-rows span{font-size:14.5px;color:#56645A;line-height:1.5}
+.ix-rows-2 li{grid-template-columns:200px 1fr}
+@keyframes ixIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ix-ticket{margin-top:22px;display:flex;background:#fff;border:1px solid #E2DBC9;border-radius:14px;position:relative;max-width:460px;animation:ixIn .6s .25s both}
+.ix-ticket::before,.ix-ticket::after{content:'';position:absolute;right:92px;width:16px;height:16px;border-radius:50%;background:#FBF8F1;border:1px solid #E2DBC9}
+.ix-ticket::before{top:-9px;clip-path:inset(50% 0 0 0)}.ix-ticket::after{bottom:-9px;clip-path:inset(0 0 50% 0)}
+.tk-l{flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:2px}
+.tk-l span{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#2E7D32}
+.tk-l b{font:500 18px/1.25 'Fraunces',Georgia,serif;color:#1B2A1C}
+.tk-l small{font-size:12.5px;color:#6b786e}
+.tk-r{width:100px;border-left:1.5px dashed #D9D1BD;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;line-height:1}
+.tk-r b{font:400 30px 'Fraunces',Georgia,serif;color:#153E27}
+.tk-r span{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b786e;margin-top:4px}
+.ix-quote{margin:24px 0 0;padding:4px 0 4px 20px;border-left:3px solid #4CAF5A;font:italic 400 19px/1.45 'Fraunces',Georgia,serif;color:#2b3b2d;max-width:540px;animation:ixIn .6s .25s both}
+.ix-quote cite{display:block;margin-top:8px;font:700 12.5px 'DM Sans',sans-serif;font-style:normal;color:#2E7D32}
 @media(max-width:760px){
-  .inc2{padding:12px;border-radius:22px}
-  .bento{grid-template-columns:1fr 1fr;gap:10px}
-  .bt-hero{grid-row:auto;grid-column:span 2}
-  .tab{font-size:13px;gap:6px;padding:11px 4px}.tab svg{width:16px;height:16px}
-  .bt{padding:15px 13px}.bt b{font-size:14px}.bt small{font-size:12.5px}
+  .ix{grid-template-columns:1fr;border-radius:6px 22px 6px 22px}
+  .ix-nav{flex-direction:row;padding:6px 14px 0;border-right:none;border-bottom:1px solid #E7E0CF;overflow-x:auto;gap:18px;scrollbar-width:none}
+  .ix-nav::-webkit-scrollbar{display:none}
+  .ix-t{grid-template-columns:auto;padding:12px 0 14px;border-bottom:none;flex:none}
+  .ix-t i{padding-top:0;font-size:11px}
+  .ix-t b{font-size:22px}
+  .ix-t small{display:none}
+  .ix-body{padding:22px 18px 24px}
+  .ix-lede{font-size:22px}
+  .ix-rows li,.ix-rows-2 li{grid-template-columns:1fr;gap:2px;padding:12px 0}
 }
-@media(max-width:480px){.viz-plat{grid-template-columns:1fr}.bt-ic{width:36px;height:36px;border-radius:11px}.bt-ic svg{width:19px;height:19px}.bt b{font-size:13.5px;margin-top:6px}.bt small{font-size:12px}.bt-hero b{font-size:18px}.bt-hero small{font-size:13px}.tab span{font-size:12.5px}}
-@media(max-width:330px){.bento{grid-template-columns:1fr}.bt-hero,.bt-wide{grid-column:auto}}
-@media(prefers-reduced-motion:reduce){.bt,.vp-row,.vp-bars i{animation:none}.net-l path,.net-n circle,.net-ring,.ve-live,.ve-talk{animation:none}.tabs-pill{transition:none}}
+@media(prefers-reduced-motion:reduce){.ix-rows li,.ix-ticket,.ix-quote{animation:none}.ix-under path{transition:none}}
 .ev-t{font-size:14px;font-weight:700;color:#1B2A1C}.ev-s{font-size:12.5px;color:var(--txs)}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:#7d8f80;text-align:center}
 footer a{color:#2E7D32;text-decoration:none}
@@ -361,80 +337,30 @@ footer a{color:#2E7D32;text-decoration:none}
   <a id="inclui"></a>
   <h2 class="sec">Na Rede dichava você tem acesso a</h2>
   <div class="sub">Uma participação só, com tudo incluso. Sem planos pra escolher e sem fidelidade.</div>
-  <div class="inc2">
-    <div class="tabs" role="tablist" aria-label="O que está incluso">
-      <span class="tabs-pill" id="tabsPill"></span>
-      <button class="tab on" role="tab" id="tb-enc" aria-controls="pn-enc" aria-selected="true" data-k="enc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5.2 5.5-5.2s5.5 2.2 5.5 5.2"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 13.9c2.8.3 5 2.3 5 5.1"/></svg><span>Encontros</span></button>
-      <button class="tab" role="tab" id="tb-rede" aria-controls="pn-rede" aria-selected="false" data-k="rede"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.6-7-9.5A3.4 3.4 0 0 1 12 8a3.4 3.4 0 0 1 7 2.5C19 15.4 12 20 12 20Z"/></svg><span>Rede</span></button>
-      <button class="tab" role="tab" id="tb-plat" aria-controls="pn-plat" aria-selected="false" data-k="plat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>Plataforma</span></button>
-    </div>
-    <div class="bento" role="tabpanel" id="pn-enc" aria-labelledby="tb-enc">
-      <div class="bt bt-hero" style="--i:0">
-        <div class="bt-hero-tx"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5.2 5.5-5.2s5.5 2.2 5.5 5.2"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 13.9c2.8.3 5 2.3 5 5.1"/></svg></span><b>Intervisão entre pares</b><small>Encontros regulares pra discutir casos em grupo, com sigilo e cuidado, trocando olhares de diferentes abordagens.</small></div>
-        <div class="viz viz-enc" aria-hidden="true">
-          <div class="ve-call">
-            <div class="ve-top"><span class="ve-live"></span>Intervisão · ao vivo</div>
-            <div class="ve-grid">
-              <div class="ve-p" style="--c:#5BC06F">AM</div><div class="ve-p ve-talk" style="--c:#7C3AED">RS</div>
-              <div class="ve-p" style="--c:#2E9AC4">JL</div><div class="ve-p" style="--c:#EA8B0C">PC</div>
-            </div>
-            <div class="ve-case"><span>Caso em discussão</span><b>"Quer diminuir, não parar. Como sustentar o vínculo?"</b></div>
-          </div>
+  <div class="ix">
+    <nav class="ix-nav" role="tablist" aria-label="O que está incluso">
+      <button class="ix-t on" role="tab" id="tb-enc" aria-controls="pn-enc" aria-selected="true"><i>01</i><b>Encontros<svg class="ix-under" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M3 9.5C40 4 92 3.2 140 5.6c20 1 38 2.6 57 4.6"/></svg></b><small>pra pensar junto</small></button>
+      <button class="ix-t" role="tab" id="tb-rede" aria-controls="pn-rede" aria-selected="false" tabindex="-1"><i>02</i><b>Rede<svg class="ix-under" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M3 9.5C40 4 92 3.2 140 5.6c20 1 38 2.6 57 4.6"/></svg></b><small>pra não estar só</small></button>
+      <button class="ix-t" role="tab" id="tb-plat" aria-controls="pn-plat" aria-selected="false" tabindex="-1"><i>03</i><b>Plataforma<svg class="ix-under" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M3 9.5C40 4 92 3.2 140 5.6c20 1 38 2.6 57 4.6"/></svg></b><small>pra organizar a clínica</small></button>
+    </nav>
+    <div class="ix-body">
+      <section class="ix-p" role="tabpanel" id="pn-enc" aria-labelledby="tb-enc">
+        <p class="ix-lede">Pra não clinicar <em>sozinho(a)</em>.</p>
+        <ul class="ix-rows"><li style="--i:0"><b>Intervisão</b><span>Casos discutidos em grupo, com sigilo, a partir de diferentes abordagens.</span></li><li style="--i:1"><b>Rodas de conversa</b><span>Redução de danos, política de drogas, ética e manejo clínico.</span></li><li style="--i:2"><b>Gravações</b><span>Os encontros ficam no painel pra você ver quando puder.</span></li><li style="--i:3"><b>Mural da rede</b><span>A agenda dos próximos encontros, sempre à mão.</span></li></ul>
+        <div class="ix-ticket" id="ix-ticket">
+          <div class="tk-l"><span>Convite</span><b id="tk-tit">Intervisão e rodas de conversa</b><small id="tk-sub">As datas ficam no mural da rede, dentro do painel.</small></div>
+          <div class="tk-r" id="tk-dia"><b>em</b><span>breve</span></div>
         </div>
-      </div>
-      <div class="bt " style="--i:1"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21M9 21h6"/></svg></span><b>Rodas de conversa</b><small>Redução de danos, política de drogas, ética e manejo clínico.</small></div>
-      <div class="bt " style="--i:2"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 9.3v5.4l4.5-2.7-4.5-2.7Z"/></svg></span><b>Gravações no painel</b><small>Perdeu ao vivo? Assiste quando puder.</small></div>
-      <div class="bt " style="--i:3"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M8.5 14h2M13.5 14h2M8.5 17.5h2"/></svg></span><b>Agenda da rede</b><small>Mural com os próximos encontros, sempre à mão.</small></div>
-      <div class="bt " style="--i:4"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v2.5"/></svg></span><b>Espaço seguro</b><small>Sigilo e respeito como combinado de todo encontro.</small></div>
-    </div>
-    <div class="bento" role="tabpanel" id="pn-rede" aria-labelledby="tb-rede" hidden>
-      <div class="bt bt-hero" style="--i:0">
-        <div class="bt-hero-tx"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.6-7-9.5A3.4 3.4 0 0 1 12 8a3.4 3.4 0 0 1 7 2.5C19 15.4 12 20 12 20Z"/></svg></span><b>Colegas de várias cidades</b><small>Profissionais de diferentes especialidades que se reconhecem no mesmo jeito de cuidar.</small></div>
-        <div class="viz viz-rede" aria-hidden="true">
-          <svg viewBox="0 0 320 190" class="net">
-            <g class="net-l" stroke="#8FD3A1" stroke-width="1.6" fill="none">
-              <path d="M160 95 L62 48"/><path d="M160 95 L262 42"/><path d="M160 95 L282 128"/><path d="M160 95 L74 150"/><path d="M160 95 L170 172"/>
-              <path d="M62 48 L74 150"/><path d="M262 42 L282 128"/><path d="M74 150 L170 172"/><path d="M170 172 L282 128"/>
-            </g>
-            <g class="net-n">
-              <circle cx="62" cy="48" r="13" fill="#5BC06F"/><circle cx="262" cy="42" r="13" fill="#2E9AC4"/><circle cx="282" cy="128" r="11" fill="#7C3AED"/>
-              <circle cx="74" cy="150" r="11" fill="#EA8B0C"/><circle cx="170" cy="172" r="10" fill="#4CAF5A"/>
-              <circle cx="160" cy="95" r="22" fill="#153E27"/><circle cx="160" cy="95" r="22" fill="none" stroke="#4CAF5A" stroke-width="2" class="net-ring"/>
-            </g>
-            <g fill="#fff" font-family="DM Sans,sans-serif" font-weight="800" font-size="10" text-anchor="middle">
-              <text x="62" y="52">SP</text><text x="262" y="46">RJ</text><text x="282" y="132">BA</text><text x="74" y="154">PE</text><text x="170" y="176">RS</text><text x="160" y="99" font-size="11">você</text>
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div class="bt " style="--i:1"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.3"/><circle cx="18" cy="6" r="2.3"/><path d="M8.3 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.7"/></svg></span><b>Encaminhamentos</b><small>Encaminhe e receba com confiança, entre membros.</small></div>
-      <div class="bt " style="--i:2"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2L12 3Z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg></span><b>Membro verificado</b><small>Perfil no app e na página pública da rede.</small></div>
-      <div class="bt " style="--i:3"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2"/></svg></span><b>Sua página de bio</b><small>Links, temas de trabalho e contato num só lugar.</small></div>
-      <div class="bt " style="--i:4"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg></span><b>Uma comunidade com história</b><small>Nasce da Dichavando: 8 anos e +143 mil pessoas.</small></div>
-    </div>
-    <div class="bento" role="tabpanel" id="pn-plat" aria-labelledby="tb-plat" hidden>
-      <div class="bt bt-hero" style="--i:0">
-        <div class="bt-hero-tx"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></span><b>Tudo pra organizar sua clínica</b><small>Do primeiro atendimento ao fechamento do mês, num painel só.</small></div>
-        <div class="viz viz-plat" aria-hidden="true">
-          <div class="vp-card">
-            <div class="vp-h"><b>Hoje</b><span>3 consultas</span></div>
-            <div class="vp-row"><i>09:00</i><span>Ana B.</span><em class="ck">Confirmado</em></div>
-            <div class="vp-row"><i>11:00</i><span>Carlos M.</span><em>Agendado</em></div>
-            <div class="vp-row"><i>15:00</i><span>Júlia F.</span><em class="on">Online</em></div>
-          </div>
-          <div class="vp-card vp-fin">
-            <div class="vp-h"><b>Financeiro</b><span>mês</span></div>
-            <div class="vp-bars"><i style="--h:42%"></i><i style="--h:58%"></i><i style="--h:50%"></i><i style="--h:72%"></i><i style="--h:66%"></i><i style="--h:88%"></i></div>
-          </div>
-        </div>
-      </div>
-      <div class="bt " style="--i:1"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span><b>Agenda</b><small>Dia, semana e mês, com sessões recorrentes.</small></div>
-      <div class="bt " style="--i:2"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15V10a6 6 0 0 1 12 0v5l2 2H4l2-2Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span><b>Agendamento online</b><small>O paciente marca sozinho, com lembretes automáticos.</small></div>
-      <div class="bt " style="--i:3"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/></svg></span><b>Prontuário com IA</b><small>Evolução em linha do tempo, com assistente.</small></div>
-      <div class="bt " style="--i:4"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2.3"/><path d="M5.8 16.2c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4"/><path d="M14.5 10h3.5M14.5 13.5h3.5"/></svg></span><b>Cadastro de pacientes ilimitado</b><small>Com lista de espera e aniversariantes.</small></div>
-      <div class="bt " style="--i:5"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3"/><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M15.5 13.5h2"/></svg></span><b>Controle financeiro</b><small>Entradas, saídas, faturamento e relatórios.</small></div>
-      <div class="bt " style="--i:6"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h6l4 4v10a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v4h4"/><path d="M4 7v13a1 1 0 0 0 1 1h9"/><path d="M10 11h5M10 14h4"/></svg></span><b>Documentos prontos</b><small>Recibos, declarações, pareceres e contrato terapêutico.</small></div>
-      <div class="bt bt-wide" style="--i:7"><span class="bt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3Z"/><path d="M9 12l2.2 2.2L15.3 10"/></svg></span><b>Segurança</b><small>Seus dados e os dos seus pacientes protegidos.</small><div class="sec-chips"><span>SSL/TLS</span><span>Criptografia em repouso</span><span>Backup</span><span>LGPD</span></div></div>
+      </section>
+      <section class="ix-p" role="tabpanel" id="pn-rede" aria-labelledby="tb-rede" hidden>
+        <p class="ix-lede">Gente que cuida <em>do mesmo jeito</em> que você.</p>
+        <ul class="ix-rows"><li style="--i:0"><b>Colegas</b><span>De várias cidades e especialidades, que cuidam do mesmo jeito que você.</span></li><li style="--i:1"><b>Encaminhamentos</b><span>Entre membros, com a confiança de saber pra quem você está indicando.</span></li><li style="--i:2"><b>Perfil de membro</b><span>Verificado, no app e na página pública da rede.</span></li><li style="--i:3"><b>Página de bio</b><span>Seus links, temas de trabalho e contato num endereço só.</span></li></ul>
+        <blockquote class="ix-quote">A rede nasce da Dichavando: oito anos falando de redução de danos com base científica e sem julgamento, e mais de 143 mil pessoas na comunidade.<cite>@dichavandoard</cite></blockquote>
+      </section>
+      <section class="ix-p" role="tabpanel" id="pn-plat" aria-labelledby="tb-plat" hidden>
+        <p class="ix-lede">E a clínica organizada, <em>do primeiro atendimento</em> ao fechamento do mês.</p>
+        <ul class="ix-rows ix-rows-2"><li style="--i:0"><b>Agenda</b><span>Dia, semana e mês, com sessões recorrentes.</span></li><li style="--i:1"><b>Agendamento online</b><span>O paciente marca pelos seus horários e recebe lembretes automáticos.</span></li><li style="--i:2"><b>Prontuário</b><span>Evolução em linha do tempo, com assistente de IA.</span></li><li style="--i:3"><b>Cadastro de pacientes</b><span>Ilimitado, com lista de espera e aniversariantes.</span></li><li style="--i:4"><b>Controle financeiro</b><span>Entradas, saídas, faturamento e relatórios.</span></li><li style="--i:5"><b>Documentos</b><span>Recibos, declarações, pareceres e contrato terapêutico.</span></li><li style="--i:6"><b>Segurança</b><span>Login seguro, backup e conformidade com a LGPD.</span></li></ul>
+      </section>
     </div>
   </div>
   <div class="note">O valor da participação é apresentado na nossa conversa de boas-vindas.</div>
@@ -548,27 +474,33 @@ async function finalizar(d){
       return '<div class="ev"><div class="ev-d">'+dia+'</div><div><div class="ev-t">'+esc(e.titulo)+'</div><div class="ev-s">'+esc(sub)+'</div></div></div>';
     }).join('');
     document.getElementById('ev-box').style.display='block';
+    var e0=evs[0], tk=document.getElementById('tk-tit');
+    if(tk){
+      tk.textContent=e0.titulo||AREA[e0.area]||'Encontro da rede';
+      document.getElementById('tk-sub').textContent=[AREA[e0.area]||'',e0.hora,e0.tag].filter(Boolean).join(' · ')||'Próximo encontro da rede';
+      if(e0.data){ var d0=new Date(e0.data+'T12:00:00'); document.getElementById('tk-dia').innerHTML='<b>'+d0.getDate()+'</b><span>'+MES[d0.getMonth()]+'</span>'; }
+    }
   }catch(e){}
 })();
-// abas do "você tem acesso a"
+// índice do "você tem acesso a"
 (function(){
-  var tabs=document.querySelectorAll('.tabs .tab'), pill=document.getElementById('tabsPill');
+  var tabs=[].slice.call(document.querySelectorAll('.ix-t'));
   if(!tabs.length)return;
   function abrir(idx,foco){
     tabs.forEach(function(t,i){
-      var on=i===idx; t.classList.toggle('on',on); t.setAttribute('aria-selected',on?'true':'false'); t.tabIndex=on?0:-1;
-      var pn=document.getElementById(t.getAttribute('aria-controls'));
-      if(on){ pn.hidden=false; pn.querySelectorAll('.bt,.vp-row,.vp-bars i').forEach(function(el){ el.style.animation='none'; el.offsetHeight; el.style.animation=''; }); }
+      var on=i===idx, pn=document.getElementById(t.getAttribute('aria-controls'));
+      t.classList.toggle('on',on); t.setAttribute('aria-selected',on?'true':'false'); t.tabIndex=on?0:-1;
+      if(on){ pn.hidden=false; pn.querySelectorAll('.ix-rows li,.ix-ticket,.ix-quote').forEach(function(el){ el.style.animation='none'; el.offsetHeight; el.style.animation=''; }); }
       else pn.hidden=true;
     });
-    if(pill) pill.style.transform='translateX('+(idx*100)+'%)';
-    if(foco) tabs[idx].focus();
+    if(foco){ tabs[idx].focus(); }
+    try{ tabs[idx].scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}); }catch(e){}
   }
   tabs.forEach(function(t,i){
     t.addEventListener('click',function(){abrir(i);});
     t.addEventListener('keydown',function(e){
-      if(e.key==='ArrowRight'){e.preventDefault();abrir((i+1)%tabs.length,true);}
-      if(e.key==='ArrowLeft'){e.preventDefault();abrir((i+tabs.length-1)%tabs.length,true);}
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();abrir((i+1)%tabs.length,true);}
+      if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();abrir((i+tabs.length-1)%tabs.length,true);}
     });
   });
 })();
