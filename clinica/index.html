@@ -2844,7 +2844,7 @@ function viewCaixa(){
     <div class="card kpi"><div class="ic-bg">↓</div><div class="lbl">Entradas</div><div class="val" style="color:var(--ve)">${brl(entradas)}</div></div>
     <div class="card kpi"><div class="ic-bg">↑</div><div class="lbl">Saídas</div><div class="val" style="color:var(--er)">${brl(saidas)}</div></div>
     <div class="card kpi"><div class="ic-bg">≈</div><div class="lbl">Saldo</div><div class="val" style="color:${entradas-saidas>=0?'var(--ve)':'var(--er)'}">${brl(entradas-saidas)}</div></div>
-    <div class="card kpi"><div class="ic-bg">⧗</div><div class="lbl">A receber</div><div class="val" style="color:var(--lrj)">${brl(aReceber)}</div><div class="dl">Atendidos não pagos</div></div>
+    <div class="card kpi" onclick="abrirAReceber()" style="cursor:pointer" title="Ver e dar baixa"><div class="ic-bg">⧗</div><div class="lbl">A receber</div><div class="val" style="color:var(--lrj)">${brl(aReceber)}</div><div class="dl">${aReceber>0?'Toque para dar baixa':'Atendidos não pagos'}</div></div>
   </div>`;
 
   let formas=Object.keys(porForma).length?`<div class="pill-row" style="margin:10px 2px 0">
@@ -2867,12 +2867,14 @@ function viewCaixa(){
         <button aria-label="Próximo mês" title="Próximo mês" class="icon-btn" onclick="shiftMes(1)">›</button>
       </div>
       <div class="grow"></div>
+      <button class="btn ghost sm" onclick="baixarCaixaCSV()" title="Exportar o mês em CSV (Excel)">⬇ CSV</button>
       <button class="btn ghost sm" onclick="formFinanceiro('saida')">＋ Saída</button>
       <button class="btn" onclick="formFinanceiro('entrada')">＋ Entrada</button>
     </div>
     ${ehEquipe()?`<div style="display:flex;align-items:center;gap:7px;background:var(--cin);border-radius:10px;padding:8px 12px;margin:2px 0 10px;font-size:12.5px;color:var(--txs)"><span>🔒</span><span>Seu caixa é <b>privado</b> — cada profissional vê só o próprio financeiro. A agenda e os pacientes são compartilhados com a equipe.</span></div>`:''}
     ${kpis}${formas}
     ${relatorioFinanceiro()}
+    ${caixaExtras()}
     <div class="sec-title">Movimentações</div>
     ${movs.length?`<div class="card"><div class="tbl-wrap"><table>
       <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Forma</th><th style="text-align:right">Valor</th><th></th></tr></thead>
@@ -2911,6 +2913,98 @@ function relatorioFinanceiro(){
   </div>`;
 }
 
+/* =============== CAIXA — extras: exportar, a receber, categorias, Carnê-Leão =============== */
+function baixarCSV(nome, linhas){
+  const csv=linhas.map(r=>r.map(c=>{c=String(c==null?'':c); return /[";\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(';')).join('\r\n');
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nome; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function _vBR(n){ return (+n||0).toFixed(2).replace('.',','); }
+function baixarCaixaCSV(){
+  const movs=DB.financeiro.filter(f=>(f.data||'').startsWith(caixaMes)&&meuReg(f)).sort((a,b)=>(a.data||'').localeCompare(b.data||''));
+  if(!movs.length){ toast('Sem movimentações neste mês',1); return; }
+  const linhas=[['Data','Tipo','Categoria','Descrição','Forma','Valor']];
+  movs.forEach(f=>linhas.push([fmtDate(f.data), f.tipo==='entrada'?'Entrada':'Saída', f.categoria||'', f.descricao||'', PAG[f.formaPagamento]||f.formaPagamento||'', (f.tipo==='saida'?'-':'')+_vBR(f.valor)]));
+  baixarCSV('caixa-'+caixaMes+'.csv', linhas);
+}
+function abrirAReceber(){
+  const lista=DB.agendamentos.filter(a=>a.status==='atendido'&&!a.pago&&meuReg(a)).sort((a,b)=>(a.data||'').localeCompare(b.data||''));
+  const total=lista.reduce((s,a)=>s+ +a.valor,0);
+  const body = lista.length ? lista.map(a=>{
+    const p=DB.pacientes.find(x=>x.id===a.pacienteId)||{}; const tel=(p.telefone||'').replace(/\D/g,'');
+    const nome=esc(p.nome||pacNome(a.pacienteId)||'Paciente');
+    const wa=tel?('https://wa.me/55'+tel+'?text='+encodeURIComponent('Oi! Passando pra lembrar do pagamento da nossa sessão do dia '+fmtDate(a.data)+' ('+brl(a.valor)+'). Qualquer dúvida, estou à disposição.')):'';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:10px 2px;border-bottom:1px solid var(--line)">'
+      +'<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13.5px">'+nome+'</div>'
+      +'<div style="font-size:12px;color:var(--txs)">'+fmtDate(a.data)+' · '+brl(a.valor)+'</div></div>'
+      +(wa?'<a class="btn ghost sm" href="'+wa+'" target="_blank" rel="noopener">Cobrar</a>':'')
+      +'<button class="btn sm" onclick="marcarPagoAR(\''+a.id+'\')">Marcar pago</button></div>';
+  }).join('') : '<div style="color:var(--txm);font-size:13px;padding:10px 2px">Tudo em dia, nada a receber.</div>';
+  openModal('<div class="modal" style="max-width:520px"><div class="modal-head"><h3>A receber'+(total>0?' · '+brl(total):'')+'</h3><button aria-label="Fechar" title="Fechar" class="icon-btn" onclick="closeModal()">✕</button></div><div class="modal-body">'+body+'</div></div>');
+}
+function marcarPagoAR(id){
+  const a=DB.agendamentos.find(x=>x.id===id); if(!a) return;
+  a.pago=true; try{ sincronizarCaixa(a); }catch(e){}
+  save(); toast('Marcado como pago'); abrirAReceber(); render();
+}
+function _somaFin(mes,tipo){ return DB.financeiro.filter(f=>f.tipo===tipo&&(f.data||'').startsWith(mes)&&meuReg(f)).reduce((s,f)=>s+ +f.valor,0); }
+function _porCategoria(mes,tipo){ const o={}; DB.financeiro.filter(f=>f.tipo===tipo&&(f.data||'').startsWith(mes)&&meuReg(f)).forEach(f=>{const c=f.categoria||'Sem categoria';o[c]=(o[c]||0)+ +f.valor;}); return Object.entries(o).sort((a,b)=>b[1]-a[1]); }
+function _mesAnterior(mes){ const [y,m]=mes.split('-').map(Number); return new Date(y,m-2,1).toISOString().slice(0,7); }
+// Tabela mensal do IRPF (Carnê-Leão) — valores de referência; confira os vigentes.
+const IRPF_FAIXAS=[
+  {ate:2259.20, aliq:0,     ded:0},
+  {ate:2826.65, aliq:0.075, ded:169.44},
+  {ate:3751.05, aliq:0.15,  ded:381.44},
+  {ate:4664.68, aliq:0.225, ded:662.77},
+  {ate:Infinity,aliq:0.275, ded:896.00}
+];
+function _impostoCarne(base){ if(base<=0) return {aliq:0,imposto:0}; for(const f of IRPF_FAIXAS){ if(base<=f.ate) return {aliq:f.aliq, imposto:Math.max(0, base*f.aliq - f.ded)}; } return {aliq:0,imposto:0}; }
+function baixarCarneCSV(){
+  const rec=DB.financeiro.filter(f=>f.tipo==='entrada'&&(f.data||'').startsWith(caixaMes)&&meuReg(f)).sort((a,b)=>(a.data||'').localeCompare(b.data||''));
+  if(!rec.length){ toast('Sem receitas neste mês',1); return; }
+  const linhas=[['Data','Descrição','Pagador','Valor']];
+  rec.forEach(f=>linhas.push([fmtDate(f.data), f.descricao||f.categoria||'', pacNome(f.pacienteId)||'', _vBR(f.valor)]));
+  baixarCSV('carne-leao-receitas-'+caixaMes+'.csv', linhas);
+}
+function caixaExtras(){
+  if(!meusCaps().relatorios && !_DEMO) return '';
+  const ent=_somaFin(caixaMes,'entrada'), sai=_somaFin(caixaMes,'saida');
+  const mAnt=_mesAnterior(caixaMes); const entAnt=_somaFin(mAnt,'entrada');
+  const varPct = entAnt>0 ? Math.round((ent-entAnt)/entAnt*100) : null;
+  const varTxt = varPct==null ? '<span style="color:var(--txm)">sem base do mês anterior</span>'
+    : (varPct>=0?'<span style="color:var(--ve);font-weight:700">▲ '+varPct+'%</span>':'<span style="color:var(--er);font-weight:700">▼ '+Math.abs(varPct)+'%</span>')+' <span style="color:var(--txm)">vs. mês anterior</span>';
+  // por categoria
+  const catS=_porCategoria(caixaMes,'saida'); const maxS=Math.max(1,...catS.map(x=>x[1]));
+  const catE=_porCategoria(caixaMes,'entrada'); const maxE=Math.max(1,...catE.map(x=>x[1]));
+  const barra=(rows,max,cor)=> rows.length? rows.slice(0,6).map(([c,v])=>`<div style="display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0">
+      <span style="width:120px;flex-shrink:0;color:var(--txs);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c)}</span>
+      <div style="flex:1;height:8px;background:var(--cin);border-radius:5px;overflow:hidden"><div style="height:100%;width:${Math.round(v/max*100)}%;background:${cor};border-radius:5px"></div></div>
+      <span style="width:88px;text-align:right;font-weight:700">${brl(v)}</span></div>`).join('') : '<div style="color:var(--txm);font-size:12.5px;padding:4px 0">Nada lançado.</div>';
+  // Carnê-Leão
+  const base=Math.max(0, ent - sai); const ir=_impostoCarne(base);
+  const carne=`<div class="card" style="padding:18px;margin-top:12px">
+    <div class="sec-title" style="margin-top:0">Carnê-Leão <span style="font-size:11px;background:#E9F7EE;color:#1B7A43;border-radius:20px;padding:2px 9px;font-weight:800;vertical-align:middle">estimativa</span></div>
+    <div class="rl-kpis">
+      <div><div class="rl-k">Receitas do mês</div><div class="rl-v" style="color:var(--ve)">${brl(ent)}</div></div>
+      <div><div class="rl-k">Despesas (livro-caixa)</div><div class="rl-v">${brl(sai)}</div></div>
+      <div><div class="rl-k">Base de cálculo</div><div class="rl-v">${brl(base)}</div></div>
+      <div><div class="rl-k">Imposto estimado</div><div class="rl-v" style="color:var(--lrj)">${brl(ir.imposto)}</div><div class="rl-s">${ir.aliq?Math.round(ir.aliq*100)+'% na faixa':'isento'}</div></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn ghost sm" onclick="baixarCarneCSV()">⬇ Exportar receitas do mês (CSV)</button>
+    </div>
+    <p style="font-size:11.5px;color:var(--txm);line-height:1.5;margin:12px 0 0">Estimativa simplificada pela tabela mensal do IRPF (receitas menos despesas do livro-caixa). Não considera dependentes, INSS/previdência nem outras deduções, e as faixas são de referência. Use como provisão e confirme o valor no Carnê-Leão Web da Receita ou com seu contador.</p>
+  </div>`;
+  return `<div class="sec-title">Análise do mês</div>
+    <div class="card" style="padding:18px">
+      <div style="font-size:13px;color:var(--txs);margin-bottom:10px">Faturamento: <b style="color:var(--ve)">${brl(ent)}</b> &nbsp; ${varTxt}</div>
+      <div style="font-weight:700;font-size:12.5px;color:var(--txs);margin:6px 0 4px">Entradas por categoria</div>
+      ${barra(catE,maxE,'var(--v)')}
+      <div style="font-weight:700;font-size:12.5px;color:var(--txs);margin:12px 0 4px">Saídas por categoria</div>
+      ${barra(catS,maxS,'#E07A5A')}
+    </div>
+    ${carne}`;
+}
 /* =============== CONFIG =============== */
 /* =============== DISPONIBILIDADE PARA AGENDAMENTO ONLINE =============== */
 let AGENDA_CFG=null;
