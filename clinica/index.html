@@ -2828,6 +2828,7 @@ function delEscala(id){if(!confirm('Excluir esta avaliação?'))return;DB.avalia
 
 /* =============== CAIXA =============== */
 let caixaMes=todayISO().slice(0,7);
+let _caixaShow=10; // quantas movimentações mostrar (paginação "mostrar mais")
 function viewCaixa(){
   const movs=DB.financeiro.filter(f=>f.data.startsWith(caixaMes)&&meuReg(f)).sort((a,b)=>b.data.localeCompare(a.data)||b.criadoEm-a.criadoEm);
   const entradas=movs.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+ +f.valor,0);
@@ -2851,7 +2852,8 @@ function viewCaixa(){
     ${Object.entries(porForma).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="chip v">${PAG[k]||k}: ${brl(v)}</span>`).join('')}
   </div>`:'';
 
-  let rows=movs.map(f=>`<tr>
+  const movsVis=movs.slice(0,_caixaShow);
+  let rows=movsVis.map(f=>`<tr>
     <td class="mono">${fmtDate(f.data)}</td>
     <td>${f.tipo==='entrada'?'<span class="chip v">Entrada</span>':'<span class="chip e">Saída</span>'}</td>
     <td><b>${esc(f.descricao||f.categoria)}</b>${f.categoria&&f.descricao?`<br><small style="color:var(--txs)">${esc(f.categoria)}</small>`:''}</td>
@@ -2878,10 +2880,11 @@ function viewCaixa(){
     <div class="sec-title">Movimentações</div>
     ${movs.length?`<div class="card"><div class="tbl-wrap"><table>
       <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Forma</th><th style="text-align:right">Valor</th><th></th></tr></thead>
-      <tbody>${rows}</tbody></table></div></div>`
+      <tbody>${rows}</tbody></table></div>${movs.length>_caixaShow?`<div style="text-align:center;padding:12px 0 2px"><button class="btn ghost sm" onclick="caixaMais()">Mostrar mais (${movs.length-_caixaShow} restante${movs.length-_caixaShow>1?'s':''})</button></div>`:(_caixaShow>10?`<div style="text-align:center;padding:12px 0 2px"><button class="btn ghost sm" onclick="_caixaShow=10;render()">Mostrar menos</button></div>`:'')}</div>`
     :`<div class="card empty"><div class="big">$</div><b>Sem movimentações neste mês</b>Consultas atendidas e marcadas como pagas entram aqui automaticamente.</div>`}`;
 }
-function shiftMes(n){ const [y,m]=caixaMes.split('-').map(Number); const d=new Date(y,m-1+n,1); caixaMes=d.toISOString().slice(0,7); render(); }
+function shiftMes(n){ const [y,m]=caixaMes.split('-').map(Number); const d=new Date(y,m-1+n,1); caixaMes=d.toISOString().slice(0,7); _caixaShow=10; render(); }
+function caixaMais(){ _caixaShow+=10; render(); }
 // Relatório: faturamento 6 meses + ticket médio + comparecimento
 function relatorioFinanceiro(){
   if(!meusCaps().relatorios && !_DEMO) return `<div class="sec-title">Relatório <span style="font-size:11px;background:var(--roxof,#F1EBFB);color:#7B54D3;border-radius:20px;padding:2px 9px;font-weight:800;vertical-align:middle">Profissional</span></div>
