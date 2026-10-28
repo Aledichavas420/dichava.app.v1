@@ -4929,7 +4929,7 @@ function upsellPro(titulo,desc){
 let _meuPlano=null;
 let _meuAcesso=null; // {ate, trial, plano} — usado pelo banner de teste grátis
 function meusCaps(){ return PLANO_CAPS[_meuPlano]||PLANO_CAPS.essencial; }
-function preencherPlanos(){ const s=$('#s-plano'); if(s&&!s.children.length) s.innerHTML=PLANOS.map(p=>`<option value="${p.k}">${p.nome} — ${p.preco}</option>`).join(''); }
+function preencherPlanos(){ const s=$('#s-plano'); if(s&&!s.children.length) s.innerHTML=PLANOS.map(p=>`<option value="${p.k}"${p.k==='profissional'?' selected':''}>${p.nome} — ${p.preco}</option>`).join(''); }
 async function enviarComprovante(file){
   if(!file||!_SB||!AUTH) return;
   if(!/^image\//.test(file.type||'')){toast('Envie uma imagem (JPG/PNG).',1);return;}
