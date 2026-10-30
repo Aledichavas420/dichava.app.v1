@@ -7229,8 +7229,7 @@ async function renderProfs(force){
     <div class="pcard" onclick="abrirPerfilProf('${p.id}')" style="cursor:pointer">
       <div class="pc-head">
         <div class="pc-av" style="background:var(--roxof)${p.foto_mini?';padding:0;overflow:hidden':''}">${p.foto_mini?`<img src="${p.foto_mini}" style="width:100%;height:100%;object-fit:cover">`:ini(p.nome)}</div>
-        <div class="pc-id"><div class="pc-nome">${esc(p.nome)}${p.destaque?' <span class="pc-destaque">★ Destaque</span>':''}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div>${avResumo(p.id)?`<div style="margin-top:2px">${avResumo(p.id)}</div>`:''}</div>
-        ${modtag(p.modalidade)}
+        <div class="pc-id"><div class="pc-nome">${esc(p.nome)}${p.destaque?' <span class="pc-destaque">★ Destaque</span>':''}</div><div class="pc-esp">${esc(p.tipo_prof||'')}</div><div class="pc-reg">${esc(p.reg||'')}</div>${avResumo(p.id)?`<div style="margin-top:2px">${avResumo(p.id)}</div>`:''}<div style="margin-top:7px">${modtag(p.modalidade)}</div></div>
       </div>
       ${p.bio?`<div class="pc-bio">${esc(p.bio)}</div>${p.bio.length>170?`<div class="pc-bio-more">ler mais →</div>`:''}`:''}
       <div class="pc-meta">
