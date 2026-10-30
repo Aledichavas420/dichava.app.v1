@@ -1873,7 +1873,7 @@ function abrirLiberar(id){
       <option value="0">Sem validade (vitalício)</option>
     </select></div>
     <div id="m-rec-note" style="display:none;font-size:12.5px;color:#8a6b00;background:#fff6e8;border-radius:9px;padding:9px 11px;margin:-4px 0 12px">♻️ Recorrente: libere <b>1 mês</b>. Todo mês, confira no PagBank se a mensalidade caiu e clique em <b>"Confirmar mensalidade"</b> pra renovar +1 mês. O acesso só é cortado se você não confirmar.</div>
-    <div class="field"><label>Anotação (opcional)</label><input id="m-obs" placeholder="ex: pagou Pix 24/07" value="${esc((p.obs_admin||'').replace(/♻️ Recorrente[^·]*·?\s*/,'').trim())}"></div>
+    <div class="field"><label>Anotação (opcional)</label><input id="m-obs" placeholder="ex: pagou Pix 24/07" value="${esc((p.obs_admin||'').replace(/♻️ Recorrente[^·]*·?\s*/,'').replace(/🎁\s*Teste gr[aá]tis.*/is,'').trim())}"></div>
     <div style="display:flex;gap:8px;margin-top:6px">
       <button class="btn ghost" style="flex:1" onclick="fecharModal()">Cancelar</button>
       <button class="btn" style="flex:1" onclick="confirmarLiberar('${id}')">Liberar</button>
@@ -1918,6 +1918,7 @@ async function confirmarLiberar(id){
   const p=PROFS.find(x=>x.id===id);
   let meses=parseInt($('#m-meses').value,10)||0;
   let obs=$('#m-obs').value.trim();
+  obs=obs.replace(/🎁\s*Teste gr[aá]tis.*/is,'').trim(); // liberação paga nunca mantém o status de teste
   _libPlano=$('#m-plano').value||null;
   const rec=$('#m-tipo').value==='recorrente';
   if(rec){
