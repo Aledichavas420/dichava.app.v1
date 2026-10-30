@@ -3,10 +3,39 @@
 const CACHE = 'dichava-clinica-v1';
 
 self.addEventListener('install', () => self.skipWaiting());
+const META = 'dichava-pro-meta';
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    Promise.all(keys.filter(k => k !== CACHE && k !== META).map(k => caches.delete(k)))
   ).then(() => self.clients.claim()));
+});
+
+// Config pública (mesma do painel) para re-registrar a assinatura sozinho.
+const SBU = 'https://gnpwaywyexcevtzbwiyq.supabase.co';
+const ANON = 'sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4';
+const VAPID = 'BN_L3cK5MByNbFTBYghnja6ryWbnN99_J2JfMiQDu-hKVkPqNJBAKLnnyBDHHSxvGNfaoIBCG1fQemYrExmUDzE';
+function _u8(b){ const pad='='.repeat((4-b.length%4)%4); const s=(b+pad).replace(/-/g,'+').replace(/_/g,'/'); const raw=atob(s); const a=new Uint8Array(raw.length); for(let i=0;i<raw.length;i++)a[i]=raw.charCodeAt(i); return a; }
+async function _putUid(uid){ try{ const c=await caches.open(META); await c.put('uid', new Response(String(uid||''))); }catch(_){} }
+async function _getUid(){ try{ const c=await caches.open(META); const r=await c.match('uid'); return r?(await r.text()):''; }catch(_){ return ''; } }
+async function _registrar(sub){
+  const j=sub && sub.toJSON(); const uid=await _getUid();
+  if(!uid || !j || !j.keys) return;
+  await fetch(SBU+'/rest/v1/push_subs?on_conflict=endpoint', {
+    method:'POST',
+    headers:{ 'apikey':ANON, 'Authorization':'Bearer '+ANON, 'Content-Type':'application/json', 'Prefer':'resolution=merge-duplicates' },
+    body: JSON.stringify({ endpoint:j.endpoint, user_id:uid, p256dh:j.keys.p256dh, auth:j.keys.auth, updated_at:new Date().toISOString() })
+  });
+}
+// o painel manda o id do profissional pra cá, pra eu conseguir re-registrar sozinho
+self.addEventListener('message', e => { if(e.data && e.data.type==='setUid') _putUid(e.data.uid); });
+// quando o navegador rotaciona/expira a assinatura: reinscreve e re-registra na hora
+self.addEventListener('pushsubscriptionchange', e => {
+  e.waitUntil((async () => {
+    try{
+      const sub = await self.registration.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:_u8(VAPID) });
+      await _registrar(sub);
+    }catch(_){}
+  })());
 });
 
 // ── PUSH ──

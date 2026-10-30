@@ -5269,6 +5269,7 @@ async function ativarNotificacoesPro(silent){
     if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:_b64u8Clin(VAPID_PUB_CLIN)});
     const j=sub.toJSON();
     await _SB.from('push_subs').upsert({user_id:AUTH.id,endpoint:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth,tz:Intl.DateTimeFormat().resolvedOptions().timeZone||'America/Sao_Paulo',updated_at:new Date().toISOString()},{onConflict:'endpoint'});
+    try{ const sw=reg.active||navigator.serviceWorker.controller; if(sw) sw.postMessage({type:'setUid',uid:AUTH.id}); }catch(e){}
     if(!silent)toast('Notificações ativadas 💚');
     return true;
   }catch(e){ if(!silent)toast('Não consegui ativar agora',1); return false; }
