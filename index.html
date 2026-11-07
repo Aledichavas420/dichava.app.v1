@@ -8376,7 +8376,7 @@ function tutRender(){
   const visual=s.mascot
     ?`<div class="tut-visual"><div class="tut-mascot"><span class="tut-halo"></span><span class="tut-halo d"></span><img id="tut-masc" alt=""></div></div>`
     :`<div class="tut-visual">${tutMock(s.id)}</div>`;
-  const badges=(s.badges||[]).map(bd=>`<div class="tut-badge ${bd.f?'free':'prem'}"><span class="tb-i">${bd.f?TIC.check:TIC.crownW}</span><span>${bd.t}</span><small>${bd.f?'grátis':'premium'}</small></div>`).join('');
+  const badges=(s.badges||[]).filter(bd=>bd.f).map(bd=>`<div class="tut-badge free"><span class="tb-i">${TIC.check}</span><span>${bd.t}</span></div>`).join('');
   el.innerHTML=`${visual}<div class="tut-t">${s.t}</div><div class="tut-x">${s.x}</div>${badges?`<div class="tut-badges">${badges}</div>`:''}`;
   if(s.mascot){const m=document.getElementById('tut-masc');if(m&&typeof brotoDataURI==='function'){try{m.src=brotoDataURI();}catch(e){}}}
   document.getElementById('tut-prog').innerHTML=TUTORIAL.map((_,i)=>`<span class="tut-seg ${i<=_tutI?'on':''}"><i></i></span>`).join('');
