@@ -8261,29 +8261,32 @@ function toggleSom(tipo,el){
   // Recalcula a altura real algumas vezes enquanto a barra anima, evitando a faixa branca embaixo.
   try{if(window.__setH){window.__setH();[250,600,1200].forEach(t=>setTimeout(window.__setH,t));}}catch(e){}
 }
-// tenta tocar o som real (Supabase Storage); se faltar o arquivo, usa o sintetizado
+// tenta tocar o som real (Supabase Storage); se faltar/der erro, usa o sintetizado.
+// IMPORTANTE (iOS): o play() precisa começar DENTRO do toque, por isso tocamos já aqui
+// e NÃO esperamos 'canplaythrough' (que roda depois e faz o iPhone bloquear o áudio).
 function _playSom(tipo){
   const file=SOM_SRC[tipo];
   if(file){
     const a=new Audio(_SOM_BUCKET+file);
     a.loop=true;a.preload='auto';a.volume=0;
-    let ok=false;
-    a.addEventListener('canplaythrough',()=>{
-      ok=true;a.play().then(()=>{let v=0;const iv=setInterval(()=>{if(_somAudio!==a){clearInterval(iv);return;}v=Math.min(.9,v+.05);a.volume=v;if(v>=.9)clearInterval(iv);},60);}).catch(()=>_fallbackSynth(tipo));
-    },{once:true});
-    a.addEventListener('error',()=>{if(!ok&&_somAtual===tipo)_fallbackSynth(tipo);},{once:true});
-    setTimeout(()=>{if(!ok&&_somAtual===tipo&&!_somNodes)_fallbackSynth(tipo);},3500);
     _somAudio=a;
+    try{ const p=a.play(); if(p&&p.catch) p.catch(()=>{ if(_somAtual===tipo&&_somAudio===a&&!_somNodes)_fallbackSynth(tipo); }); }catch(e){ if(_somAtual===tipo&&!_somNodes)_fallbackSynth(tipo); }
+    a.addEventListener('playing',function(){ if(_somAudio!==a)return; let v=0;const iv=setInterval(()=>{if(_somAudio!==a){clearInterval(iv);return;}v=Math.min(.9,v+.05);a.volume=v;if(v>=.9)clearInterval(iv);},60); },{once:true});
+    a.addEventListener('error',()=>{if(_somAtual===tipo&&_somAudio===a&&!_somNodes)_fallbackSynth(tipo);},{once:true});
+    setTimeout(()=>{if(_somAtual===tipo&&_somAudio===a&&a.paused&&!_somNodes)_fallbackSynth(tipo);},4000);
   } else {
     _fallbackSynth(tipo);
   }
 }
+// Plano B sintetizado para os sons que não têm versão própria no _buildSom,
+// pra nenhum som ficar mudo se o arquivo não tocar.
+const _SOM_FALLBACK={f528r:'f528',cura:'f432',aguas:'ocean',luz:'f528',yoga:'binaural',deriva:'binaural',serenidade:'binaural',ceuazul:'binaural',sono:'binaural'};
 function _fallbackSynth(tipo){
   if(_somAudio){try{_somAudio.pause()}catch(e){}_somAudio=null;}
   if(_somAtual!==tipo)return;
   if(!_ac){try{_ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return;}}
   if(_somNodes)_somNodes.stop();
-  _somNodes=_buildSom(tipo);
+  _somNodes=_buildSom(_SOM_FALLBACK[tipo]||tipo);
 }
 function pararSom(){
   if(_somNodes){_somNodes.stop();_somNodes=null;}
