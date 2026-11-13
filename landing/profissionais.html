@@ -1,9 +1,9 @@
 <!doctype html><html lang=pt-BR><head><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1">
-<title>Rede dichava, para profissionais da saúde</title>
-<meta name=description content="Rede dichava: uma comunidade de profissionais de saúde que se encontram pra pensar e praticar a redução de danos, com intervisões, rodas de conversa e uma plataforma completa pra organizar a clínica.">
+<title>Para profissionais da saúde, dichava.app</title>
+<meta name=description content="Seja um profissional parceiro do dichava.app: apareça para quem já busca cuidado e capte novos pacientes. Crie sua conta agora.">
 <meta name=robots content="index,follow">
-<meta property="og:title" content="Rede dichava, para profissionais da saúde">
-<meta property="og:description" content="Uma comunidade de profissionais que se encontram pra pensar e praticar a redução de danos.">
+<meta property="og:title" content="dichava.app para profissionais da saúde">
+<meta property="og:description" content="Apareça para quem já busca cuidado e capte novos pacientes. Crie sua conta agora.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -82,233 +82,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#4CAF5A;backgr
 .ok{display:none;text-align:center;padding:20px 0}
 .ok .em{font-size:52px}.ok h3{font-size:22px;margin:10px 0 6px}.ok p{color:var(--txs);font-size:14.5px}
 .err{color:#C0392B;font-size:13px;margin-top:10px;display:none}
-.hint{font-size:12px;color:#7d8f80;margin-top:4px;line-height:1.4}
-textarea{min-height:92px;resize:vertical;line-height:1.5}
-.fsec{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#2E7D32;margin:22px 0 2px;padding-top:16px;border-top:1px solid var(--line)}
-.fsec.first{border-top:none;padding-top:0;margin-top:6px}
-.chk{display:flex;gap:9px;align-items:flex-start;font-size:13px;font-weight:500;color:#3d4d3f;margin-top:16px;line-height:1.45}
-.chk input{width:auto;margin-top:3px;flex:none}
-/* etapas */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;counter-reset:st}
-.step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 16px;position:relative;box-shadow:0 6px 18px rgba(30,60,35,.04)}
-.step .n{width:30px;height:30px;border-radius:50%;background:#DCF0DE;color:#2E7D32;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
-.step b.t{display:block;font-size:15px;margin-bottom:3px}
-.step small{font-size:13px;color:var(--txs);line-height:1.45;display:block}
-.sel-band{background:linear-gradient(150deg,#153E27,#0C2A19);color:#E6F2E8;border-radius:20px;padding:18px 20px;margin-top:14px;font-size:14.5px;line-height:1.55;text-align:center}
-.sel-band b{color:#fff}
-/* comunidade de prática */
-.comm{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.comm-c{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 18px;box-shadow:0 6px 18px rgba(30,60,35,.04)}
-.comm-c .tg{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:10px}
-.comm-c b{display:block;font-size:16.5px;margin-bottom:5px}
-.comm-c p{font-size:13.5px;color:var(--txs);margin:0;line-height:1.5}
-.ev-box{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin-top:14px;display:none}
-.ev-box h4{margin:0 0 8px;font-size:14px;font-weight:800}
-.ev{display:flex;gap:12px;align-items:center;padding:9px 0;border-top:1px solid #EEF3EE}
-.ev:first-child{border-top:none}
-.ev-d{flex:none;width:50px;text-align:center;background:#F0F7F1;border-radius:12px;padding:6px 0;line-height:1.1}
-.ev-d b{display:block;font-size:18px;color:#2E7D32}.ev-d span{font-size:10.5px;font-weight:800;color:#5E7062;text-transform:uppercase}
-/* incluso: bento interativo */
-.inc2{background:linear-gradient(160deg,#153E27,#0C2A19);border-radius:28px;padding:18px;box-shadow:0 24px 60px rgba(20,50,30,.22);position:relative;overflow:hidden}
-.inc2::before{content:'';position:absolute;inset:-40% -10% auto auto;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(76,175,90,.28),transparent 65%);pointer-events:none}
-.tabs{position:relative;display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:5px;margin-bottom:16px}
-.tabs-pill{position:absolute;top:5px;bottom:5px;left:5px;width:calc((100% - 10px)/4);border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.18);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-.tab{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;background:none;border:none;color:#CFE3D4;font:800 14.5px 'DM Sans',sans-serif;padding:12px 6px;border-radius:14px;cursor:pointer;transition:color .3s}
-.tab svg{width:18px;height:18px}
-.tab.on{color:#153E27}
-.tab:focus-visible{outline:2px solid #8FE3A6;outline-offset:2px}
-.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative}
-.bento[hidden]{display:none}
-.bt{background:#fff;border-radius:20px;padding:18px 16px;display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;animation:btIn .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*60ms)}
-.bt:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.22)}
-.bt b{font-size:15px;line-height:1.25;color:#1B2A1C;margin-top:8px}
-.bt small{font-size:13px;color:var(--txs);line-height:1.45}
-.bt-ic{width:40px;height:40px;border-radius:12px;background:#E7F4E9;color:#2E7D32;display:flex;align-items:center;justify-content:center;transition:background .25s,color .25s,transform .25s}
-.bt-ic svg{width:21px;height:21px}
-.bt:hover .bt-ic{background:#2E7D32;color:#fff;transform:rotate(-6deg) scale(1.06)}
-.bt-hero-tx{display:flex;flex-direction:column;gap:4px}
-.bt-hero{grid-column:span 2;grid-row:span 2;background:linear-gradient(165deg,#F4FBF5,#E3F3E6);padding:22px}
-.bt-hero-tx b{font-size:21px;letter-spacing:-.3px}
-.bt-hero-tx small{font-size:14px;max-width:340px}
-.bt-wide{grid-column:span 2}
-.sec-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.sec-chips span{font-size:11.5px;font-weight:800;color:#2E7D32;background:#E7F4E9;border-radius:20px;padding:4px 10px}
-@keyframes btIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
-.viz{margin-top:auto;padding-top:16px}
-/* encontros */
-.ve-call{background:#132a1c;border-radius:16px;padding:12px;color:#EAF3EC}
-.ve-top{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#BFE3C4;margin-bottom:10px}
-.ve-live{width:8px;height:8px;border-radius:50%;background:#FF5A5A;box-shadow:0 0 0 0 rgba(255,90,90,.6);animation:live 1.8s infinite}
-.ve-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.ve-p{height:46px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;position:relative}
-.ve-p::before{content:'';width:30px;height:30px;border-radius:50%;background:var(--c);position:absolute;opacity:.9}
-.ve-p{isolation:isolate}.ve-p::before{z-index:-1}
-.ve-talk{box-shadow:inset 0 0 0 2px #8FE3A6;animation:talk 2.4s ease-in-out infinite}
-.ve-case{margin-top:9px;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 10px;font-size:11.5px}
-.ve-case span{display:block;color:#9DBBA6;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
-.ve-case b{color:#fff;font-size:12.5px;font-weight:600;font-style:italic;margin:2px 0 0;display:block}
-@keyframes live{70%{box-shadow:0 0 0 8px rgba(255,90,90,0)}100%{box-shadow:0 0 0 0 rgba(255,90,90,0)}}
-@keyframes talk{50%{box-shadow:inset 0 0 0 2px #8FE3A6,0 0 0 4px rgba(143,227,166,.25)}}
-/* rede */
-.net{width:100%;height:auto;display:block}
-.net-l path{stroke-dasharray:5 6;animation:flow 2.6s linear infinite}
-.net-n circle:not(.net-ring){transform-box:fill-box;transform-origin:center;animation:node 3.2s ease-in-out infinite}
-.net-n circle:nth-child(2){animation-delay:.5s}.net-n circle:nth-child(3){animation-delay:1s}.net-n circle:nth-child(4){animation-delay:1.5s}.net-n circle:nth-child(5){animation-delay:2s}
-.net-ring{transform-box:fill-box;transform-origin:center;animation:ring 2.4s ease-out infinite}
-@keyframes flow{to{stroke-dashoffset:-22}}
-@keyframes node{50%{transform:scale(1.12)}}
-@keyframes ring{from{transform:scale(1);opacity:.9}to{transform:scale(1.7);opacity:0}}
-/* plataforma */
-.viz-plat{display:grid;grid-template-columns:1.3fr 1fr;gap:9px}
-.vp-card{background:#fff;border:1px solid #D7EAD9;border-radius:14px;padding:10px 11px}
-.vp-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.vp-h b{font-size:12.5px;margin:0}.vp-h span{font-size:10.5px;color:var(--txs);font-weight:700}
-.vp-row{display:flex;align-items:center;gap:7px;font-size:11.5px;padding:5px 0;border-top:1px solid #EEF3EE;animation:btIn .5s both}
-.vp-row:nth-child(3){animation-delay:.15s}.vp-row:nth-child(4){animation-delay:.3s}
-.vp-row i{font-style:normal;font-weight:800;color:#1B2A1C}.vp-row span{flex:1;color:#2b3b2d}
-.vp-row em{font-style:normal;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;background:#F1F3EF;color:#7d8f80}
-.vp-row em.ck{background:#E0F2F1;color:#00897B}.vp-row em.on{background:#F3E9FF;color:#7C3AED}
-.vp-bars{display:flex;align-items:flex-end;gap:5px;height:78px;padding-top:4px}
-.vp-bars i{flex:1;height:var(--h);border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#4CAF5A,#2E7D32);transform-origin:bottom;animation:bar .9s cubic-bezier(.2,.8,.2,1) both}
-.vp-bars i:nth-child(2){animation-delay:.08s}.vp-bars i:nth-child(3){animation-delay:.16s}.vp-bars i:nth-child(4){animation-delay:.24s}.vp-bars i:nth-child(5){animation-delay:.32s}.vp-bars i:nth-child(6){animation-delay:.4s}
-@keyframes bar{from{transform:scaleY(0)}}
-/* cartões visuais */
-.bt{justify-content:flex-start;min-height:150px}
-.bt-v{min-height:70px;flex:none;display:flex;align-items:center;justify-content:flex-start}
-.bt b{margin-top:12px}
-.bt small{font-size:12.5px;line-height:1.45;margin-top:1px}
-.bt-hero-tx{display:flex;flex-direction:column;gap:4px}
-.bt-hero b{margin-top:0}
-.av{width:30px;height:30px;border-radius:50%;background:var(--c,#5BC06F);color:#fff;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;border:2px solid #fff;flex:none}
-.v-chat{display:flex;flex-direction:column;gap:5px;width:100%}
-.v-chat span{font-size:11px;font-weight:700;padding:5px 10px;border-radius:12px;width:max-content;max-width:100%}
-.v-chat .c1{background:#E7F4E9;color:#2E7D32;border-bottom-left-radius:3px}
-.v-chat .c2{background:#F1EAFF;color:#6D28D9;align-self:flex-end;border-bottom-right-radius:3px}
-.v-chat .c3{background:#F1F3EF;display:flex;gap:3px;padding:7px 10px;border-bottom-left-radius:3px}
-.v-chat .c3 i{width:5px;height:5px;border-radius:50%;background:#9AA89C;animation:dot 1.2s infinite}
-.v-chat .c3 i:nth-child(2){animation-delay:.15s}.v-chat .c3 i:nth-child(3){animation-delay:.3s}
-@keyframes dot{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-3px);opacity:1}}
-.v-video{width:100%;height:62px;border-radius:12px;background:linear-gradient(150deg,#1d4a30,#132a1c);position:relative;display:flex;align-items:center;justify-content:center}
-.v-video .pl{width:30px;height:30px;border-radius:50%;background:#fff;color:#2E7D32;display:flex;align-items:center;justify-content:center;padding-left:2px}
-.v-video .bar{position:absolute;left:10px;right:10px;bottom:9px;height:3px;border-radius:3px;background:rgba(255,255,255,.2);overflow:hidden}
-.v-video .bar i{display:block;height:100%;width:40%;background:#8FE3A6;animation:prog 4s linear infinite}
-.v-video em{position:absolute;top:7px;right:9px;font-style:normal;font-size:9.5px;font-weight:700;color:#BFE3C4}
-@keyframes prog{from{width:8%}to{width:92%}}
-.v-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;width:100%}
-.v-cal i{height:14px;border-radius:4px;background:#EEF3EE}
-.v-cal i.a{background:#7C3AED}.v-cal i.b{background:#4CAF5A}
-.v-cal i.a,.v-cal i.b{animation:pop 2.4s ease-in-out infinite}.v-cal i.b{animation-delay:1.2s}
-@keyframes pop{50%{transform:scale(1.18)}}
-.v-lock{display:flex;align-items:center;gap:10px}
-.v-lock span{width:48px;height:48px;border-radius:50%;background:#E7F4E9;color:#2E7D32;display:flex;align-items:center;justify-content:center}
-.v-lock em{font-style:normal;font-size:11px;font-weight:800;color:#2E7D32;background:#E7F4E9;border-radius:20px;padding:4px 10px}
-.v-ref{display:flex;align-items:center;width:100%}
-.v-ref .ln{flex:1;height:2px;margin:0 6px;background:repeating-linear-gradient(90deg,#4CAF5A 0 6px,transparent 6px 11px);background-size:22px 2px;animation:march .9s linear infinite;position:relative}
-.v-ref .ln::after{content:'';position:absolute;right:-2px;top:-4px;border:5px solid transparent;border-left:7px solid #4CAF5A;border-right:0}
-@keyframes march{to{background-position:22px 0}}
-.v-prof{display:flex;align-items:center;gap:8px;background:#F4FBF5;border:1px solid #D7EAD9;border-radius:14px;padding:9px 10px;width:100%;position:relative}
-.v-prof .lines{flex:1;display:flex;flex-direction:column;gap:5px}
-.v-prof .lines i{height:6px;border-radius:4px;background:#D9E6DB}.v-prof .lines i:last-child{width:60%}
-.v-prof .ck{width:20px;height:20px;border-radius:50%;background:#2E7D32;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
-.v-bio{display:flex;flex-direction:column;gap:5px;width:100%}
-.v-bio i{height:13px;border-radius:20px;border:1.5px solid #CFE6D3;background:#fff}
-.v-bio i:first-child{background:#4CAF5A;border-color:#4CAF5A}
-.v-num{display:flex;flex-direction:column;line-height:1}
-.v-num b{font-size:30px;font-weight:800;color:#2E7D32;letter-spacing:-1px;margin:0}
-.v-num span{font-size:11px;font-weight:700;color:#7d8f80;margin-top:6px}
-.v-week{display:flex;gap:6px;align-items:flex-end;width:100%;height:62px}
-.v-week span{flex:1;display:flex;flex-direction:column-reverse;align-items:center;gap:4px;height:100%}
-.v-week em{font-style:normal;font-size:9.5px;font-weight:800;color:#9AA89C}
-.v-week i{width:100%;height:var(--h);border-radius:6px;background:#E7F4E9;border-top:3px solid #4CAF5A}
-.v-slots{display:flex;flex-wrap:wrap;gap:5px}
-.v-slots span{font-size:11px;font-weight:800;color:#4f6152;border:1.5px solid #DCE7DD;border-radius:20px;padding:4px 9px}
-.v-slots span.on{background:#2E7D32;border-color:#2E7D32;color:#fff;animation:glow 2.4s ease-in-out infinite}
-@keyframes glow{50%{box-shadow:0 0 0 4px rgba(76,175,90,.25)}}
-.v-pront{display:flex;flex-direction:column;gap:6px;width:100%;position:relative;padding-right:22px}
-.v-pront i{height:7px;border-radius:4px;background:linear-gradient(90deg,#E3EDE4 0%,#CFE6D3 50%,#E3EDE4 100%);background-size:200% 100%;animation:shim 2.2s linear infinite}
-.v-pront .sp{position:absolute;right:0;top:-4px;color:#7C3AED}
-@keyframes shim{to{background-position:-200% 0}}
-.v-pac{display:flex}
-.v-pac .av{width:34px;height:34px;margin-left:-8px}.v-pac .av:first-child{margin-left:0}
-.v-pac .more{background:#E7F4E9;color:#2E7D32}
-.v-fin{width:100%;height:56px}
-.v-fin svg{width:100%;height:100%;display:block}
-.v-fin .ar{fill:#E7F4E9}
-.v-fin .ln{fill:none;stroke:#2E7D32;stroke-width:2.2;stroke-linejoin:round;stroke-dasharray:160;stroke-dashoffset:160;animation:draw 1.4s .2s cubic-bezier(.4,.1,.2,1) forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
-.v-docs{position:relative;width:100%;height:62px}
-.v-docs span{position:absolute;bottom:0;width:60px;height:52px;border-radius:8px;background:#fff;border:1.5px solid #DCE7DD;font-size:9px;font-weight:800;color:#4f6152;padding:6px;box-shadow:0 4px 10px rgba(30,60,35,.06)}
-.v-docs span:nth-child(1){left:0;transform:rotate(-7deg)}
-.v-docs span:nth-child(2){left:46px;transform:rotate(2deg);z-index:1;border-color:#4CAF5A;color:#2E7D32}
-.v-docs span:nth-child(3){left:92px;transform:rotate(8deg);z-index:2}
-.bt:hover .v-docs span:nth-child(1){transform:rotate(-12deg) translateX(-4px)}.bt:hover .v-docs span:nth-child(3){transform:rotate(13deg) translateX(4px)}
-.v-docs span{transition:transform .3s}
-.v-seg{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.v-seg .sh{width:44px;height:44px;border-radius:50%;background:#E7F4E9;color:#2E7D32;display:flex;align-items:center;justify-content:center;margin-right:4px}
-.v-seg em{font-style:normal;font-size:11px;font-weight:800;color:#2E7D32;background:#E7F4E9;border-radius:20px;padding:5px 11px}
-@media(max-width:480px){.bt{min-height:132px}.bt-v{min-height:62px}.v-num b{font-size:24px}.v-docs span{width:50px;height:46px;font-size:8.5px;padding:5px}.v-docs span:nth-child(2){left:38px}.v-docs span:nth-child(3){left:76px}}
-@media(prefers-reduced-motion:reduce){.v-chat .c3 i,.v-video .bar i,.v-cal i,.v-ref .ln,.v-slots span.on,.v-pront i,.v-fin .ln{animation:none}.v-fin .ln{stroke-dashoffset:0}}
-/* aba "No app" */
-.viz-app{display:flex;justify-content:center}
-.va-ph{width:100%;max-width:300px;background:#fff;border:1px solid #D7EAD9;border-radius:18px;padding:10px;box-shadow:0 10px 24px rgba(30,60,35,.08)}
-.va-top{font-size:12px;font-weight:800;color:#1B2A1C;margin:2px 2px 7px}
-.va-search{display:flex;align-items:center;gap:6px;background:#F4F8F5;border:1px solid #E2ECE3;border-radius:20px;padding:6px 10px;color:#7d8f80;font-size:10.5px}
-.va-chips{display:flex;gap:5px;margin:7px 0}
-.va-chips span{font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;background:#EEF3EE;color:#5E7062}
-.va-chips span.on{background:#2E7D32;color:#fff}
-.va-card{display:flex;align-items:center;gap:8px;border:1px solid #EEF3EE;border-radius:12px;padding:8px;margin-top:6px;animation:btIn .5s both}
-.va-card:nth-child(5){animation-delay:.15s}
-.va-card>div{flex:1;min-width:0}
-.va-card b{display:block;font-size:11.5px;margin:0;color:#1B2A1C}
-.va-card small{display:block;font-size:10px;color:#7d8f80}
-.va-card em{font-style:normal;font-size:9.5px;font-weight:800;color:#2E7D32;background:#E7F4E9;border-radius:20px;padding:3px 8px;flex:none}
-.va-st{color:#F2B705;display:flex;gap:1px;margin-top:2px}
-.va-tags{display:flex;gap:3px;margin-top:3px}.va-tags i{font-style:normal;font-size:8.5px;font-weight:700;background:#EEF3EE;color:#4a5c4c;border-radius:10px;padding:2px 6px}
-.v-busca{display:flex;flex-wrap:wrap;gap:5px;width:100%}
-.v-busca .sb{flex-basis:100%;display:flex;align-items:center;gap:6px;border:1.5px solid #DCE7DD;border-radius:20px;padding:5px 9px;color:#7d8f80}
-.v-busca .sb i{height:6px;width:55%;border-radius:4px;background:#E3EDE4;animation:type 2.6s steps(6) infinite}
-@keyframes type{0%{width:5%}70%,100%{width:60%}}
-.v-busca .ch{font-size:10.5px;font-weight:800;border-radius:20px;padding:3px 9px;background:#EEF3EE;color:#5E7062}
-.v-busca .ch.on{background:#2E7D32;color:#fff}
-.v-ordem{display:flex;align-items:center;gap:5px;width:100%}
-.v-ordem i{flex:1;height:34px;border-radius:9px;background:#F4F8F5;border:1.5px solid #E2ECE3;position:relative;animation:shuf 3s ease-in-out infinite}
-.v-ordem i::before{content:'';position:absolute;left:6px;top:8px;width:14px;height:14px;border-radius:50%;background:var(--c)}
-.v-ordem i:nth-child(1){animation-delay:0s}.v-ordem i:nth-child(2){animation-delay:.2s}.v-ordem i:nth-child(3){animation-delay:.4s}
-.v-ordem span{color:#2E7D32;flex:none}
-@keyframes shuf{0%,100%{transform:none}40%{transform:translateY(-5px)}}
-.v-conv{display:flex;flex-direction:column;gap:6px;width:100%}
-.v-conv .b1{font-size:11px;font-weight:700;background:#F1F3EF;color:#4f6152;border-radius:12px;border-bottom-left-radius:3px;padding:6px 10px;width:max-content;max-width:100%}
-.v-conv .b2{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;background:#2E7D32;color:#fff;border-radius:20px;padding:6px 12px;width:max-content;align-self:flex-end}
-.v-agh{display:flex;align-items:center;gap:9px}
-.v-agh .cl{width:46px;height:46px;border-radius:14px;background:#E7F4E9;color:#2E7D32;display:flex;align-items:center;justify-content:center}
-.v-agh .sl{display:flex;flex-direction:column;gap:3px}
-.v-agh .sl i{font-style:normal;font-size:10.5px;font-weight:800;color:#7d8f80}
-.v-agh .sl b{font-size:11px;margin:0;background:#2E7D32;color:#fff;border-radius:20px;padding:4px 10px}
-.v-aval{display:flex;flex-direction:column;gap:6px}
-.v-aval div{display:flex;gap:2px;color:#F2B705}
-.v-aval div svg{animation:pop 2.4s ease-in-out infinite}
-.v-aval div svg:nth-child(2){animation-delay:.1s}.v-aval div svg:nth-child(3){animation-delay:.2s}.v-aval div svg:nth-child(4){animation-delay:.3s}.v-aval div svg:nth-child(5){animation-delay:.4s}
-.v-aval span{font-size:10.5px;font-weight:700;color:#7d8f80}
-.v-ctrl{display:flex;align-items:center;gap:9px}
-.v-ctrl .tg{width:42px;height:24px;border-radius:20px;background:#4CAF5A;position:relative;flex:none}
-.v-ctrl .tg i{position:absolute;top:3px;left:21px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);animation:sw 3.4s ease-in-out infinite}
-@keyframes sw{0%,40%{left:21px}50%,90%{left:3px}100%{left:21px}}
-.v-ctrl em{font-style:normal;font-size:11px;font-weight:800;color:#4f6152}
-.v-pub{width:100%;display:flex;align-items:center;gap:10px;background:#F4F8F5;border:1px solid #E2ECE3;border-radius:12px;padding:9px 12px}
-.v-pub .dots{display:flex;gap:4px}.v-pub .dots i{width:8px;height:8px;border-radius:50%;background:#D9E6DB}
-.v-pub .url{flex:1;font-size:11.5px;font-weight:800;color:#2E7D32;background:#fff;border-radius:20px;padding:4px 12px}
-@media(prefers-reduced-motion:reduce){.va-card,.v-busca .sb i,.v-ordem i,.v-aval div svg,.v-ctrl .tg i{animation:none}}
-@media(max-width:760px){
-  .inc2{padding:12px;border-radius:22px}
-  .bento{grid-template-columns:1fr 1fr;gap:10px}
-  .bt-hero{grid-row:auto;grid-column:span 2}
-  .tab{font-size:12.5px;gap:5px;padding:11px 2px}.tab svg{width:15px;height:15px}
-  .bt{padding:15px 13px}.bt b{font-size:14px}.bt small{font-size:12.5px}
-}
-@media(max-width:480px){.tab svg{display:none}.viz-plat{grid-template-columns:1fr}.bt-ic{width:36px;height:36px;border-radius:11px}.bt-ic svg{width:19px;height:19px}.bt b{font-size:13.5px;margin-top:6px}.bt small{font-size:12px}.bt-hero-tx b{font-size:18px}.bt-hero-tx small{font-size:13px}.tab span{font-size:12.5px}}
-@media(max-width:330px){.bento{grid-template-columns:1fr}.bt-hero,.bt-wide{grid-column:auto}}
-@media(prefers-reduced-motion:reduce){.bt,.vp-row,.vp-bars i{animation:none}.net-l path,.net-n circle,.net-ring,.ve-live,.ve-talk{animation:none}.tabs-pill{transition:none}}
-.ev-t{font-size:14px;font-weight:700;color:#1B2A1C}.ev-s{font-size:12.5px;color:var(--txs)}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:#7d8f80;text-align:center}
 footer a{color:#2E7D32;text-decoration:none}
 .carousel{max-width:340px;margin:0 auto}
@@ -319,134 +92,194 @@ footer a{color:#2E7D32;text-decoration:none}
 .dots{display:flex;gap:7px;justify-content:center;margin-top:14px}
 .dots i{width:8px;height:8px;border-radius:50%;background:#cfe0d2;transition:.2s;cursor:pointer}
 .dots i.on{background:#2E7D32;width:22px;border-radius:20px}
-@media(max-width:760px){.steps{grid-template-columns:1fr 1fr}.comm{grid-template-columns:1fr}}
 @media(max-width:640px){.preview{grid-template-columns:1fr;padding:22px}.why,.plans,.row{grid-template-columns:1fr}h1{font-size:30px}.preview-tx{order:2}}
 </style></head><body>
 <div class="wrap">
   <div class="top"><a class="logo" href="/">dichava<span>.app</span></a><a class="back" href="/landing/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M20 12H5"/><path d="M11 6l-6 6 6 6"/></svg> voltar ao site</a></div>
 
   <div class="hero">
-    <span class="kick">comunidade de profissionais da redução de danos</span>
-    <h1>A <span>Rede dichava</span> é um lugar de encontro pra quem cuida com redução de danos.</h1>
-    <p class="lead">Profissionais de saúde que se reúnem pra discutir casos, trocar experiências e pensar juntos a clínica do uso de drogas, nas <b>intervisões</b> e <b>rodas de conversa</b>. E, no dia a dia, uma <b>plataforma completa</b> pra organizar a sua prática.</p>
+    <span class="kick">para profissionais da saúde</span>
+    <h1>Faça parte da <span>maior comunidade de redução de danos do Brasil</span>.</h1>
+    <p class="lead">O dichava.app reúne pessoas que decidiram olhar pra própria relação com o uso, com dados, sem julgamento. Seja um <b>profissional parceiro</b>, apareça pra elas na hora certa e organize sua prática num só lugar.</p>
     <div class="mag-band">+143 mil na comunidade @dichavandoard · redução de danos com base científica e política pública de saúde</div>
-    <a class="hero-cta" href="#candidatura">Quero fazer parte <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
-    <div style="margin-top:12px"><a href="#rede" style="color:#2E7D32;font-weight:700;font-size:14.5px;text-decoration:none">Conhecer a rede ↓</a></div>
+    <a class="hero-cta" href="/clinica/?criar">Criar minha conta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
   </div>
 
-  <!-- O QUE ESTÁ INCLUSO -->
-  <a id="rede"></a><a id="inclui"></a>
-  <h2 class="sec">Sua clínica fica mais forte em rede</h2>
-  <div class="sub">Uma comunidade pra pensar, trocar e cuidar melhor.</div>
-  <div class="inc2">
-    <div class="tabs" role="tablist" aria-label="O que está incluso">
-      <span class="tabs-pill" id="tabsPill"></span>
-      <button class="tab on" role="tab" id="tb-enc" aria-controls="pn-enc" aria-selected="true" data-k="enc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5.2 5.5-5.2s5.5 2.2 5.5 5.2"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 13.9c2.8.3 5 2.3 5 5.1"/></svg><span>Encontros</span></button>
-      <button class="tab" role="tab" id="tb-rede" aria-controls="pn-rede" aria-selected="false" data-k="rede"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.6-7-9.5A3.4 3.4 0 0 1 12 8a3.4 3.4 0 0 1 7 2.5C19 15.4 12 20 12 20Z"/></svg><span>Rede</span></button>
-      <button class="tab" role="tab" id="tb-app" aria-controls="pn-app" aria-selected="false" data-k="app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 17.5h2"/></svg><span>No app</span></button>
-      <button class="tab" role="tab" id="tb-plat" aria-controls="pn-plat" aria-selected="false" data-k="plat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>Plataforma</span></button>
+  <!-- PREVIEW DO PERFIL NO APP -->
+  <div class="preview">
+    <div class="preview-tx">
+      <h2>Assim seu perfil aparece no app</h2>
+      <p>Os usuários encontram você numa aba de <b>profissionais parceiros</b>, com tudo que precisam pra decidir dar o primeiro passo.</p>
+      <ul>
+        <li>Selo de <b>verificado</b> (conferimos seu registro)</li>
+        <li>Abordagem, formação e temas que você atende</li>
+        <li>Valor médio de sessão e forma de atendimento</li>
+        <li>Botão de contato direto (WhatsApp / link)</li>
+      </ul>
     </div>
-    <div class="bento" role="tabpanel" id="pn-enc" aria-labelledby="tb-enc">
-      <div class="bt bt-hero" style="--i:0"><div class="bt-hero-tx"><b>Intervisão entre pares</b><small>Encontros regulares pra discutir casos clínicos em grupo, com sigilo, a partir de diferentes abordagens.</small></div>
-        <div class="viz viz-enc" aria-hidden="true">
-          <div class="ve-call">
-            <div class="ve-top"><span class="ve-live"></span>Intervisão · ao vivo</div>
-            <div class="ve-grid">
-              <div class="ve-p" style="--c:#5BC06F">AM</div><div class="ve-p ve-talk" style="--c:#7C3AED">RS</div>
-              <div class="ve-p" style="--c:#2E9AC4">JL</div><div class="ve-p" style="--c:#EA8B0C">PC</div>
+    <div>
+      <div class="phone">
+        <div class="ph-hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M6 3v5a5 5 0 0 0 10 0V3"/><path d="M4 3h2M14 3h2"/><path d="M11 18a4 4 0 0 0 8 0v-2"/><circle cx="19" cy="14" r="2"/></svg> Profissionais parceiros</div>
+        <div class="procard">
+          <div class="pro-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M5 12.5l4.5 4.5L19 6.5"/></svg> Parceiro verificado</div>
+          <div class="pro-head">
+            <div class="pro-av">MA</div>
+            <div><div class="pro-name">Marina Alves</div><div class="pro-reg">Psicóloga · CRP 00/00000</div></div>
+          </div>
+          <div class="pro-tags"><span>Gestalt-terapia</span><span>Redução de danos</span><span>Ansiedade</span></div>
+          <div class="pro-bio">"Acompanho quem quer repensar a relação com o uso, no seu tempo, sem julgamento."</div>
+          <div class="pro-meta"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><rect x="4" y="5" width="16" height="10" rx="1.5"/><path d="M2 19h20"/></svg> Online e presencial</div><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 21s-6.5-5.6-6.5-10.5A6.5 6.5 0 0 1 18.5 10.5C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10.5" r="2.3"/></svg> São Paulo/SP</div><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.2a2.5 2 0 0 1 5 0c0 2.6-5 1.4-5 4a2.5 2 0 0 0 5 0"/></svg> a partir de R$ 150/sessão</div></div>
+          <button class="pro-cta">Falar com a profissional</button>
+        </div>
+        <div class="pro-ex">perfil ilustrativo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAINEL DA CLÍNICA -->
+  <div class="preview" style="margin-top:26px">
+    <div>
+      <div class="carousel">
+        <div class="car-track" id="carTrack">
+          <!-- 1: Visão geral -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M6 3v5a5 5 0 0 0 10 0V3"/><path d="M4 3h2M14 3h2"/><path d="M11 18a4 4 0 0 0 8 0v-2"/><circle cx="19" cy="14" r="2"/></svg> Visão geral</div>
+            <div style="padding:12px;display:grid;gap:9px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:#F0F7F1;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#5D7060;font-weight:700">Consultas hoje</div><div style="font-size:22px;font-weight:800;color:#1B2A1C">4</div></div>
+                <div style="background:#F0F7F1;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#5D7060;font-weight:700">Faturamento/mês</div><div style="font-size:22px;font-weight:800;color:#2E7D32">R$ 3.240</div></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E4E4DF;border-radius:12px;padding:10px 12px">
+                <div style="font-size:11px;color:#5D7060;font-weight:700;margin-bottom:6px">AGENDA DE HOJE</div>
+                <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #F0F0EC"><b style="font-size:13px">09:00</b><span style="font-size:13px;color:#2b3b2d">Ana Beatriz</span><span style="margin-left:auto;background:#E0F2F1;color:#00897B;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Confirmado</span></div>
+                <div style="display:flex;align-items:center;gap:9px;padding:6px 0"><b style="font-size:13px">11:00</b><span style="font-size:13px;color:#2b3b2d">Carlos Mendes</span><span style="margin-left:auto;background:#F5F5F0;color:#9E9E9E;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Agendado</span></div>
+              </div>
+              <div style="background:#FFF9C4;border-radius:12px;padding:9px 12px;font-size:12px;color:#8a6d00;font-weight:600"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 20h16"/><path d="M5 20v-6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6"/><path d="M4 15c1.5 1.4 3 1.4 4 0s2.5-1.4 4 0 2.5 1.4 4 0 2.5-1.4 4 0"/><path d="M12 8V6"/></svg> Aniversariantes: Júlia (20/07)</div>
             </div>
-            <div class="ve-case"><span>Caso em discussão</span><b>"Quer diminuir, não parar. Como sustentar o vínculo?"</b></div>
-          </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
+          <!-- 2: Agenda -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd">◷ Agenda · Ter, 22/07</div>
+            <div style="padding:12px;display:grid;gap:0">
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">08:00</span><span style="flex:1"></span></div>
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">09:00</span><div style="flex:1;background:#E0F2F1;border-left:3px solid #00897B;border-radius:8px;padding:6px 9px"><b style="font-size:12.5px">Ana Beatriz</b><div style="font-size:11px;color:#5D7060">Consulta · Confirmado</div></div></div>
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">11:00</span><div style="flex:1;background:#E8F5E9;border-left:3px solid #4CAF5A;border-radius:8px;padding:6px 9px"><b style="font-size:12.5px">Carlos Mendes</b><div style="font-size:11px;color:#5D7060">Retorno · Agendado</div></div></div>
+              <div style="display:flex;gap:8px;border-top:1px solid #F0F0EC;padding:7px 0"><span style="font-size:11px;color:#9E9E9E;width:38px">15:00</span><div style="flex:1;background:#F3E9FF;border-left:3px solid #7C3AED;border-radius:8px;padding:6px 9px"><b style="font-size:12.5px">Júlia Ferreira</b><div style="font-size:11px;color:#5D7060">Avaliação · <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg> Dra. Marina</div></div></div>
+            </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
+          <!-- 3: Prontuário -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd">▤ Prontuário · Ana B.</div>
+            <div style="padding:12px;display:grid;gap:8px">
+              <div style="font-size:11px;color:#7C3AED;font-weight:800">10/07 · EVOLUÇÃO · Sessão 3</div>
+              <div style="background:#fff;border:1px solid #E4E4DF;border-radius:10px;padding:9px 11px;font-size:12px;color:#2b3b2d">
+                <b style="color:#5D7060">Queixa:</b> ansiedade social<br>
+                <b style="color:#5D7060">Objetivos:</b> exposição gradual<br>
+                <b style="color:#5D7060">Intervenções:</b> reestruturação cognitiva
+              </div>
+              <div style="background:#E8F5E9;border-radius:10px;padding:8px 11px;font-size:12px;color:#2E7D32"><b>Plano:</b> tarefa de exposição + respiração</div>
+              <div style="background:#FFF3CD;border-radius:10px;padding:8px 11px;font-size:12px;color:#8a6d00"><b>Atenção:</b> monitorar sono</div>
+            </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
+          <!-- 4: Caixa -->
+          <div class="car-slide"><div class="phone">
+            <div class="ph-hd">$ Caixa · Julho</div>
+            <div style="padding:12px;display:grid;gap:9px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:#E8F5E9;border-radius:12px;padding:9px 11px"><div style="font-size:10.5px;color:#2E7D32;font-weight:700">Entradas</div><div style="font-size:18px;font-weight:800;color:#2E7D32">R$ 3.240</div></div>
+                <div style="background:#FFEBEE;border-radius:12px;padding:9px 11px"><div style="font-size:10.5px;color:#C62828;font-weight:700">Saídas</div><div style="font-size:18px;font-weight:800;color:#C62828">R$ 900</div></div>
+              </div>
+              <div style="background:#F0F7F1;border-radius:12px;padding:9px 12px"><div style="font-size:10.5px;color:#5D7060;font-weight:700">Saldo do mês</div><div style="font-size:20px;font-weight:800;color:#1B2A1C">R$ 2.340</div></div>
+              <div style="background:#fff;border:1px solid #E4E4DF;border-radius:12px;padding:9px 11px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="color:#2b3b2d">Consulta, Ana B.</span><b style="color:#2E7D32">+180,00</b></div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0;border-top:1px solid #F0F0EC"><span style="color:#2b3b2d">Aluguel da sala</span><b style="color:#C62828">−900,00</b></div>
+              </div>
+            </div>
+            <div class="pro-ex">ilustrativo</div>
+          </div></div>
         </div>
+        <div class="dots" id="carDots"></div>
       </div>
-      <div class="bt " style="--i:1"><div class="bt-v" aria-hidden="true"><div class="v-chat"><span class="c1">política de drogas</span><span class="c2">e o manejo?</span><span class="c3"><i></i><i></i><i></i></span></div></div><b>Rodas de conversa</b><small>Temas como política de drogas, ética e manejo clínico.</small></div>
-      <div class="bt " style="--i:2"><div class="bt-v" aria-hidden="true"><div class="v-video"><span class="pl"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7.5v9l7.5-4.5L9 7.5Z" fill="currentColor"/></svg></span><span class="bar"><i></i></span><em>1:12:40</em></div></div><b>Gravações no painel</b><small>Perdeu ao vivo? Os encontros ficam gravados pra você.</small></div>
-      <div class="bt " style="--i:3"><div class="bt-v" aria-hidden="true"><div class="v-cal"><i class=""></i><i class=""></i><i class="a"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="b"></i><i class=""></i><i class=""></i></div></div><b>Agenda da rede</b><small>As datas dos próximos encontros, no mural do painel.</small></div>
-      <div class="bt " style="--i:4"><div class="bt-v" aria-hidden="true"><div class="v-lock"><span><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v2.5"/></svg></span><em>sigilo</em></div></div><b>Espaço seguro</b><small>Sigilo e respeito como combinado de todo encontro.</small></div>
     </div>
-    <div class="bento" role="tabpanel" id="pn-rede" aria-labelledby="tb-rede" hidden>
-      <div class="bt bt-hero" style="--i:0"><div class="bt-hero-tx"><b>Colegas de várias cidades</b><small>Profissionais de diferentes especialidades que se reconhecem no mesmo jeito de cuidar.</small></div>
-        <div class="viz viz-rede" aria-hidden="true">
-          <svg viewBox="0 0 320 190" class="net">
-            <g class="net-l" stroke="#8FD3A1" stroke-width="1.6" fill="none">
-              <path d="M160 95 L62 48"/><path d="M160 95 L262 42"/><path d="M160 95 L282 128"/><path d="M160 95 L74 150"/><path d="M160 95 L170 172"/>
-              <path d="M62 48 L74 150"/><path d="M262 42 L282 128"/><path d="M74 150 L170 172"/><path d="M170 172 L282 128"/>
-            </g>
-            <g class="net-n">
-              <circle cx="62" cy="48" r="13" fill="#5BC06F"/><circle cx="262" cy="42" r="13" fill="#2E9AC4"/><circle cx="282" cy="128" r="11" fill="#7C3AED"/>
-              <circle cx="74" cy="150" r="11" fill="#EA8B0C"/><circle cx="170" cy="172" r="10" fill="#4CAF5A"/>
-              <circle cx="160" cy="95" r="22" fill="#153E27"/><circle cx="160" cy="95" r="22" fill="none" stroke="#4CAF5A" stroke-width="2" class="net-ring"/>
-            </g>
-            <g fill="#fff" font-family="DM Sans,sans-serif" font-weight="800" font-size="10" text-anchor="middle">
-              <text x="62" y="52">SP</text><text x="262" y="46">RJ</text><text x="282" y="132">BA</text><text x="74" y="154">PE</text><text x="170" y="176">RS</text><text x="160" y="99" font-size="11">você</text>
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div class="bt " style="--i:1"><div class="bt-v" aria-hidden="true"><div class="v-ref"><span class="av" style="--c:#5BC06F">AM</span><span class="ln"></span><span class="av" style="--c:#7C3AED">RS</span></div></div><b>Encaminhamentos</b><small>Indique e receba pacientes de colegas que você conhece.</small></div>
-      <div class="bt " style="--i:2"><div class="bt-v" aria-hidden="true"><div class="v-prof"><span class="av" style="--c:#2E9AC4">JL</span><span class="lines"><i></i><i></i></span><span class="ck"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 6.5"/></svg></span></div></div><b>Membro verificado</b><small>Conferimos seu registro profissional antes de você entrar.</small></div>
-      <div class="bt " style="--i:3"><div class="bt-v" aria-hidden="true"><div class="v-bio"><i></i><i></i><i></i></div></div><b>Sua página de bio</b><small>Links, temas de trabalho e contato num endereço só.</small></div>
-      <div class="bt " style="--i:4"><div class="bt-v" aria-hidden="true"><div class="v-num"><b>+143 mil</b><span>@dichavandoard</span></div></div><b>Comunidade Dichavando</b><small>8 anos de conteúdo sobre redução de danos.</small></div>
-    </div>
-    <div class="bento" role="tabpanel" id="pn-app" aria-labelledby="tb-app" hidden>
-      <div class="bt bt-hero" style="--i:0"><div class="bt-hero-tx"><b>Seu perfil no app dichava</b><small>O app é gratuito pra quem usa. Na aba Profissionais, a pessoa encontra os membros da rede, lê o perfil e decide com quem quer conversar.</small></div>
-        <div class="viz viz-app" aria-hidden="true">
-          <div class="va-ph">
-            <div class="va-top">Profissionais</div>
-            <div class="va-search"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><span>Buscar por especialidade ou cidade</span></div>
-            <div class="va-chips"><span class="on">Todos</span><span>Online</span><span>Presencial</span></div>
-            <div class="va-card"><span class="av" style="--c:#5BC06F">MA</span><div><b>Marina Alves</b><small>Psicóloga · Online</small><div class="va-st"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg></div></div><em>Ver perfil</em></div>
-            <div class="va-card"><span class="av" style="--c:#2E9AC4">JL</span><div><b>João Lima</b><small>Psiquiatra · São Paulo/SP</small><div class="va-tags"><i>Redução de danos</i><i>Ansiedade</i></div></div><em>Ver perfil</em></div>
-          </div>
-        </div>
-      </div>
-      <div class="bt " style="--i:1"><div class="bt-v" aria-hidden="true"><div class="v-busca"><span class="sb"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><i></i></span><span class="ch on">Online</span><span class="ch">Presencial</span></div></div><b>Busca e filtros</b><small>Por nome, especialidade, cidade e atendimento online ou presencial.</small></div>
-      <div class="bt " style="--i:2"><div class="bt-v" aria-hidden="true"><div class="v-ordem"><i style="--c:#5BC06F"></i><i style="--c:#7C3AED"></i><i style="--c:#EA8B0C"></i><span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3.5c2 0 3.2 1 4.5 3l1 2c1.3 2 2.5 3 4.5 3H20"/><path d="M17 12l3 3-3 3"/><path d="M4 17h3.5c1.4 0 2.4-.5 3.3-1.4"/><path d="M13.2 8.4C14.1 7.5 15.1 7 16.5 7H20"/><path d="M17 4l3 3-3 3"/></svg></span></div></div><b>Ordem justa</b><small>A lista é sorteada a cada visita: ninguém fica sempre no fim.</small></div>
-      <div class="bt " style="--i:3"><div class="bt-v" aria-hidden="true"><div class="v-conv"><span class="b1">Oi! Vi seu perfil no app</span><span class="b2"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V16h0a2 2 0 0 1-2-2Z"/></svg> Conversar</span></div></div><b>Conversa no app</b><small>A pessoa te chama pelo chat do app ou pelo seu WhatsApp.</small></div>
-      <div class="bt " style="--i:4"><div class="bt-v" aria-hidden="true"><div class="v-agh"><span class="cl"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M9 15l2 2 4-4"/></svg></span><span class="sl"><i>Qui · 14:00</i><b>Agendar horário</b></span></div></div><b>Agendar horário</b><small>Com a agenda online ativa, ela marca direto nos seus horários.</small></div>
-      <div class="bt " style="--i:5"><div class="bt-v" aria-hidden="true"><div class="v-aval"><div><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z" fill="currentColor" stroke="none"/></svg></div></div></div><b>Avaliações</b><small>Quem foi atendido pode deixar uma avaliação no seu perfil.</small></div>
-      <div class="bt " style="--i:6"><div class="bt-v" aria-hidden="true"><div class="v-ctrl"><span class="tg"><i></i></span><em>Aparecer no diretório</em></div></div><b>Você no controle</b><small>Edite o perfil quando quiser ou oculte do diretório.</small></div>
-      <div class="bt bt-wide" style="--i:7"><div class="bt-v" aria-hidden="true"><div class="v-pub"><span class="dots"><i></i><i></i><i></i></span><span class="url">dichava.app/landing/rede.html</span></div></div><b>Também na web</b><small>Seu perfil aparece na página pública da Rede dichava.</small></div>
-    </div>
-    <div class="bento" role="tabpanel" id="pn-plat" aria-labelledby="tb-plat" hidden>
-      <div class="bt bt-hero" style="--i:0"><div class="bt-hero-tx"><b>Tudo pra organizar sua clínica</b><small>Do primeiro atendimento ao fechamento do mês, num painel só.</small></div>
-        <div class="viz viz-plat" aria-hidden="true">
-          <div class="vp-card">
-            <div class="vp-h"><b>Hoje</b><span>3 consultas</span></div>
-            <div class="vp-row"><i>09:00</i><span>Ana B.</span><em class="ck">Confirmado</em></div>
-            <div class="vp-row"><i>11:00</i><span>Carlos M.</span><em>Agendado</em></div>
-            <div class="vp-row"><i>15:00</i><span>Júlia F.</span><em class="on">Online</em></div>
-          </div>
-          <div class="vp-card vp-fin">
-            <div class="vp-h"><b>Financeiro</b><span>mês</span></div>
-            <div class="vp-bars"><i style="--h:42%"></i><i style="--h:58%"></i><i style="--h:50%"></i><i style="--h:72%"></i><i style="--h:66%"></i><i style="--h:88%"></i></div>
-          </div>
-        </div>
-      </div>
-      <div class="bt " style="--i:1"><div class="bt-v" aria-hidden="true"><div class="v-week"><span><em>S</em><i style="--h:60%"></i></span><span><em>T</em><i style="--h:35%"></i></span><span><em>Q</em><i style="--h:80%"></i></span><span><em>Q</em><i style="--h:45%"></i></span><span><em>S</em><i style="--h:70%"></i></span></div></div><b>Agenda</b><small>Dia, semana e mês, com sessões recorrentes.</small></div>
-      <div class="bt " style="--i:2"><div class="bt-v" aria-hidden="true"><div class="v-slots"><span>09:00</span><span class="on">10:30</span><span>14:00</span><span>16:00</span></div></div><b>Agendamento online</b><small>O paciente marca nos seus horários, com lembrete automático.</small></div>
-      <div class="bt " style="--i:3"><div class="bt-v" aria-hidden="true"><div class="v-pront"><span class="sp"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/></svg></span><i style="width:90%"></i><i style="width:70%"></i><i style="width:82%"></i></div></div><b>Prontuário com IA</b><small>Evolução em linha do tempo, com assistente que organiza a escrita.</small></div>
-      <div class="bt " style="--i:4"><div class="bt-v" aria-hidden="true"><div class="v-pac"><span class="av" style="--c:#5BC06F">AB</span><span class="av" style="--c:#EA8B0C">CM</span><span class="av" style="--c:#7C3AED">JF</span><span class="av more"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 9.5c-2 0-3 1.2-3 2.5s1 2.5 3 2.5c3 0 6-5 9-5 2 0 3 1.2 3 2.5s-1 2.5-3 2.5c-3 0-6-5-9-5Z"/></svg></span></div></div><b>Cadastro de pacientes ilimitado</b><small>Com lista de espera e aniversariantes.</small></div>
-      <div class="bt " style="--i:5"><div class="bt-v" aria-hidden="true"><div class="v-fin"><svg viewBox="0 0 120 44" preserveAspectRatio="none"><path class="ar" d="M2 38 L22 30 L42 33 L62 20 L82 24 L102 10 L118 6 L118 44 L2 44Z"/><path class="ln" d="M2 38 L22 30 L42 33 L62 20 L82 24 L102 10 L118 6"/></svg></div></div><b>Controle financeiro</b><small>Consulta atendida vira entrada. Faturamento e relatórios do mês.</small></div>
-      <div class="bt " style="--i:6"><div class="bt-v" aria-hidden="true"><div class="v-docs"><span>Recibo</span><span>Contrato</span><span>Parecer</span></div></div><b>Documentos prontos</b><small>Recibos, declarações, pareceres e contrato terapêutico.</small></div>
-      <div class="bt bt-wide" style="--i:7"><div class="bt-v" aria-hidden="true"><div class="v-seg"><span class="sh"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3Z"/><path d="M9 12l2.2 2.2L15.3 10"/></svg></span><em>SSL/TLS</em><em>Backup</em><em>LGPD</em></div></div><b>Segurança e LGPD</b><small>Login seguro, criptografia e backup dos seus dados.</small></div>
+    <div class="preview-tx">
+      <div style="display:inline-block;background:#FFF9C4;color:#EA580C;font-size:12px;font-weight:800;padding:3px 11px;border-radius:20px;margin-bottom:10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/></svg> Incluso pra parceiros</div>
+      <h2>Um painel pra organizar sua clínica</h2>
+      <p>Além de aparecer na lista de profissionais do app, você ganha acesso a um <b>painel de gestão completo</b>, pensado pra quem está começando e precisa se organizar sem complicação.</p>
+      <ul>
+        <li><b>Agenda</b> de consultas por horário, com status</li>
+        <li><b>Pacientes & prontuários</b> em linha do tempo</li>
+        <li><b>Caixa automático</b>: consulta atendida vira entrada</li>
+        <li>Faturamento, saldo do mês e a receber num olhar</li>
+        <li>Login seguro (o mesmo do app) e backup dos dados</li>
+      </ul>
     </div>
   </div>
-  <div class="note">O valor da participação é apresentado na nossa conversa de boas-vindas.</div>
-  <div class="ev-box" id="ev-box"><h4>Próximos encontros da rede</h4><div id="ev-list"></div></div>
 
-  <!-- COMO CHEGAR NA REDE -->
-  <h2 class="sec">Como chegar na rede</h2>
-  <div class="sub">A rede cresce por encontro. Antes de qualquer coisa, a gente quer te conhecer.</div>
-  <div class="steps">
-    <div class="step"><div class="n">1</div><b class="t">Você se apresenta</b><small>Conta pra gente sua formação, seu caminho na clínica e como a redução de danos aparece no seu trabalho.</small></div>
-    <div class="step"><div class="n">2</div><b class="t">A gente lê com cuidado</b><small>Cada apresentação é lida com calma, por gente, não por algoritmo. Depois a gente te chama pra conversar.</small></div>
-    <div class="step"><div class="n">3</div><b class="t">Uma conversa</b><small>Um papo online com o fundador pra nos conhecermos, falar da sua prática e de como a rede funciona.</small></div>
-    <div class="step"><div class="n">4</div><b class="t">Boas-vindas</b><small>Fazendo sentido pros dois lados, você recebe o convite pra criar sua conta e chegar nos encontros.</small></div>
+  <div class="why">
+    <div class="why-c"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span><b>Público certo</b><small>Pessoas engajadas em autoconhecimento e redução de danos, que muitas vezes já querem apoio profissional.</small></div>
+    <div class="why-c"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 10v4a1 1 0 0 0 1 1h2l7 4V5L7 9H5a1 1 0 0 0-1 1Z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg></span><b>Alcance real</b><small>Divulgação no Instagram do app <b>@dichava.app</b> e na landing, impulsionada pela comunidade @dichavandoard (143 mil seguidores).</small></div>
+    <div class="why-c"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M6 3v5a5 5 0 0 0 10 0V3"/><path d="M4 3h2M14 3h2"/><path d="M11 18a4 4 0 0 0 8 0v-2"/><circle cx="19" cy="14" r="2"/></svg></span><b>Seu perfil profissional</b><small>Mini-currículo, abordagem, formação, valor médio de sessão e contato, tudo verificado.</small></div>
+    <div class="why-c"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 20s-7-4.6-7-9.5A3.4 3.4 0 0 1 12 8a3.4 3.4 0 0 1 7 2.5C19 15.4 12 20 12 20Z"/></svg></span><b>Causa alinhada</b><small>Redução de danos, ética e respaldo em política pública de saúde. Você entra numa rede séria.</small></div>
   </div>
-  <div class="sel-band">A rede não se abre por assinatura, se abre por afinidade. É esse cuidado na chegada que faz dela um lugar de confiança: entre colegas e pra quem procura atendimento.</div>
 
-
+  <h2 class="sec">Planos pra você ou sua clínica</h2>
+  <div class="sub">Escolha na hora de contratar. Sem fidelidade, cancele quando quiser. <b>Todos incluem o Painel da Clínica.</b></div>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-n">Essencial</div>
+      <div class="plan-de">de <s>R$ 99,90</s></div>
+      <div class="plan-p">R$ 79,90<small>/mês</small></div>
+      <div class="plan-anual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg> preço de lançamento · menos de <b>R$ 2,70 por dia</b></div>
+      <div class="plan-para">Para quem está começando ou consolidando a prática</div>
+      <ul>
+        <li>Perfil <b>verificado</b> no diretório do app</li>
+        <li><b>Agenda completa</b> (dia, semana e mês) + sessões recorrentes</li>
+        <li><b>Pacientes ilimitados</b>, com prontuário completo</li>
+        <li><b>Caixa</b> e controle financeiro do mês</li>
+        <li>Recibos, declarações e contrato terapêutico</li>
+        <li>Lembretes e lista de espera</li>
+        <li class="off">Agendamento online e lembretes automáticos</li>
+        <li class="off">Assistente de IA e relatórios</li>
+        <li class="off">Destaque no diretório e equipe compartilhada</li>
+      </ul>
+    </div>
+    <div class="plan best">
+      <div class="plan-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z"/></svg> mais escolhido</div>
+      <div class="plan-n">Profissional</div>
+      <div class="plan-de">de <s>R$ 199,90</s></div>
+      <div class="plan-p">R$ 179,90<small>/mês</small></div>
+      <div class="plan-anual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg> preço de lançamento · menos de <b>R$ 6 por dia</b></div>
+      <div class="plan-para">Menos trabalho manual, mais tempo pra clínica</div>
+      <ul>
+        <li>Tudo do Essencial, e mais:</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg> <b>Agendamento online</b>, o paciente marca sozinho pelos seus horários</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M6 15V10a6 6 0 0 1 12 0v5l2 2H4l2-2Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg> <b>Lembretes automáticos</b> de consulta</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/></svg> <b>Assistente de IA no prontuário</b>, organiza a evolução por você</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 20V4"/><path d="M4 20h16"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg> <b>Relatórios</b>: faturamento, ticket médio e comparecimento</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 15h6"/></svg> Pareceres e relatórios técnicos com modelos por especialidade</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4 1.3 6L12 16.8 6.6 19.8l1.3-6-4.5-4 6-.7L12 3.5Z"/></svg> <b>Destaque</b> no diretório + divulgação nos nossos canais</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <div class="plan-n">Clínica</div>
+      <div class="plan-de">de <s>R$ 349,90</s></div>
+      <div class="plan-p">R$ 299,90<small>/mês</small></div>
+      <div class="plan-anual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg> preço de lançamento · menos de <b>R$ 10 por dia</b></div>
+      <div class="plan-para">Para clínicas e coletivos com equipe de apoio</div>
+      <ul>
+        <li>Tudo do Profissional, e mais:</li>
+        <li><b>Até 5 profissionais</b> na mesma conta</li>
+        <li><b>Painel compartilhado</b>: agenda, caixa e pacientes da equipe</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/></svg> <b>IA e relatórios</b> pra toda a equipe</li>
+        <li>Página da <b>clínica</b> no diretório do app</li>
+        <li><b>Suporte prioritário dedicado</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">Valores de lançamento, sujeitos a ajuste. A rede é curada: você cria sua conta e o acesso é liberado após uma conversa rápida no WhatsApp.</div>
 
   <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:26px 0 6px">
     <span style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:700;color:#2b3b2d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Conexão criptografada (SSL/TLS)</span>
@@ -456,55 +289,13 @@ footer a{color:#2E7D32;text-decoration:none}
   </div>
   <div style="text-align:center;font-size:13px;color:#7d8f80;margin-bottom:8px">Saiba como protegemos os dados em <a href="/landing/seguranca.html" style="color:#2E7D32;font-weight:700">Segurança e Privacidade</a> · <a href="/landing/profissional-lgpd.html" style="color:#2E7D32;font-weight:700">Termo de Operador (LGPD)</a></div>
 
-  <div class="form" id="candidatura">
-    <a id="lista"></a>
-    <div id="wl-form">
-      <h3>Quero fazer parte da rede</h3>
-      <p class="fd">Conta pra gente quem você é e como chegou até aqui. A gente lê cada apresentação com calma e depois te chama pra uma conversa.</p>
-      <form onsubmit="return enviar(event)">
-        <div class="fsec first">Sobre você</div>
-        <label>Nome completo <span class="req">*</span></label><input id="f-nome" required maxlength="120" autocomplete="name">
-        <div class="row">
-          <div><label>Profissão / especialidade <span class="req">*</span></label><input id="f-esp" required maxlength="120" placeholder="Ex.: Psicóloga, Psiquiatra"></div>
-          <div><label>Registro profissional <span class="req">*</span></label><input id="f-reg" required maxlength="60" placeholder="Ex.: CRP 06/12345"></div>
-        </div>
-        <div class="row">
-          <div><label>Cidade / UF</label><input id="f-cidade" maxlength="120" placeholder="Ex.: São Paulo/SP"></div>
-          <div><label>Atendimento</label><select id="f-atend"><option value="">Selecione</option><option>Online</option><option>Presencial</option><option>Online e presencial</option></select></div>
-        </div>
-        <div class="row">
-          <div><label>E-mail <span class="req">*</span></label><input id="f-email" type="email" required maxlength="160" autocomplete="email"></div>
-          <div><label>WhatsApp <span class="req">*</span></label><input id="f-wpp" type="tel" required maxlength="40" placeholder="(11) 90000-0000" autocomplete="tel"></div>
-        </div>
-
-        <div class="fsec">Formação e percurso</div>
-        <label>Formação <span class="req">*</span></label>
-        <textarea id="f-formacao" required maxlength="3000" placeholder="Graduação, pós, especializações, formações clínicas, abordagem teórica…"></textarea>
-        <label>Percurso profissional <span class="req">*</span></label>
-        <textarea id="f-percurso" required maxlength="3000" placeholder="Onde você atuou ou atua (CAPS AD, consultório, serviços públicos, ONGs, pesquisa…), há quanto tempo e com quais públicos."></textarea>
-        <label>Sua relação com a redução de danos <span class="req">*</span></label>
-        <textarea id="f-rd" required maxlength="3000" placeholder="Como a redução de danos aparece na sua prática? Pode contar de uma experiência ou de como você entende o cuidado com quem usa drogas."></textarea>
-        <label>Por que você quer fazer parte da rede?</label>
-        <textarea id="f-motiv" maxlength="3000" placeholder="O que te atrai na rede, nos encontros de intervisão e nas rodas de conversa?"></textarea>
-        <label>Links (opcional)</label>
-        <input id="f-links" maxlength="600" placeholder="Lattes, LinkedIn, Instagram profissional, site">
-
-        <div class="fsec">Nossa conversa</div>
-        <label>Melhores dias e horários pra uma conversa online</label>
-        <input id="f-disp" maxlength="300" placeholder="Ex.: terças e quintas à tarde, ou sábado de manhã">
-        <div class="hint">Um papo de uns 30 minutos, por vídeo. A gente confirma o horário depois de ler sua apresentação.</div>
-
-        <label class="chk"><input type="checkbox" id="f-ok" required><span>Autorizo o dichava a usar estas informações para conhecer minha trajetória e entrar em contato comigo (<a href="/landing/privacidade.html" style="color:#2E7D32">Privacidade</a>).</span></label>
-        <button class="btn" id="wl-btn" type="submit">Enviar minha apresentação</button>
-        <div class="err" id="wl-err"></div>
-      </form>
-    </div>
-    <div class="ok" id="wl-ok">
-      <div class="em" style="color:#2E7D32"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg></div>
-      <h3>Que bom te conhecer</h3>
-      <p>Obrigado por contar sua história pra gente. Vamos ler com calma e em breve entramos em contato por WhatsApp ou e-mail pra marcar nossa conversa.</p>
-    </div>
-    <div class="note" style="margin-top:14px">Já faz parte da rede? <a href="/clinica/" style="color:#2E7D32;font-weight:700">Entrar no painel</a></div>
+  <div class="form" id="lista" style="text-align:center">
+    <div style="font-size:40px;line-height:1;margin-bottom:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M12 22c0-6 4-10 9-11-1 6-5 10-9 11Z"/><path d="M12 22C12 16 8 12 3 11c1 6 5 10 9 11Z"/><path d="M12 22v-9"/></svg></div>
+    <h3>Crie sua conta e fale com a gente</h3>
+    <p class="fd">A rede é curada, então funciona assim: você cria sua conta agora e informa seu WhatsApp. Antes de liberar o acesso ao painel, a gente bate um papo rápido por lá pra te conhecer. Depois dessa conversa, eu libero seu acesso. Sem precisar agendar horário, a conversa acontece no seu tempo.</p>
+    <a class="btn" href="/clinica/?criar" style="display:inline-block;text-decoration:none;margin-top:6px">Criar minha conta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+    <div class="note" style="margin-top:14px">Prefere falar antes de criar a conta? <a href="https://wa.me/5527998715972?text=Ol%C3%A1!%20Quero%20fazer%20parte%20da%20rede%20dichava%20como%20profissional." target="_blank" rel="noopener" style="color:#2E7D32;font-weight:700">Chamar no WhatsApp</a></div>
+    <div class="note" style="margin-top:8px">Já tem conta? <a href="/clinica/" style="color:#2E7D32;font-weight:700">Entrar no painel</a></div>
   </div>
 
   <footer>dichava.app · redução de danos, sem julgamento · <a href="mailto:contato@dichava.app">contato@dichava.app</a><br>
@@ -516,13 +307,15 @@ footer a{color:#2E7D32;text-decoration:none}
 var SB=null;
 try{ SB = supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
 function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
-function sucesso(){document.getElementById('wl-form').style.display='none';document.getElementById('wl-ok').style.display='block';document.getElementById('candidatura').scrollIntoView({behavior:'smooth',block:'start'});}
+function sucesso(){document.getElementById('wl-form').style.display='none';document.getElementById('wl-ok').style.display='block';}
+function mailtoFallback(d){
+  var corpo='Nome: '+d.nome+'%0ARegistro: '+d.registro+'%0AEspecialidade: '+d.especialidade+'%0ACidade: '+d.cidade+'%0AAtendimento: '+d.atendimento+'%0AE-mail: '+d.email+'%0AWhatsApp: '+d.whatsapp+'%0APlano: '+d.plano+'%0AMensagem: '+encodeURIComponent(d.mensagem);
+  window.location.href='mailto:contato@dichava.app?subject='+encodeURIComponent('Waitlist profissional, '+d.nome)+'&body='+corpo;
+}
 function enviar(ev){
   ev.preventDefault();
-  var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
-  err.style.display='none';
-  var d={nome:val('f-nome'),registro:val('f-reg'),especialidade:val('f-esp'),cidade:val('f-cidade'),atendimento:val('f-atend'),email:val('f-email'),whatsapp:val('f-wpp'),
-    formacao:val('f-formacao'),percurso:val('f-percurso'),experiencia_rd:val('f-rd'),motivacao:val('f-motiv'),links:val('f-links'),disponibilidade:val('f-disp')};
+  var btn=document.getElementById('wl-btn');
+  var d={nome:val('f-nome'),registro:val('f-reg'),especialidade:val('f-esp'),cidade:val('f-cidade'),atendimento:val('f-atend'),email:val('f-email'),whatsapp:val('f-wpp'),plano:val('f-plano'),mensagem:val('f-msg')};
   btn.disabled=true; btn.textContent='Enviando…';
   finalizar(d);
   return false;
@@ -531,56 +324,18 @@ async function finalizar(d){
   var btn=document.getElementById('wl-btn'), err=document.getElementById('wl-err');
   var ok=false;
   if(SB){
+    // 1) Caminho confiável: função SECURITY DEFINER (ignora o RLS, sempre grava)
     try{
-      var r=await SB.rpc('pro_candidatura_add',{p_nome:d.nome,p_registro:d.registro,p_especialidade:d.especialidade,p_cidade:d.cidade,p_atendimento:d.atendimento,p_email:d.email,p_whatsapp:d.whatsapp,
-        p_formacao:d.formacao,p_percurso:d.percurso,p_experiencia_rd:d.experiencia_rd,p_motivacao:d.motivacao,p_links:d.links,p_disponibilidade:d.disponibilidade});
+      var r=await SB.rpc('pro_waitlist_add',{p_nome:d.nome,p_registro:d.registro,p_especialidade:d.especialidade,p_cidade:d.cidade,p_atendimento:d.atendimento,p_email:d.email,p_whatsapp:d.whatsapp,p_plano:d.plano,p_mensagem:d.mensagem});
       if(!r.error) ok=true;
     }catch(e){}
+    // 2) Fallback: insert direto (caso a função ainda não tenha sido criada)
+    if(!ok){ try{ var r2=await SB.from('pro_waitlist').insert([d]); if(!r2.error) ok=true; }catch(e){} }
   }
   if(ok){ sucesso(); return; }
-  btn.disabled=false; btn.textContent='Enviar minha apresentação';
-  err.innerHTML='Não consegui enviar agora. Confira sua conexão e tente de novo, ou mande pra <a href="mailto:contato@dichava.app" style="color:#C0392B">contato@dichava.app</a>.'; err.style.display='block';
+  btn.disabled=false; btn.textContent='Quero ser avisado(a) ';
+  err.textContent='Não consegui enviar agora. Confira sua conexão e toque de novo. '; err.style.display='block';
 }
-// próximos encontros da rede (intervisão, rodas) — só aparece se houver evento cadastrado
-(async function(){
-  if(!SB)return;
-  try{
-    var r=await SB.rpc('rede_eventos_pub'); var evs=(r&&r.data)||[];
-    if(r.error||!evs.length)return;
-    var AREA={interv:'Intervisão',rodas:'Roda de conversa',eventos:'Evento'};
-    var MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-    var esc=function(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
-    document.getElementById('ev-list').innerHTML=evs.map(function(e){
-      var dt=e.data?new Date(e.data+'T12:00:00'):null;
-      var dia=dt?('<b>'+dt.getDate()+'</b><span>'+MES[dt.getMonth()]+'</span>'):'<span>em breve</span>';
-      var sub=[AREA[e.area]||'',e.hora,e.tag].filter(Boolean).join(' · ');
-      return '<div class="ev"><div class="ev-d">'+dia+'</div><div><div class="ev-t">'+esc(e.titulo)+'</div><div class="ev-s">'+esc(sub)+'</div></div></div>';
-    }).join('');
-    document.getElementById('ev-box').style.display='block';
-  }catch(e){}
-})();
-// abas do "você tem acesso a"
-(function(){
-  var tabs=document.querySelectorAll('.tabs .tab'), pill=document.getElementById('tabsPill');
-  if(!tabs.length)return;
-  function abrir(idx,foco){
-    tabs.forEach(function(t,i){
-      var on=i===idx; t.classList.toggle('on',on); t.setAttribute('aria-selected',on?'true':'false'); t.tabIndex=on?0:-1;
-      var pn=document.getElementById(t.getAttribute('aria-controls'));
-      if(on){ pn.hidden=false; pn.querySelectorAll('.bt,.vp-row,.vp-bars i,.v-fin .ln').forEach(function(el){ el.style.animation='none'; el.offsetHeight; el.style.animation=''; }); }
-      else pn.hidden=true;
-    });
-    if(pill) pill.style.transform='translateX('+(idx*100)+'%)';
-    if(foco) tabs[idx].focus();
-  }
-  tabs.forEach(function(t,i){
-    t.addEventListener('click',function(){abrir(i);});
-    t.addEventListener('keydown',function(e){
-      if(e.key==='ArrowRight'){e.preventDefault();abrir((i+1)%tabs.length,true);}
-      if(e.key==='ArrowLeft'){e.preventDefault();abrir((i+tabs.length-1)%tabs.length,true);}
-    });
-  });
-})();
 // carrossel do painel
 (function(){
   var track=document.getElementById('carTrack'), dotsEl=document.getElementById('carDots');
