@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Sala de Sessão · dichava</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SALA DE SESSÃO — ferramentas de apoio para sessões online
+   Perspectiva: Gestalt-terapia + redução de danos.
+   Nada é salvo: tudo vive só na memória desta aba.
+   ============================================================ */
+:root{
+  --bg:#EDEFE9; --card:#FFFFFF; --line:#E4E4DF;
+  --tx:#1B2A1C; --txs:#5D7060; --txm:#8E9A8F;
+  --v:#4CAF5A; --ve:#2E7D32; --vf:#E8F5E9;
+  --am:#F2C200; --amf:#FFF9C4;
+  --sa:#00897B; --saf:#E0F2F1;
+  --er:#C62828; --erf:#FFEBEE;
+  --roxo:#7C3AED; --roxof:#F3EEFF;
+  --lrj:#EA580C; --lrjf:#FFF1E6;
+  --dk:#1B2A1C;
+  --r:14px; --rlg:22px;
+  --sh:0 2px 16px rgba(0,0,0,.07);
+  --scale:1;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141C15; --card:#1E2A1F; --line:#2E3D2F;
+    --tx:#E8EDE6; --txs:#A8B8A9; --txm:#748575;
+    --vf:#1F3522; --amf:#3A3416; --saf:#123330; --erf:#3A1C1C; --roxof:#2A2140; --lrjf:#3A2614;
+    --sh:0 2px 16px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141C15; --card:#1E2A1F; --line:#2E3D2F;
+  --tx:#E8EDE6; --txs:#A8B8A9; --txm:#748575;
+  --vf:#1F3522; --amf:#3A3416; --saf:#123330; --erf:#3A1C1C; --roxof:#2A2140; --lrjf:#3A2614;
+  --sh:0 2px 16px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font:calc(16px*var(--scale))/1.5 Inter,system-ui,sans-serif;overflow:hidden}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.01em}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,textarea,select{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:.55em .8em;width:100%}
+input:focus,textarea:focus{outline:none;border-color:var(--v)}
+:focus-visible{outline:3px solid var(--v);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:240px 1fr;height:100vh}
+.app.clean{grid-template-columns:0 1fr}
+.app.clean .side{display:none}
+
+/* ---------- Sidebar ---------- */
+.side{background:var(--dk);color:#E8EDE6;display:flex;flex-direction:column;padding:18px 12px;gap:4px;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 16px}
+.brand .dot{width:30px;height:30px;border-radius:50%;background:var(--v);display:grid;place-items:center;font-weight:700;color:var(--dk)}
+.brand b{font-family:Fraunces,serif;font-size:1.05rem}
+.brand small{display:block;color:#9FB3A1;font-size:.72rem}
+.grp{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7F9481;padding:12px 10px 4px}
+.nav{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;text-align:left;font-size:.92rem;color:#D3DDD4}
+.nav:hover{background:#2a3d2b}
+.nav.on{background:var(--v);color:var(--dk);font-weight:600}
+.nav .k{margin-left:auto;font-size:.7rem;opacity:.55;border:1px solid currentColor;border-radius:5px;padding:0 5px}
+.side .foot{margin-top:auto;padding:14px 10px 0;font-size:.74rem;color:#8EA390;line-height:1.45}
+
+/* ---------- Topbar ---------- */
+.main{display:flex;flex-direction:column;min-width:0;height:100vh}
+.top{display:flex;align-items:center;gap:8px;padding:12px 22px;border-bottom:1px solid var(--line);background:var(--card)}
+.top h1{font-size:1.25rem;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);font-size:.85rem;white-space:nowrap;background:var(--card)}
+.tb:hover{border-color:var(--v)}
+.tb.pri{background:var(--v);border-color:var(--v);color:#10210F;font-weight:600}
+.timer{font-variant-numeric:tabular-nums}
+
+.stage{flex:1;overflow:auto;padding:28px clamp(16px,3vw,44px) 48px}
+.view{display:none;max-width:1100px;margin:0 auto;animation:fade .35s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.lead{color:var(--txs);font-size:1.05em;max-width:62ch;margin:.35em 0 1.4em}
+.card{background:var(--card);border-radius:var(--rlg);box-shadow:var(--sh);padding:22px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font-size:.9rem}
+.btn:hover{border-color:var(--v)}
+.btn.pri{background:var(--v);border-color:var(--v);color:#10210F;font-weight:600}
+.btn.sm{padding:5px 11px;font-size:.8rem}
+.chip{padding:7px 13px;border-radius:999px;border:1.5px solid var(--line);font-size:.88rem;background:var(--card)}
+.chip.on{border-color:var(--v);background:var(--vf);font-weight:600}
+.lbl{font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;color:var(--txm);margin-bottom:8px;font-weight:600}
+.hint{font-size:.84rem;color:var(--txs);background:var(--vf);border-radius:12px;padding:10px 14px;margin-top:14px}
+.hint b{color:var(--ve)}
+:root[data-theme="dark"] .hint b{color:var(--v)}
+.muted{color:var(--txm)}
+
+/* ---------- Chegada ---------- */
+.climas{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.clima{border:2px solid var(--line);border-radius:18px;padding:16px 8px;text-align:center;background:var(--card);transition:.15s}
+.clima span{font-size:2.4em;display:block;line-height:1.1}
+.clima small{display:block;margin-top:6px;font-size:.86rem;color:var(--txs)}
+.clima.on{border-color:var(--v);background:var(--vf);transform:translateY(-2px)}
+.big-word{font-family:Fraunces,serif;font-size:2.4em;text-align:center;padding:.4em;min-height:1.6em;color:var(--ve)}
+:root[data-theme="dark"] .big-word{color:var(--v)}
+input[type=range]{padding:0;border:0;accent-color:var(--v);height:28px;background:transparent}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.78rem;color:var(--txm)}
+
+/* ---------- Corpo ---------- */
+.body-wrap{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:22px;align-items:start}
+#bodySvg{width:100%;height:auto;cursor:crosshair;touch-action:none;display:block}
+#bodySvg .sil{fill:var(--vf);stroke:var(--ve);stroke-width:1.5}
+:root[data-theme="dark"] #bodySvg .sil{stroke:var(--v)}
+.sens{display:flex;flex-wrap:wrap;gap:8px}
+.sens .chip i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.marks{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:6px;max-height:300px;overflow:auto}
+.marks li{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:10px;background:var(--bg);font-size:.9rem}
+.marks li i{width:12px;height:12px;border-radius:50%;flex:none}
+.marks li input{border:0;background:transparent;padding:0}
+
+/* ---------- Respirar ---------- */
+.breath{display:grid;place-items:center;min-height:430px;position:relative}
+.orb{width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#C8E6C9,var(--v));box-shadow:0 0 0 18px rgba(76,175,90,.12),0 0 0 40px rgba(76,175,90,.06);transition:transform 4s ease-in-out;display:grid;place-items:center}
+.orb b{font-family:Fraunces,serif;color:#10210F;font-size:1.25em}
+.aware{font-family:Fraunces,serif;font-size:1.7em;text-align:center;max-width:26ch;margin:26px auto 0;min-height:2.6em;transition:opacity .6s}
+
+/* ---------- Ciclo do contato ---------- */
+.ciclo-wrap{display:grid;grid-template-columns:minmax(300px,460px) 1fr;gap:22px;align-items:start}
+#cicloSvg{width:100%;height:auto}
+#cicloSvg .node{cursor:pointer}
+#cicloSvg .node circle.b{fill:var(--card);stroke:var(--line);stroke-width:2.5;transition:.2s}
+#cicloSvg .node.sel circle.b{stroke:var(--v);stroke-width:4;fill:var(--vf)}
+#cicloSvg .node.int circle.b{stroke:var(--er);stroke-dasharray:6 5;stroke-width:4}
+#cicloSvg .node text{fill:var(--tx);font-size:13px;font-family:Inter,sans-serif;font-weight:600;text-anchor:middle;pointer-events:none}
+#cicloSvg .flag{font-size:20px}
+.mec{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:16px}
+.mec button{text-align:left;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card)}
+.mec button b{display:block;font-size:.92rem}
+.mec button small{color:var(--txs);font-size:.8rem;line-height:1.35;display:block;margin-top:2px}
+.mec button.on{border-color:var(--er);background:var(--erf)}
+.qs{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.qs li{padding:10px 14px;border-left:3px solid var(--v);background:var(--bg);border-radius:0 10px 10px 0;font-size:.95rem}
+
+/* ---------- Cadeira vazia ---------- */
+.chairs{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chair{border:2.5px solid var(--line);border-radius:var(--rlg);padding:18px;background:var(--card);transition:.25s;min-height:340px;display:flex;flex-direction:column}
+.chair.on{border-color:var(--v);box-shadow:0 0 0 6px rgba(76,175,90,.15)}
+.chair.on.b{border-color:var(--roxo);box-shadow:0 0 0 6px rgba(124,58,237,.15)}
+.chair h3{display:flex;align-items:center;gap:10px;font-size:1.2em}
+.chair h3 .ic{font-size:1.5em}
+.chair .who{font-size:.85rem;color:var(--txs);margin-top:2px}
+.falas{list-style:none;flex:1;display:flex;flex-direction:column;gap:8px;margin:14px 0;overflow:auto;max-height:320px}
+.falas li{padding:10px 14px;border-radius:14px;background:var(--vf);font-size:1.02em;animation:fade .3s}
+.chair.b .falas li{background:var(--roxof)}
+.chair input{opacity:.5}
+.chair.on input{opacity:1}
+
+/* ---------- Polaridades ---------- */
+.pol{padding:18px 0;border-bottom:1px solid var(--line)}
+.pol:last-child{border-bottom:0}
+.pol .ends{display:flex;justify-content:space-between;font-family:Fraunces,serif;font-size:1.2em;margin-bottom:8px}
+.track{position:relative;height:44px;border-radius:999px;background:linear-gradient(90deg,var(--saf),var(--card) 50%,var(--lrjf));border:1.5px solid var(--line);touch-action:none}
+.pin{position:absolute;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:700;color:#fff;cursor:grab;box-shadow:0 2px 8px rgba(0,0,0,.25);user-select:none;touch-action:none}
+.pin.a{background:var(--v)}
+.pin.b{background:var(--roxo)}
+.pin.c{background:var(--lrj)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.86rem;color:var(--txs)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+/* ---------- Onda ---------- */
+#ondaCv{width:100%;height:380px;display:block;border-radius:16px;background:var(--bg);touch-action:none;cursor:crosshair}
+
+/* ---------- Figura e fundo ---------- */
+#ffArea{position:relative;height:500px;border-radius:var(--rlg);background:var(--bg);overflow:hidden;touch-action:none}
+#ffArea .fig-zone{position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;border-radius:50%;border:2.5px dashed var(--v);display:grid;place-items:center;color:var(--txm);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;pointer-events:none}
+.tok{position:absolute;padding:8px 14px;border-radius:999px;background:var(--card);border:1.5px solid var(--line);cursor:grab;user-select:none;white-space:nowrap;box-shadow:var(--sh);transition:font-size .25s,background .25s,opacity .25s;touch-action:none}
+.tok.fig{font-family:Fraunces,serif;font-size:1.45em;background:var(--vf);border-color:var(--v)}
+.tok.fundo{opacity:.55}
+.tok .x{margin-left:8px;opacity:.4;font-size:.8em}
+
+/* ---------- Fechamento ---------- */
+.close-q{font-family:Fraunces,serif;font-size:1.35em;margin-bottom:10px}
+.close-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.close-grid textarea{min-height:150px;resize:vertical;font-size:1.02em}
+
+/* ---------- Carta de experimento ---------- */
+.toast{position:fixed;right:22px;bottom:22px;width:min(380px,calc(100vw - 32px));background:var(--dk);color:#E8EDE6;border-radius:18px;padding:18px 20px;box-shadow:0 12px 40px rgba(0,0,0,.3);transform:translateY(140%);transition:transform .35s ease;z-index:20}
+.toast.on{transform:none}
+.toast .t{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#9FB3A1}
+.toast p{font-family:Fraunces,serif;font-size:1.2rem;margin:6px 0 4px}
+.toast small{color:#B9C8BA;font-size:.82rem;display:block}
+.toast .row{margin-top:12px}
+.toast .btn{background:transparent;color:#E8EDE6;border-color:#3d5240}
+
+/* ---------- Tela calma ---------- */
+.calm{position:fixed;inset:0;background:radial-gradient(circle at 50% 45%,#2a3d2b,#0f1710);display:none;place-items:center;z-index:30;color:#CFDCD0;text-align:center}
+.calm.on{display:grid}
+.calm p{font-family:Fraunces,serif;font-size:2rem;opacity:.85}
+.calm small{display:block;margin-top:14px;opacity:.5;font-size:.85rem}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  .grid2,.body-wrap,.ciclo-wrap,.chairs,.close-grid{grid-template-columns:1fr}
+  .top{flex-wrap:wrap;padding:10px 16px}
+  .stage{padding:20px 16px 40px}
+  .mobnav{display:flex!important}
+}
+.mobnav{display:none;gap:6px;overflow-x:auto;padding:8px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.mobnav .chip{white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="side" aria-label="Ferramentas">
+    <div class="brand"><div class="dot">d</div><div><b>Sala de Sessão</b><small>apoio para sessão online</small></div></div>
+    <div class="grp">Abrir</div>
+    <button class="nav on" data-v="chegada">🌤️ Como você chega <span class="k">1</span></button>
+    <button class="nav" data-v="corpo">🫀 Mapa do corpo <span class="k">2</span></button>
+    <button class="nav" data-v="respirar">🌬️ Aqui e agora <span class="k">3</span></button>
+    <div class="grp">Explorar</div>
+    <button class="nav" data-v="ciclo">🔄 Ciclo do contato <span class="k">4</span></button>
+    <button class="nav" data-v="cadeira">🪑 Cadeira vazia <span class="k">5</span></button>
+    <button class="nav" data-v="polaridades">⚖️ Polaridades <span class="k">6</span></button>
+    <button class="nav" data-v="onda">🌊 Onda da fissura <span class="k">7</span></button>
+    <button class="nav" data-v="figura">🎯 Figura e fundo <span class="k">8</span></button>
+    <div class="grp">Fechar</div>
+    <button class="nav" data-v="fechamento">🌱 O que você leva <span class="k">9</span></button>
+    <div class="foot">🔒 Nada é salvo. Ao fechar a aba, tudo se apaga.<br>Atalhos: <b>1–9</b> ferramentas · <b>E</b> experimento · <b>H</b> esconder menu · <b>C</b> tela calma</div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <h1 id="ttl">Como você chega hoje?</h1>
+      <span class="tb timer" id="timer" title="Tempo de sessão (clique para pausar)">⏱ 00:00</span>
+      <button class="tb" id="bExp" title="Sortear uma carta de experimento (só para você, terapeuta)">🃏 Experimento</button>
+      <button class="tb" id="bCalm" title="Tela calma — pausa sem nada na tela">🌙 Pausa</button>
+      <button class="tb" id="bZoom" title="Aumentar a letra para quem está do outro lado">A+</button>
+      <button class="tb" id="bTheme" title="Tema claro/escuro">🌗</button>
+      <button class="tb" id="bClean" title="Esconder o menu lateral (tela limpa para compartilhar)">⇤ Menu</button>
+      <button class="tb" id="bFull" title="Tela cheia">⛶</button>
+      <button class="tb pri" id="bResumo" title="Copiar um resumo da sessão para o seu prontuário">📋 Resumo</button>
+    </div>
+    <nav class="mobnav" id="mobnav"></nav>
+
+    <div class="stage">
+
+      <!-- 1. CHEGADA -->
+      <section class="view on" id="v-chegada" data-t="Como você chega hoje?">
+        <p class="lead">Sem pressa. Se o seu momento de agora fosse um clima, qual seria?</p>
+        <div class="climas" id="climas"></div>
+        <div class="grid2" style="margin-top:22px">
+          <div class="card">
+            <div class="lbl">Quanta energia tem aí agora?</div>
+            <input type="range" min="0" max="10" value="5" id="energia">
+            <div class="scale-lbl"><span>quase nada</span><span id="energiaV">5</span><span>transbordando</span></div>
+            <div class="lbl" style="margin-top:20px">E a vontade de usar, hoje?</div>
+            <input type="range" min="0" max="10" value="0" id="vontade">
+            <div class="scale-lbl"><span>nenhuma</span><span id="vontadeV">0</span><span>muito forte</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl">Uma palavra para hoje</div>
+            <input id="palavra" placeholder="escreva aqui…" maxlength="40" autocomplete="off">
+            <div class="big-word" id="palavraBig"></div>
+          </div>
+        </div>
+        <div class="hint">Na Gestalt, o começo é <b>contato</b>, não coleta de dados. Experimente perguntar: <b>“e como é dizer isso pra mim agora?”</b></div>
+      </section>
+
+      <!-- 2. CORPO -->
+      <section class="view" id="v-corpo" data-t="Onde isso mora no corpo?">
+        <p class="lead">Escolha uma sensação e toque no corpo onde ela aparece. Não precisa ter nome certo.</p>
+        <div class="body-wrap">
+          <div class="card">
+            <svg id="bodySvg" viewBox="0 0 200 420" role="img" aria-label="Silhueta de corpo humano">
+              <g class="sil">
+                <circle cx="100" cy="42" r="28"/>
+                <rect x="88" y="66" width="24" height="18" rx="6"/>
+                <path d="M58 86 Q100 76 142 86 Q154 90 154 104 L150 212 Q148 226 134 226 L66 226 Q52 226 50 212 L46 104 Q46 90 58 86Z"/>
+                <path d="M46 100 Q32 104 30 120 L20 210 Q18 226 28 228 Q38 230 40 216 L52 130Z"/>
+                <path d="M154 100 Q168 104 170 120 L180 210 Q182 226 172 228 Q162 230 160 216 L148 130Z"/>
+                <path d="M66 222 L96 222 L94 396 Q94 410 81 410 Q68 410 68 396Z"/>
+                <path d="M104 222 L134 222 L132 396 Q132 410 119 410 Q106 410 106 396Z"/>
+              </g>
+              <g id="bodyMarks"></g>
+            </svg>
+          </div>
+          <div>
+            <div class="lbl">Sensação</div>
+            <div class="sens" id="sens"></div>
+            <ul class="marks" id="marks"></ul>
+            <div class="row" style="margin-top:12px"><button class="btn sm" id="bodyUndo">↶ desfazer</button><button class="btn sm" id="bodyClear">limpar</button></div>
+            <div class="hint">Peça pra pessoa <b>dar voz</b> a esse lugar: <b>“se o seu peito falasse agora, o que diria?”</b> Ou para <b>exagerar</b> a sensação por alguns segundos e ver o que muda.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. RESPIRAR / AQUI-AGORA -->
+      <section class="view" id="v-respirar" data-t="Aqui e agora">
+        <p class="lead">Acompanhe a bolinha. Quando ela crescer, inspire; quando diminuir, solte o ar devagar.</p>
+        <div class="card breath">
+          <div>
+            <div class="orb" id="orb"><b id="orbTxt">pronto?</b></div>
+            <div class="aware" id="aware">Agora eu percebo…</div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:16px;justify-content:center">
+          <button class="btn pri" id="bBreath">▶ Começar</button>
+          <button class="btn" id="bAware">Próxima frase</button>
+          <label class="chip"><input type="checkbox" id="autoAware" style="width:auto;margin-right:6px" checked>trocar frases sozinho</label>
+        </div>
+        <div class="hint">Continuum de awareness: a pessoa completa em voz alta <b>“agora eu percebo…”</b> várias vezes — algo de fora, algo do corpo, algo que imagina. Note quando ela <b>sai do agora</b> (explica, justifica, vai pro passado).</div>
+      </section>
+
+      <!-- 4. CICLO DO CONTATO -->
+      <section class="view" id="v-ciclo" data-t="Ciclo do contato">
+        <p class="lead">Escolha uma situação recente de uso (ou de vontade). Vamos percorrer o ciclo e ver onde a experiência se interrompe.</p>
+        <div class="ciclo-wrap">
+          <div class="card"><svg id="cicloSvg" viewBox="0 0 440 440" aria-label="Ciclo do contato"></svg>
+            <div class="row" style="justify-content:center;margin-top:6px">
+              <button class="btn sm" id="bFlagUso">🔥 marcar onde entra o uso</button>
+              <button class="btn sm" id="bFlagInt">✂️ marcar interrupção</button>
+            </div>
+          </div>
+          <div class="card">
+            <h2 id="cTit" style="font-size:1.4em">Toque numa etapa</h2>
+            <p id="cDesc" class="muted" style="margin-top:4px">Sensação → Awareness → Mobilização → Ação → Contato → Retirada.</p>
+            <ul class="qs" id="cQs"></ul>
+          </div>
+        </div>
+        <div class="lbl" style="margin-top:22px">Como o contato se interrompe? (toque para marcar)</div>
+        <div class="mec" id="mec"></div>
+        <div class="hint">Não é diagnóstico — é <b>mapa compartilhado</b>. O uso muitas vezes aparece como um atalho entre <b>sensação</b> e <b>ação</b>, pulando a awareness. Pergunte: <b>“o que você estava sentindo um pouco antes de pensar em usar?”</b></div>
+      </section>
+
+      <!-- 5. CADEIRA VAZIA -->
+      <section class="view" id="v-cadeira" data-t="Cadeira vazia">
+        <p class="lead">Quem senta na outra cadeira hoje? Dê voz a cada lado. Use <b>Tab</b> ou o botão para trocar de lugar.</p>
+        <div class="row" id="quem" style="margin-bottom:16px"></div>
+        <div class="chairs">
+          <div class="chair a on" id="chA">
+            <h3><span class="ic">🧍</span><span>Eu</span></h3>
+            <div class="who">fala em primeira pessoa, no presente</div>
+            <ul class="falas" id="falA"></ul>
+            <input id="inA" placeholder="o que você quer dizer?" autocomplete="off">
+          </div>
+          <div class="chair b" id="chB">
+            <h3><span class="ic" id="icB">🌿</span><span id="nmB">A substância</span></h3>
+            <div class="who">responde como se fosse ela</div>
+            <ul class="falas" id="falB"></ul>
+            <input id="inB" placeholder="e o que ela responde?" autocomplete="off">
+          </div>
+        </div>
+        <div class="row" style="margin-top:16px;justify-content:center">
+          <button class="btn pri" id="bTroca">⇄ Trocar de cadeira</button>
+          <button class="btn" id="bLimpaCad">limpar diálogo</button>
+        </div>
+        <div class="hint">Peça que a pessoa fale <b>com</b> e não <b>sobre</b>. Proponha: “diga isso de novo, mais alto”, “o que você nunca disse pra ela?”, “o que ela te dá que você não encontra em outro lugar?”. Reconhecer a <b>função</b> do uso costuma abrir mais que combatê-lo.</div>
+      </section>
+
+      <!-- 6. POLARIDADES -->
+      <section class="view" id="v-polaridades" data-t="Polaridades">
+        <p class="lead">Arraste cada bolinha para onde você se sente. Compare: como fico <b>usando</b>, <b>sem usar</b> e <b>como gostaria</b>.</p>
+        <div class="legend" style="margin-bottom:8px"><span><i style="background:var(--roxo)"></i>usando</span><span><i style="background:var(--v)"></i>sem usar</span><span><i style="background:var(--lrj)"></i>como eu gostaria</span></div>
+        <div class="card" id="pols"></div>
+        <div class="row" style="margin-top:14px">
+          <input id="polA" placeholder="novo polo (ex.: anestesiado)" style="max-width:240px">
+          <input id="polB" placeholder="outro polo (ex.: sentindo tudo)" style="max-width:240px">
+          <button class="btn" id="bPolAdd">+ adicionar</button>
+        </div>
+        <div class="hint">Na Gestalt, os polos não são certo/errado: são <b>partes que precisam se integrar</b>. Experimente dar voz ao polo mais rejeitado: “fale como o seu lado <b>descontrolado</b> — do que ele precisa?”</div>
+      </section>
+
+      <!-- 7. ONDA -->
+      <section class="view" id="v-onda" data-t="A onda da fissura">
+        <p class="lead">Desenhe com o dedo/mouse como a vontade de usar subiu e desceu da última vez. Da esquerda (começo) para a direita (depois).</p>
+        <div class="card"><canvas id="ondaCv"></canvas>
+          <div class="row" style="margin-top:12px">
+            <button class="btn sm" id="ondaClear">limpar</button>
+            <button class="btn sm" id="ondaDemo">mostrar uma onda de exemplo</button>
+            <span class="muted" style="font-size:.85rem;margin-left:auto">Toque na curva depois de desenhar para anotar o que estava acontecendo.</span>
+          </div>
+        </div>
+        <div class="hint">A fissura é uma <b>figura que emerge e se desfaz</b> — quase sempre tem pico e passa. Pergunte: <b>“o que você percebeu no pico?”</b>, <b>“o que te ajudou a descer?”</b>, <b>“se você ficasse com ela sem agir, o que acha que aconteceria?”</b></div>
+      </section>
+
+      <!-- 8. FIGURA E FUNDO -->
+      <section class="view" id="v-figura" data-t="Figura e fundo">
+        <p class="lead">Escreva o que está presente na sua vida agora. Arraste para o centro o que ocupa mais espaço; deixe nas bordas o que está no fundo.</p>
+        <div class="row" style="margin-bottom:12px">
+          <input id="ffIn" placeholder="ex.: trabalho, mãe, cansaço, o baseado da noite…" style="max-width:420px" autocomplete="off">
+          <button class="btn pri" id="ffAdd">+ colocar</button>
+          <button class="btn sm" id="ffClear">limpar</button>
+        </div>
+        <div id="ffArea"><div class="fig-zone">figura</div></div>
+        <div class="hint">Quando o uso vira figura o tempo todo, o resto vira fundo. Pergunte: <b>“o que fica no fundo quando isso ocupa o centro?”</b> e <b>“o que pediria pra vir pra frente?”</b> — necessidades não atendidas tendem a voltar como figura.</div>
+      </section>
+
+      <!-- 9. FECHAMENTO -->
+      <section class="view" id="v-fechamento" data-t="O que você leva">
+        <p class="lead">Antes de encerrar, vamos fechar a Gestalt de hoje — ou reconhecer o que fica aberto.</p>
+        <div class="close-grid">
+          <div class="card"><div class="close-q">🌱 O que você leva de hoje?</div><textarea id="f1" placeholder="uma percepção, uma frase, uma sensação…"></textarea></div>
+          <div class="card"><div class="close-q">🧩 O que ficou inacabado?</div><textarea id="f2" placeholder="o que ainda pede atenção…"></textarea></div>
+          <div class="card"><div class="close-q">🧪 Um pequeno experimento</div><textarea id="f3" placeholder="algo simples pra testar até a próxima sessão (não é tarefa — é curiosidade)"></textarea></div>
+        </div>
+        <div class="card" style="margin-top:18px">
+          <div class="lbl">Cuidados de redução de danos combinados (opcional)</div>
+          <div class="row" id="rd"></div>
+        </div>
+        <div class="hint">Use o botão <b>📋 Resumo</b> (em cima) para copiar tudo o que foi registrado na sessão e colar no seu prontuário. Depois é só fechar a aba — nada fica guardado aqui.</div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <div class="t">Carta de experimento · só para você</div>
+  <p id="toastP"></p>
+  <small id="toastS"></small>
+  <div class="row"><button class="btn sm" id="toastNext">outra</button><button class="btn sm" id="toastClose">fechar</button></div>
+</div>
+<div class="calm" id="calm"><div><p>Um momento de pausa.</p><small>pressione C ou toque para voltar</small></div></div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const S={clima:null,energia:5,vontade:0,palavra:'',corpo:[],ciclo:{sel:null,uso:null,int:[]},mec:[],cad:{outro:'A substância',a:[],b:[]},onda:{pts:[],notas:[]},ff:[],fech:{},rd:[]};
+
+/* ---------- Navegação ---------- */
+const views=$$('.view').map(v=>v.id.slice(2));
+const mob=$('#mobnav');
+$$('.nav').forEach(n=>{const c=document.createElement('button');c.className='chip';c.dataset.v=n.dataset.v;c.textContent=n.childNodes[0].textContent.trim();mob.appendChild(c);});
+function go(v){
+  $$('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
+  $$('[data-v]').forEach(x=>x.classList.toggle(x.classList.contains('chip')?'on':'on',x.dataset.v===v));
+  $('#ttl').textContent=$('#v-'+v).dataset.t;
+  if(v==='onda')requestAnimationFrame(sizeOnda);
+  try{localStorage.setItem('sala_view',v)}catch(e){}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b)go(b.dataset.v);});
+
+/* ---------- Topbar ---------- */
+let t0=Date.now(),paused=0,pauseAt=null;
+setInterval(()=>{if(pauseAt)return;const s=Math.floor((Date.now()-t0-paused)/1000);$('#timer').textContent='⏱ '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');},1000);
+$('#timer').onclick=()=>{if(pauseAt){paused+=Date.now()-pauseAt;pauseAt=null;$('#timer').style.opacity=1}else{pauseAt=Date.now();$('#timer').style.opacity=.5}};
+let sc=1;$('#bZoom').onclick=()=>{sc=sc>=1.3?1:+(sc+.15).toFixed(2);document.documentElement.style.setProperty('--scale',sc);$('#bZoom').textContent=sc>1?'A−':'A+';};
+$('#bTheme').onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';drawOnda();};
+$('#bClean').onclick=()=>$('#app').classList.toggle('clean');
+$('#bFull').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.();
+$('#bCalm').onclick=()=>$('#calm').classList.add('on');
+$('#calm').onclick=()=>$('#calm').classList.remove('on');
+
+/* ---------- Cartas de experimento ---------- */
+const EXP=[
+ ['“Diga isso de novo, mais devagar.”','Repetir amplia a awareness do que foi dito.'],
+ ['“Troque o ‘mas’ por ‘e’.”','“Quero parar e gosto de usar” — sustenta as duas partes.'],
+ ['“Troque ‘não consigo’ por ‘não quero’ — e veja se é verdade.”','Devolve a responsabilidade (habilidade de responder).'],
+ ['“Troque ‘a gente’ / ‘você’ por ‘eu’.”','Linguagem de responsabilidade, sai da generalização.'],
+ ['“Exagere esse gesto que você está fazendo.”','O corpo costuma dizer antes da palavra.'],
+ ['“Dê voz à sua mão / ao seu pé agora.”','Expressão de partes retrofletidas.'],
+ ['“Fale isso como uma ordem: ‘você deveria…’. De quem é essa voz?”','Explorar introjetos (os “tem que”).'],
+ ['“O que você está evitando sentir agora?”','Ir em direção à evitação, com cuidado e consentimento.'],
+ ['“Fique um pouco com isso, sem resolver.”','Sustentar o vazio fértil em vez de fechar rápido.'],
+ ['“Como você está se sentindo comigo agora?”','Trazer a relação para o aqui-e-agora.'],
+ ['“Se o uso fosse uma pessoa, como ela entraria nesta sala?”','Personificar abre espaço para diálogo (cadeira vazia).'],
+ ['“Complete: ‘Eu me responsabilizo por…’”','Frase incompleta — repetir várias vezes.'],
+ ['“O que você percebe na sua respiração agora?”','Ancorar no corpo quando a fala acelera.'],
+ ['Compartilhe o que você, terapeuta, está sentindo.','Autorrevelação dosada, a serviço do contato.'],
+ ['“Que parte de você quer usar? E qual não quer? Deixe as duas falarem.”','Topdog / underdog — conflito interno ganha forma.'],
+ ['“O que o uso faz por você que nada mais faz?”','Função do uso: ajustamento criativo, não “defeito”.'],
+];
+let ei=-1;
+function exp(){let n;do{n=Math.floor(Math.random()*EXP.length)}while(n===ei&&EXP.length>1);ei=n;$('#toastP').textContent=EXP[n][0];$('#toastS').textContent=EXP[n][1];$('#toast').classList.add('on');}
+$('#bExp').onclick=exp;$('#toastNext').onclick=exp;$('#toastClose').onclick=()=>$('#toast').classList.remove('on');
+
+/* ---------- 1. Chegada ---------- */
+const CLIMAS=[['☀️','ensolarado'],['🌤️','sol entre nuvens'],['☁️','nublado'],['🌫️','neblina'],['🌧️','chuva'],['⛈️','tempestade'],['🌬️','ventania'],['🌈','depois da chuva'],['🌙','noite quieta'],['🔥','calor demais']];
+$('#climas').innerHTML=CLIMAS.map((c,i)=>`<button class="clima" data-i="${i}"><span>${c[0]}</span><small>${c[1]}</small></button>`).join('');
+$('#climas').onclick=e=>{const b=e.target.closest('.clima');if(!b)return;$$('.clima').forEach(x=>x.classList.toggle('on',x===b));S.clima=CLIMAS[b.dataset.i].join(' ');};
+$('#energia').oninput=e=>{S.energia=+e.target.value;$('#energiaV').textContent=e.target.value};
+$('#vontade').oninput=e=>{S.vontade=+e.target.value;$('#vontadeV').textContent=e.target.value};
+$('#palavra').oninput=e=>{S.palavra=e.target.value;$('#palavraBig').textContent=e.target.value};
+
+/* ---------- 2. Corpo ---------- */
+const SENS=[['tensão','#C62828'],['aperto','#EA580C'],['calor','#F2A900'],['vazio','#78909C'],['formigamento','#7C3AED'],['leveza','#4CAF5A'],['peso','#5D4037'],['dor','#AD1457']];
+let sensSel=0;
+$('#sens').innerHTML=SENS.map((s,i)=>`<button class="chip ${i?'':'on'}" data-i="${i}"><i style="background:${s[1]}"></i>${s[0]}</button>`).join('');
+$('#sens').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;sensSel=+b.dataset.i;$$('#sens .chip').forEach(x=>x.classList.toggle('on',x===b));};
+const svg=$('#bodySvg');
+svg.addEventListener('pointerdown',e=>{
+  const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());
+  S.corpo.push({x:q.x,y:q.y,s:sensSel,n:''});drawBody();
+});
+function drawBody(){
+  $('#bodyMarks').innerHTML=S.corpo.map((m,i)=>`<g><circle cx="${m.x}" cy="${m.y}" r="13" fill="${SENS[m.s][1]}" opacity=".22"/><circle cx="${m.x}" cy="${m.y}" r="6.5" fill="${SENS[m.s][1]}"/><text x="${m.x}" y="${m.y+3}" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">${i+1}</text></g>`).join('');
+  $('#marks').innerHTML=S.corpo.map((m,i)=>`<li><i style="background:${SENS[m.s][1]}"></i><b>${i+1}. ${SENS[m.s][0]}</b><input data-i="${i}" placeholder="anotar… (ex.: ‘como um nó’)" value="${esc(m.n)}"></li>`).join('');
+}
+$('#marks').oninput=e=>{if(e.target.dataset.i!=null)S.corpo[e.target.dataset.i].n=e.target.value};
+$('#bodyUndo').onclick=()=>{S.corpo.pop();drawBody()};
+$('#bodyClear').onclick=()=>{S.corpo=[];drawBody()};
+
+/* ---------- 3. Respirar ---------- */
+const AW=['Agora eu percebo…','Agora eu percebo no meu corpo…','Agora eu percebo ao meu redor…','Agora eu percebo que estou pensando em…','Agora eu percebo que quero…','Agora eu percebo que evito…','Agora eu percebo a minha respiração…','Agora eu percebo que sinto…'];
+let ai=0,bOn=false,bT=null,aT=0;
+function nextAw(){ai=(ai+1)%AW.length;const el=$('#aware');el.style.opacity=0;setTimeout(()=>{el.textContent=AW[ai];el.style.opacity=1},500);}
+$('#bAware').onclick=nextAw;
+const PH=[['inspire',4000,1.45],['segure',2000,1.45],['solte',6000,1]];
+function breathStep(i){
+  if(!bOn)return;const [t,d,s]=PH[i];$('#orbTxt').textContent=t;$('#orb').style.transitionDuration=(i===1?.2:d/1000)+'s';$('#orb').style.transform=`scale(${s})`;
+  if(i===2&&$('#autoAware').checked&&++aT%2===0)nextAw();
+  bT=setTimeout(()=>breathStep((i+1)%3),d);
+}
+$('#bBreath').onclick=()=>{bOn=!bOn;$('#bBreath').textContent=bOn?'⏸ Pausar':'▶ Começar';clearTimeout(bT);if(bOn)breathStep(0);else{$('#orb').style.transform='scale(1)';$('#orbTxt').textContent='pausa'}};
+
+/* ---------- 4. Ciclo do contato ---------- */
+const CIC=[
+ ['Sensação','Algo começa a se mexer: um incômodo, uma inquietação, um vazio.',['O que você sentia no corpo um pouco antes?','Onde isso começou?','Era familiar?']],
+ ['Awareness','Eu me dou conta do que sinto e do que preciso.',['Você conseguia nomear o que estava sentindo?','Do que você precisava naquele momento?','O que dificultou perceber?']],
+ ['Mobilização','A energia cresce, eu me preparo para agir.',['Que pensamentos apareceram?','Para onde foi a sua energia?','Quais opções você enxergou?']],
+ ['Ação','Escolho e faço algo em direção ao que preciso.',['O que você fez?','Foi uma escolha ou um automático?','O que você poderia ter feito diferente — e o que isso te custaria?']],
+ ['Contato','Encontro com o que buscava; a necessidade é tocada.',['Você encontrou o que precisava?','O que o uso te deu de fato?','O que ficou faltando?']],
+ ['Retirada','Satisfação, descanso, a figura se desfaz.',['Como você ficou depois?','Houve alívio, culpa, vazio?','A necessidade voltou? Quando?']],
+];
+const MEC=[
+ ['Introjeção','Engolir regras sem digerir: “tenho que”, “não posso”.'],
+ ['Projeção','Ver no outro o que é meu: “eles me fazem usar”.'],
+ ['Retroflexão','Fazer a mim o que gostaria de fazer ao outro / ao mundo.'],
+ ['Confluência','Não diferencio meu desejo do grupo: “todo mundo usa”.'],
+ ['Deflexão','Desvio o contato: humor, mudar de assunto, anestesiar.'],
+ ['Dessensibilização','Deixo de sentir: corpo e emoção “desligados”.'],
+ ['Egotismo','Controle excessivo, observo de fora, não me entrego.'],
+ ['Proflexão','Faço ao outro o que gostaria que fizessem por mim.'],
+];
+const cs=$('#cicloSvg'),R=150,C=220;
+let flagMode=null;
+function drawCiclo(){
+  let h=`<circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="var(--line)" stroke-width="3"/>`;
+  for(let i=0;i<6;i++){const a=(i/6)*Math.PI*2-Math.PI/2+.52, b=a+.52, x1=C+R*Math.cos(a),y1=C+R*Math.sin(a),x2=C+R*Math.cos(b),y2=C+R*Math.sin(b);
+    h+=`<path d="M${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2}" stroke="var(--v)" stroke-width="3" fill="none" marker-end="url(#ah)" opacity=".7"/>`;}
+  h=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--v)"/></marker></defs>`+h;
+  CIC.forEach((c,i)=>{const a=(i/6)*Math.PI*2-Math.PI/2,x=C+R*Math.cos(a),y=C+R*Math.sin(a);
+    const cl=['node',S.ciclo.sel===i?'sel':'',S.ciclo.int.includes(i)?'int':''].join(' ');
+    h+=`<g class="${cl}" data-i="${i}" tabindex="0" role="button" aria-label="${c[0]}"><circle class="b" cx="${x}" cy="${y}" r="46"/><text x="${x}" y="${y+5}">${c[0]}</text>`;
+    if(S.ciclo.uso===i)h+=`<text class="flag" x="${x+34}" y="${y-30}">🔥</text>`;
+    if(S.ciclo.int.includes(i))h+=`<text class="flag" x="${x-38}" y="${y-30}">✂️</text>`;
+    h+=`</g>`;});
+  h+=`<text x="${C}" y="${C-6}" text-anchor="middle" font-family="Fraunces,serif" font-size="20" fill="var(--txs)">ciclo do</text><text x="${C}" y="${C+18}" text-anchor="middle" font-family="Fraunces,serif" font-size="20" fill="var(--txs)">contato</text>`;
+  cs.innerHTML=h;
+}
+cs.addEventListener('click',e=>{const g=e.target.closest('.node');if(!g)return;const i=+g.dataset.i;
+  if(flagMode==='uso'){S.ciclo.uso=S.ciclo.uso===i?null:i;flagMode=null;setFlagBtns();}
+  else if(flagMode==='int'){const k=S.ciclo.int.indexOf(i);k<0?S.ciclo.int.push(i):S.ciclo.int.splice(k,1);flagMode=null;setFlagBtns();}
+  S.ciclo.sel=i;const c=CIC[i];$('#cTit').textContent=c[0];$('#cDesc').textContent=c[1];$('#cQs').innerHTML=c[2].map(q=>`<li>${q}</li>`).join('');drawCiclo();});
+function setFlagBtns(){$('#bFlagUso').classList.toggle('pri',flagMode==='uso');$('#bFlagInt').classList.toggle('pri',flagMode==='int');}
+$('#bFlagUso').onclick=()=>{flagMode=flagMode==='uso'?null:'uso';setFlagBtns()};
+$('#bFlagInt').onclick=()=>{flagMode=flagMode==='int'?null:'int';setFlagBtns()};
+$('#mec').innerHTML=MEC.map((m,i)=>`<button data-i="${i}"><b>${m[0]}</b><small>${m[1]}</small></button>`).join('');
+$('#mec').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,k=S.mec.indexOf(i);k<0?S.mec.push(i):S.mec.splice(k,1);b.classList.toggle('on');};
+drawCiclo();
+
+/* ---------- 5. Cadeira vazia ---------- */
+const OUTROS=[['🌿','A substância'],['🔥','A parte que quer usar'],['🛑','A parte que quer parar'],['🧒','Eu criança'],['🕰️','Eu do futuro'],['👤','Alguém importante']];
+let lado='a';
+$('#quem').innerHTML=OUTROS.map((o,i)=>`<button class="chip ${i?'':'on'}" data-i="${i}">${o[0]} ${o[1]}</button>`).join('')+`<input id="quemLivre" placeholder="ou escreva…" style="max-width:180px">`;
+$('#quem').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;$$('#quem .chip').forEach(x=>x.classList.toggle('on',x===b));const o=OUTROS[b.dataset.i];setOutro(o[0],o[1]);};
+$('#quemLivre').oninput=e=>{if(e.target.value.trim()){$$('#quem .chip').forEach(x=>x.classList.remove('on'));setOutro('💬',e.target.value.trim());}};
+function setOutro(ic,nm){$('#icB').textContent=ic;$('#nmB').textContent=nm;S.cad.outro=nm;}
+function setLado(l){lado=l;$('#chA').classList.toggle('on',l==='a');$('#chB').classList.toggle('on',l==='b');(l==='a'?$('#inA'):$('#inB')).focus();}
+$('#bTroca').onclick=()=>setLado(lado==='a'?'b':'a');
+$('#chA').onclick=e=>{if(lado!=='a')setLado('a')};$('#chB').onclick=e=>{if(lado!=='b')setLado('b')};
+function fala(l,inp){const v=inp.value.trim();if(!v)return;S.cad[l].push(v);inp.value='';renderFalas();}
+function renderFalas(){$('#falA').innerHTML=S.cad.a.map(f=>`<li>${esc(f)}</li>`).join('');$('#falB').innerHTML=S.cad.b.map(f=>`<li>${esc(f)}</li>`).join('');$('#falA').scrollTop=1e5;$('#falB').scrollTop=1e5;}
+[['a','#inA'],['b','#inB']].forEach(([l,s])=>$(s).addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();fala(l,e.target);}
+  if(e.key==='Tab'){e.preventDefault();setLado(l==='a'?'b':'a');}
+}));
+$('#bLimpaCad').onclick=()=>{S.cad.a=[];S.cad.b=[];renderFalas();};
+
+/* ---------- 6. Polaridades ---------- */
+S.pol=[['controle','entrega'],['anestesiado','sentindo tudo'],['sozinho','conectado'],['exigente comigo','gentil comigo']].map(p=>({a:p[0],b:p[1],v:{b:.25,a:.65,c:.75}}));
+function drawPols(){
+  $('#pols').innerHTML=S.pol.map((p,i)=>`<div class="pol"><div class="ends"><span>${esc(p.a)}</span><span>${esc(p.b)}</span></div><div class="track" data-i="${i}">
+   ${['b','a','c'].map(k=>`<div class="pin ${k}" data-k="${k}" style="left:${p.v[k]*100}%" title="${{a:'sem usar',b:'usando',c:'como eu gostaria'}[k]}">${{a:'S',b:'U',c:'★'}[k]}</div>`).join('')}</div></div>`).join('');
+}
+let drag=null;
+$('#pols').addEventListener('pointerdown',e=>{const p=e.target.closest('.pin');if(!p)return;drag={p,tr:p.parentElement};p.setPointerCapture(e.pointerId);p.style.cursor='grabbing';});
+$('#pols').addEventListener('pointermove',e=>{if(!drag)return;const r=drag.tr.getBoundingClientRect();const v=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));drag.p.style.left=v*100+'%';S.pol[drag.tr.dataset.i].v[drag.p.dataset.k]=v;});
+$('#pols').addEventListener('pointerup',()=>{if(drag)drag.p.style.cursor='';drag=null;});
+$('#bPolAdd').onclick=()=>{const a=$('#polA').value.trim(),b=$('#polB').value.trim();if(!a||!b)return;S.pol.push({a,b,v:{b:.3,a:.5,c:.7}});$('#polA').value=$('#polB').value='';drawPols();};
+drawPols();
+
+/* ---------- 7. Onda ---------- */
+const cv=$('#ondaCv'),cx=cv.getContext('2d');let drawing=false;
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function sizeOnda(){const r=cv.getBoundingClientRect();if(!r.width)return;const d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;cx.setTransform(d,0,0,d,0,0);drawOnda();}
+function drawOnda(){
+  const W=cv.clientWidth,H=cv.clientHeight;if(!W)return;cx.clearRect(0,0,W,H);
+  cx.font='12px Inter,sans-serif';cx.fillStyle=css('--txm');cx.strokeStyle=css('--line');cx.lineWidth=1;
+  for(let i=0;i<=10;i+=2){const y=H-30-(H-50)*i/10;cx.beginPath();cx.moveTo(40,y);cx.lineTo(W-10,y);cx.stroke();cx.fillText(i,18,y+4);}
+  cx.fillText('começo',44,H-10);cx.textAlign='right';cx.fillText('depois',W-12,H-10);cx.textAlign='left';
+  cx.save();cx.translate(12,H/2+40);cx.rotate(-Math.PI/2);cx.fillText('intensidade da vontade',0,0);cx.restore();
+  const P=S.onda.pts;if(P.length>1){
+    const g=cx.createLinearGradient(0,20,0,H-30);g.addColorStop(0,'rgba(234,88,12,.35)');g.addColorStop(1,'rgba(0,137,123,.05)');
+    cx.beginPath();cx.moveTo(P[0].x*W,H-30);P.forEach(p=>cx.lineTo(p.x*W,p.y*H));cx.lineTo(P[P.length-1].x*W,H-30);cx.closePath();cx.fillStyle=g;cx.fill();
+    cx.beginPath();P.forEach((p,i)=>i?cx.lineTo(p.x*W,p.y*H):cx.moveTo(p.x*W,p.y*H));cx.strokeStyle=css('--sa');cx.lineWidth=3.5;cx.lineJoin='round';cx.stroke();
+    let pk=P.reduce((a,b)=>b.y<a.y?b:a);cx.fillStyle=css('--lrj');cx.beginPath();cx.arc(pk.x*W,pk.y*H,6,0,7);cx.fill();cx.font='600 13px Inter';cx.fillText('pico',pk.x*W+10,pk.y*H-8);
+  }
+  S.onda.notas.forEach(n=>{cx.fillStyle=css('--roxo');cx.beginPath();cx.arc(n.x*W,n.y*H,5,0,7);cx.fill();cx.font='13px Inter';const tw=cx.measureText(n.t).width;const bx=Math.min(n.x*W+8,W-tw-18);cx.fillStyle=css('--card');cx.fillRect(bx,n.y*H-26,tw+12,20);cx.fillStyle=css('--tx');cx.fillText(n.t,bx+6,n.y*H-11);});
+}
+function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height};}
+cv.addEventListener('pointerdown',e=>{const p=pos(e);
+  if(S.onda.pts.length>5&&!drawing){const near=S.onda.pts.some(q=>Math.hypot((q.x-p.x)*cv.clientWidth,(q.y-p.y)*cv.clientHeight)<16);
+    if(near){const t=prompt('O que estava acontecendo aqui?');if(t){S.onda.notas.push({...p,t});drawOnda();}return;}}
+  drawing=true;cv.setPointerCapture(e.pointerId);S.onda.pts=[p];S.onda.h=cv.clientHeight;S.onda.notas=[];drawOnda();});
+cv.addEventListener('pointermove',e=>{if(!drawing)return;const p=pos(e);const L=S.onda.pts[S.onda.pts.length-1];if(p.x>L.x)S.onda.pts.push(p);drawOnda();});
+cv.addEventListener('pointerup',()=>drawing=false);
+$('#ondaClear').onclick=()=>{S.onda={pts:[],notas:[]};drawOnda();};
+$('#ondaDemo').onclick=()=>{const pts=[];for(let i=0;i<=80;i++){const t=i/80;const v=Math.exp(-Math.pow((t-.38)/.17,2))*.78+.04+.03*Math.sin(t*30);pts.push({x:.07+t*.9,y:(1-30/cv.clientHeight)-v*(1-50/cv.clientHeight)});}S.onda={pts,notas:[],h:cv.clientHeight};drawOnda();};
+addEventListener('resize',sizeOnda);
+
+/* ---------- 8. Figura e fundo ---------- */
+const ff=$('#ffArea');let fdrag=null;
+function addTok(txt){const a=ff.getBoundingClientRect();const ang=Math.random()*Math.PI*2;const t={t:txt,x:.5+Math.cos(ang)*.38,y:.5+Math.sin(ang)*.38};S.ff.push(t);renderFF();}
+function renderFF(){$$('#ffArea .tok').forEach(x=>x.remove());const A=ff.getBoundingClientRect();
+  S.ff.forEach((t,i)=>{const d=document.createElement('div');d.className='tok';d.dataset.i=i;d.innerHTML=`${esc(t.t)}<span class="x" data-x="${i}">✕</span>`;ff.appendChild(d);place(d,t,A);});}
+function place(d,t,A){A=A||ff.getBoundingClientRect();const dist=Math.hypot((t.x-.5)*A.width,(t.y-.5)*A.height);d.classList.toggle('fig',dist<130);d.classList.toggle('fundo',dist>Math.min(A.width,A.height)*.42);t.fig=dist<130;
+  d.style.left=(t.x*A.width-d.offsetWidth/2)+'px';d.style.top=(t.y*A.height-d.offsetHeight/2)+'px';}
+ff.addEventListener('pointerdown',e=>{if(e.target.dataset.x!=null){S.ff.splice(+e.target.dataset.x,1);renderFF();return;}const d=e.target.closest('.tok');if(!d)return;fdrag=d;d.setPointerCapture(e.pointerId);d.style.zIndex=5;});
+ff.addEventListener('pointermove',e=>{if(!fdrag)return;const A=ff.getBoundingClientRect(),t=S.ff[fdrag.dataset.i];t.x=Math.min(.97,Math.max(.03,(e.clientX-A.left)/A.width));t.y=Math.min(.96,Math.max(.04,(e.clientY-A.top)/A.height));place(fdrag,t,A);});
+ff.addEventListener('pointerup',()=>{if(fdrag)fdrag.style.zIndex='';fdrag=null;});
+$('#ffAdd').onclick=()=>{const v=$('#ffIn').value.trim();if(v){addTok(v);$('#ffIn').value='';$('#ffIn').focus();}};
+$('#ffIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#ffAdd').click();});
+$('#ffClear').onclick=()=>{S.ff=[];renderFF();};
+addEventListener('resize',()=>renderFF());
+
+/* ---------- 9. Fechamento ---------- */
+['f1','f2','f3'].forEach(id=>$('#'+id).oninput=e=>S.fech[id]=e.target.value);
+const RD=['não usar sozinho(a)','testar/dosar menos','não misturar substâncias','comer e beber água','ter alguém de confiança avisado','evitar usar dirigindo','pausas entre usos','guardar o contato de apoio'];
+$('#rd').innerHTML=RD.map((r,i)=>`<button class="chip" data-i="${i}">${r}</button>`).join('');
+$('#rd').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;b.classList.toggle('on');S.rd=$$('#rd .chip.on').map(x=>RD[x.dataset.i]);};
+
+/* ---------- Resumo ---------- */
+$('#bResumo').onclick=async()=>{
+  const L=[],pct=v=>Math.round(v*100);
+  const d=new Date();L.push(`SESSÃO — ${d.toLocaleDateString('pt-BR')} · duração ${$('#timer').textContent.replace('⏱ ','')}`);
+  L.push(`\nCHEGADA: ${S.clima||'—'} · energia ${S.energia}/10 · vontade de usar ${S.vontade}/10${S.palavra?` · palavra: “${S.palavra}”`:''}`);
+  if(S.corpo.length)L.push('\nCORPO:\n'+S.corpo.map((m,i)=>`  ${i+1}. ${SENS[m.s][0]}${m.n?' — '+m.n:''}`).join('\n'));
+  if(S.ciclo.uso!=null||S.ciclo.int.length||S.mec.length)L.push(`\nCICLO DO CONTATO: uso entra em ${S.ciclo.uso!=null?CIC[S.ciclo.uso][0]:'—'} · interrupções em ${S.ciclo.int.map(i=>CIC[i][0]).join(', ')||'—'}${S.mec.length?'\n  mecanismos: '+S.mec.map(i=>MEC[i][0]).join(', '):''}`);
+  if(S.cad.a.length||S.cad.b.length)L.push(`\nCADEIRA VAZIA (com: ${S.cad.outro}):\n  Eu: ${S.cad.a.join(' / ')||'—'}\n  ${S.cad.outro}: ${S.cad.b.join(' / ')||'—'}`);
+  L.push('\nPOLARIDADES (0% = 1º polo · 100% = 2º polo):\n'+S.pol.map(p=>`  ${p.a} ↔ ${p.b}: usando ${pct(p.v.b)}% · sem usar ${pct(p.v.a)}% · desejado ${pct(p.v.c)}%`).join('\n'));
+  if(S.onda.pts.length){const pk=S.onda.pts.reduce((a,b)=>b.y<a.y?b:a);const H=S.onda.h||380;L.push(`\nONDA DA FISSURA: pico ≈ ${Math.round((1-30/H-pk.y)/(1-50/H)*10)}/10${S.onda.notas.length?' · notas: '+S.onda.notas.map(n=>n.t).join('; '):''}`);}
+  if(S.ff.length)L.push(`\nFIGURA: ${S.ff.filter(t=>t.fig).map(t=>t.t).join(', ')||'—'}\nFUNDO: ${S.ff.filter(t=>!t.fig).map(t=>t.t).join(', ')||'—'}`);
+  if(S.fech.f1||S.fech.f2||S.fech.f3)L.push(`\nFECHAMENTO:\n  Leva: ${S.fech.f1||'—'}\n  Inacabado: ${S.fech.f2||'—'}\n  Experimento: ${S.fech.f3||'—'}`);
+  if(S.rd.length)L.push(`\nCUIDADOS COMBINADOS: ${S.rd.join('; ')}`);
+  const txt=L.join('\n');
+  try{await navigator.clipboard.writeText(txt);$('#bResumo').textContent='✓ Copiado';}catch(e){prompt('Copie o resumo:',txt);}
+  setTimeout(()=>$('#bResumo').textContent='📋 Resumo',2000);
+};
+
+/* ---------- Atalhos ---------- */
+document.addEventListener('keydown',e=>{
+  if(e.target.matches('input,textarea'))return;
+  if(e.key>='1'&&e.key<='9'){go(views[+e.key-1]);}
+  else if(e.key==='e'||e.key==='E')exp();
+  else if(e.key==='h'||e.key==='H')$('#app').classList.toggle('clean');
+  else if(e.key==='c'||e.key==='C')$('#calm').classList.toggle('on');
+  else if(e.key==='Escape'){$('#toast').classList.remove('on');$('#calm').classList.remove('on');}
+});
+try{const v=localStorage.getItem('sala_view');if(v&&views.includes(v))go(v)}catch(e){}
+addEventListener('beforeunload',e=>{if(S.corpo.length||S.cad.a.length||S.ff.length||S.fech.f1){e.preventDefault();e.returnValue='';}});
+})();
+</script>
+</body>
+</html>
