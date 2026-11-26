@@ -217,13 +217,17 @@ h1 .hl::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:9px;
 <script>
 var SB=null;
 try{ SB = supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
-var BYID={}, LISTA=[], FMOD='todos', CARREGADO=false;
+var BYID={}, LISTA=[], FMOD='todos', CARREGADO=false, _profRnd={};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 function ini(n){n=(n||'').trim();if(!n)return'?';var p=n.split(/\s+/);return((p[0][0]||'')+(p.length>1?p[p.length-1][0]:'')).toUpperCase();}
 function modtag(m){m=m||'';if(m.includes('online')&&m.includes('presencial'))return'Online e presencial';if(m.includes('online'))return'Online';if(m.includes('presencial'))return'Presencial';return'';}
 function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
 function waLink(tel){tel=(tel||'').replace(/\D/g,'');if(tel.length<10)return'';var num=tel.length<=11?('55'+tel):tel;return 'https://wa.me/'+num+'?text='+encodeURIComponent('Olá! Vi seu perfil na Rede dichava e gostaria de saber mais sobre atendimento. ');}
 function agLink(cod){return cod?('https://dichava.app/agendar/?c='+encodeURIComponent(cod)):'';}
+// Nome em caixa normal (só inicial maiúscula) quando vem todo em CAIXA ALTA do cadastro.
+function tcNome(s){ if(!s) return s; var str=String(s).trim(); if(!str||str!==str.toUpperCase()) return s;
+  var min={de:1,da:1,do:1,das:1,dos:1,e:1,di:1,du:1,della:1,van:1,von:1};
+  return str.toLowerCase().split(/\s+/).map(function(w,i){return (i>0&&min[w])?w:(w.charAt(0).toUpperCase()+w.slice(1));}).join(' '); }
 
 async function carregar(){
   var grid=document.getElementById('rede-grid'), cnt=document.getElementById('rede-count');
@@ -235,8 +239,10 @@ async function carregar(){
     if(r.error){ r=await SB.from('profissionais_pub').select('*').eq('status','aprovado'); }
     profs=r.data||[];
   }catch(e){ profs=[]; }
+  // normaliza o nome (CAIXA ALTA -> inicial maiúscula) e sorteia a ordem de rodízio uma vez por carregamento
+  profs.forEach(function(p){ p.nome=tcNome(p.nome); if(_profRnd[p.id]===undefined)_profRnd[p.id]=Math.random(); });
   LISTA=profs.filter(function(p){return p.ativo!==false && p.em_teste!==true && p.oculto_diretorio!==true;})
-    .sort(function(a,b){return (b.destaque?1:0)-(a.destaque?1:0) || String(a.nome||'').localeCompare(String(b.nome||''));});
+    .sort(function(a,b){return (b.destaque?1:0)-(a.destaque?1:0) || ((_profRnd[a.id]||0)-(_profRnd[b.id]||0));});
   BYID={}; LISTA.forEach(function(p){BYID[p.id]=p;});
   // estatísticas do hero
   document.getElementById('st-prof').textContent = LISTA.length || '0';
