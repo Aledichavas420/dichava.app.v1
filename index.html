@@ -2422,6 +2422,21 @@ a{color:inherit;text-decoration:none}
 .tb-coletivo .tb-col-tx{font-size:calc(13px*var(--fz,1));color:#dceee0;line-height:1.45}
 .tb-coletivo .tb-col-tx b{color:#8FE3A6}
 </style>
+<style>
+#h-passa:empty{display:none}
+.passa-card{margin:0 18px 13px;background:linear-gradient(160deg,#F5F3FF,#EDE9FF);border:1px solid #D9CFF5;border-radius:16px;padding:15px 16px}
+#shell.dkm .passa-card{background:linear-gradient(160deg,#241a3a,#1c1830);border-color:#3a2f5c}
+.passa-h{font-size:calc(12px*var(--fz,1));font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#7C3AED;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+#shell.dkm .passa-h{color:#b9a9e8}
+.passa-msg{font-size:calc(15.5px*var(--fz,1));font-weight:700;line-height:1.5;color:var(--tx)}
+.passa-ty{margin-top:12px;background:none;border:none;color:#7C3AED;font-family:inherit;font-weight:700;font-size:calc(13px*var(--fz,1));display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
+#shell.dkm .passa-ty{color:#b9a9e8}
+.passa-ty svg{width:15px;height:15px}
+.passa-chips{display:flex;flex-direction:column;gap:9px}
+.passa-chip{width:100%;text-align:left;background:var(--cin);border:1.5px solid var(--cinm);border-radius:13px;padding:12px 14px;font-family:inherit;font-size:calc(14px*var(--fz,1));font-weight:600;color:var(--tx);cursor:pointer;line-height:1.4;-webkit-tap-highlight-color:transparent;transition:border-color .15s}
+.passa-chip:active{transform:scale(.99)}
+.passa-chip:hover{border-color:var(--roxo)}
+</style>
 </head>
 <body>
 <div id="splash">
@@ -2550,6 +2565,7 @@ a{color:inherit;text-decoration:none}
   <div id="h-tempo"></div>
   <div id="h-alts"></div>
   <div class="cks" id="ck-strip"><div class="ckst" id="termo-q">Como você chega hoje?</div><div class="ckse" id="termo-opts"><button aria-label="Chego tranquilo" title="Tranquilo" class="cke" onclick="termoVote(this,'tranquilo')">😌</button><button aria-label="Chego bem" title="Bem" class="cke" onclick="termoVote(this,'bem')">😊</button><button aria-label="Chego triste" title="Triste" class="cke" onclick="termoVote(this,'triste')">😔</button><button aria-label="Chego ansioso" title="Ansioso" class="cke" onclick="termoVote(this,'ansioso')">😰</button><button aria-label="Chego intenso" title="Intenso" class="cke" onclick="termoVote(this,'intenso')">😵</button></div><div id="termo-voted" style="display:none"></div><button class="termo-tog" id="termo-tog" onclick="termoToggle()" aria-expanded="false"><span class="termo-tl">🌡️ Termômetro da rede</span><span class="termo-ar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;display:block"><path d="M9 6l6 6-6 6"/></svg></span></button><div class="termo-agg" id="termo-agg" style="display:none"></div></div>
+  <div id="h-passa"></div>
   <div class="wk"><div class="wlb">Sua semana</div><div class="wds" id="h-wds"></div><button class="btn bv bsm" onclick="openMod('mreg')" style="font-family:'DM Sans',sans-serif;position:relative;z-index:1">+ Registrar agora</button></div>
   <!-- CRISE + FISSURA -->
   <div class="qag">
@@ -4011,6 +4027,17 @@ a{color:inherit;text-decoration:none}
   <div class="infi"><div class="infi-ic" style="background:#FFF3E0" data-icon="agenda"></div><div><div class="infi-t">Este mês</div><div class="infi-d">Total de registros feitos no mês atual.</div></div></div>
   <div class="infi"><div class="infi-ic" style="background:var(--vf)">⏳</div><div><div class="infi-t">Tempo desde o último uso</div><div class="infi-d">Há quantos dias você não registra cada substância. Um marco de orgulho, no seu ritmo.</div></div></div>
   <button class="btn bv bfull" style="margin-top:6px" onclick="closeMod('minfo')">Entendi</button>
+</div></div></div>
+
+<!-- PASSA ADIANTE -->
+<div class="ov" id="mpassa" onclick="if(event.target===this)closeMod('mpassa')"><div class="sheet"><div class="sp">
+  <div class="mh"></div>
+  <button class="mclose" onclick="closeMod('mpassa')" aria-label="Fechar">✕</button>
+  <div style="text-align:center;font-size:34px;margin-bottom:4px">🤲</div>
+  <div class="mt c">Deixe algo pra próxima pessoa</div>
+  <p style="font-size:calc(13px*var(--fz,1));color:var(--txs);text-align:center;margin-bottom:14px">Alguém da rede vai receber isso de forma anônima, no momento em que precisar. Escolha o que quer passar adiante.</p>
+  <div id="passa-chips" class="passa-chips"></div>
+  <button class="btn bout bfull" style="margin-top:12px" onclick="closeMod('mpassa')">Agora não</button>
 </div></div></div>
 
 <!-- MEU PERFIL -->
@@ -5559,6 +5586,7 @@ function renderHome(){
   try{atualizarChatHome();}catch(e){}
   try{checarDesbloqueios();}catch(e){}
   try{renderCkStrip();}catch(e){}
+  try{renderPassa();}catch(e){}
 }
 /* ══ DESBLOQUEIO PROGRESSIVO DE FERRAMENTAS ══
    Base enxuta no início; ferramentas free liberam por marcos OU dias (o que vier antes).
@@ -5957,7 +5985,51 @@ function confirmarQuick(){
   closeMod('mquick');vib(12);_quickData=null;
   const cfg=gC();const cH=gR().filter(r=>r.data===hoje()).length;
   if(cfg.notif&&cH>=limiteDia())notif('⚠️','Atenção ao ritmo',`Você registrou ${cH}x hoje. Cuidar é também desacelerar 💚`);
-  toast('✓ Registro confirmado');renderHome();
+  toast('✓ Registro confirmado');renderHome();try{passaOferecer();}catch(e){}
+}
+const PASSA_FRASES=[
+  'Voc\u00ea n\u00e3o est\u00e1 sozinho(a) nessa.',
+  'Um dia de cada vez j\u00e1 \u00e9 cuidado.',
+  'Reca\u00edda n\u00e3o apaga o seu progresso.',
+  'Orgulho de voc\u00ea ter aberto o app hoje.',
+  'Seu ritmo \u00e9 v\u00e1lido, sem pressa.',
+  'Se cuidar tamb\u00e9m \u00e9 resist\u00eancia.',
+  'O simples fato de voc\u00ea estar aqui j\u00e1 diz muito.',
+  'Vai com leveza, amanh\u00e3 tem mais.'
+];
+function passaRenderChips(){
+  const c=document.getElementById('passa-chips');if(!c)return;
+  c.innerHTML=PASSA_FRASES.map(function(f,i){return '<button class="passa-chip" onclick="passaEnviar('+i+')">\u201c'+esc(f)+'\u201d</button>';}).join('');
+}
+function passaOferecer(){
+  if(!_SB||!U||U.id==='demo')return;
+  const k='dr_passa_of_'+uid()+'_'+hoje();
+  try{if(localStorage.getItem(k))return;localStorage.setItem(k,'1');}catch(e){}
+  setTimeout(function(){try{passaRenderChips();openMod('mpassa');}catch(e){}},900);
+}
+async function passaEnviar(i){
+  if(_SB&&U&&U.id!=='demo'){try{await _SB.rpc('passa_enviar',{p_frase:i});}catch(e){}}
+  try{closeMod('mpassa');}catch(e){}
+  try{toast('Enviado. Vai chegar em algu\u00e9m \ud83d\udc9a');}catch(e){}
+}
+async function renderPassa(){
+  const c=document.getElementById('h-passa');if(!c)return;
+  if(!_SB||!U||U.id==='demo'){c.innerHTML='';return;}
+  try{if(localStorage.getItem('dr_passa_rx_'+uid()+'_'+hoje())==='done'){c.innerHTML='';return;}}catch(e){}
+  const keyF='dr_passa_rxf_'+uid()+'_'+hoje();
+  let fi=null;try{fi=localStorage.getItem(keyF);}catch(e){}
+  if(fi===null||fi===undefined){
+    try{const r=await _SB.rpc('passa_receber');fi=(typeof r.data==='number')?r.data:-1;}catch(e){fi=-1;}
+    try{localStorage.setItem(keyF,String(fi));}catch(e){}
+  }
+  fi=parseInt(fi,10);
+  if(isNaN(fi)||fi<0||fi>=PASSA_FRASES.length){c.innerHTML='';return;}
+  c.innerHTML='<div class="passa-card"><div class="passa-h"><span>\ud83e\udd32</span> Algu\u00e9m deixou isso pra voc\u00ea</div><div class="passa-msg">\u201c'+esc(PASSA_FRASES[fi])+'\u201d</div><button class="passa-ty" onclick="passaRecebi()"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.7l-1.32-1.2C6 15.3 3 12.6 3 9.24 3 6.52 5.14 4.4 7.86 4.4c1.54 0 3.02.72 3.99 1.85.97-1.13 2.45-1.85 3.99-1.85C18.56 4.4 20.7 6.52 20.7 9.24c0 3.36-3 6.06-7.68 10.28z"/></svg> Recebi, obrigado</button></div>';
+}
+function passaRecebi(){
+  try{localStorage.setItem('dr_passa_rx_'+uid()+'_'+hoje(),'done');}catch(e){}
+  const c=document.getElementById('h-passa');if(c)c.innerHTML='';
+  try{toast('\ud83d\udc9a');}catch(e){}
 }
 /* ── INSTALAR NA TELA INICIAL ── */
 function renderInstall(){
@@ -6153,6 +6225,7 @@ function salvReg(){
   _eReg=null;_editRegId=null;closeMod('mreg');vib(15);
   if(!editando)try{addXP(5,'registro');}catch(e){}
   toast(editando?'✓ Registro atualizado':'✓ Registro guardado 💚');
+  if(!editando)try{passaOferecer();}catch(e){}
   try{renderHome();renderHist();renderGraf();renderCqs();}catch(e){}
   try{const st=streak(gR());if(st===7||st===30||st===90)premNudge('streak');}catch(e){}
   try{if(getComputedStyle(document.getElementById('p-agenda')).display!=='none')renderCal();}catch(e){}
