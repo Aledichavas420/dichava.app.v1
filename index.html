@@ -2398,6 +2398,30 @@ a{color:inherit;text-decoration:none}
 
 </style>
 <noscript><div style="padding:40px 24px;font-family:sans-serif;text-align:center;color:#1B2A1C"><h2>⚠️ JavaScript desativado</h2><p>Este app precisa ser aberto em um navegador (Chrome, Safari, Firefox).<br>Se você abriu pelo WhatsApp ou pelo visualizador de arquivos, toque em <strong>"Abrir com → Chrome"</strong>.</p></div></noscript>
+<style>
+.termo-tog{width:100%;margin-top:12px;background:none;border:none;border-top:1px solid var(--cinm);padding:12px 2px 2px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:inherit;font-weight:700;font-size:calc(13px*var(--fz,1));color:var(--txs);cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none}
+.termo-tog:focus{outline:none}
+.termo-tog .termo-tl{display:inline-flex;align-items:center;gap:6px}
+.termo-tog .termo-ar{display:inline-flex;align-items:center;flex:none;transition:transform .22s;color:var(--txm)}
+.termo-tog .termo-ar svg{width:16px;height:16px;display:block}
+.termo-tog.on .termo-ar{transform:rotate(90deg)}
+.termo-agg{margin-top:4px;animation:termoIn .25s ease}
+@keyframes termoIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.termo-aggh{font-size:calc(11px*var(--fz,1));font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--txm);margin:2px 0 10px}
+.termo-bar{margin-bottom:9px}
+.termo-bt{display:flex;justify-content:space-between;font-size:calc(12.5px*var(--fz,1));font-weight:600;color:var(--tx);margin-bottom:4px}
+.termo-tr{height:7px;background:var(--cinm);border-radius:5px;overflow:hidden}
+.termo-tf{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--v),#7BD98A);transition:width .4s ease}
+.termo-note{text-align:center;font-size:calc(11px*var(--fz,1));color:var(--txm);margin-top:7px}
+.termo-empty{font-size:calc(12.5px*var(--fz,1));color:var(--txs);text-align:center;padding:8px 2px;line-height:1.5}
+#termo-voted{font-size:calc(13.5px*var(--fz,1));color:var(--tx);text-align:center;padding:2px 0}
+</style>
+<style>
+.tb-coletivo{display:none;margin:0 20px 14px;background:rgba(143,227,166,.1);border:1px solid rgba(143,227,166,.25);border-radius:14px;padding:11px 14px;align-items:center;gap:10px}
+.tb-coletivo .tb-col-ic{font-size:calc(20px*var(--fz,1));flex:none;line-height:1}
+.tb-coletivo .tb-col-tx{font-size:calc(13px*var(--fz,1));color:#dceee0;line-height:1.45}
+.tb-coletivo .tb-col-tx b{color:#8FE3A6}
+</style>
 </head>
 <body>
 <div id="splash">
@@ -2525,7 +2549,7 @@ a{color:inherit;text-decoration:none}
   <div id="h-quick"></div>
   <div id="h-tempo"></div>
   <div id="h-alts"></div>
-  <div class="cks" id="ck-strip"><div class="ckst" id="termo-q">Como você chega hoje?</div><div class="ckse" id="termo-opts"><button aria-label="Chego tranquilo" title="Tranquilo" class="cke" onclick="termoVote(this,'tranquilo')">😌</button><button aria-label="Chego bem" title="Bem" class="cke" onclick="termoVote(this,'bem')">😊</button><button aria-label="Chego triste" title="Triste" class="cke" onclick="termoVote(this,'triste')">😔</button><button aria-label="Chego ansioso" title="Ansioso" class="cke" onclick="termoVote(this,'ansioso')">😰</button><button aria-label="Chego intenso" title="Intenso" class="cke" onclick="termoVote(this,'intenso')">😵</button></div><div id="termo-voted" style="display:none"></div><button class="termo-tog" id="termo-tog" onclick="termoToggle()" aria-expanded="false"><span class="termo-tl">🌡️ Termômetro da rede</span><span class="termo-ar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button><div class="termo-agg" id="termo-agg" style="display:none"></div></div>
+  <div class="cks" id="ck-strip"><div class="ckst" id="termo-q">Como você chega hoje?</div><div class="ckse" id="termo-opts"><button aria-label="Chego tranquilo" title="Tranquilo" class="cke" onclick="termoVote(this,'tranquilo')">😌</button><button aria-label="Chego bem" title="Bem" class="cke" onclick="termoVote(this,'bem')">😊</button><button aria-label="Chego triste" title="Triste" class="cke" onclick="termoVote(this,'triste')">😔</button><button aria-label="Chego ansioso" title="Ansioso" class="cke" onclick="termoVote(this,'ansioso')">😰</button><button aria-label="Chego intenso" title="Intenso" class="cke" onclick="termoVote(this,'intenso')">😵</button></div><div id="termo-voted" style="display:none"></div><button class="termo-tog" id="termo-tog" onclick="termoToggle()" aria-expanded="false"><span class="termo-tl">🌡️ Termômetro da rede</span><span class="termo-ar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;display:block"><path d="M9 6l6 6-6 6"/></svg></span></button><div class="termo-agg" id="termo-agg" style="display:none"></div></div>
   <div class="wk"><div class="wlb">Sua semana</div><div class="wds" id="h-wds"></div><button class="btn bv bsm" onclick="openMod('mreg')" style="font-family:'DM Sans',sans-serif;position:relative;z-index:1">+ Registrar agora</button></div>
   <!-- CRISE + FISSURA -->
   <div class="qag">
@@ -8506,31 +8530,7 @@ function exportarRelatorioPDF(){
     const rows=Object.entries(subCount).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<tr><td>${esc(k)}</td><td style="text-align:right">${n}</td></tr>`).join('');
     const gastoRows=Object.entries(bySub).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td style="text-align:right">${brl(v)}</td></tr>`).join('');
     const total=cur.usos+cur.resist;const taxa=total?Math.round(cur.resist/total*100):0;
-    const html=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Relatório · dichava.app</title><style>body{font-family:-apple-system,system-ui,sans-serif;color:#1B2A1C;max-width:720px;margin:0 auto;padding:28px 22px;line-height:1.5}h1{color:#2E7D32;font-size:calc(24px*var(--fz,1));margin:0 0 2px}.sub{color:#888;font-size:calc(13px*var(--fz,1));margin-bottom:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.m{border:1px solid #e6e6e2;border-radius:12px;padding:12px}.m b{font-size:calc(22px*var(--fz,1));display:block}.m span{font-size:calc(12px*var(--fz,1));color:#888}h2{font-size:calc(15px*var(--fz,1));margin:24px 0 8px;color:#2E7D32}table{width:100%;border-collapse:collapse;font-size:calc(14px*var(--fz,1))}td{padding:6px 0;border-bottom:1px solid #eee}.foot{margin-top:28px;font-size:calc(11px*var(--fz,1));color:#999;border-top:1px solid #eee;padding-top:12px}@media print{.noprint{display:none}}</style><style>
-.termo-tog{width:100%;margin-top:12px;background:none;border:none;border-top:1px solid var(--cinm);padding:12px 2px 2px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:inherit;font-weight:700;font-size:calc(13px*var(--fz,1));color:var(--txs);cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none}
-.termo-tog:focus{outline:none}
-.termo-tog .termo-tl{display:inline-flex;align-items:center;gap:6px}
-.termo-tog .termo-ar{display:inline-flex;align-items:center;flex:none;transition:transform .22s;color:var(--txm)}
-.termo-tog .termo-ar svg{width:16px;height:16px;display:block}
-.termo-tog.on .termo-ar{transform:rotate(90deg)}
-.termo-agg{margin-top:4px;animation:termoIn .25s ease}
-@keyframes termoIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.termo-aggh{font-size:calc(11px*var(--fz,1));font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--txm);margin:2px 0 10px}
-.termo-bar{margin-bottom:9px}
-.termo-bt{display:flex;justify-content:space-between;font-size:calc(12.5px*var(--fz,1));font-weight:600;color:var(--tx);margin-bottom:4px}
-.termo-tr{height:7px;background:var(--cinm);border-radius:5px;overflow:hidden}
-.termo-tf{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--v),#7BD98A);transition:width .4s ease}
-.termo-note{text-align:center;font-size:calc(11px*var(--fz,1));color:var(--txm);margin-top:7px}
-.termo-empty{font-size:calc(12.5px*var(--fz,1));color:var(--txs);text-align:center;padding:8px 2px;line-height:1.5}
-#termo-voted{font-size:calc(13.5px*var(--fz,1));color:var(--tx);text-align:center;padding:2px 0}
-</style>
-<style>
-.tb-coletivo{display:none;margin:0 20px 14px;background:rgba(143,227,166,.1);border:1px solid rgba(143,227,166,.25);border-radius:14px;padding:11px 14px;align-items:center;gap:10px}
-.tb-coletivo .tb-col-ic{font-size:calc(20px*var(--fz,1));flex:none;line-height:1}
-.tb-coletivo .tb-col-tx{font-size:calc(13px*var(--fz,1));color:#dceee0;line-height:1.45}
-.tb-coletivo .tb-col-tx b{color:#8FE3A6}
-</style>
-</head><body>
+    const html=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Relatório · dichava.app</title><style>body{font-family:-apple-system,system-ui,sans-serif;color:#1B2A1C;max-width:720px;margin:0 auto;padding:28px 22px;line-height:1.5}h1{color:#2E7D32;font-size:calc(24px*var(--fz,1));margin:0 0 2px}.sub{color:#888;font-size:calc(13px*var(--fz,1));margin-bottom:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.m{border:1px solid #e6e6e2;border-radius:12px;padding:12px}.m b{font-size:calc(22px*var(--fz,1));display:block}.m span{font-size:calc(12px*var(--fz,1));color:#888}h2{font-size:calc(15px*var(--fz,1));margin:24px 0 8px;color:#2E7D32}table{width:100%;border-collapse:collapse;font-size:calc(14px*var(--fz,1))}td{padding:6px 0;border-bottom:1px solid #eee}.foot{margin-top:28px;font-size:calc(11px*var(--fz,1));color:#999;border-top:1px solid #eee;padding-top:12px}@media print{.noprint{display:none}}</style></head><body>
 <h1>Relatório · dichava.app</h1><div class="sub">${periodoTxt} · gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
 <div class="grid"><div class="m"><b>${cur.usos}</b><span>registros de uso</span></div><div class="m"><b>${cur.resist}</b><span>resistências (taxa ${taxa}%)</span></div><div class="m"><b>${brl(cur.gasto)}</b><span>gasto</span></div><div class="m"><b>${brl(cur.eco)}</b><span>economia</span></div></div>
 <h2>Substâncias registradas</h2><table>${rows||'<tr><td>Sem registros no período</td></tr>'}</table>
