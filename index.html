@@ -2525,7 +2525,7 @@ a{color:inherit;text-decoration:none}
   <div id="h-quick"></div>
   <div id="h-tempo"></div>
   <div id="h-alts"></div>
-  <div class="cks" id="ck-strip"><div class="ckst">Como estou me sentindo hoje?</div><div class="ckse"><button aria-label="Como me sinto: tranquilo" title="Como me sinto: tranquilo" class="cke" onclick="ckRapido(this,'😌','tranquilo')">😌</button><button aria-label="Como me sinto: bem" title="Como me sinto: bem" class="cke" onclick="ckRapido(this,'😊','bem')">😊</button><button aria-label="Como me sinto: triste" title="Como me sinto: triste" class="cke" onclick="ckRapido(this,'😔','triste')">😔</button><button aria-label="Como me sinto: ansioso" title="Como me sinto: ansioso" class="cke" onclick="ckRapido(this,'😰','ansioso')">😰</button><button aria-label="Como me sinto: intenso" title="Como me sinto: intenso" class="cke" onclick="ckRapido(this,'😵','intenso')">😵</button></div></div>
+  <div class="cks" id="ck-strip"><div class="ckst" id="termo-q">Como você chega hoje?</div><div class="ckse" id="termo-opts"><button aria-label="Chego tranquilo" title="Tranquilo" class="cke" onclick="termoVote(this,'tranquilo')">😌</button><button aria-label="Chego bem" title="Bem" class="cke" onclick="termoVote(this,'bem')">😊</button><button aria-label="Chego triste" title="Triste" class="cke" onclick="termoVote(this,'triste')">😔</button><button aria-label="Chego ansioso" title="Ansioso" class="cke" onclick="termoVote(this,'ansioso')">😰</button><button aria-label="Chego intenso" title="Intenso" class="cke" onclick="termoVote(this,'intenso')">😵</button></div><div id="termo-voted" style="display:none"></div><button class="termo-tog" id="termo-tog" onclick="termoToggle()" aria-expanded="false"><span>🌡️ Termômetro da rede</span><span class="termo-ar">›</span></button><div class="termo-agg" id="termo-agg" style="display:none"></div></div>
   <div class="wk"><div class="wlb">Sua semana</div><div class="wds" id="h-wds"></div><button class="btn bv bsm" onclick="openMod('mreg')" style="font-family:'DM Sans',sans-serif;position:relative;z-index:1">+ Registrar agora</button></div>
   <!-- CRISE + FISSURA -->
   <div class="qag">
@@ -5437,10 +5437,56 @@ function entrar(){
 }
 
 /* ══ CHECK-IN ══ */
+const TERMO_OPS=[
+  {op:'tranquilo',e:'😌',l:'Tranquilo(a)'},
+  {op:'bem',e:'😊',l:'Bem'},
+  {op:'triste',e:'😔',l:'Triste'},
+  {op:'ansioso',e:'😰',l:'Ansioso(a)'},
+  {op:'intenso',e:'😵',l:'Intenso'}
+];
+function _termoOp(op){return TERMO_OPS.find(o=>o.op===op)||{op:op,e:'',l:op};}
 function renderCkStrip(){
-  const cfg=gC();if(!cfg.ck)return;
-  const ck=gCK();if(ck.data===hoje())return;
-  document.getElementById('ck-strip').style.display='block';
+  const el=document.getElementById('ck-strip');if(!el)return;
+  const cfg=gC();if(!cfg.ck){el.style.display='none';return;}
+  el.style.display='block';
+  const ck=gCK();const voted=ck&&ck.data===hoje();
+  const q=document.getElementById('termo-q'),opts=document.getElementById('termo-opts'),vd=document.getElementById('termo-voted');
+  if(voted){
+    if(q)q.style.display='none';if(opts)opts.style.display='none';
+    if(vd){vd.style.display='block';const o=_termoOp(ck.label);vd.innerHTML='Você chegou hoje: <b>'+(ck.emoji||'')+' '+esc(o.l||ck.label||'')+'</b>';}
+  }else{
+    if(q)q.style.display='';if(opts){opts.style.display='';opts.querySelectorAll('.cke').forEach(b=>b.classList.remove('on'));}
+    if(vd)vd.style.display='none';
+  }
+}
+async function termoVote(btn,op){
+  const o=_termoOp(op);
+  try{document.querySelectorAll('#termo-opts .cke').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}catch(e){}
+  sCK({data:hoje(),emoji:o.e,label:o.op});
+  try{renderDiaHoje();}catch(e){}
+  if(_SB&&U&&U.id!=='demo'){
+    try{const{data}=await _SB.rpc('termometro_votar',{p_opcao:o.op});if(data)termoRenderAgg(data);}catch(e){}
+  }
+  setTimeout(()=>{try{renderCkStrip();}catch(e){}try{toast('✓ Humor registrado 💚');}catch(e){}},500);
+  termoOpen();
+}
+let _termoOpen=false;
+function termoToggle(){_termoOpen?termoClose():termoOpen();}
+function termoClose(){_termoOpen=false;const a=document.getElementById('termo-agg'),t=document.getElementById('termo-tog');if(a)a.style.display='none';if(t){t.classList.remove('on');t.setAttribute('aria-expanded','false');}}
+function termoOpen(){_termoOpen=true;const a=document.getElementById('termo-agg'),t=document.getElementById('termo-tog');if(a)a.style.display='block';if(t){t.classList.add('on');t.setAttribute('aria-expanded','true');}termoLoadAgg();}
+async function termoLoadAgg(){
+  const a=document.getElementById('termo-agg');if(!a)return;
+  if(!_SB){a.innerHTML='<div class="termo-empty">Entre na sua conta pra ver o termômetro da rede.</div>';return;}
+  if(!a.dataset.loaded)a.innerHTML='<div class="termo-empty">Carregando…</div>';
+  try{const{data}=await _SB.rpc('termometro_hoje');termoRenderAgg(data);}catch(e){a.innerHTML='<div class="termo-empty">Não consegui carregar agora.</div>';}
+}
+function termoRenderAgg(data){
+  const a=document.getElementById('termo-agg');if(!a)return;
+  a.dataset.loaded='1';
+  const total=(data&&data.total)||0,counts=(data&&data.counts)||{};
+  if(total<5){a.innerHTML='<div class="termo-empty">Ainda são poucas respostas hoje. 🌱<br>Volte mais tarde pra ver como a rede está chegando.</div>';return;}
+  const rows=TERMO_OPS.map(o=>({e:o.e,l:o.l,n:counts[o.op]||0})).sort((x,y)=>y.n-x.n);
+  a.innerHTML='<div class="termo-aggh">A rede hoje</div>'+rows.map(o=>{const pct=Math.round(o.n/total*100);return '<div class="termo-bar"><div class="termo-bt"><span>'+o.e+' '+esc(o.l)+'</span><span>'+pct+'%</span></div><div class="termo-tr"><div class="termo-tf" style="width:'+pct+'%"></div></div></div>';}).join('')+'<div class="termo-note">'+total+(total===1?' pessoa respondeu':' pessoas responderam')+' hoje</div>';
 }
 function ckRapido(btn,emoji,label){
   document.querySelectorAll('#ck-strip .cke').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
@@ -5488,6 +5534,7 @@ function renderHome(){
   try{renderFin();}catch(e){}
   try{atualizarChatHome();}catch(e){}
   try{checarDesbloqueios();}catch(e){}
+  try{renderCkStrip();}catch(e){}
 }
 /* ══ DESBLOQUEIO PROGRESSIVO DE FERRAMENTAS ══
    Base enxuta no início; ferramentas free liberam por marcos OU dias (o que vier antes).
@@ -8459,7 +8506,22 @@ function exportarRelatorioPDF(){
     const rows=Object.entries(subCount).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<tr><td>${esc(k)}</td><td style="text-align:right">${n}</td></tr>`).join('');
     const gastoRows=Object.entries(bySub).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td style="text-align:right">${brl(v)}</td></tr>`).join('');
     const total=cur.usos+cur.resist;const taxa=total?Math.round(cur.resist/total*100):0;
-    const html=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Relatório · dichava.app</title><style>body{font-family:-apple-system,system-ui,sans-serif;color:#1B2A1C;max-width:720px;margin:0 auto;padding:28px 22px;line-height:1.5}h1{color:#2E7D32;font-size:calc(24px*var(--fz,1));margin:0 0 2px}.sub{color:#888;font-size:calc(13px*var(--fz,1));margin-bottom:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.m{border:1px solid #e6e6e2;border-radius:12px;padding:12px}.m b{font-size:calc(22px*var(--fz,1));display:block}.m span{font-size:calc(12px*var(--fz,1));color:#888}h2{font-size:calc(15px*var(--fz,1));margin:24px 0 8px;color:#2E7D32}table{width:100%;border-collapse:collapse;font-size:calc(14px*var(--fz,1))}td{padding:6px 0;border-bottom:1px solid #eee}.foot{margin-top:28px;font-size:calc(11px*var(--fz,1));color:#999;border-top:1px solid #eee;padding-top:12px}@media print{.noprint{display:none}}</style></head><body>
+    const html=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Relatório · dichava.app</title><style>body{font-family:-apple-system,system-ui,sans-serif;color:#1B2A1C;max-width:720px;margin:0 auto;padding:28px 22px;line-height:1.5}h1{color:#2E7D32;font-size:calc(24px*var(--fz,1));margin:0 0 2px}.sub{color:#888;font-size:calc(13px*var(--fz,1));margin-bottom:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.m{border:1px solid #e6e6e2;border-radius:12px;padding:12px}.m b{font-size:calc(22px*var(--fz,1));display:block}.m span{font-size:calc(12px*var(--fz,1));color:#888}h2{font-size:calc(15px*var(--fz,1));margin:24px 0 8px;color:#2E7D32}table{width:100%;border-collapse:collapse;font-size:calc(14px*var(--fz,1))}td{padding:6px 0;border-bottom:1px solid #eee}.foot{margin-top:28px;font-size:calc(11px*var(--fz,1));color:#999;border-top:1px solid #eee;padding-top:12px}@media print{.noprint{display:none}}</style><style>
+.termo-tog{width:100%;margin-top:12px;background:none;border:none;border-top:1px solid var(--cinm);padding:11px 2px 3px;display:flex;align-items:center;justify-content:space-between;font-family:inherit;font-weight:700;font-size:calc(13px*var(--fz,1));color:var(--txs);cursor:pointer}
+.termo-tog .termo-ar{transition:transform .22s;font-size:calc(18px*var(--fz,1));line-height:1}
+.termo-tog.on .termo-ar{transform:rotate(90deg)}
+.termo-agg{margin-top:4px;animation:termoIn .25s ease}
+@keyframes termoIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.termo-aggh{font-size:calc(11px*var(--fz,1));font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--txm);margin:2px 0 10px}
+.termo-bar{margin-bottom:9px}
+.termo-bt{display:flex;justify-content:space-between;font-size:calc(12.5px*var(--fz,1));font-weight:600;color:var(--tx);margin-bottom:4px}
+.termo-tr{height:7px;background:var(--cinm);border-radius:5px;overflow:hidden}
+.termo-tf{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--v),#7BD98A);transition:width .4s ease}
+.termo-note{text-align:center;font-size:calc(11px*var(--fz,1));color:var(--txm);margin-top:7px}
+.termo-empty{font-size:calc(12.5px*var(--fz,1));color:var(--txs);text-align:center;padding:8px 2px;line-height:1.5}
+#termo-voted{font-size:calc(13.5px*var(--fz,1));color:var(--tx);text-align:center;padding:2px 0}
+</style>
+</head><body>
 <h1>Relatório · dichava.app</h1><div class="sub">${periodoTxt} · gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
 <div class="grid"><div class="m"><b>${cur.usos}</b><span>registros de uso</span></div><div class="m"><b>${cur.resist}</b><span>resistências (taxa ${taxa}%)</span></div><div class="m"><b>${brl(cur.gasto)}</b><span>gasto</span></div><div class="m"><b>${brl(cur.eco)}</b><span>economia</span></div></div>
 <h2>Substâncias registradas</h2><table>${rows||'<tr><td>Sem registros no período</td></tr>'}</table>
