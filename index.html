@@ -8524,6 +8524,12 @@ function exportarRelatorioPDF(){
 .termo-empty{font-size:calc(12.5px*var(--fz,1));color:var(--txs);text-align:center;padding:8px 2px;line-height:1.5}
 #termo-voted{font-size:calc(13.5px*var(--fz,1));color:var(--tx);text-align:center;padding:2px 0}
 </style>
+<style>
+.tb-coletivo{display:none;margin:0 20px 14px;background:rgba(143,227,166,.1);border:1px solid rgba(143,227,166,.25);border-radius:14px;padding:11px 14px;align-items:center;gap:10px}
+.tb-coletivo .tb-col-ic{font-size:calc(20px*var(--fz,1));flex:none;line-height:1}
+.tb-coletivo .tb-col-tx{font-size:calc(13px*var(--fz,1));color:#dceee0;line-height:1.45}
+.tb-coletivo .tb-col-tx b{color:#8FE3A6}
+</style>
 </head><body>
 <h1>Relatório · dichava.app</h1><div class="sub">${periodoTxt} · gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
 <div class="grid"><div class="m"><b>${cur.usos}</b><span>registros de uso</span></div><div class="m"><b>${cur.resist}</b><span>resistências (taxa ${taxa}%)</span></div><div class="m"><b>${brl(cur.gasto)}</b><span>gasto</span></div><div class="m"><b>${brl(cur.eco)}</b><span>economia</span></div></div>
@@ -9900,7 +9906,7 @@ function tbNudgePush(){
     }).catch(function(){});
   }catch(e){}
 }
-function tbReset(){if(!confirm('Recomeçar a jornada? O diário desta pausa será apagado.'))return;ls('dr_tb_'+uid(),null);renderTbreak();}
+function tbReset(){if(!confirm('Recomeçar a jornada? O diário desta pausa será apagado.'))return;ls('dr_tb_'+uid(),null);try{if(_SB&&U&&U.id!=='demo')_SB.rpc('tbreak_fim');}catch(e){}renderTbreak();}
 // ── CERTIFICADO / STORY compartilhável ──
 function _roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 function tbDesenharCert(cb){
@@ -10029,9 +10035,11 @@ function renderTbreak(){
   if(!tb){
     const tracks=[[7,'⚡','Reset rápido','Uma semana já impacta a tolerância.','',''],[14,'🌟','Pausa firme','Duas semanas pra um reajuste mais profundo.','mais escolhida','best'],[31,'🏆','Reinício','Um mês pra reencontrar sua relação com a erva.','transformação','']];
     let s='<div class="tb-welcome"><img class="tb-guide-av" alt=""><div class="tb-welcome-b"><div class="tb-welcome-t">Bora começar sua pausa? 🌱</div><div class="tb-welcome-x">Uma pausa planejada pra reequilibrar seu corpo e sua relação com a erva — <b>dia a dia</b>, no seu ritmo.</div></div></div>';
+    s+='<div id="tb-coletivo" class="tb-coletivo"></div>';
     s+='<div class="tb-sec">Escolha sua trilha</div><div class="tb-tracks">'+tracks.map(function(t){return '<button class="tb-track'+(t[5]==='best'?' tb-track-best':'')+'" onclick="tbIniciar('+t[0]+')">'+(t[4]?'<span class="tb-track-tag">'+t[4]+'</span>':'')+'<span class="tbt-n"><b>'+t[0]+'</b><span>dias</span></span><span class="tbt-ic">'+t[1]+'</span><span style="flex:1;min-width:0"><span class="tbt-t">'+t[2]+'</span><div class="tbt-d">'+t[3]+'</div></span><span class="tbt-go">→</span></button>';}).join('')+'</div>';
     s+='<div class="premnote" style="margin:8px 20px 0">Conteúdo inspirado no Guia de Pausa Canábica (Desprô/@dichavando) e na literatura sobre abstinência. Não substitui acompanhamento profissional.</div>';
     c.innerHTML=s;
+    try{tbColetivo(false);}catch(e){}
     try{const av=c.querySelector('.tb-guide-av');if(av&&typeof brotoDataURI==='function')av.src=brotoDataURI();}catch(e){}
     return;
   }
@@ -10045,6 +10053,7 @@ function renderTbreak(){
     h+='<div class="tb-complete"><div class="tb-aur-c"></div><div class="tb-complete-tro">🏆</div><div class="tb-complete-t">Você completou a pausa!</div><div class="tb-complete-x">'+N+' dias atravessados · '+(feitos*3)+' estrelas conquistadas ⭐</div><div class="tb-complete-m">Você provou pra si mesmo(a) que consegue. Seja qual for o próximo passo, ele é seu. 💚</div><button class="tbcert-btn" onclick="tbGerarCert()">📤 Compartilhar meu certificado</button><button class="tbcert-btn tbcert-ghost" onclick="abrirTbAnalise()">📊 Ver análise da pausa</button></div>';
   } else {
     h+='<div class="tb-guide"><img class="tb-guide-av" alt=""><div class="tb-guide-b"><div class="tb-guide-t">Dia '+atual+' de '+N+' · '+info.tema+'</div><div class="tb-guide-x">'+TB_GUIA[(atual-1)%7]+'</div><div class="tb-prog-bar"><div style="width:'+Math.round(feitos/N*100)+'%"></div></div></div></div>';
+    h+='<div id="tb-coletivo" class="tb-coletivo"></div>';
   }
   const W=320,cx0=160,amp=86,rowH=110,r=31;
   const pts=[];for(let d=1;d<=N;d++)pts.push({x:cx0+amp*Math.sin((d-1)*0.85),y:46+(d-1)*rowH});
@@ -10069,7 +10078,30 @@ function renderTbreak(){
   if(logs.length)h+='<div class="tb-sec">Meu diário da pausa 📔</div>'+logs.map(function(l){return '<div class="tbdi"><div class="tbdi-h">'+(l[1].humor||'🌱')+' Dia '+l[0]+' · '+tbInfo(l[0]).tema+'</div>'+(l[1].texto?'<div class="tbdi-x">'+esc(l[1].texto)+'</div>':'')+'</div>';}).join('');
   h+='<div style="text-align:center;padding:18px 16px"><button class="btn bout bsm" onclick="tbReset()">'+(allDone?'Fazer outra pausa':'Recomeçar jornada')+'</button></div>';
   c.innerHTML=h;
+  try{ if(allDone){ if(_SB&&U&&U.id!=='demo')_SB.rpc('tbreak_fim'); } else { tbColetivo(true,tb); } }catch(e){}
   try{const av=c.querySelector('.tb-guide-av');if(av&&typeof brotoDataURI==='function')av.src=brotoDataURI();}catch(e){}
+}
+async function tbColetivo(ativa,tb){
+  const el=document.getElementById('tb-coletivo');if(!el)return;
+  if(!_SB||!U||U.id==='demo'){el.style.display='none';return;}
+  try{
+    let n;
+    if(ativa&&tb){const{data}=await _SB.rpc('tbreak_ping',{p_inicio:tb.inicio,p_trilha:tb.trilha});n=data;}
+    else{const{data}=await _SB.rpc('tbreak_ativos');n=data;}
+    n=parseInt(n,10);if(isNaN(n))n=0;
+    el.innerHTML=tbColetivoHTML(ativa,n);
+    el.style.display='flex';
+  }catch(e){el.style.display='none';}
+}
+function tbColetivoHTML(ativa,n){
+  let txt;
+  if(ativa){
+    const o=Math.max(0,n-1);
+    txt=o>=1?('Voc\u00ea e mais <b>'+o+'</b> '+(o===1?'pessoa':'pessoas')+' est\u00e3o numa pausa de toler\u00e2ncia agora.'):'Voc\u00ea est\u00e1 cuidando da sua pausa hoje. \ud83c\udf31';
+  }else{
+    txt=n>=1?('<b>'+n+'</b> '+(n===1?'pessoa est\u00e1':'pessoas est\u00e3o')+' numa pausa de toler\u00e2ncia agora. Comece a sua.'):'Seja uma das primeiras a come\u00e7ar uma pausa hoje. \ud83c\udf31';
+  }
+  return '<span class="tb-col-ic">\ud83e\udd1d</span><span class="tb-col-tx">'+txt+'</span>';
 }
 let _tbSelDia=null,_tbHumor=null;
 function abrirTbDia(d){
