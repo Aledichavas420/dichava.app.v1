@@ -5514,6 +5514,7 @@ async function termoVote(btn,op){
   const o=_termoOp(op);
   try{document.querySelectorAll('#termo-opts .cke').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}catch(e){}
   sCK({data:hoje(),emoji:o.e,label:o.op});
+  try{var _ont=(function(){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-1);return isoLocal(d);})();if(gR().some(function(r){return r.data===_ont;})){var _d1=gD1();if(_d1.ref!==_ont)sD1({ref:_ont,data:hoje(),emoji:o.e,label:o.op});}}catch(e){}
   try{renderDiaHoje();}catch(e){}
   if(_SB&&U&&U.id!=='demo'){
     try{const{data}=await _SB.rpc('termometro_votar',{p_opcao:o.op});if(data)termoRenderAgg(data);}catch(e){}
@@ -6072,7 +6073,7 @@ function renderHabilidades(){
 function habGo(id){const s=HABS.find(h=>h.id===id);if(s&&habUnlocked(s))s.go();}
 
 function renderAlts(regs){
-  const c=document.getElementById('h-alts');c.innerHTML=renderD1(regs);const cfg=gC();const hj=hoje();
+  const c=document.getElementById('h-alts');c.innerHTML='';const cfg=gC();const hj=hoje();
   const cH=regs.filter(r=>r.data===hj).length,cS=regs.filter(r=>r.data>=semISO(hj)).length;
   if(cfg.notif&&cH>=cfg.limD)c.innerHTML+=`<div class="alt at"><div class="alti">⚠️</div><div class="altb"><div class="altt">Limite diário atingido</div><div class="altx">Você registrou ${cH} usos hoje (limite: ${cfg.limD}). Como você está?</div></div><button aria-label="Dispensar aviso" title="Dispensar aviso" class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
   if(cfg.notif&&cS>=cfg.limS)c.innerHTML+=`<div class="alt at"><div class="alti">📊</div><div class="altb"><div class="altt">Limite semanal atingido</div><div class="altx">${cS} usos essa semana (limite: ${cfg.limS}).</div></div><button aria-label="Dispensar aviso" title="Dispensar aviso" class="altf" onclick="this.parentElement.remove()">✕</button></div>`;
