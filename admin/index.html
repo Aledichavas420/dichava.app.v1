@@ -199,6 +199,7 @@ tbody tr:hover{background:var(--card2)}
       <button class="atab" data-t="conteudo" onclick="adminTab('conteudo')">📣 Conteúdo</button>
       <button class="atab" data-t="rede" onclick="adminTab('rede');carregarRedeAdmin()">🌐 Rede</button>
       <button class="atab" data-t="blog" onclick="adminTab('blog');carregarBlog();carregarBanners()">✍️ Blog</button>
+      <button class="atab" data-t="certs" onclick="adminTab('certs');carregarCerts()">🎓 Certificados</button>
     </div>
 
     <!-- ══ VISÃO GERAL ══ -->
@@ -469,6 +470,28 @@ tbody tr:hover{background:var(--card2)}
       </div>
     </div>
     </div><!-- /ap-conteudo -->
+
+    <div class="apane" id="ap-certs">
+    <div class="sec">🎓 Certificados das rodas</div>
+    <div class="card" style="padding:16px">
+      <div style="font-size:13px;color:var(--txs);margin-bottom:10px">Crie a roda, pegue o link/QR de presença pra divulgar, e emita os certificados por e-mail depois. A lista de presenças é o seu registro.</div>
+      <input id="ce-titulo" placeholder="Título da roda (ex.: Raça e Redução de Danos na Clínica)" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px">
+      <div style="display:flex;gap:8px">
+        <input id="ce-data" type="date" style="padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;flex:1">
+        <input id="ce-carga" placeholder="Carga horária (ex.: 1 hora)" style="padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;width:180px">
+      </div>
+      <div style="display:flex;gap:8px">
+        <input id="ce-mod" value="Online" placeholder="Modalidade" style="padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;flex:1">
+        <input id="ce-local" value="Vitória/ES" placeholder="Local de emissão" style="padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px;flex:1">
+      </div>
+      <label style="font-size:12px;color:var(--txm)">Modelo do certificado</label>
+      <select id="ce-modelo" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:14px;margin-bottom:8px"><option value="b">Modelo B (moderno)</option><option value="a">Modelo A (clássico)</option></select>
+      <div class="pacts" style="margin-top:4px"><button class="btn sm" onclick="criarEvento()">Criar roda</button></div>
+      <div id="ce-status" style="font-size:12.5px;color:var(--txm);margin-top:8px"></div>
+    </div>
+    <div class="sec">Rodas e presenças</div>
+    <div id="certs-lista" class="card" style="padding:12px"><div style="color:var(--txm);font-size:13px;padding:8px">Carregando…</div></div>
+    </div><!-- /ap-certs -->
   </div>
 </div>
 
@@ -476,6 +499,7 @@ tbody tr:hover{background:var(--card2)}
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@04f46c6a0708418cb7b96fc563eacae0fbf77674/qrcode.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const SB = (typeof supabase!=='undefined') ? supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4') : null;
@@ -1150,6 +1174,105 @@ async function salvarBanner(){
 async function toggleBanner(id){ const b=_banners.find(x=>x.id===id); if(!b)return; try{ await SB.from('blog_banners').update({ativo:!b.ativo}).eq('id',id); carregarBanners(); }catch(e){} }
 async function excluirBanner(id){ if(!confirm('Excluir este banner? Não dá pra desfazer.'))return; try{ await SB.from('blog_banners').delete().eq('id',id); carregarBanners(); }catch(e){} }
 function adminTab(t){document.querySelectorAll('.atab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('.apane').forEach(p=>p.classList.toggle('on',p.id==='ap-'+t));try{window.scrollTo(0,0);}catch(e){}}
+
+/* ══ CERTIFICADOS ══ */
+let _CERTS_EV=[], _CERTS_PR={};
+async function carregarCerts(){
+  const c=document.getElementById('certs-lista'); if(!c)return;
+  if(!SB){ c.innerHTML='<div style="padding:8px;color:var(--txm)">Sem conexão.</div>'; return; }
+  c.innerHTML='<div style="padding:8px;color:var(--txm)">Carregando…</div>';
+  try{
+    const {data:evs,error}=await SB.from('cert_eventos').select('*').order('data_evento',{ascending:false});
+    if(error) throw error;
+    _CERTS_EV=evs||[]; _CERTS_PR={};
+    const ids=_CERTS_EV.map(e=>e.id);
+    if(ids.length){ const {data:prs}=await SB.from('cert_presencas').select('*').in('evento_id',ids).order('criado_em',{ascending:true}); (prs||[]).forEach(p=>{(_CERTS_PR[p.evento_id]=_CERTS_PR[p.evento_id]||[]).push(p);}); }
+    renderCerts();
+  }catch(e){ c.innerHTML='<div style="padding:8px;color:#E7484D">Erro ao carregar. Você rodou o <b>certificados-setup.sql</b> no Supabase? ('+esc(e.message||e)+')</div>'; }
+}
+function renderCerts(){
+  const c=document.getElementById('certs-lista');
+  if(!_CERTS_EV.length){ c.innerHTML='<div style="padding:8px;color:var(--txm)">Nenhuma roda ainda. Crie a primeira acima.</div>'; return; }
+  c.innerHTML=_CERTS_EV.map(e=>{
+    const link=location.origin+'/presenca/?e='+e.id;
+    const prs=_CERTS_PR[e.id]||[];
+    const emitidos=prs.filter(p=>p.emitido_em).length, pend=prs.length-emitidos;
+    const rows=prs.length?prs.map(p=>certPrRow(p)).join(''):'<div style="color:var(--txm);font-size:12.5px;padding:6px 0">Ninguém confirmou presença ainda.</div>';
+    return '<div class="pcard" style="margin-bottom:14px">'
+      +'<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">'
+        +'<div style="min-width:0"><b>'+esc(e.titulo)+'</b><div style="font-size:12.5px;color:var(--txm)">'+fmtData(e.data_evento)+(e.carga_horaria?' · '+esc(e.carga_horaria):'')+' · modelo '+String(e.modelo||'b').toUpperCase()+'</div></div>'
+        +'<button class="btn ghost sm" onclick="toggleEventoAtivo(\''+e.id+'\','+(e.ativo?'true':'false')+')">'+(e.ativo?'Encerrar':'Reabrir')+'</button>'
+      +'</div>'
+      +'<div style="display:flex;gap:7px;align-items:center;margin:10px 0;flex-wrap:wrap">'
+        +'<input readonly value="'+esc(link)+'" onclick="this.select()" style="flex:1;min-width:170px;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-size:12.5px">'
+        +'<button class="btn sm" onclick="copiarTxt(\''+esc(link)+'\')">Copiar link</button>'
+        +'<button class="btn ghost sm" onclick="certQR(\''+esc(link)+'\',\''+esc(e.titulo).replace(/'/g,"\\'")+'\')">QR</button>'
+      +'</div>'
+      +'<div style="font-size:12.5px;color:var(--txm);margin-bottom:4px">'+prs.length+' presença(s) · '+emitidos+' emitido(s)'+(pend?' · <button class="btn sm" onclick="emitirTodos(\''+e.id+'\')">Emitir '+pend+' pendente(s)</button>':'')+'</div>'
+      +rows
+    +'</div>';
+  }).join('');
+}
+function certPrRow(p){
+  const st = p.enviado_em ? '<span style="color:#2FA35F">✓ enviado</span>' : (p.emitido_em?'<span style="color:#F2B705">emitido</span>':'<span style="color:var(--txm)">pendente</span>');
+  const acts = p.emitido_em
+    ? '<a class="btn ghost sm" href="'+location.origin+'/validar/?c='+encodeURIComponent(p.codigo)+'" target="_blank" rel="noopener">Ver</a><button class="btn ghost sm" onclick="emitirCert(\''+p.id+'\',true)">Reenviar</button>'
+    : '<button class="btn sm" onclick="emitirCert(\''+p.id+'\')">Emitir e enviar</button>';
+  return '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--line)">'
+    +'<div style="min-width:0;flex:1"><div style="font-weight:600;font-size:13.5px">'+esc(p.nome)+'</div>'
+    +'<div style="font-size:12px;color:var(--txm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p.email)+(p.codigo?' · '+esc(p.codigo):'')+' · '+st+'</div></div>'
+    +'<div style="display:flex;gap:6px;flex:none">'+acts+'</div></div>';
+}
+async function criarEvento(){
+  const t=document.getElementById('ce-titulo').value.trim(), d=document.getElementById('ce-data').value, st=document.getElementById('ce-status');
+  if(!t||!d){ st.textContent='Preencha título e data.'; return; }
+  st.textContent='Criando…';
+  try{
+    const row={titulo:t,data_evento:d,carga_horaria:document.getElementById('ce-carga').value.trim()||null,modalidade:document.getElementById('ce-mod').value.trim()||'Online',local_emissao:document.getElementById('ce-local').value.trim()||null,modelo:document.getElementById('ce-modelo').value};
+    const {error}=await SB.from('cert_eventos').insert(row);
+    if(error) throw error;
+    document.getElementById('ce-titulo').value=''; document.getElementById('ce-carga').value='';
+    st.textContent='✓ Roda criada.'; carregarCerts();
+  }catch(e){ st.textContent='Erro: '+(e.message||e); }
+}
+async function toggleEventoAtivo(id,ativo){ try{ await SB.from('cert_eventos').update({ativo:!ativo}).eq('id',id); carregarCerts(); }catch(e){ toast('Erro: '+(e.message||e)); } }
+function copiarTxt(t){ try{ navigator.clipboard.writeText(t); toast('Copiado'); }catch(e){ toast(t); } }
+async function emitirCert(id,re){
+  try{
+    toast('Emitindo…');
+    const {data,error}=await SB.rpc('cert_emitir',{p_presenca:id});
+    if(error||(data&&data.erro)) throw new Error((data&&data.erro)||(error&&error.message)||'erro');
+    await enviarCertEmail(data,id);
+    carregarCerts();
+  }catch(e){ toast('Erro: '+(e.message||e),4000); }
+}
+async function enviarCertEmail(data,presencaId){
+  const link=location.origin+'/validar/?c='+encodeURIComponent(data.codigo);
+  try{
+    const {error}=await SB.functions.invoke('cert-email',{body:{to:data.email,nome:data.nome,evento:data.evento,data:data.data_evento,link:link}});
+    if(error){ let det=''; try{const b=await error.context.json();det=b&&(b.erro||b.motivo||'');}catch(_){ } throw new Error(det||error.message||'falha no e-mail'); }
+    await SB.from('cert_presencas').update({enviado_em:new Date().toISOString()}).eq('id',presencaId);
+    toast('✉️ Certificado enviado para '+data.email);
+  }catch(e){ toast('Emitido, mas o e-mail falhou ('+(e.message||'')+'). Código: '+data.codigo,6000); }
+}
+async function emitirTodos(evId){
+  const prs=(_CERTS_PR[evId]||[]).filter(p=>!p.emitido_em);
+  if(!prs.length) return;
+  if(!confirm('Emitir e enviar '+prs.length+' certificado(s) por e-mail?')) return;
+  toast('Emitindo '+prs.length+'…');
+  for(const p of prs){ try{ const {data,error}=await SB.rpc('cert_emitir',{p_presenca:p.id}); if(!error&&data&&!data.erro){ await enviarCertEmail(data,p.id); } }catch(e){} }
+  carregarCerts();
+}
+function certQR(link,titulo){
+  $('#modalRoot').innerHTML='<div class="mbg" onclick="if(event.target===this)fecharModal()"><div class="modal" style="text-align:center;max-width:300px">'
+    +'<h3 style="margin-bottom:4px">'+esc(titulo)+'</h3>'
+    +'<div style="font-size:12.5px;color:var(--txm);margin-bottom:12px">Mostre este QR pra galera confirmar presença.</div>'
+    +'<div id="cert-qrbox" style="display:inline-block;background:#fff;padding:10px;border-radius:12px"></div>'
+    +'<div style="font-size:11px;color:var(--txm);margin-top:10px;word-break:break-all">'+esc(link)+'</div>'
+    +'<button class="btn" style="width:100%;margin-top:12px" onclick="fecharModal()">Fechar</button>'
+  +'</div></div>';
+  try{ new QRCode(document.getElementById('cert-qrbox'),{text:link,width:220,height:220,colorDark:'#143E27',colorLight:'#ffffff'}); }catch(e){ var b=document.getElementById('cert-qrbox'); if(b)b.textContent='QR indisponível'; }
+}
 async function carregarSuporte(){
   try{
     const {data,error}=await SB.rpc('admin_suporte_conversas');

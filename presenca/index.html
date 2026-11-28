@@ -1,0 +1,104 @@
+<!doctype html><html lang=pt-BR><head><meta charset=utf-8>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>Presença — Roda de Conversa · dichava.app</title>
+<meta name=robots content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;color:#1B2A1C;line-height:1.6;min-height:100vh;
+  background:radial-gradient(120% 60% at 80% -5%,#DFF3E4 0%,transparent 55%),linear-gradient(180deg,#F5FAF4,#EEF6EE);
+  padding:26px 16px 60px}
+.wrap{max-width:460px;margin:0 auto}
+.logo{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:20px;color:#1B2A1C;text-decoration:none;margin-bottom:18px}
+.logo span{color:#2E7D32}.logo svg{width:24px;height:24px;color:#4CAF5A}
+.card{background:#fff;border:1px solid #E2ECE3;border-radius:22px;padding:26px 22px;box-shadow:0 14px 40px rgba(30,60,35,.07)}
+.kick{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#2E7D32;text-align:center}
+h1{font-size:22px;font-weight:800;text-align:center;margin:6px 0 4px;line-height:1.2}
+.ev{text-align:center;color:#5E7062;font-size:14.5px;margin-bottom:18px}
+label{display:block;font-size:13px;font-weight:700;color:#3d4d3f;margin:12px 0 5px}
+label .opt{font-weight:500;color:#8a9a86}
+input{width:100%;background:#F6FAF6;border:1.5px solid #DCE7DD;border-radius:12px;padding:12px 13px;color:#1B2A1C;font-size:15px;font-family:inherit}
+input:focus{outline:none;border-color:#4CAF5A;background:#fff}
+.btn{width:100%;margin-top:20px;background:#2fbd6a;color:#fff;border:none;border-radius:28px;padding:15px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px rgba(47,189,106,.28)}
+.btn:disabled{opacity:.6}
+.err{color:#C0392B;font-size:13.5px;margin-top:12px;display:none;text-align:center}
+.priv{font-size:12px;color:#7d8f80;text-align:center;margin-top:14px;line-height:1.5}
+.ok{text-align:center;padding:12px 0}
+.ok .em{width:64px;height:64px;border-radius:50%;background:#E6F6EC;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.ok .em svg{width:32px;height:32px;color:#2E7D32}
+.ok h2{font-size:20px;margin-bottom:6px}.ok p{color:#5E7062;font-size:14.5px}
+.load{text-align:center;color:#5E7062;padding:20px}
+.spin{width:22px;height:22px;border:3px solid #cfe0d4;border-top-color:#2E7D32;border-radius:50%;display:inline-block;animation:sp .8s linear infinite;vertical-align:-5px;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style></head>
+<body>
+<div class="wrap">
+  <a class="logo" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-8 6-14 16-15C19 13 13 20 5 20"/><path d="M4 20c3-4 6-6 10-8"/></svg> dichava<span>.app</span></a>
+  <div class="card" id="card"><div class="load" id="load"><span class="spin"></span> Carregando…</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SB=null;
+try{ SB=supabase.createClient('https://gnpwaywyexcevtzbwiyq.supabase.co','sb_publishable_JBxiSIYDYRBxgBunmedHfA_BJDCffZ4'); }catch(e){}
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+var MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function dataLonga(iso){ if(!iso)return''; var p=String(iso).slice(0,10).split('-'); if(p.length<3)return iso; return (+p[2])+' de '+MESES[(+p[1])-1]+' de '+p[0]; }
+function qparam(k){ return new URLSearchParams(location.search).get(k)||''; }
+var EV='';
+
+function erroTela(msg){ document.getElementById('card').innerHTML='<div class="load">'+esc(msg)+'</div>'; }
+
+function formHTML(ev){
+  return '<div class="kick">Roda de Conversa</div>'
+   +'<h1>'+esc(ev.titulo)+'</h1>'
+   +'<div class="ev">'+esc(dataLonga(ev.data_evento))+' · confirme sua presença para receber o certificado</div>'
+   +'<form id="f" onsubmit="return enviar(event)">'
+   +'<label>Nome completo</label><input id="i-nome" type="text" autocomplete="name" placeholder="Como vai aparecer no certificado" required>'
+   +'<label>E-mail</label><input id="i-email" type="email" autocomplete="email" placeholder="Para onde enviamos o certificado" required>'
+   +'<label>Profissão <span class="opt">· opcional</span></label><input id="i-prof" type="text" placeholder="Ex.: Psicóloga, Psiquiatra...">'
+   +'<label>Cidade <span class="opt">· opcional</span></label><input id="i-cidade" type="text" placeholder="Ex.: Vitória/ES">'
+   +'<button class="btn" id="b" type="submit">Confirmar presença</button>'
+   +'<div class="err" id="e"></div>'
+   +'<div class="priv">Seus dados são usados só para emitir seu certificado e registrar sua presença, conforme a <a href="/landing/privacidade.html" style="color:#2E7D32">Privacidade</a>.</div>'
+   +'</form>';
+}
+function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+async function enviar(ev){
+  ev.preventDefault();
+  var b=document.getElementById('b'), e=document.getElementById('e');
+  var nome=val('i-nome'), email=val('i-email');
+  if(!nome||!/.+@.+\..+/.test(email)){ e.textContent='Preencha nome e um e-mail válido.'; e.style.display='block'; return false; }
+  e.style.display='none'; b.disabled=true; b.textContent='Enviando…';
+  try{
+    var r=await SB.rpc('cert_presenca_add',{p_evento:EV,p_nome:nome,p_email:email,p_profissao:val('i-prof'),p_cidade:val('i-cidade')});
+    if(r.error||(r.data&&r.data.erro)){ throw new Error((r.data&&r.data.erro)||'erro'); }
+    sucesso(nome);
+  }catch(err){
+    b.disabled=false; b.textContent='Confirmar presença';
+    e.textContent=(err&&err.message&&err.message!=='erro')?('Não consegui registrar: '+err.message):'Não consegui registrar agora. Tente de novo.';
+    e.style.display='block';
+  }
+  return false;
+}
+function sucesso(nome){
+  document.getElementById('card').innerHTML='<div class="ok"><div class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'
+   +'<h2>Presença confirmada!</h2><p>Obrigado por participar, '+esc(nome.split(/\s+/)[0])+'. Seu certificado será enviado para o seu e-mail em breve. 💚</p></div>';
+}
+
+async function iniciar(){
+  EV=qparam('e').trim();
+  if(!EV){ erroTela('Link inválido. Use o link que você recebeu da roda de conversa.'); return; }
+  if(!SB){ erroTela('Não consegui carregar agora. Tente novamente mais tarde.'); return; }
+  var info=null;
+  try{ var r=await SB.rpc('cert_evento_info',{p_id:EV}); info=r.data; }catch(e){ info=null; }
+  if(!info){ erroTela('Evento não encontrado. Confira o link da roda de conversa.'); return; }
+  if(info.ativo===false){ erroTela('As confirmações de presença para esta roda foram encerradas.'); return; }
+  document.getElementById('card').innerHTML=formHTML(info);
+}
+iniciar();
+</script>
+</body></html>
